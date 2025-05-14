@@ -203,7 +203,9 @@ struct NoInitClass {
 #include	"key.h"
 #endif
 
+#ifdef WIN32
 #include <wwlib32.h>
+#endif
 #include	"mpu.h"
 #include	"bench.h"
 #include	"rect.h"

@@ -42,8 +42,8 @@
 //#define getch	Get_Key_Num
 //#define kbhit	Check_Key_Num
 #include	"key.h"
-#else
 #include	<conio.h>
+#else
 #endif
 
 /*
