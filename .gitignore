@@ -7,4 +7,6 @@
 [Dd]ebug/
 [Rr]elease/
 [Bb]in/
+.cache/clangd/index
+build
 compile_commands.json
