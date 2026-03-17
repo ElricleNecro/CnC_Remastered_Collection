@@ -10,3 +10,4 @@
 .cache/clangd/index
 build
 compile_commands.json
+/.zig-cache
