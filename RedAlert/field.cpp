@@ -29,8 +29,8 @@
  *-------------------------------------------------------------------------*
  * Functions:                                                              *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#include "field.h"
 #include <string.h>
+#include "field.h"
 
 FieldClass::FieldClass(char *id, char data) {
 	strncpy(ID, id, sizeof(ID));

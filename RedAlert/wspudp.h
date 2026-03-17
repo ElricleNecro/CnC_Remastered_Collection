@@ -34,15 +34,14 @@
 #ifndef WSPUDP_H
 #define WSPUDP_H
 
-#include "WSProto.h"
 #include <nspapi.h>
+#include "WSProto.h"
 
 /*
 ** Class to allow access to UDP specific portions of the Winsock interface.
 **
 */
 class UDPInterfaceClass : public WinsockInterfaceClass {
-
 public:
 	UDPInterfaceClass(void);
 	virtual ~UDPInterfaceClass(void);
@@ -52,9 +51,13 @@ public:
 	virtual void Set_Broadcast_Address(void *address);
 	virtual void Broadcast(void *buffer, int buffer_len);
 
-	virtual ProtocolEnum Get_Protocol(void) { return (PROTOCOL_UDP); };
+	virtual ProtocolEnum Get_Protocol(void) {
+		return (PROTOCOL_UDP);
+	};
 
-	virtual int Protocol_Event_Message(void) { return (WM_UDPASYNCEVENT); };
+	virtual int Protocol_Event_Message(void) {
+		return (WM_UDPASYNCEVENT);
+	};
 
 private:
 	/*

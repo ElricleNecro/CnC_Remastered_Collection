@@ -52,10 +52,10 @@ private:
 	**	This is the door state.
 	*/
 	enum {
-		IS_CLOSED,  // Door is closed.
+		IS_CLOSED, // Door is closed.
 		IS_OPENING, // Door is in the process of opening.
-		IS_OPEN,    // Door is fully open.
-		IS_CLOSING  //	Door is in the process of closing.
+		IS_OPEN, // Door is fully open.
+		IS_CLOSING //	Door is in the process of closing.
 	} State;
 
 	/*
@@ -68,16 +68,28 @@ public:
 	DoorClass(void);
 	DoorClass(NoInitClass const &x) : Control(x) {};
 
-	bool Time_To_Redraw(void) { return (IsToRedraw); };
-	void Clear_Redraw_Flag(void) { IsToRedraw = false; };
+	bool Time_To_Redraw(void) {
+		return (IsToRedraw);
+	};
+	void Clear_Redraw_Flag(void) {
+		IsToRedraw = false;
+	};
 	void AI(void);
 	int Door_Stage(void) const;
-	bool Is_Door_Opening(void) const { return (State == IS_OPENING); };
-	bool Is_Door_Closing(void) const { return (State == IS_CLOSING); };
+	bool Is_Door_Opening(void) const {
+		return (State == IS_OPENING);
+	};
+	bool Is_Door_Closing(void) const {
+		return (State == IS_CLOSING);
+	};
 	bool Open_Door(int rate, int stages);
 	bool Close_Door(int rate, int stages);
-	bool Is_Door_Open(void) const { return (State == IS_OPEN); };
-	bool Is_Door_Closed(void) const { return (State == IS_CLOSED); };
+	bool Is_Door_Open(void) const {
+		return (State == IS_OPEN);
+	};
+	bool Is_Door_Closed(void) const {
+		return (State == IS_CLOSED);
+	};
 	bool Is_Ready_To_Open(void) const;
 };
 

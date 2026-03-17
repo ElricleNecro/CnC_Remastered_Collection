@@ -53,7 +53,8 @@
  * HISTORY:                                                                                    *
  *   07/22/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Rect::Rect(int x, int y, int w, int h) : X(x), Y(y), Width(w), Height(h) {}
+Rect::Rect(int x, int y, int w, int h) : X(x), Y(y), Width(w), Height(h) {
+}
 
 /***********************************************************************************************
  * Rect::Is_Valid -- Determines if the rectangle is valid.                                     *
@@ -71,7 +72,9 @@ Rect::Rect(int x, int y, int w, int h) : X(x), Y(y), Width(w), Height(h) {}
  * HISTORY:                                                                                    *
  *   07/22/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool Rect::Is_Valid(void) const { return (Width > 0 && Height > 0); }
+bool Rect::Is_Valid(void) const {
+	return (Width > 0 && Height > 0);
+}
 
 /***********************************************************************************************
  * Rect::Intersect -- Find the intersection between two rectangles.                            *
@@ -98,7 +101,7 @@ bool Rect::Is_Valid(void) const { return (Width > 0 && Height > 0); }
  *=============================================================================================*/
 Rect const Rect::Intersect(Rect const &rectangle, int *x, int *y) const {
 	Rect rect(0, 0, 0, 0); // Dummy (illegal) rectangle.
-	Rect r = rectangle;    // Working rectangle.
+	Rect r = rectangle; // Working rectangle.
 
 	/*
 	**	Both rectangles must be valid or else no intersection can occur. In such

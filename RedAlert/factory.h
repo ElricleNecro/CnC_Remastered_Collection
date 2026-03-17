@@ -46,7 +46,9 @@ public:
 	FactoryClass(NoInitClass const &x) : StageClass(x) {};
 	~FactoryClass(void);
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init(void);
@@ -63,7 +65,9 @@ public:
 	bool Completed(void);
 	bool Has_Changed(void);
 	bool Has_Completed(void);
-	bool Is_Building(void) const { return (Fetch_Rate() != 0); };
+	bool Is_Building(void) const {
+		return (Fetch_Rate() != 0);
+	};
 	bool Set(TechnoTypeClass const &object, HouseClass &house);
 	bool Set(int const &type, HouseClass &house);
 	bool Start(void);
@@ -73,10 +77,18 @@ public:
 	int Get_Special_Item(void) const;
 	void AI(void);
 	void Set(TechnoClass &object);
-	HouseClass *Get_House(void) { return (House); };
-	char const *Name(void) { return ("Factory"); }
-	bool Is_Blocked(void) { return IsBlocked; }
-	void Set_Is_Blocked(bool set) { IsBlocked = set; }
+	HouseClass *Get_House(void) {
+		return (House);
+	};
+	char const *Name(void) {
+		return ("Factory");
+	}
+	bool Is_Blocked(void) {
+		return IsBlocked;
+	}
+	void Set_Is_Blocked(bool set) {
+		IsBlocked = set;
+	}
 
 	/*
 	** Added for debugging / testing. ST - 8/23/2019 3:52PM

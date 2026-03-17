@@ -29,9 +29,9 @@
  * Functions:                                                              *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "misc.h"
 #include <stdlib.h>
 #include <time.h>
+#include "misc.h"
 
 extern "C" unsigned long RandNumb = 0x12349876;
 
@@ -96,7 +96,7 @@ invalid:
 
 RandNumb DD 12349876H
 
-    ;
+	;
 ;
 UBYTE Random(VOID);
 ;
@@ -105,7 +105,7 @@ int Get_Random_Mask(int maxval);
 ;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
-    ;
+	;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -;
 RANDOM;
 ;
@@ -114,10 +114,10 @@ UBYTE Random(VOID);
 ;
 *
 
-    PROC Random C near USES esi
+	PROC Random C near USES esi
 
-	lea esi,
-    [RandNumb];
+		lea esi,
+	[RandNumb];
 get offset in segment of RandNumb xor eax, eax mov al, [esi] shr al, 1;
 shift right 1 bit(bit0 in carry) shr al, 1 rcl[BYTE PTR esi + 2], 1;
 rcl byte 3 of RandNumb rcl[BYTE PTR esi + 1], 1;
@@ -129,11 +129,11 @@ rcr byte 1 of RandNumb mov al, [esi];
 reload byte 1 of RandNumb xor al, [esi + 1];
 xor with byte 2 of RandNumb
 
-    ret
+	ret
 
-	ENDP Random
+		ENDP Random
 
-    ;
+	;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -;
 GET_RANDOM_MASK - returns an AND value that is large enough that it;
 encloses the 'maxval' parameter.;
@@ -143,9 +143,9 @@ int Get_Random_Mask(int maxval);
 ;
 *
 
-    PROC Get_Random_Mask C near USES ecx ARG maxval : DWORD
+	PROC Get_Random_Mask C near USES ecx ARG maxval : DWORD
 
-    ; This function takes as a parameter a maximum value, for example, 61.  It
+	; This function takes as a parameter a maximum value, for example, 61.  It
 ;
 then tries to create an AND mask that is big enough to enclose that number.; For our example case, that AND mask would be 0x3F.  It does this by scanning
 ; for the highest bit in the number, then making an all-1's mask from that

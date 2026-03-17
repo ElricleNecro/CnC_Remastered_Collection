@@ -46,78 +46,78 @@
 /*
 **	This is the text name for all of the trigger events. These are used by the scenario editor
 */
-const char *EventText[TEVENT_COUNT] = {"-No Event-",
-				       "Entered by...",
-				       "Spied by...",
-				       "Thieved by...",
-				       "Discovered by player",
-				       "House Discovered...",
-				       "Attacked by anybody",
-				       "Destroyed by anybody",
-				       "Any Event",
-				       "Destroyed, Units, All...",
-				       "Destroyed, Buildings, All...",
-				       "Destroyed, All...",
-				       "Credits exceed (x100)...",
-				       "Elapsed Time (1/10th min)...",
-				       "Mission Timer Expired",
-				       "Destroyed, Buildings, #...",
-				       "Destroyed, Units, #...",
-				       "No Factories left",
-				       "Civilians Evacuated",
-				       "Build Building Type...",
-				       "Build Unit Type...",
-				       "Build Infantry Type...",
-				       "Build Aircraft Type...",
-				       "Leaves map (team)...",
-				       "Zone Entry by...",
-				       "Crosses Horizontal Line...",
-				       "Crosses Vertical Line...",
-				       "Global is set...",
-				       "Global is clear...",
-				       "Destroyed, Fakes, All...",
-				       "Low Power...",
-				       "All bridges destroyed",
-				       "Building exists..."};
+const char *EventText[TEVENT_COUNT] = { "-No Event-",
+					"Entered by...",
+					"Spied by...",
+					"Thieved by...",
+					"Discovered by player",
+					"House Discovered...",
+					"Attacked by anybody",
+					"Destroyed by anybody",
+					"Any Event",
+					"Destroyed, Units, All...",
+					"Destroyed, Buildings, All...",
+					"Destroyed, All...",
+					"Credits exceed (x100)...",
+					"Elapsed Time (1/10th min)...",
+					"Mission Timer Expired",
+					"Destroyed, Buildings, #...",
+					"Destroyed, Units, #...",
+					"No Factories left",
+					"Civilians Evacuated",
+					"Build Building Type...",
+					"Build Unit Type...",
+					"Build Infantry Type...",
+					"Build Aircraft Type...",
+					"Leaves map (team)...",
+					"Zone Entry by...",
+					"Crosses Horizontal Line...",
+					"Crosses Vertical Line...",
+					"Global is set...",
+					"Global is clear...",
+					"Destroyed, Fakes, All...",
+					"Low Power...",
+					"All bridges destroyed",
+					"Building exists..." };
 
 /*
 **	This is an ordinal list of trigger events. This list
 **	is used when generating the trigger dialog box.
 */
 EventChoiceClass EventChoices[TEVENT_COUNT] = {
-    {TEVENT_NONE},
-    {TEVENT_PLAYER_ENTERED},
-    {TEVENT_SPIED},
-    {TEVENT_THIEVED},
-    {TEVENT_DISCOVERED},
-    {TEVENT_HOUSE_DISCOVERED},
-    {TEVENT_ATTACKED},
-    {TEVENT_DESTROYED},
-    {TEVENT_ANY},
-    {TEVENT_UNITS_DESTROYED},
-    {TEVENT_BUILDINGS_DESTROYED},
-    {TEVENT_ALL_DESTROYED},
-    {TEVENT_CREDITS},
-    {TEVENT_TIME},
-    {TEVENT_MISSION_TIMER_EXPIRED},
-    {TEVENT_NBUILDINGS_DESTROYED},
-    {TEVENT_NUNITS_DESTROYED},
-    {TEVENT_NOFACTORIES},
-    {TEVENT_EVAC_CIVILIAN},
-    {TEVENT_BUILD},
-    {TEVENT_BUILD_UNIT},
-    {TEVENT_BUILD_INFANTRY},
-    {TEVENT_BUILD_AIRCRAFT},
-    {TEVENT_LEAVES_MAP},
-    {TEVENT_ENTERS_ZONE},
-    {TEVENT_CROSS_HORIZONTAL},
-    {TEVENT_CROSS_VERTICAL},
-    {TEVENT_GLOBAL_SET},
-    {TEVENT_GLOBAL_CLEAR},
-    {TEVENT_FAKES_DESTROYED},
-    {TEVENT_LOW_POWER},
-    {TEVENT_ALL_BRIDGES_DESTROYED},
-    {TEVENT_BUILDING_EXISTS},
+	{ TEVENT_NONE },
+	{ TEVENT_PLAYER_ENTERED },
+	{ TEVENT_SPIED },
+	{ TEVENT_THIEVED },
+	{ TEVENT_DISCOVERED },
+	{ TEVENT_HOUSE_DISCOVERED },
+	{ TEVENT_ATTACKED },
+	{ TEVENT_DESTROYED },
+	{ TEVENT_ANY },
+	{ TEVENT_UNITS_DESTROYED },
+	{ TEVENT_BUILDINGS_DESTROYED },
+	{ TEVENT_ALL_DESTROYED },
+	{ TEVENT_CREDITS },
+	{ TEVENT_TIME },
+	{ TEVENT_MISSION_TIMER_EXPIRED },
+	{ TEVENT_NBUILDINGS_DESTROYED },
+	{ TEVENT_NUNITS_DESTROYED },
+	{ TEVENT_NOFACTORIES },
+	{ TEVENT_EVAC_CIVILIAN },
+	{ TEVENT_BUILD },
+	{ TEVENT_BUILD_UNIT },
+	{ TEVENT_BUILD_INFANTRY },
+	{ TEVENT_BUILD_AIRCRAFT },
+	{ TEVENT_LEAVES_MAP },
+	{ TEVENT_ENTERS_ZONE },
+	{ TEVENT_CROSS_HORIZONTAL },
+	{ TEVENT_CROSS_VERTICAL },
+	{ TEVENT_GLOBAL_SET },
+	{ TEVENT_GLOBAL_CLEAR },
+	{ TEVENT_FAKES_DESTROYED },
+	{ TEVENT_LOW_POWER },
+	{ TEVENT_ALL_BRIDGES_DESTROYED },
+	{ TEVENT_BUILDING_EXISTS },
 };
 
 /***********************************************************************************************
@@ -137,9 +137,8 @@ EventChoiceClass EventChoices[TEVENT_COUNT] = {
  *=============================================================================================*/
 void EventChoiceClass::Draw_It(int, int x, int y, int width, int height, bool selected, TextPrintType flags) const {
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
-	static int _tabs[] = {13, 40};
+	static int _tabs[] = { 13, 40 };
 	if ((flags & 0x0F) == TPF_6PT_GRAD || (flags & 0x0F) == TPF_EFNT) {
-
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
 			LogicPage->Fill_Rect(x, y, x + width - 1, y + height - 1, scheme->Shadow);
@@ -151,9 +150,14 @@ void EventChoiceClass::Draw_It(int, int x, int y, int width, int height, bool se
 
 		Conquer_Clip_Text_Print(Description(), x, y, scheme, TBLACK, flags, width, _tabs);
 	} else {
-		Conquer_Clip_Text_Print(Description(), x, y,
+		Conquer_Clip_Text_Print(Description(),
+					x,
+					y,
 					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
-					TBLACK, flags, width, _tabs);
+					TBLACK,
+					flags,
+					width,
+					_tabs);
 	}
 }
 
@@ -207,8 +211,7 @@ void TEventClass::Reset(TDEventClass &td) const {
  * HISTORY:                                                                                    *
  *   11/28/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool TEventClass::operator()(TDEventClass &td, TEventType event, HousesType house, ObjectClass const *object,
-			     bool forced) {
+bool TEventClass::operator()(TDEventClass &td, TEventType event, HousesType house, ObjectClass const *object, bool forced) {
 	/*
 	**	If this trigger event has been forced, then no further checks are required.
 	**	Force the trigger to be tripped.
@@ -262,10 +265,8 @@ bool TEventClass::operator()(TDEventClass &td, TEventType event, HousesType hous
 	**	true just by the fact that this routine is called with the appropriate
 	**	event identifier.
 	*/
-	if (Event == TEVENT_ATTACKED || Event == TEVENT_DESTROYED || Event == TEVENT_DISCOVERED ||
-	    Event == TEVENT_SPIED || Event == TEVENT_NONE || Event == TEVENT_CROSS_HORIZONTAL ||
-	    Event == TEVENT_CROSS_VERTICAL || Event == TEVENT_ENTERS_ZONE || Event == TEVENT_PLAYER_ENTERED) {
-
+	if (Event == TEVENT_ATTACKED || Event == TEVENT_DESTROYED || Event == TEVENT_DISCOVERED || Event == TEVENT_SPIED || Event == TEVENT_NONE ||
+	    Event == TEVENT_CROSS_HORIZONTAL || Event == TEVENT_CROSS_VERTICAL || Event == TEVENT_ENTERS_ZONE || Event == TEVENT_PLAYER_ENTERED) {
 		if (event != Event && event != TEVENT_ANY) {
 			return (false);
 		}
@@ -276,8 +277,7 @@ bool TEventClass::operator()(TDEventClass &td, TEventType event, HousesType hous
 	**	matching ownership has entered the cell in question. All other
 	**	conditions will not trigger the event.
 	*/
-	if (Event == TEVENT_PLAYER_ENTERED || Event == TEVENT_CROSS_HORIZONTAL || Event == TEVENT_CROSS_VERTICAL ||
-	    Event == TEVENT_ENTERS_ZONE) {
+	if (Event == TEVENT_PLAYER_ENTERED || Event == TEVENT_CROSS_HORIZONTAL || Event == TEVENT_CROSS_VERTICAL || Event == TEVENT_ENTERS_ZONE) {
 		if (!object || object->Owner() != Data.House)
 			return (false);
 		td.IsTripped = true;
@@ -333,8 +333,7 @@ bool TEventClass::operator()(TDEventClass &td, TEventType event, HousesType hous
 		**	Ensure that there are no more factories left.
 		*/
 		case TEVENT_NOFACTORIES:
-			if (hptr->BScan &
-			    (STRUCTF_AIRSTRIP | STRUCTF_TENT | STRUCTF_WEAP | STRUCTF_BARRACKS | STRUCTF_CONST))
+			if (hptr->BScan & (STRUCTF_AIRSTRIP | STRUCTF_TENT | STRUCTF_WEAP | STRUCTF_BARRACKS | STRUCTF_CONST))
 				return (false);
 			break;
 
@@ -656,7 +655,9 @@ TEventType Event_From_Name(char const *name) {
  * HISTORY:                                                                                    *
  *   11/29/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-char const *Name_From_Event(TEventType event) { return (EventText[event]); }
+char const *Name_From_Event(TEventType event) {
+	return (EventText[event]);
+}
 
 /***********************************************************************************************
  * Attaches_To -- Determines what event can be attached to.                                    *

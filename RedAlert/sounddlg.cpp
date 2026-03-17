@@ -40,8 +40,7 @@
 class MusicListClass : public ListClass {
 public:
 	MusicListClass(int id, int x, int y, int w, int h)
-	    : ListClass(id, x, y, w, h, TPF_6PT_GRAD | TPF_NOSHADOW, MFCD::Retrieve("BTN-UP.SHP"),
-			MFCD::Retrieve("BTN-DN.SHP")) {};
+		: ListClass(id, x, y, w, h, TPF_6PT_GRAD | TPF_NOSHADOW, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP")) {};
 	virtual ~MusicListClass(void) {};
 
 protected:
@@ -63,7 +62,6 @@ protected:
  * HISTORY:    12/31/1994 MML : Created.                                                       *
  *=============================================================================================*/
 void SoundControlsClass::Process(void) {
-
 	/*
 	** Adjust dialog controls for resolution
 	*/
@@ -132,8 +130,7 @@ void SoundControlsClass::Process(void) {
 	/*
 	**	Return to options menu button.
 	*/
-	TextButtonClass returnto(BUTTON_OPTIONS, TXT_OK, TPF_BUTTON, option_x + button_x, option_y + button_y,
-				 button_width);
+	TextButtonClass returnto(BUTTON_OPTIONS, TXT_OK, TPF_BUTTON, option_x + button_x, option_y + button_y, button_width);
 	//	TextButtonClass returnto(BUTTON_OPTIONS, TXT_OPTIONS_MENU, TPF_BUTTON,
 
 	/*
@@ -149,16 +146,14 @@ void SoundControlsClass::Process(void) {
 	/*
 	**	Shuffle control.
 	*/
-	TextButtonClass shufflebtn(BUTTON_SHUFFLE, TXT_OFF, TPF_BUTTON, option_x + shuffle_x, option_y + shuffle_y,
-				   onoff_width);
+	TextButtonClass shufflebtn(BUTTON_SHUFFLE, TXT_OFF, TPF_BUTTON, option_x + shuffle_x, option_y + shuffle_y, onoff_width);
 	//	TextButtonClass shufflebtn(BUTTON_SHUFFLE, TXT_OFF, TPF_BUTTON, option_x+shuffle_x, option_y+shuffle_y,
 	// ONOFF_WIDTH);
 
 	/*
 	**	Repeat control.
 	*/
-	TextButtonClass repeatbtn(BUTTON_REPEAT, TXT_OFF, TPF_BUTTON, option_x + repeat_x, option_y + repeat_y,
-				  onoff_width);
+	TextButtonClass repeatbtn(BUTTON_REPEAT, TXT_OFF, TPF_BUTTON, option_x + repeat_x, option_y + repeat_y, onoff_width);
 
 	/*
 	**	Music volume slider.
@@ -168,8 +163,7 @@ void SoundControlsClass::Process(void) {
 	/*
 	**	Sound volume slider.
 	*/
-	SliderClass sound(SLIDER_SOUND, option_x + fxslider_x, option_y + fxslider_y, fxslider_w, fxslider_height,
-			  true);
+	SliderClass sound(SLIDER_SOUND, option_x + fxslider_x, option_y + fxslider_y, fxslider_w, fxslider_height, true);
 
 	/*
 	**	Causes left mouse clicks inside the dialog area, but not on any
@@ -181,8 +175,7 @@ void SoundControlsClass::Process(void) {
 	**	Causes right clicks anywhere or left clicks outside of the dialog
 	**	box area to be the same a clicking the return to game options button.
 	*/
-	ControlClass ctrl(BUTTON_OPTIONS, 0, 0, SeenBuff.Get_Width(), SeenBuff.Get_Height(),
-			  GadgetClass::RIGHTPRESS | GadgetClass::LEFTPRESS);
+	ControlClass ctrl(BUTTON_OPTIONS, 0, 0, SeenBuff.Get_Width(), SeenBuff.Get_Height(), GadgetClass::RIGHTPRESS | GadgetClass::LEFTPRESS);
 
 	/*
 	**	The repeat and shuffle buttons are of the toggle type. They toggle
@@ -245,8 +238,7 @@ void SoundControlsClass::Process(void) {
 
 			void *ptr = new char[sizeof(buffer)];
 			if (ptr) {
-				sprintf((char *)ptr, "%cTrack %d\t%d:%02d\t%s", index, listbox.Count() + 1, length / 60,
-					length % 60, fullname);
+				sprintf((char *)ptr, "%cTrack %d\t%d:%02d\t%s", index, listbox.Count() + 1, length / 60, length % 60, fullname);
 				listbox.Add_Item((char const *)ptr);
 			}
 
@@ -255,7 +247,7 @@ void SoundControlsClass::Process(void) {
 			}
 		}
 	}
-	static int _tabs[] = {55 * RESFACTOR, 72 * RESFACTOR, 90 * RESFACTOR};
+	static int _tabs[] = { 55 * RESFACTOR, 72 * RESFACTOR, 90 * RESFACTOR };
 	listbox.Set_Tabs(_tabs);
 
 	/*
@@ -265,7 +257,6 @@ void SoundControlsClass::Process(void) {
 	bool process = true;
 
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -291,7 +282,6 @@ void SoundControlsClass::Process(void) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			Hide_Mouse();
 
 			/*
@@ -304,20 +294,40 @@ void SoundControlsClass::Process(void) {
 			/*
 			** Draw the Music, Speech & Sound titles.
 			*/
-			Fancy_Text_Print(TXT_MUSIC_VOLUME, option_x + mslider_x - (5 * RESFACTOR),
-					 option_y + mslider_y - (2 * RESFACTOR), scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
-			Fancy_Text_Print(TXT_SOUND_VOLUME, option_x + fxslider_x - (5 * RESFACTOR),
-					 option_y + fxslider_y - (2 * RESFACTOR), scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+			Fancy_Text_Print(TXT_MUSIC_VOLUME,
+					 option_x + mslider_x - (5 * RESFACTOR),
+					 option_y + mslider_y - (2 * RESFACTOR),
+					 scheme,
+					 TBLACK,
+					 TPF_TEXT | TPF_RIGHT);
+			Fancy_Text_Print(TXT_SOUND_VOLUME,
+					 option_x + fxslider_x - (5 * RESFACTOR),
+					 option_y + fxslider_y - (2 * RESFACTOR),
+					 scheme,
+					 TBLACK,
+					 TPF_TEXT | TPF_RIGHT);
 
 #if defined(GERMAN) || defined(FRENCH)
-			Fancy_Text_Print(TXT_SHUFFLE, option_x + 4 + shuffle_x - (5 * RESFACTOR),
-					 option_y + shuffle_y + (1 * RESFACTOR), scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+			Fancy_Text_Print(TXT_SHUFFLE,
+					 option_x + 4 + shuffle_x - (5 * RESFACTOR),
+					 option_y + shuffle_y + (1 * RESFACTOR),
+					 scheme,
+					 TBLACK,
+					 TPF_TEXT | TPF_RIGHT);
 #else
-			Fancy_Text_Print(TXT_SHUFFLE, option_x + shuffle_x - (5 * RESFACTOR),
-					 option_y + shuffle_y + (1 * RESFACTOR), scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+			Fancy_Text_Print(TXT_SHUFFLE,
+					 option_x + shuffle_x - (5 * RESFACTOR),
+					 option_y + shuffle_y + (1 * RESFACTOR),
+					 scheme,
+					 TBLACK,
+					 TPF_TEXT | TPF_RIGHT);
 #endif
-			Fancy_Text_Print(TXT_REPEAT, option_x + repeat_x - (5 * RESFACTOR),
-					 option_y + repeat_y + (1 * RESFACTOR), scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+			Fancy_Text_Print(TXT_REPEAT,
+					 option_x + repeat_x - (5 * RESFACTOR),
+					 option_y + repeat_y + (1 * RESFACTOR),
+					 scheme,
+					 TBLACK,
+					 TPF_TEXT | TPF_RIGHT);
 
 			optionsbtn->Draw_All();
 			Show_Mouse();
@@ -333,7 +343,6 @@ void SoundControlsClass::Process(void) {
 		**	Process Input.
 		*/
 		switch (input) {
-
 		case KN_ESC:
 		case BUTTON_OPTIONS | KN_BUTTON:
 			process = false;
@@ -442,8 +451,7 @@ void MusicListClass::Draw_Entry(int index, int x, int y, int width, int selected
 
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
-			LogicPage->Fill_Rect(x, y, x + width - 1, y + LineHeight - 1,
-					     GadgetClass::Get_Color_Scheme()->Shadow);
+			LogicPage->Fill_Rect(x, y, x + width - 1, y + LineHeight - 1, GadgetClass::Get_Color_Scheme()->Shadow);
 		} else {
 			if (!(flags & TPF_USE_GRAD_PAL)) {
 				flags = flags | TPF_MEDIUM_COLOR;
@@ -453,8 +461,13 @@ void MusicListClass::Draw_Entry(int index, int x, int y, int width, int selected
 		Conquer_Clip_Text_Print((char *)List[index] + 1, x, y, scheme, TBLACK, flags, width, Tabs);
 
 	} else {
-		Conquer_Clip_Text_Print((char *)List[index] + 1, x, y,
+		Conquer_Clip_Text_Print((char *)List[index] + 1,
+					x,
+					y,
 					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
-					TBLACK, TextFlags, width, Tabs);
+					TBLACK,
+					TextFlags,
+					width,
+					Tabs);
 	}
 }

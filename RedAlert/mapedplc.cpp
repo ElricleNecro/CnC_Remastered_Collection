@@ -220,12 +220,12 @@ int MapEditClass::Placement_Dialog(void) {
 	/*
 	**	Dialog variables
 	*/
-	bool cancel = false;	       // true = user cancels
+	bool cancel = false; // true = user cancels
 	const ObjectTypeClass *curobj; // Working object pointer.
-	int x, y;		       // for drawing the grid
-	KeyNumType input;	       // user input
-	short const *occupy;	       // ptr into object's OccupyList
-	int cell;		       // cell index for parsing OccupyList
+	int x, y; // for drawing the grid
+	KeyNumType input; // user input
+	short const *occupy; // ptr into object's OccupyList
+	int cell; // cell index for parsing OccupyList
 	int i;
 	int typeindex; // index of class type
 
@@ -234,8 +234,14 @@ int MapEditClass::Placement_Dialog(void) {
 	*/
 	ControlClass *commands;
 
-	ListClass housebtn(BUTTON_HOUSE, D_GDI_X, D_GDI_Y, 60, 8 * 16, TPF_EFNT | TPF_NOSHADOW,
-			   MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	ListClass housebtn(BUTTON_HOUSE,
+			   D_GDI_X,
+			   D_GDI_Y,
+			   60,
+			   8 * 16,
+			   TPF_EFNT | TPF_NOSHADOW,
+			   MFCD::Retrieve("EBTN-UP.SHP"),
+			   MFCD::Retrieve("EBTN-DN.SHP"));
 	for (house = HOUSE_FIRST; house < HOUSE_COUNT; house++) {
 		housebtn.Add_Item(HouseTypeClass::As_Reference(house).IniName);
 	}
@@ -245,20 +251,14 @@ int MapEditClass::Placement_Dialog(void) {
 	TextButtonClass prevbtn(BUTTON_PREV, TXT_LEFT, TPF_EBUTTON, D_LEFT_X, D_LEFT_Y, D_LEFT_W, D_LEFT_H);
 	TextButtonClass okbtn(BUTTON_OK, "OK", TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
 	TextButtonClass cancelbtn(BUTTON_CANCEL, "Cancel", TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
-	TextButtonClass templatebtn(BUTTON_TEMPLATE, "Template", TPF_EBUTTON, D_TEMPLATE_X, D_TEMPLATE_Y, D_TEMPLATE_W,
-				    D_TEMPLATE_H);
-	TextButtonClass overlaybtn(BUTTON_OVERLAY, "Overlay", TPF_EBUTTON, D_OVERLAY_X, D_OVERLAY_Y, D_OVERLAY_W,
-				   D_OVERLAY_H);
+	TextButtonClass templatebtn(BUTTON_TEMPLATE, "Template", TPF_EBUTTON, D_TEMPLATE_X, D_TEMPLATE_Y, D_TEMPLATE_W, D_TEMPLATE_H);
+	TextButtonClass overlaybtn(BUTTON_OVERLAY, "Overlay", TPF_EBUTTON, D_OVERLAY_X, D_OVERLAY_Y, D_OVERLAY_W, D_OVERLAY_H);
 	TextButtonClass smudgebtn(BUTTON_SMUDGE, "Smudge", TPF_EBUTTON, D_SMUDGE_X, D_SMUDGE_Y, D_SMUDGE_W, D_SMUDGE_H);
-	TextButtonClass terrainbtn(BUTTON_TERRAIN, "Terrain", TPF_EBUTTON, D_TERRAIN_X, D_TERRAIN_Y, D_TERRAIN_W,
-				   D_TERRAIN_H);
+	TextButtonClass terrainbtn(BUTTON_TERRAIN, "Terrain", TPF_EBUTTON, D_TERRAIN_X, D_TERRAIN_Y, D_TERRAIN_W, D_TERRAIN_H);
 	TextButtonClass unitbtn(BUTTON_UNIT, "Unit", TPF_EBUTTON, D_UNIT_X, D_UNIT_Y, D_UNIT_W, D_UNIT_H);
-	TextButtonClass infantrybtn(BUTTON_INFANTRY, "Infantry", TPF_EBUTTON, D_INFANTRY_X, D_INFANTRY_Y, D_INFANTRY_W,
-				    D_INFANTRY_H);
-	TextButtonClass aircraftbtn(BUTTON_AIRCRAFT, "Ships", TPF_EBUTTON, D_AIRCRAFT_X, D_AIRCRAFT_Y, D_AIRCRAFT_W,
-				    D_AIRCRAFT_H);
-	TextButtonClass buildingbtn(BUTTON_BUILDING, "Building", TPF_EBUTTON, D_BUILDING_X, D_BUILDING_Y, D_BUILDING_W,
-				    D_BUILDING_H);
+	TextButtonClass infantrybtn(BUTTON_INFANTRY, "Infantry", TPF_EBUTTON, D_INFANTRY_X, D_INFANTRY_Y, D_INFANTRY_W, D_INFANTRY_H);
+	TextButtonClass aircraftbtn(BUTTON_AIRCRAFT, "Ships", TPF_EBUTTON, D_AIRCRAFT_X, D_AIRCRAFT_Y, D_AIRCRAFT_W, D_AIRCRAFT_H);
+	TextButtonClass buildingbtn(BUTTON_BUILDING, "Building", TPF_EBUTTON, D_BUILDING_X, D_BUILDING_Y, D_BUILDING_W, D_BUILDING_H);
 	TextButtonClass airbtn(BUTTON_AIR, "Aircraft", TPF_EBUTTON, D_AIR_X, D_AIR_Y, D_AIR_W, D_AIR_H);
 
 	/*
@@ -328,7 +328,6 @@ int MapEditClass::Placement_Dialog(void) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback
 		*/
@@ -338,7 +337,6 @@ int MapEditClass::Placement_Dialog(void) {
 		**	Refresh display if needed
 		*/
 		if (display) {
-
 			/*
 			**	Display the dialog box
 			*/
@@ -365,8 +363,11 @@ int MapEditClass::Placement_Dialog(void) {
 			/*
 			**	Erase the grid
 			*/
-			LogicPage->Fill_Rect(D_GRID_X - GRIDBLOCK_W * 2, D_GRID_Y, D_GRID_X + GRIDSIZE * GRIDBLOCK_W,
-					     D_GRID_Y + GRIDSIZE * GRIDBLOCK_H, BLACK);
+			LogicPage->Fill_Rect(D_GRID_X - GRIDBLOCK_W * 2,
+					     D_GRID_Y,
+					     D_GRID_X + GRIDSIZE * GRIDBLOCK_W,
+					     D_GRID_Y + GRIDSIZE * GRIDBLOCK_H,
+					     BLACK);
 
 			/*
 			**	Draw a box for every cell occupied
@@ -385,12 +386,16 @@ int MapEditClass::Placement_Dialog(void) {
 			*/
 			for (y = 0; y <= GRIDSIZE; y++) {
 				for (x = 0; x <= GRIDSIZE; x++) {
-					LogicPage->Draw_Line(D_GRID_X + x * GRIDBLOCK_W, D_GRID_Y,
+					LogicPage->Draw_Line(D_GRID_X + x * GRIDBLOCK_W,
+							     D_GRID_Y,
 							     D_GRID_X + x * GRIDBLOCK_W,
-							     D_GRID_Y + GRIDSIZE * GRIDBLOCK_H, scheme->Shadow);
+							     D_GRID_Y + GRIDSIZE * GRIDBLOCK_H,
+							     scheme->Shadow);
 				}
-				LogicPage->Draw_Line(D_GRID_X, D_GRID_Y + y * GRIDBLOCK_H,
-						     D_GRID_X + GRIDSIZE * GRIDBLOCK_W, D_GRID_Y + y * GRIDBLOCK_H,
+				LogicPage->Draw_Line(D_GRID_X,
+						     D_GRID_Y + y * GRIDBLOCK_H,
+						     D_GRID_X + GRIDSIZE * GRIDBLOCK_W,
+						     D_GRID_Y + y * GRIDBLOCK_H,
 						     scheme->Shadow);
 			}
 
@@ -399,7 +404,11 @@ int MapEditClass::Placement_Dialog(void) {
 			**	Warning: Text_String returns an EMS pointer, so standard string
 			**	functions won't work!
 			*/
-			Fancy_Text_Print(curobj->Full_Name(), D_PICTURE_CX, D_PICTURE_Y + D_MARGIN, scheme, TBLACK,
+			Fancy_Text_Print(curobj->Full_Name(),
+					 D_PICTURE_CX,
+					 D_PICTURE_Y + D_MARGIN,
+					 scheme,
+					 TBLACK,
 					 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
 
 			/*
@@ -478,7 +487,6 @@ int MapEditClass::Placement_Dialog(void) {
 		**	Process user input
 		*/
 		switch (input) {
-
 		/*
 		**	GDI House
 		*/
@@ -662,7 +670,6 @@ int MapEditClass::Placement_Dialog(void) {
  *   11/04/1994 BR : Created.                                              *
  *=========================================================================*/
 void MapEditClass::Start_Placement(void) {
-
 	/*
 	**	Initialize addable objects list; we must do this every time in case one
 	**	of the object pools has become exhausted; that object won't be available
@@ -766,15 +773,15 @@ void MapEditClass::Start_Placement(void) {
  *   11/04/1994 BR : Created.                                              *
  *=========================================================================*/
 int MapEditClass::Place_Object(void) {
-	CELL template_cell;	  // cell being checked for template
-	COORDINATE obj_coord;	  // coord of occupier object
-	int okflag;		  // OK to place a template?
-	short const *occupy;	  // ptr into template's OccupyList
-	ObjectClass *occupier;	  // occupying object
-	TemplateType save_ttype;  // for saving cell's TType
+	CELL template_cell; // cell being checked for template
+	COORDINATE obj_coord; // coord of occupier object
+	int okflag; // OK to place a template?
+	short const *occupy; // ptr into template's OccupyList
+	ObjectClass *occupier; // occupying object
+	TemplateType save_ttype; // for saving cell's TType
 	unsigned char save_ticon; // for saving cell's TIcon
-				  //	BaseNodeClass node;						// for adding to
-				  //an AI Base
+		//	BaseNodeClass node;						// for adding to
+		//an AI Base
 
 	/*
 	**	Placing a template:
@@ -784,14 +791,12 @@ int MapEditClass::Place_Object(void) {
 	*/
 	// ScenarioInit++;
 	if (PendingObject->What_Am_I() == RTTI_TEMPLATETYPE) {
-
 		/*
 		**	Loop through all cells this template will occupy
 		*/
 		okflag = true;
 		occupy = PendingObject->Occupy_List();
 		while ((*occupy) != REFRESH_EOL) {
-
 			/*
 			**	Check this cell for an occupier
 			*/
@@ -815,8 +820,7 @@ int MapEditClass::Place_Object(void) {
 				save_ttype = (*this)[template_cell].TType;
 				save_ticon = (*this)[template_cell].TIcon;
 				(*this)[template_cell].TType = ((TemplateTypeClass *)PendingObject)->Type;
-				(*this)[template_cell].TIcon =
-				    Cell_X(*occupy) + Cell_Y(*occupy) * ((TemplateTypeClass *)PendingObject)->Width;
+				(*this)[template_cell].TIcon = Cell_X(*occupy) + Cell_Y(*occupy) * ((TemplateTypeClass *)PendingObject)->Width;
 				(*this)[template_cell].Recalc_Attributes();
 
 				/*
@@ -846,14 +850,12 @@ int MapEditClass::Place_Object(void) {
 		*/
 		if (okflag) {
 			if (PendingObjectPtr->Unlimbo(Cell_Coord(ZoneCell + ZoneOffset))) {
-
 				/*
 				**	Loop through all cells occupied by this template, and clear the
 				**	smudge & overlay.
 				*/
 				occupy = PendingObject->Occupy_List();
 				while ((*occupy) != REFRESH_EOL) {
-
 					/*
 					**	Get cell for this occupy item
 					*/
@@ -908,7 +910,6 @@ int MapEditClass::Place_Object(void) {
 	**	sub-position closest to the mouse & put him there
 	*/
 	if (PendingObject->What_Am_I() == RTTI_INFANTRYTYPE) {
-
 		/*
 		**	Find cell sub-position
 		*/
@@ -949,7 +950,6 @@ int MapEditClass::Place_Object(void) {
 	**	Placing an object
 	*/
 	if (PendingObjectPtr->Unlimbo(Cell_Coord(ZoneCell + ZoneOffset))) {
-
 		/*
 		** Update the Tiberium computation if we're placing an overlay
 		*/
@@ -964,8 +964,7 @@ int MapEditClass::Place_Object(void) {
 		if (BaseBuilding && PendingObject->What_Am_I() == RTTI_BUILDINGTYPE) {
 			//			node.Type = ((BuildingTypeClass *)PendingObject)->Type;
 			//			node.Cell = Coord_Cell(PendingObjectPtr->Coord);
-			Base.Nodes.Add(BaseNodeClass(((BuildingTypeClass *)PendingObject)->Type,
-						     Coord_Cell(PendingObjectPtr->Coord)));
+			Base.Nodes.Add(BaseNodeClass(((BuildingTypeClass *)PendingObject)->Type, Coord_Cell(PendingObjectPtr->Coord)));
 		}
 
 		PendingObjectPtr = 0;
@@ -1050,7 +1049,6 @@ void MapEditClass::Place_Next(void) {
 		*/
 		LastChoice++;
 		if (LastChoice == ObjCount) {
-
 			/*
 			** If we're in normal placement mode, wrap to the 1st object;
 			** if we're in base-building mode, wrap to the 1st building
@@ -1117,7 +1115,6 @@ void MapEditClass::Place_Prev(void) {
 	**	Loop until we create a valid object
 	*/
 	while (!PendingObjectPtr) {
-
 		/*
 		**	Go to prev object in Objects list
 		*/
@@ -1209,7 +1206,6 @@ void MapEditClass::Place_Next_Category(void) {
 	**	Loop until we create a valid object
 	*/
 	while (!PendingObjectPtr) {
-
 		/*
 		**	Get house for this object type
 		*/
@@ -1320,7 +1316,6 @@ void MapEditClass::Place_Prev_Category(void) {
 	**	Loop until we create a valid object
 	*/
 	while (!PendingObjectPtr) {
-
 		/*
 		**	Get house for this object type
 		*/
@@ -1395,7 +1390,6 @@ void MapEditClass::Place_Home(void) {
 	*/
 	LastChoice = 0;
 	while (!PendingObjectPtr) {
-
 		/*
 		**	Get house for this object type
 		*/
@@ -1520,14 +1514,12 @@ void MapEditClass::Set_House_Buttons(HousesType house, GadgetClass *, int)
 	**	Loop through all houses, searching the button list for each one.
 	*/
 	for (h = HOUSE_FIRST; h < HOUSE_COUNT; h++) {
-
 		/*
 		**	Compute the desired button ID; get a pointer to the button
 		*/
 		id = (int)h + base_id;
 		btn = (TextButtonClass *)btnlist->Extract_Gadget(id);
 		if (btn) {
-
 			/*
 			**	If this house value is the desired one, turn the button on;
 			**	otherwise, turn it off.
@@ -1634,7 +1626,6 @@ void MapEditClass::Place_Trigger(void) {
 			}
 		}
 	} else {
-
 		/*
 		**	Assign trigger to a cell
 		*/

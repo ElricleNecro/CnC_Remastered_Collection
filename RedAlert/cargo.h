@@ -47,7 +47,9 @@ public:
 	*/
 	CargoClass(void) : Quantity(0), CargoHold(0) {};
 	CargoClass(NoInitClass const &) {};
-	~CargoClass(void) { CargoHold = 0; };
+	~CargoClass(void) {
+		CargoHold = 0;
+	};
 
 	/*---------------------------------------------------------------------
 	**	Member function prototypes.
@@ -58,8 +60,12 @@ public:
 #endif
 	void AI(void) {};
 
-	int How_Many(void) const { return Quantity; };
-	bool Is_Something_Attached(void) const { return (CargoHold != 0); };
+	int How_Many(void) const {
+		return Quantity;
+	};
+	bool Is_Something_Attached(void) const {
+		return (CargoHold != 0);
+	};
 	FootClass *Attached_Object(void) const;
 	FootClass *Detach_Object(void);
 	void Attach(FootClass *object);

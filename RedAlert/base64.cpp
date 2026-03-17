@@ -34,8 +34,8 @@
  *   Base64_Encode -- Encode data into Base 64 format.                                         *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "base64.h"
 #include <stddef.h>
+#include "base64.h"
 
 /*
 **	This is the magic padding character used to fill out the encoded data to a multiple of
@@ -57,18 +57,17 @@ static char const *const _encoder = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
 #define BAD 0xFE // Ignore this character in source data.
 #define END 0xFF // Signifies premature end of input data.
 static unsigned char const _decoder[256] = {
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, 62,
-    BAD, BAD, BAD, 63,	52,  53,  54,  55,  56,	 57,  58,  59,	60,  61,  BAD, BAD, BAD, END, BAD, BAD, BAD, 0,
-    1,	 2,   3,   4,	5,   6,	  7,   8,   9,	 10,  11,  12,	13,  14,  15,  16,  17,	 18,  19,  20,	21,  22,
-    23,	 24,  25,  BAD, BAD, BAD, BAD, BAD, BAD, 26,  27,  28,	29,  30,  31,  32,  33,	 34,  35,  36,	37,  38,
-    39,	 40,  41,  42,	43,  44,  45,  46,  47,	 48,  49,  50,	51,  BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
-    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD};
+	BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+	BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, 62,  BAD, BAD, BAD, 63,  52,  53,	54,  55,
+	56,  57,  58,  59,  60,	 61,  BAD, BAD, BAD, END, BAD, BAD, BAD, 0,   1,   2,	3,   4,	  5,   6,   7,	 8,   9,   10,	11,  12,
+	13,  14,  15,  16,  17,	 18,  19,  20,	21,  22,  23,  24,  25,	 BAD, BAD, BAD, BAD, BAD, BAD, 26,  27,	 28,  29,  30,	31,  32,
+	33,  34,  35,  36,  37,	 38,  39,  40,	41,  42,  43,  44,  45,	 46,  47,  48,	49,  50,  51,  BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+	BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+	BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+	BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+	BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+	BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD
+};
 
 int const PacketChars = 4;
 
@@ -146,7 +145,6 @@ int Base64_Encode(void const *source, int slen, void *dest, int dlen) {
 	unsigned char const *sptr = (unsigned char const *)source;
 	unsigned char *dptr = (unsigned char *)dest;
 	while (slen > 0 && dlen >= PacketChars) {
-
 		/*
 		**	Fetch 24 bits of source data.
 		*/
@@ -240,7 +238,6 @@ int Base64_Decode(void const *source, int slen, void *dest, int dlen) {
 	unsigned char const *sptr = (unsigned char const *)source;
 	unsigned char *dptr = (unsigned char *)dest;
 	while (slen > 0 && dlen > 0) {
-
 		PacketType packet;
 		packet.Raw = 0;
 

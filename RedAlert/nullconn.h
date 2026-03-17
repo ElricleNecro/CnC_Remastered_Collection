@@ -85,7 +85,7 @@ public:
 	.....................................................................*/
 #ifdef WIN32
 	void Init(HANDLE port_handle);
-#else  // WIN32
+#else // WIN32
 	void Init(PORT *port);
 #endif // WIN32
 
@@ -120,7 +120,7 @@ protected:
 	** This is the winsoze port handle
 	*/
 	HANDLE PortHandle;
-#else  // WIN32
+#else // WIN32
 	/*.....................................................................
 	This is the PORT value used by the GreenLeaf calls.
 	.....................................................................*/

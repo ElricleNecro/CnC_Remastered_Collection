@@ -81,8 +81,8 @@
  *   03/14/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 VesselClass::VesselClass(VesselType classid, HousesType house)
-    : DriveClass(RTTI_VESSEL, Vessels.ID(this), house), Class(VesselTypes.Ptr((int)classid)), IsToSelfRepair(false),
-      IsSelfRepairing(false), DoorShutCountDown(0), PulseCountDown(0), SecondaryFacing(PrimaryFacing) {
+	: DriveClass(RTTI_VESSEL, Vessels.ID(this), house), Class(VesselTypes.Ptr((int)classid)), IsToSelfRepair(false), IsSelfRepairing(false),
+	  DoorShutCountDown(0), PulseCountDown(0), SecondaryFacing(PrimaryFacing) {
 	House->Tracking_Add(this);
 
 	/*
@@ -131,7 +131,6 @@ VesselClass::VesselClass(VesselType classid, HousesType house)
  *=============================================================================================*/
 VesselClass::~VesselClass(void) {
 	if (GameActive && Class.Is_Valid()) {
-
 		/*
 		**	Remove this member from any team it may be associated with. This must occur at the
 		**	top most level of the inheritance hierarchy because it may call virtual functions.
@@ -276,7 +275,6 @@ MoveType VesselClass::Can_Enter_Cell(CELL cell, FacingType) const {
 	**	as blocked by a moving object.
 	*/
 	if (cellptr->Flag.Composite) {
-
 		if (cellptr->Flag.Occupy.Building) {
 			return (MOVE_NO);
 		}
@@ -416,8 +414,7 @@ void VesselClass::Draw_It(int x, int y, WindowNumberType window) const {
 				Class->Turret_Adjust(turdir, xx, yy);
 				// Add shape file name forl new shape draw intercept. ST - 8/19/2019 1:42PM
 				// Techno_Draw_Object(shapefile, shapenum, xx, yy, window);
-				Techno_Draw_Object_Virtual(shapefile, shapenum, xx, yy, window, DIR_N, 0x0100,
-							   turret_shape_name);
+				Techno_Draw_Object_Virtual(shapefile, shapenum, xx, yy, window, DIR_N, 0x0100, turret_shape_name);
 				xx = x;
 				yy = y;
 				turdir = DirType(Dir_To_16(PrimaryFacing + DIR_S) * 16);
@@ -449,8 +446,7 @@ void VesselClass::Draw_It(int x, int y, WindowNumberType window) const {
 			*/
 			// Add shape file name forl new shape draw intercept. ST - 8/19/2019 1:42PM
 			if (turret_shape_name) {
-				Techno_Draw_Object_Virtual(shapefile, shapenum, xx, yy, window, DIR_N, 0x0100,
-							   turret_shape_name);
+				Techno_Draw_Object_Virtual(shapefile, shapenum, xx, yy, window, DIR_N, 0x0100, turret_shape_name);
 			} else {
 				Techno_Draw_Object(shapefile, shapenum, xx, yy, window);
 			}
@@ -466,10 +462,8 @@ void VesselClass::Draw_It(int x, int y, WindowNumberType window) const {
 		TechnoClass *contact = Contact_With_Whom();
 		assert(contact->IsActive);
 
-		int xxx = x + ((int)Lepton_To_Pixel((int)Coord_X(contact->Render_Coord())) -
-			       (int)Lepton_To_Pixel((int)Coord_X(Render_Coord())));
-		int yyy = y + ((int)Lepton_To_Pixel((int)Coord_Y(contact->Render_Coord())) -
-			       (int)Lepton_To_Pixel((int)Coord_Y(Render_Coord())));
+		int xxx = x + ((int)Lepton_To_Pixel((int)Coord_X(contact->Render_Coord())) - (int)Lepton_To_Pixel((int)Coord_X(Render_Coord())));
+		int yyy = y + ((int)Lepton_To_Pixel((int)Coord_Y(contact->Render_Coord())) - (int)Lepton_To_Pixel((int)Coord_Y(Render_Coord())));
 		contact->Draw_It(xxx, yyy, window);
 		contact->IsToDisplay = false;
 	}
@@ -596,8 +590,8 @@ void VesselClass::AI(void) {
 	}
 #endif
 
-#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
-		     // Re-stock the ammo of any on-board helicopters on an aircraft carrier.
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98                                                                                                        \
+	// Re-stock the ammo of any on-board helicopters on an aircraft carrier.
 	if (*this == VESSEL_CARRIER && How_Many()) {
 		if (!MoebiusCountDown) {
 			MoebiusCountDown = Rule.ReloadRate * TICKS_PER_MINUTE;
@@ -638,13 +632,12 @@ void VesselClass::AI(void) {
 	}
 
 	if (Class->Max_Passengers() > 0) {
-
 		/*
 		**	Double check that there is a passenger that is trying to load or unload.
 		**	If not, then close the door.
 		*/
-		if (!Is_Door_Closed() && Mission != MISSION_UNLOAD &&
-		    Transmit_Message(RADIO_TRYING_TO_LOAD) != RADIO_ROGER && !(long)DoorShutCountDown) {
+		if (!Is_Door_Closed() && Mission != MISSION_UNLOAD && Transmit_Message(RADIO_TRYING_TO_LOAD) != RADIO_ROGER &&
+		    !(long)DoorShutCountDown) {
 			LST_Close_Door();
 		}
 	}
@@ -702,7 +695,6 @@ void VesselClass::Per_Cell_Process(PCPType why) {
 				SmartPtr<BuildingClass> whom;
 				whom = Map[cell].Cell_Building();
 				if (whom != NULL && ((*whom == STRUCT_SHIP_YARD) || (*whom == STRUCT_SUB_PEN))) {
-
 					// MBL 04.27.2020: Make only audible to the correct player
 					// if (IsOwnedByPlayer) Speak(VOX_REPAIRING);
 					if (IsOwnedByPlayer)
@@ -767,9 +759,8 @@ ActionType VesselClass::What_Action(ObjectClass const *object) const {
 					CELL cellnum = Adjacent_Cell(Coord_Cell(Coord), face);
 					CellClass *cell = &Map[cellnum];
 					if (Map.In_Radar(cellnum)) {
-						if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 ||
-						    cell->Flag.Occupy.Building || cell->Flag.Occupy.Vehicle ||
-						    cell->Flag.Occupy.Monolith ||
+						if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 || cell->Flag.Occupy.Building ||
+						    cell->Flag.Occupy.Vehicle || cell->Flag.Occupy.Monolith ||
 						    (cell->Flag.Composite & 0x01F) == 0x01F) {
 							continue;
 						} else {
@@ -794,8 +785,7 @@ ActionType VesselClass::What_Action(ObjectClass const *object) const {
 		}
 	}
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
-	if (action == ACTION_ATTACK && object->What_Am_I() == RTTI_VESSEL &&
-	    (*this == VESSEL_MISSILESUB || *this == VESSEL_CA)) {
+	if (action == ACTION_ATTACK && object->What_Am_I() == RTTI_VESSEL && (*this == VESSEL_MISSILESUB || *this == VESSEL_CA)) {
 		action = ACTION_NOMOVE;
 	}
 #endif
@@ -969,14 +959,12 @@ ResultType VesselClass::Take_Damage(int &damage, int distance, WarheadType warhe
 		delete this;
 
 	} else {
-
 		/*
 		**	When damaged and below half strength, start smoking if
 		**	it isn't already smoking (and it's not a submarine).
 		*/
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
-		if (Health_Ratio() <= Rule.ConditionYellow && !IsAnimAttached &&
-		    (*this != VESSEL_SS && *this != VESSEL_MISSILESUB)) {
+		if (Health_Ratio() <= Rule.ConditionYellow && !IsAnimAttached && (*this != VESSEL_SS && *this != VESSEL_MISSILESUB)) {
 #else
 		if (Health_Ratio() <= Rule.ConditionYellow && !IsAnimAttached && (*this != VESSEL_SS)) {
 #endif
@@ -1088,8 +1076,7 @@ FireErrorType VesselClass::Can_Fire(TARGET target, int which) const {
 				return (FIRE_CANT);
 			} else {
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
-				if (Is_Target_Vessel(target) &&
-				    (*As_Vessel(target) != VESSEL_SS && *As_Vessel(target) != VESSEL_MISSILESUB)) {
+				if (Is_Target_Vessel(target) && (*As_Vessel(target) != VESSEL_SS && *As_Vessel(target) != VESSEL_MISSILESUB)) {
 #else
 				if (Is_Target_Vessel(target) && *As_Vessel(target) != VESSEL_SS) {
 #endif
@@ -1100,8 +1087,7 @@ FireErrorType VesselClass::Can_Fire(TARGET target, int which) const {
 			}
 		} else {
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
-			if (Is_Target_Vessel(target) &&
-			    (*As_Vessel(target) == VESSEL_SS || *As_Vessel(target) == VESSEL_MISSILESUB)) {
+			if (Is_Target_Vessel(target) && (*As_Vessel(target) == VESSEL_SS || *As_Vessel(target) == VESSEL_MISSILESUB)) {
 #else
 			if (Is_Target_Vessel(target) && *As_Vessel(target) == VESSEL_SS) {
 #endif
@@ -1172,13 +1158,13 @@ FireDataType VesselClass::Fire_Data(int which) const {
 			coord = Coord_Move(coord, PrimaryFacing, 0x0100);
 		}
 		coord = Coord_Move(coord, DIR_N, 0x0030);
-		return {coord, 0x0040};
+		return { coord, 0x0040 };
 	}
 
 	if (*this == VESSEL_PT) {
 		coord = Coord_Move(coord, PrimaryFacing, 0x0080);
 		coord = Coord_Move(coord, DIR_N, 0x0020);
-		return {coord, 0x0010};
+		return { coord, 0x0010 };
 	}
 
 	return (DriveClass::Fire_Data(which));
@@ -1226,7 +1212,9 @@ COORDINATE VesselClass::Fire_Coord(int which) const {
  * HISTORY:                                                                                    *
  *   05/13/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void VesselClass::Init(void) { Vessels.Free_All(); }
+void VesselClass::Init(void) {
+	Vessels.Free_All();
+}
 
 /***********************************************************************************************
  * VesselClass::Greatest_Threat -- Determines the greatest threat (best target) for the vessel *
@@ -1252,8 +1240,7 @@ TARGET VesselClass::Greatest_Threat(ThreatType threat) const {
 		threat = threat | THREAT_BUILDINGS;
 		threat = threat | THREAT_FACTORIES;
 	} else {
-		if ((threat & (THREAT_GROUND | THREAT_POWER | THREAT_FACTORIES | THREAT_TIBERIUM | THREAT_BASE_DEFENSE |
-			       THREAT_BOATS)) == 0) {
+		if ((threat & (THREAT_GROUND | THREAT_POWER | THREAT_FACTORIES | THREAT_TIBERIUM | THREAT_BASE_DEFENSE | THREAT_BOATS)) == 0) {
 			if (Class->PrimaryWeapon != NULL) {
 				threat = threat | Class->PrimaryWeapon->Allowed_Threats();
 			}
@@ -1313,7 +1300,6 @@ void VesselClass::Enter_Idle_Mode(bool) {
 	if (Target_Legal(NavCom)) {
 		order = MISSION_MOVE;
 	} else {
-
 		if (Class->PrimaryWeapon == NULL) {
 			if (IsALoaner && Class->Max_Passengers() > 0 && Is_Something_Attached() && !Team) {
 				order = MISSION_UNLOAD;
@@ -1324,9 +1310,8 @@ void VesselClass::Enter_Idle_Mode(bool) {
 			}
 
 		} else {
-
-			if (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA ||
-			    MissionControl[Mission].IsParalyzed || MissionControl[Mission].IsZombie) {
+			if (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA || MissionControl[Mission].IsParalyzed ||
+			    MissionControl[Mission].IsZombie) {
 				return;
 			}
 
@@ -1370,7 +1355,6 @@ RadioMessageType VesselClass::Receive_Message(RadioClass *from, RadioMessageType
 	assert(IsActive);
 
 	switch (message) {
-
 	/*
 	**	Asks if the passenger can load on this transport.
 	*/
@@ -1434,7 +1418,6 @@ RadioMessageType VesselClass::Receive_Message(RadioClass *from, RadioMessageType
 		**	off contact. In all other cases, just tell the pending unit to stand by.
 		*/
 		if (Contact_With_Whom() != from) {
-
 			/*
 			**	Can't ever load up so tell the passenger to bug off.
 			*/
@@ -1451,7 +1434,6 @@ RadioMessageType VesselClass::Receive_Message(RadioClass *from, RadioMessageType
 				Transmit_Message(RADIO_MOVE_HERE, param);
 				return (RADIO_ROGER);
 			} else {
-
 				/*
 				**	This causes the potential passenger to think that all is ok and to
 				**	hold on for a bit.
@@ -1474,7 +1456,6 @@ RadioMessageType VesselClass::Receive_Message(RadioClass *from, RadioMessageType
 				**	spot and tell it to go.
 				*/
 				if (Transmit_Message(RADIO_NEED_TO_MOVE, from) == RADIO_ROGER) {
-
 					CELL cell;
 					DirType dir = Desired_Load_Dir(from, cell);
 
@@ -1501,13 +1482,11 @@ RadioMessageType VesselClass::Receive_Message(RadioClass *from, RadioMessageType
 						*passenger is *	already at the staging location, then tell it to move
 						*onto the transport *	directly.
 						*/
-						if (Transmit_Message(RADIO_MOVE_HERE, param, from) ==
-						    RADIO_YEA_NOW_WHAT) {
+						if (Transmit_Message(RADIO_MOVE_HERE, param, from) == RADIO_YEA_NOW_WHAT) {
 							if (Is_Door_Open()) {
 								param = (long)As_Target();
 								Transmit_Message(RADIO_TETHER);
-								if (Transmit_Message(RADIO_MOVE_HERE, param, from) !=
-								    RADIO_ROGER) {
+								if (Transmit_Message(RADIO_MOVE_HERE, param, from) != RADIO_ROGER) {
 									Transmit_Message(RADIO_OVER_OUT, from);
 								} else {
 									Contact_With_Whom()->Unselect();
@@ -1604,15 +1583,11 @@ DirType VesselClass::Desired_Load_Dir(ObjectClass *passenger, CELL &moveto) cons
 		**	cell so that it is prevented from ever choosing that cell for load/unload.
 		*/
 		if (passenger != NULL) {
-			value =
-			    (passenger->Can_Enter_Cell(cellnum) == MOVE_OK || Coord_Cell(passenger->Coord) == cellnum)
-				? 128
-				: -128;
+			value = (passenger->Can_Enter_Cell(cellnum) == MOVE_OK || Coord_Cell(passenger->Coord) == cellnum) ? 128 : -128;
 		} else {
 			CellClass *cell = &Map[cellnum];
-			if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 || cell->Flag.Occupy.Building ||
-			    cell->Flag.Occupy.Vehicle || cell->Flag.Occupy.Monolith ||
-			    (cell->Flag.Composite & 0x01F) == 0x01F) {
+			if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 || cell->Flag.Occupy.Building || cell->Flag.Occupy.Vehicle ||
+			    cell->Flag.Occupy.Monolith || (cell->Flag.Composite & 0x01F) == 0x01F) {
 				value = -128;
 			} else {
 				if (cell->Cell_Techno() && !House->Is_Ally(cell->Cell_Techno())) {
@@ -1653,8 +1628,7 @@ DirType VesselClass::Desired_Load_Dir(ObjectClass *passenger, CELL &moveto) cons
 	*/
 	moveto = 0;
 	if (bestval > 0) {
-		static DirType _desired_to_actual[FACING_COUNT] = {DIR_S,  DIR_SW, DIR_NW, DIR_NW,
-								   DIR_NE, DIR_NE, DIR_NE, DIR_SE};
+		static DirType _desired_to_actual[FACING_COUNT] = { DIR_S, DIR_SW, DIR_NW, DIR_NW, DIR_NE, DIR_NE, DIR_NE, DIR_SE };
 
 		moveto = Adjacent_Cell(Coord_Cell(Coord), bestdir);
 		return (_desired_to_actual[bestdir]);
@@ -1767,7 +1741,6 @@ int VesselClass::Mission_Unload(void) {
 
 		case UNLOADING:
 			if (How_Many()) {
-
 				/*
 				**	Don't do anything if still in radio contact.
 				*/
@@ -1786,8 +1759,7 @@ int VesselClass::Mission_Unload(void) {
 
 						if (passenger->Can_Enter_Cell(newcell) == MOVE_OK) {
 							ScenarioInit++;
-							passenger->Unlimbo(
-							    Coord_Move(Coord, newface, CELL_LEPTON_W / 2), newface);
+							passenger->Unlimbo(Coord_Move(Coord, newface, CELL_LEPTON_W / 2), newface);
 							ScenarioInit--;
 							passenger->Assign_Mission(MISSION_MOVE);
 							passenger->Assign_Destination(::As_Target(newcell));
@@ -1814,8 +1786,7 @@ int VesselClass::Mission_Unload(void) {
 						*/
 						for (FacingType face = FACING_N; face < FACING_COUNT; face++) {
 							CellClass *cellptr = Map[Coord].Adjacent_Cell(face);
-							if (cellptr &&
-							    cellptr->Is_Clear_To_Move(SPEED_TRACK, true, true)) {
+							if (cellptr && cellptr->Is_Clear_To_Move(SPEED_TRACK, true, true)) {
 								cellptr->Incoming(0, true);
 							}
 						}
@@ -1958,9 +1929,10 @@ int VesselClass::Mission_Retreat(void) {
 		if (!Target_Legal(NavCom)) {
 			//				CELL cell = Map.Calculated_Cell(House->Control.Edge,
 			//(Team.Is_Valid()) ? Team->Class->Origin : -1, -1, Class->Speed);
-			CELL cell =
-			    Map.Calculated_Cell(House->Control.Edge, (Team.Is_Valid()) ? Team->Class->Origin : -1,
-						Coord_Cell(Center_Coord()), Class->Speed);
+			CELL cell = Map.Calculated_Cell(House->Control.Edge,
+							(Team.Is_Valid()) ? Team->Class->Origin : -1,
+							Coord_Cell(Center_Coord()),
+							Class->Speed);
 			if (Team.Is_Valid()) {
 				Team->Remove(this);
 			}
@@ -1997,7 +1969,9 @@ int VesselClass::Mission_Retreat(void) {
  * HISTORY:                                                                                    *
  *   07/09/1996 BWG : Created.                                                                 *
  *=============================================================================================*/
-bool VesselClass::Is_Allowed_To_Recloak(void) const { return (PulseCountDown == 0); }
+bool VesselClass::Is_Allowed_To_Recloak(void) const {
+	return (PulseCountDown == 0);
+}
 
 /***********************************************************************************************
  * VesselClass::Read_INI -- Read the vessel data from the INI database.                        *
@@ -2016,8 +1990,8 @@ bool VesselClass::Is_Allowed_To_Recloak(void) const { return (PulseCountDown == 
  *=============================================================================================*/
 void VesselClass::Read_INI(CCINIClass &ini) {
 	VesselClass *vessel; // Working vessel pointer.
-	HousesType inhouse;  // Vessel house.
-	VesselType classid;  // Vessel class.
+	HousesType inhouse; // Vessel house.
+	VesselType classid; // Vessel class.
 	char buf[128];
 
 	int len = ini.Entry_Count(INI_Name());
@@ -2030,11 +2004,9 @@ void VesselClass::Read_INI(CCINIClass &ini) {
 			classid = VesselTypeClass::From_Name(strtok(NULL, ","));
 
 			if (classid != VESSEL_NONE) {
-
 				if (HouseClass::As_Pointer(inhouse) != NULL) {
 					vessel = new VesselClass(classid, inhouse);
 					if (vessel != NULL) {
-
 						/*
 						**	Read the raw data.
 						*/
@@ -2045,12 +2017,10 @@ void VesselClass::Read_INI(CCINIClass &ini) {
 						COORDINATE coord = Cell_Coord(cell);
 
 						DirType dir = (DirType)atoi(strtok(NULL, ",\r\n"));
-						MissionType mission =
-						    MissionClass::Mission_From_Name(strtok(NULL, ",\n\r"));
+						MissionType mission = MissionClass::Mission_From_Name(strtok(NULL, ",\n\r"));
 
 						vessel->Trigger = NULL;
-						TriggerTypeClass *tp =
-						    TriggerTypeClass::From_Name(strtok(NULL, ",\r\n"));
+						TriggerTypeClass *tp = TriggerTypeClass::From_Name(strtok(NULL, ",\r\n"));
 						if (tp != NULL) {
 							TriggerClass *tt = Find_Or_Make(tp);
 							if (tt != NULL) {
@@ -2060,8 +2030,7 @@ void VesselClass::Read_INI(CCINIClass &ini) {
 						}
 
 						if (vessel->Unlimbo(coord, dir)) {
-							vessel->Strength =
-							    (int)vessel->Class->MaxStrength * fixed(strength, 256);
+							vessel->Strength = (int)vessel->Class->MaxStrength * fixed(strength, 256);
 							if (vessel->Strength > vessel->Class->MaxStrength - 3)
 								vessel->Strength = vessel->Class->MaxStrength;
 							//						vessel->Strength
@@ -2074,7 +2043,6 @@ void VesselClass::Read_INI(CCINIClass &ini) {
 							}
 
 						} else {
-
 							/*
 							**	If the vessel could not be unlimboed, then this is a
 							*catastrophic error *	condition. Delete the vessel.
@@ -2120,9 +2088,14 @@ void VesselClass::Write_INI(CCINIClass &ini) {
 			char buf[128];
 
 			sprintf(uname, "%d", index);
-			sprintf(buf, "%s,%s,%d,%u,%d,%s,%s", vessel->House->Class->IniName, vessel->Class->IniName,
-				vessel->Health_Ratio() * 256, Coord_Cell(vessel->Coord),
-				vessel->PrimaryFacing.Current(), MissionClass::Mission_Name(vessel->Mission),
+			sprintf(buf,
+				"%s,%s,%d,%u,%d,%s,%s",
+				vessel->House->Class->IniName,
+				vessel->Class->IniName,
+				vessel->Health_Ratio() * 256,
+				Coord_Cell(vessel->Coord),
+				vessel->PrimaryFacing.Current(),
+				MissionClass::Mission_Name(vessel->Mission),
 				vessel->Trigger.Is_Valid() ? vessel->Trigger->Class->IniName : "None");
 			ini.Put_String(INI_Name(), uname, buf);
 		}
@@ -2181,8 +2154,7 @@ ActionType VesselClass::What_Action(CELL cell) const {
 		return (ACTION_MOVE);
 	}
 
-	if (action == ACTION_NOMOVE && Class->PrimaryWeapon != NULL && Class->PrimaryWeapon->Bullet->IsSubSurface &&
-	    Map[cell].Is_Bridge_Here()) {
+	if (action == ACTION_NOMOVE && Class->PrimaryWeapon != NULL && Class->PrimaryWeapon->Bullet->IsSubSurface && Map[cell].Is_Bridge_Here()) {
 		return (ACTION_ATTACK);
 	}
 	return (action);
@@ -2213,7 +2185,6 @@ void VesselClass::Rotation_AI(void) {
 
 	IsRotating = false;
 	if (Class->IsTurretEquipped) {
-
 		if (SecondaryFacing.Is_Rotating()) {
 			Mark(MARK_CHANGE_REDRAW);
 			if (SecondaryFacing.Rotation_Adjust((Class->ROT * House->GroundspeedBias) + 1)) {
@@ -2246,7 +2217,6 @@ void VesselClass::Rotation_AI(void) {
  *=============================================================================================*/
 void VesselClass::Combat_AI(void) {
 	if (Target_Legal(TarCom) && Is_Weapon_Equipped()) {
-
 		/*
 		**	Determine which weapon can fire. First check for the primary weapon. If that weapon
 		**	cannot fire, then check any secondary weapon. If neither weapon can fire, then the

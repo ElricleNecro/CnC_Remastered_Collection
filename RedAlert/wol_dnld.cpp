@@ -32,11 +32,11 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 	/*
 	** Dialog & button dimensions
 	*/
-	int d_dialog_w = 200 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 90 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 200 * RESFACTOR; // dialog width
+	int d_dialog_h = 90 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_margin = 34;
 	int d_txt6_h = 15;
@@ -59,8 +59,7 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 	//	int	height;
 	//	char* info_string = (char*)szTitle;
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
-			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	//	Format_Window_String( info_string, SeenBuff.Get_Height(), width, height );
 
@@ -72,33 +71,28 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 	/*
 	** Buttons
 	*/
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
 				  TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
 #if (GERMAN | FRENCH)
-				  d_cancel_x, d_cancel_y);
+				  d_cancel_x,
+				  d_cancel_y);
 #else
-				  d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
+				  d_cancel_x,
+				  d_cancel_y,
+				  d_cancel_w,
+				  d_cancel_h);
 #endif
 
 	GaugeClass progress_meter(BUTTON_PROGRESS, d_progress_x, d_progress_y, d_progress_w, d_progress_h);
 	progress_meter.Use_Thumb(0);
 
-	StaticButtonClass StatTitle(0, szTitle, TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 28,
-				    d_dialog_w - 2 * d_margin, d_txt6_h);
-	StaticButtonClass StatStatus(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 49,
-				     d_dialog_w - 2 * d_margin, d_txt6_h);
-	StaticButtonClass StatBytes(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 71,
-				    d_dialog_w - 2 * d_margin, d_txt6_h);
-	StaticButtonClass StatTime(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 117,
-				   d_dialog_w - 2 * d_margin, d_txt6_h);
+	StaticButtonClass StatTitle(0, szTitle, TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 28, d_dialog_w - 2 * d_margin, d_txt6_h);
+	StaticButtonClass StatStatus(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 49, d_dialog_w - 2 * d_margin, d_txt6_h);
+	StaticButtonClass StatBytes(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 71, d_dialog_w - 2 * d_margin, d_txt6_h);
+	StaticButtonClass StatTime(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + d_margin, d_dialog_y + 117, d_dialog_w - 2 * d_margin, d_txt6_h);
 
-	typedef enum {
-		REDRAW_NONE = 0,
-		REDRAW_PROGRESS,
-		REDRAW_BUTTONS,
-		REDRAW_BACKGROUND,
-		REDRAW_ALL = REDRAW_BACKGROUND
-	} RedrawType;
+	typedef enum { REDRAW_NONE = 0, REDRAW_PROGRESS, REDRAW_BUTTONS, REDRAW_BACKGROUND, REDRAW_ALL = REDRAW_BACKGROUND } RedrawType;
 
 	bool process = true;
 	RedrawType display = REDRAW_ALL; // redraw level
@@ -113,7 +107,7 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 	StatStatus.Add_Tail(*commands);
 
 	progress_meter.Set_Maximum(100); // Max is 100%
-	progress_meter.Set_Value(0);	 // Current is 0%
+	progress_meter.Set_Value(0); // Current is 0%
 
 	do {
 #ifdef WIN32
@@ -128,9 +122,7 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 #endif
 
 		if (display) {
-
 			if (display >= REDRAW_BACKGROUND) {
-
 				Hide_Mouse();
 				/*
 				** Redraw backgound & dialog box
@@ -154,7 +146,6 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 			}
 
 			if (display >= REDRAW_BUTTONS) {
-
 				commands->Draw_All();
 			}
 
@@ -168,7 +159,6 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 		if (process) {
 			input = cancelbtn.Input();
 			switch (input) {
-
 			/*
 			** Cancel. Just return to the main menu
 			*/
@@ -199,12 +189,13 @@ bool WOL_Download_Dialog(IDownload *pDownload, RADownloadEventSink *pDownloadSin
 				pDownloadSink->bFlagProgressUpdate = false;
 				progress_meter.Set_Value((pDownloadSink->iBytesRead * 100) / pDownloadSink->iTotalSize);
 				char szText[200];
-				sprintf(szText, TXT_WOL_DOWNLOADBYTES, pDownloadSink->iBytesRead,
+				sprintf(szText,
+					TXT_WOL_DOWNLOADBYTES,
+					pDownloadSink->iBytesRead,
 					pDownloadSink->iTotalSize,
 					(pDownloadSink->iBytesRead * 100) / pDownloadSink->iTotalSize);
 				StatBytes.Set_Text(szText);
-				sprintf(szText, TXT_WOL_DOWNLOADTIME, pDownloadSink->iTimeLeft / 60,
-					pDownloadSink->iTimeLeft % 60);
+				sprintf(szText, TXT_WOL_DOWNLOADTIME, pDownloadSink->iTimeLeft / 60, pDownloadSink->iTimeLeft % 60);
 				StatTime.Set_Text(szText);
 				if (display < REDRAW_BUTTONS)
 					display = REDRAW_BUTTONS;

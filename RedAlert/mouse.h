@@ -46,13 +46,15 @@ public:
 	/*
 	** Initialization
 	*/
-	virtual void One_Time(void);   // One-time inits
+	virtual void One_Time(void); // One-time inits
 	virtual void Init_Clear(void); // Clears all to known state
 
 	virtual void AI(KeyNumType &input, int x, int y);
 	virtual bool Override_Mouse_Shape(MouseType mouse, bool wsmall = false);
 	virtual void Revert_Mouse_Shape(void);
-	virtual MouseType Get_Mouse_Shape(void) const { return NormalMouseShape; };
+	virtual MouseType Get_Mouse_Shape(void) const {
+		return NormalMouseShape;
+	};
 	virtual void Mouse_Small(bool wsmall);
 
 	/*
@@ -82,9 +84,9 @@ private:
 	typedef struct MouseStruct {
 		int StartFrame; // Starting frame number.
 		int FrameCount; // Number of animation frames.
-		int FrameRate;	// Frame delay between changing frames.
+		int FrameRate; // Frame delay between changing frames.
 		int SmallFrame; // Start frame number for small version (if any).
-		int X, Y;	// Hotspot X and Y offset.
+		int X, Y; // Hotspot X and Y offset.
 	} MouseStruct;
 
 	/*

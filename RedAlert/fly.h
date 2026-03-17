@@ -36,9 +36,9 @@
 #define FLY_H
 
 typedef enum ImpactType : unsigned char {
-	IMPACT_NONE,   // No movement (of significance) occurred.
+	IMPACT_NONE, // No movement (of significance) occurred.
 	IMPACT_NORMAL, // Some (non eventful) movement occurred.
-	IMPACT_EDGE    // The edge of the world was reached.
+	IMPACT_EDGE // The edge of the world was reached.
 } ImpactType;
 
 /****************************************************************************
@@ -58,7 +58,9 @@ public:
 	*/
 	void Fly_Speed(int speed, MPHType maximum);
 	ImpactType Physics(COORDINATE &coord, DirType facing);
-	MPHType Get_Speed(void) const { return (SpeedAdd); };
+	MPHType Get_Speed(void) const {
+		return (SpeedAdd);
+	};
 
 private:
 	/*
@@ -66,7 +68,7 @@ private:
 	**	has accumulated so that moving the object becomes reasonable.
 	*/
 	unsigned SpeedAccum; // Lepton accumulator.
-	MPHType SpeedAdd;    // Lepton add (per frame).
+	MPHType SpeedAdd; // Lepton add (per frame).
 };
 
 #endif

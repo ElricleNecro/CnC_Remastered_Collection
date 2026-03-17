@@ -180,21 +180,21 @@ public:
 	bool bRequestChannelListForLobbiesWait;
 
 	bool bIgnoreChannelLists; //	Used to temporarily turn off response to channel lists, when we are in the midst
-				  //	of some processing that depends on pChannelList remaining constant.
+		//	of some processing that depends on pChannelList remaining constant.
 
 	bool bRequestGameStartWait;
 
 	Server *pServer; //	Server to connect to, acquired from OnServerList.
 	bool bConnected; //	True when user is logged in to chat server.
-	bool bJoined;	 //	True when user has joined a channel.
+	bool bJoined; //	True when user has joined a channel.
 
-	Channel *pChannelList;	     //	First element of channel list, or null.
+	Channel *pChannelList; //	First element of channel list, or null.
 	CHANNELFILTER ChannelFilter; //	Affects what channels are included in channel list when built.
 
 	User *pUserList; //	First element of user list, or null.
 	User *pUserTail; //	Last element of user list, or null.
 
-	char *szMotd;			    //	Message of the day.
+	char *szMotd; //	Message of the day.
 	HRESULT hresRequestConnectionError; //	Used to pass error hresult.
 
 	HRESULT hresRequestFindResult; //	Used to pass hresult.
@@ -207,8 +207,8 @@ public:
 	bool bGotKickedTrigger; //	Special flag meaning do some more processing after callback has exited.
 
 	User *pGameUserList; //	First element of start game user list, or null.
-	int iGameID;	     //	WW Online game id received from OnGameStart.
-			     //	Is also a flag indicating "OnGameStart() called, TriggerGameStart() not yet called".
+	int iGameID; //	WW Online game id received from OnGameStart.
+		//	Is also a flag indicating "OnGameStart() called, TriggerGameStart() not yet called".
 
 	User *pUserIPList; //	List that holds user IP's, used for pinging in game channel.
 	User *pUserIPListTail;
@@ -227,8 +227,8 @@ private:
 
 //***********************************************************************************************
 class RADownloadEventSink :
-    ///////////	public CComObjectRoot,
-    public IDownloadEvent {
+	///////////	public CComObjectRoot,
+	public IDownloadEvent {
 public:
 	RADownloadEventSink();
 	virtual ~RADownloadEventSink() {};
@@ -268,8 +268,8 @@ private:
 
 //***********************************************************************************************
 class RANetUtilEventSink :
-    //    public CComObjectRoot,
-    public INetUtilEvent {
+	//    public CComObjectRoot,
+	public INetUtilEvent {
 public:
 	RANetUtilEventSink(WolapiObject *pOwner);
 	virtual ~RANetUtilEventSink();
@@ -292,8 +292,8 @@ public:
 	void DeleteLadderList(); //	Deletes from heap all users pointed to through pUserList.
 	unsigned int GetUserRank(const char *szName, bool bRankRA);
 
-	Ladder *pLadderList;   //	First element of Ladder list, or null.
-	Ladder *pLadderTail;   //	Last element of Ladder list, or null.
+	Ladder *pLadderList; //	First element of Ladder list, or null.
+	Ladder *pLadderTail; //	Last element of Ladder list, or null.
 	Ladder *pLadderListAM; //	First element of Aftermath Ladder list, or null.
 	Ladder *pLadderTailAM; //	Last element of Aftermath Ladder list, or null.
 

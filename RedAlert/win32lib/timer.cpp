@@ -38,10 +38,10 @@
  *   TimerClass::Time -- Get the current time of timer.                    *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "timer.H"
 #include <stdio.h>
 #include <stdlib.h>
 #include <wwstd.h>
+#include "timer.H"
 
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// Code ////////////////////////////////////////
@@ -89,7 +89,6 @@ long TimerClass::Get_Ticks(void)
 {
 	if (WindowsTimer) {
 		switch (TickType) {
-
 		case BT_SYSTEM:
 			return (WindowsTimer->Get_System_Tick_Count());
 

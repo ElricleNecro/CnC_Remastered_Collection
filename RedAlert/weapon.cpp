@@ -65,9 +65,9 @@ TFixedIHeapClass<WeaponTypeClass> Weapons;
  *   07/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 WeaponTypeClass::WeaponTypeClass(char const *name)
-    : ID(Weapons.ID(this)), IniName(name), IsSupressed(false), IsCamera(false), IsElectric(false), Burst(1),
-      Bullet(NULL), Attack(0), MaxSpeed(MPH_IMMOBILE), WarheadPtr(NULL), ROF(0), Range(0), Sound(VOC_NONE),
-      Anim(ANIM_NONE) {}
+	: ID(Weapons.ID(this)), IniName(name), IsSupressed(false), IsCamera(false), IsElectric(false), Burst(1), Bullet(NULL), Attack(0),
+	  MaxSpeed(MPH_IMMOBILE), WarheadPtr(NULL), ROF(0), Range(0), Sound(VOC_NONE), Anim(ANIM_NONE) {
+}
 
 /***********************************************************************************************
  * WeaponTypeClass::~WeaponTypeClass -- Destructor for weapon type class objects.              *
@@ -106,7 +106,9 @@ WeaponTypeClass::~WeaponTypeClass(void) {
  * HISTORY:                                                                                    *
  *   07/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void *WeaponTypeClass::operator new(size_t) { return (Weapons.Alloc()); }
+void *WeaponTypeClass::operator new(size_t) {
+	return (Weapons.Alloc());
+}
 
 /***********************************************************************************************
  * WeaponTypeClass::operator delete -- Returns weapon type object back to special heap.        *
@@ -123,7 +125,9 @@ void *WeaponTypeClass::operator new(size_t) { return (Weapons.Alloc()); }
  * HISTORY:                                                                                    *
  *   07/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void WeaponTypeClass::operator delete(void *pointer) { Weapons.Free((WeaponTypeClass *)pointer); }
+void WeaponTypeClass::operator delete(void *pointer) {
+	Weapons.Free((WeaponTypeClass *)pointer);
+}
 
 /***********************************************************************************************
  * WeaponTypeClass::As_Pointer -- Give a weapon type ID, fetch pointer to weapon type object.  *

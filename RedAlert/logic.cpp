@@ -78,7 +78,9 @@ void LogicClass::Debug_Dump(MonoClass *mono) const {
 	mono->Set_Cursor(10, 1);
 	mono->Printf("%3d", FramesPerSecond);
 	mono->Set_Cursor(1, 3);
-	mono->Printf("%02d:%02d:%02d", Scen.Timer / TICKS_PER_HOUR, (Scen.Timer % TICKS_PER_HOUR) / TICKS_PER_MINUTE,
+	mono->Printf("%02d:%02d:%02d",
+		     Scen.Timer / TICKS_PER_HOUR,
+		     (Scen.Timer % TICKS_PER_HOUR) / TICKS_PER_MINUTE,
 		     (Scen.Timer % TICKS_PER_MINUTE) / TICKS_PER_SECOND);
 
 	mono->Set_Cursor(1, 11);
@@ -168,7 +170,7 @@ void LogicClass::Debug_Dump(MonoClass *mono) const {
 	mono->Sub_Window(15, 13, 64, 10);
 	int graph = RECORDHEIGHT * fixed(TIMER_SECOND - SpareTicks, TIMER_SECOND);
 	for (int row = 1; row < RECORDHEIGHT; row += 2) {
-		static char _barchar[4] = {' ', 220, 0, 219};
+		static char _barchar[4] = { ' ', 220, 0, 219 };
 		char str[2];
 		int index = 0;
 
@@ -363,9 +365,8 @@ void LogicClass::AI(void) {
 						break;
 					}
 					if (damage) {
-						obj->Clicked_As_Target(
-						    HOUSE_COUNT); // 2019/09/20 JAS - Added record of who clicked on the
-								  // object, HOUSE_COUNT is used to mark for all houses
+						obj->Clicked_As_Target(HOUSE_COUNT); // 2019/09/20 JAS - Added record of who clicked on the
+							// object, HOUSE_COUNT is used to mark for all houses
 						new AnimClass(ANIM_MINE_EXP1, obj->Center_Coord());
 					}
 					obj->Take_Damage(damage, 0, WARHEAD_AP, 0, true);

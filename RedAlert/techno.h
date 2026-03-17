@@ -250,14 +250,16 @@ public:
 	TechnoClass(RTTIType rtti, int id, HousesType house = HOUSE_NONE);
 #ifdef FIXIT_MULTI_SAVE
 	TechnoClass(NoInitClass const &x)
-	    : RadioClass(x), FlasherClass(x), StageClass(x), CargoClass(x), DoorClass(x), IdleTimer(x),
-	      IronCurtainCountDown(x), House(x), Crew(x), CloakDelay(x), PrimaryFacing(x), Arm(x) {};
+		: RadioClass(x), FlasherClass(x), StageClass(x), CargoClass(x), DoorClass(x), IdleTimer(x), IronCurtainCountDown(x), House(x),
+		  Crew(x), CloakDelay(x), PrimaryFacing(x), Arm(x) {};
 #else
 	TechnoClass(NoInitClass const &x)
-	    : RadioClass(x), FlasherClass(x), StageClass(x), CargoClass(x), DoorClass(x), IronCurtainCountDown(x),
-	      House(x), Crew(x), CloakDelay(x), PrimaryFacing(x), Arm(x) {};
+		: RadioClass(x), FlasherClass(x), StageClass(x), CargoClass(x), DoorClass(x), IronCurtainCountDown(x), House(x), Crew(x),
+		  CloakDelay(x), PrimaryFacing(x), Arm(x) {};
 #endif
-	virtual ~TechnoClass(void) { House = 0; };
+	virtual ~TechnoClass(void) {
+		House = 0;
+	};
 
 	/*
 	**	Query functions.
@@ -269,9 +271,13 @@ public:
 	int Combat_Damage(int which = -1) const;
 	bool Is_Ready_To_Cloak(void) const;
 	virtual int How_Many_Survivors(void) const;
-	virtual DirType Turret_Facing(void) const { return (PrimaryFacing.Current()); }
+	virtual DirType Turret_Facing(void) const {
+		return (PrimaryFacing.Current());
+	}
 	CELL Nearby_Location(TechnoClass const *from = NULL, int locationmod = 0) const;
-	TechnoTypeClass *Techno_Type_Class(void) const { return ((TechnoTypeClass *)&Class_Of()); };
+	TechnoTypeClass *Techno_Type_Class(void) const {
+		return ((TechnoTypeClass *)&Class_Of());
+	};
 	bool Is_Visible_On_Radar(void) const;
 	int Anti_Air(void) const;
 	int Anti_Armor(void) const;
@@ -310,14 +316,15 @@ public:
 	virtual void Response_Select(void);
 	virtual void Response_Move(void);
 	virtual void Response_Attack(void);
-	virtual void Player_Assign_Mission(MissionType order, TARGET target = TARGET_NONE,
-					   TARGET destination = TARGET_NONE);
+	virtual void Player_Assign_Mission(MissionType order, TARGET target = TARGET_NONE, TARGET destination = TARGET_NONE);
 
 	/*
 	**	Combat related.
 	*/
 	fixed Area_Modify(CELL cell) const;
-	virtual int Made_A_Kill(void) { return (Crew.Made_A_Kill()); }
+	virtual int Made_A_Kill(void) {
+		return (Crew.Made_A_Kill());
+	}
 	void Base_Is_Attacked(TechnoClass const *enemy);
 	void Kill_Cargo(TechnoClass *source);
 	virtual void Record_The_Kill(TechnoClass *source);
@@ -335,15 +342,12 @@ public:
 	virtual BulletClass *Fire_At(TARGET target, int which = 0);
 	virtual int Weapon_Range(int which) const;
 	virtual bool Captured(HouseClass *newowner);
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0,
-				       bool forced = false);
-	bool Evaluate_Cell(ThreatType method, int mask, CELL cell, int range, TechnoClass const **object, int &value,
-			   int zone = 0) const;
-	bool Evaluate_Object(ThreatType method, int mask, int range, TechnoClass const *object, int &value,
-			     int zone = -1) const;
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0, bool forced = false);
+	bool Evaluate_Cell(ThreatType method, int mask, CELL cell, int range, TechnoClass const **object, int &value, int zone = 0) const;
+	bool Evaluate_Object(ThreatType method, int mask, int range, TechnoClass const *object, int &value, int zone = -1) const;
 	int Evaluate_Just_Cell(CELL cell) const;
-	virtual bool Electric_Zap(COORDINATE target_coord, int which, WindowNumberType window,
-				  COORDINATE source_coord = 0L, unsigned char *remap = NULL) const;
+	virtual bool
+	Electric_Zap(COORDINATE target_coord, int which, WindowNumberType window, COORDINATE source_coord = 0L, unsigned char *remap = NULL) const;
 	bool Is_Cloaked(HousesType house, bool check_invisible = false) const;
 	bool Is_Cloaked(HouseClass const *house, bool check_invisible = false) const;
 	bool Is_Cloaked(ObjectClass const *object, bool check_invisible = false) const;
@@ -376,12 +380,22 @@ public:
 	*/
 	virtual void const *Remap_Table(void) const;
 	VisualType Visual_Character(bool raw = false) const;
-	void Techno_Draw_Object(void const *shapefile, int shapenum, int x, int y, WindowNumberType window,
-				DirType rotation = DIR_N, int scale = 0x0100) const;
+	void Techno_Draw_Object(void const *shapefile,
+				int shapenum,
+				int x,
+				int y,
+				WindowNumberType window,
+				DirType rotation = DIR_N,
+				int scale = 0x0100) const;
 
 	// Added. ST - 8/1/2019 5:37PM
-	void Techno_Draw_Object_Virtual(void const *shapefile, int shapenum, int x, int y, WindowNumberType window,
-					DirType rotation = DIR_N, int scale = 0x0100,
+	void Techno_Draw_Object_Virtual(void const *shapefile,
+					int shapenum,
+					int x,
+					int y,
+					WindowNumberType window,
+					DirType rotation = DIR_N,
+					int scale = 0x0100,
 					const char *shape_name = NULL) const;
 
 	virtual void Draw_It(int x, int y, WindowNumberType window) const;
@@ -397,7 +411,9 @@ public:
 	**	Movement and animation.
 	*/
 	virtual bool Is_Ready_To_Random_Animate(void) const;
-	virtual bool Random_Animate(void) { return (false); }
+	virtual bool Random_Animate(void) {
+		return (false);
+	}
 	virtual void Assign_Destination(TARGET target);
 	virtual void Per_Cell_Process(PCPType why);
 	virtual void Enter_Idle_Mode(bool initial = false);

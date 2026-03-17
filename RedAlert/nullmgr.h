@@ -85,12 +85,15 @@ public:
 	/*
 	**	This is the main initialization routine.
 	*/
-	int Init(int port, int irq, char *dev_name, int baud, char parity, int wordlength, int stopbits,
-		 int flowcontrol);
+	int Init(int port, int irq, char *dev_name, int baud, char parity, int wordlength, int stopbits, int flowcontrol);
 	int Delete_Connection(void);
 	virtual int Num_Connections(void);
-	virtual int Connection_ID(int) { return (0); }
-	virtual int Connection_Index(int) { return (0); }
+	virtual int Connection_ID(int) {
+		return (0);
+	}
+	virtual int Connection_Index(int) {
+		return (0);
+	}
 	int Init_Send_Queue(void);
 	void Shutdown(void);
 
@@ -108,7 +111,9 @@ public:
 	virtual int Send_Private_Message(void *buf, int buflen, int ack_req = 1, int = CONNECTION_NONE) {
 		return (Send_Message(buf, buflen, ack_req));
 	}
-	virtual int Get_Private_Message(void *buf, int *buflen, int *) { return (Get_Message(buf, buflen)); }
+	virtual int Get_Private_Message(void *buf, int *buflen, int *) {
+		return (Get_Message(buf, buflen));
+	}
 
 	/*
 	**	The main polling routine; should be called as often as possible.
@@ -125,8 +130,7 @@ public:
 	virtual unsigned long Response_Time(void);
 	virtual void Reset_Response_Time(void);
 	void *Oldest_Send(void);
-	virtual void Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart,
-				     int namecount);
+	virtual void Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart, int namecount);
 #ifdef CHEAT_KEYS
 	virtual void Mono_Debug_Print(int index, int refresh = 0);
 #endif
@@ -134,10 +138,18 @@ public:
 	/*
 	** These are for compatibility
 	*/
-	virtual int Global_Num_Send(void) { return (Num_Send()); }
-	virtual int Global_Num_Receive(void) { return (Num_Receive()); }
-	virtual int Private_Num_Send(int = CONNECTION_NONE) { return (Num_Send()); }
-	virtual int Private_Num_Receive(int = CONNECTION_NONE) { return (Num_Receive()); }
+	virtual int Global_Num_Send(void) {
+		return (Num_Send());
+	}
+	virtual int Global_Num_Receive(void) {
+		return (Num_Receive());
+	}
+	virtual int Private_Num_Send(int = CONNECTION_NONE) {
+		return (Num_Send());
+	}
+	virtual int Private_Num_Receive(int = CONNECTION_NONE) {
+		return (Num_Receive());
+	}
 
 	DetectPortType Detect_Port(SerialSettingsType *settings);
 	int Detect_Modem(SerialSettingsType *settings, int reconnect = 0);
@@ -172,7 +184,7 @@ private:
 	** This is the Win95 port handle
 	*/
 	HANDLE PortHandle;
-#else  // WIN32
+#else // WIN32
 	/*
 	**	This is the Greenleaf port handle.
 	*/

@@ -44,21 +44,21 @@
 // structure definition for the capabilities
 typedef struct _tagCAPABILITIES {
 	BYTE szDeviceName[32]; // device name
-	WORD wDeviceVersion;   // device version
-	WORD wBitsPerSample;   // bits per sound sample
-	WORD wChannels;	       // stereo/mono sound card
-	WORD wMinRate;	       // minimum rate
-	WORD wMaxRate;	       // maximum rate
-	WORD wMixerOnBoard;    // board contains mixer
-	WORD wMixerFlags;      // mixer capabilities
-	WORD wFlags;	       // miscellaneous flags
+	WORD wDeviceVersion; // device version
+	WORD wBitsPerSample; // bits per sound sample
+	WORD wChannels; // stereo/mono sound card
+	WORD wMinRate; // minimum rate
+	WORD wMaxRate; // maximum rate
+	WORD wMixerOnBoard; // board contains mixer
+	WORD wMixerFlags; // mixer capabilities
+	WORD wFlags; // miscellaneous flags
 	short far *lpPortList; // list of usable ports
-	short far *lpDMAList;  // list of usable dma channels
-	short far *lpIRQList;  // list of usable irq channels
+	short far *lpDMAList; // list of usable dma channels
+	short far *lpIRQList; // list of usable irq channels
 	short far *lpRateList; // list of usable rates, -1 if any in min to max
-	WORD fBackground;      // foreground or background driver
-	WORD wDeviceID;	       // ID for the device
-	WORD wTimerID;	       // ID for the timer
+	WORD fBackground; // foreground or background driver
+	WORD wDeviceID; // ID for the device
+	WORD wTimerID; // ID for the timer
 
 } _SOS_CAPABILITIES;
 
@@ -168,20 +168,18 @@ enum {
 
 // fill info
 typedef struct _tagFillInfo {
-
-	LPSTR lpFillHandler;	  // pointer to fill handler
-	LPWORD lpDMAFillCount;	  // pointer to dma count
-	LPSTR lpSampleList;	  // pointer to sample list
+	LPSTR lpFillHandler; // pointer to fill handler
+	LPWORD lpDMAFillCount; // pointer to dma count
+	LPSTR lpSampleList; // pointer to sample list
 	LPWORD lpDMAMasterVolume; // pointer to dma count
 
 } _SOS_FILL_INFO;
 
 // caps info structure
 typedef struct _tagCapsInfo {
-
 	LPSTR lpPortList; // pointer to port list
-	LPSTR lpDMAList;  // pointer to DMA list
-	LPSTR lpIRQList;  // pointer to IRQ list
+	LPSTR lpDMAList; // pointer to DMA list
+	LPSTR lpIRQList; // pointer to IRQ list
 	LPSTR lpRateList; // pointer to rate list
 
 } _SOS_CAPS_INFO;
@@ -191,26 +189,26 @@ typedef struct _tagCapsInfo {
 
 // structure definition
 typedef struct _tagSAMPLE {
-	LPSTR samplePtr;     // pointer to data buffer
-	LPSTR sampleData;    // pointer to active data
+	LPSTR samplePtr; // pointer to data buffer
+	LPSTR sampleData; // pointer to active data
 	LPSTR sampleLoopPtr; // pointer for loop back
 
-	WORD sampleLength;     // length of sample
-	WORD sampleIndex;      // index into sample
+	WORD sampleLength; // length of sample
+	WORD sampleIndex; // index into sample
 	WORD sampleLoopLength; // length of loop
 
 	WORD sampleBytesLeft; // bytes left to play in sample
 
-	WORD sampleLoopPoint;	  // byte count for loop point
+	WORD sampleLoopPoint; // byte count for loop point
 	WORD sampleLoopEndLength; // length of remaining chunk
 
-	short sampleFlags;  // control sample
+	short sampleFlags; // control sample
 	short sampleVolume; // volume control
-	short sampleID;	    // sample ID
+	short sampleID; // sample ID
 
-	short sampleChannel;				     // channel to play sample on
-	short sampleLoopCount;				     // loop count
-	short sampleLastFill;				     // last fill position
+	short sampleChannel; // channel to play sample on
+	short sampleLoopCount; // loop count
+	short sampleLastFill; // last fill position
 	VOID(far __cdecl *sampleCallback)(WORD, WORD, WORD); // callback function for sample
 
 	WORD samplePitchAdd;

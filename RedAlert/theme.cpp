@@ -58,47 +58,47 @@ extern short StreamLowImpact;
 **	These are the actual filename list for the theme sample files.
 */
 ThemeClass::ThemeControl ThemeClass::_themes[THEME_COUNT] = {
-    {"BIGF226M", TXT_THEME_BIGF, 0, 307, true, false, true, HOUSEF_ALLIES},
-    {"CRUS226M", TXT_THEME_CRUS, 0, 222, true, false, true, HOUSEF_SOVIET},
-    {"FAC1226M", TXT_THEME_FAC1, 0, 271, true, false, true, HOUSEF_ALLIES},
-    {"FAC2226M", TXT_THEME_FAC2, 0, 328, true, false, true, HOUSEF_SOVIET},
-    {"HELL226M", TXT_THEME_HELL, 0, 375, true, false, true, HOUSEF_ALLIES},
-    {"RUN1226M", TXT_THEME_RUN1, 0, 312, true, false, true, HOUSEF_SOVIET},
-    {"SMSH226M", TXT_THEME_SMSH, 0, 272, true, false, true, HOUSEF_ALLIES},
-    {"TREN226M", TXT_THEME_TREN, 0, 312, true, false, true, HOUSEF_SOVIET},
-    {"WORK226M", TXT_THEME_WORK, 0, 277, true, false, true, HOUSEF_ALLIES},
-    {"AWAIT", TXT_THEME_AWAIT, 0, 259, true, false, true, HOUSEF_ALLIES},
-    {"DENSE_R", TXT_THEME_DENSE_R, 0, 294, true, false, true, HOUSEF_ALLIES},
-    {"FOGGER1A", TXT_THEME_FOGGER1A, 0, 297, true, false, true, HOUSEF_ALLIES},
-    {"MUD1A", TXT_THEME_MUD1A, 0, 280, true, false, true, HOUSEF_ALLIES},
-    {"RADIO2", TXT_THEME_RADIO2, 0, 237, true, false, true, HOUSEF_ALLIES},
-    {"ROLLOUT", TXT_THEME_ROLLOUT, 0, 227, true, false, true, HOUSEF_ALLIES},
-    {"SNAKE", TXT_THEME_SNAKE, 0, 277, true, false, true, HOUSEF_ALLIES},
-    {"TERMINAT", TXT_THEME_TERMINAT, 0, 310, true, false, true, HOUSEF_ALLIES},
-    {"TWIN", TXT_THEME_TWIN, 0, 229, true, false, true, HOUSEF_ALLIES},
-    {"VECTOR1A", TXT_THEME_VECTOR1A, 0, 252, true, false, true, HOUSEF_ALLIES},
-    {"MAP", TXT_THEME_MAP, 0, 63, false, true, true, HOUSEF_NONE},
-    {"SCORE", TXT_THEME_SCORE, 0, 106, false, true, true, HOUSEF_NONE},
-    {"INTRO", TXT_THEME_INTRO, 0, 205, false, true, true, HOUSEF_NONE},
-    {"CREDITS", TXT_THEME_CREDITS, 0, 163, false, true, true, HOUSEF_NONE},
+	{ "BIGF226M", TXT_THEME_BIGF, 0, 307, true, false, true, HOUSEF_ALLIES },
+	{ "CRUS226M", TXT_THEME_CRUS, 0, 222, true, false, true, HOUSEF_SOVIET },
+	{ "FAC1226M", TXT_THEME_FAC1, 0, 271, true, false, true, HOUSEF_ALLIES },
+	{ "FAC2226M", TXT_THEME_FAC2, 0, 328, true, false, true, HOUSEF_SOVIET },
+	{ "HELL226M", TXT_THEME_HELL, 0, 375, true, false, true, HOUSEF_ALLIES },
+	{ "RUN1226M", TXT_THEME_RUN1, 0, 312, true, false, true, HOUSEF_SOVIET },
+	{ "SMSH226M", TXT_THEME_SMSH, 0, 272, true, false, true, HOUSEF_ALLIES },
+	{ "TREN226M", TXT_THEME_TREN, 0, 312, true, false, true, HOUSEF_SOVIET },
+	{ "WORK226M", TXT_THEME_WORK, 0, 277, true, false, true, HOUSEF_ALLIES },
+	{ "AWAIT", TXT_THEME_AWAIT, 0, 259, true, false, true, HOUSEF_ALLIES },
+	{ "DENSE_R", TXT_THEME_DENSE_R, 0, 294, true, false, true, HOUSEF_ALLIES },
+	{ "FOGGER1A", TXT_THEME_FOGGER1A, 0, 297, true, false, true, HOUSEF_ALLIES },
+	{ "MUD1A", TXT_THEME_MUD1A, 0, 280, true, false, true, HOUSEF_ALLIES },
+	{ "RADIO2", TXT_THEME_RADIO2, 0, 237, true, false, true, HOUSEF_ALLIES },
+	{ "ROLLOUT", TXT_THEME_ROLLOUT, 0, 227, true, false, true, HOUSEF_ALLIES },
+	{ "SNAKE", TXT_THEME_SNAKE, 0, 277, true, false, true, HOUSEF_ALLIES },
+	{ "TERMINAT", TXT_THEME_TERMINAT, 0, 310, true, false, true, HOUSEF_ALLIES },
+	{ "TWIN", TXT_THEME_TWIN, 0, 229, true, false, true, HOUSEF_ALLIES },
+	{ "VECTOR1A", TXT_THEME_VECTOR1A, 0, 252, true, false, true, HOUSEF_ALLIES },
+	{ "MAP", TXT_THEME_MAP, 0, 63, false, true, true, HOUSEF_NONE },
+	{ "SCORE", TXT_THEME_SCORE, 0, 106, false, true, true, HOUSEF_NONE },
+	{ "INTRO", TXT_THEME_INTRO, 0, 205, false, true, true, HOUSEF_NONE },
+	{ "CREDITS", TXT_THEME_CREDITS, 0, 163, false, true, true, HOUSEF_NONE },
 
-    {"2ND_HAND", TXT_THEME_2ND_HAND, 0, 268, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"ARAZOID", TXT_THEME_ARAZOID, 0, 257, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
-    {"BACKSTAB", TXT_THEME_BACKSTAB, 0, 278, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"CHAOS2", TXT_THEME_CHAOS2, 0, 250, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
-    {"SHUT_IT", TXT_THEME_SHUT_IT, 0, 261, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"TWINMIX1", TXT_THEME_TWINMIX1, 0, 222, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
-    {"UNDER3", TXT_THEME_UNDER3, 0, 246, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"VR2", TXT_THEME_VR2, 0, 255, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
+	{ "2ND_HAND", TXT_THEME_2ND_HAND, 0, 268, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "ARAZOID", TXT_THEME_ARAZOID, 0, 257, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
+	{ "BACKSTAB", TXT_THEME_BACKSTAB, 0, 278, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "CHAOS2", TXT_THEME_CHAOS2, 0, 250, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
+	{ "SHUT_IT", TXT_THEME_SHUT_IT, 0, 261, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "TWINMIX1", TXT_THEME_TWINMIX1, 0, 222, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
+	{ "UNDER3", TXT_THEME_UNDER3, 0, 246, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "VR2", TXT_THEME_VR2, 0, 255, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
-    {"BOG", TXT_THEME_BOG, 0, 212, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"FLOAT_V2", TXT_THEME_FLOAT_V2, 0, 274, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
-    {"GLOOM", TXT_THEME_GLOOM, 0, 236, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"GRNDWIRE", TXT_THEME_GRNDWIRE, 0, 228, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
-    {"RPT", TXT_THEME_RPT, 0, 275, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"SEARCH", TXT_THEME_SEARCH, 0, 276, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
-    {"TRACTION", TXT_THEME_TRACTION, 0, 237, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN},
-    {"WASTELND", TXT_THEME_WASTELND, 0, 242, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN},
+	{ "BOG", TXT_THEME_BOG, 0, 212, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "FLOAT_V2", TXT_THEME_FLOAT_V2, 0, 274, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
+	{ "GLOOM", TXT_THEME_GLOOM, 0, 236, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "GRNDWIRE", TXT_THEME_GRNDWIRE, 0, 228, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
+	{ "RPT", TXT_THEME_RPT, 0, 275, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "SEARCH", TXT_THEME_SEARCH, 0, 276, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
+	{ "TRACTION", TXT_THEME_TRACTION, 0, 237, true, false, true, HOUSEF_ALLIES | HOUSEF_SPAIN },
+	{ "WASTELND", TXT_THEME_WASTELND, 0, 242, true, false, true, HOUSEF_SOVIET | HOUSEF_SPAIN },
 #endif
 };
 
@@ -139,7 +139,8 @@ char const *ThemeClass::Base_Name(ThemeType theme) const {
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ThemeClass::ThemeClass(void) : Current(-1), Score(THEME_NONE), Pending(THEME_NONE) {}
+ThemeClass::ThemeClass(void) : Current(-1), Score(THEME_NONE), Pending(THEME_NONE) {
+}
 
 /***********************************************************************************************
  * ThemeClass::Full_Name -- Retrieves the full score name.                                     *
@@ -183,7 +184,6 @@ char const *ThemeClass::Full_Name(ThemeType theme) const {
 void ThemeClass::AI(void) {
 	if (SampleType && !Debug_Quiet) {
 		if (ScoresPresent && Options.ScoreVolume != 0 && !Still_Playing() && Pending != THEME_NONE) {
-
 			/*
 			**	If the pending song needs to be picked, then pick it now.
 			*/
@@ -220,10 +220,8 @@ void ThemeClass::AI(void) {
  *   01/19/1995 JLB : Will not play the same song twice when in shuffle mode.                  *
  *=============================================================================================*/
 ThemeType ThemeClass::Next_Song(ThemeType theme) const {
-	if (theme == THEME_NONE || theme == THEME_PICK_ANOTHER ||
-	    (theme != THEME_QUIET && !_themes[theme].Repeat && !Options.IsScoreRepeat)) {
+	if (theme == THEME_NONE || theme == THEME_PICK_ANOTHER || (theme != THEME_QUIET && !_themes[theme].Repeat && !Options.IsScoreRepeat)) {
 		if (Options.IsScoreShuffle) {
-
 			/*
 			**	Shuffle the theme, but never pick the same theme that was just
 			**	playing.
@@ -235,7 +233,6 @@ ThemeType ThemeClass::Next_Song(ThemeType theme) const {
 			theme = newtheme;
 
 		} else {
-
 			/*
 			**	Sequential score playing.
 			*/

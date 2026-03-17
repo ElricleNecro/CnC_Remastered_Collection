@@ -54,35 +54,35 @@ void *Get_Icon_Set_Map(void const *iconset);
 ** the structure in WWLIB.I!  This structure MUST be a multiple of 16 bytes long.
 */
 typedef struct {
-	short Width;	      // Width of icons (pixels).
-	short Height;	      // Height of icons (pixels).
-	short Count;	      // Number of (logical) icons in this set.
-			      //	BOOL	Allocated;		// Was this iconset allocated?
-	short Allocated;      // Was this iconset allocated?
-	long Size;	      // Size of entire iconset memory block.
+	short Width; // Width of icons (pixels).
+	short Height; // Height of icons (pixels).
+	short Count; // Number of (logical) icons in this set.
+		//	BOOL	Allocated;		// Was this iconset allocated?
+	short Allocated; // Was this iconset allocated?
+	long Size; // Size of entire iconset memory block.
 	unsigned char *Icons; // Offset from buffer start to icon data.
-	long Palettes;	      // Offset from buffer start to palette data.
-	long Remaps;	      // Offset from buffer start to remap index data.
-	long TransFlag;	      // Offset for transparency flag table.
-	unsigned char *Map;   // Icon map offset (if present).
+	long Palettes; // Offset from buffer start to palette data.
+	long Remaps; // Offset from buffer start to remap index data.
+	long TransFlag; // Offset for transparency flag table.
+	unsigned char *Map; // Icon map offset (if present).
 } IControl_Type;
 #endif //(0)
 
 typedef struct {
-	short Width;	 // Width of icons (pixels).
-	short Height;	 // Height of icons (pixels).
-	short Count;	 // Number of (logical) icons in this set.
+	short Width; // Width of icons (pixels).
+	short Height; // Height of icons (pixels).
+	short Count; // Number of (logical) icons in this set.
 	short Allocated; // Was this iconset allocated?
-	short MapWidth;	 // Width of map (in icons).
+	short MapWidth; // Width of map (in icons).
 	short MapHeight; // Height of map (in icons).
-	long Size;	 // Size of entire iconset memory block.
-	long Icons;	 // Offset from buffer start to icon data.
-			 //	unsigned char * Icons;	// Offset from buffer start to icon data.
-	long Palettes;	 // Offset from buffer start to palette data.
-	long Remaps;	 // Offset from buffer start to remap index data.
-	long TransFlag;	 // Offset for transparency flag table.
-	long ColorMap;	 // Offset for color control value table.
-	long Map;	 // Icon map offset (if present).
+	long Size; // Size of entire iconset memory block.
+	long Icons; // Offset from buffer start to icon data.
+		//	unsigned char * Icons;	// Offset from buffer start to icon data.
+	long Palettes; // Offset from buffer start to palette data.
+	long Remaps; // Offset from buffer start to remap index data.
+	long TransFlag; // Offset for transparency flag table.
+	long ColorMap; // Offset for color control value table.
+	long Map; // Icon map offset (if present).
 	//	unsigned char * Map;				// Icon map offset (if present).
 } IControl_Type;
 

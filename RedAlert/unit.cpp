@@ -105,10 +105,8 @@ extern void Logic_Switch_Player_Context(HouseClass *object);
 extern void On_Special_Weapon_Targetting(const HouseClass *player_ptr, SpecialWeaponType weapon_type);
 extern bool Is_Legacy_Render_Enabled(void);
 
-static int _GapShroudXTable[] = {-1, 0, 1,  -2, -1, 0, 1, 2,  -2, -1, 0, 1, 2,	-2, -1, 0,
-				 1,  2, -2, -1, 0,  1, 2, -2, -1, 0,  1, 2, -1, 0,  1};
-static int _GapShroudYTable[] = {-3, -3, -3, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1, 0, 0, 0,
-				 0,  0,	 1,  1,	 1,  1,	 1,  2,	 2,  2,	 2,  2,	 3,  3, 3};
+static int _GapShroudXTable[] = { -1, 0, 1, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -2, -1, 0, 1, 2, -1, 0, 1 };
+static int _GapShroudYTable[] = { -3, -3, -3, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3 };
 
 /***********************************************************************************************
  * Recoil_Adjust -- Adjust pixel values in direction specified.                                *
@@ -132,15 +130,15 @@ static int _GapShroudYTable[] = {-3, -3, -3, -2, -2, -2, -2, -2, -1, -1, -1, -1,
 void Recoil_Adjust(DirType dir, int &x, int &y) {
 	static struct {
 		signed char X, Y;
-	} _adjust[32] = {{0, 1},				 // N
-			 {0, 1},   {0, 1},   {-1, 1},  {-1, 1},	 // NE
-			 {-1, 1},  {-1, 0},  {-1, 0},  {-1, 0},	 // E
-			 {-1, 0},  {-1, -1}, {-1, -1}, {-1, -1}, // SE
-			 {-1, -1}, {-1, -1}, {0, -1},  {0, -1},	 // S
-			 {0, -1},  {0, -1},  {1, -1},  {1, -1},	 // SW
-			 {1, -1},  {1, 0},   {1, 0},   {1, 0},	 // W
-			 {1, 0},   {1, 1},   {1, 1},   {1, 1},	 // NW
-			 {1, 1},   {0, 1},   {0, 1}};
+	} _adjust[32] = { { 0, 1 }, // N
+			  { 0, 1 },   { 0, 1 },	  { -1, 1 },  { -1, 1 }, // NE
+			  { -1, 1 },  { -1, 0 },  { -1, 0 },  { -1, 0 }, // E
+			  { -1, 0 },  { -1, -1 }, { -1, -1 }, { -1, -1 }, // SE
+			  { -1, -1 }, { -1, -1 }, { 0, -1 },  { 0, -1 }, // S
+			  { 0, -1 },  { 0, -1 },  { 1, -1 },  { 1, -1 }, // SW
+			  { 1, -1 },  { 1, 0 },	  { 1, 0 },   { 1, 0 }, // W
+			  { 1, 0 },   { 1, 1 },	  { 1, 1 },   { 1, 1 }, // NW
+			  { 1, 1 },   { 0, 1 },	  { 0, 1 } };
 
 	int index = Dir_To_32(dir);
 	x += _adjust[index].X;
@@ -213,7 +211,6 @@ void UnitClass::operator delete(void *ptr) {
  *=============================================================================================*/
 UnitClass::~UnitClass(void) {
 	if (GameActive && Class.Is_Valid()) {
-
 		/*
 		**	Remove this member from any team it may be associated with. This must occur at the
 		**	top most level of the inheritance hierarchy because it may call virtual functions.
@@ -256,9 +253,9 @@ UnitClass::~UnitClass(void) {
  *   04/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 UnitClass::UnitClass(UnitType classid, HousesType house)
-    : DriveClass(RTTI_UNIT, Units.ID(this), house), Class(UnitTypes.Ptr((int)classid)), Flagged(HOUSE_NONE),
-      IsDumping(false), Gems(0), Gold(0), Tiberium(0), IsToScatter(false), ShroudBits(0xFFFFFFFFUL), ShroudCenter(0),
-      Reload(0), SecondaryFacing(PrimaryFacing), TiberiumUnloadRefinery(TARGET_NONE) {
+	: DriveClass(RTTI_UNIT, Units.ID(this), house), Class(UnitTypes.Ptr((int)classid)), Flagged(HOUSE_NONE), IsDumping(false), Gems(0), Gold(0),
+	  Tiberium(0), IsToScatter(false), ShroudBits(0xFFFFFFFFUL), ShroudCenter(0), Reload(0), SecondaryFacing(PrimaryFacing),
+	  TiberiumUnloadRefinery(TARGET_NONE) {
 	Reload = 0;
 	House->Tracking_Add(this);
 	Ammo = Class->MaxAmmo;
@@ -401,9 +398,8 @@ void UnitClass::AI(void) {
 	/*
 	**	Scatter units off buildings in guard modes.
 	*/
-	if (!IsTethered && !IsFiring && !IsDriving && !IsRotating &&
-	    (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA) && MissionQueue == MISSION_NONE &&
-	    Map[Coord].Cell_Building() != NULL) {
+	if (!IsTethered && !IsFiring && !IsDriving && !IsRotating && (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA) &&
+	    MissionQueue == MISSION_NONE && Map[Coord].Cell_Building() != NULL) {
 		Scatter(0, true, true);
 	}
 
@@ -426,13 +422,11 @@ void UnitClass::AI(void) {
 	**	mission that they can follow. Passenger loading is merely a part of their normal operation.
 	*/
 	if (Class->Max_Passengers() > 0) {
-
 		/*
 		**	Double check that there is a passenger that is trying to load or unload.
 		**	If not, then close the door.
 		*/
-		if (!Is_Door_Closed() && Mission != MISSION_UNLOAD &&
-		    Transmit_Message(RADIO_TRYING_TO_LOAD) != RADIO_ROGER) {
+		if (!Is_Door_Closed() && Mission != MISSION_UNLOAD && Transmit_Message(RADIO_TRYING_TO_LOAD) != RADIO_ROGER) {
 			APC_Close_Door();
 		}
 	}
@@ -482,15 +476,14 @@ void UnitClass::Rotation_AI(void) {
 		if (Class->IsTurretEquipped) {
 			SecondaryFacing.Set_Desired(dir);
 		} else {
-
 			/*
 			**	Non turret equipped vehicles will rotate their body to face the target only
 			**	if the vehicle isn't currently moving or facing the correct direction. This
 			**	applies only to tracked vehicles. Wheeled vehicles never rotate to face the
 			**	target, since they aren't maneuverable enough.
 			*/
-			if ((Class->Speed == SPEED_TRACK /* || *this == UNIT_BIKE */) && !Target_Legal(NavCom) &&
-			    !IsDriving && PrimaryFacing.Difference(dir)) {
+			if ((Class->Speed == SPEED_TRACK /* || *this == UNIT_BIKE */) && !Target_Legal(NavCom) && !IsDriving &&
+			    PrimaryFacing.Difference(dir)) {
 				PrimaryFacing.Set_Desired(dir);
 			}
 		}
@@ -501,7 +494,6 @@ void UnitClass::Rotation_AI(void) {
 		SecondaryFacing.Set((DirType)(SecondaryFacing.Current() + 8));
 		Mark(MARK_CHANGE_REDRAW);
 	} else {
-
 		IsRotating = false;
 		if (Class->IsTurretEquipped) {
 			if (IsTurretLockedDown) {
@@ -609,7 +601,6 @@ void UnitClass::Reload_AI(void) {
  *=============================================================================================*/
 void UnitClass::Firing_AI(void) {
 	if (Target_Legal(TarCom) && Class->PrimaryWeapon != NULL) {
-
 		/*
 		**	Determine which weapon can fire. First check for the primary weapon. If that weapon
 		**	cannot fire, then check any secondary weapon. If neither weapon can fire, then the
@@ -683,8 +674,7 @@ RadioMessageType UnitClass::Receive_Message(RadioClass *from, RadioMessageType m
 	**	Checks to see if this object is in need of service depot processing.
 	*/
 	case RADIO_NEED_REPAIR:
-		if (!IsDriving && !Target_Legal(NavCom) &&
-		    (Health_Ratio() >= 1 && (*this != UNIT_MINELAYER || Ammo >= Class->MaxAmmo)))
+		if (!IsDriving && !Target_Legal(NavCom) && (Health_Ratio() >= 1 && (*this != UNIT_MINELAYER || Ammo >= Class->MaxAmmo)))
 			return (RADIO_NEGATIVE);
 		break;
 		//			return(RADIO_ROGER);
@@ -753,7 +743,6 @@ RadioMessageType UnitClass::Receive_Message(RadioClass *from, RadioMessageType m
 		**	off contact. In all other cases, just tell the pending unit to stand by.
 		*/
 		if (Contact_With_Whom() != from) {
-
 			/*
 			**	Can't ever load up so tell the passenger to bug off.
 			*/
@@ -767,7 +756,6 @@ RadioMessageType UnitClass::Receive_Message(RadioClass *from, RadioMessageType m
 			if (!In_Radio_Contact()) {
 				Transmit_Message(RADIO_HELLO, from);
 			} else {
-
 				/*
 				**	This causes the potential passenger to think that all is ok and to
 				**	hold on for a bit.
@@ -780,13 +768,11 @@ RadioMessageType UnitClass::Receive_Message(RadioClass *from, RadioMessageType m
 			DriveClass::Receive_Message(from, message, param);
 
 			if (!IsDriving && !IsRotating && !IsTethered) {
-
 				/*
 				**	If the potential passenger needs someplace to go, then figure out a good
 				**	spot and tell it to go.
 				*/
 				if (Transmit_Message(RADIO_NEED_TO_MOVE, from) == RADIO_ROGER) {
-
 					CELL cell;
 					DirType dir = Desired_Load_Dir(from, cell);
 
@@ -826,18 +812,15 @@ RadioMessageType UnitClass::Receive_Message(RadioClass *from, RadioMessageType m
 						*passenger is *	already at the staging location, then tell it to move
 						*onto the transport *	directly.
 						*/
-						if (Transmit_Message(RADIO_MOVE_HERE, param, from) ==
-						    RADIO_YEA_NOW_WHAT) {
+						if (Transmit_Message(RADIO_MOVE_HERE, param, from) == RADIO_YEA_NOW_WHAT) {
 #ifdef FIXIT_PHASETRANSPORT //	checked - ajw 9/28/98
-							if ((*this != UNIT_APC && *this != UNIT_PHASE) ||
-							    Is_Door_Open()) {
+							if ((*this != UNIT_APC && *this != UNIT_PHASE) || Is_Door_Open()) {
 #else
 							if (*this != UNIT_APC || Is_Door_Open()) {
 #endif
 								param = (long)As_Target();
 								Transmit_Message(RADIO_TETHER);
-								if (Transmit_Message(RADIO_MOVE_HERE, param, from) !=
-								    RADIO_ROGER) {
+								if (Transmit_Message(RADIO_MOVE_HERE, param, from) != RADIO_ROGER) {
 									Transmit_Message(RADIO_OVER_OUT, from);
 								} else {
 									Contact_With_Whom()->Unselect();
@@ -909,7 +892,6 @@ bool UnitClass::Unlimbo(COORDINATE coord, DirType dir) {
 	*/
 	dir = Facing_Dir(Dir_Facing(dir));
 	if (DriveClass::Unlimbo(coord, dir)) {
-
 		SecondaryFacing = dir;
 		/*
 		**	Ensure that the owning house knows about the
@@ -1008,8 +990,7 @@ ResultType UnitClass::Take_Damage(int &damage, int distance, WarheadType warhead
 			**	Tiberium they are carrying.
 			*/
 			if (Tiberium > 0 && Rule.IsExplosiveHarvester) {
-				Wide_Area_Damage(Coord, CELL_LEPTON_W + CELL_LEPTON_W / 2,
-						 Credit_Load() + Class->MaxStrength, this, WARHEAD_HE);
+				Wide_Area_Damage(Coord, CELL_LEPTON_W + CELL_LEPTON_W / 2, Credit_Load() + Class->MaxStrength, this, WARHEAD_HE);
 			}
 
 			/*
@@ -1103,7 +1084,6 @@ ResultType UnitClass::Take_Damage(int &damage, int distance, WarheadType warhead
 		delete this;
 
 	} else {
-
 		/*
 		**	When damaged and below half strength, start smoking if
 		**	it isn't already smoking.
@@ -1124,9 +1104,7 @@ ResultType UnitClass::Take_Damage(int &damage, int distance, WarheadType warhead
 		**	Try to crush anyone that fires on this unit if possible. The harvester
 		**	typically is the only one that will qualify here.
 		*/
-		if (!Team.Is_Valid() && source != NULL && !IsTethered && !House->Is_Ally(source) &&
-		    (!House->IsHuman || Rule.IsAutoCrush)) {
-
+		if (!Team.Is_Valid() && source != NULL && !IsTethered && !House->Is_Ally(source) && (!House->IsHuman || Rule.IsAutoCrush)) {
 			/*
 			**	Try to crush the attacker if it can be crushed by this unit and this unit is
 			**	not equipped with a flame type weapon. If this unit has a weapon and the target
@@ -1138,12 +1116,10 @@ ResultType UnitClass::Take_Damage(int &damage, int distance, WarheadType warhead
 				Assign_Destination(source->As_Target());
 				Assign_Mission(MISSION_MOVE);
 			} else {
-
 				/*
 				**	Try to return to base if possible.
 				*/
 				if (*this == UNIT_HARVESTER && Pip_Count() && Health_Ratio() <= Rule.ConditionYellow) {
-
 					/*
 					**	Find nearby refinery and head to it?
 					*/
@@ -1153,8 +1129,7 @@ ResultType UnitClass::Take_Damage(int &damage, int distance, WarheadType warhead
 					**	Since the refinery said it was ok to load, establish radio
 					**	contact with the refinery and then await docking orders.
 					*/
-					if (building != NULL &&
-					    Transmit_Message(RADIO_HELLO, building) == RADIO_ROGER) {
+					if (building != NULL && Transmit_Message(RADIO_HELLO, building) == RADIO_ROGER) {
 						Assign_Mission(MISSION_ENTER);
 					}
 				}
@@ -1322,11 +1297,9 @@ void UnitClass::Enter_Idle_Mode(bool initial) {
 	if (Target_Legal(NavCom)) {
 		order = MISSION_MOVE;
 	} else {
-
 		if (!Is_Weapon_Equipped()) {
 			if (Class->IsToHarvest) {
-				if (!In_Radio_Contact() && Mission != MISSION_HARVEST &&
-				    MissionQueue != MISSION_HARVEST) {
+				if (!In_Radio_Contact() && Mission != MISSION_HARVEST && MissionQueue != MISSION_HARVEST) {
 					if (initial || !House->IsHuman || Map[Coord].Land_Type() == LAND_TIBERIUM) {
 						order = MISSION_HARVEST;
 					} else {
@@ -1338,8 +1311,7 @@ void UnitClass::Enter_Idle_Mode(bool initial) {
 					return;
 				}
 			} else {
-				if (IsALoaner && Class->Max_Passengers() > 0 && Is_Something_Attached() &&
-				    !Team.Is_Valid()) {
+				if (IsALoaner && Class->Max_Passengers() > 0 && Is_Something_Attached() && !Team.Is_Valid()) {
 					order = MISSION_UNLOAD;
 				} else {
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
@@ -1356,9 +1328,8 @@ void UnitClass::Enter_Idle_Mode(bool initial) {
 			}
 #endif
 		} else {
-
-			if (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA ||
-			    MissionControl[Mission].IsParalyzed || MissionControl[Mission].IsZombie) {
+			if (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA || MissionControl[Mission].IsParalyzed ||
+			    MissionControl[Mission].IsZombie) {
 				return;
 			}
 
@@ -1393,8 +1364,8 @@ bool UnitClass::Goto_Clear_Spot(void) {
 	assert(IsActive);
 
 	Mark(MARK_UP);
-	if (!Target_Legal(NavCom) && BuildingTypeClass::As_Reference(STRUCT_CONST)
-					 .Legal_Placement(Adjacent_Cell(Coord_Cell(Center_Coord()), FACING_NW))) {
+	if (!Target_Legal(NavCom) &&
+	    BuildingTypeClass::As_Reference(STRUCT_CONST).Legal_Placement(Adjacent_Cell(Coord_Cell(Center_Coord()), FACING_NW))) {
 		Mark(MARK_DOWN);
 		return (true);
 	}
@@ -1404,21 +1375,47 @@ bool UnitClass::Goto_Clear_Spot(void) {
 		**	This scan table is skewed to north scanning only. This should
 		**	probably be converted to a more flexible method.
 		*/
-		static int _offsets[] = {
-		    -MAP_CELL_W * 1, -MAP_CELL_W * 2, -(MAP_CELL_W * 2) + 1, -(MAP_CELL_W * 2) - 1, -MAP_CELL_W * 3,
-		    -(MAP_CELL_W * 3) + 1, -(MAP_CELL_W * 3) - 1, -(MAP_CELL_W * 3) + 2, -(MAP_CELL_W * 3) - 2,
-		    -MAP_CELL_W * 4, -(MAP_CELL_W * 4) + 1, -(MAP_CELL_W * 4) - 1, -(MAP_CELL_W * 4) + 2,
-		    -(MAP_CELL_W * 4) - 2,
-		    // BG: Added south scanning
-		    MAP_CELL_W * 1, MAP_CELL_W * 2, (MAP_CELL_W * 2) + 1, (MAP_CELL_W * 2) - 1, MAP_CELL_W * 3,
-		    (MAP_CELL_W * 3) + 1, (MAP_CELL_W * 3) - 1, (MAP_CELL_W * 3) + 2, (MAP_CELL_W * 3) - 2,
-		    MAP_CELL_W * 4, (MAP_CELL_W * 4) + 1, (MAP_CELL_W * 4) - 1, (MAP_CELL_W * 4) + 2,
-		    (MAP_CELL_W * 4) - 2,
+		static int _offsets[] = { -MAP_CELL_W * 1,
+					  -MAP_CELL_W * 2,
+					  -(MAP_CELL_W * 2) + 1,
+					  -(MAP_CELL_W * 2) - 1,
+					  -MAP_CELL_W * 3,
+					  -(MAP_CELL_W * 3) + 1,
+					  -(MAP_CELL_W * 3) - 1,
+					  -(MAP_CELL_W * 3) + 2,
+					  -(MAP_CELL_W * 3) - 2,
+					  -MAP_CELL_W * 4,
+					  -(MAP_CELL_W * 4) + 1,
+					  -(MAP_CELL_W * 4) - 1,
+					  -(MAP_CELL_W * 4) + 2,
+					  -(MAP_CELL_W * 4) - 2,
+					  // BG: Added south scanning
+					  MAP_CELL_W * 1,
+					  MAP_CELL_W * 2,
+					  (MAP_CELL_W * 2) + 1,
+					  (MAP_CELL_W * 2) - 1,
+					  MAP_CELL_W * 3,
+					  (MAP_CELL_W * 3) + 1,
+					  (MAP_CELL_W * 3) - 1,
+					  (MAP_CELL_W * 3) + 2,
+					  (MAP_CELL_W * 3) - 2,
+					  MAP_CELL_W * 4,
+					  (MAP_CELL_W * 4) + 1,
+					  (MAP_CELL_W * 4) - 1,
+					  (MAP_CELL_W * 4) + 2,
+					  (MAP_CELL_W * 4) - 2,
 
-		    // BG: Added some token east/west scanning
-		    -1, -2, -3, -4,
+					  // BG: Added some token east/west scanning
+					  -1,
+					  -2,
+					  -3,
+					  -4,
 
-		    1, 2, 3, 4, 0};
+					  1,
+					  2,
+					  3,
+					  4,
+					  0 };
 		int *ptr;
 
 		ptr = &_offsets[0];
@@ -1469,7 +1466,6 @@ bool UnitClass::Try_To_Deploy(void) {
 
 	if (!Target_Legal(NavCom) && !IsRotating) {
 		if (*this == UNIT_MCV) {
-
 			/*
 			**	Determine if it is legal to deploy at this location. If not, tell the
 			**	player.
@@ -1510,7 +1506,6 @@ bool UnitClass::Try_To_Deploy(void) {
 			BuildingClass *building = new BuildingClass(STRUCT_CONST, House->Class->House);
 			if (building != NULL) {
 				if (building->Unlimbo(Adjacent_Cell(Coord, FACING_NW))) {
-
 					/*
 					**	Play the buildup sound for the player if this is the players
 					**	MCV.
@@ -1561,7 +1556,6 @@ bool UnitClass::Try_To_Deploy(void) {
 					delete this;
 					return (true);
 				} else {
-
 					/*
 					**	Could not deploy the construction yard at this location! Just revert
 					**	back to normal "just sitting there" mode and await further instructions.
@@ -1643,8 +1637,7 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 		**	and attach itself to the transporter.
 		*/
 		TechnoClass *techno = Contact_With_Whom();
-		if (Mission == MISSION_ENTER && techno && Coord_Cell(Coord) == Coord_Cell(techno->Coord) &&
-		    techno == As_Techno(NavCom)) {
+		if (Mission == MISSION_ENTER && techno && Coord_Cell(Coord) == Coord_Cell(techno->Coord) && techno == As_Techno(NavCom)) {
 			if (Transmit_Message(RADIO_IM_IN) == RADIO_ATTACH) {
 				Limbo();
 				techno->Attach(this);
@@ -1657,11 +1650,8 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 		**	When breaking away from a transport object or building, possibly
 		**	scatter or otherwise begin normal unit operations.
 		*/
-		if (IsTethered &&
-		    (Mission != MISSION_ENTER ||
-		     (As_Techno(NavCom) != NULL && Contact_With_Whom() != As_Techno(NavCom))) &&
+		if (IsTethered && (Mission != MISSION_ENTER || (As_Techno(NavCom) != NULL && Contact_With_Whom() != As_Techno(NavCom))) &&
 		    Mission != MISSION_UNLOAD) {
-
 			/*
 			**	Special hack check to make sure that even though it has moved one
 			**	cell, if it is still on the building (e.g., service depot), have
@@ -1672,14 +1662,12 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 			} else {
 				TechnoClass *contact = Contact_With_Whom();
 				if (Transmit_Message(RADIO_UNLOADED) == RADIO_RUN_AWAY) {
-					if (*this == UNIT_HARVESTER && contact &&
-					    contact->What_Am_I() == RTTI_BUILDING &&
+					if (*this == UNIT_HARVESTER && contact && contact->What_Am_I() == RTTI_BUILDING &&
 					    *((BuildingClass *)contact) != STRUCT_REPAIR) {
 						Assign_Mission(MISSION_HARVEST);
 					} else if (!Target_Legal(NavCom)) {
 						Scatter(0, true);
 					} else {
-
 						/*
 						**	Special case hack to allow automatic transition to loading
 						**	onto a transport (or other situation) if the destination
@@ -1697,7 +1685,6 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 							Assign_Destination(ArchiveTarget);
 							ArchiveTarget = TARGET_NONE;
 						} else {
-
 							/*
 							**	Since there is no place to go, move away to clear
 							**	the pad for another harvester.
@@ -1762,7 +1749,6 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 		**	If there is a house flag here, then this unit just might pick it up.
 		*/
 		if (Flagged == HOUSE_NONE) {
-
 			if (Map[cell].IsFlagged && !House->Is_Ally(Map[cell].Owner)) {
 				HouseClass::As_Pointer(Map[cell].Owner)->Flag_Attach(this);
 			}
@@ -1773,7 +1759,6 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 		** a flag, destroy the house of the flag the unit is carrying.
 		*/
 		if (Flagged != HOUSE_NONE) {
-
 			/*
 			**	If this vehicle is carrying your flag, then it will reveal the
 			**	map for you as well as itself. This gives you and opportunity to
@@ -1798,16 +1783,13 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 		** If entering a cell with a land mine in it, blow up the mine.
 		*/
 		BuildingClass *bldng = Map[cell].Cell_Building();
-		if (bldng != NULL && (*bldng == STRUCT_AVMINE || *bldng == STRUCT_APMINE) &&
-		    !bldng->House->Is_Ally(this)) {
-
+		if (bldng != NULL && (*bldng == STRUCT_AVMINE || *bldng == STRUCT_APMINE) && !bldng->House->Is_Ally(this)) {
 			/*
 			** Special case: if it's a land mine deployer, and it ran over the
 			** type of mine it deploys (only possible if it just dropped it
 			** down) then ignore the mine.
 			*/
 			if (*this != UNIT_MINELAYER || bldng->House != House) {
-
 				COORDINATE blcoord = bldng->Center_Coord();
 
 				new AnimClass(ANIM_MINE_EXP1, blcoord);
@@ -1839,8 +1821,7 @@ void UnitClass::Per_Cell_Process(PCPType why) {
 		**	anyway, so blow it up now.
 		*/
 		LandType land = Map[Coord].Land_Type();
-		if (!IsDriving && IsMovingOntoBridge &&
-		    (land == LAND_ROCK || land == LAND_WATER || land == LAND_RIVER)) {
+		if (!IsDriving && IsMovingOntoBridge && (land == LAND_ROCK || land == LAND_WATER || land == LAND_RIVER)) {
 			new AnimClass(Combat_Anim(Strength, WARHEAD_AP, land), Coord);
 			int damage = Strength;
 			Take_Damage(damage, 0, WARHEAD_AP, NULL, true);
@@ -1908,7 +1889,6 @@ int UnitClass::Shape_Number(void) const {
 	**	This handles the ant case.
 	*/
 	if (Class->Rotation == 8) {
-
 		/*
 		**	The starting frame is based on the facing of the unit.
 		*/
@@ -1920,7 +1900,6 @@ int UnitClass::Shape_Number(void) const {
 		if (IsDriving) {
 			shapenum = 8 + (shapenum * 8) + ((::Frame + ID) / 2) % 8;
 		} else {
-
 			/*
 			**	If in combat, then do combat anims.
 			*/
@@ -1939,8 +1918,7 @@ int UnitClass::Shape_Number(void) const {
 			unsigned stage = Fetch_Stage();
 			if (stage >= ARRAY_SIZE(Class->Harvester_Load_List))
 				stage = ARRAY_SIZE(Class->Harvester_Load_List) - 1;
-			shapenum = 32 + (((UnitClass::BodyShape[facing] + 2) / 4) * Class->Harvester_Load_Count) +
-				   Class->Harvester_Load_List[stage];
+			shapenum = 32 + (((UnitClass::BodyShape[facing] + 2) / 4) * Class->Harvester_Load_Count) + Class->Harvester_Load_List[stage];
 		} else {
 			/*
 			** If the harvester's dumping a load of ore, show that animation
@@ -2028,7 +2006,7 @@ void UnitClass::Draw_It(int x, int y, WindowNumberType window) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	int shapenum;	       // Working shape number.
+	int shapenum; // Working shape number.
 	void const *shapefile; // Working shape file pointer.
 	int facing = Dir_To_32(PrimaryFacing);
 	int tfacing = Dir_To_32(SecondaryFacing);
@@ -2134,10 +2112,19 @@ void UnitClass::Draw_It(int x, int y, WindowNumberType window) const {
 		shapefile = MFCD::Retrieve("FLAGFLY.SHP");
 		int flag_x = x + (ICON_PIXEL_W / 2) - 2;
 		int flag_y = y + (3 * ICON_PIXEL_H / 4) - Get_Build_Frame_Height(shapefile);
-		CC_Draw_Shape(this, "FLAGFLY", shapefile, Frame % 14, flag_x, flag_y, window,
+		CC_Draw_Shape(this,
+			      "FLAGFLY",
+			      shapefile,
+			      Frame % 14,
+			      flag_x,
+			      flag_y,
+			      window,
 			      SHAPE_CENTER | SHAPE_FADING | SHAPE_GHOST,
-			      HouseClass::As_Pointer(Flagged)->Remap_Table(false, Class->Remap), Map.UnitShadow, DIR_N,
-			      0x0100, Flagged);
+			      HouseClass::As_Pointer(Flagged)->Remap_Table(false, Class->Remap),
+			      Map.UnitShadow,
+			      DIR_N,
+			      0x0100,
+			      Flagged);
 	}
 
 	DriveClass::Draw_It(x, y, window);
@@ -2232,7 +2219,6 @@ bool UnitClass::Goto_Tiberium(int rad) {
 		if (Map[center].Land_Type() == LAND_TIBERIUM) {
 			return (true);
 		} else {
-
 			/*
 			**	Perform a ring search outward from the center.
 			*/
@@ -2242,12 +2228,11 @@ bool UnitClass::Goto_Tiberium(int rad) {
 				int tiberium = 0;
 				int besttiberium = 0;
 				for (int x = -radius; x <= radius; x++) {
-
 					/*
 					**	Randomize the corners.
 					*/
 					int corner[2];
-					int corners[4][2] = {{x, -radius}, {x, +radius}, {-radius, x}, {+radius, x}};
+					int corners[4][2] = { { x, -radius }, { x, +radius }, { -radius, x }, { +radius, x } };
 					for (int i = 0; i < 3; i++) {
 						int j = i + rand() / (RAND_MAX / (4 - i) + 1);
 						memcpy(&corner, &corners[j], sizeof(corner));
@@ -2323,7 +2308,6 @@ bool UnitClass::Harvesting(void) {
 		return (true);
 
 	if (Tiberium_Load() < 1 && ptr->Land_Type() == LAND_TIBERIUM) {
-
 		/*
 		**	Lift some Tiberium from the ground. Try to lift a complete
 		**	"level" of Tiberium. A level happens to be 6 steps. If there
@@ -2369,7 +2353,6 @@ bool UnitClass::Harvesting(void) {
 		Set_Rate(Rule.OreDumpRate);
 
 	} else {
-
 		/*
 		**	If the harvester is stopped on a non Tiberium field and the harvester
 		**	isn't loaded with Tiberium, then no further action can be performed
@@ -2665,10 +2648,9 @@ int UnitClass::Mission_Unload(void) {
 				if (!Map[Center_Coord()].Cell_Building()) {
 					Mark(MARK_UP);
 					BuildingClass *building = new BuildingClass((House->ActLike == HOUSE_USSR ||
-										     House->ActLike == HOUSE_UKRAINE ||
-										     House->ActLike == HOUSE_BAD)
-											? STRUCT_APMINE
-											: STRUCT_AVMINE,
+										     House->ActLike == HOUSE_UKRAINE || House->ActLike == HOUSE_BAD) ?
+											    STRUCT_APMINE :
+											    STRUCT_AVMINE,
 										    House->Class->House);
 					if (building != NULL) {
 						ScenarioInit = true;
@@ -2763,7 +2745,7 @@ int UnitClass::Mission_Unload(void) {
 
 		Sound_Effect(VOC_MAD_EXPLODE, Center_Coord());
 
-		Strength = 1;		 // assure destruction
+		Strength = 1; // assure destruction
 		PendingTimeQuake = true; // trigger a time quake
 		TimeQuakeCenter = ::As_Target(Center_Coord());
 		break;
@@ -2834,7 +2816,6 @@ int UnitClass::Mission_Harvest(void) {
 	}
 
 	switch (Status) {
-
 	/*
 	**	Go and find a Tiberium field to harvest.
 	*/
@@ -2864,14 +2845,12 @@ int UnitClass::Mission_Harvest(void) {
 			ArchiveTarget = ::As_Target(Coord_Cell(Coord));
 			return (1);
 		} else {
-
 			/*
 			**	If the harvester isn't on Tiberium and it is not heading toward Tiberium, then
 			**	force it to go into guard mode. This will prevent the harvester from repeatedly
 			**	searching for Tiberium.
 			*/
 			if (!Target_Legal(NavCom)) {
-
 				/*
 				**	If the archive target is legal, then head there since it is presumed
 				**	that the archive target points to the last place it harvested at. This might
@@ -2931,7 +2910,6 @@ int UnitClass::Mission_Harvest(void) {
 	*/
 	case FINDHOME:
 		if (!Target_Legal(NavCom)) {
-
 			/*
 			**	Find best refinery.
 			*/
@@ -2943,8 +2921,7 @@ int UnitClass::Mission_Harvest(void) {
 			*/
 			if (nearest != NULL && Transmit_Message(RADIO_HELLO, nearest) == RADIO_ROGER) {
 				Status = HEADINGHOME;
-				if (nearest->House == PlayerPtr && (PlayerPtr->Capacity - PlayerPtr->Tiberium) < 300 &&
-				    PlayerPtr->Capacity > 500 &&
+				if (nearest->House == PlayerPtr && (PlayerPtr->Capacity - PlayerPtr->Tiberium) < 300 && PlayerPtr->Capacity > 500 &&
 				    (PlayerPtr->ActiveBScan & (STRUCTF_REFINERY | STRUCTF_CONST))) {
 					Speak(VOX_NEED_MO_CAPACITY);
 				}
@@ -3010,7 +2987,6 @@ int UnitClass::Mission_Hunt(void) {
 		enum { FIND_SPOT, WAITING };
 
 		switch (Status) {
-
 		/*
 		**	This stage handles locating a convenient spot, rotating to face the correct
 		**	direction and then commencing the deployment operation.
@@ -3035,7 +3011,6 @@ int UnitClass::Mission_Hunt(void) {
 			break;
 		}
 	} else {
-
 		return (DriveClass::Mission_Hunt());
 	}
 	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
@@ -3150,13 +3125,11 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 	if (cellptr->Overlay != OVERLAY_NONE) {
 		OverlayTypeClass const *optr = &OverlayTypeClass::As_Reference(cellptr->Overlay);
 
-		if (optr->IsCrate && !((Session.Type == GAME_NORMAL) ? House->IsPlayerControl : House->IsHuman) &&
-		    Session.Type == GAME_NORMAL) {
+		if (optr->IsCrate && !((Session.Type == GAME_NORMAL) ? House->IsPlayerControl : House->IsHuman) && Session.Type == GAME_NORMAL) {
 			return (MOVE_NO);
 		}
 
 		if (optr->IsWall) {
-
 			/*
 			**	If the blocking wall is crushable (and not owned by this player or one of this players
 			**	allies, then record that it is crushable and let the normal logic take over. The end
@@ -3191,14 +3164,11 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 	bool crushable = false;
 	ObjectClass *obj = cellptr->Cell_Occupier();
 	while (obj != NULL) {
-
 		if (obj != this) {
-
 			/*
 			** If object is a land mine, allow movement if possible.
 			*/
-			if (obj->What_Am_I() == RTTI_BUILDING &&
-			    (!Rule.IsMineAware || !((BuildingClass *)obj)->House->Is_Ally(House))) {
+			if (obj->What_Am_I() == RTTI_BUILDING && (!Rule.IsMineAware || !((BuildingClass *)obj)->House->Is_Ally(House))) {
 				if ((*(BuildingClass *)obj) == STRUCT_APMINE)
 					return (MOVE_OK);
 				if ((*(BuildingClass *)obj) == STRUCT_AVMINE)
@@ -3209,8 +3179,8 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 			**	Always allow entry if trying to move on a cell with
 			**	authorization from the occupier.
 			*/
-			if (obj == Contact_With_Whom() && (IsTethered || (obj->What_Am_I() == RTTI_BUILDING &&
-									  *((BuildingClass *)obj) == STRUCT_REPAIR))) {
+			if (obj == Contact_With_Whom() &&
+			    (IsTethered || (obj->What_Am_I() == RTTI_BUILDING && *((BuildingClass *)obj) == STRUCT_REPAIR))) {
 				return (MOVE_OK);
 			}
 
@@ -3231,8 +3201,7 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 			}
 
 			bool is_moving = obj->Is_Foot() && (Target_Legal(((FootClass *)obj)->NavCom) ||
-							    ((FootClass *)obj)->PrimaryFacing.Is_Rotating() ||
-							    ((FootClass *)obj)->IsDriving);
+							    ((FootClass *)obj)->PrimaryFacing.Is_Rotating() || ((FootClass *)obj)->IsDriving);
 			//						(((FootClass *)obj)->PrimaryFacing.Is_Rotating()
 			//|| ((FootClass *)obj)->IsDriving);
 			//						(((FootClass *)obj)->IsRotating || ((FootClass
@@ -3264,13 +3233,11 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 						retval = MOVE_TEMP;
 				}
 			} else {
-
 				/*
 				**	Cloaked enemy objects are not considered if this is a Find_Path()
 				**	call.
 				*/
 				if (!obj->Is_Techno() || !((TechnoClass *)obj)->Is_Cloaked(this)) {
-
 					/*
 					**	If this unit can crush infantry, and there is an enemy infantry in the
 					**	cell, don't consider the cell impassible. This is true even if the unit
@@ -3278,7 +3245,6 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 					*/
 					bool crusher = Class->IsCrusher;
 					if (!crusher || !obj->Class_Of().IsCrushable) {
-
 						/*
 						**	Any non-allied blockage is considered impassable if the unit
 						**	is not equipped with a weapon.
@@ -3297,7 +3263,6 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 #ifdef TOFIX
 							if (((TerrainClass *)obj)->Class->Armor == ARMOR_WOOD &&
 							    Class->PrimaryWeapon->WarheadPtr->IsWoodDestroyer) {
-
 								if (retval < MOVE_DESTROYABLE)
 									retval = MOVE_DESTROYABLE;
 							} else {
@@ -3342,7 +3307,6 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 	**	as blocked by a moving object.
 	*/
 	if (retval == MOVE_OK && !crushable && (cellptr->Flag.Composite & 0x3F) != 0) {
-
 		/*
 		**	If reserved by a vehicle, then consider this blocked terrain.
 		*/
@@ -3352,7 +3316,6 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 			if (cellptr->InfType != HOUSE_NONE && House->Is_Ally(cellptr->InfType)) {
 				retval = MOVE_MOVING_BLOCK;
 			} else {
-
 				/*
 				**	Enemy infantry have reserved the cell. If this unit can crush
 				**	infantry, consider the cell passable. If not, then consider the
@@ -3360,8 +3323,7 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 				**	this vehicle should avoid the cell altogether.
 				*/
 				if (!Class->IsCrusher) {
-					if (Class->PrimaryWeapon != NULL &&
-					    Class->PrimaryWeapon->Bullet->IsAntiGround) {
+					if (Class->PrimaryWeapon != NULL && Class->PrimaryWeapon->Bullet->IsAntiGround) {
 						retval = MOVE_DESTROYABLE;
 					} else {
 						return (MOVE_NO);
@@ -3376,7 +3338,6 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 	** make sure no one else is already moving into the cell to crush something.
 	*/
 	if (retval == MOVE_OK && crushable && cellptr->Flag.Occupy.Vehicle) {
-
 		/*
 		**	However, if the cell is occupied by a crushable vehicle, then we can
 		**	never be sure if some other friendly vehicle is also trying to crush
@@ -3410,7 +3371,9 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
  * HISTORY:                                                                                    *
  *   08/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Init(void) { Units.Free_All(); }
+void UnitClass::Init(void) {
+	Units.Free_All();
+}
 
 /***********************************************************************************************
  * UnitClass::Start_Driver -- Starts driving and reserves destination cell.                    *
@@ -3489,28 +3452,24 @@ ActionType UnitClass::What_Action(ObjectClass const *object) const {
 	*/
 	if (action == ACTION_SELF) {
 		if (*this == UNIT_MCV) {
-
 			/*
 			**	The MCV will get the no-deploy cursor if it couldn't
 			**	deploy at its current location.
 			*/
 			((ObjectClass &)(*this)).Mark(MARK_UP);
-			if (!BuildingTypeClass::As_Reference(STRUCT_CONST)
-				 .Legal_Placement(Coord_Cell(Adjacent_Cell(Center_Coord(), FACING_NW)))) {
+			if (!BuildingTypeClass::As_Reference(STRUCT_CONST).Legal_Placement(Coord_Cell(Adjacent_Cell(Center_Coord(), FACING_NW)))) {
 				action = ACTION_NO_DEPLOY;
 			}
 			((ObjectClass &)(*this)).Mark(MARK_DOWN);
 
 		} else {
-
 			/*
 			**	The mine layer can "deploy" its mines if it currently isn't
 			**	sitting on top of a mine and it still has mines available.
 			*/
 			if (*this == UNIT_MINELAYER) {
 				if (!Ammo || Map[Center_Coord()].Cell_Building() ||
-				    (Map[Center_Coord()].Smudge != SMUDGE_NONE &&
-				     SmudgeTypeClass::As_Reference(Map[Center_Coord()].Smudge).IsBib)) {
+				    (Map[Center_Coord()].Smudge != SMUDGE_NONE && SmudgeTypeClass::As_Reference(Map[Center_Coord()].Smudge).IsBib)) {
 					action = ACTION_NO_DEPLOY;
 				}
 			} else {
@@ -3521,8 +3480,8 @@ ActionType UnitClass::What_Action(ObjectClass const *object) const {
 						// deploy.  Or, if it's a player-controlled chrono tank, and the
 						// player's currently trying to teleport a different unit, don't allow
 						// teleporting this unit.
-						if (MoebiusCountDown || (IsOwnedByPlayer && House->UnitToTeleport &&
-									 Map.IsTargettingMode == SPC_CHRONO2)) {
+						if (MoebiusCountDown ||
+						    (IsOwnedByPlayer && House->UnitToTeleport && Map.IsTargettingMode == SPC_CHRONO2)) {
 							action = ACTION_NO_DEPLOY;
 						}
 					}
@@ -3550,10 +3509,9 @@ ActionType UnitClass::What_Action(ObjectClass const *object) const {
 	/*
 	**	Special return to friendly refinery action.
 	*/
-	bool is_player_controlled = (Session.Type == GAME_NORMAL)
-					? (House->IsPlayerControl && object->Owner() != HOUSE_NONE &&
-					   HouseClass::As_Pointer(object->Owner())->IsPlayerControl)
-					: (Is_Owned_By_Player() && House->Class->House == object->Owner());
+	bool is_player_controlled = (Session.Type == GAME_NORMAL) ? (House->IsPlayerControl && object->Owner() != HOUSE_NONE &&
+								     HouseClass::As_Pointer(object->Owner())->IsPlayerControl) :
+								    (Is_Owned_By_Player() && House->Class->House == object->Owner());
 	if (is_player_controlled && object->What_Am_I() == RTTI_BUILDING &&
 	    ((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, (TechnoClass *)object) == RADIO_ROGER) {
 		action = ACTION_ENTER;
@@ -3564,8 +3522,7 @@ ActionType UnitClass::What_Action(ObjectClass const *object) const {
 	*/
 	if (is_player_controlled && action == ACTION_SELECT && object->What_Am_I() == RTTI_BUILDING) {
 		BuildingClass *building = (BuildingClass *)object;
-		if (building->Class->Type == STRUCT_REPAIR &&
-		    ((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, building) == RADIO_ROGER &&
+		if (building->Class->Type == STRUCT_REPAIR && ((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, building) == RADIO_ROGER &&
 		    !building->In_Radio_Contact() && !building->Is_Something_Attached()) {
 			action = ACTION_MOVE;
 		}
@@ -3574,8 +3531,7 @@ ActionType UnitClass::What_Action(ObjectClass const *object) const {
 	/*
 	**	Check to see if it can enter a transporter.
 	*/
-	if (House->Is_Ally(object) && House->IsPlayerControl && object->Is_Techno() &&
-	    object->What_Am_I() == RTTI_VESSEL) {
+	if (House->Is_Ally(object) && House->IsPlayerControl && object->Is_Techno() && object->What_Am_I() == RTTI_VESSEL) {
 #ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
 		if (*(VesselClass *)object != VESSEL_CARRIER) {
 #endif
@@ -3665,8 +3621,8 @@ void UnitClass::Exit_Repair(void) {
 	int i;
 	CELL cell;
 	bool found = false;
-	static short const ExitRepair[] = {XYCELL(0, -2), XYCELL(1, -1), XYCELL(2, 0),	XYCELL(1, 1),
-					   XYCELL(0, 2),  XYCELL(-1, 1), XYCELL(-2, 0), XYCELL(-1, -1)};
+	static short const ExitRepair[] = { XYCELL(0, -2), XYCELL(1, -1), XYCELL(2, 0),	 XYCELL(1, 1),
+					    XYCELL(0, 2),  XYCELL(-1, 1), XYCELL(-2, 0), XYCELL(-1, -1) };
 
 	cell = Coord_Cell(Coord) + ExitRepair[Dir_Facing(PrimaryFacing.Current())];
 	if (Can_Enter_Cell(cell) == MOVE_OK)
@@ -3707,8 +3663,8 @@ void UnitClass::Exit_Repair(void) {
 int UnitClass::Mission_Guard(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
-	if (/*House->IsBaseBuilding &&*/ !House->IsHuman && Class->IsToHarvest &&
-	    House->Get_Quantity(STRUCT_REFINERY) > 0 && !House->IsTiberiumShort) {
+	if (/*House->IsBaseBuilding &&*/ !House->IsHuman && Class->IsToHarvest && House->Get_Quantity(STRUCT_REFINERY) > 0 &&
+	    !House->IsTiberiumShort) {
 		Assign_Mission(MISSION_HARVEST);
 		return (1);
 		//		return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
@@ -3763,8 +3719,7 @@ int UnitClass::Mission_Enter(void) {
 		if (contact == NULL) {
 			contact = As_Techno(ArchiveTarget);
 		}
-		if (contact != NULL && contact->What_Am_I() == RTTI_BUILDING &&
-		    *((BuildingClass *)contact) == STRUCT_REFINERY) {
+		if (contact != NULL && contact->What_Am_I() == RTTI_BUILDING && *((BuildingClass *)contact) == STRUCT_REFINERY) {
 			TiberiumUnloadRefinery = contact->As_Target();
 		}
 	}
@@ -3822,15 +3777,11 @@ DirType UnitClass::Desired_Load_Dir(ObjectClass *passenger, CELL &moveto) const 
 		**	cell so that it is prevented from ever choosing that cell for load/unload.
 		*/
 		if (passenger != NULL) {
-			value =
-			    (passenger->Can_Enter_Cell(cellnum) == MOVE_OK || Coord_Cell(passenger->Coord) == cellnum)
-				? 128
-				: -128;
+			value = (passenger->Can_Enter_Cell(cellnum) == MOVE_OK || Coord_Cell(passenger->Coord) == cellnum) ? 128 : -128;
 		} else {
 			CellClass *cell = &Map[cellnum];
-			if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 || cell->Flag.Occupy.Building ||
-			    cell->Flag.Occupy.Vehicle || cell->Flag.Occupy.Monolith ||
-			    (cell->Flag.Composite & 0x01F) == 0x01F) {
+			if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 || cell->Flag.Occupy.Building || cell->Flag.Occupy.Vehicle ||
+			    cell->Flag.Occupy.Monolith || (cell->Flag.Composite & 0x01F) == 0x01F) {
 				value = -128;
 			} else {
 				if (cell->Cell_Techno() && !House->Is_Ally(cell->Cell_Techno())) {
@@ -3867,8 +3818,7 @@ DirType UnitClass::Desired_Load_Dir(ObjectClass *passenger, CELL &moveto) const 
 	*/
 	moveto = 0;
 	if (bestval > 0) {
-		static DirType _desired_to_actual[FACING_COUNT] = {DIR_S,  DIR_SW, DIR_NW, DIR_NW,
-								   DIR_NE, DIR_NE, DIR_NE, DIR_SE};
+		static DirType _desired_to_actual[FACING_COUNT] = { DIR_S, DIR_SW, DIR_NW, DIR_NW, DIR_NE, DIR_NE, DIR_NE, DIR_SE };
 
 		moveto = Adjacent_Cell(Coord_Cell(Coord), bestdir);
 		return (_desired_to_actual[bestdir]);
@@ -4089,7 +4039,6 @@ int UnitClass::Mission_Repair(void) {
 			Enter_Idle_Mode();
 		}
 	} else {
-
 		/*
 		**	Try to establish radio contact with the repair facility. If contact
 		**	was established, then proceed with normal enter mission, which handles
@@ -4218,8 +4167,7 @@ FireErrorType UnitClass::Can_Fire(TARGET target, int which) const {
 		/*
 		**	If this unit cannot fire while moving, then bail.
 		*/
-		if ((Class->IsNoFireWhileMoving /*!Class->IsTurretEquipped || Class->IsLockTurret*/) &&
-		    Target_Legal(NavCom)) {
+		if ((Class->IsNoFireWhileMoving /*!Class->IsTurretEquipped || Class->IsLockTurret*/) && Target_Legal(NavCom)) {
 			return (FIRE_MOVING);
 		}
 
@@ -4352,10 +4300,9 @@ BuildingClass *UnitClass::Find_Best_Refinery(void) const {
 	*/
 	if (Target_Legal(TiberiumUnloadRefinery)) {
 		BuildingClass *refinery = As_Building(TiberiumUnloadRefinery);
-		if (refinery != NULL && refinery->House == House && !refinery->IsInLimbo &&
-		    refinery->Mission != MISSION_DECONSTRUCTION && *refinery == STRUCT_REFINERY &&
-		    Map[refinery->Center_Coord()].Zones[Techno_Type_Class()->MZone] ==
-			Map[Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
+		if (refinery != NULL && refinery->House == House && !refinery->IsInLimbo && refinery->Mission != MISSION_DECONSTRUCTION &&
+		    *refinery == STRUCT_REFINERY &&
+		    Map[refinery->Center_Coord()].Zones[Techno_Type_Class()->MZone] == Map[Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
 			return refinery;
 		} else {
 			TiberiumUnloadRefinery = TARGET_NONE;
@@ -4397,8 +4344,7 @@ int UnitClass::Offload_Tiberium_Bail(void) {
 		if (House->IsHuman) {
 			return (UnitTypeClass::FULL_LOAD_CREDITS / UnitTypeClass::STEP_COUNT);
 		}
-		return (UnitTypeClass::FULL_LOAD_CREDITS +
-			(UnitTypeClass::FULL_LOAD_CREDITS / 3) / UnitTypeClass::STEP_COUNT);
+		return (UnitTypeClass::FULL_LOAD_CREDITS + (UnitTypeClass::FULL_LOAD_CREDITS / 3) / UnitTypeClass::STEP_COUNT);
 #endif
 	}
 	return (0);
@@ -4429,7 +4375,6 @@ void UnitClass::Approach_Target(void) {
 	**	Only if there is a legal target should the approach check occur.
 	*/
 	if (!House->IsHuman && Target_Legal(TarCom) && !Target_Legal(NavCom)) {
-
 		/*
 		**	Special case:
 		**	If this is for a unit that can crush infantry, and the target is
@@ -4478,13 +4423,11 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten) {
 
 	if (Class->IsCrusher) {
 		if (threaten) {
-
 			/*
 			**	If the cell contains infantry, then they will panic when a vehicle tries
 			**	drive over them. Have the infantry run away instead.
 			*/
 			if (cellptr->Flag.Composite & 0x1F) {
-
 				/*
 				**	Scattering is controlled by the game difficulty level.
 				*/
@@ -4496,14 +4439,12 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten) {
 			while (object != NULL) {
 				if (object->Class_Of().IsCrushable && !House->Is_Ally(object) &&
 				    Distance(object->Center_Coord()) < CELL_LEPTON_W / 2) {
-
 #ifdef OBSOLETE
 					/*
 					** If we're running over infantry, let's see if the infantry we're
 					** squashing is a thief trying to capture us.  If so, let him succeed.
 					*/
-					if (object->What_Am_I() == RTTI_INFANTRY &&
-					    *((InfantryClass *)object) == INFANTRY_THIEF &&
+					if (object->What_Am_I() == RTTI_INFANTRY && *((InfantryClass *)object) == INFANTRY_THIEF &&
 					    ((InfantryClass *)object)->NavCom == As_Target()) {
 						ObjectClass *next = object->Next;
 						IsOwnedByPlayer = ((InfantryClass *)object)->IsOwnedByPlayer;
@@ -4520,8 +4461,7 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten) {
 						*/
 						Sound_Effect(VOC_SQUISH, Coord);
 						if (object->Height == 0) {
-							AnimClass *anim =
-							    new AnimClass(ANIM_CORPSE1, object->Center_Coord());
+							AnimClass *anim = new AnimClass(ANIM_CORPSE1, object->Center_Coord());
 							if (anim != NULL) {
 								anim->Set_Owner(object->Owner());
 							}
@@ -4585,7 +4525,6 @@ void UnitClass::Assign_Destination(TARGET target) {
 	**	Handle entry logic here.
 	*/
 	if (Mission == MISSION_ENTER || MissionQueue == MISSION_ENTER) {
-
 		/*
 		**	If not already in radio contact (presumed with the transport), then
 		**	either try to establish contact if allowed, or just move close and
@@ -4593,7 +4532,6 @@ void UnitClass::Assign_Destination(TARGET target) {
 		*/
 		if (!In_Radio_Contact()) {
 			if (b != NULL) {
-
 				/*
 				**	Determine if the transport is already in radio contact. If so, then just move
 				**	toward the transport and try to establish contact at a later time.
@@ -4626,7 +4564,6 @@ void UnitClass::Assign_Destination(TARGET target) {
 			} else {
 				TechnoClass *techno = As_Techno(target);
 				if (techno != NULL) {
-
 					/*
 					**	Determine if the transport is already in radio contact. If so, then just
 					*move *	toward the transport and try to establish contact at a later time.
@@ -4666,13 +4603,11 @@ void UnitClass::Assign_Destination(TARGET target) {
 			//			}
 			//			target = TARGET_NONE;
 		} else {
-
 			/*
 			**	Establish radio contact protocol. If the facility responds correctly,
 			**	then remain in radio contact and proceed toward the desired destination.
 			*/
 			if (Transmit_Message(RADIO_HELLO, b) == RADIO_ROGER) {
-
 				/*
 				**	Last check to make sure that the loading square is free from permanent
 				**	occupation (such as a building).
@@ -4752,9 +4687,9 @@ TARGET UnitClass::Greatest_Threat(ThreatType threat) const {
  *   05/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 void UnitClass::Read_INI(CCINIClass &ini) {
-	UnitClass *unit;    // Working unit pointer.
+	UnitClass *unit; // Working unit pointer.
 	HousesType inhouse; // Unit house.
-	UnitType classid;   // Unit class.
+	UnitType classid; // Unit class.
 	char buf[128];
 
 	int len = ini.Entry_Count(INI_Name());
@@ -4769,11 +4704,9 @@ void UnitClass::Read_INI(CCINIClass &ini) {
 			classid = UnitTypeClass::From_Name(strtok(NULL, ","));
 
 			if (classid != UNIT_NONE) {
-
 				if (HouseClass::As_Pointer(inhouse) != NULL) {
 					unit = new UnitClass(classid, inhouse);
 					if (unit != NULL) {
-
 						/*
 						**	Read the raw data.
 						*/
@@ -4784,12 +4717,10 @@ void UnitClass::Read_INI(CCINIClass &ini) {
 						COORDINATE coord = Cell_Coord(cell);
 
 						DirType dir = (DirType)atoi(strtok(NULL, ",\r\n"));
-						MissionType mission =
-						    MissionClass::Mission_From_Name(strtok(NULL, ",\n\r"));
+						MissionType mission = MissionClass::Mission_From_Name(strtok(NULL, ",\n\r"));
 
 						unit->Trigger = NULL;
-						TriggerTypeClass *tp =
-						    TriggerTypeClass::From_Name(strtok(NULL, ",\r\n"));
+						TriggerTypeClass *tp = TriggerTypeClass::From_Name(strtok(NULL, ",\r\n"));
 						if (tp != NULL) {
 							TriggerClass *tt = Find_Or_Make(tp);
 							if (tt != NULL) {
@@ -4799,8 +4730,7 @@ void UnitClass::Read_INI(CCINIClass &ini) {
 						}
 
 						if (unit->Unlimbo(coord, dir)) {
-							unit->Strength =
-							    (int)unit->Class->MaxStrength * fixed(strength, 256);
+							unit->Strength = (int)unit->Class->MaxStrength * fixed(strength, 256);
 							if (unit->Strength > unit->Class->MaxStrength - 3)
 								unit->Strength = unit->Class->MaxStrength;
 							if (Session.Type == GAME_NORMAL || unit->House->IsHuman) {
@@ -4811,7 +4741,6 @@ void UnitClass::Read_INI(CCINIClass &ini) {
 							}
 
 						} else {
-
 							/*
 							**	If the unit could not be unlimboed, then this is a
 							*catastrophic error *	condition. Delete the unit.
@@ -4855,8 +4784,13 @@ void UnitClass::Write_INI(CCINIClass &ini) {
 			char buf[128];
 
 			sprintf(uname, "%d", index);
-			sprintf(buf, "%s,%s,%d,%u,%d,%s,%s", unit->House->Class->IniName, unit->Class->IniName,
-				unit->Health_Ratio() * 256, Coord_Cell(unit->Coord), unit->PrimaryFacing.Current(),
+			sprintf(buf,
+				"%s,%s,%d,%u,%d,%s,%s",
+				unit->House->Class->IniName,
+				unit->Class->IniName,
+				unit->Health_Ratio() * 256,
+				Coord_Cell(unit->Coord),
+				unit->PrimaryFacing.Current(),
 				MissionClass::Mission_Name(unit->Mission),
 				unit->Trigger.Is_Valid() ? unit->Trigger->Class->IniName : "None");
 			ini.Put_String(INI_Name(), uname, buf);
@@ -4879,7 +4813,9 @@ void UnitClass::Write_INI(CCINIClass &ini) {
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Credit_Load(void) const { return ((Gold * Rule.GoldValue) + (Gems * Rule.GemValue)); }
+int UnitClass::Credit_Load(void) const {
+	return ((Gold * Rule.GoldValue) + (Gems * Rule.GemValue));
+}
 
 /***********************************************************************************************
  * UnitClass::Should_Crush_It -- Determines if this unit should crush an object.               *
@@ -5113,7 +5049,6 @@ void UnitClass::Unapply_Temporary_Jamming_Shroud(HouseClass *house_to_unapply_fo
 */
 void UnitClass::Shroud_Regen(void) {
 	if (Class->IsGapper /*KO && !House->IsPlayerControl*/) {
-
 		int index;
 		int centerx, centery;
 		CELL trycell;
@@ -5125,8 +5060,7 @@ void UnitClass::Shroud_Regen(void) {
 				centery = Cell_Y(ShroudCenter);
 				for (index = 30; index >= 0 && ShroudBits; index--) {
 					if (ShroudBits & 1) {
-						trycell = XY_Cell(centerx + _GapShroudXTable[index],
-								  centery + _GapShroudYTable[index]);
+						trycell = XY_Cell(centerx + _GapShroudXTable[index], centery + _GapShroudYTable[index]);
 #if (0)
 						Map.Map_Cell(trycell, PlayerPtr);
 #else
@@ -5146,8 +5080,7 @@ void UnitClass::Shroud_Regen(void) {
 				centery = Cell_Y(ShroudCenter);
 				for (index = 0; index < 31; index++) {
 					ShroudBits <<= 1;
-					trycell = XY_Cell(centerx + _GapShroudXTable[index],
-							  centery + _GapShroudYTable[index]);
+					trycell = XY_Cell(centerx + _GapShroudXTable[index], centery + _GapShroudYTable[index]);
 					if (Map[trycell].Is_Mapped(House)) {
 						Map.Jam_Cell(trycell, House);
 						ShroudBits |= 1;
@@ -5165,11 +5098,9 @@ void UnitClass::Shroud_Regen(void) {
 			}
 
 		} else {
-
 			if (Is_Legacy_Render_Enabled()) {
 				for (int i = 0; i < Session.Players.Count(); i++) {
-					HouseClass *player_house =
-					    HouseClass::As_Pointer(Session.Players[i]->Player.ID);
+					HouseClass *player_house = HouseClass::As_Pointer(Session.Players[i]->Player.ID);
 					if (player_house->IsHuman && player_house != House) {
 						Map.Constrained_Look(Coord, 5 * CELL_LEPTON_W, player_house);
 					}
@@ -5217,11 +5148,9 @@ int UnitClass::Mission_Guard_Area(void) {
 
 			InfantryClass *infantry = Infantry.Ptr(index);
 
-			if (infantry != NULL && infantry->IsActive && !infantry->IsInLimbo && infantry->Strength > 0 &&
-			    infantry->House == House && !Target_Legal(infantry->TarCom) &&
-			    !Target_Legal(infantry->NavCom) && Distance(infantry) < 7 * CELL_LEPTON_W &&
+			if (infantry != NULL && infantry->IsActive && !infantry->IsInLimbo && infantry->Strength > 0 && infantry->House == House &&
+			    !Target_Legal(infantry->TarCom) && !Target_Legal(infantry->NavCom) && Distance(infantry) < 7 * CELL_LEPTON_W &&
 			    (infantry->Mission == MISSION_GUARD || infantry->Mission == MISSION_GUARD_AREA)) {
-
 				infantry->Assign_Mission(MISSION_ENTER);
 				infantry->ArchiveTarget = As_Target();
 				needed--;

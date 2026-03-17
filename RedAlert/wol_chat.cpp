@@ -74,11 +74,11 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 	//------------------------------------------------------------------------
 	//	Dialog & button dimensions
 	//------------------------------------------------------------------------
-	int d_dialog_w = 320 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 200 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 320 * RESFACTOR; // dialog width
+	int d_dialog_h = 200 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_text_h = 12;
 	int d_margin1 = 34; // large margin
@@ -141,7 +141,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 	//------------------------------------------------------------------------
 	enum {
 		BUTTON_DISCONNECT = 100, //	Note: standard WOL button IDs must match values in
-					 // WolapiObject::PrepareButtonsAndIcons().
+		// WolapiObject::PrepareButtonsAndIcons().
 		BUTTON_LEAVE,
 		BUTTON_REFRESH,
 		BUTTON_SQUELCH,
@@ -176,7 +176,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 	//	Dialog variables
 	//------------------------------------------------------------------------
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 
 	TTimerClass<SystemTimerClass> lastclick_timer;
@@ -191,16 +191,39 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 	char *pShpExpand = (char *)MFCD::Retrieve("exp.shp");
 	char *pShpUnexpand = (char *)MFCD::Retrieve("unexp.shp");
 
-	IconListClass chatlist(BUTTON_CHATLIST, d_chatlist_x, d_chatlist_y, d_chatlist_w, d_chatlist_h, TPF_TYPE,
-			       MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"), true, 0, 500);
-	ShapeButtonClass ExpandChanBtn(BUTTON_EXPANDCHANNELS, pShpExpand, d_chanlist_x + d_chanlist_w - 17,
-				       d_chanlist_y - 14);
-	IconListClass chanlist(BUTTON_CHANLIST, d_chanlist_x, d_chanlist_y, d_chanlist_w, d_chanlist_h, TPF_TYPE,
-			       MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"), true, 1);
-	ShapeButtonClass ExpandUserBtn(BUTTON_EXPANDUSERS, pShpExpand, d_userlist_x + d_userlist_w - 17,
-				       d_userlist_y - 14);
-	IconListClass userlist(BUTTON_USERLIST, d_userlist_x, d_userlist_y, d_userlist_w, d_userlist_h, TPF_TYPE,
-			       MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"), true, 2);
+	IconListClass chatlist(BUTTON_CHATLIST,
+			       d_chatlist_x,
+			       d_chatlist_y,
+			       d_chatlist_w,
+			       d_chatlist_h,
+			       TPF_TYPE,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"),
+			       true,
+			       0,
+			       500);
+	ShapeButtonClass ExpandChanBtn(BUTTON_EXPANDCHANNELS, pShpExpand, d_chanlist_x + d_chanlist_w - 17, d_chanlist_y - 14);
+	IconListClass chanlist(BUTTON_CHANLIST,
+			       d_chanlist_x,
+			       d_chanlist_y,
+			       d_chanlist_w,
+			       d_chanlist_h,
+			       TPF_TYPE,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"),
+			       true,
+			       1);
+	ShapeButtonClass ExpandUserBtn(BUTTON_EXPANDUSERS, pShpExpand, d_userlist_x + d_userlist_w - 17, d_userlist_y - 14);
+	IconListClass userlist(BUTTON_USERLIST,
+			       d_userlist_x,
+			       d_userlist_y,
+			       d_userlist_w,
+			       d_userlist_h,
+			       TPF_TYPE,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"),
+			       true,
+			       2);
 	TextButtonClass ActionBtn(BUTTON_ACTION, TXT_WOL_ACTION, TPF_BUTTON, d_action_x, d_action_y, d_action_w);
 	TextButtonClass CreateBtn(BUTTON_CREATE, TXT_WOL_NEWSOMETHING, TPF_BUTTON, d_create_x, d_create_y, d_create_w);
 	TextButtonClass JoinBtn(BUTTON_JOIN, TXT_WOL_JOIN, TPF_BUTTON, d_join_x, d_join_y, d_join_w);
@@ -210,23 +233,17 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 		szRecordToStartWith = pWO->szMyRecord;
 	else
 		szRecordToStartWith = pWO->szMyRecordAM;
-	StaticButtonClass chatlistTitle(0, szRecordToStartWith, TPF_TYPE, d_chatlist_x + 2, d_chatlist_y - 13,
-					d_chatlist_w - 4, 12);
-	StaticButtonClass chanlistTitle(0, "", TPF_TYPE, d_chanlist_x + 2, d_chanlist_y - 16 + 4, d_chanlist_w - 4 - 16,
-					12);
-	StaticButtonClass userlistTitle(0, TXT_WOL_NOUSERLIST, TPF_TYPE, d_userlist_x + 2, d_userlist_y - 16 + 4,
-					d_userlist_w - 4 - 16 * 4, 12);
+	StaticButtonClass chatlistTitle(0, szRecordToStartWith, TPF_TYPE, d_chatlist_x + 2, d_chatlist_y - 13, d_chatlist_w - 4, 12);
+	StaticButtonClass chanlistTitle(0, "", TPF_TYPE, d_chanlist_x + 2, d_chanlist_y - 16 + 4, d_chanlist_w - 4 - 16, 12);
+	StaticButtonClass userlistTitle(0, TXT_WOL_NOUSERLIST, TPF_TYPE, d_userlist_x + 2, d_userlist_y - 16 + 4, d_userlist_w - 4 - 16 * 4, 12);
 
 	char szSendBuffer[MAXCHATSENDLENGTH] = "";
-	EditClass sendedit(BUTTON_SENDEDIT, szSendBuffer, MAXCHATSENDLENGTH, TPF_TEXT, d_send_x, d_send_y, d_send_w,
-			   d_send_h);
+	EditClass sendedit(BUTTON_SENDEDIT, szSendBuffer, MAXCHATSENDLENGTH, TPF_TEXT, d_send_x, d_send_y, d_send_w, d_send_h);
 
 	char *pShpRankRA = (char *)MFCD::Retrieve("rank_ra.shp");
 	char *pShpRankAM = (char *)MFCD::Retrieve("rank_am.shp");
-	ShapeButtonClass RankRABtn(BUTTON_RANKRA, pShpRankRA, d_userlist_x + d_userlist_w - (16 * 4 + 1),
-				   d_userlist_y - 14);
-	ShapeButtonClass RankAMBtn(BUTTON_RANKAM, pShpRankAM, d_userlist_x + d_userlist_w - (16 * 3 + 1),
-				   d_userlist_y - 14);
+	ShapeButtonClass RankRABtn(BUTTON_RANKRA, pShpRankRA, d_userlist_x + d_userlist_w - (16 * 4 + 1), d_userlist_y - 14);
+	ShapeButtonClass RankAMBtn(BUTTON_RANKAM, pShpRankAM, d_userlist_x + d_userlist_w - (16 * 3 + 1), d_userlist_y - 14);
 	//	Change draw behavior of toggle buttons.
 	RankRABtn.ReflectButtonState = true;
 	RankAMBtn.ReflectButtonState = true;
@@ -260,7 +277,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 
 	//	Tooltips...
 	DWORD timeToolTipAppear;
-	ToolTipClass *pToolTipHead = NULL;    //	Head of list of ToolTips that parallels gadget list.
+	ToolTipClass *pToolTipHead = NULL; //	Head of list of ToolTips that parallels gadget list.
 	ToolTipClass *pToolTipHitLast = NULL; //	ToolTip the mouse was last over, or null.
 
 	ToolTipClass *pToolTip = pToolTipHead = pWO->pTTipDiscon;
@@ -282,12 +299,10 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 	pToolTip = pToolTip->next;
 	pToolTip->next = pWO->pTTipHelp;
 	pToolTip = pToolTip->next;
-	ToolTipClass TTipChanExpand(&ExpandChanBtn, TXT_WOL_TTIP_EXPANDLIST, ExpandChanBtn.X + 8, ExpandChanBtn.Y - 9,
-				    true);
+	ToolTipClass TTipChanExpand(&ExpandChanBtn, TXT_WOL_TTIP_EXPANDLIST, ExpandChanBtn.X + 8, ExpandChanBtn.Y - 9, true);
 	pToolTip->next = &TTipChanExpand;
 	pToolTip = pToolTip->next;
-	ToolTipClass TTipUserExpand(&ExpandUserBtn, TXT_WOL_TTIP_EXPANDLIST, ExpandUserBtn.X + 8, ExpandUserBtn.Y - 9,
-				    true);
+	ToolTipClass TTipUserExpand(&ExpandUserBtn, TXT_WOL_TTIP_EXPANDLIST, ExpandUserBtn.X + 8, ExpandUserBtn.Y - 9, true);
 	pToolTip->next = &TTipUserExpand;
 	pToolTip = pToolTip->next;
 	ToolTipClass TTipChanList(&chanlist, 0, chanlist.X + 1, chanlist.Y + 1, true, true);
@@ -316,7 +331,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 	//........................................................................
 	// List boxes
 	//........................................................................
-	int tabs[] = {150}; //	tabs for channel list
+	int tabs[] = { 150 }; //	tabs for channel list
 	chanlist.Set_Tabs(tabs);
 
 	//	Fancy_Text_Print("", 0, 0, scheme, TBLACK, TPF_TEXT);
@@ -349,8 +364,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 			char szChannelToJoin[WOL_CHANNAME_LEN_MAX];
 			// sprintf( szChannelToJoin, "Lob_%i_%i", GAME_TYPE, pWO->iLobbyReturnAfterGame );
 			sprintf(szChannelToJoin, "%s%i", LOB_PREFIX, pWO->iLobbyReturnAfterGame);
-			pWO->OnEnteringChatChannel(szChannelToJoin, false,
-						   iChannelLobbyNumber((unsigned char *)szChannelToJoin));
+			pWO->OnEnteringChatChannel(szChannelToJoin, false, iChannelLobbyNumber((unsigned char *)szChannelToJoin));
 		} else
 			//	Will never happen presumably, if games are always entered via a lobby chat channel.
 			pWO->EnterLevel_Top();
@@ -563,8 +577,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 				switch (lesCurrent) {
 				case LES_CHANNELS_EXPANDED:
 					//	Draw users title bar at bottom.
-					Draw_Box(d_userlist_x, d_userlist_y + d_userlist_h - 16, d_userlist_w, 16,
-						 BOXSTYLE_BOX, false);
+					Draw_Box(d_userlist_x, d_userlist_y + d_userlist_h - 16, d_userlist_w, 16, BOXSTYLE_BOX, false);
 					break;
 				case LES_USERS_EXPANDED:
 					//	Draw users title bar at top.
@@ -572,8 +585,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 					break;
 				default:
 					//	Draw users title bar in middle.
-					Draw_Box(d_userlist_x, d_userlist_y - 15, d_userlist_w, 16, BOXSTYLE_BOX,
-						 false);
+					Draw_Box(d_userlist_x, d_userlist_y - 15, d_userlist_w, 16, BOXSTYLE_BOX, false);
 					break;
 				}
 			}
@@ -623,13 +635,11 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 		if (pToolTipHead) {
 			ToolTipClass *pToolTipHit = pToolTipHead->GetToolTipHit();
 			if (pToolTipHit == pToolTipHitLast) {
-				if (pToolTipHit &&
-				    bLinkInList(commands,
-						pToolTipHit->pGadget)) //	(Gadget must be in controls list.)
+				if (pToolTipHit && bLinkInList(commands,
+							       pToolTipHit->pGadget)) //	(Gadget must be in controls list.)
 				{
 					if (!pToolTipHit->bShowing && ::timeGetTime() > timeToolTipAppear &&
-					    !((::GetAsyncKeyState(KN_LMOUSE) & 0x8000) ||
-					      (::GetAsyncKeyState(KN_RMOUSE) & 0x8000))) {
+					    !((::GetAsyncKeyState(KN_LMOUSE) & 0x8000) || (::GetAsyncKeyState(KN_RMOUSE) & 0x8000))) {
 						pToolTipHit->Show();
 					} else if (pToolTipHit->bIconList && pToolTipHit->bOverDifferentLine()) {
 						pToolTipHit->Unshow();
@@ -866,8 +876,7 @@ int WOL_Chat_Dialog(WolapiObject *pWO) {
 			//	Note no break; here. Fall through if at top level.
 		case (BUTTON_DISCONNECT | KN_BUTTON):
 			if (WWMessageBox().Process(TXT_WOL_CONFIRMLOGOUT, TXT_YES, TXT_NO) == 0) {
-				if (pWO->CurrentLevel == WOL_LEVEL_INCHATCHANNEL ||
-				    pWO->CurrentLevel == WOL_LEVEL_INLOBBY)
+				if (pWO->CurrentLevel == WOL_LEVEL_INCHATCHANNEL || pWO->CurrentLevel == WOL_LEVEL_INLOBBY)
 					ExitChatChannel(pWO);
 				pWO->Logout();
 				rc = -1;
@@ -1010,8 +1019,7 @@ bool OnExpandUserList(IconListClass &chanlist, IconListClass &userlist) {
 void ResizeChannelList(IconListClass &chanlist, bool bExpand) {
 	//	If bExpand, makes list big, else normal size.
 	if (bExpand)
-		chanlist.Resize(d_chanlist_x, d_chanlist_y, d_chanlist_w,
-				d_userlist_y + d_userlist_h - 15 - d_chanlist_y);
+		chanlist.Resize(d_chanlist_x, d_chanlist_y, d_chanlist_w, d_userlist_y + d_userlist_h - 15 - d_chanlist_y);
 	else
 		chanlist.Resize(d_chanlist_x, d_chanlist_y, d_chanlist_w, d_chanlist_h);
 }
@@ -1020,8 +1028,7 @@ void ResizeChannelList(IconListClass &chanlist, bool bExpand) {
 void ResizeUserList(IconListClass &userlist, bool bExpand) {
 	//	If bExpand, makes list big, else normal size.
 	if (bExpand)
-		userlist.Resize(d_userlist_x, d_chanlist_y + 15, d_userlist_w,
-				d_userlist_y + d_userlist_h - (d_chanlist_y + 15));
+		userlist.Resize(d_userlist_x, d_chanlist_y + 15, d_userlist_w, d_userlist_y + d_userlist_h - (d_chanlist_y + 15));
 	else
 		userlist.Resize(d_userlist_x, d_userlist_y, d_userlist_w, d_userlist_h);
 }
@@ -1099,15 +1106,15 @@ bool EnterChannel(WolapiObject *pWO, IconListClass &chatlist, Channel *pChannel,
 			Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK,
 					 TPF_TEXT); //	Required before String_Pixel_Width() call, for god's sake.
 #ifdef ENGLISH
-			SimpleEditDlgClass *pEditDlg = new SimpleEditDlgClass(
-			    300, TXT_WOL_JOINPRIVATETITLE, TXT_WOL_JOINPRIVATEPROMPT, WOL_CHANKEY_LEN_MAX);
+			SimpleEditDlgClass *pEditDlg =
+				new SimpleEditDlgClass(300, TXT_WOL_JOINPRIVATETITLE, TXT_WOL_JOINPRIVATEPROMPT, WOL_CHANKEY_LEN_MAX);
 #else
 #ifdef GERMAN
-			SimpleEditDlgClass *pEditDlg = new SimpleEditDlgClass(
-			    400, TXT_WOL_JOINPRIVATETITLE, TXT_WOL_JOINPRIVATEPROMPT, WOL_CHANKEY_LEN_MAX);
+			SimpleEditDlgClass *pEditDlg =
+				new SimpleEditDlgClass(400, TXT_WOL_JOINPRIVATETITLE, TXT_WOL_JOINPRIVATEPROMPT, WOL_CHANKEY_LEN_MAX);
 #else
-			SimpleEditDlgClass *pEditDlg = new SimpleEditDlgClass(
-			    500, TXT_WOL_JOINPRIVATETITLE, TXT_WOL_JOINPRIVATEPROMPT, WOL_CHANKEY_LEN_MAX);
+			SimpleEditDlgClass *pEditDlg =
+				new SimpleEditDlgClass(500, TXT_WOL_JOINPRIVATETITLE, TXT_WOL_JOINPRIVATEPROMPT, WOL_CHANKEY_LEN_MAX);
 #endif
 #endif
 			pWO->bPump_In_Call_Back = true;
@@ -1224,9 +1231,12 @@ void CreateChatChannel(WolapiObject *pWO) {
 	{
 		Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK,
 				 TPF_TEXT); //	Required before String_Pixel_Width() call, for god's sake.
-		pEditDlg =
-		    new SimpleEditDlgClass(350, TXT_WOL_CREATECHANNELTITLE, TXT_WOL_CREATECHANNELPROMPT,
-					   WOL_CHANNAME_LEN_MAX, TXT_WOL_OPTIONALPASSPROMPT, WOL_CHANKEY_LEN_MAX);
+		pEditDlg = new SimpleEditDlgClass(350,
+						  TXT_WOL_CREATECHANNELTITLE,
+						  TXT_WOL_CREATECHANNELPROMPT,
+						  WOL_CHANNAME_LEN_MAX,
+						  TXT_WOL_OPTIONALPASSPROMPT,
+						  WOL_CHANKEY_LEN_MAX);
 		pWO->bPump_In_Call_Back = true;
 		if (strcmp(pEditDlg->Show(), Text_String(TXT_OK)) == 0 && *pEditDlg->szEdit) {
 			pWO->bPump_In_Call_Back = false;
@@ -1265,8 +1275,7 @@ bool CreateGameChannel(WolapiObject *pWO, const CREATEGAMEINFO &cgi) {
 	else
 		szKey = NULL;
 
-	if (pWO->ChannelCreate(szNewChannelName, szKey, true, cgi.iPlayerMax, cgi.bTournament, pWO->iLobbyLast,
-			       cgi.GameKind))
+	if (pWO->ChannelCreate(szNewChannelName, szKey, true, cgi.iPlayerMax, cgi.bTournament, pWO->iLobbyLast, cgi.GameKind))
 		pWO->OnEnteringGameChannel(szNewChannelName, true, cgi);
 	else {
 		pWO->OnFailedToEnterGameChannel();
@@ -1357,23 +1366,20 @@ bool ProcessChannelListSelection(WolapiObject *pWO, IconListClass &chatlist, Ico
 			Channel *pChannel = (Channel *)chanlist.Get_Item_ExtraDataPtr(iIndex);
 			if (pChannel->type == GAME_TYPE) {
 				//	It is a game of our type, at least.
-				CREATEGAMEINFO::GAMEKIND GameKind =
-				    (CREATEGAMEINFO::GAMEKIND)(pChannel->reserved & 0xFF000000);
+				CREATEGAMEINFO::GAMEKIND GameKind = (CREATEGAMEINFO::GAMEKIND)(pChannel->reserved & 0xFF000000);
 				switch (GameKind) {
 				case CREATEGAMEINFO::RAGAME:
 					break;
 				case CREATEGAMEINFO::CSGAME:
 					if (!Is_Counterstrike_Installed()) {
-						WOL_PrintMessage(chatlist, TXT_WOL_NEEDCOUNTERSTRIKE,
-								 WOLCOLORREMAP_LOCALMACHINEMESS);
+						WOL_PrintMessage(chatlist, TXT_WOL_NEEDCOUNTERSTRIKE, WOLCOLORREMAP_LOCALMACHINEMESS);
 						Sound_Effect(WOLSOUND_ERROR);
 						return false;
 					}
 					break;
 				case CREATEGAMEINFO::AMGAME:
 					if (!Is_Aftermath_Installed()) {
-						WOL_PrintMessage(chatlist, TXT_WOL_NEEDAFTERMATH,
-								 WOLCOLORREMAP_LOCALMACHINEMESS);
+						WOL_PrintMessage(chatlist, TXT_WOL_NEEDAFTERMATH, WOLCOLORREMAP_LOCALMACHINEMESS);
 						Sound_Effect(WOLSOUND_ERROR);
 						return false;
 					}

@@ -200,7 +200,7 @@ public:
 			unsigned NE : 1;
 			unsigned SW : 1;
 			unsigned SE : 1;
-			unsigned Vehicle : 1;  // Reserved for vehicle occupation.
+			unsigned Vehicle : 1; // Reserved for vehicle occupation.
 			unsigned Monolith : 1; // Some immovable blockage is in cell.
 			unsigned Building : 1; // A building of some time (usually blocks movement).
 		} Occupy;
@@ -209,10 +209,15 @@ public:
 
 	//----------------------------------------------------------------
 	CellClass(void);
-	CellClass(NoInitClass const &x) : Trigger(x) {}
-	~CellClass(void) { OccupierPtr = 0; }
+	CellClass(NoInitClass const &x) : Trigger(x) {
+	}
+	~CellClass(void) {
+		OccupierPtr = 0;
+	}
 
-	int operator==(CellClass const &cell) const { return &cell == this; }
+	int operator==(CellClass const &cell) const {
+		return &cell == this;
+	}
 
 	/*
 	**	Query functions.
@@ -221,32 +226,45 @@ public:
 	bool Can_Tiberium_Grow(void) const;
 	bool Can_Tiberium_Spread(void) const;
 	bool Is_Bridge_Here(void) const;
-	RTTIType What_Am_I(void) const { return (RTTI_CELL); }
+	RTTIType What_Am_I(void) const {
+		return (RTTI_CELL);
+	}
 	BuildingClass *Cell_Building(void) const;
-	CELL Cell_Number(void) const { return (ID); }
+	CELL Cell_Number(void) const {
+		return (ID);
+	}
 	COORDINATE Cell_Coord(void) const;
 	COORDINATE Closest_Free_Spot(COORDINATE coord, bool any = false) const;
-	COORDINATE Free_Spot(void) const { return Closest_Free_Spot(Cell_Coord()); }
+	COORDINATE Free_Spot(void) const {
+		return Closest_Free_Spot(Cell_Coord());
+	}
 	CellClass *Adjacent_Cell(FacingType face) {
 		return (CellClass *)((*((CellClass const *)this)).Adjacent_Cell(face));
 	}
 	CellClass const *Adjacent_Cell(FacingType face) const;
 	InfantryClass *Cell_Infantry(void) const;
-	LandType Land_Type(void) const { return ((OverrideLand != LAND_NONE) ? OverrideLand : Land); }
+	LandType Land_Type(void) const {
+		return ((OverrideLand != LAND_NONE) ? OverrideLand : Land);
+	}
 	ObjectClass *Cell_Find_Object(RTTIType rtti) const;
 	ObjectClass *Cell_Object(int x = 0, int y = 0) const;
-	ObjectClass *Cell_Occupier(void) const { return (OccupierPtr); }
+	ObjectClass *Cell_Occupier(void) const {
+		return (OccupierPtr);
+	}
 	ObjectClass *Fetch_Occupier(void) const;
-	TARGET As_Target(void) const { return ::As_Target(Cell_Number()); }
+	TARGET As_Target(void) const {
+		return ::As_Target(Cell_Number());
+	}
 	TechnoClass *Cell_Techno(int x = 0, int y = 0) const;
 	TerrainClass *Cell_Terrain(void) const;
 	UnitClass *Cell_Unit(void) const;
 	VesselClass *Cell_Vessel(void) const;
 	bool Goodie_Check(FootClass *object);
 	bool Is_Clear_To_Build(SpeedType loco = SPEED_TRACK) const;
-	bool Is_Clear_To_Move(SpeedType loco, bool ignoreinfantry, bool ignorevehicles, int zone = -1,
-			      MZoneType check = MZONE_NORMAL) const;
-	bool Is_Spot_Free(int spot_index) const { return (!(Flag.Composite & (1 << spot_index))); }
+	bool Is_Clear_To_Move(SpeedType loco, bool ignoreinfantry, bool ignorevehicles, int zone = -1, MZoneType check = MZONE_NORMAL) const;
+	bool Is_Spot_Free(int spot_index) const {
+		return (!(Flag.Composite & (1 << spot_index)));
+	}
 	int Cell_Color(bool override = false) const;
 	int Clear_Icon(void) const;
 	static int Spot_Index(COORDINATE coord);
@@ -295,7 +313,9 @@ public:
 	void Incoming(COORDINATE threat = 0, bool forced = false, bool nokidding = false);
 	void Adjust_Threat(HousesType house, int threat_value);
 
-	int operator!=(CellClass const &) const { return 0; }
+	int operator!=(CellClass const &) const {
+		return 0;
+	}
 
 	/*
 	**	Additional per-player functionality is needed for multiplayer. ST - 8/2/2019 3:01PM

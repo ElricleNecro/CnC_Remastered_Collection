@@ -35,9 +35,9 @@
  *   Straw::~Straw -- Destructor for a straw segment.                                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "straw.h"
 #include <stddef.h>
 #include <string.h>
+#include "straw.h"
 
 /***********************************************************************************************
  * Straw::~Straw -- Destructor for a straw segment.                                            *

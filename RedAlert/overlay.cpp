@@ -58,7 +58,9 @@ HousesType OverlayClass::ToOwn = HOUSE_NONE;
  * HISTORY:                                                                                    *
  *   05/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OverlayClass::Init(void) { Overlays.Free_All(); }
+void OverlayClass::Init(void) {
+	Overlays.Free_All();
+}
 
 /***********************************************************************************************
  * OverlayClass::new -- Allocates a overlay object from pool                                   *
@@ -122,7 +124,7 @@ void OverlayClass::operator delete(void *ptr) {
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 OverlayClass::OverlayClass(OverlayType type, CELL pos, HousesType house)
-    : ObjectClass(RTTI_OVERLAY, Overlays.ID(this)), Class(OverlayTypes.Ptr((int)type)) {
+	: ObjectClass(RTTI_OVERLAY, Overlays.ID(this)), Class(OverlayTypes.Ptr((int)type)) {
 	if (pos != -1) {
 		ToOwn = house;
 		Unlimbo(Cell_Coord(pos));
@@ -165,8 +167,7 @@ bool OverlayClass::Mark(MarkType mark) {
 					cellptr->OverlayData = 0;
 					cellptr->Redraw_Objects();
 					cellptr->Wall_Update();
-					Map.Zone_Reset(Class->IsCrushable ? MZONE_NORMAL
-									  : MZONE_NORMAL | MZONE_CRUSHER);
+					Map.Zone_Reset(Class->IsCrushable ? MZONE_NORMAL : MZONE_NORMAL | MZONE_CRUSHER);
 
 					/*
 					**	Flag ownership of the cell if the 'global' ownership flag indicates that
@@ -181,14 +182,12 @@ bool OverlayClass::Mark(MarkType mark) {
 					return (false);
 				}
 			} else {
-
 				bool clear = false;
 				if (!ScenarioInit) {
 					if (Class->Type == OVERLAY_WATER_CRATE) {
 						clear = cellptr->Is_Clear_To_Move(SPEED_FLOAT, false, false);
 					} else {
-						if (Class->Type == OVERLAY_STEEL_CRATE ||
-						    Class->Type == OVERLAY_WOOD_CRATE) {
+						if (Class->Type == OVERLAY_STEEL_CRATE || Class->Type == OVERLAY_WOOD_CRATE) {
 							clear = cellptr->Is_Clear_To_Move(SPEED_TRACK, false, false);
 						} else {
 							clear = cellptr->Is_Clear_To_Move(SPEED_TRACK, true, true);
@@ -199,7 +198,6 @@ bool OverlayClass::Mark(MarkType mark) {
 				}
 
 				if ((ScenarioInit || cellptr->Overlay == OVERLAY_NONE) && clear) {
-
 					cellptr->Overlay = Class->Type;
 					cellptr->OverlayData = 0;
 
@@ -261,10 +259,7 @@ void OverlayClass::Read_INI(CCINIClass &ini) {
 				uncomp.Get(&classid, sizeof(classid));
 
 				if (classid != OVERLAY_NONE) {
-
-					if (Session.Type == GAME_NORMAL ||
-					    !OverlayTypeClass::As_Reference(classid).IsCrate) {
-
+					if (Session.Type == GAME_NORMAL || !OverlayTypeClass::As_Reference(classid).IsCrate) {
 						/*
 						**	Don't allow placement of overlays on the top or bottom rows of
 						**	the map.
@@ -276,11 +271,9 @@ void OverlayClass::Read_INI(CCINIClass &ini) {
 							if (OverlayTypeClass::As_Reference(classid).IsWall) {
 								HousesType owner = HOUSE_NONE;
 								int distance = 0x7FFFFFFF;
-								for (int index = 0; index < Buildings.Count();
-								     index++) {
+								for (int index = 0; index < Buildings.Count(); index++) {
 									BuildingClass *building = Buildings.Ptr(index);
-									int newdist = ::Distance(
-									    building->Center_Coord(), Cell_Coord(cell));
+									int newdist = ::Distance(building->Center_Coord(), Cell_Coord(cell));
 									if (newdist < distance) {
 										distance = newdist;
 										owner = building->Owner();
@@ -305,9 +298,7 @@ void OverlayClass::Read_INI(CCINIClass &ini) {
 			/*
 			**	Don't allow placement of crates in the multiplayer scenarios.
 			*/
-			if (classid != OVERLAY_NONE &&
-			    (Session.Type == GAME_NORMAL || !OverlayTypeClass::As_Reference(classid).IsCrate)) {
-
+			if (classid != OVERLAY_NONE && (Session.Type == GAME_NORMAL || !OverlayTypeClass::As_Reference(classid).IsCrate)) {
 				/*
 				**	Don't allow placement of overlays on the top or bottom rows of
 				**	the map.
@@ -321,8 +312,7 @@ void OverlayClass::Read_INI(CCINIClass &ini) {
 						int distance = 0x7FFFFFFF;
 						for (int index = 0; index < Buildings.Count(); index++) {
 							BuildingClass *building = Buildings.Ptr(index);
-							int newdist =
-							    ::Distance(building->Center_Coord(), Cell_Coord(cell));
+							int newdist = ::Distance(building->Center_Coord(), Cell_Coord(cell));
 							if (newdist < distance) {
 								distance = newdist;
 								owner = building->Owner();

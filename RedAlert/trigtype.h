@@ -45,9 +45,9 @@ class TriggerClass;
 **	indicate if there are multiple events/actions and what their relationship is.
 */
 typedef enum MultiStyleType : unsigned char {
-	MULTI_ONLY,  // "Only" main trigger action/event?
-	MULTI_AND,   // "And" secondary trigger action/event?
-	MULTI_OR,    // "Or" secondary event?
+	MULTI_ONLY, // "Only" main trigger action/event?
+	MULTI_AND, // "And" secondary trigger action/event?
+	MULTI_OR, // "Or" secondary event?
 	MULTI_LINKED // Cause and effect pairs are linked?
 } MultiStyleType;
 
@@ -94,7 +94,9 @@ public:
 	virtual ~TriggerTypeClass(void);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	/*
@@ -110,7 +112,9 @@ public:
 	void Fill_In(char *name, char *entry);
 	void Build_INI_Entry(char *buf) const;
 
-	static char *INI_Name(void) { return "Trigs"; };
+	static char *INI_Name(void) {
+		return "Trigs";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 	void Code_Pointers(void);
@@ -132,7 +136,9 @@ public:
 	bool Edit(void);
 #if defined(CHEAT_KEYS) || defined(SCENARIO_EDITOR)
 	char const *Description(void) const;
-	operator const char *(void) const { return (Description()); };
+	operator const char *(void) const {
+		return (Description());
+	};
 #endif
 	void Draw_It(int index, int x, int y, int width, int height, bool selected, TextPrintType flags) const;
 };

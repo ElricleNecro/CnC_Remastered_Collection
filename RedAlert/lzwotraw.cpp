@@ -35,11 +35,11 @@
  *   LZWStraw::~LZWStraw -- Destructor for the LZW straw.                                      *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <assert.h>
+#include <string.h>
 #include "lzo.h"
 #include "lzostraw.h"
 #include "lzwstraw.h"
-#include <assert.h>
-#include <string.h>
 
 /***********************************************************************************************
  * LZWStraw::LZWStraw -- Constructor for LZW straw object.                                     *
@@ -60,8 +60,7 @@
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LZWStraw::LZWStraw(CompControl control, int blocksize)
-    : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
+LZWStraw::LZWStraw(CompControl control, int blocksize) : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
 	SafetyMargin = BlockSize;
 	//	SafetyMargin = BlockSize/128+1;
 	Buffer = new char[BlockSize + SafetyMargin];
@@ -126,7 +125,6 @@ int LZWStraw::Get(void *destbuf, int slen) {
 	}
 
 	while (slen > 0) {
-
 		/*
 		**	Copy as much data is requested and available into the desired
 		**	destination buffer.
@@ -136,8 +134,7 @@ int LZWStraw::Get(void *destbuf, int slen) {
 			if (Control == DECOMPRESS) {
 				memmove(destbuf, &Buffer[BlockHeader.UncompCount - Counter], len);
 			} else {
-				memmove(destbuf, &Buffer2[(BlockHeader.CompCount + sizeof(BlockHeader)) - Counter],
-					len);
+				memmove(destbuf, &Buffer2[(BlockHeader.CompCount + sizeof(BlockHeader)) - Counter], len);
 			}
 			destbuf = ((char *)destbuf) + len;
 			slen -= len;
@@ -165,8 +162,7 @@ int LZWStraw::Get(void *destbuf, int slen) {
 				break;
 			int len = sizeof(Buffer2) - sizeof(BlockHeader);
 			char *dictionary = new char[64 * 1024];
-			lzo1x_1_compress(Buffer, BlockHeader.UncompCount, &Buffer2[sizeof(BlockHeader)],
-					 &BlockHeader.CompCount, dictionary);
+			lzo1x_1_compress(Buffer, BlockHeader.UncompCount, &Buffer2[sizeof(BlockHeader)], &BlockHeader.CompCount, dictionary);
 			delete[] dictionary;
 			memmove(Buffer2, &BlockHeader, sizeof(BlockHeader));
 			Counter = BlockHeader.CompCount + sizeof(BlockHeader);

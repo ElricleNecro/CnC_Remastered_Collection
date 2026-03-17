@@ -69,10 +69,13 @@ class fixed {
 
 public:
 	// The default constructor must not touch the data members in any way.
-	fixed(void) {}
+	fixed(void) {
+	}
 
 	// Copy constructor
-	fixed(fixed const &rvalue) { Data.Raw = rvalue.Data.Raw; }
+	fixed(fixed const &rvalue) {
+		Data.Raw = rvalue.Data.Raw;
+	}
 
 	// Convenient constructor if numerator and denominator components are known.
 	fixed(int numerator, int denominator);
@@ -115,8 +118,7 @@ public:
 	}
 	fixed &operator/=(fixed const &rvalue) {
 		if (rvalue.Data.Raw != 0U && rvalue.Data.Raw != PRECISION)
-			Data.Raw = (unsigned int)((((unsigned __int64)Data.Raw * PRECISION) + (PRECISION >> 1)) /
-						  rvalue.Data.Raw);
+			Data.Raw = (unsigned int)((((unsigned __int64)Data.Raw * PRECISION) + (PRECISION >> 1)) / rvalue.Data.Raw);
 		return (*this);
 	}
 	fixed &operator/=(int rvalue) {
@@ -137,14 +139,30 @@ public:
 	**	The standard "My Dear Aunt Sally" operators. The integer versions of multiply
 	**	and divide are more efficient than using the fixed point counterparts.
 	*/
-	const fixed operator*(fixed const &rvalue) const { return fixed(*this) *= rvalue; }
-	const int operator*(int rvalue) const { return fixed(*this) *= rvalue; }
-	const fixed operator/(fixed const &rvalue) const { return fixed(*this) /= rvalue; }
-	const int operator/(int rvalue) const { return fixed(*this) /= rvalue; }
-	const fixed operator+(fixed const &rvalue) const { return fixed(*this) += rvalue; }
-	const int operator+(int rvalue) const { return fixed(*this) += rvalue; }
-	const fixed operator-(fixed const &rvalue) const { return fixed(*this) -= rvalue; }
-	const int operator-(int rvalue) const { return fixed(*this) -= rvalue; }
+	const fixed operator*(fixed const &rvalue) const {
+		return fixed(*this) *= rvalue;
+	}
+	const int operator*(int rvalue) const {
+		return fixed(*this) *= rvalue;
+	}
+	const fixed operator/(fixed const &rvalue) const {
+		return fixed(*this) /= rvalue;
+	}
+	const int operator/(int rvalue) const {
+		return fixed(*this) /= rvalue;
+	}
+	const fixed operator+(fixed const &rvalue) const {
+		return fixed(*this) += rvalue;
+	}
+	const int operator+(int rvalue) const {
+		return fixed(*this) += rvalue;
+	}
+	const fixed operator-(fixed const &rvalue) const {
+		return fixed(*this) -= rvalue;
+	}
+	const int operator-(int rvalue) const {
+		return fixed(*this) -= rvalue;
+	}
 
 	/*
 	**	The Shift operators are more efficient than using multiplies or divides by power-of-2 numbers.
@@ -157,43 +175,93 @@ public:
 		Data.Raw <<= rvalue;
 		return (*this);
 	}
-	const fixed operator>>(unsigned rvalue) const { return fixed(*this) >>= rvalue; }
-	const fixed operator<<(unsigned rvalue) const { return fixed(*this) <<= rvalue; }
+	const fixed operator>>(unsigned rvalue) const {
+		return fixed(*this) >>= rvalue;
+	}
+	const fixed operator<<(unsigned rvalue) const {
+		return fixed(*this) <<= rvalue;
+	}
 
 	/*
 	**	The full set of comparison operators.
 	*/
-	bool operator==(fixed const &rvalue) const { return (Data.Raw == rvalue.Data.Raw); }
-	bool operator!=(fixed const &rvalue) const { return (Data.Raw != rvalue.Data.Raw); }
-	bool operator<(fixed const &rvalue) const { return (Data.Raw < rvalue.Data.Raw); }
-	bool operator>(fixed const &rvalue) const { return (Data.Raw > rvalue.Data.Raw); }
-	bool operator<=(fixed const &rvalue) const { return (Data.Raw <= rvalue.Data.Raw); }
-	bool operator>=(fixed const &rvalue) const { return (Data.Raw >= rvalue.Data.Raw); }
-	bool operator!(void) const { return (Data.Raw == 0U); }
+	bool operator==(fixed const &rvalue) const {
+		return (Data.Raw == rvalue.Data.Raw);
+	}
+	bool operator!=(fixed const &rvalue) const {
+		return (Data.Raw != rvalue.Data.Raw);
+	}
+	bool operator<(fixed const &rvalue) const {
+		return (Data.Raw < rvalue.Data.Raw);
+	}
+	bool operator>(fixed const &rvalue) const {
+		return (Data.Raw > rvalue.Data.Raw);
+	}
+	bool operator<=(fixed const &rvalue) const {
+		return (Data.Raw <= rvalue.Data.Raw);
+	}
+	bool operator>=(fixed const &rvalue) const {
+		return (Data.Raw >= rvalue.Data.Raw);
+	}
+	bool operator!(void) const {
+		return (Data.Raw == 0U);
+	}
 
 	/*
 	**	Comparison to integers requires consideration of fractional component.
 	*/
-	bool operator<(int rvalue) const { return (Data.Raw < ((unsigned int)rvalue * PRECISION)); }
-	bool operator>(int rvalue) const { return (Data.Raw > ((unsigned int)rvalue * PRECISION)); }
-	bool operator<=(int rvalue) const { return (Data.Raw <= ((unsigned int)rvalue * PRECISION)); }
-	bool operator>=(int rvalue) const { return (Data.Raw >= ((unsigned int)rvalue * PRECISION)); }
-	bool operator==(int rvalue) const { return (Data.Raw == ((unsigned int)rvalue * PRECISION)); }
-	bool operator!=(int rvalue) const { return (Data.Raw != ((unsigned int)rvalue * PRECISION)); }
+	bool operator<(int rvalue) const {
+		return (Data.Raw < ((unsigned int)rvalue * PRECISION));
+	}
+	bool operator>(int rvalue) const {
+		return (Data.Raw > ((unsigned int)rvalue * PRECISION));
+	}
+	bool operator<=(int rvalue) const {
+		return (Data.Raw <= ((unsigned int)rvalue * PRECISION));
+	}
+	bool operator>=(int rvalue) const {
+		return (Data.Raw >= ((unsigned int)rvalue * PRECISION));
+	}
+	bool operator==(int rvalue) const {
+		return (Data.Raw == ((unsigned int)rvalue * PRECISION));
+	}
+	bool operator!=(int rvalue) const {
+		return (Data.Raw != ((unsigned int)rvalue * PRECISION));
+	}
 
 	/*
 	**	Friend functions to handle the alternate positioning of fixed and integer parameters.
 	*/
-	friend const int operator*(int lvalue, fixed const &rvalue) { return fixed(lvalue) * rvalue; }
-	friend const int operator/(int lvalue, fixed const &rvalue) { return fixed(lvalue) / rvalue; }
-	friend const int operator+(int lvalue, fixed const &rvalue) { return fixed(lvalue) + rvalue; }
-	friend const int operator-(int lvalue, fixed const &rvalue) { return fixed(lvalue) - rvalue; }
-	friend bool operator<(unsigned lvalue, fixed const &rvalue) { return fixed(lvalue) < rvalue; }
-	friend bool operator>(unsigned lvalue, fixed const &rvalue) { return fixed(lvalue) > rvalue; }
-	friend bool operator<=(unsigned lvalue, fixed const &rvalue) { return fixed(lvalue) <= rvalue; }
-	friend bool operator>=(unsigned lvalue, fixed const &rvalue) { return fixed(lvalue) >= rvalue; }
-	friend bool operator==(unsigned lvalue, fixed const &rvalue) { return fixed(lvalue) == rvalue; }
-	friend bool operator!=(unsigned lvalue, fixed const &rvalue) { return fixed(lvalue) != rvalue; }
+	friend const int operator*(int lvalue, fixed const &rvalue) {
+		return fixed(lvalue) * rvalue;
+	}
+	friend const int operator/(int lvalue, fixed const &rvalue) {
+		return fixed(lvalue) / rvalue;
+	}
+	friend const int operator+(int lvalue, fixed const &rvalue) {
+		return fixed(lvalue) + rvalue;
+	}
+	friend const int operator-(int lvalue, fixed const &rvalue) {
+		return fixed(lvalue) - rvalue;
+	}
+	friend bool operator<(unsigned lvalue, fixed const &rvalue) {
+		return fixed(lvalue) < rvalue;
+	}
+	friend bool operator>(unsigned lvalue, fixed const &rvalue) {
+		return fixed(lvalue) > rvalue;
+	}
+	friend bool operator<=(unsigned lvalue, fixed const &rvalue) {
+		return fixed(lvalue) <= rvalue;
+	}
+	friend bool operator>=(unsigned lvalue, fixed const &rvalue) {
+		return fixed(lvalue) >= rvalue;
+	}
+	friend bool operator==(unsigned lvalue, fixed const &rvalue) {
+		return fixed(lvalue) == rvalue;
+	}
+	friend bool operator!=(unsigned lvalue, fixed const &rvalue) {
+		return fixed(lvalue) != rvalue;
+	}
 	friend int operator*=(int &lvalue, fixed const &rvalue) {
 		lvalue = lvalue * rvalue;
 		return (lvalue);
@@ -218,7 +286,9 @@ public:
 		Data.Raw += (PRECISION - 1U);
 		Data.Composite.Fraction = 0U;
 	}
-	void Round_Down(void) { Data.Composite.Fraction = 0U; }
+	void Round_Down(void) {
+		Data.Composite.Fraction = 0U;
+	}
 	void Round(void) {
 		if (Data.Composite.Fraction >= PRECISION >> 1)
 			Round_Up();
@@ -240,7 +310,9 @@ public:
 		if (*this >= capvalue)
 			Data.Raw = capvalue.Data.Raw - 1U;
 	}
-	void Inverse(void) { *this = fixed(1) / *this; }
+	void Inverse(void) {
+		*this = fixed(1) / *this;
+	}
 
 	/*
 	**	Friend helper functions that work in the typical C fashion of passing the object to

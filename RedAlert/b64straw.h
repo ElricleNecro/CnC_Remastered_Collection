@@ -45,7 +45,8 @@ class Base64Straw : public Straw {
 public:
 	typedef enum CodeControl { ENCODE, DECODE } CodeControl;
 
-	Base64Straw(CodeControl control) : Control(control), Counter(0) {}
+	Base64Straw(CodeControl control) : Control(control), Counter(0) {
+	}
 	virtual int Get(void *source, int slen);
 
 private:

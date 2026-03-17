@@ -48,16 +48,16 @@ field; annotation of 'APP' means the application must set the field.
 NOTE: All header fields are ordered high-byte,low-byte.
 ---------------------------------------------------------------------------*/
 typedef struct IPXHEADER {
-	unsigned short CheckSum;	      // IPX: Not used; always 0xffff
-	unsigned short Length;		      // IPX: Total size, incl header & data
-	unsigned char TransportControl;	      // IPX: # bridges message crossed
-	unsigned char PacketType;	      // APP: Set to 4 for IPX (5 for SPX)
-	unsigned char DestNetworkNumber[4];   // APP: destination Network Number
-	unsigned char DestNetworkNode[6];     // APP: destination Node Address
-	unsigned short DestNetworkSocket;     // APP: destination Socket Number
+	unsigned short CheckSum; // IPX: Not used; always 0xffff
+	unsigned short Length; // IPX: Total size, incl header & data
+	unsigned char TransportControl; // IPX: # bridges message crossed
+	unsigned char PacketType; // APP: Set to 4 for IPX (5 for SPX)
+	unsigned char DestNetworkNumber[4]; // APP: destination Network Number
+	unsigned char DestNetworkNode[6]; // APP: destination Node Address
+	unsigned short DestNetworkSocket; // APP: destination Socket Number
 	unsigned char SourceNetworkNumber[4]; // IPX: source Network Number
-	unsigned char SourceNetworkNode[6];   // IPX: source Node Address
-	unsigned short SourceNetworkSocket;   // IPX: source Socket Number
+	unsigned char SourceNetworkNode[6]; // IPX: source Node Address
+	unsigned short SourceNetworkSocket; // IPX: source Socket Number
 } IPXHeaderType;
 
 /*---------------------------------------------------------------------------
@@ -68,10 +68,10 @@ up a separate ECB for each IPX operation you perform.
 typedef struct ECB {
 	void *Link_Address;
 	void (*Event_Service_Routine)(void); // APP: event handler (NULL=none)
-	unsigned char InUse;		     // IPX: 0 = event complete
-	unsigned char CompletionCode;	     // IPX: event's return code
-	unsigned short SocketNumber;	     // APP: socket to send data through
-	unsigned short ConnectionID;	     // returned by Listen (???)
+	unsigned char InUse; // IPX: 0 = event complete
+	unsigned char CompletionCode; // IPX: event's return code
+	unsigned short SocketNumber; // APP: socket to send data through
+	unsigned short ConnectionID; // returned by Listen (???)
 	unsigned short RestOfWorkspace;
 	unsigned char DriverWorkspace[12];
 	unsigned char ImmediateAddress[6]; // returned by Get_Local_Target
@@ -174,8 +174,7 @@ int IPX_Get_Internet_Address(int connection_number, unsigned char *network_numbe
 int IPX_Get_User_ID(int connection_number, char *user_id);
 int IPX_Listen_For_Packet(struct ECB *ecb_ptr);
 void IPX_Send_Packet(struct ECB *ecb_ptr);
-int IPX_Get_Local_Target(unsigned char *dest_network, unsigned char *dest_node, unsigned short dest_socket,
-			 unsigned char *bridge_address);
+int IPX_Get_Local_Target(unsigned char *dest_network, unsigned char *dest_node, unsigned short dest_socket, unsigned char *bridge_address);
 int IPX_Cancel_Event(struct ECB *ecb_ptr);
 void Let_IPX_Breath(void);
 

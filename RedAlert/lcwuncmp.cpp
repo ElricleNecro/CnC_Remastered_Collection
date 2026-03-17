@@ -78,12 +78,10 @@ unsigned long __cdecl LCW_Uncompress(void *source, void *dest, unsigned long)
 	dest_ptr = (unsigned char *)dest;
 
 	while (1 /*TRUE*/) {
-
 		/* Read in the operation code. */
 		op_code = *source_ptr++;
 
 		if (!(op_code & 0x80)) {
-
 			/* Do a short copy from destination. */
 			count = (op_code >> 4) + 3;
 			copy_ptr = dest_ptr - ((unsigned)*source_ptr++ + (((unsigned)op_code & 0x0f) << 8));
@@ -92,16 +90,12 @@ unsigned long __cdecl LCW_Uncompress(void *source, void *dest, unsigned long)
 				*dest_ptr++ = *copy_ptr++;
 
 		} else {
-
 			if (!(op_code & 0x40)) {
-
 				if (op_code == 0x80) {
-
 					/* Return # of destination bytes written. */
 					return ((unsigned long)(dest_ptr - (unsigned char *)dest));
 
 				} else {
-
 					/* Do a medium copy from source. */
 					count = op_code & 0x3f;
 
@@ -110,14 +104,11 @@ unsigned long __cdecl LCW_Uncompress(void *source, void *dest, unsigned long)
 				}
 
 			} else {
-
 				if (op_code == 0xfe) {
-
 					/* Do a long run. */
 					count = *source_ptr + ((unsigned)*(source_ptr + 1) << 8);
 					word_data = data = *(source_ptr + 2);
-					word_data =
-					    (word_data << 24) + (word_data << 16) + (word_data << 8) + word_data;
+					word_data = (word_data << 24) + (word_data << 16) + (word_data << 8) + word_data;
 					source_ptr += 3;
 
 					copy_ptr = dest_ptr + 4 - ((unsigned)dest_ptr & 0x3);
@@ -140,24 +131,19 @@ unsigned long __cdecl LCW_Uncompress(void *source, void *dest, unsigned long)
 						*dest_ptr++ = data;
 
 				} else {
-
 					if (op_code == 0xff) {
-
 						/* Do a long copy from destination. */
 						count = *source_ptr + ((unsigned)*(source_ptr + 1) << 8);
-						copy_ptr = (unsigned char *)dest + *(source_ptr + 2) +
-							   ((unsigned)*(source_ptr + 3) << 8);
+						copy_ptr = (unsigned char *)dest + *(source_ptr + 2) + ((unsigned)*(source_ptr + 3) << 8);
 						source_ptr += 4;
 
 						while (count--)
 							*dest_ptr++ = *copy_ptr++;
 
 					} else {
-
 						/* Do a medium copy from destination. */
 						count = (op_code & 0x3f) + 3;
-						copy_ptr = (unsigned char *)dest + *source_ptr +
-							   ((unsigned)*(source_ptr + 1) << 8);
+						copy_ptr = (unsigned char *)dest + *source_ptr + ((unsigned)*(source_ptr + 1) << 8);
 						source_ptr += 2;
 
 						while (count--)

@@ -148,7 +148,6 @@ int FacingClass::Rotation_Adjust(int rate) {
 		if (ABS(diff) < rate) {
 			CurrentFacing = DesiredFacing;
 		} else {
-
 			/*
 			**	Adjust the current facing clockwise or counterclockwise depending
 			**	on the shortest distance to the desired facing from the current

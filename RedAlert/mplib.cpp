@@ -13,14 +13,14 @@
 // GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
+#include <assert.h>
+#include <i86.h>
+#include <mem.h>
 #include "mplib.h"
 #include "magic.h"
 #include "mgenord.h"
 #include "rtq.h"
 #include "types.h"
-#include <assert.h>
-#include <i86.h>
-#include <mem.h>
 
 #define CHUNNEL_INT 0x48
 

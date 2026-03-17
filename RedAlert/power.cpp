@@ -66,8 +66,9 @@ PowerClass::PowerButtonClass PowerClass::PowerButton;
  *   12/20/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 PowerClass::PowerClass(void)
-    : IsToRedraw(false), IsActive(false), FlashTimer(0), RecordedDrain(-1), RecordedPower(-1), DesiredDrainHeight(0),
-      DesiredPowerHeight(0), DrainHeight(0), PowerHeight(0), DrainBounce(0), PowerBounce(0), PowerDir(0), DrainDir(0) {}
+	: IsToRedraw(false), IsActive(false), FlashTimer(0), RecordedDrain(-1), RecordedPower(-1), DesiredDrainHeight(0), DesiredPowerHeight(0),
+	  DrainHeight(0), PowerHeight(0), DrainBounce(0), PowerBounce(0), PowerDir(0), DrainDir(0) {
+}
 
 /***********************************************************************************************
  * PowerClass::Init_Clear -- Clears all the power bar variables.                               *
@@ -141,7 +142,7 @@ void PowerClass::One_Time(void) {
  *   12/27/1994 JLB : Changes power bar color depending on amount of power.                    *
  *=============================================================================================*/
 void PowerClass::Draw_It(bool complete) {
-	static int _modtable[] = {0, -1, 0, 1, 0, -1, -2, -1, 0, 1, 2, 1, 0};
+	static int _modtable[] = { 0, -1, 0, 1, 0, -1, -2, -1, 0, 1, 2, 1, 0 };
 
 	if (complete || IsToRedraw) {
 		BStart(BENCH_POWER);
@@ -159,27 +160,35 @@ void PowerClass::Draw_It(bool complete) {
 
 				//				LogicPage->Fill_Rect(POWER_X, POWER_Y,
 				// POWER_X+POWER_WIDTH-1, POWER_Y+POWER_HEIGHT-1, LTGREY);
-				CC_Draw_Shape(PowerBarShape, 0, 240 * RESFACTOR, 88 * RESFACTOR, WINDOW_MAIN,
-					      flags | SHAPE_NORMAL | SHAPE_WIN_REL, remap);
+				CC_Draw_Shape(PowerBarShape,
+					      0,
+					      240 * RESFACTOR,
+					      88 * RESFACTOR,
+					      WINDOW_MAIN,
+					      flags | SHAPE_NORMAL | SHAPE_WIN_REL,
+					      remap);
 
 #ifdef WIN32
 				/*
 				** Hires power strip is too big to fit into a shape so it is in two parts
 				*/
-				CC_Draw_Shape(PowerBarShape, 1, 240 * RESFACTOR, (88 * RESFACTOR) + (56 * RESFACTOR),
-					      WINDOW_MAIN, flags | SHAPE_NORMAL | SHAPE_WIN_REL, remap);
+				CC_Draw_Shape(PowerBarShape,
+					      1,
+					      240 * RESFACTOR,
+					      (88 * RESFACTOR) + (56 * RESFACTOR),
+					      WINDOW_MAIN,
+					      flags | SHAPE_NORMAL | SHAPE_WIN_REL,
+					      remap);
 #endif
 				/*
 				**	Determine how much the power production exceeds or falls short
 				**	of power demands.
 				*/
 				int bottom = (POWER_Y + POWER_HEIGHT - 1) * RESFACTOR;
-				int power_height = (PowerHeight == DesiredPowerHeight)
-						       ? PowerHeight + (_modtable[PowerBounce] * PowerDir)
-						       : PowerHeight;
-				int drain_height = (DrainHeight == DesiredDrainHeight)
-						       ? DrainHeight + (_modtable[DrainBounce] * DrainDir)
-						       : DrainHeight;
+				int power_height =
+					(PowerHeight == DesiredPowerHeight) ? PowerHeight + (_modtable[PowerBounce] * PowerDir) : PowerHeight;
+				int drain_height =
+					(DrainHeight == DesiredDrainHeight) ? DrainHeight + (_modtable[DrainBounce] * DrainDir) : DrainHeight;
 				power_height = Bound(power_height, 0, POWER_HEIGHT - 2);
 				drain_height = Bound(drain_height, 0, POWER_HEIGHT - 2);
 
@@ -212,18 +221,20 @@ void PowerClass::Draw_It(bool complete) {
 #endif
 					bottom = (175 * RESFACTOR) + 1;
 
-					LogicPage->Fill_Rect(245 * RESFACTOR, bottom - power_height,
-							     245 * RESFACTOR + 1, bottom, color2);
-					LogicPage->Fill_Rect(246 * RESFACTOR, bottom - power_height,
-							     246 * RESFACTOR + 1, bottom, color1);
+					LogicPage->Fill_Rect(245 * RESFACTOR, bottom - power_height, 245 * RESFACTOR + 1, bottom, color2);
+					LogicPage->Fill_Rect(246 * RESFACTOR, bottom - power_height, 246 * RESFACTOR + 1, bottom, color1);
 				}
 
 				/*
 				**	Draw the power drain threshold marker.
 				*/
-				CC_Draw_Shape(PowerShape, 0, (POWER_X * RESFACTOR) + RESFACTOR,
-					      bottom - (drain_height + (2 * RESFACTOR)), WINDOW_MAIN,
-					      flags | SHAPE_NORMAL, remap);
+				CC_Draw_Shape(PowerShape,
+					      0,
+					      (POWER_X * RESFACTOR) + RESFACTOR,
+					      bottom - (drain_height + (2 * RESFACTOR)),
+					      WINDOW_MAIN,
+					      flags | SHAPE_NORMAL,
+					      remap);
 			}
 			LogicPage->Unlock();
 		}
@@ -372,7 +383,7 @@ void PowerClass::Refresh_Cells(CELL cell, short const *list) {
  *=========================================================================*/
 int PowerClass::Power_Height(int value) {
 	int num = value / POWER_STEP_LEVEL; // figure out the initial num of DRAIN_VALUE's
-	int retval = 0;			    // currently there is no power
+	int retval = 0; // currently there is no power
 
 	/*
 	** Loop through the different hundreds figuring out the fractional piece

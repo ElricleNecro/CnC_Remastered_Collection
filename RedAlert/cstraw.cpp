@@ -33,8 +33,8 @@
  *   CacheStraw::Get -- Fetch data from the data source.                                       *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "cstraw.h"
 #include <string.h>
+#include "cstraw.h"
 
 /***********************************************************************************************
  * CacheStraw::Get -- Fetch data from the data source.                                         *
@@ -61,13 +61,11 @@ int CacheStraw::Get(void *source, int slen) {
 	int total = 0;
 
 	if (Is_Valid() && source != NULL && slen > 0) {
-
 		/*
 		**	Keep processing the data request until there is no more data to supply or the request
 		**	has been fulfilled.
 		*/
 		while (slen > 0) {
-
 			/*
 			**	First try to fetch the data from data previously loaded into the buffer.
 			*/

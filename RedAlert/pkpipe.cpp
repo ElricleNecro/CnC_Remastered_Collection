@@ -58,8 +58,9 @@
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 PKPipe::PKPipe(CryptControl control, RandomStraw &rnd)
-    : IsGettingKey(true), Rand(rnd), BF((control == ENCRYPT) ? BlowPipe::ENCRYPT : BlowPipe::DECRYPT), Control(control),
-      CipherKey(NULL), Counter(0), BytesLeft(0) {}
+	: IsGettingKey(true), Rand(rnd), BF((control == ENCRYPT) ? BlowPipe::ENCRYPT : BlowPipe::DECRYPT), Control(control), CipherKey(NULL),
+	  Counter(0), BytesLeft(0) {
+}
 
 /***********************************************************************************************
  * PKPipe::Put_To -- Chains one pipe to another.                                               *
@@ -164,13 +165,11 @@ int PKPipe::Put(void const *source, int length) {
 	**	is processed by the blowfish pipe and ignored by the PKPipe.
 	*/
 	if (IsGettingKey) {
-
 		/*
 		**	When encrypting, first make the key block and then pass the data through the
 		**	normal blowfish processor.
 		*/
 		if (Control == ENCRYPT) {
-
 			/*
 			**	Generate the largest blowfish key possible.
 			*/
@@ -188,7 +187,6 @@ int PKPipe::Put(void const *source, int length) {
 			IsGettingKey = false;
 
 		} else {
-
 			/*
 			**	First try to accumulate a full key.
 			*/

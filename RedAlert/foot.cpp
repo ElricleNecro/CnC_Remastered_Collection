@@ -96,13 +96,11 @@
  *   11/23/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 FootClass::FootClass(RTTIType rtti, int id, HousesType house)
-    : TechnoClass(rtti, id, house), IsScanLimited(false), IsInitiated(false), IsNewNavCom(false),
-      IsPlanningToLook(false), IsDeploying(false), IsFiring(false), IsRotating(false), IsDriving(false),
-      IsUnloading(false), IsFormationMove(false), IsNavQueueLoop(false), IsScattering(false), IsMovingOntoBridge(false),
-      Speed(0), SpeedBias(1), XFormOffset(0x80000000), YFormOffset(0x80000000), NavCom(TARGET_NONE),
-      SuspendedNavCom(TARGET_NONE), Team(0), Group(255), Member(0), PathThreshhold(MOVE_CLOAK), PathDelay(0),
-      TryTryAgain(PATH_RETRY), BaseAttackTimer(0), FormationSpeed(SPEED_FOOT), FormationMaxSpeed(MPH_IMMOBILE),
-      HeadToCoord(0) {
+	: TechnoClass(rtti, id, house), IsScanLimited(false), IsInitiated(false), IsNewNavCom(false), IsPlanningToLook(false), IsDeploying(false),
+	  IsFiring(false), IsRotating(false), IsDriving(false), IsUnloading(false), IsFormationMove(false), IsNavQueueLoop(false),
+	  IsScattering(false), IsMovingOntoBridge(false), Speed(0), SpeedBias(1), XFormOffset(0x80000000), YFormOffset(0x80000000),
+	  NavCom(TARGET_NONE), SuspendedNavCom(TARGET_NONE), Team(0), Group(255), Member(0), PathThreshhold(MOVE_CLOAK), PathDelay(0),
+	  TryTryAgain(PATH_RETRY), BaseAttackTimer(0), FormationSpeed(SPEED_FOOT), FormationMaxSpeed(MPH_IMMOBILE), HeadToCoord(0) {
 	Path[0] = FACING_NONE;
 	for (int index = 0; index < ARRAY_SIZE(NavQueue); index++) {
 		NavQueue[index] = TARGET_NONE;
@@ -156,7 +154,7 @@ void FootClass::Debug_Dump(MonoClass *mono) const {
 		mono->Printf("%d", Group);
 	}
 
-	static char const *_p2c[9] = {"-", "0", "1", "2", "3", "4", "5", "6", "7"};
+	static char const *_p2c[9] = { "-", "0", "1", "2", "3", "4", "5", "6", "7" };
 	for (int index = 0; index < min(12, ARRAY_SIZE(Path)); index++) {
 		mono->Set_Cursor(54 + index, 3);
 		mono->Printf("%s", _p2c[((ABS((int)Path[index] + 1)) % ARRAY_SIZE(_p2c))]);
@@ -304,7 +302,8 @@ bool FootClass::Basic_Path(void) {
 		int dist = Distance(NavCom);
 		int checkdist = Team.Is_Valid() ? Rule.StrayDistance : Rule.CloseEnoughDistance;
 		if (Can_Enter_Cell(cell) > MOVE_CLOAK && dist > checkdist) {
-			CELL cell2 = Map.Nearby_Location(cell, Techno_Type_Class()->Speed,
+			CELL cell2 = Map.Nearby_Location(cell,
+							 Techno_Type_Class()->Speed,
 							 Map[Coord].Zones[Techno_Type_Class()->MZone],
 							 Techno_Type_Class()->MZone);
 			if (cell2 != 0 && ::Distance(Cell_Coord(cell), Cell_Coord(cell2)) < dist)
@@ -345,14 +344,13 @@ bool FootClass::Basic_Path(void) {
 			bool found1 = false; // Found a best path yet?
 			PathType path1;
 			FacingType workpath1[200]; // Staging area for path list.
-						   //			FacingType	workpath2[200];	// Staging area
-						   //for path list.
+				//			FacingType	workpath2[200];	// Staging area
+				//for path list.
 			MoveType maxtype = MOVE_TEMP;
 			if (!House->IsHuman) {
 				maxtype = MOVE_TEMP;
 				//				maxtype = MOVE_DESTROYABLE;
 			} else {
-
 				/*
 				**	For simple movement missions by the human player, then don't
 				**	consider friendly units as passable if close to the destination.
@@ -409,18 +407,15 @@ bool FootClass::Basic_Path(void) {
 					memcpy(&path1, path, sizeof(path1));
 					memcpy(workpath1, workpath2, sizeof(workpath1));
 				} else {
-
 					/*
 					**	The easiest path method didn't result in a satisfactory path. Scan
 					*through *	the rest of the path options, looking for the best one.
 					*/
-					for (MoveType move = (MoveType)(MOVE_CLOAK + 1); move < (MoveType)(maxtype - 1);
-					     move++) {
+					for (MoveType move = (MoveType)(MOVE_CLOAK + 1); move < (MoveType)(maxtype - 1); move++) {
 						//					for (MoveType move =
 						// MOVE_MOVING_BLOCK; move < maxtype-1; move++) {
 						path = Find_Path(cell, &workpath2[0], sizeof(workpath2), move);
-						if (path && path->Cost &&
-						    path->Cost < max((path1.Cost + (path1.Cost / 2)), 3)) {
+						if (path && path->Cost && path->Cost < max((path1.Cost + (path1.Cost / 2)), 3)) {
 							memcpy(&path1, path, sizeof(path1));
 							memcpy(workpath1, workpath2, sizeof(workpath1));
 						}
@@ -478,8 +473,7 @@ int FootClass::Mission_Move(void) {
 		return (1);
 	}
 	//	if (!Target_Legal(TarCom) && !House->IsPlayerControl && !House->IsHuman) {
-	if (!Target_Legal(TarCom) && !House->IsPlayerControl && !House->IsHuman &&
-	    (!Team.Is_Valid() || !Team->Class->IsSuicide)) {
+	if (!Target_Legal(TarCom) && !House->IsPlayerControl && !House->IsHuman && (!Team.Is_Valid() || !Team->Class->IsSuicide)) {
 		Target_Something_Nearby(THREAT_RANGE);
 	}
 	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
@@ -508,8 +502,7 @@ int FootClass::Mission_Capture(void) {
 	/*
 	**	If there is a valid TarCom but the NavCom isn't set, then set the NavCom accordingly.
 	*/
-	if (Is_Target_Building(TarCom) && !Target_Legal(NavCom) && What_Am_I() == RTTI_INFANTRY &&
-	    ((InfantryClass *)this)->Class->IsBomber) {
+	if (Is_Target_Building(TarCom) && !Target_Legal(NavCom) && What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber) {
 		Assign_Destination(TarCom);
 	}
 
@@ -598,13 +591,11 @@ int FootClass::Mission_Guard(void) {
 		}
 	}
 	if (What_Am_I() == RTTI_INFANTRY) {
-
 		/*
 		**	If this is a bomber type infantry and the current target is a building, then go into
 		**	sabotage mode if not already.
 		*/
-		if (!House->IsHuman && Is_Target_Building(TarCom) && ((InfantryClass *)this)->Class->IsBomber &&
-		    Mission != MISSION_SABOTAGE) {
+		if (!House->IsHuman && Is_Target_Building(TarCom) && ((InfantryClass *)this)->Class->IsBomber && Mission != MISSION_SABOTAGE) {
 			Assign_Mission(MISSION_SABOTAGE);
 		}
 
@@ -643,8 +634,8 @@ int FootClass::Mission_Hunt(void) {
 	if (!Target_Something_Nearby(THREAT_NORMAL)) {
 #if (0)
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
-		if (What_Am_I() == RTTI_INFANTRY && *(InfantryClass *)this == INFANTRY_GENERAL &&
-		    House->Class->House == HOUSE_UKRAINE && Scen.Scenario == 47) {
+		if (What_Am_I() == RTTI_INFANTRY && *(InfantryClass *)this == INFANTRY_GENERAL && House->Class->House == HOUSE_UKRAINE &&
+		    Scen.Scenario == 47) {
 			for (int index = 0; index < Buildings.Count(); index++) {
 				if (Buildings.Ptr(index)->IsOwnedByPlayer) {
 					Assign_Target(Buildings.Ptr(index)->As_Target());
@@ -674,14 +665,12 @@ int FootClass::Mission_Hunt(void) {
 #endif
 		Random_Animate();
 	} else {
-		if (What_Am_I() == RTTI_INFANTRY &&
-		    (((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_RENOVATOR ||
-		     ((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_THIEF)) {
+		if (What_Am_I() == RTTI_INFANTRY && (((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_RENOVATOR ||
+						     ((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_THIEF)) {
 			Assign_Destination(TarCom);
 			Assign_Mission(MISSION_CAPTURE);
 		} else {
-			if (What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber &&
-			    Is_Target_Building(TarCom)) {
+			if (What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber && Is_Target_Building(TarCom)) {
 				Assign_Destination(TarCom);
 				Assign_Mission(MISSION_SABOTAGE);
 			} else {
@@ -748,8 +737,8 @@ bool FootClass::Start_Driver(COORDINATE &headto) {
 
 		CellClass *cellptr = &Map[headto];
 		TemplateType ttype = cellptr->TType;
-		IsMovingOntoBridge = (ttype >= TEMPLATE_BRIDGE1 && ttype <= TEMPLATE_BRIDGE2D) ||
-				     (ttype >= TEMPLATE_BRIDGE_1A && ttype <= TEMPLATE_BRIDGE_3F);
+		IsMovingOntoBridge =
+			(ttype >= TEMPLATE_BRIDGE1 && ttype <= TEMPLATE_BRIDGE2D) || (ttype >= TEMPLATE_BRIDGE_1A && ttype <= TEMPLATE_BRIDGE_3F);
 
 		/*
 		**	Check for crate goodie finder here.
@@ -899,7 +888,7 @@ void FootClass::Approach_Target(void) {
 			**	and let "the chips fall where they may."
 			*/
 			for (int range = maxrange; range > 0x0080; range -= 0x0100) {
-				static int _angles[] = {0, 8, -8, 16, -16, 24, -24, 32, -32, 48, -48, 64, -64};
+				static int _angles[] = { 0, 8, -8, 16, -16, 24, -24, 32, -32, 48, -48, 64, -64 };
 
 				for (int index = 0; index < (sizeof(_angles) / sizeof(_angles[0])); index++) {
 					trycoord = Coord_Move(tcoord, (DirType)(dir + _angles[index]), range);
@@ -907,10 +896,11 @@ void FootClass::Approach_Target(void) {
 					if (::Distance(trycoord, tcoord) < range) {
 						trycell = Coord_Cell(trycoord);
 						if (Map.In_Radar(trycell) &&
-						    Map[trycell].Is_Clear_To_Move(
-							Techno_Type_Class()->Speed, false, false,
-							Map[Coord].Zones[Techno_Type_Class()->MZone],
-							Techno_Type_Class()->MZone)) {
+						    Map[trycell].Is_Clear_To_Move(Techno_Type_Class()->Speed,
+										  false,
+										  false,
+										  Map[Coord].Zones[Techno_Type_Class()->MZone],
+										  Techno_Type_Class()->MZone)) {
 							//						if
 							//(Can_Enter_Cell(trycell) <= MOVE_CLOAK &&
 							// Map.In_Radar(trycell)) {
@@ -934,8 +924,8 @@ void FootClass::Approach_Target(void) {
 			} else if (found) {
 				Assign_Destination(::As_Target(trycell));
 			} else {
-
-				trycell = Map.Nearby_Location(trycell, Techno_Type_Class()->Speed,
+				trycell = Map.Nearby_Location(trycell,
+							      Techno_Type_Class()->Speed,
 							      Map[Coord].Zones[Techno_Type_Class()->MZone],
 							      Techno_Type_Class()->MZone);
 				Assign_Destination(::As_Target(trycell));
@@ -996,8 +986,7 @@ int FootClass::Mission_Guard_Area(void) {
 		CELL cell = As_Cell(NavCom);
 		int x = Cell_X(cell);
 		int y = Cell_Y(cell);
-		if (x < Map.MapCellX || y < Map.MapCellY || x >= (Map.MapCellX + Map.MapCellWidth) ||
-		    y >= (Map.MapCellY + Map.MapCellHeight)) {
+		if (x < Map.MapCellX || y < Map.MapCellY || x >= (Map.MapCellX + Map.MapCellWidth) || y >= (Map.MapCellY + Map.MapCellHeight)) {
 			Assign_Target(TARGET_NONE);
 			Assign_Destination(TARGET_NONE);
 			ArchiveTarget = ::As_Target(Coord);
@@ -1008,8 +997,8 @@ int FootClass::Mission_Guard_Area(void) {
 	**	If this is a bomber type infantry and the current target is a building, then go into
 	**	sabotage mode if not already.
 	*/
-	if (!House->IsHuman && What_Am_I() == RTTI_INFANTRY && Is_Target_Building(TarCom) &&
-	    ((InfantryClass *)this)->Class->IsBomber && Mission != MISSION_SABOTAGE) {
+	if (!House->IsHuman && What_Am_I() == RTTI_INFANTRY && Is_Target_Building(TarCom) && ((InfantryClass *)this)->Class->IsBomber &&
+	    Mission != MISSION_SABOTAGE) {
 		Assign_Mission(MISSION_SABOTAGE);
 		return (1);
 	}
@@ -1070,7 +1059,6 @@ bool FootClass::Unlimbo(COORDINATE coord, DirType dir) {
 	**	Try to unlimbo the unit.
 	*/
 	if (TechnoClass::Unlimbo(coord, dir)) {
-
 		/*
 		**	Mobile units are always revealed to the house that owns them.
 		*/
@@ -1114,13 +1102,10 @@ ResultType FootClass::Take_Damage(int &damage, int distance, WarheadType warhead
 	ResultType result = TechnoClass::Take_Damage(damage, distance, warhead, source, forced);
 
 	if (result != RESULT_NONE && Team) {
-
 		Team->Took_Damage(this, result, source);
 
 	} else {
-
 		if (result != RESULT_DESTROYED && result != RESULT_NONE) {
-
 			/*
 			**	Determine if the target that is currently being attacked has a weapon that can
 			**	do harm to a ground based unit. This information is needed so that an appropriate
@@ -1145,7 +1130,6 @@ ResultType FootClass::Take_Damage(int &damage, int distance, WarheadType warhead
 			**	it try to do so. This prevents it from just sitting there and taking damage.
 			*/
 			if (Is_Allowed_To_Retaliate(source)) {
-
 				int primary = What_Weapon_Should_I_Use(source->As_Target());
 				if (In_Range(source, primary) || !House->IsHuman) {
 					Assign_Target(source->As_Target());
@@ -1164,13 +1148,11 @@ ResultType FootClass::Take_Damage(int &damage, int distance, WarheadType warhead
 				}
 
 			} else {
-
 				/*
 				**	If this object isn't doing anything important, then scatter.
 				*/
-				if (MissionControl[Mission].IsScatter && !IsTethered && !IsDriving &&
-				    !Target_Legal(TarCom) && !Target_Legal(NavCom) && What_Am_I() != RTTI_AIRCRAFT &&
-				    What_Am_I() != RTTI_VESSEL) {
+				if (MissionControl[Mission].IsScatter && !IsTethered && !IsDriving && !Target_Legal(TarCom) &&
+				    !Target_Legal(NavCom) && What_Am_I() != RTTI_AIRCRAFT && What_Am_I() != RTTI_VESSEL) {
 					if (!House->IsHuman || Rule.IsScatter) {
 						Scatter(0, true);
 					}
@@ -1203,9 +1185,8 @@ void FootClass::Active_Click_With(ActionType action, ObjectClass *object) {
 	switch (action) {
 	case ACTION_GUARD_AREA:
 		if (Can_Player_Fire() && Can_Player_Move()) {
-			if (What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber &&
-			    object->What_Am_I() == RTTI_BUILDING && !House->Is_Ally(object)) {
-
+			if (What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber && object->What_Am_I() == RTTI_BUILDING &&
+			    !House->Is_Ally(object)) {
 				Player_Assign_Mission(MISSION_SABOTAGE, TARGET_NONE, object->As_Target());
 			} else {
 				Player_Assign_Mission(MISSION_GUARD_AREA, object->As_Target());
@@ -1224,8 +1205,7 @@ void FootClass::Active_Click_With(ActionType action, ObjectClass *object) {
 		break;
 
 	case ACTION_ENTER:
-		if (Can_Player_Move() && object &&
-		    object->Is_Techno() /*&& !((RadioClass *)object)->In_Radio_Contact()*/) {
+		if (Can_Player_Move() && object && object->Is_Techno() /*&& !((RadioClass *)object)->In_Radio_Contact()*/) {
 			Player_Assign_Mission(MISSION_ENTER, TARGET_NONE, object->As_Target());
 		}
 		break;
@@ -1245,27 +1225,26 @@ void FootClass::Active_Click_With(ActionType action, ObjectClass *object) {
 	case ACTION_NOMOVE:
 	case ACTION_MOVE:
 		if (Can_Player_Move()) {
-
 			TARGET targ = object->As_Target();
 
 			/*
 			**	If the destination object is not the same zone, then pick a nearby location.
 			*/
 			if (object->What_Am_I() != RTTI_AIRCRAFT && Techno_Type_Class()->Speed != SPEED_WINGED &&
-			    Map[Coord].Zones[Techno_Type_Class()->MZone] !=
-				Map[object->Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
-
+			    Map[Coord].Zones[Techno_Type_Class()->MZone] != Map[object->Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
 #ifdef FIXIT_MINE_PASSABLE
 				// Fixes units not driving onto mines.
 				if (Can_Enter_Cell(Coord_Cell(object->Center_Coord())) > MOVE_OK) {
-					targ = ::As_Target(Map.Nearby_Location(
-					    Coord_Cell(object->Center_Coord()), Techno_Type_Class()->Speed,
-					    Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone));
+					targ = ::As_Target(Map.Nearby_Location(Coord_Cell(object->Center_Coord()),
+									       Techno_Type_Class()->Speed,
+									       Map[Coord].Zones[Techno_Type_Class()->MZone],
+									       Techno_Type_Class()->MZone));
 				}
 #else
-				targ = ::As_Target(Map.Nearby_Location(
-				    Coord_Cell(object->Center_Coord()), Techno_Type_Class()->Speed,
-				    Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone));
+				targ = ::As_Target(Map.Nearby_Location(Coord_Cell(object->Center_Coord()),
+								       Techno_Type_Class()->Speed,
+								       Map[Coord].Zones[Techno_Type_Class()->MZone],
+								       Techno_Type_Class()->MZone));
 #endif
 			}
 
@@ -1311,15 +1290,13 @@ void FootClass::Active_Click_With(ActionType action, CELL cell) {
 	case ACTION_MOVE:
 		if (AllowVoice) {
 			COORDINATE coord = Map.Pixel_To_Coord(Get_Mouse_X(), Get_Mouse_Y());
-			OutList.Add(
-			    EventClass(ANIM_MOVE_FLASH, PlayerPtr->Class->House, coord, 1 << PlayerPtr->Class->House));
+			OutList.Add(EventClass(ANIM_MOVE_FLASH, PlayerPtr->Class->House, coord, 1 << PlayerPtr->Class->House));
 		}
 		// Fall into next case.
 
 	case ACTION_NOMOVE:
 		// using function for IsVisible so we have different results for different players - JAS 2019/09/30
 		if (What_Am_I() != RTTI_AIRCRAFT || Map[cell].Is_Visible(PlayerPtr)) {
-
 			/*
 			** Find the closest same-zoned cell to where the unit currently is.
 			** This will allow the unit to come as close to the destination cell
@@ -1330,16 +1307,17 @@ void FootClass::Active_Click_With(ActionType action, CELL cell) {
 			*/
 			CellClass const *cellptr = &Map[::As_Cell(::As_Target(Center_Coord()))];
 			if (What_Am_I() != RTTI_AIRCRAFT) {
-
 				if (Can_Enter_Cell(Coord_Cell(Center_Coord())) == MOVE_OK) {
-					cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed,
+					cell = Map.Nearby_Location(cell,
+								   Techno_Type_Class()->Speed,
 								   cellptr->Zones[Techno_Type_Class()->MZone],
 								   Techno_Type_Class()->MZone);
 				} else {
 					cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed);
 				}
 #ifdef OBSOLETE
-				cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed,
+				cell = Map.Nearby_Location(cell,
+							   Techno_Type_Class()->Speed,
 							   cellptr->Zones[Techno_Type_Class()->MZone],
 							   Techno_Type_Class()->MZone);
 #endif
@@ -1399,7 +1377,6 @@ void FootClass::Per_Cell_Process(PCPType why) {
 	assert(IsActive);
 
 	if (why == PCP_END) {
-
 		IsScattering = false;
 
 		/*
@@ -1418,8 +1395,7 @@ void FootClass::Per_Cell_Process(PCPType why) {
 				if (Map.In_Radar(cell)) {
 					TechnoClass const *techno = Map[cell].Cell_Techno();
 
-					if (techno && !techno->House->Is_Ally(this) &&
-					    techno->Techno_Type_Class()->IsScanner) {
+					if (techno && !techno->House->Is_Ally(this) && techno->Techno_Type_Class()->IsScanner) {
 						Do_Shimmer();
 						break;
 					}
@@ -1439,13 +1415,11 @@ void FootClass::Per_Cell_Process(PCPType why) {
 			if (techno != NULL && techno->Is_Foot()) {
 				FootClass const *foot = (FootClass const *)techno;
 				MPHType speed = ((TechnoTypeClass const &)techno->Class_Of()).MaxSpeed;
-				COORDINATE rangecoord =
-				    (speed > MPH_SLOW) ? foot->Likely_Coord() : foot->Target_Coord();
+				COORDINATE rangecoord = (speed > MPH_SLOW) ? foot->Likely_Coord() : foot->Target_Coord();
 				inrange = In_Range(rangecoord, primary);
 			}
 
-			if ((Mission == MISSION_RESCUE || Mission == MISSION_GUARD_AREA || Mission == MISSION_ATTACK ||
-			     Mission == MISSION_HUNT) &&
+			if ((Mission == MISSION_RESCUE || Mission == MISSION_GUARD_AREA || Mission == MISSION_ATTACK || Mission == MISSION_HUNT) &&
 			    inrange) {
 				Assign_Destination(TARGET_NONE);
 				Path[0] = FACING_NONE;
@@ -1473,8 +1447,7 @@ void FootClass::Per_Cell_Process(PCPType why) {
 				trigger = Map[XY_Cell(index + Map.MapCellX, y)].Trigger;
 				if (trigger != NULL) {
 					if (trigger->Class->Event1.Event == TEVENT_CROSS_HORIZONTAL ||
-					    (trigger->Class->EventControl != MULTI_ONLY &&
-					     trigger->Class->Event2.Event == TEVENT_CROSS_HORIZONTAL)) {
+					    (trigger->Class->EventControl != MULTI_ONLY && trigger->Class->Event2.Event == TEVENT_CROSS_HORIZONTAL)) {
 						trigger->Spring(TEVENT_CROSS_HORIZONTAL, this, Coord_Cell(Coord));
 						if (!IsActive)
 							return;
@@ -1489,8 +1462,7 @@ void FootClass::Per_Cell_Process(PCPType why) {
 				trigger = Map[XY_Cell(x, index + Map.MapCellY)].Trigger;
 				if (trigger != NULL) {
 					if (trigger->Class->Event1.Event == TEVENT_CROSS_VERTICAL ||
-					    (trigger->Class->EventControl != MULTI_ONLY &&
-					     trigger->Class->Event2.Event == TEVENT_CROSS_VERTICAL)) {
+					    (trigger->Class->EventControl != MULTI_ONLY && trigger->Class->Event2.Event == TEVENT_CROSS_VERTICAL)) {
 						trigger->Spring(TEVENT_CROSS_VERTICAL, this, Coord_Cell(Coord));
 						if (!IsActive)
 							return;
@@ -1504,10 +1476,8 @@ void FootClass::Per_Cell_Process(PCPType why) {
 			for (MapTriggerID = 0; MapTriggerID < MapTriggers.Count(); MapTriggerID++) {
 				trigger = MapTriggers[MapTriggerID];
 				if (trigger->Class->Event1.Event == TEVENT_ENTERS_ZONE ||
-				    (trigger->Class->EventControl != MULTI_ONLY &&
-				     trigger->Class->Event2.Event == TEVENT_ENTERS_ZONE)) {
-					if (Map[trigger->Cell].Zones[Techno_Type_Class()->MZone] ==
-					    Map[Coord].Zones[Techno_Type_Class()->MZone]) {
+				    (trigger->Class->EventControl != MULTI_ONLY && trigger->Class->Event2.Event == TEVENT_ENTERS_ZONE)) {
+					if (Map[trigger->Cell].Zones[Techno_Type_Class()->MZone] == Map[Coord].Zones[Techno_Type_Class()->MZone]) {
 						trigger->Spring(TEVENT_ENTERS_ZONE, this, Coord_Cell(Coord));
 						if (!IsActive)
 							return;
@@ -1616,7 +1586,6 @@ RadioMessageType FootClass::Receive_Message(RadioClass *from, RadioMessageType m
 	assert(IsActive);
 
 	switch (message) {
-
 	/*
 	**	Answers if this object is located on top of a service depot.
 	*/
@@ -1737,7 +1706,6 @@ int FootClass::Mission_Enter(void) {
 	**	If in contact, then let the transporter handle the movement coordination.
 	*/
 	if (contact != NULL) {
-
 		/*
 		**	If the transport says to "bug off", then abort the enter mission. The transport may
 		**	likely say all is 'ok' with the "RADIO ROGER", then try again later.
@@ -1748,7 +1716,6 @@ int FootClass::Mission_Enter(void) {
 		}
 
 	} else {
-
 		/*
 		**	Since there is no potential object to enter, then abort this
 		**	mission with some default standby mission.
@@ -1892,7 +1859,6 @@ int FootClass::Rescue_Mission(TARGET tarcom) {
 	int threat = Risk() * 1024;
 	int speed = -1;
 	if (dist > 0) {
-
 		/*
 		** Next we need to figure out how fast the unit moves because this
 		** decreases the distance penalty.
@@ -1927,8 +1893,7 @@ void FootClass::Death_Announcement(TechnoClass const *) const {
 	assert(IsActive);
 
 	// if (IsOwnedByPlayer) {
-	if ((Session.Type == GAME_GLYPHX_MULTIPLAYER && House->IsHuman) ||
-	    (Session.Type != GAME_GLYPHX_MULTIPLAYER && IsOwnedByPlayer)) {
+	if ((Session.Type == GAME_GLYPHX_MULTIPLAYER && House->IsHuman) || (Session.Type != GAME_GLYPHX_MULTIPLAYER && IsOwnedByPlayer)) {
 		if (What_Am_I() == RTTI_VESSEL) {
 			// Speak(VOX_SHIP_LOST); // MBL 02.06.2020
 			Speak(VOX_SHIP_LOST, House, Center_Coord());
@@ -1975,8 +1940,8 @@ TARGET FootClass::Greatest_Threat(ThreatType method) const {
 		return (TARGET_NONE);
 	}
 
-	if (!(method & (THREAT_INFANTRY | THREAT_VEHICLES | THREAT_BUILDINGS | THREAT_TIBERIUM | THREAT_BOATS |
-			THREAT_CIVILIANS | THREAT_POWER | THREAT_FAKES | THREAT_FACTORIES | THREAT_BASE_DEFENSE))) {
+	if (!(method & (THREAT_INFANTRY | THREAT_VEHICLES | THREAT_BUILDINGS | THREAT_TIBERIUM | THREAT_BOATS | THREAT_CIVILIANS | THREAT_POWER |
+			THREAT_FAKES | THREAT_FACTORIES | THREAT_BASE_DEFENSE))) {
 		if (What_Am_I() != RTTI_VESSEL) {
 			method = method | THREAT_GROUND;
 		} else {
@@ -2056,8 +2021,7 @@ void FootClass::Detach(TARGET target, bool all) {
 		if (NavQueue[index] == target) {
 			NavQueue[index] = TARGET_NONE;
 			if (index < ARRAY_SIZE(NavQueue) - 1) {
-				memmove(&NavQueue[index], &NavQueue[index + 1],
-					((ARRAY_SIZE(NavQueue) - index) - 1) * sizeof(NavQueue[0]));
+				memmove(&NavQueue[index], &NavQueue[index + 1], ((ARRAY_SIZE(NavQueue) - index) - 1) * sizeof(NavQueue[0]));
 				NavQueue[ARRAY_SIZE(NavQueue) - 1] = TARGET_NONE;
 				index--;
 			}
@@ -2495,8 +2459,7 @@ void FootClass::AI(void) {
 // FootClass::Per_Cell_Process does this function already.
 #ifdef OBSOLETE
 	if (IsActive) {
-		if (!IsScattering && !IsTethered && !IsInLimbo && What_Am_I() != RTTI_AIRCRAFT &&
-		    Target_Legal(TarCom) && In_Range(TarCom)) {
+		if (!IsScattering && !IsTethered && !IsInLimbo && What_Am_I() != RTTI_AIRCRAFT && Target_Legal(TarCom) && In_Range(TarCom)) {
 			Assign_Destination(TARGET_NONE);
 		}
 	}
@@ -2546,7 +2509,6 @@ int FootClass::Mission_Retreat(void) {
 	enum { FIND_EDGE, TRAVELLING };
 
 	switch (Status) {
-
 	/*
 	**	Find a suitable edge to travel to and then assign destination there.
 	*/
@@ -2554,7 +2516,6 @@ int FootClass::Mission_Retreat(void) {
 		if (Target_Legal(NavCom)) {
 			Status = TRAVELLING;
 		} else {
-
 			CELL cell = 0;
 
 			/*
@@ -2562,8 +2523,10 @@ int FootClass::Mission_Retreat(void) {
 			**	entered from.
 			*/
 			if (Team.Is_Valid() && Team->Class->Origin != -1) {
-				cell = Map.Calculated_Cell(House->Control.Edge, Team->Class->Origin,
-							   Coord_Cell(Center_Coord()), Techno_Type_Class()->Speed);
+				cell = Map.Calculated_Cell(House->Control.Edge,
+							   Team->Class->Origin,
+							   Coord_Cell(Center_Coord()),
+							   Techno_Type_Class()->Speed);
 			}
 
 			/*
@@ -2571,8 +2534,7 @@ int FootClass::Mission_Retreat(void) {
 			**	team information.
 			*/
 			if (cell == 0) {
-				cell = Map.Calculated_Cell(House->Control.Edge, -1, Coord_Cell(Center_Coord()),
-							   Techno_Type_Class()->Speed);
+				cell = Map.Calculated_Cell(House->Control.Edge, -1, Coord_Cell(Center_Coord()), Techno_Type_Class()->Speed);
 			}
 
 			assert(cell == 0); // An edge cell must be found!

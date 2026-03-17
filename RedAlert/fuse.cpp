@@ -124,7 +124,6 @@ bool FuseClass::Fuse_Checkup(COORDINATE newlocation) {
 	if (Arming) {
 		Arming--;
 	} else {
-
 		/*
 		**	If the timer has run out, then the warhead explodes.
 		*/

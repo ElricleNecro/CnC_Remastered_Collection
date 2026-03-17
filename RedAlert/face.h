@@ -50,10 +50,18 @@ typedef enum DirType : unsigned char {
 } DirType;
 
 // Operators that allow simple math with DirType.
-inline DirType operator+(DirType f1, DirType f2) { return (DirType)(((int)f1 + (int)f2) & 0x00FF); }
-inline DirType operator+(DirType f1, int f2) { return (DirType)(((int)f1 + (int)f2) & 0x00FF); }
-inline DirType operator-(DirType f1, DirType f2) { return (DirType)(((int)f1 - (int)f2) & 0x00FF); }
-inline DirType operator-(DirType f1, int f2) { return (DirType)(((int)f1 - (int)f2) & 0x00FF); }
+inline DirType operator+(DirType f1, DirType f2) {
+	return (DirType)(((int)f1 + (int)f2) & 0x00FF);
+}
+inline DirType operator+(DirType f1, int f2) {
+	return (DirType)(((int)f1 + (int)f2) & 0x00FF);
+}
+inline DirType operator-(DirType f1, DirType f2) {
+	return (DirType)(((int)f1 - (int)f2) & 0x00FF);
+}
+inline DirType operator-(DirType f1, int f2) {
+	return (DirType)(((int)f1 - (int)f2) & 0x00FF);
+}
 
 // Function prototypes.
 DirType Desired_Facing8(int x1, int y1, int x2, int y2);

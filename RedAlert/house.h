@@ -521,7 +521,7 @@ public:
 	**	the base.
 	*/
 	COORDINATE Center; // Center of the base.
-	int Radius;	   // Average building distance from center (leptons).
+	int Radius; // Average building distance from center (leptons).
 	struct {
 		int AirDefense;
 		int ArmorDefense;
@@ -533,9 +533,9 @@ public:
 	**	side was attacked. This information is used to determine proper
 	**	response.
 	*/
-	int LATime;	    // Time of attack.
-	RTTIType LAType;    // Type of attacker.
-	ZoneType LAZone;    // Last zone that was attacked.
+	int LATime; // Time of attack.
+	RTTIType LAType; // Type of attacker.
+	ZoneType LAZone; // Last zone that was attacked.
 	HousesType LAEnemy; // Owner of attacker.
 
 	/*
@@ -641,12 +641,14 @@ public:
 	**	Constructors, Destructors, and overloaded operators.
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 	HouseClass(HousesType house);
 	HouseClass(NoInitClass const &x)
-	    : Class(x), Control(x), AlertTime(x), BorrowedTime(x), Attack(x), AITimer(x), DamageTime(x), TeamTime(x),
-	      TriggerTime(x), SpeakAttackDelay(x), SpeakPowerDelay(x), SpeakMoneyDelay(x), SpeakMaxedDelay(x) {};
+		: Class(x), Control(x), AlertTime(x), BorrowedTime(x), Attack(x), AITimer(x), DamageTime(x), TeamTime(x), TriggerTime(x),
+		  SpeakAttackDelay(x), SpeakPowerDelay(x), SpeakMoneyDelay(x), SpeakMaxedDelay(x) {};
 	~HouseClass(void);
 	operator HousesType(void) const;
 
@@ -682,7 +684,9 @@ public:
 	void Init_Data(PlayerColorType color, HousesType house, int credits);
 	COORDINATE Find_Build_Location(BuildingClass *building) const;
 	BuildingClass *Find_Building(StructType type, ZoneType zone = ZONE_NONE) const;
-	char const *Name(void) const { return (Class->Name()); }
+	char const *Name(void) const {
+		return (Class->Name());
+	}
 
 	// Added so the ally flags could be sent to client machines - 09 / 12 / 2019 JAS
 	unsigned Get_Ally_Flags();
@@ -709,7 +713,9 @@ public:
 	bool Is_Ally(HousesType house) const;
 	bool Is_Ally(HouseClass const *house) const;
 	bool Is_Ally(ObjectClass const *object) const;
-	unsigned int Get_Allies(void) const { return Allies; }
+	unsigned int Get_Allies(void) const {
+		return Allies;
+	}
 #ifdef CHEAT_KEYS
 	void Debug_Dump(MonoClass *mono) const;
 #endif
@@ -742,7 +748,9 @@ public:
 	int Adjust_Capacity(int adjust, bool inanger = false);
 	fixed Power_Fraction(void) const;
 	fixed Tiberium_Fraction(void) const;
-	void Begin_Production(void) { IsStarted = true; };
+	void Begin_Production(void) {
+		IsStarted = true;
+	};
 	TeamTypeClass const *Suggested_New_Team(bool alertcheck = false);
 	void Adjust_Threat(int region, int threat);
 	void Tracking_Remove(TechnoClass const *techno);
@@ -772,7 +780,9 @@ public:
 	bool AI_Raise_Power(UrgencyType urgency) const;
 	bool AI_Lower_Power(UrgencyType urgency) const;
 
-	bool Can_Make_Money(void) const { return (Available_Money() > 300 || (BScan & STRUCTF_REFINERY)); };
+	bool Can_Make_Money(void) const {
+		return (Available_Money() > 300 || (BScan & STRUCTF_REFINERY));
+	};
 
 	static void Init(void);
 	static void One_Time(void);
@@ -897,14 +907,20 @@ private:
 	**	the house AI processing. Higher priority build requests take precidence.
 	*/
 	struct BuildChoiceClass {
-		static void *operator new(size_t, void *ptr) { return (ptr); };
-		UrgencyType Urgency;  // The urgency of the build request.
+		static void *operator new(size_t, void *ptr) {
+			return (ptr);
+		};
+		UrgencyType Urgency; // The urgency of the build request.
 		StructType Structure; // The type of building to produce.
 
 		BuildChoiceClass(UrgencyType u, StructType s) : Urgency(u), Structure(s) {};
 		BuildChoiceClass(NoInitClass const &) {};
-		int Save(Pipe &) const { return (true); };
-		int Load(Straw &) { return (true); };
+		int Save(Pipe &) const {
+			return (true);
+		};
+		int Load(Straw &) {
+			return (true);
+		};
 		void Code_Pointers(void) {};
 		void Decode_Pointers(void) {};
 	};
@@ -933,7 +949,9 @@ public:
 	char InitialName[HOUSE_NAME_MAX];
 #endif
 
-	int QuantityB(int index) { return (BQuantity[index]); }
+	int QuantityB(int index) {
+		return (BQuantity[index]);
+	}
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	int QuantityU(int index) {
 		if (index >= UNIT_RA_COUNT)
@@ -945,17 +963,27 @@ public:
 			index -= INFANTRY_RA_COUNT;
 		return (IQuantity[index]);
 	}
-	int QuantityA(int index) { return (AQuantity[index]); }
+	int QuantityA(int index) {
+		return (AQuantity[index]);
+	}
 	int QuantityV(int index) {
 		if (index >= VESSEL_RA_COUNT)
 			index -= VESSEL_RA_COUNT;
 		return (VQuantity[index]);
 	}
 #else
-	int QuantityU(int index) { return (UQuantity[index]); }
-	int QuantityI(int index) { return (IQuantity[index]); }
-	int QuantityA(int index) { return (AQuantity[index]); }
-	int QuantityV(int index) { return (VQuantity[index]); }
+	int QuantityU(int index) {
+		return (UQuantity[index]);
+	}
+	int QuantityI(int index) {
+		return (IQuantity[index]);
+	}
+	int QuantityA(int index) {
+		return (AQuantity[index]);
+	}
+	int QuantityV(int index) {
+		return (VQuantity[index]);
+	}
 #endif
 
 	/*

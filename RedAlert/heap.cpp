@@ -109,7 +109,8 @@ template class TFixedIHeapClass<WeaponTypeClass>;
  * HISTORY:                                                                                    *
  *   02/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-FixedHeapClass::FixedHeapClass(int size) : IsAllocated(false), Size(size), TotalCount(0), ActiveCount(0), Buffer(0) {}
+FixedHeapClass::FixedHeapClass(int size) : IsAllocated(false), Size(size), TotalCount(0), ActiveCount(0), Buffer(0) {
+}
 
 /***********************************************************************************************
  * FixedHeapClass::~FixedHeapClass -- Destructor for the heap manager class.                   *
@@ -126,7 +127,9 @@ FixedHeapClass::FixedHeapClass(int size) : IsAllocated(false), Size(size), Total
  * HISTORY:                                                                                    *
  *   02/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-FixedHeapClass::~FixedHeapClass(void) { FixedHeapClass::Clear(); }
+FixedHeapClass::~FixedHeapClass(void) {
+	FixedHeapClass::Clear();
+}
 
 /***********************************************************************************************
  * FixedHeapClass::Set_Heap -- Assigns a memory block for this heap manager.                   *
@@ -482,7 +485,8 @@ int FixedIHeapClass::Logical_ID(void const *pointer) const {
  *   03/15/1995 BRR : Created.                                                                 *
  *   03/12/1996 JLB : Uses in-place new operator for virtual table control.                    *
  *=============================================================================================*/
-template <class T> int TFixedIHeapClass<T>::Save(Pipe &file) const {
+template <class T>
+int TFixedIHeapClass<T>::Save(Pipe &file) const {
 	/*
 	** Save the number of instances of this class
 	*/
@@ -492,7 +496,6 @@ template <class T> int TFixedIHeapClass<T>::Save(Pipe &file) const {
 	** Save each instance of this class
 	*/
 	for (int i = 0; i < ActiveCount; i++) {
-
 		/*
 		** Save the array index of the object, so it can be loaded back into the
 		** same array location (so TARGET translations will work)
@@ -521,10 +524,11 @@ template <class T> int TFixedIHeapClass<T>::Save(Pipe &file) const {
  * HISTORY:                                                                                    *
  *   03/15/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int TFixedIHeapClass<T>::Load(Straw &file) {
-	int i;	 // loop counter
+template <class T>
+int TFixedIHeapClass<T>::Load(Straw &file) {
+	int i; // loop counter
 	int idx; // object index
-	T *ptr;	 // object pointer
+	T *ptr; // object pointer
 	int a_count;
 
 	/*
@@ -585,7 +589,8 @@ template <class T> int TFixedIHeapClass<T>::Load(Straw &file) {
  * HISTORY:                                                                                    *
  *   03/15/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-template <class T> void TFixedIHeapClass<T>::Code_Pointers(void) {
+template <class T>
+void TFixedIHeapClass<T>::Code_Pointers(void) {
 	int i;
 
 	for (i = 0; i < ActiveCount; i++) {
@@ -605,7 +610,8 @@ template <class T> void TFixedIHeapClass<T>::Code_Pointers(void) {
  * HISTORY:                                                                                    *
  *   03/15/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-template <class T> void TFixedIHeapClass<T>::Decode_Pointers(void) {
+template <class T>
+void TFixedIHeapClass<T>::Decode_Pointers(void) {
 	int i;
 
 	for (i = 0; i < ActiveCount; i++) {

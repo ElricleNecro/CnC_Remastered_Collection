@@ -61,7 +61,9 @@ public:
 	** Constructor/Destructor
 	*/
 	BaseClass(void) {};
-	virtual ~BaseClass() { Nodes.Clear(); }
+	virtual ~BaseClass() {
+		Nodes.Clear();
+	}
 
 	/*
 	** Initialization
@@ -76,7 +78,9 @@ public:
 	*/
 	void Read_INI(CCINIClass &ini);
 	void Write_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "Base"; }
+	static char *INI_Name(void) {
+		return "Base";
+	}
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 	virtual void Code_Pointers(void) {};
@@ -101,7 +105,9 @@ public:
 	** Returns a pointer to the requested node.
 	*/
 	BaseNodeClass *Get_Node(BuildingClass const *obj);
-	BaseNodeClass *Get_Node(int index) { return (&Nodes[index]); }
+	BaseNodeClass *Get_Node(int index) {
+		return (&Nodes[index]);
+	}
 	BaseNodeClass *Get_Node(CELL cell);
 
 	/*

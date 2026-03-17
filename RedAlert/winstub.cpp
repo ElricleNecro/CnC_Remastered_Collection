@@ -51,7 +51,8 @@
 #include "tcpip.h"
 #endif // WINSOCK_IPX
 
-void output(short, short) {}
+void output(short, short) {
+}
 
 unsigned long CCFocusMessage = WM_USER + 50; // Private message for receiving application focus
 extern void VQA_PauseAudio(void);
@@ -123,7 +124,6 @@ void Check_For_Focus_Loss(void) {
 	}
 
 	if (!focus_last_time && GameInFocus) {
-
 		VQA_PauseAudio();
 		CountDownTimerClass cd;
 		cd.Set(60 * 1);
@@ -153,7 +153,6 @@ void Check_For_Focus_Loss(void) {
 extern bool InMovie;
 #if (0) // PG
 long FAR PASCAL _export Windows_Procedure(HWND hwnd, UINT message, UINT wParam, LONG lParam) {
-
 	int low_param = LOWORD(wParam);
 
 	if (message == CCFocusMessage) {
@@ -296,7 +295,6 @@ long FAR PASCAL _export Windows_Procedure(HWND hwnd, UINT message, UINT wParam, 
 
 	case WM_SYSCOMMAND:
 		switch (wParam) {
-
 		case SC_CLOSE:
 			/*
 			** Windows sent us a close message. Probably in response to Alt-F4. Ignore it by
@@ -429,15 +427,21 @@ void Create_Main_Window(HANDLE instance, int command_show, int width, int height
 	//
 	// Create our main window
 	//
-	hwnd = CreateWindowEx(WS_EX_TOPMOST, WINDOW_NAME, WINDOW_NAME,
+	hwnd = CreateWindowEx(WS_EX_TOPMOST,
+			      WINDOW_NAME,
+			      WINDOW_NAME,
 			      WS_POPUP, // Denzil | WS_MAXIMIZE,
-			      0, 0,
+			      0,
+			      0,
 			      // Denzil 5/18/98 - Making window fullscreen prevents other apps
 			      // from getting WM_PAINT messages
 			      GetSystemMetrics(SM_CXSCREEN), // width,
 			      GetSystemMetrics(SM_CYSCREEN), // height,
 			      // End Denzil
-			      NULL, NULL, instance, NULL);
+			      NULL,
+			      NULL,
+			      instance,
+			      NULL);
 	// Denzil
 	width = width;
 	height = height;
@@ -492,30 +496,27 @@ void Window_Dialog_Box(HANDLE hinst, LPCTSTR lpszTemplate, HWND hwndOwner, DLGPR
 }
 
 typedef struct tColourList {
-
 	char Red;
 	char Green;
 	char Blue;
 } ColourList;
 
-ColourList ColourLookup[9] = {0,  0,  0,  63, 0, 0,  0,	 63, 0,	 0,  0,	 63, 63, 0,
-			      63, 63, 63, 0,  0, 63, 63, 32, 32, 32, 63, 63, 63};
+ColourList ColourLookup[9] = { 0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 0, 63, 63, 0, 63, 63, 63, 0, 0, 63, 63, 32, 32, 32, 63, 63, 63 };
 
 int DebugColour = 1;
 
 extern "C" void Set_Palette_Register(int number, int red, int green, int blue);
 // #pragma off (unreferenced)
 void Colour_Debug(int call_number) {
-#if (0) // PG
-	// #if 0
+#if (0) // PG                                                                                                                                        \
+	// #if 0                                                                                                                                     \
 	// if (DebugColour==call_number || !call_number) {
 
 	// if (call_number) {
 	//	Wait_Vert_Blank();
 	// }
 
-	Set_Palette_Register(0, ColourLookup[call_number].Red, ColourLookup[call_number].Green,
-			     ColourLookup[call_number].Blue);
+	Set_Palette_Register(0, ColourLookup[call_number].Red, ColourLookup[call_number].Green, ColourLookup[call_number].Blue);
 	//}
 	// #endif
 #endif
@@ -663,8 +664,7 @@ void Assert_Failure(char *expression, int line, char *file) {
 
 	GetLocalTime(&time);
 
-	sprintf(timebuff, "%02d/%02d/%04d %02d:%02d:%02d - %s", time.wMonth, time.wDay, time.wYear, time.wHour,
-		time.wMinute, time.wSecond, assertbuf);
+	sprintf(timebuff, "%02d/%02d/%04d %02d:%02d:%02d - %s", time.wMonth, time.wDay, time.wYear, time.wHour, time.wMinute, time.wSecond, assertbuf);
 
 	HMMIO handle = mmioOpen("ASSERT.TXT", NULL, MMIO_WRITE);
 	if (!handle) {
@@ -674,7 +674,6 @@ void Assert_Failure(char *expression, int line, char *file) {
 	}
 
 	if (handle) {
-
 		mmioWrite(handle, timebuff, strlen(timebuff));
 		mmioClose(handle, 0);
 	}
@@ -724,7 +723,6 @@ void Memory_Error_Handler(void) {
 
 GraphicBufferClass *Read_PCX_File(char *name, char *Palette, void *Buff, long Size);
 void Load_Title_Screen(char *name, GraphicViewPortClass *video_page, unsigned char *palette) {
-
 	GraphicBufferClass *load_buffer;
 
 	load_buffer = Read_PCX_File(name, (char *)palette, NULL, 0);
@@ -762,11 +760,11 @@ void Load_Title_Screen(char *name, GraphicViewPortClass *video_page, unsigned ch
  *=========================================================================*/
 
 #define POOL_SIZE 2048
-#define READ_CHAR()                                                                                                    \
-	*file_ptr++;                                                                                                   \
-	if (file_ptr >= &pool[POOL_SIZE]) {                                                                            \
-		file_handle.Read(pool, POOL_SIZE);                                                                     \
-		file_ptr = pool;                                                                                       \
+#define READ_CHAR()                                                                                                                                  \
+	*file_ptr++;                                                                                                                                 \
+	if (file_ptr >= &pool[POOL_SIZE]) {                                                                                                          \
+		file_handle.Read(pool, POOL_SIZE);                                                                                                   \
+		file_ptr = pool;                                                                                                                     \
 	}
 
 GraphicBufferClass *Read_PCX_File(char *name, char *palette, void *Buff, long Size) {
@@ -816,7 +814,6 @@ GraphicBufferClass *Read_PCX_File(char *name, char *palette, void *Buff, long Si
 	file_handle.Read(pool, POOL_SIZE);
 
 	if (header.byte_per_line != width) {
-
 		for (scan_pos = j = 0; j < (unsigned)height; j++, scan_pos += width) {
 			for (i = 0; i < (unsigned)width;) {
 				rle = READ_CHAR();
@@ -838,7 +835,6 @@ GraphicBufferClass *Read_PCX_File(char *name, char *palette, void *Buff, long Si
 			rle = READ_CHAR();
 
 	} else {
-
 		for (i = 0; i < (unsigned)width * height;) {
 			rle = READ_CHAR();
 			rle &= 0xff;

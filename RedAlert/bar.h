@@ -65,7 +65,9 @@ public:
 private:
 	void Outline(void) const;
 	bool Is_Horizontal(void) const;
-	bool Is_Outlined(void) const { return (BorderColor != 0); }
+	bool Is_Outlined(void) const {
+		return (BorderColor != 0);
+	}
 
 	/*
 	**	This is the upper left coordinates of the bargraph.

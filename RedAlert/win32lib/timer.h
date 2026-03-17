@@ -51,12 +51,12 @@
 //////////////////////////////////////// Externs /////////////////////////////////////////////
 extern BOOL TimerSystemOn;
 extern HANDLE TimerThreadHandle; // Handle of timer thread
-extern int InTimerCallback;	 // true if we are currently in a callback
+extern int InTimerCallback; // true if we are currently in a callback
 
 /*=========================================================================*/
 typedef enum BaseTimerEnum {
 	BT_SYSTEM, // System timer (60 / second).
-	BT_USER	   // User controllable timer (? / second).
+	BT_USER // User controllable timer (? / second).
 } BaseTimerEnum;
 
 class TimerClass {
@@ -66,17 +66,18 @@ public:
 	TimerClass(BaseTimerEnum timer = BT_SYSTEM, BOOL start = FALSE);
 
 	// No destructor.
-	~TimerClass(void) {}
+	~TimerClass(void) {
+	}
 
 	//
 	long Set(long value, BOOL start = TRUE); // Set initial timer value.
-	long Stop(void);			 // Pause timer.
-	long Start(void);			 // Resume timer.
-	long Reset(BOOL start = TRUE);		 // Reset timer to zero.
-	long Time(void);			 // Fetch current timer value.
+	long Stop(void); // Pause timer.
+	long Start(void); // Resume timer.
+	long Reset(BOOL start = TRUE); // Reset timer to zero.
+	long Time(void); // Fetch current timer value.
 
 protected:
-	long Started;	  // Time last started (0 == not paused).
+	long Started; // Time last started (0 == not paused).
 	long Accumulated; //	Total accumulated ticks.
 
 private:
@@ -85,7 +86,9 @@ private:
 	long Get_Ticks(void);
 };
 
-inline long TimerClass::Reset(BOOL start) { return (Set(0, start)); }
+inline long TimerClass::Reset(BOOL start) {
+	return (Set(0, start));
+}
 
 class CountDownTimerClass : private TimerClass {
 public:
@@ -95,14 +98,15 @@ public:
 	CountDownTimerClass(BaseTimerEnum timer = BT_SYSTEM, int on = FALSE);
 
 	// No destructor.
-	~CountDownTimerClass(void) {}
+	~CountDownTimerClass(void) {
+	}
 
 	// Public functions
 	long Set(long set, BOOL start = TRUE); // Set count down value.
-	long Reset(BOOL start = TRUE);	       // Reset timer to zero.
-	long Stop(void);		       // Pause timer.
-	long Start(void);		       // Resume timer.
-	long Time(void);		       // Fetch current count down value.
+	long Reset(BOOL start = TRUE); // Reset timer to zero.
+	long Stop(void); // Pause timer.
+	long Start(void); // Resume timer.
+	long Time(void); // Fetch current count down value.
 
 protected:
 	long DelayTime; // Ticks remaining before countdown timer expires.
@@ -118,10 +122,11 @@ inline long CountDownTimerClass::Start(void) {
 	return (Time());
 }
 
-inline long CountDownTimerClass::Reset(BOOL start) { return (TimerClass::Reset(start)); }
+inline long CountDownTimerClass::Reset(BOOL start) {
+	return (TimerClass::Reset(start));
+}
 
 class WinTimerClass {
-
 public:
 	WinTimerClass(UINT freq = 60, BOOL partial = 0);
 	~WinTimerClass();
@@ -132,12 +137,12 @@ public:
 
 private:
 	unsigned TimerHandle; // Handle for windows timer event
-	unsigned Frequency;   // Frequency of our windows timer in ticks per second
+	unsigned Frequency; // Frequency of our windows timer in ticks per second
 
-	unsigned TrueRate;  // True rate of clock. (only use word)
-	unsigned SysTicks;  // Tick count of timer.
+	unsigned TrueRate; // True rate of clock. (only use word)
+	unsigned SysTicks; // Tick count of timer.
 	unsigned UserTicks; // Tick count of timer.
-	unsigned UserRate;  // Desired rate of timer.
+	unsigned UserRate; // Desired rate of timer.
 };
 
 extern WinTimerClass *WindowsTimer;

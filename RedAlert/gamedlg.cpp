@@ -62,16 +62,16 @@ void GameControlsClass::Process(void) {
 	/*
 	**	Dialog & button dimensions
 	*/
-	int d_dialog_w = 232 * RESFACTOR;			     // dialog width
-	int d_dialog_h = 141 * RESFACTOR;			     // dialog height
-	int d_dialog_x = ((SeenBuff.Get_Width() - d_dialog_w) / 2);  // dialog x-coord
+	int d_dialog_w = 232 * RESFACTOR; // dialog width
+	int d_dialog_h = 141 * RESFACTOR; // dialog height
+	int d_dialog_x = ((SeenBuff.Get_Width() - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((SeenBuff.Get_Height() - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);	     // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 	int d_top_margin = 25 * RESFACTOR;
 
 	int d_txt6_h = (6 * RESFACTOR) + 1; // ht of 6-pt text
-	int d_margin1 = (5 * RESFACTOR);    // large margin
-	int d_margin2 = (2 * RESFACTOR);    // small margin
+	int d_margin1 = (5 * RESFACTOR); // large margin
+	int d_margin2 = (2 * RESFACTOR); // small margin
 
 	int d_speed_w = d_dialog_w - (34 * RESFACTOR);
 	int d_speed_h = 6 * RESFACTOR;
@@ -170,10 +170,8 @@ void GameControlsClass::Process(void) {
 
 	SliderClass gspeed_btn(BUTTON_SPEED, d_speed_x, d_speed_y, d_speed_w, d_speed_h, true);
 	SliderClass scrate_btn(BUTTON_SCROLLRATE, d_scroll_x, d_scroll_y, d_scroll_w, d_scroll_h, true);
-	TextButtonClass visual_btn(BUTTON_VISUAL, TXT_VISUAL_CONTROLS, TPF_BUTTON, d_visual_x, d_visual_y, d_visual_w,
-				   d_visual_h);
-	TextButtonClass sound_btn(BUTTON_SOUND, TXT_SOUND_CONTROLS, TPF_BUTTON, d_sound_x, d_sound_y, d_sound_w,
-				  d_sound_h);
+	TextButtonClass visual_btn(BUTTON_VISUAL, TXT_VISUAL_CONTROLS, TPF_BUTTON, d_visual_x, d_visual_y, d_visual_w, d_visual_h);
+	TextButtonClass sound_btn(BUTTON_SOUND, TXT_SOUND_CONTROLS, TPF_BUTTON, d_sound_x, d_sound_y, d_sound_w, d_sound_h);
 	TextButtonClass okbtn(BUTTON_OK, TXT_OPTIONS_MENU, TPF_BUTTON, d_ok_x, d_ok_y);
 	okbtn.X = (SeenBuff.Get_Width() - okbtn.Width) / 2;
 
@@ -234,7 +232,6 @@ void GameControlsClass::Process(void) {
 	bool display = true;
 	bool refresh = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -284,10 +281,13 @@ void GameControlsClass::Process(void) {
 			}
 			Fancy_Text_Print(TXT_SPEED, d_speed_x, d_speed_y - d_txt6_h, scheme, TBLACK, style);
 
-			Fancy_Text_Print(TXT_SLOWER, d_speed_x, d_speed_y + d_speed_h + (1 * RESFACTOR), scheme, TBLACK,
-					 TPF_TEXT);
-			Fancy_Text_Print(TXT_FASTER, d_speed_x + d_speed_w, d_speed_y + d_speed_h + (1 * RESFACTOR),
-					 scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+			Fancy_Text_Print(TXT_SLOWER, d_speed_x, d_speed_y + d_speed_h + (1 * RESFACTOR), scheme, TBLACK, TPF_TEXT);
+			Fancy_Text_Print(TXT_FASTER,
+					 d_speed_x + d_speed_w,
+					 d_speed_y + d_speed_h + (1 * RESFACTOR),
+					 scheme,
+					 TBLACK,
+					 TPF_TEXT | TPF_RIGHT);
 
 			/*
 			**	Label the scroll rate slider
@@ -298,10 +298,13 @@ void GameControlsClass::Process(void) {
 			}
 			Fancy_Text_Print(TXT_SCROLLRATE, d_scroll_x, d_scroll_y - d_txt6_h, scheme, TBLACK, style);
 
-			Fancy_Text_Print(TXT_SLOWER, d_scroll_x, d_scroll_y + d_scroll_h + (1 * RESFACTOR), scheme,
-					 TBLACK, TPF_TEXT);
-			Fancy_Text_Print(TXT_FASTER, d_scroll_x + d_scroll_w, d_scroll_y + d_scroll_h + (1 * RESFACTOR),
-					 scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+			Fancy_Text_Print(TXT_SLOWER, d_scroll_x, d_scroll_y + d_scroll_h + (1 * RESFACTOR), scheme, TBLACK, TPF_TEXT);
+			Fancy_Text_Print(TXT_FASTER,
+					 d_scroll_x + d_scroll_w,
+					 d_scroll_y + d_scroll_h + (1 * RESFACTOR),
+					 scheme,
+					 TBLACK,
+					 TPF_TEXT | TPF_RIGHT);
 
 			commands->Draw_All();
 
@@ -431,7 +434,6 @@ void GameControlsClass::Process(void) {
 		**	Perform some action. Either to exit the dialog or bring up another.
 		*/
 		if (pressed) {
-
 			/*
 			**	Record the new options slider settings.
 			** The GameSpeed data member MUST NOT BE SET HERE!  It will cause multiplayer

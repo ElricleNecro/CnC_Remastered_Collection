@@ -35,6 +35,7 @@
 #ifndef INI_H
 #define INI_H
 
+#include <stdlib.h>
 #include "crc.h"
 #include "fixed.h"
 #include "listnode.h"
@@ -42,7 +43,6 @@
 #include "pk.h"
 #include "search.h"
 #include "wwfile.h"
-#include <stdlib.h>
 
 /*
 **	This is an INI database handler class. It handles a database with a disk format identical
@@ -50,7 +50,8 @@
 */
 class INIClass {
 public:
-	INIClass(void) {}
+	INIClass(void) {
+	}
 	~INIClass(void);
 
 	/*
@@ -67,7 +68,9 @@ public:
 	bool Clear(char const *section = 0, char const *entry = 0);
 
 	int Line_Count(char const *section) const;
-	bool Is_Loaded(void) const { return (!SectionList.Is_Empty()); }
+	bool Is_Loaded(void) const {
+		return (!SectionList.Is_Empty());
+	}
 	int Size(void) const;
 	bool Is_Present(char const *section, char const *entry = 0) const {
 		if (entry == 0)
@@ -80,7 +83,9 @@ public:
 	**	section is present.
 	*/
 	int Section_Count(void) const;
-	bool Section_Present(char const *section) const { return (Find_Section(section) != NULL); }
+	bool Section_Present(char const *section) const {
+		return (Find_Section(section) != NULL);
+	}
 
 	/*
 	**	Fetch the number of entries in a section or get a particular entry in a section.
@@ -120,14 +125,17 @@ protected:
 	**	The entry identifier and value string are combined into this object.
 	*/
 	struct INIEntry : Node<INIEntry> {
-		INIEntry(char *entry = 0, char *value = 0) : Entry(entry), Value(value) {}
+		INIEntry(char *entry = 0, char *value = 0) : Entry(entry), Value(value) {
+		}
 		~INIEntry(void) {
 			free(Entry);
 			Entry = 0;
 			free(Value);
 			Value = 0;
 		}
-		int Index_ID(void) const { return (CRCEngine()(Entry, strlen(Entry))); };
+		int Index_ID(void) const {
+			return (CRCEngine()(Entry, strlen(Entry)));
+		};
 
 		char *Entry;
 		char *Value;
@@ -138,14 +146,17 @@ protected:
 	**	subordinate to this section are attached.
 	*/
 	struct INISection : Node<INISection> {
-		INISection(char *section) : Section(section) {}
+		INISection(char *section) : Section(section) {
+		}
 		~INISection(void) {
 			free(Section);
 			Section = 0;
 			EntryList.Delete();
 		}
 		INIEntry *Find_Entry(char const *entry) const;
-		int Index_ID(void) const { return (CRCEngine()(Section, strlen(Section))); };
+		int Index_ID(void) const {
+			return (CRCEngine()(Section, strlen(Section)));
+		};
 
 		char *Section;
 		List<INIEntry> EntryList;

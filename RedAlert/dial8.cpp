@@ -57,8 +57,7 @@
  * HISTORY:                                                                *
  *   11/16/1994 BR : Created.                                              *
  *=========================================================================*/
-Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir)
-    : ControlClass(id, x, y, w, h, LEFTPRESS | LEFTHELD | LEFTRELEASE, true) {
+Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir) : ControlClass(id, x, y, w, h, LEFTPRESS | LEFTHELD | LEFTRELEASE, true) {
 	/*
 	**	Center coordinates.
 	*/
@@ -68,9 +67,9 @@ Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir)
 	/*
 	**	Init directions.
 	*/
-	Direction = dir;		// 0 - 255
+	Direction = dir; // 0 - 255
 	Facing = Dir_Facing(Direction); // 0 - 7
-	OldFacing = Facing;		// 0 - 7
+	OldFacing = Facing; // 0 - 7
 
 	/*
 	**	Compute the drawing dimensions:  a 45-degree angle intersects a unity-
@@ -184,7 +183,6 @@ int Dial8Class::Action(unsigned flags, KeyNumType &key) {
 			return (true);
 
 		} else {
-
 			/*
 			**	Dial hasn't moved; kill the event & return
 			*/
@@ -194,7 +192,6 @@ int Dial8Class::Action(unsigned flags, KeyNumType &key) {
 		}
 
 	} else {
-
 		/*
 		**	Otherwise, no events have occurred; kill the event if it's a LEFTRELEASE,
 		**	and return
@@ -248,8 +245,7 @@ int Dial8Class::Draw_Me(int forced) {
 		/*
 		**	Draw the hand & its shadow.
 		*/
-		LogicPage->Draw_Line(FaceX + 1, FaceY + 1, FaceLine[Facing][0] + 1, FaceLine[Facing][1] + 1,
-				     scheme->Shadow);
+		LogicPage->Draw_Line(FaceX + 1, FaceY + 1, FaceLine[Facing][0] + 1, FaceLine[Facing][1] + 1, scheme->Shadow);
 		LogicPage->Draw_Line(FaceX, FaceY, FaceLine[Facing][0], FaceLine[Facing][1], scheme->Highlight);
 
 		/*
@@ -280,7 +276,9 @@ int Dial8Class::Draw_Me(int forced) {
  * HISTORY:                                                                *
  *   11/17/1994 BR : Created.                                              *
  *=========================================================================*/
-DirType Dial8Class::Get_Direction(void) const { return (Direction); }
+DirType Dial8Class::Get_Direction(void) const {
+	return (Direction);
+}
 
 /***************************************************************************
  * Dial8Class::Set_Direction -- sets current direction (0-255) of dial     *

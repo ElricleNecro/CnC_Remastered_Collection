@@ -67,15 +67,15 @@ extern bool Is_Mission_Counterstrike(char *file_name);
 /***************************************************************************
 ** Internet specific globals
 */
-char PlanetWestwoodHandle[] = {"Handle"};			   // Planet WW user name
-char PlanetWestwoodPassword[] = {"Password"};			   // Planet WW password
-char PlanetWestwoodIPAddress[IP_ADDRESS_MAX] = {"206.154.108.87"}; // IP of server or other player
-long PlanetWestwoodPortNumber = 1234;				   // Port number to send to
-bool PlanetWestwoodIsHost = false;				   // Flag true if player has control of game options
-unsigned long PlanetWestwoodGameID;				   // Game ID
-unsigned long PlanetWestwoodStartTime;				   // Time that game was started
-HWND WChatHWND = 0;						   // Handle to Wchat window.
-bool GameStatisticsPacketSent;					   // Flag that game stats have been sent to wchat
+char PlanetWestwoodHandle[] = { "Handle" }; // Planet WW user name
+char PlanetWestwoodPassword[] = { "Password" }; // Planet WW password
+char PlanetWestwoodIPAddress[IP_ADDRESS_MAX] = { "206.154.108.87" }; // IP of server or other player
+long PlanetWestwoodPortNumber = 1234; // Port number to send to
+bool PlanetWestwoodIsHost = false; // Flag true if player has control of game options
+unsigned long PlanetWestwoodGameID; // Game ID
+unsigned long PlanetWestwoodStartTime; // Time that game was started
+HWND WChatHWND = 0; // Handle to Wchat window.
+bool GameStatisticsPacketSent; // Flag that game stats have been sent to wchat
 bool ConnectionLost; // Flag that the connection to the other player was lost
 int WChatMaxAhead;
 int WChatSendRate;
@@ -105,8 +105,7 @@ int ShowCommand;
  *=============================================================================================*/
 #ifndef WOLAPI_INTEGRATION
 void Check_From_WChat(char *wchat_name) {
-
-	char default_string[] = {"Error"};
+	char default_string[] = { "Error" };
 	char key_string[256];
 	char *ini_file;
 	RawFileClass wchat_file;
@@ -134,7 +133,6 @@ void Check_From_WChat(char *wchat_name) {
 	}
 
 	if (!wchat_name || wchat_file.Is_Available()) {
-
 		/*
 		** Read the ini file from disk if we founf it there
 		*/
@@ -147,8 +145,7 @@ void Check_From_WChat(char *wchat_name) {
 		*/
 		key_string[0] = 0;
 
-		WWGetPrivateProfileString("Internet", "Address", default_string, key_string, sizeof(key_string),
-					  ini_file);
+		WWGetPrivateProfileString("Internet", "Address", default_string, key_string, sizeof(key_string), ini_file);
 
 		if (!strcmp(key_string, default_string)) {
 			if (wchat_name)
@@ -220,7 +217,7 @@ void Check_From_WChat(char *wchat_name) {
 int Read_Game_Options(char *name) {
 	char *buffer;
 
-	char filename[256] = {"INVALID.123"};
+	char filename[256] = { "INVALID.123" };
 
 	if (name) {
 		strcpy(filename, name);
@@ -267,8 +264,7 @@ int Read_Game_Options(char *name) {
 
 	PlanetWestwoodGameID = WWGetPrivateProfileInt("Internet", "GameID", 0, buffer);
 	PlanetWestwoodStartTime = WWGetPrivateProfileInt("Internet", "StartTime", 0, buffer);
-	WChatHWND =
-	    (HWND)WWGetPrivateProfileInt("Internet", "HWND", (int)FindWindow("OWL_Window", "Westwood Chat"), buffer);
+	WChatHWND = (HWND)WWGetPrivateProfileInt("Internet", "HWND", (int)FindWindow("OWL_Window", "Westwood Chat"), buffer);
 
 	Session.Options.AIPlayers = WWGetPrivateProfileInt("Options", "AI", 0, buffer); // Number of AI players
 	if (Session.Options.AIPlayers) {
@@ -286,8 +282,12 @@ int Read_Game_Options(char *name) {
 	/*
 	** Read the scenario name from the .INI and try to match it with a scenario file in our list.
 	*/
-	WWGetPrivateProfileString("Options", "Scenario", "SCM01EA.INI", Session.Options.ScenarioDescription,
-				  sizeof(Session.Options.ScenarioDescription), buffer);
+	WWGetPrivateProfileString("Options",
+				  "Scenario",
+				  "SCM01EA.INI",
+				  Session.Options.ScenarioDescription,
+				  sizeof(Session.Options.ScenarioDescription),
+				  buffer);
 	// WWDebugString ("RA95I - Scenario is ");
 	// WWDebugString (Session.Options.ScenarioDescription);
 	// WWDebugString ("\n");
@@ -451,11 +451,8 @@ bool Is_User_WChat_Registered(char *buffer, int buffer_len) {
 	if (key) {
 		key = Get_Registry_Sub_Key(key, "Nick1", TRUE);
 		if (key) {
-
 			if (RegQueryValue(key, "Nick", user_handle, (long *)&user_handle_size) == ERROR_SUCCESS) {
-
 				if (RegQueryValue(key, "Pass", user_pword, (long *)&user_pword_size) == ERROR_SUCCESS) {
-
 					/*
 					** If the first char of the users name is non-numberic and there is a password
 					** then return success
@@ -488,8 +485,7 @@ bool Is_User_WChat_Registered(char *buffer, int buffer_len) {
 	if (!key)
 		return (FALSE);
 
-	if (RegQueryValueEx(key, "UserName", NULL, NULL, (unsigned char *)user_handle, &user_handle_size) !=
-	    ERROR_SUCCESS) {
+	if (RegQueryValueEx(key, "UserName", NULL, NULL, (unsigned char *)user_handle, &user_handle_size) != ERROR_SUCCESS) {
 		RegCloseKey(key);
 		return (FALSE);
 	}
@@ -531,7 +527,7 @@ bool Spawn_WChat(bool can_launch) {
 
 #if (0)
 	WWDebugString("RA95 - In Spawn_WChat.\n");
-	char packet[10] = {"Hello"};
+	char packet[10] = { "Hello" };
 	HWND chat_window = NULL;
 
 	/*
@@ -611,8 +607,7 @@ bool Spawn_WChat(bool can_launch) {
 	// key = Get_Registry_Sub_Key (key, "Nick", TRUE);
 	// if (!key) return (FALSE);
 
-	if (RegQueryValueEx(key, "InstallPath", NULL, NULL, (unsigned char *)wchat_loc, &wchat_loc_size) !=
-	    ERROR_SUCCESS) {
+	if (RegQueryValueEx(key, "InstallPath", NULL, NULL, (unsigned char *)wchat_loc, &wchat_loc_size) != ERROR_SUCCESS) {
 		RegCloseKey(key);
 		return (FALSE);
 	}
@@ -699,8 +694,7 @@ bool Spawn_Registration_App(void) {
 	if (!key)
 		return (FALSE);
 
-	if (RegQueryValueEx(key, "InstallPath", NULL, NULL, (unsigned char *)inetreg_loc, &inetreg_loc_size) !=
-	    ERROR_SUCCESS) {
+	if (RegQueryValueEx(key, "InstallPath", NULL, NULL, (unsigned char *)inetreg_loc, &inetreg_loc_size) != ERROR_SUCCESS) {
 		RegCloseKey(key);
 		return (FALSE);
 	}
@@ -714,8 +708,7 @@ bool Spawn_Registration_App(void) {
 	start_info.cb = sizeof(start_info);
 	Just_Path(inetreg_loc, justpath);
 
-	BOOL success =
-	    CreateProcess(inetreg_loc, NULL, NULL, NULL, false, 0, NULL, justpath, &start_info, &process_info);
+	BOOL success = CreateProcess(inetreg_loc, NULL, NULL, NULL, false, 0, NULL, justpath, &start_info, &process_info);
 	if (success) {
 		// WaitForSingleObject (process_info.hProcess, 1000*10000);
 		// SetForegroundWindow ( MainWindow );
@@ -745,16 +738,16 @@ bool Spawn_Registration_App(void) {
 bool Do_The_Internet_Menu_Thang(void) {
 #if (0) // PG
 	int factor = (SeenBuff.Get_Width() == 320) ? 1 : 2;
-	char packet[10] = {"Hello"};
+	char packet[10] = { "Hello" };
 
 	/*
 	** Dialog & button dimensions
 	*/
-	int d_dialog_w = 120 * factor;			    // dialog width
-	int d_dialog_h = 80 * factor;			    // dialog height
+	int d_dialog_w = 120 * factor; // dialog width
+	int d_dialog_h = 80 * factor; // dialog height
 	int d_dialog_x = ((320 * factor - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * factor - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);    // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_margin1 = 10;
 	int d_txt6_h = 15;
@@ -771,8 +764,7 @@ bool Do_The_Internet_Menu_Thang(void) {
 	int width;
 	int height;
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
-			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	Format_Window_String((char *)TXT_HACKHACK, SeenBuff.Get_Height(), width, height);
 
@@ -789,18 +781,21 @@ bool Do_The_Internet_Menu_Thang(void) {
 	// TextButtonClass *buttons;										//
 	// button list
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
 				  TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
 				  // #if (GERMAN | FRENCH)
 				  //		d_cancel_x, d_cancel_y);
 				  // #else
-				  d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
+				  d_cancel_x,
+				  d_cancel_y,
+				  d_cancel_w,
+				  d_cancel_h);
 	// #endif
 
 	// buttons = &cancelbtn;
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
-			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	char users_name[256];
 	int buffer_len = sizeof(users_name);
@@ -827,7 +822,6 @@ bool Do_The_Internet_Menu_Thang(void) {
 			** OK, whatever, just run WChat anyway.
 			*/
 			if (!Spawn_WChat(true)) {
-
 				Set_Logic_Page(SeenBuff);
 				Load_Title_Page(true);
 				Set_Palette(CCPalette);
@@ -850,7 +844,6 @@ bool Do_The_Internet_Menu_Thang(void) {
 	display = true;
 
 	while (process) {
-
 		/*
 		** If we have just received input focus again after running in the background then
 		** we need to redraw.
@@ -877,8 +870,11 @@ bool Do_The_Internet_Menu_Thang(void) {
 			*/
 			Draw_Caption(TXT_NONE, d_dialog_x, d_dialog_y, d_dialog_w);
 
-			Fancy_Text_Print(TXT_HACKHACK, d_dialog_cx - width / 2, d_dialog_y + 25 * factor,
-					 GadgetClass::Get_Color_Scheme(), TBLACK,
+			Fancy_Text_Print(TXT_HACKHACK,
+					 d_dialog_cx - width / 2,
+					 d_dialog_y + 25 * factor,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
 					 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 			// cancelbtn.Zap();
@@ -911,7 +907,6 @@ bool Do_The_Internet_Menu_Thang(void) {
 		---------------------------- Process input ----------------------------
 		*/
 		switch (input) {
-
 		/*
 		** Cancel. Just return to the main menu
 		*/

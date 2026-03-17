@@ -62,7 +62,9 @@
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-char const *TriggerClass::Description(void) const { return (Class->Description()); }
+char const *TriggerClass::Description(void) const {
+	return (Class->Description());
+}
 
 /***********************************************************************************************
  * TriggerClass::Draw_It -- Draws this trigger as if it were part of a list box.               *
@@ -81,9 +83,8 @@ char const *TriggerClass::Description(void) const { return (Class->Description()
  *=============================================================================================*/
 void TriggerClass::Draw_It(int, int x, int y, int width, int height, bool selected, TextPrintType flags) const {
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
-	static int _tabs[] = {13, 40};
+	static int _tabs[] = { 13, 40 };
 	if ((flags & 0x0F) == TPF_6PT_GRAD || (flags & 0x0F) == TPF_EFNT) {
-
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
 			LogicPage->Fill_Rect(x, y, x + width - 1, y + height - 1, scheme->Shadow);
@@ -95,9 +96,14 @@ void TriggerClass::Draw_It(int, int x, int y, int width, int height, bool select
 
 		Conquer_Clip_Text_Print(Description(), x, y, scheme, TBLACK, flags, width, _tabs);
 	} else {
-		Conquer_Clip_Text_Print(Description(), x, y,
+		Conquer_Clip_Text_Print(Description(),
+					x,
+					y,
 					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
-					TBLACK, flags, width, _tabs);
+					TBLACK,
+					flags,
+					width,
+					_tabs);
 	}
 }
 #endif
@@ -117,8 +123,7 @@ void TriggerClass::Draw_It(int, int x, int y, int width, int height, bool select
  * HISTORY:                                                                                    *
  *   11/28/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-TriggerClass::TriggerClass(TriggerTypeClass *trigtype)
-    : RTTI(RTTI_TRIGGER), ID(Triggers.ID(this)), Class(trigtype), AttachCount(0), Cell(0) {
+TriggerClass::TriggerClass(TriggerTypeClass *trigtype) : RTTI(RTTI_TRIGGER), ID(Triggers.ID(this)), Class(trigtype), AttachCount(0), Cell(0) {
 	Class->Event1.Reset(Event1);
 	Class->Event2.Reset(Event2);
 }
@@ -180,7 +185,9 @@ TriggerClass::~TriggerClass(void) {
  * HISTORY:                                                                                    *
  *   11/29/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-void TriggerClass::Init(void) { Triggers.Free_All(); }
+void TriggerClass::Init(void) {
+	Triggers.Free_All();
+}
 
 /***********************************************************************************************
  * TriggerClass::Spring -- Spring the trigger (possibly).                                      *
@@ -220,7 +227,6 @@ bool TriggerClass::Spring(TEventType event, ObjectClass *obj, CELL cell, bool fo
 	if (forced) {
 		cell = Cell;
 	} else {
-
 		/*
 		**	Determine if the trigger event is considered to have been sprung according to the
 		**	event control value. This might require that both events be triggered, one event
@@ -248,14 +254,12 @@ bool TriggerClass::Spring(TEventType event, ObjectClass *obj, CELL cell, bool fo
 	**	See if the trigger is sprung with a qualifying event.
 	*/
 	if (execute || forced) {
-
 		/*
 		**	Verify that the trigger event should really be sprung. Exceptions
 		**	would include semi-persistent triggers that don't actually
 		**	spring until all triggers have sprung.
 		*/
 		if (Class->IsPersistant == TriggerTypeClass::SEMIPERSISTANT) {
-
 			/*
 			** Detach ourselves from the object and record that there
 			**	is one less attachment to keep track of.
@@ -290,7 +294,6 @@ bool TriggerClass::Spring(TEventType event, ObjectClass *obj, CELL cell, bool fo
 			if (e2 && !forced)
 				ok |= Class->Action2(hh, obj, ID, cell);
 		} else {
-
 			switch (Class->ActionControl) {
 			case MULTI_ONLY:
 				ok |= Class->Action1(hh, obj, ID, cell);
@@ -317,7 +320,8 @@ bool TriggerClass::Spring(TEventType event, ObjectClass *obj, CELL cell, bool fo
 			MonoArray[DMONO_STRESS].Scroll();
 			MonoArray[DMONO_STRESS].Sub_Window(61, 1, 18, 11);
 			MonoArray[DMONO_STRESS].Set_Cursor(0, 10);
-			MonoArray[DMONO_STRESS].Printf("%02d:%02d:%02d-%s", Scen.Timer / TICKS_PER_HOUR,
+			MonoArray[DMONO_STRESS].Printf("%02d:%02d:%02d-%s",
+						       Scen.Timer / TICKS_PER_HOUR,
 						       (Scen.Timer % TICKS_PER_HOUR) / TICKS_PER_MINUTE,
 						       (Scen.Timer % TICKS_PER_MINUTE) / TICKS_PER_SECOND,
 						       Class->IniName);
@@ -330,7 +334,6 @@ bool TriggerClass::Spring(TEventType event, ObjectClass *obj, CELL cell, bool fo
 				delete this;
 				return (true);
 			} else {
-
 				/*
 				**	Reset event data so that the event will
 				**	repeat as necessary.

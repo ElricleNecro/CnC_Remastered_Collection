@@ -88,7 +88,8 @@ extern short Hard_Error_Occured;
  * HISTORY:                                                                                    *
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void RawFileClass::Error(int, int, char const *) {}
+void RawFileClass::Error(int, int, char const *) {
+}
 
 /***********************************************************************************************
  * RawFileClass::RawFileClass -- Simple constructor for a file object.                         *
@@ -108,8 +109,8 @@ void RawFileClass::Error(int, int, char const *) {}
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 RawFileClass::RawFileClass(char const *filename)
-    : Rights(0), BiasStart(0), BiasLength(-1), Handle(NULL_HANDLE), Filename(filename), Date(0), Time(0),
-      Allocated(false) {}
+	: Rights(0), BiasStart(0), BiasLength(-1), Handle(NULL_HANDLE), Filename(filename), Date(0), Time(0), Allocated(false) {
+}
 
 /***********************************************************************************************
  * RawFileClass::Set_Name -- Manually sets the name for a file object.                         *
@@ -216,7 +217,6 @@ int RawFileClass::Open(int rights) {
 	**	Repetitively try to open the file. Abort if a fatal error condition occurs.
 	*/
 	for (;;) {
-
 /*
 **	Try to open the file according to the access rights specified.
 */
@@ -224,7 +224,6 @@ int RawFileClass::Open(int rights) {
 		Hard_Error_Occured = 0;
 #endif
 		switch (rights) {
-
 		/*
 		**	If the access rights are not recognized, then report this as
 		**	an invalid access code.
@@ -235,8 +234,7 @@ int RawFileClass::Open(int rights) {
 
 		case READ:
 #ifdef WIN32
-			Handle = CreateFile(Filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-					    FILE_ATTRIBUTE_NORMAL, NULL);
+			Handle = CreateFile(Filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 #else
 			_dos_open(Filename, O_RDONLY | SH_DENYNO, &Handle);
 #endif
@@ -244,8 +242,7 @@ int RawFileClass::Open(int rights) {
 
 		case WRITE:
 #ifdef WIN32
-			Handle =
-			    CreateFile(Filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+			Handle = CreateFile(Filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 #else
 			_dos_creat(Filename, 0, &Handle);
 #endif
@@ -253,8 +250,7 @@ int RawFileClass::Open(int rights) {
 
 		case READ | WRITE:
 #ifdef WIN32
-			Handle = CreateFile(Filename, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
-					    FILE_ATTRIBUTE_NORMAL, NULL);
+			Handle = CreateFile(Filename, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 #else
 			_dos_open(Filename, O_RDWR | O_CREAT | SH_DENYWR, &Handle);
 #endif
@@ -274,7 +270,6 @@ int RawFileClass::Open(int rights) {
 		**	are fatal.
 		*/
 		if (Handle == NULL_HANDLE) {
-
 #ifdef WIN32
 			//			return(false);
 			Error(GetLastError(), false, Filename);
@@ -350,10 +345,8 @@ int RawFileClass::Is_Available(int forced) {
 	**	condition, go through the normal error recover channels.
 	*/
 	for (;;) {
-
 #ifdef WIN32
-		Handle = CreateFile(Filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
-				    NULL);
+		Handle = CreateFile(Filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (Handle == NULL_HANDLE) {
 			return (false);
 		}
@@ -439,7 +432,6 @@ void RawFileClass::Close(void) {
 	**	isn't considered an error condition.
 	*/
 	if (Is_Open()) {
-
 #ifdef WIN32
 		/*
 		**	Try to close the file. If there was an error (who knows what that could be), then
@@ -455,7 +447,6 @@ void RawFileClass::Close(void) {
 			*/
 			Hard_Error_Occured = 0;
 			if (_dos_close(Handle)) {
-
 				/*
 				**	By definition, this error can only be a bad file handle. This a fatal condition
 				**	of course, so abort with an error message.
@@ -515,7 +506,6 @@ long RawFileClass::Read(void *buffer, long size) {
 	**	for the programmer.
 	*/
 	if (!Is_Open()) {
-
 		/*
 		**	The error check here is moot. Open will never return unless it succeeded.
 		*/
@@ -568,7 +558,7 @@ long RawFileClass::Read(void *buffer, long size) {
 	*/
 	while (size) {
 		unsigned desired; // Bytes desired to be read this pass.
-		unsigned actual;  // Actual number of bytes read.
+		unsigned actual; // Actual number of bytes read.
 
 		/*
 		**	Break the read request into chunks no bigger than the low level DOS read
@@ -587,7 +577,6 @@ long RawFileClass::Read(void *buffer, long size) {
 			Error(Hard_Error_Occured, true, Filename);
 			continue; // Not technically needed, but to be consistent...
 		} else {
-
 			/*
 			**	If negative one is returned from the read operation, then this indicates
 			**	either a bad file number or invalid access. These are fatal conditions, so
@@ -596,7 +585,6 @@ long RawFileClass::Read(void *buffer, long size) {
 			if (readresult != 0) {
 				Error(errno, false, Filename);
 			} else {
-
 				/*
 				**	No error occurred during the read. Adjust the pointers and size counters and
 				**	loop again if more data is needed to be read.
@@ -668,7 +656,7 @@ long RawFileClass::Write(void const *buffer, long size) {
 	*/
 	while (size) {
 		unsigned desired; // Bytes desired to be write this pass.
-		unsigned actual;  // Actual number of bytes written.
+		unsigned actual; // Actual number of bytes written.
 
 		Hard_Error_Occured = 0;
 		//		desired = (unsigned)MIN(size, Transfer_Block_Size());
@@ -683,7 +671,6 @@ long RawFileClass::Write(void const *buffer, long size) {
 			Error(Hard_Error_Occured, true, Filename);
 			continue; // Not technically needed, but to be consistent...
 		} else {
-
 			/*
 			**	If negative one is returned by the DOS read, then this indicates a bad file
 			**	handle or invalid access. Either condition is fatal -- display error condition
@@ -692,7 +679,6 @@ long RawFileClass::Write(void const *buffer, long size) {
 			if (writeresult != 0) {
 				Error(errno, false, Filename);
 			} else {
-
 				/*
 				**	A successful write occurred. Update pointers and byte counter as appropriate.
 				*/
@@ -757,7 +743,6 @@ long RawFileClass::Write(void const *buffer, long size) {
  *   10/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 long RawFileClass::Seek(long pos, int dir) {
-
 	/*
 	**	A file that is biased will have a seek operation modified so that the file appears to
 	**	exist only within the bias range. All bytes outside of this range appear to be
@@ -838,7 +823,6 @@ long RawFileClass::Size(void) {
 	**	If the file is open, then proceed normally.
 	*/
 	if (Is_Open()) {
-
 #ifdef WIN32
 		size = GetFileSize(Handle, NULL);
 
@@ -875,7 +859,6 @@ long RawFileClass::Size(void) {
 #endif
 
 	} else {
-
 		/*
 		**	If the file wasn't open, then open the file and call this routine again. Count on
 		**	the fact that the open function must succeed.
@@ -914,7 +897,6 @@ long RawFileClass::Size(void) {
 int RawFileClass::Create(void) {
 	Close();
 	if (Open(WRITE)) {
-
 		/*
 		**	A biased file must be at least as long as the bias offset. Seeking to the
 		**	appropriate start offset has the effect of lengthening the file to the
@@ -966,7 +948,6 @@ int RawFileClass::Delete(void) {
 	**	abort the program with an error.
 	*/
 	for (;;) {
-
 		/*
 		**	If the file is already missing, then return with this fact. No action is necessary.
 		**	This can occur as this section loops if the file exists on a floppy and the floppy
@@ -985,7 +966,6 @@ int RawFileClass::Delete(void) {
 #else
 		Hard_Error_Occured = 0;
 		if (remove(Filename) == -1) {
-
 			/*
 			**	If a hard error occurred, then assume that the media has been removed. Display
 			**	error message and retry as directed.
@@ -1063,7 +1043,6 @@ unsigned long RawFileClass::Get_Date_Time(void) {
 			return (datetime);
 		}
 	} else {
-
 		//
 		//	If the file wasn't open, then see if the file exists.
 		//
@@ -1147,7 +1126,6 @@ bool RawFileClass::Set_Date_Time(unsigned long datetime) {
 			}
 		}
 	} else {
-
 		//
 		//	If the file wasn't open, then see if the file exists.
 		//
@@ -1275,7 +1253,6 @@ long RawFileClass::Raw_Seek(long pos, int dir) {
 	**	Keep trying to seek until a non-retry condition occurs.
 	*/
 	for (;;) {
-
 		/*
 		**	Perform the low level seek on the file.
 		*/
@@ -1290,7 +1267,6 @@ long RawFileClass::Raw_Seek(long pos, int dir) {
 			Error(Hard_Error_Occured, true, Filename);
 			continue;
 		} else {
-
 			/*
 			**	A negative one indicates a fatal error with the seek operation. Display error
 			**	condition and then abort.

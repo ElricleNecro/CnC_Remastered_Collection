@@ -63,8 +63,13 @@ public:
 	/*.....................................................................
 	Constructor/destructor.
 	.....................................................................*/
-	NonSequencedConnClass(int numsend, int numrecieve, int maxlen, unsigned short magicnum,
-			      unsigned long retry_delta, unsigned long max_retries, unsigned long timeout);
+	NonSequencedConnClass(int numsend,
+			      int numrecieve,
+			      int maxlen,
+			      unsigned short magicnum,
+			      unsigned long retry_delta,
+			      unsigned long max_retries,
+			      unsigned long timeout);
 	virtual ~NonSequencedConnClass();
 
 	/*.....................................................................

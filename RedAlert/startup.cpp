@@ -34,9 +34,9 @@
  *   main -- Initial startup routine (preps library systems).                                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
 #include <conio.h>
 #include <io.h>
+#include "function.h"
 
 #ifdef WIN32
 #include "ccdde.h"
@@ -101,7 +101,6 @@ BOOL WINAPI DllMain(HINSTANCE instance, unsigned int fdwReason, void *lpvReserve
 	lpvReserved;
 
 	switch (fdwReason) {
-
 	case DLL_PROCESS_ATTACH:
 		ProgramInstance = instance;
 		break;
@@ -165,8 +164,7 @@ BOOL WINAPI DllMain(HINSTANCE instance, unsigned int fdwReason, void *lpvReserve
 // int PASCAL WinMain(HINSTANCE, HINSTANCE, char *, int )
 // PG int PASCAL WinMain ( HINSTANCE instance , HINSTANCE , char * command_line , int command_show )
 int DLL_Startup(const char *command_line_in)
-
-#else  // WIN32
+#else // WIN32
 int main(int argc, char *argv[])
 #endif // WIN32
 
@@ -188,7 +186,7 @@ int main(int argc, char *argv[])
 	**  and if so, switch to the existing instance and terminate ourselves.
 	*/
 	SpawnedFromWChat = false;
-#if (0)				  // PG
+#if (0) // PG
 	if (RA95AlreadyRunning) { // Set in the DDEServer constructor
 		// MessageBox (NULL, "Error - attempt to restart Red Alert 95 when already running.", "Red Alert",
 		// MB_ICONEXCLAMATION|MB_OK);
@@ -215,7 +213,6 @@ int main(int argc, char *argv[])
 	if (temp_mem) {
 		free(temp_mem);
 	} else {
-
 		// if (Ram_Free(MEM_NORMAL) < 13000000) {
 //	if (Ram_Free(MEM_NORMAL) < 3500000) {
 #endif
@@ -270,7 +267,7 @@ int main(int argc, char *argv[])
 	** First argument is supposed to be a pointer to the .EXE that is running
 	**
 	*/
-	argc = 1;		   // Set argument count to 1
+	argc = 1; // Set argument count to 1
 	argv[0] = &path_to_exe[0]; // Set 1st command line argument to point to full path
 
 	/*
@@ -375,7 +372,6 @@ int main(int argc, char *argv[])
 #endif
 
 	if (Parse_Command_Line(argc, argv)) {
-
 #if (TEN)
 		//
 		// Only allow the TEN version of the game to run if the TEN
@@ -425,7 +421,7 @@ int main(int argc, char *argv[])
 			return (EXIT_FAILURE);
 		}
 #endif
-#else  // WIN32
+#else // WIN32
 		Init_Timer_System(60, true);
 #endif // WIN32
 
@@ -468,7 +464,6 @@ int main(int argc, char *argv[])
 		** If there is not enough disk space free, don't allow the product to run.
 		*/
 		if (Disk_Space_Available() < INIT_FREE_DISK_SPACE) {
-
 #ifdef WIN32
 #if (0) // PG
 			char disk_space_message[512];
@@ -495,7 +490,6 @@ int main(int argc, char *argv[])
 		}
 
 		if (cfile.Is_Available()) {
-
 			Read_Private_Config_Struct(cfile, &NewConfig);
 
 #ifdef WIN32
@@ -507,9 +501,12 @@ int main(int argc, char *argv[])
 
 			Create_Main_Window(instance, command_show, ScreenWidth, ScreenHeight);
 			SoundOn = Audio_Init(MainWindow, 16, false, 11025 * 2, 0);
-#else  // WIN32
+#else // WIN32
 			if (!Debug_Quiet) {
-				Audio_Init(NewConfig.DigitCard, NewConfig.Port, NewConfig.IRQ, NewConfig.DMA,
+				Audio_Init(NewConfig.DigitCard,
+					   NewConfig.Port,
+					   NewConfig.IRQ,
+					   NewConfig.DMA,
 					   PLAYBACK_RATE_NORMAL,
 					   //						(NewConfig.Speed) ?
 					   // PLAYBACK_RATE_SLOW : PLAYBACK_RATE_NORMAL,
@@ -558,8 +555,7 @@ int main(int argc, char *argv[])
 
 			if (ScreenWidth == 320) {
 				VisiblePage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)0);
-				ModeXBuff.Init(ScreenWidth, ScreenHeight, NULL, 0,
-					       (GBC_Enum)(GBC_VISIBLE | GBC_VIDEOMEM));
+				ModeXBuff.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)(GBC_VISIBLE | GBC_VIDEOMEM));
 			} else {
 
 #if (1) // ST - 1/3/2019 2:11PM
@@ -568,8 +564,7 @@ int main(int argc, char *argv[])
 				HiddenPage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)0);
 
 #else
-				VisiblePage.Init(ScreenWidth, ScreenHeight, NULL, 0,
-						 (GBC_Enum)(GBC_VISIBLE | GBC_VIDEOMEM));
+				VisiblePage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)(GBC_VISIBLE | GBC_VIDEOMEM));
 
 				/*
 				** Check that we really got a video memory page. Failure is fatal.
@@ -582,8 +577,7 @@ int main(int argc, char *argv[])
 					*/
 					WWDebugString(TEXT_DDRAW_ERROR);
 					WWDebugString("\n");
-					MessageBox(MainWindow, TEXT_DDRAW_ERROR, TEXT_SHORT_TITLE,
-						   MB_ICONEXCLAMATION | MB_OK);
+					MessageBox(MainWindow, TEXT_DDRAW_ERROR, TEXT_SHORT_TITLE, MB_ICONEXCLAMATION | MB_OK);
 					if (WindowsTimer)
 						delete WindowsTimer;
 					return (EXIT_FAILURE);
@@ -599,8 +593,7 @@ int main(int argc, char *argv[])
 				*/
 				unsigned video_memory = Get_Free_Video_Memory();
 				unsigned video_capabilities = Get_Video_Hardware_Capabilities();
-				if (video_memory < (unsigned int)(ScreenWidth * ScreenHeight) ||
-				    (!(video_capabilities & VIDEO_BLITTER)) ||
+				if (video_memory < (unsigned int)(ScreenWidth * ScreenHeight) || (!(video_capabilities & VIDEO_BLITTER)) ||
 				    (video_capabilities & VIDEO_NO_HARDWARE_ASSIST) || !VideoBackBufferAllowed) {
 					HiddenPage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)0);
 				} else {
@@ -614,15 +607,13 @@ int main(int argc, char *argv[])
 					memset(&surface_capabilities, 0, sizeof(surface_capabilities));
 					HiddenPage.Get_DD_Surface()->GetCaps(&surface_capabilities);
 					if (surface_capabilities.dwCaps & DDSCAPS_SYSTEMMEMORY) {
-
 						/*
 						** Oh dear, big trub. This must be an IBM Aptiva or something similarly
 						*cruddy.
 						** We must redo the Hidden Page as system memory.
 						*/
-						AllSurfaces.Remove_DD_Surface(
-						    HiddenPage.Get_DD_Surface()); // Remove the old surface from the
-										  // AllSurfaces list
+						AllSurfaces.Remove_DD_Surface(HiddenPage.Get_DD_Surface()); // Remove the old surface from the
+							// AllSurfaces list
 						HiddenPage.Get_DD_Surface()->Release();
 						HiddenPage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)0);
 					} else {
@@ -664,7 +655,7 @@ int main(int argc, char *argv[])
 
 			// PG CDFileClass::Set_CD_Drive (CDList.Get_First_CD_Drive());
 
-#else  // WIN32
+#else // WIN32
 
 			Options.Adjust_Variables_For_Resolution();
 			if (!Special.IsFromInstall) {
@@ -748,7 +739,7 @@ int main(int argc, char *argv[])
 #ifdef WIN32
 			VisiblePage.Clear();
 			HiddenPage.Clear();
-#else  // WIN32
+#else // WIN32
 			SeenPage.Clear();
 			Set_Video_Mode(RESET_MODE);
 #endif // WIN32
@@ -774,7 +765,7 @@ int main(int argc, char *argv[])
 
 			return (EXIT_SUCCESS);
 
-#else  // WIN32
+#else // WIN32
 			Remove_Mouse();
 			Sound_End();
 #endif // WIN32
@@ -791,7 +782,7 @@ int main(int argc, char *argv[])
 			WindowsTimer = NULL;
 		}
 
-#else  // WIN32
+#else // WIN32
 		Remove_Keyboard_Interrupt();
 		Remove_Timer_System();
 #endif // WIN32
@@ -808,7 +799,6 @@ int main(int argc, char *argv[])
 
 /* Initialize DirectDraw and surfaces */
 bool InitDDraw(void) {
-
 	VisiblePage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)(GBC_VISIBLE | GBC_VIDEOMEM));
 	HiddenPage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)GBC_VIDEOMEM);
 	VisiblePage.Attach_DD_Surface(&HiddenPage);
@@ -892,8 +882,7 @@ bool InitDDraw(void) {
 				/* Oh dear, big trub. This must be an IBM Aptiva or something similarly cruddy.
 				 * We must redo the Hidden Page as system memory.
 				 */
-				AllSurfaces.Remove_DD_Surface(
-				    HiddenPage.Get_DD_Surface()); // Remove the old surface from the AllSurfaces list
+				AllSurfaces.Remove_DD_Surface(HiddenPage.Get_DD_Surface()); // Remove the old surface from the AllSurfaces list
 				HiddenPage.Get_DD_Surface()->Release();
 				HiddenPage.Init(ScreenWidth, ScreenHeight, NULL, 0, (GBC_Enum)0);
 			} else {
@@ -959,7 +948,7 @@ void __cdecl Prog_End(const char *why, bool fatal) {
 
 	ProgEndCalled = true;
 }
-#else  // WIN32
+#else // WIN32
 
 void Prog_End(void) {
 	if (Session.Type == GAME_MODEM || Session.Type == GAME_NULL_MODEM) {
@@ -1068,7 +1057,6 @@ void Emergency_Exit(int code) {
  *=============================================================================================*/
 void Read_Setup_Options(RawFileClass *config_file) {
 	if (config_file->Is_Available()) {
-
 		INIClass ini;
 
 		ini.Load(*config_file);

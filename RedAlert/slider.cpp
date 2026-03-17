@@ -220,7 +220,7 @@ int SliderClass::Action(unsigned flags, KeyNumType &key) {
 	*/
 	if (flags & LEFTPRESS) {
 		int mouse; // Mouse pixel position.
-		int edge;  // Edge of slider.
+		int edge; // Edge of slider.
 
 		if (IsHorizontal) {
 			mouse = Get_Mouse_X();
@@ -330,7 +330,6 @@ void SliderClass::Draw_Thumb(void) {
 int SliderClass::Draw_Me(int forced) {
 	if (BelongToList) {
 		if (ControlClass::Draw_Me(forced)) {
-
 			/*
 			**	Hide the mouse.
 			*/

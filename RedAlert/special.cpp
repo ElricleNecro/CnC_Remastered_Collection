@@ -108,20 +108,18 @@ void Special_Dialog(bool simple) {
 		int Setting;
 		CheckBoxClass *Button;
 	} _options[] = {
-	    {TXT_THREE_POINT, 0, 0},
-	    {TXT_SPEED_BUILD, 0, 0},
+		{ TXT_THREE_POINT, 0, 0 },
+		{ TXT_SPEED_BUILD, 0, 0 },
 	};
 
-	TextButtonClass ok(200, TXT_OK, TPF_BUTTON, OPTION_X + 15 * RESFACTOR,
-			   OPTION_Y + OPTION_HEIGHT - 15 * RESFACTOR);
-	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X + OPTION_WIDTH - 60 * RESFACTOR,
-			       OPTION_Y + OPTION_HEIGHT - 15 * RESFACTOR);
+	TextButtonClass ok(200, TXT_OK, TPF_BUTTON, OPTION_X + 15 * RESFACTOR, OPTION_Y + OPTION_HEIGHT - 15 * RESFACTOR);
+	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X + OPTION_WIDTH - 60 * RESFACTOR, OPTION_Y + OPTION_HEIGHT - 15 * RESFACTOR);
 	buttons = &ok;
 	cancel.Add(*buttons);
 
 	for (int index = 0; index < sizeof(_options) / sizeof(_options[0]); index++) {
-		_options[index].Button = new CheckBoxClass(100 + index, OPTION_X + 17 * RESFACTOR,
-							   OPTION_Y + 20 * RESFACTOR + (index * 10 * RESFACTOR));
+		_options[index].Button =
+			new CheckBoxClass(100 + index, OPTION_X + 17 * RESFACTOR, OPTION_Y + 20 * RESFACTOR + (index * 10 * RESFACTOR));
 		if (_options[index].Button) {
 			_options[index].Button->Add(*buttons);
 
@@ -151,7 +149,6 @@ void Special_Dialog(bool simple) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		if (Session.Type == GAME_NORMAL) {
 			Call_Back();
 		} else {
@@ -169,8 +166,10 @@ void Special_Dialog(bool simple) {
 
 			for (index = 0; index < sizeof(_options) / sizeof(_options[0]); index++) {
 				Fancy_Text_Print(_options[index].Description,
-						 _options[index].Button->X + 10 * RESFACTOR, _options[index].Button->Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK,
+						 _options[index].Button->X + 10 * RESFACTOR,
+						 _options[index].Button->Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
 						 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 			}
 			buttons->Draw_All();
@@ -234,7 +233,7 @@ void Special_Dialog(bool simple) {
 class PWEditClass : public EditClass {
 public:
 	PWEditClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w = -1, int h = -1)
-	    : EditClass(id, text, max_len, flags, x, y, w, h, ALPHANUMERIC) {};
+		: EditClass(id, text, max_len, flags, x, y, w, h, ALPHANUMERIC) {};
 
 protected:
 	virtual void Draw_Text(char const *text);
@@ -275,17 +274,19 @@ void PWEditClass::Draw_Text(char const *text) {
 		Conquer_Clip_Text_Print(buffer, X + 1, Y + 1, Color, TBLACK, TextFlags | flags, Width - 2);
 
 		if (Has_Focus() && (int)strlen(buffer) < MaxLength) {
-			Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(buffer), Y + 1, Color, TBLACK,
-						TextFlags | flags);
+			Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(buffer), Y + 1, Color, TBLACK, TextFlags | flags);
 		}
 	} else {
-		Conquer_Clip_Text_Print(buffer, X + 1, Y + 1,
+		Conquer_Clip_Text_Print(buffer,
+					X + 1,
+					Y + 1,
 					Has_Focus() ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY],
-					TBLACK, TextFlags, Width - 2);
+					TBLACK,
+					TextFlags,
+					Width - 2);
 
 		if (Has_Focus() && (int)strlen(buffer) < MaxLength) {
-			Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(buffer), Y + 1,
-						&ColorRemaps[PCOLOR_DIALOG_BLUE], TBLACK, TextFlags);
+			Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(buffer), Y + 1, &ColorRemaps[PCOLOR_DIALOG_BLUE], TBLACK, TextFlags);
 		}
 	}
 }
@@ -312,7 +313,7 @@ void PWEditClass::Draw_Text(char const *text) {
 #define BUFFSIZE (511)
 char const *Fetch_Password(int caption, int message, int btext) {
 	char buffer[BUFFSIZE];
-	bool process;	  // loop while true
+	bool process; // loop while true
 	KeyNumType input; // user input
 	bool pressed;
 	int curbutton;
@@ -358,15 +359,20 @@ char const *Fetch_Password(int caption, int message, int btext) {
 	/*
 	**	Create the "ok" and password edit buttons.
 	*/
-	TextButtonClass button1(1, btext, TPF_BUTTON, x + ((width - bwidth) >> 1),
-				y + height - (bheight + 5 * RESFACTOR), bwidth);
+	TextButtonClass button1(1, btext, TPF_BUTTON, x + ((width - bwidth) >> 1), y + height - (bheight + 5 * RESFACTOR), bwidth);
 
 	static char pbuffer[45];
 	memset(pbuffer, '\0', sizeof(pbuffer));
 	int editx = x + 26 * RESFACTOR;
 	int editwidth = (SeenBuff.Get_Width() / 2 - editx) * 2;
-	PWEditClass button2(2, &pbuffer[0], sizeof(pbuffer), TPF_6PT_GRAD | TPF_NOSHADOW, editx,
-			    (y + height) - 35 * RESFACTOR, editwidth, 10 * RESFACTOR);
+	PWEditClass button2(2,
+			    &pbuffer[0],
+			    sizeof(pbuffer),
+			    TPF_6PT_GRAD | TPF_NOSHADOW,
+			    editx,
+			    (y + height) - 35 * RESFACTOR,
+			    editwidth,
+			    10 * RESFACTOR);
 
 	TextButtonClass *buttonlist = 0;
 	curbutton = 0;
@@ -388,7 +394,11 @@ char const *Fetch_Password(int caption, int message, int btext) {
 	/*
 	**	Draw the body of the message box.
 	*/
-	Fancy_Text_Print(buffer, x + 20 * RESFACTOR, y + 25 * RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK,
+	Fancy_Text_Print(buffer,
+			 x + 20 * RESFACTOR,
+			 y + 25 * RESFACTOR,
+			 GadgetClass::Get_Color_Scheme(),
+			 TBLACK,
 			 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	/*
@@ -406,7 +416,6 @@ char const *Fetch_Password(int caption, int message, int btext) {
 	pressed = false;
 	bool first = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -488,8 +497,8 @@ int Fetch_Difficulty(void)
 	char buffer[512];
 	strncpy(buffer, Text_String(TXT_DIFFICULTY), sizeof(buffer) - 1);
 	buffer[sizeof(buffer) - 1] = '\0';
-#ifdef FIXIT_CSII //	checked - ajw 9/28/98
-		  // If it's an aftermath mission, trim the sentence to get rid of the campaign stuff.
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98                                                                                                           \
+	// If it's an aftermath mission, trim the sentence to get rid of the campaign stuff.
 	if (amath) {
 		int index = 0;
 		while (buffer[index] && buffer[index] != '.')
@@ -508,8 +517,7 @@ int Fetch_Difficulty(void)
 	/*
 	**	Create the OK button.
 	*/
-	TextButtonClass okbutton(1, TXT_OK, TPF_BUTTON, (x + w) - (bwidth + 20 * RESFACTOR), (y + h) - (18 * RESFACTOR),
-				 bwidth);
+	TextButtonClass okbutton(1, TXT_OK, TPF_BUTTON, (x + w) - (bwidth + 20 * RESFACTOR), (y + h) - (18 * RESFACTOR), bwidth);
 	GadgetClass *buttonlist = &okbutton;
 
 	/*
@@ -532,7 +540,6 @@ int Fetch_Difficulty(void)
 	bool redraw = true;
 	bool process = true;
 	while (process) {
-
 		if (redraw) {
 			redraw = false;
 
@@ -547,19 +554,33 @@ int Fetch_Difficulty(void)
 			*/
 			//			Fancy_Text_Print(buffer, x + 20*RESFACTOR, y + 15*RESFACTOR,
 			// GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
-			Fancy_Text_Print(buffer, x + 20 * RESFACTOR, y + 15 * RESFACTOR,
-					 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD | TPF_NOSHADOW);
+			Fancy_Text_Print(buffer,
+					 x + 20 * RESFACTOR,
+					 y + 15 * RESFACTOR,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_6PT_GRAD | TPF_NOSHADOW);
 
 			/*
 			**	Display the descripton of the slider range.
 			*/
-			Fancy_Text_Print(TXT_HARD, slider.X + slider.Width, slider.Y - 9 * RESFACTOR,
-					 GadgetClass::Get_Color_Scheme(), TBLACK,
+			Fancy_Text_Print(TXT_HARD,
+					 slider.X + slider.Width,
+					 slider.Y - 9 * RESFACTOR,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
 					 TPF_RIGHT | TPF_6PT_GRAD | TPF_DROPSHADOW);
-			Fancy_Text_Print(TXT_EASY, slider.X, slider.Y - 9 * RESFACTOR, GadgetClass::Get_Color_Scheme(),
-					 TBLACK, TPF_6PT_GRAD | TPF_DROPSHADOW);
-			Fancy_Text_Print(TXT_NORMAL, slider.X + (slider.Width / 2), slider.Y - 9 * RESFACTOR,
-					 GadgetClass::Get_Color_Scheme(), TBLACK,
+			Fancy_Text_Print(TXT_EASY,
+					 slider.X,
+					 slider.Y - 9 * RESFACTOR,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_6PT_GRAD | TPF_DROPSHADOW);
+			Fancy_Text_Print(TXT_NORMAL,
+					 slider.X + (slider.Width / 2),
+					 slider.Y - 9 * RESFACTOR,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
 					 TPF_CENTER | TPF_6PT_GRAD | TPF_DROPSHADOW);
 
 			/*

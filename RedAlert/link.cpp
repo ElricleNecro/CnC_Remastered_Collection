@@ -85,7 +85,9 @@ LinkClass::LinkClass(LinkClass const &link) : Next(0), Prev(0) {
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-LinkClass::~LinkClass(void) { Remove(); }
+LinkClass::~LinkClass(void) {
+	Remove();
+}
 
 /***********************************************************************************************
  * LinkClass::Zap -- Forces the link pointers to NULL.                                         *
@@ -156,7 +158,9 @@ LinkClass &LinkClass::operator=(LinkClass const &link) {
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-LinkClass *LinkClass::Get_Next(void) const { return (Next); }
+LinkClass *LinkClass::Get_Next(void) const {
+	return (Next);
+}
 
 /***********************************************************************************************
  * LinkClass::Get_Prev -- Fetches previous object in linked list.                              *
@@ -173,7 +177,9 @@ LinkClass *LinkClass::Get_Next(void) const { return (Next); }
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-LinkClass *LinkClass::Get_Prev(void) const { return (Prev); }
+LinkClass *LinkClass::Get_Prev(void) const {
+	return (Prev);
+}
 
 /***********************************************************************************************
  * LinkClass::Head_Of_List -- Finds the head of the list.                                      *

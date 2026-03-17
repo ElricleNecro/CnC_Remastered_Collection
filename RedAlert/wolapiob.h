@@ -35,17 +35,17 @@ class IconListClass;
 class WOL_GameSetupDialog;
 class ToolTipClass;
 
-#define PUMPSLEEPDURATION 300	//	Milliseconds between PumpMessages() calls.
+#define PUMPSLEEPDURATION 300 //	Milliseconds between PumpMessages() calls.
 #define EMERGENCY_TIMEOUT 40000 //	Longest we wait for a wolapi response before terminating everything.
 
 //	Milliseconds between automatic behaviors.
 #define WOLAPIPUMPWAIT 300
 #define CHANNELUPDATEWAIT 45000
 
-#define WOL_NAME_LEN_MAX 10	//	Includes null-terminator.
-#define WOL_PASSWORD_LEN 9	//	Includes null-terminator.
+#define WOL_NAME_LEN_MAX 10 //	Includes null-terminator.
+#define WOL_PASSWORD_LEN 9 //	Includes null-terminator.
 #define WOL_CHANNAME_LEN_MAX 17 //	Includes null-terminator.
-#define WOL_CHANKEY_LEN_MAX 9	//	Includes null-terminator.
+#define WOL_CHANKEY_LEN_MAX 9 //	Includes null-terminator.
 
 #define CHAT_USER_SQUELCHED 0x0004 //	Will theoretically be added to the api and implemented.
 
@@ -69,15 +69,15 @@ class ToolTipClass;
 #define CHANNELTYPE_LOBBYCHANNEL "LobbyChannel" //	Not seen.
 
 enum WOL_LEVEL {
-	WOL_LEVEL_TOP,		 //	Viewing top level menu choices.
-	WOL_LEVEL_OFFICIALCHAT,	 //	Viewing official chat channels.
-	WOL_LEVEL_USERCHAT,	 //	Viewing user chat channels.
+	WOL_LEVEL_TOP, //	Viewing top level menu choices.
+	WOL_LEVEL_OFFICIALCHAT, //	Viewing official chat channels.
+	WOL_LEVEL_USERCHAT, //	Viewing user chat channels.
 	WOL_LEVEL_INCHATCHANNEL, //	In a chat channel.
-	WOL_LEVEL_GAMES,	 //	Viewing types (skus) of games.
-	WOL_LEVEL_GAMESOFTYPE,	 //	Viewing game channels of a type.
+	WOL_LEVEL_GAMES, //	Viewing types (skus) of games.
+	WOL_LEVEL_GAMESOFTYPE, //	Viewing game channels of a type.
 	WOL_LEVEL_INGAMECHANNEL, //	In a game channel.
-	WOL_LEVEL_LOBBIES,	 //	Viewing the game lobbies.
-	WOL_LEVEL_INLOBBY,	 //	In a "lobby" chat channel.
+	WOL_LEVEL_LOBBIES, //	Viewing the game lobbies.
+	WOL_LEVEL_INLOBBY, //	In a "lobby" chat channel.
 	WOL_LEVEL_INVALID
 };
 
@@ -85,27 +85,27 @@ struct WOL_GAMETYPEINFO {
 	int iGameType;
 	char szName[128];
 	char szURL[256];
-	HDIB hDIB;	  //	DIB handle.
+	HDIB hDIB; //	DIB handle.
 	const char *pDIB; //	What you get when you GlobalLock hDIB.
 };
 
 //	Header values for game options messages. Note that 0 is not used!
 enum WOL_GAMEOPT {
-	WOL_GAMEOPT_REQCOLOR = 1,	      //	REQuest = guest asks game host for a color
-	WOL_GAMEOPT_INFCOLOR,		      //	INForm = game host tells guests color of a single player (not
-					      //"accept-canceling")
-	WOL_GAMEOPT_INFPARAMS,		      //	host tells guests all common game params
-	WOL_GAMEOPT_REQHOUSE,		      //	guest tells host he's changed house (REQ because it's guest->host)
-	WOL_GAMEOPT_INFHOUSE,		      //	host tells guests about new house of a single player
-	WOL_GAMEOPT_REQACCEPT,		      //	guest tells host he accepts current params
-	WOL_GAMEOPT_INFACCEPT,		      //	host tells guests that a player accepted
-	WOL_GAMEOPT_INFSTART,		      //	host tell guests to go into wait for start mode
-	WOL_GAMEOPT_REQSTART,		      //	guest acknowledges WOL_GAMEOPT_INFSTART
+	WOL_GAMEOPT_REQCOLOR = 1, //	REQuest = guest asks game host for a color
+	WOL_GAMEOPT_INFCOLOR, //	INForm = game host tells guests color of a single player (not
+	//"accept-canceling")
+	WOL_GAMEOPT_INFPARAMS, //	host tells guests all common game params
+	WOL_GAMEOPT_REQHOUSE, //	guest tells host he's changed house (REQ because it's guest->host)
+	WOL_GAMEOPT_INFHOUSE, //	host tells guests about new house of a single player
+	WOL_GAMEOPT_REQACCEPT, //	guest tells host he accepts current params
+	WOL_GAMEOPT_INFACCEPT, //	host tells guests that a player accepted
+	WOL_GAMEOPT_INFSTART, //	host tell guests to go into wait for start mode
+	WOL_GAMEOPT_REQSTART, //	guest acknowledges WOL_GAMEOPT_INFSTART
 	WOL_GAMEOPT_REQSTART_BUTNEEDSCENARIO, //	guests acks WOL_GAMEOPT_INFSTART and asks for scenario download
-	WOL_GAMEOPT_INFCANCELSTART,	      //	host tells guests to cancel game start, as a change arrived or player
-					      // joined/left
-	WOL_GAMEOPT_INFGO,		      //	host tells everyone to start
-	WOL_GAMEOPT_INFNEWGUESTPLAYERINFO,    //	host tells new guest a lot of stuff about everyone that's in the game
+	WOL_GAMEOPT_INFCANCELSTART, //	host tells guests to cancel game start, as a change arrived or player
+	// joined/left
+	WOL_GAMEOPT_INFGO, //	host tells everyone to start
+	WOL_GAMEOPT_INFNEWGUESTPLAYERINFO, //	host tells new guest a lot of stuff about everyone that's in the game
 };
 enum DIBICON {
 	DIBICON_OWNER,
@@ -128,7 +128,7 @@ struct DIBICONINFO {
 
 //	See SaveChat()...
 #define SAVECHATWIDTH 150 //	Wider than text that will fit in the chat list window.
-struct CHATSAVE		  //	What we save about each individual list item.
+struct CHATSAVE //	What we save about each individual list item.
 {
 	char szText[SAVECHATWIDTH + 1];
 	IconList_ItemExtras ItemExtras; //	Only color is used.
@@ -144,7 +144,7 @@ struct CREATEGAMEINFO {
 	};
 
 	bool bCreateGame; //	True if user confirms game creation.
-	int iPlayerMax;	  //	NOT number of players, but maximum number allowed into game channel.
+	int iPlayerMax; //	NOT number of players, but maximum number allowed into game channel.
 	int iPlayerCount; //	Number of initial human players in game. Set at game launch, used for stats.
 	bool bTournament;
 	bool bPrivate;
@@ -185,12 +185,12 @@ public:
 
 	bool bFindEnabled; //	I have to maintain these, though wolapi should do it for me...
 	bool bPageEnabled; //	Note they are initialized true, as is currently the case in wol.
-	bool bLangFilter;  //
+	bool bLangFilter; //
 	bool bAllGamesShown;
 
-	bool bEggSounds;  //	Easter egg related. True = user actions trigger sounds.
+	bool bEggSounds; //	Easter egg related. True = user actions trigger sounds.
 	bool bEgg8Player; //	True = 8 player games can be created. This is hidden so that we don't really have to
-			  // support the feature...
+		// support the feature...
 
 	WOL_LEVEL CurrentLevel;
 	WOL_LEVEL LastUpdateChannelCallLevel;
@@ -225,14 +225,14 @@ public:
 
 	WOL_GameSetupDialog *pGSupDlg; //	When in a game channel, setting up a game; ptr to the dialog.
 
-	bool bInGame;	      //	True while playing a game.
+	bool bInGame; //	True while playing a game.
 	bool bConnectionDown; //	Flag used while in a game, set to true if connection goes down.
-	bool bGameServer;     //	Flag used while in a game, true if game server (host).
+	bool bGameServer; //	Flag used while in a game, true if game server (host).
 
 	unsigned long TournamentOpponentIP; //	Valid while playing a tournament game. IP address of opponent.
 
 	bool bPump_In_Call_Back; //	Used to enable PumpMessages during Call_Back(), for when we're in a modal
-				 // dialog.
+		// dialog.
 
 	bool bSelfDestruct; //	If set true, causes logout and deletion of wolapi object.
 
@@ -249,7 +249,7 @@ public:
 	char szExternalPager[WOL_NAME_LEN_MAX]; //	Last person to page me from outside the game, or blank for none.
 	bool bFreezeExternalPager;
 
-	bool bShowRankRA;      //	true = view RA rankings, false = view AM rankings
+	bool bShowRankRA; //	true = view RA rankings, false = view AM rankings
 	bool bShowRankUpdated; //	set true when bShowRankRA value changes
 
 	//	Standard wol buttons.
@@ -289,8 +289,7 @@ public:
 public:
 	bool bLoggedIn();
 
-	void LinkToChatDlg(IconListClass *pILChat, IconListClass *pILChannels, IconListClass *pILUsers,
-			   StaticButtonClass *pStaticUsers);
+	void LinkToChatDlg(IconListClass *pILChat, IconListClass *pILChannels, IconListClass *pILUsers, StaticButtonClass *pStaticUsers);
 	void ClearListPtrs();
 	void LinkToGameDlg(IconListClass *pILDisc, IconListClass *pILPlayers);
 
@@ -326,8 +325,12 @@ public:
 	void RequestPlayerPings();
 
 	void SendMessage(const char *szMessage, IconListClass &ILUsers, bool bAction);
-	bool ChannelCreate(const char *szChannelName, const char *szKey, bool bGame = false, int iMaxPlayers = 0,
-			   bool bTournament = false, int iLobby = 0,
+	bool ChannelCreate(const char *szChannelName,
+			   const char *szKey,
+			   bool bGame = false,
+			   int iMaxPlayers = 0,
+			   bool bTournament = false,
+			   int iLobby = 0,
 			   CREATEGAMEINFO::GAMEKIND GameKind = CREATEGAMEINFO::RAGAME);
 	void DoFindPage();
 	HRESULT Locate(const char *szUser);
@@ -354,8 +357,7 @@ public:
 	bool OnEnteringChatChannel(const char *szChannelName, bool bICreatedChannel, int iLobby);
 	void OnExitingChatChannel();
 	bool ExitChatChannelForGameChannel();
-	bool OnEnteringGameChannel(const char *szChannelName, bool bICreatedChannel,
-				   const CREATEGAMEINFO &CreateGameInfo);
+	bool OnEnteringGameChannel(const char *szChannelName, bool bICreatedChannel, const CREATEGAMEINFO &CreateGameInfo);
 	bool OnEnteringGameSetup();
 	void OnFailedToEnterGameChannel();
 	void OnExitingGameChannel();
@@ -395,16 +397,16 @@ protected:
 
 protected:
 	//	Used by the general chat dialog.
-	IconListClass *pILChat;	    //	Main messages list.
+	IconListClass *pILChat; //	Main messages list.
 	IconListClass *pILChannels; //	Channels list.
-	IconListClass *pILUsers;    //	Users list.
+	IconListClass *pILUsers; //	Users list.
 
 	//	IconListClass*			pILDisc;			//	Main messages list.
 	//(pILChat is used.)
 	IconListClass *pILPlayers; //	Players list.
 
 	StaticButtonClass *pStaticUsers; //	Title for a users list. Used by main chat dialog only, not by game
-					 //setup.
+		//setup.
 
 	WOL_GAMETYPEINFO *GameTypeInfos;
 	unsigned int nGameTypeInfos;

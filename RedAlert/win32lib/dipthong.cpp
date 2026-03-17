@@ -41,8 +41,8 @@
 
 // #include	"function.h"
 // #include	"ems.h"
-#include "dipthong.h"
 #include <keyboard.h>
+#include "dipthong.h"
 
 /***************************************************************************
  * Fixup_Text -- Converts dipthonged foreign text into normal text.        *
@@ -110,18 +110,16 @@ void Fixup_Text(char const *source, char *dest) {
  *=========================================================================*/
 int Dip_Text(char const *source, char *dest) {
 	unsigned char first, // First character in pair.
-	    next;	     // Second character in pair.
-	int common,	     // Common character index.
-	    dipthong;	     // Dipthong character index.
+		next; // Second character in pair.
+	int common, // Common character index.
+		dipthong; // Dipthong character index.
 
 	unsigned long length = 0; // Length of output string
 
 	first = *source++;
 	next = *source;
 	while (first) {
-
 		if (first > 127) {
-
 			/*
 			**	Characters greater than 127 cannot be dipthonged.  They must
 			**	be preceeded with an extended character code.
@@ -131,14 +129,12 @@ int Dip_Text(char const *source, char *dest) {
 			length++;
 
 		} else {
-
 			/*
 			**	Normal characters can be dipthonged.  First see if there is a
 			**	match in the Common table.
 			*/
 			for (common = 0; common < 16; common++) {
 				if (Common[common] == first) {
-
 					/*
 					**	Common character found.  See if there is a matching
 					**	Dipthong character.
@@ -193,9 +189,9 @@ int Dip_Text(char const *source, char *dest) {
  *   10/06/1994 JLB : Handles source string in EMS.                        *
  *=========================================================================*/
 int UnDip_Text(char const *source, char *dest) {
-	int c;	    // Source input character.
+	int c; // Source input character.
 	int common; // Common character index.
-	int len;    // Length of output string.
+	int len; // Length of output string.
 	char const *src;
 
 	len = 0; // Presume no translation.
@@ -206,7 +202,6 @@ int UnDip_Text(char const *source, char *dest) {
 	src = source;
 	c = *src++;
 	while (c) {
-
 		/*
 		**	Convert a dipthong character into it's component
 		**	ASCII characters.
@@ -280,28 +275,28 @@ int UnDip_Text(char const *source, char *dest) {
 #define TXT_WINSOCK_CONNECTION_LOST 4567 + 20
 #define TXT_WINSOCK_RESOLVING_HOST_ADDRESS 4567 + 21
 
-static char InternetTxt[22][40] = {"Internet H2H",
-				   "Host Internet Game",
-				   "Join Internet Game",
-				   "Guest",
-				   "Login",
-				   "Login to Planet Westwood",
-				   "Planet Westwood Handle",
-				   "Planet Westwood Password",
-				   "Host Game",
-				   "Join Game",
-				   "Choose Type of Internet Game",
-				   "Join Internet Game",
-				   "Address of Host",
-				   "Connecting...",
-				   "Connection Error!",
-				   "Unable to connect to host!",
-				   "Connecting to host...",
-				   "Unable to resolve host address!",
-				   "Unable to accept client connection",
-				   "Unable to connect!",
-				   "Connection lost!",
-				   "Resolving address of host..."};
+static char InternetTxt[22][40] = { "Internet H2H",
+				    "Host Internet Game",
+				    "Join Internet Game",
+				    "Guest",
+				    "Login",
+				    "Login to Planet Westwood",
+				    "Planet Westwood Handle",
+				    "Planet Westwood Password",
+				    "Host Game",
+				    "Join Game",
+				    "Choose Type of Internet Game",
+				    "Join Internet Game",
+				    "Address of Host",
+				    "Connecting...",
+				    "Connection Error!",
+				    "Unable to connect to host!",
+				    "Connecting to host...",
+				    "Unable to resolve host address!",
+				    "Unable to accept client connection",
+				    "Unable to connect!",
+				    "Connection lost!",
+				    "Resolving address of host..." };
 
 char *Extract_String(void const *data, int string) {
 	unsigned short int const *ptr;

@@ -46,10 +46,10 @@ public:
 	/*
 	** Initialization
 	*/
-	virtual void One_Time(void);			// One-time initializations
-	virtual void Init(TheaterType = THEATER_NONE);	// Inits everything
-	virtual void Init_Clear(void);			// Clears all to known state
-	virtual void Init_IO(void);			// Inits button list
+	virtual void One_Time(void); // One-time initializations
+	virtual void Init(TheaterType = THEATER_NONE); // Inits everything
+	virtual void Init_Clear(void); // Clears all to known state
+	virtual void Init_IO(void); // Inits button list
 	virtual void Init_Theater(TheaterType theater); // Theater-specific inits
 
 	/*
@@ -93,7 +93,9 @@ public:
 	/*
 	**	Misc routines.
 	*/
-	virtual void *Shadow_Address(void) { return (ShadowPage); };
+	virtual void *Shadow_Address(void) {
+		return (ShadowPage);
+	};
 
 	/*
 	**	This points to the buttons that are used for input. All of the derived classes will

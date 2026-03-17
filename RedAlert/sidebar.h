@@ -48,12 +48,12 @@ public:
 	**	as enumerations since C++ cannot use "const" in this context.
 	*/
 	enum SideBarClassEnums {
-		BUTTON_ACTIVATOR = 100,	       // Button ID for the activator.
-		SIDE_X = 320 - 80,	       // The X position of sidebar upper left corner.
-		SIDE_Y = 7 + 70,	       // The Y position of sidebar upper left corner.
-		SIDE_WIDTH = SIDEBAR_WID,      // Width of the entire sidebar (in pixels).
-		SIDE_HEIGHT = 200 - (7 + 70),  // Height of the entire sidebar (in pixels).
-		TOP_HEIGHT = 13,	       // Height of top section (with repair/sell buttons).
+		BUTTON_ACTIVATOR = 100, // Button ID for the activator.
+		SIDE_X = 320 - 80, // The X position of sidebar upper left corner.
+		SIDE_Y = 7 + 70, // The Y position of sidebar upper left corner.
+		SIDE_WIDTH = SIDEBAR_WID, // Width of the entire sidebar (in pixels).
+		SIDE_HEIGHT = 200 - (7 + 70), // Height of the entire sidebar (in pixels).
+		TOP_HEIGHT = 13, // Height of top section (with repair/sell buttons).
 		COLUMN_ONE_X = (320 - 80) + 8, // Sidestrip upper left coordinates...
 		COLUMN_ONE_Y = int(SIDE_Y) + int(TOP_HEIGHT),
 		COLUMN_TWO_X = (320 - 80) + 8 + ((80 - 16) / 2) + 3,
@@ -61,42 +61,42 @@ public:
 
 // BGA: changes to all buttons
 #ifdef GERMAN
-		BUTTON_ONE_WIDTH = 20,	      // Button width.
-		BUTTON_TWO_WIDTH = 27,	      // Button width.
-		BUTTON_THREE_WIDTH = 26,      // Button width.
-		BUTTON_HEIGHT = 9,	      // Button height.
-		BUTTON_ONE_X = SIDE_X + 2,    // Left button X coordinate.
-		BUTTON_ONE_Y = SIDE_Y + 2,    // Left button Y coordinate.
-		BUTTON_TWO_X = SIDE_X + 24,   // Right button X coordinate.
-		BUTTON_TWO_Y = SIDE_Y + 2,    // Right button Y coordinate.
+		BUTTON_ONE_WIDTH = 20, // Button width.
+		BUTTON_TWO_WIDTH = 27, // Button width.
+		BUTTON_THREE_WIDTH = 26, // Button width.
+		BUTTON_HEIGHT = 9, // Button height.
+		BUTTON_ONE_X = SIDE_X + 2, // Left button X coordinate.
+		BUTTON_ONE_Y = SIDE_Y + 2, // Left button Y coordinate.
+		BUTTON_TWO_X = SIDE_X + 24, // Right button X coordinate.
+		BUTTON_TWO_Y = SIDE_Y + 2, // Right button Y coordinate.
 		BUTTON_THREE_X = SIDE_X + 53, // Right button X coordinate.
-		BUTTON_THREE_Y = SIDE_Y + 2,  // Right button Y coordinate.
+		BUTTON_THREE_Y = SIDE_Y + 2, // Right button Y coordinate.
 #endif
 
 #ifdef FRENCH
-		BUTTON_ONE_WIDTH = 20,	      // Button width.
-		BUTTON_TWO_WIDTH = 27,	      // Button width.
-		BUTTON_THREE_WIDTH = 26,      // Button width.
-		BUTTON_HEIGHT = 9,	      // Button height.
-		BUTTON_ONE_X = SIDE_X + 2,    // Left button X coordinate.
-		BUTTON_ONE_Y = SIDE_Y + 2,    // Left button Y coordinate.
-		BUTTON_TWO_X = SIDE_X + 24,   // Right button X coordinate.
-		BUTTON_TWO_Y = SIDE_Y + 2,    // Right button Y coordinate.
+		BUTTON_ONE_WIDTH = 20, // Button width.
+		BUTTON_TWO_WIDTH = 27, // Button width.
+		BUTTON_THREE_WIDTH = 26, // Button width.
+		BUTTON_HEIGHT = 9, // Button height.
+		BUTTON_ONE_X = SIDE_X + 2, // Left button X coordinate.
+		BUTTON_ONE_Y = SIDE_Y + 2, // Left button Y coordinate.
+		BUTTON_TWO_X = SIDE_X + 24, // Right button X coordinate.
+		BUTTON_TWO_Y = SIDE_Y + 2, // Right button Y coordinate.
 		BUTTON_THREE_X = SIDE_X + 53, // Right button X coordinate.
-		BUTTON_THREE_Y = SIDE_Y + 2,  // Right button Y coordinate.
+		BUTTON_THREE_Y = SIDE_Y + 2, // Right button Y coordinate.
 #endif
 
 #ifdef ENGLISH
-		BUTTON_ONE_WIDTH = 32,		   // Button width.
-		BUTTON_TWO_WIDTH = 20,		   // Button width.
-		BUTTON_THREE_WIDTH = 20,	   // Button width.
-		BUTTON_HEIGHT = 9,		   // Button height.
-		BUTTON_ONE_X = (int)SIDE_X + 2,	   // Left button X coordinate.
-		BUTTON_ONE_Y = (int)SIDE_Y + 2,	   // Left button Y coordinate.
-		BUTTON_TWO_X = (int)SIDE_X + 36,   // Right button X coordinate.
-		BUTTON_TWO_Y = (int)SIDE_Y + 2,	   // Right button Y coordinate.
+		BUTTON_ONE_WIDTH = 32, // Button width.
+		BUTTON_TWO_WIDTH = 20, // Button width.
+		BUTTON_THREE_WIDTH = 20, // Button width.
+		BUTTON_HEIGHT = 9, // Button height.
+		BUTTON_ONE_X = (int)SIDE_X + 2, // Left button X coordinate.
+		BUTTON_ONE_Y = (int)SIDE_Y + 2, // Left button Y coordinate.
+		BUTTON_TWO_X = (int)SIDE_X + 36, // Right button X coordinate.
+		BUTTON_TWO_Y = (int)SIDE_Y + 2, // Right button Y coordinate.
 		BUTTON_THREE_X = (int)SIDE_X + 58, // Right button X coordinate.
-		BUTTON_THREE_Y = (int)SIDE_Y + 2,  // Right button Y coordinate.
+		BUTTON_THREE_Y = (int)SIDE_Y + 2, // Right button Y coordinate.
 #endif
 
 		COLUMNS = 2 // Number of side strips on sidebar.
@@ -112,11 +112,11 @@ public:
 	/*
 	** Initialization
 	*/
-	virtual void One_Time(void);			// One-time inits
-	virtual void Init_Clear(void);			// Clears all to known state
-	virtual void Init_IO(void);			// Inits button list
+	virtual void One_Time(void); // One-time inits
+	virtual void Init_Clear(void); // Clears all to known state
+	virtual void Init_IO(void); // Inits button list
 	virtual void Init_Theater(TheaterType theater); // Theater-specific inits
-	void Reload_Sidebar(void);			// Loads house-specific sidebar art
+	void Reload_Sidebar(void); // Loads house-specific sidebar art
 
 	virtual void AI(KeyNumType &input, int x, int y);
 	virtual void Draw_It(bool complete);
@@ -151,7 +151,8 @@ public:
 		};
 
 	public:
-		StripClass(void) {}
+		StripClass(void) {
+		}
 		StripClass(InitClass const &);
 		StripClass(NoInitClass const &) {};
 
@@ -187,10 +188,10 @@ public:
 			BUTTON_DOWN = 210,
 			BUTTON_SELECT = 220,
 			MAX_BUILDABLES = 75, // Maximum number of object types in sidebar.
-			OBJECT_HEIGHT = 24,  // Pixel height of each buildable object.
-			OBJECT_WIDTH = 32,   // Pixel width of each buildable object.
-			STRIP_WIDTH = 35,    // Width of strip (not counting border lines).
-			MAX_VISIBLE = 4,     // Number of object slots visible at any one time.
+			OBJECT_HEIGHT = 24, // Pixel height of each buildable object.
+			OBJECT_WIDTH = 32, // Pixel width of each buildable object.
+			STRIP_WIDTH = 35, // Width of strip (not counting border lines).
+			MAX_VISIBLE = 4, // Number of object slots visible at any one time.
 #ifdef WIN32
 			SCROLL_RATE = 12, // The pixel jump while scrolling (larger is faster).
 #else
@@ -202,14 +203,14 @@ public:
 #else
 			UP_Y_OFFSET = int(MAX_VISIBLE) * int(OBJECT_HEIGHT) + 2,
 #endif
-			DOWN_X_OFFSET = 18,	     // Scroll down arrow coordinates.
+			DOWN_X_OFFSET = 18, // Scroll down arrow coordinates.
 			DOWN_Y_OFFSET = UP_Y_OFFSET, // BGint(MAX_VISIBLE)*int(OBJECT_HEIGHT)+1,
-			SBUTTON_WIDTH = 16,	     // Width of the mini-scroll button.
-			SBUTTON_HEIGHT = 12,	     // Height of the mini-scroll button.
-			LEFT_EDGE_OFFSET = 2,	     // Offset from left edge for building shapes.
-			TEXT_X_OFFSET = 18,	     // X offset to print "ready" text.
-			TEXT_Y_OFFSET = 15,	     // Y offset to print "ready" text.
-			TEXT_COLOR = 255	     // Color to use for the "Ready" text.
+			SBUTTON_WIDTH = 16, // Width of the mini-scroll button.
+			SBUTTON_HEIGHT = 12, // Height of the mini-scroll button.
+			LEFT_EDGE_OFFSET = 2, // Offset from left edge for building shapes.
+			TEXT_X_OFFSET = 18, // X offset to print "ready" text.
+			TEXT_Y_OFFSET = 15, // Y offset to print "ready" text.
+			TEXT_COLOR = 255 // Color to use for the "Ready" text.
 		};
 
 		/*
@@ -307,7 +308,7 @@ public:
 		typedef struct BuildType {
 			int BuildableID;
 			RTTIType BuildableType;
-			int Factory;		  // Production manager.
+			int Factory; // Production manager.
 			bool BuildableViaCapture; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
 		} BuildType;
 		BuildType Buildables[MAX_BUILDABLES];
@@ -363,9 +364,11 @@ public:
 	public:
 		// #ifdef WIN32
 		SBGadgetClass(void)
-		    : GadgetClass((int)((int)SIDE_X + 8) * RESFACTOR, (int)SIDE_Y * RESFACTOR,
-				  (int)((int)SIDE_WIDTH - 1) * RESFACTOR - 1, (int)((int)SIDE_HEIGHT - 1) * RESFACTOR,
-				  LEFTUP) {};
+			: GadgetClass((int)((int)SIDE_X + 8) * RESFACTOR,
+				      (int)SIDE_Y * RESFACTOR,
+				      (int)((int)SIDE_WIDTH - 1) * RESFACTOR - 1,
+				      (int)((int)SIDE_HEIGHT - 1) * RESFACTOR,
+				      LEFTUP) {};
 		// #else
 		//				SBGadgetClass(void) : GadgetClass((int)SIDE_X+8, (int)SIDE_Y,
 		//(int)SIDE_WIDTH-1, (int)SIDE_HEIGHT-1, LEFTUP) {}; #endif

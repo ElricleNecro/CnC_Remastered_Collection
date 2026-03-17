@@ -60,14 +60,30 @@ public:
 	// These conveniance functions allow us to add a field directly to the list without
 	// having to worry about newing one first.
 	//
-	void Add_Field(char *field, char data) { Add_Field(new FieldClass(field, data)); };
-	void Add_Field(char *field, unsigned char data) { Add_Field(new FieldClass(field, data)); };
-	void Add_Field(char *field, short data) { Add_Field(new FieldClass(field, data)); };
-	void Add_Field(char *field, unsigned short data) { Add_Field(new FieldClass(field, data)); };
-	void Add_Field(char *field, long data) { Add_Field(new FieldClass(field, data)); };
-	void Add_Field(char *field, unsigned long data) { Add_Field(new FieldClass(field, data)); };
-	void Add_Field(char *field, char *data) { Add_Field(new FieldClass(field, data)); };
-	void Add_Field(char *field, void *data, int length) { Add_Field(new FieldClass(field, data, length)); };
+	void Add_Field(char *field, char data) {
+		Add_Field(new FieldClass(field, data));
+	};
+	void Add_Field(char *field, unsigned char data) {
+		Add_Field(new FieldClass(field, data));
+	};
+	void Add_Field(char *field, short data) {
+		Add_Field(new FieldClass(field, data));
+	};
+	void Add_Field(char *field, unsigned short data) {
+		Add_Field(new FieldClass(field, data));
+	};
+	void Add_Field(char *field, long data) {
+		Add_Field(new FieldClass(field, data));
+	};
+	void Add_Field(char *field, unsigned long data) {
+		Add_Field(new FieldClass(field, data));
+	};
+	void Add_Field(char *field, char *data) {
+		Add_Field(new FieldClass(field, data));
+	};
+	void Add_Field(char *field, void *data, int length) {
+		Add_Field(new FieldClass(field, data, length));
+	};
 
 	//
 	// These functions search for a field of a given name in the list and

@@ -61,17 +61,17 @@
  *   INIClass::~INIClass -- Destructor for INI handler.                                        *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <ctype.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "ini.h"
 #include "b64pipe.h"
 #include "b64straw.h"
 #include "readline.h"
 #include "xpipe.h"
 #include "xstraw.h"
-#include <ctype.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #ifdef FIXIT_FAST_LOAD
 #include "cstraw.h"
@@ -95,7 +95,9 @@
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-INIClass::~INIClass(void) { Clear(); }
+INIClass::~INIClass(void) {
+	Clear();
+}
 
 /***********************************************************************************************
  * INIClass::Clear -- Clears out a section (or all sections) of the INI data.                  *
@@ -163,7 +165,9 @@ bool INIClass::Clear(char const *section, char const *entry) {
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Load(FileClass &file) { return (Load(FileStraw(file))); }
+bool INIClass::Load(FileClass &file) {
+	return (Load(FileStraw(file)));
+}
 
 /***********************************************************************************************
  * INIClass::Load -- Load the INI data from the data stream (straw).                           *
@@ -208,7 +212,6 @@ bool INIClass::Load(Straw &file)
 	**	Process a section. The buffer is prefilled with the section name line.
 	*/
 	while (!end_of_file) {
-
 		buffer[0] = ' ';
 		char *ptr = strchr(buffer, ']');
 		if (ptr)
@@ -224,7 +227,6 @@ bool INIClass::Load(Straw &file)
 		**	Read in the entries of this section.
 		*/
 		while (!end_of_file) {
-
 			/*
 			**	If this line is the start of another section, then bail out
 			**	of the entry loop and let the outer section loop take
@@ -302,7 +304,9 @@ bool INIClass::Load(Straw &file)
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int INIClass::Save(FileClass &file) const { return (Save(FilePipe(file))); }
+int INIClass::Save(FileClass &file) const {
+	return (Save(FilePipe(file)));
+}
 
 /***********************************************************************************************
  * INIClass::Save -- Saves the INI data to a pipe stream.                                      *
@@ -323,7 +327,6 @@ int INIClass::Save(Pipe &pipe) const {
 
 	INISection *secptr = SectionList.First();
 	while (secptr && secptr->Is_Valid()) {
-
 		/*
 		**	Output the section identifier.
 		*/
@@ -378,7 +381,6 @@ int INIClass::Save(Pipe &pipe) const {
  *=============================================================================================*/
 INIClass::INISection *INIClass::Find_Section(char const *section) const {
 	if (section != NULL) {
-
 		long crc = CRCEngine()(section, strlen(section));
 
 		if (SectionIndex.Is_Present(crc)) {
@@ -404,7 +406,9 @@ INIClass::INISection *INIClass::Find_Section(char const *section) const {
  *   07/02/1996 JLB : Created.                                                                 *
  *   11/02/1996 JLB : Uses index manager.                                                      *
  *=============================================================================================*/
-int INIClass::Section_Count(void) const { return (SectionIndex.Count()); }
+int INIClass::Section_Count(void) const {
+	return (SectionIndex.Count());
+}
 
 /***********************************************************************************************
  * INIClass::Entry_Count -- Fetches the number of entries in a specified section.              *
@@ -614,7 +618,6 @@ bool INIClass::Put_TextBlock(char const *section, char const *text) {
 
 	int index = 1;
 	while (text != NULL && *text != NULL) {
-
 		char buffer[128];
 
 		strncpy(buffer, text, 75);
@@ -689,7 +692,6 @@ int INIClass::Get_TextBlock(char const *section, char *buffer, int len) const {
 	int elen = Entry_Count(section);
 	int total = 0;
 	for (int index = 0; index < elen; index++) {
-
 		/*
 		**	Add spacers between lines of fetched text.
 		*/
@@ -788,7 +790,6 @@ int INIClass::Get_Int(char const *section, char const *entry, int defvalue) cons
 
 	INIEntry *entryptr = Find_Entry(section, entry);
 	if (entryptr && entryptr->Value != NULL) {
-
 		if (*entryptr->Value == '$') {
 			sscanf(entryptr->Value, "$%x", &defvalue);
 		} else {

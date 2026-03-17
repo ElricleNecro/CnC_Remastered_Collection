@@ -44,7 +44,7 @@ bool Debug_Icon = false;
 bool Debug_Flag = false;
 bool Debug_Lose = false;
 bool Debug_Win = false;
-bool Debug_Map = false;	     // true = map editor mode
+bool Debug_Map = false; // true = map editor mode
 bool Debug_Passable = false; // true = show passable/impassable terrain
 bool Debug_Unshroud = false; // true = hide the shroud
 bool Debug_Threat = false;
@@ -52,11 +52,11 @@ bool Debug_Find_Path = false;
 bool Debug_Check_Map = false; // true = validate the map each frame
 bool Debug_Playtest = false;
 
-bool Debug_Heap_Dump = false;	    // true = print the Heap Dump
-bool Debug_Smart_Print = false;	    // true = print everything that calls Smart_Printf
+bool Debug_Heap_Dump = false; // true = print the Heap Dump
+bool Debug_Smart_Print = false; // true = print everything that calls Smart_Printf
 bool Debug_Trap_Check_Heap = false; // true = check the Heap
-bool Debug_Modem_Dump = false;	    // true = print the Modem Stuff
-bool Debug_Print_Events = false;    // true = print event & packet processing
+bool Debug_Modem_Dump = false; // true = print the Modem Stuff
+bool Debug_Print_Events = false; // true = print event & packet processing
 bool Debug_Force_Crash = false;
 
 TFixedIHeapClass<AircraftClass> Aircraft;
@@ -98,34 +98,61 @@ TFixedIHeapClass<SmudgeTypeClass> SmudgeTypes;
 **	game objects, then a CCPtr can be instantiated for it.
 */
 #if (0) // Moved to runtime initialization. ST - 5/20/2019
-template <> FixedIHeapClass *CCPtr<AircraftClass>::Heap = &Aircraft;
-template <> FixedIHeapClass *CCPtr<AnimClass>::Heap = &Anims;
-template <> FixedIHeapClass *CCPtr<BuildingClass>::Heap = &Buildings;
-template <> FixedIHeapClass *CCPtr<BulletClass>::Heap = &Bullets;
-template <> FixedIHeapClass *CCPtr<FactoryClass>::Heap = &Factories;
-template <> FixedIHeapClass *CCPtr<HouseClass>::Heap = &Houses;
-template <> FixedIHeapClass *CCPtr<InfantryClass>::Heap = &Infantry;
-template <> FixedIHeapClass *CCPtr<OverlayClass>::Heap = &Overlays;
-template <> FixedIHeapClass *CCPtr<SmudgeClass>::Heap = &Smudges;
-template <> FixedIHeapClass *CCPtr<TeamClass>::Heap = &Teams;
-template <> FixedIHeapClass *CCPtr<TeamTypeClass>::Heap = &TeamTypes;
-template <> FixedIHeapClass *CCPtr<TemplateClass>::Heap = &Templates;
-template <> FixedIHeapClass *CCPtr<TerrainClass>::Heap = &Terrains;
-template <> FixedIHeapClass *CCPtr<TriggerClass>::Heap = &Triggers;
-template <> FixedIHeapClass *CCPtr<TriggerTypeClass>::Heap = &TriggerTypes;
+template <>
+FixedIHeapClass *CCPtr<AircraftClass>::Heap = &Aircraft;
+template <>
+FixedIHeapClass *CCPtr<AnimClass>::Heap = &Anims;
+template <>
+FixedIHeapClass *CCPtr<BuildingClass>::Heap = &Buildings;
+template <>
+FixedIHeapClass *CCPtr<BulletClass>::Heap = &Bullets;
+template <>
+FixedIHeapClass *CCPtr<FactoryClass>::Heap = &Factories;
+template <>
+FixedIHeapClass *CCPtr<HouseClass>::Heap = &Houses;
+template <>
+FixedIHeapClass *CCPtr<InfantryClass>::Heap = &Infantry;
+template <>
+FixedIHeapClass *CCPtr<OverlayClass>::Heap = &Overlays;
+template <>
+FixedIHeapClass *CCPtr<SmudgeClass>::Heap = &Smudges;
+template <>
+FixedIHeapClass *CCPtr<TeamClass>::Heap = &Teams;
+template <>
+FixedIHeapClass *CCPtr<TeamTypeClass>::Heap = &TeamTypes;
+template <>
+FixedIHeapClass *CCPtr<TemplateClass>::Heap = &Templates;
+template <>
+FixedIHeapClass *CCPtr<TerrainClass>::Heap = &Terrains;
+template <>
+FixedIHeapClass *CCPtr<TriggerClass>::Heap = &Triggers;
+template <>
+FixedIHeapClass *CCPtr<TriggerTypeClass>::Heap = &TriggerTypes;
 
-template <> FixedIHeapClass *CCPtr<HouseTypeClass>::Heap = &HouseTypes;
-template <> FixedIHeapClass *CCPtr<BuildingTypeClass>::Heap = &BuildingTypes;
-template <> FixedIHeapClass *CCPtr<AircraftTypeClass>::Heap = &AircraftTypes;
-template <> FixedIHeapClass *CCPtr<InfantryTypeClass>::Heap = &InfantryTypes;
-template <> FixedIHeapClass *CCPtr<BulletTypeClass>::Heap = &BulletTypes;
-template <> FixedIHeapClass *CCPtr<AnimTypeClass>::Heap = &AnimTypes;
-template <> FixedIHeapClass *CCPtr<UnitTypeClass>::Heap = &UnitTypes;
-template <> FixedIHeapClass *CCPtr<VesselTypeClass>::Heap = &VesselTypes;
-template <> FixedIHeapClass *CCPtr<TemplateTypeClass>::Heap = &TemplateTypes;
-template <> FixedIHeapClass *CCPtr<TerrainTypeClass>::Heap = &TerrainTypes;
-template <> FixedIHeapClass *CCPtr<OverlayTypeClass>::Heap = &OverlayTypes;
-template <> FixedIHeapClass *CCPtr<SmudgeTypeClass>::Heap = &SmudgeTypes;
+template <>
+FixedIHeapClass *CCPtr<HouseTypeClass>::Heap = &HouseTypes;
+template <>
+FixedIHeapClass *CCPtr<BuildingTypeClass>::Heap = &BuildingTypes;
+template <>
+FixedIHeapClass *CCPtr<AircraftTypeClass>::Heap = &AircraftTypes;
+template <>
+FixedIHeapClass *CCPtr<InfantryTypeClass>::Heap = &InfantryTypes;
+template <>
+FixedIHeapClass *CCPtr<BulletTypeClass>::Heap = &BulletTypes;
+template <>
+FixedIHeapClass *CCPtr<AnimTypeClass>::Heap = &AnimTypes;
+template <>
+FixedIHeapClass *CCPtr<UnitTypeClass>::Heap = &UnitTypes;
+template <>
+FixedIHeapClass *CCPtr<VesselTypeClass>::Heap = &VesselTypes;
+template <>
+FixedIHeapClass *CCPtr<TemplateTypeClass>::Heap = &TemplateTypes;
+template <>
+FixedIHeapClass *CCPtr<TerrainTypeClass>::Heap = &TerrainTypes;
+template <>
+FixedIHeapClass *CCPtr<OverlayTypeClass>::Heap = &OverlayTypes;
+template <>
+FixedIHeapClass *CCPtr<SmudgeTypeClass>::Heap = &SmudgeTypes;
 #endif
 
 /* These variables are used to keep track of the slowest speed of a team */
@@ -152,7 +179,7 @@ bool NewUnitsEnabled = false;
 bool SecretUnitsEnabled = false;
 int MTankDistance = 15;
 bool OverrideNewUnitsEnabled = false; // ST - 12/13/2019 12:21PM
-#ifdef FIXIT_CARRIER		      //	checked - ajw 9/28/98
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
 int CarrierLaunchDelay = 60;
 #endif
 #endif
@@ -168,9 +195,9 @@ fixed QuakeUnitDamage = 0x300;
 fixed QuakeBuildingDamage = 0x300;
 int QuakeInfantryDamage = 25;
 int QuakeDelay;
-fixed ChronoTankDuration = 0x300;  // chrono override for chrono tanks
-#ifdef FIXIT_ENGINEER		   //	checked - ajw 9/28/98
-fixed EngineerDamage = 0x55;	   // Amount of damage an engineer does
+fixed ChronoTankDuration = 0x300; // chrono override for chrono tanks
+#ifdef FIXIT_ENGINEER //	checked - ajw 9/28/98
+fixed EngineerDamage = 0x55; // Amount of damage an engineer does
 fixed EngineerCaptureLevel = 0x40; // Building damage level before engineer can capture
 #endif
 #endif
@@ -290,10 +317,10 @@ SelectedObjectsType CurrentObject;
 */
 // VQAConfig AnimControl;
 
-int PreserveVQAScreen;	     // Used for screen mode transition control.
+int PreserveVQAScreen; // Used for screen mode transition control.
 bool BreakoutAllowed = true; // "true" if aborting of movies is allowed.
-bool Brokeout;		     // Was the movie broken out of?
-bool SlowPalette = false;    // Slow palette flag set?
+bool Brokeout; // Was the movie broken out of?
+bool SlowPalette = false; // Slow palette flag set?
 
 /***************************************************************************
 **	These are the movie names to use for mission briefing, winning, and losing
@@ -363,9 +390,9 @@ Buffer *TheaterBuffer;
 **	histogram of game performance.
 */
 long SpareTicks;
-long PathCount;	     // Number of findpaths called.
-long CellCount;	     // Number of cells redrawn.
-long TargetScan;     // Number of target scans.
+long PathCount; // Number of findpaths called.
+long CellCount; // Number of cells redrawn.
+long TargetScan; // Number of target scans.
 long SidebarRedraws; // Number of sidebar redraws.
 
 /***************************************************************************
@@ -478,16 +505,16 @@ CELL CurrentCell = 0;
 **	yet.
 */
 void const *Metal12FontPtr; // Font for use on in-game tabs in hires
-void const *MapFontPtr;	    // Standard very small font.
-void const *TypeFontPtr;    // Teletype font for mission briefings.
-void const *Font3Ptr;	    // Standard very small font.
-void const *Font6Ptr;	    // Standard small font.
-void const *EditorFont;	    // Font used for scenario editor.
-void const *Font8Ptr;	    // 8 point proportional.
-void const *FontLEDPtr;	    // LED fixed point font.
-void const *VCRFontPtr;	    // VCR font pointer.
-void const *ScoreFontPtr;   // font for score & map selection screens
-void const *GradFont6Ptr;   // gradient 6 point font pointer.
+void const *MapFontPtr; // Standard very small font.
+void const *TypeFontPtr; // Teletype font for mission briefings.
+void const *Font3Ptr; // Standard very small font.
+void const *Font6Ptr; // Standard small font.
+void const *EditorFont; // Font used for scenario editor.
+void const *Font8Ptr; // 8 point proportional.
+void const *FontLEDPtr; // LED fixed point font.
+void const *VCRFontPtr; // VCR font pointer.
+void const *ScoreFontPtr; // font for score & map selection screens
+void const *GradFont6Ptr; // gradient 6 point font pointer.
 
 /***************************************************************************
 **	This is the house that the human player is currently playing.
@@ -570,7 +597,7 @@ int NewMaxAheadFrame2;
 bool bAftermathMultiplayer; //	Is multiplayer game being played with Aftermath rules?
 #else
 unsigned long PlayingAgainstVersion; // Negotiated version number
-bool Version107InMix;		     // Is there a v1.07 in the game
+bool Version107InMix; // Is there a v1.07 in the game
 #endif
 
 /***************************************************************************
@@ -582,7 +609,7 @@ NullModemClass NullModem(16, // number of send entries
 			 16, // number of receive entries
 			 (MAX_SERIAL_PACKET_SIZE / sizeof(EventClass)) * sizeof(EventClass) + sizeof(CommHeaderType),
 			 0x1234); // Magic number must have each digit unique
-				  // and different from the queue magic number
+	// and different from the queue magic number
 #endif
 
 /***************************************************************************
@@ -601,9 +628,9 @@ NullModemClass NullModem(16, // number of send entries
 
 IPXManagerClass Ipx(MAX(sizeof(GlobalPacketType), sizeof(RemoteFileTransferType)), // size of Global Channel packets
 		    ((546 - sizeof(CommHeaderType)) / sizeof(EventClass)) * sizeof(EventClass),
-		    160,				       // # entries in Global Queue
-		    32,					       // # entries in Private Queues
-		    VIRGIN_SOCKET,			       // Socket ID #
+		    160, // # entries in Global Queue
+		    32, // # entries in Private Queues
+		    VIRGIN_SOCKET, // Socket ID #
 		    IPXGlobalConnClass::COMMAND_AND_CONQUER0); // Product ID #
 
 #if (TEN)
@@ -641,39 +668,39 @@ int Seed = 0;
 int CustomSeed = 0;
 
 int WindowList[][9] = {
-    /* xbyte, ypixel, bytewid, pixelht, cursor color, bkgd color,	cursor x, cursor y */
+	/* xbyte, ypixel, bytewid, pixelht, cursor color, bkgd color,	cursor x, cursor y */
 
-    /* do not change the first 2 entries!! they are necc. to the system */
+	/* do not change the first 2 entries!! they are necc. to the system */
 
-    {0, 0, 40 * 8 * RESFACTOR, 200 * RESFACTOR, WHITE, BLACK, 0, 0}, /* screen window */
-    {1 * 8, 75, 38 * 8, 100, WHITE, BLACK, 0, 0},		     /* DOS Error window */
+	{ 0, 0, 40 * 8 * RESFACTOR, 200 * RESFACTOR, WHITE, BLACK, 0, 0 }, /* screen window */
+	{ 1 * 8, 75, 38 * 8, 100, WHITE, BLACK, 0, 0 }, /* DOS Error window */
 
-    // Tactical map.
-    {0, 0, 40 * 8 * RESFACTOR, 200 * RESFACTOR, WHITE, LTGREY, 0, 0},
+	// Tactical map.
+	{ 0, 0, 40 * 8 * RESFACTOR, 200 * RESFACTOR, WHITE, LTGREY, 0, 0 },
 
-    // Initial menu window.
-    {12 * 8, 199 - 42, 16 * 8, 42, LTGREY, DKGREY, 0, 0},
+	// Initial menu window.
+	{ 12 * 8, 199 - 42, 16 * 8, 42, LTGREY, DKGREY, 0, 0 },
 
-    // Sidebar clipping window.
-    {0, 0, 0, 0, 0, 0, 0, 0},
+	// Sidebar clipping window.
+	{ 0, 0, 0, 0, 0, 0, 0, 0 },
 
-    // Scenario editor window.
-    {5 * 8, 30, 30 * 8, 140, 0, 0, 0, 0},
+	// Scenario editor window.
+	{ 5 * 8, 30, 30 * 8, 140, 0, 0, 0, 0 },
 
-    // Partial object draw sub-window.
-    {0, 0, 0, 0, WHITE, BLACK, 0, 0},
+	// Partial object draw sub-window.
+	{ 0, 0, 0, 0, WHITE, BLACK, 0, 0 },
 
-    // Custom window.
-    {0, 0, 0, 0, 0, 0, 0, 0},
+	// Custom window.
+	{ 0, 0, 0, 0, 0, 0, 0, 0 },
 
-    // Virtual window for external rendering. ST - 1/15/2019 3:02PM
-    {0, 0, 0, 0, 0, 0, 0, 0}
+	// Virtual window for external rendering. ST - 1/15/2019 3:02PM
+	{ 0, 0, 0, 0, 0, 0, 0, 0 }
 
 };
 
 /* X,Y,Item Width,Items High,Selected,Norm Color,Sel Color,zero 	*/
 int MenuList[][8] = {
-    {1, 3, 12, 3, 0, WHITE, PINK, 0},
+	{ 1, 3, 12, 3, 0, WHITE, PINK, 0 },
 };
 
 #ifdef WIN32
@@ -712,7 +739,7 @@ int MouseInstalled;
 // Variables for helping track how much time goes bye in routines
 //
 int LogLevel = 0;
-unsigned long LogLevelTime[MAX_LOG_LEVEL] = {0};
+unsigned long LogLevelTime[MAX_LOG_LEVEL] = { 0 };
 unsigned long LogLastTime = 0;
 bool LogDump_Print = false; // true = print the Log time Stuff
 

@@ -36,9 +36,9 @@
  *   Benchmarks -- Display the performance tracking benchmarks.                                *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <stdarg.h>
 #include "function.h"
 #include "vortex.h"
-#include <stdarg.h>
 
 #ifdef CHEAT_KEYS
 
@@ -74,9 +74,7 @@ void Debug_Key(unsigned input) {
 	**	Processing of normal keystrokes.
 	*/
 	if (Debug_Flag) {
-
 		switch (input) {
-
 		case KN_BACKSPACE:
 
 			if (ChronalVortex.Is_Active()) {
@@ -100,7 +98,9 @@ void Debug_Key(unsigned input) {
 			** time to create a screen shot using the PCX code (if it works)
 			*/
 			if (!Debug_MotionCapture) {
-				GraphicBufferClass temp_page(SeenBuff.Get_Width(), SeenBuff.Get_Height(), NULL,
+				GraphicBufferClass temp_page(SeenBuff.Get_Width(),
+							     SeenBuff.Get_Height(),
+							     NULL,
 							     SeenBuff.Get_Width() * SeenBuff.Get_Height());
 				CDFileClass file;
 				char filename[30];
@@ -243,8 +243,7 @@ void Debug_Key(unsigned input) {
 				Map.PendingObject = &CurrentObject[0]->Class_Of();
 				if (Map.PendingObject) {
 					Map.PendingHouse = CurrentObject[0]->Owner();
-					Map.PendingObjectPtr =
-					    Map.PendingObject->Create_One_Of(HouseClass::As_Pointer(Map.PendingHouse));
+					Map.PendingObjectPtr = Map.PendingObject->Create_One_Of(HouseClass::As_Pointer(Map.PendingHouse));
 					if (Map.PendingObjectPtr) {
 						Map.Set_Cursor_Pos();
 						Map.Set_Cursor_Shape(Map.PendingObject->Occupy_List());
@@ -532,7 +531,9 @@ void Self_Regulate(void) {
 					     "Largest:  %10ld \r"
 					     "Ttl Free: %10ld \r"
 					     "Frag:     %10ld \r",
-					     Heap_Size(MEM_NORMAL), Ram_Free(MEM_NORMAL), Total_Ram_Free(MEM_NORMAL),
+					     Heap_Size(MEM_NORMAL),
+					     Ram_Free(MEM_NORMAL),
+					     Total_Ram_Free(MEM_NORMAL),
 					     Total_Ram_Free(MEM_NORMAL) - Ram_Free(MEM_NORMAL));
 #endif
 				break;

@@ -33,11 +33,11 @@
  *   Remove_Timer_System -- Removes the timer system.                      *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "timer.H"
 #include <mmsystem.h>
 #include <profile.h>
 #include <stdio.h>
 #include <wwstd.h>
+#include "timer.H"
 
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// Defines /////////////////////////////////////
@@ -71,7 +71,7 @@ CountDownTimerClass CountDown(BT_SYSTEM, 0);
 void CALLBACK Timer_Callback(UINT event_id, UINT res1, DWORD user, DWORD res2, DWORD res3);
 
 HANDLE TimerThreadHandle = 0; // Handle of timer thread
-int InTimerCallback = 0;      // Flag to say if we are in a timer callback
+int InTimerCallback = 0; // Flag to say if we are in a timer callback
 
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// Code ////////////////////////////////////////
@@ -143,7 +143,6 @@ WinTimerClass::WinTimerClass(UINT freq, BOOL partial) {
  *   10/5/95 3:47PM : ST Created.                                          *
  *=========================================================================*/
 WinTimerClass::~WinTimerClass(void) {
-
 	if (TimerHandle) {
 		timeKillEvent(TimerHandle);
 		TimerHandle = 0; // ST - 2/13/2019 5:12PM
@@ -257,7 +256,9 @@ void WinTimerClass::Update_Tick_Count(void) {
  *    10/5/95 4:02PM ST : Created                                                              *
  *=============================================================================================*/
 
-unsigned WinTimerClass::Get_System_Tick_Count(void) { return (SysTicks); }
+unsigned WinTimerClass::Get_System_Tick_Count(void) {
+	return (SysTicks);
+}
 
 /***********************************************************************************************
  * WinTimerClass::Get_User_Tick_Count -- returns the user tick count                           *
@@ -272,4 +273,6 @@ unsigned WinTimerClass::Get_System_Tick_Count(void) { return (SysTicks); }
  *    10/5/95 4:02PM ST : Created                                                              *
  *=============================================================================================*/
 
-unsigned WinTimerClass::Get_User_Tick_Count(void) { return (UserTicks); }
+unsigned WinTimerClass::Get_User_Tick_Count(void) {
+	return (UserTicks);
+}

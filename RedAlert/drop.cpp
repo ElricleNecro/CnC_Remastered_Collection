@@ -35,11 +35,9 @@
 #include "drop.h"
 #include "function.h"
 
-DropListClass::DropListClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w, int h,
-			     void const *up, void const *down)
-    : EditClass(id, text, max_len, flags, x, y, w, 9 * RESFACTOR, ALPHANUMERIC), IsDropped(false), ListHeight(h),
-      DropButton(0, down, x + w, y),
-      List(0, x, y + Get_Build_Frame_Height(down), w + Get_Build_Frame_Width(down), h, flags, up, down) {
+DropListClass::DropListClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w, int h, void const *up, void const *down)
+	: EditClass(id, text, max_len, flags, x, y, w, 9 * RESFACTOR, ALPHANUMERIC), IsDropped(false), ListHeight(h), DropButton(0, down, x + w, y),
+	  List(0, x, y + Get_Build_Frame_Height(down), w + Get_Build_Frame_Width(down), h, flags, up, down) {
 	Fancy_Text_Print("", 0, 0, 0, 0, flags);
 	EditClass::Height = FontHeight + 1;
 	List.Make_Peer(*this);
@@ -82,9 +80,13 @@ int DropListClass::Add_Item(char const *text) {
 	return (List.Add_Item(text));
 }
 
-char const *DropListClass::Current_Item(void) { return (List.Current_Item()); }
+char const *DropListClass::Current_Item(void) {
+	return (List.Current_Item());
+}
 
-int DropListClass::Current_Index(void) { return (List.Current_Index()); }
+int DropListClass::Current_Index(void) {
+	return (List.Current_Index());
+}
 
 void DropListClass::Set_Selected_Index(int index) {
 	if (index < List.Count()) {
@@ -95,7 +97,9 @@ void DropListClass::Set_Selected_Index(int index) {
 	}
 }
 
-void DropListClass::Clear_Focus(void) { Collapse(); }
+void DropListClass::Clear_Focus(void) {
+	Collapse();
+}
 
 void DropListClass::Peer_To_Peer(unsigned flags, KeyNumType &key, ControlClass &whom) {
 	if (&whom == &DropButton) {
@@ -149,8 +153,7 @@ DropListClass &DropListClass::operator=(DropListClass const &list) {
 }
 
 DropListClass::DropListClass(DropListClass const &list)
-    : EditClass(list), IsDropped(list.IsDropped), ListHeight(list.ListHeight), DropButton(list.DropButton),
-      List(list.List) {
+	: EditClass(list), IsDropped(list.IsDropped), ListHeight(list.ListHeight), DropButton(list.DropButton), List(list.List) {
 	List.Make_Peer(*this);
 	DropButton.Make_Peer(*this);
 }

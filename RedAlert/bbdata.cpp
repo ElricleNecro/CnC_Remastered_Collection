@@ -59,12 +59,11 @@
  *   07/17/1996 JLB : Uses correct default values.                                             *
  *=============================================================================================*/
 BulletTypeClass::BulletTypeClass(char const *name)
-    : ObjectTypeClass(RTTI_BULLETTYPE, BulletTypes.ID(this), true, true, false, false, true, true, false, TXT_NONE,
-		      name),
-      IsHigh(false), IsShadow(true), IsArcing(false), IsDropping(false), IsInvisible(false), IsProximityArmed(false),
-      IsFlameEquipped(false), IsFueled(false), IsFaceless(true), IsInaccurate(false), IsTranslucent(false),
-      IsAntiAircraft(false), IsAntiGround(true), IsAntiSub(false), IsDegenerate(false), IsSubSurface(false),
-      IsParachuted(false), IsGigundo(false), Type(BulletType(ID)), ROT(0), Arming(0), Tumble(0) {}
+	: ObjectTypeClass(RTTI_BULLETTYPE, BulletTypes.ID(this), true, true, false, false, true, true, false, TXT_NONE, name), IsHigh(false),
+	  IsShadow(true), IsArcing(false), IsDropping(false), IsInvisible(false), IsProximityArmed(false), IsFlameEquipped(false), IsFueled(false),
+	  IsFaceless(true), IsInaccurate(false), IsTranslucent(false), IsAntiAircraft(false), IsAntiGround(true), IsAntiSub(false),
+	  IsDegenerate(false), IsSubSurface(false), IsParachuted(false), IsGigundo(false), Type(BulletType(ID)), ROT(0), Arming(0), Tumble(0) {
+}
 
 /***********************************************************************************************
  * BulletTypeClass::operator new -- Allocates a bullet type object from the special heap.      *
@@ -82,7 +81,9 @@ BulletTypeClass::BulletTypeClass(char const *name)
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void *BulletTypeClass::operator new(size_t) { return (BulletTypes.Alloc()); }
+void *BulletTypeClass::operator new(size_t) {
+	return (BulletTypes.Alloc());
+}
 
 /***********************************************************************************************
  * BulletTypeClass::operator delete -- Deletes a bullet type object from the special heap.     *
@@ -100,7 +101,9 @@ void *BulletTypeClass::operator new(size_t) { return (BulletTypes.Alloc()); }
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BulletTypeClass::operator delete(void *ptr) { BulletTypes.Free((BulletTypeClass *)ptr); }
+void BulletTypeClass::operator delete(void *ptr) {
+	BulletTypes.Free((BulletTypeClass *)ptr);
+}
 
 /***********************************************************************************************
  * BulletTypeClass::Init_Heap -- Initialize the heap objects for the bullet type.              *
@@ -122,24 +125,24 @@ void BulletTypeClass::Init_Heap(void) {
 	**	are specified in the BulletType enumeration. This is necessary because the heap
 	**	allocation block index serves double duty as the type number index.
 	*/
-	new BulletTypeClass("Invisible");    //	BULLET_INVISIBLE
-	new BulletTypeClass("Cannon");	     //	BULLET_CANNON
-	new BulletTypeClass("Ack");	     //	BULLET_ACK
-	new BulletTypeClass("Torpedo");	     //	BULLET_TORPEDO
-	new BulletTypeClass("FROG");	     //	BULLET_FROG
-	new BulletTypeClass("HeatSeeker");   //	BULLET_HEAT_SEEKER
-	new BulletTypeClass("LaserGuided");  //	BULLET_LASER_GUIDED
-	new BulletTypeClass("Lobbed");	     //	BULLET_LOBBED
-	new BulletTypeClass("Bomblet");	     //	BULLET_BOMBLET
-	new BulletTypeClass("Ballistic");    //	BULLET_BALLISTIC
-	new BulletTypeClass("Parachute");    //	BULLET_PARACHUTE
-	new BulletTypeClass("Fireball");     //	BULLET_FIREBALL
-	new BulletTypeClass("LeapDog");	     //	BULLET_DOG
-	new BulletTypeClass("Catapult");     //	BULLET_CATAPULT
-	new BulletTypeClass("AAMissile");    //	BULLET_AAMISSILE
+	new BulletTypeClass("Invisible"); //	BULLET_INVISIBLE
+	new BulletTypeClass("Cannon"); //	BULLET_CANNON
+	new BulletTypeClass("Ack"); //	BULLET_ACK
+	new BulletTypeClass("Torpedo"); //	BULLET_TORPEDO
+	new BulletTypeClass("FROG"); //	BULLET_FROG
+	new BulletTypeClass("HeatSeeker"); //	BULLET_HEAT_SEEKER
+	new BulletTypeClass("LaserGuided"); //	BULLET_LASER_GUIDED
+	new BulletTypeClass("Lobbed"); //	BULLET_LOBBED
+	new BulletTypeClass("Bomblet"); //	BULLET_BOMBLET
+	new BulletTypeClass("Ballistic"); //	BULLET_BALLISTIC
+	new BulletTypeClass("Parachute"); //	BULLET_PARACHUTE
+	new BulletTypeClass("Fireball"); //	BULLET_FIREBALL
+	new BulletTypeClass("LeapDog"); //	BULLET_DOG
+	new BulletTypeClass("Catapult"); //	BULLET_CATAPULT
+	new BulletTypeClass("AAMissile"); //	BULLET_AAMISSILE
 	new BulletTypeClass("GPSSatellite"); //	BULLET_GPS_SATELLITE
-	new BulletTypeClass("NukeUp");	     //	BULLET_NUKE_UP
-	new BulletTypeClass("NukeDown");     //	BULLET_NUKE_DOWN
+	new BulletTypeClass("NukeUp"); //	BULLET_NUKE_UP
+	new BulletTypeClass("NukeDown"); //	BULLET_NUKE_DOWN
 }
 
 /***********************************************************************************************
@@ -200,7 +203,9 @@ void BulletTypeClass::One_Time(void) {
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-BulletTypeClass &BulletTypeClass::As_Reference(BulletType type) { return (*BulletTypes.Ptr(type)); }
+BulletTypeClass &BulletTypeClass::As_Reference(BulletType type) {
+	return (*BulletTypes.Ptr(type));
+}
 
 /***********************************************************************************************
  * BulletTypeClass::Read_INI -- Fetch the bullet type data from the INI database.              *

@@ -64,8 +64,8 @@
  *   03/01/1996 JLB : Uses initializer lists.                                                  *
  *=============================================================================================*/
 MissionClass::MissionClass(RTTIType rtti, int id)
-    : ObjectClass(rtti, id), Mission(MISSION_NONE), SuspendedMission(MISSION_NONE), MissionQueue(MISSION_NONE),
-      Status(0), Timer(0) {}
+	: ObjectClass(rtti, id), Mission(MISSION_NONE), SuspendedMission(MISSION_NONE), MissionQueue(MISSION_NONE), Status(0), Timer(0) {
+}
 
 /***********************************************************************************************
  * MissionClass::Mission_???  -- Stub mission functions that do nothing.                       *
@@ -83,24 +83,60 @@ MissionClass::MissionClass(RTTIType rtti, int id)
  * HISTORY:                                                                                    *
  *   01/23/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int MissionClass::Mission_Sleep(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Ambush(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Attack(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Capture(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Guard(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Guard_Area(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Harvest(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Hunt(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Move(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Retreat(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Return(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Stop(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Unload(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Enter(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Construction(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Deconstruction(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Repair(void) { return TICKS_PER_SECOND * 30; };
-int MissionClass::Mission_Missile(void) { return TICKS_PER_SECOND * 30; };
+int MissionClass::Mission_Sleep(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Ambush(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Attack(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Capture(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Guard(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Guard_Area(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Harvest(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Hunt(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Move(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Retreat(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Return(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Stop(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Unload(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Enter(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Construction(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Deconstruction(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Repair(void) {
+	return TICKS_PER_SECOND * 30;
+};
+int MissionClass::Mission_Missile(void) {
+	return TICKS_PER_SECOND * 30;
+};
 
 /***********************************************************************************************
  * MissionClass::Set_Mission -- Sets the mission to the specified value.                       *
@@ -500,8 +536,9 @@ bool MissionClass::Is_Recruitable_Mission(MissionType mission) {
 }
 
 MissionControlClass::MissionControlClass(void)
-    : Mission(MISSION_NONE), IsNoThreat(false), IsZombie(false), IsRecruitable(true), IsParalyzed(false),
-      IsRetaliate(true), IsScatter(true), Rate(".016"), AARate(".016") {}
+	: Mission(MISSION_NONE), IsNoThreat(false), IsZombie(false), IsRecruitable(true), IsParalyzed(false), IsRetaliate(true), IsScatter(true),
+	  Rate(".016"), AARate(".016") {
+}
 
 char const *MissionControlClass::Name(void) const {
 	if (Mission == MISSION_NONE) {

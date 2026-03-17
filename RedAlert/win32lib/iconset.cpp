@@ -42,10 +42,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 // #include	<mem.h>
-#include "tile.h"
 #include <file.h>
 #include <iff.h>
 #include <wwstd.h>
+#include "tile.h"
 
 // Misc? ST - 1/3/2019 10:40AM
 // extern int Misc;
@@ -105,25 +105,25 @@ void *Get_Icon_Set_Map(void const *iconset);
  *   09/15/1993 JLB : Added EMS support.                                   *
  *=========================================================================*/
 void *Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize) {
-	int fh;			 // File handle of iconset.
-	int bytespericon;	 // The number of bytes per icon.
+	int fh; // File handle of iconset.
+	int bytespericon; // The number of bytes per icon.
 	unsigned long icons = 0; // Number of icons loaded.
-	unsigned long size;	 // Size of the icon chunk (raw).
+	unsigned long size; // Size of the icon chunk (raw).
 
 	unsigned long transsize;
 	void *transptr = NULL;
 
-	unsigned long mapsize;	     // Icon map chunk size.
-	void *mapptr = NULL;	     // Icon map pointer.
-	void *returnptr = NULL;	     // Iconset pointer returned by routine.
-	BOOL allocated = FALSE;	     // Was the iconset block allocated?
+	unsigned long mapsize; // Icon map chunk size.
+	void *mapptr = NULL; // Icon map pointer.
+	void *returnptr = NULL; // Iconset pointer returned by routine.
+	BOOL allocated = FALSE; // Was the iconset block allocated?
 	IControl_Type *idata = NULL; // Icon data loaded.
-	long id;		     // ID of file openned.
+	long id; // ID of file openned.
 	struct {
-		char Width;	// Width of icon in bytes.
-		char Height;	// Height of icon in bytes.
-		char Format;	// Graphic mode.
-				// lint -esym(754,Format)
+		char Width; // Width of icon in bytes.
+		char Height; // Height of icon in bytes.
+		char Format; // Graphic mode.
+			// lint -esym(754,Format)
 		char Bitplanes; // Number of bitplanes per icon.
 	} sinf;
 
@@ -135,15 +135,13 @@ void *Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize) {
 	if (fh != WW_ERROR) {
 		Read_File(fh, &id, sizeof(long));
 		if (id == FORM_ICON) {
-
 			/*
 			**	Determine the size of the icons and set up the graphic
 			**	system accordingly.  Also get the sizes of the various
 			**	data blocks that have to be loaded.
 			*/
 			Read_Iff_Chunk(fh, FORM_SINF, &sinf, sizeof(sinf));
-			bytespericon =
-			    ((((int)sinf.Width) << 3) * (((int)sinf.Height) << 3) * (int)sinf.Bitplanes) >> 3;
+			bytespericon = ((((int)sinf.Width) << 3) * (((int)sinf.Height) << 3) * (int)sinf.Bitplanes) >> 3;
 
 			size = Get_Iff_Chunk_Size(fh, FORM_SSET);
 			transsize = Get_Iff_Chunk_Size(fh, FORM_TRNS);
@@ -162,9 +160,7 @@ void *Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize) {
 				allocated = (iconsetptr != NULL);
 			}
 
-			if (iconsetptr &&
-			    (size + transsize + mapsize + sizeof(IControl_Type)) <= (unsigned long)buffsize) {
-
+			if (iconsetptr && (size + transsize + mapsize + sizeof(IControl_Type)) <= (unsigned long)buffsize) {
 				idata = (IControl_Type *)iconsetptr;
 
 				memset(idata, 0, sizeof(IControl_Type));
@@ -183,9 +179,7 @@ void *Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize) {
 				{
 					long val;
 
-					val = Read_Iff_Chunk(fh, FORM_SSET,
-							     Add_Long_To_Pointer(iconsetptr, sizeof(IControl_Type)),
-							     size);
+					val = Read_Iff_Chunk(fh, FORM_SSET, Add_Long_To_Pointer(iconsetptr, sizeof(IControl_Type)), size);
 					icons = (int)(val / (long)bytespericon);
 					idata = (IControl_Type *)iconsetptr;
 				}

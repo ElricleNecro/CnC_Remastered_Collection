@@ -69,9 +69,14 @@
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-SequencedConnClass::SequencedConnClass(int numsend, int numreceive, int maxlen, unsigned short magicnum,
-				       unsigned long retry_delta, unsigned long max_retries, unsigned long timeout)
-    : ConnectionClass(maxlen, magicnum, retry_delta, max_retries, timeout) {
+SequencedConnClass::SequencedConnClass(int numsend,
+				       int numreceive,
+				       int maxlen,
+				       unsigned short magicnum,
+				       unsigned long retry_delta,
+				       unsigned long max_retries,
+				       unsigned long timeout)
+	: ConnectionClass(maxlen, magicnum, retry_delta, max_retries, timeout) {
 	NumRecNoAck = 0;
 	NumRecAck = 0;
 	NumSendNoAck = 0;
@@ -104,7 +109,9 @@ SequencedConnClass::SequencedConnClass(int numsend, int numreceive, int maxlen, 
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-SequencedConnClass::~SequencedConnClass() { delete Queue; }
+SequencedConnClass::~SequencedConnClass() {
+	delete Queue;
+}
 
 /***************************************************************************
  * SequencedConnClass::Init -- Initializes connection queue to empty			*
@@ -124,7 +131,9 @@ SequencedConnClass::~SequencedConnClass() { delete Queue; }
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-void SequencedConnClass::Init(void) { Queue->Init(); } /* end of Init */
+void SequencedConnClass::Init(void) {
+	Queue->Init();
+} /* end of Init */
 
 /***************************************************************************
  * SequencedConnClass::Send_Packet -- adds a packet to the send queue		*
@@ -209,12 +218,12 @@ int SequencedConnClass::Send_Packet(void *buf, int buflen, int ack_req) {
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 int SequencedConnClass::Receive_Packet(void *buf, int buflen) {
-	CommHeaderType *packet;	     // ptr to this packet
-	SendQueueType *send_entry;   // ptr to send entry header
+	CommHeaderType *packet; // ptr to this packet
+	SendQueueType *send_entry; // ptr to send entry header
 	ReceiveQueueType *rec_entry; // ptr to receive entry header
-	CommHeaderType *entry_data;  // ptr to queue entry data
-	int save_packet = 1;	     // 0 = this is a resend, or
-			     //  out-of-order packet
+	CommHeaderType *entry_data; // ptr to queue entry data
+	int save_packet = 1; // 0 = this is a resend, or
+		//  out-of-order packet
 
 	/*
 	--------------------------- Check the magic # ----------------------------
@@ -254,8 +263,7 @@ int SequencedConnClass::Receive_Packet(void *buf, int buflen) {
 				rec_entry = Queue->Next_Receive();
 				if (rec_entry) {
 					entry_data = (CommHeaderType *)rec_entry->Buffer;
-					if (entry_data->PacketID == packet->PacketID &&
-					    entry_data->Code == PACKET_DATA_ACK) {
+					if (entry_data->PacketID == packet->PacketID && entry_data->Code == PACKET_DATA_ACK) {
 						rec_entry->IsACK = 0;
 #ifdef DEBUG_SEQ
 						printf("(Resend)\n");
@@ -340,7 +348,7 @@ int SequencedConnClass::Receive_Packet(void *buf, int buflen) {
  *=========================================================================*/
 int SequencedConnClass::Get_Packet(void *buf, int *buflen) {
 	ReceiveQueueType *rec_entry; // ptr to receive entry header
-	int packetlen;		     // size of received packet
+	int packetlen; // size of received packet
 
 	/*
 	------------------ Get ptr to the next available entry -------------------
@@ -389,9 +397,9 @@ int SequencedConnClass::Get_Packet(void *buf, int *buflen) {
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 int SequencedConnClass::Service_Send_Queue(void) {
-	SendQueueType *send_entry;  // ptr to send queue entry
+	SendQueueType *send_entry; // ptr to send queue entry
 	CommHeaderType *packet_hdr; // packet header
-	unsigned long curtime;	    // current time
+	unsigned long curtime; // current time
 
 	/*------------------------------------------------------------------------
 	- If the next packet is ACK'd remove it from the queue
@@ -408,7 +416,6 @@ int SequencedConnClass::Service_Send_Queue(void) {
 	------------------ If ACK has been received, unqueue it ------------------
 	*/
 	if (send_entry->IsACK) {
-
 		/*
 		.................. Update this queue's response time ..................
 		*/
@@ -425,7 +432,6 @@ int SequencedConnClass::Service_Send_Queue(void) {
 #endif
 		Queue->UnQueue_Send(NULL, NULL);
 	} else {
-
 		/*
 		----------------- ACK not received yet, [re-]send packet -----------------
 		*/
@@ -500,9 +506,9 @@ int SequencedConnClass::Service_Send_Queue(void) {
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 int SequencedConnClass::Service_Receive_Queue(void) {
-	CommHeaderType ackpacket;    // ACK packet to send
+	CommHeaderType ackpacket; // ACK packet to send
 	ReceiveQueueType *rec_entry; // ptr to receive entry header
-	CommHeaderType *packet_hdr;  // packet header
+	CommHeaderType *packet_hdr; // packet header
 
 	/*------------------------------------------------------------------------
 	Get a pointer to the next received entry

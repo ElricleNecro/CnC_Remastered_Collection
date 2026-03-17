@@ -65,17 +65,15 @@ extern bool SpawnedFromWChat;
 /*
 ********************************** Defines **********************************
 */
-#define SAVEGAME_VERSION                                                                                               \
-	(DESCRIP_MAX + 0x01000006 +                                                                                    \
-	 (sizeof(AircraftClass) + sizeof(AircraftTypeClass) + sizeof(AnimClass) + sizeof(AnimTypeClass) +              \
-	  sizeof(BaseClass) + sizeof(BuildingClass) + sizeof(BuildingTypeClass) + sizeof(BulletClass) +                \
-	  sizeof(BulletTypeClass) + sizeof(CellClass) + sizeof(FactoryClass) + sizeof(HouseClass) +                    \
-	  sizeof(HouseTypeClass) + sizeof(InfantryClass) + sizeof(InfantryTypeClass) + sizeof(LayerClass) +            \
-	  sizeof(MouseClass) + sizeof(OverlayClass) + sizeof(OverlayTypeClass) + sizeof(SmudgeClass) +                 \
-	  sizeof(SmudgeTypeClass) + sizeof(TeamClass) + sizeof(TeamTypeClass) + sizeof(TemplateClass) +                \
-	  sizeof(TemplateTypeClass) + sizeof(TerrainClass) + sizeof(TerrainTypeClass) + sizeof(TriggerClass) +         \
-	  sizeof(TriggerTypeClass) + sizeof(UnitClass) + sizeof(UnitTypeClass) + sizeof(VesselClass) +                 \
-	  sizeof(ScenarioClass) + sizeof(ChronalVortexClass)))
+#define SAVEGAME_VERSION                                                                                                                             \
+	(DESCRIP_MAX + 0x01000006 +                                                                                                                  \
+	 (sizeof(AircraftClass) + sizeof(AircraftTypeClass) + sizeof(AnimClass) + sizeof(AnimTypeClass) + sizeof(BaseClass) +                        \
+	  sizeof(BuildingClass) + sizeof(BuildingTypeClass) + sizeof(BulletClass) + sizeof(BulletTypeClass) + sizeof(CellClass) +                    \
+	  sizeof(FactoryClass) + sizeof(HouseClass) + sizeof(HouseTypeClass) + sizeof(InfantryClass) + sizeof(InfantryTypeClass) +                   \
+	  sizeof(LayerClass) + sizeof(MouseClass) + sizeof(OverlayClass) + sizeof(OverlayTypeClass) + sizeof(SmudgeClass) +                          \
+	  sizeof(SmudgeTypeClass) + sizeof(TeamClass) + sizeof(TeamTypeClass) + sizeof(TemplateClass) + sizeof(TemplateTypeClass) +                  \
+	  sizeof(TerrainClass) + sizeof(TerrainTypeClass) + sizeof(TriggerClass) + sizeof(TriggerTypeClass) + sizeof(UnitClass) +                    \
+	  sizeof(UnitTypeClass) + sizeof(VesselClass) + sizeof(ScenarioClass) + sizeof(ChronalVortexClass)))
 //										sizeof(Waypoint)))
 
 static int Reconcile_Players(void);
@@ -272,7 +270,7 @@ static void Put_All(Pipe &pipe, int save_net) {
 	**	Save multiplayer values
 	*/
 	pipe.Put(&save_net, sizeof(save_net)); // Write out whether we saved the net values so we know if we have to
-					       // load them again. ST - 10/22/2019 2:10PM
+		// load them again. ST - 10/22/2019 2:10PM
 	if (save_net) {
 		Save_MPlayer_Values(pipe);
 	}
@@ -352,7 +350,7 @@ bool Save_Game(const char *file_name, const char *descr) {
 	unsigned scenario;
 	HousesType house;
 
-	scenario = Scen.Scenario;	 // get current scenario #
+	scenario = Scen.Scenario; // get current scenario #
 	house = PlayerPtr->Class->House; // get current house
 
 	/*
@@ -633,10 +631,8 @@ bool Load_Game(const char *file_name) {
 	** CD to request later
 	*/
 	if (load_net) {
-
 		CCFileClass scenario_file(Scen.ScenarioName);
 		if (!scenario_file.Is_Available()) {
-
 			int cd = -1;
 			if (Is_Mission_Counterstrike(Scen.ScenarioName)) {
 				cd = 2;
@@ -835,16 +831,13 @@ bool Load_Game(const char *file_name) {
 	**	loaded.
 	*/
 	if (RequiredCD != -2 && !load_net) {
-
 #ifdef FIXIT_ANTS
 		/*
 		**	Determines if this an ant mission. Since the ant mission looks no different from
 		**	a regular mission, examining of the scenario name is the only way to tell.
 		*/
-		if (toupper(Scen.ScenarioName[0]) == 'S' && toupper(Scen.ScenarioName[1]) == 'C' &&
-		    toupper(Scen.ScenarioName[2]) == 'A' && toupper(Scen.ScenarioName[3]) == '0' &&
-		    toupper(Scen.ScenarioName[5]) == 'E' && toupper(Scen.ScenarioName[6]) == 'A') {
-
+		if (toupper(Scen.ScenarioName[0]) == 'S' && toupper(Scen.ScenarioName[1]) == 'C' && toupper(Scen.ScenarioName[2]) == 'A' &&
+		    toupper(Scen.ScenarioName[3]) == '0' && toupper(Scen.ScenarioName[5]) == 'E' && toupper(Scen.ScenarioName[6]) == 'A') {
 			AntsEnabled = true;
 		} else {
 			AntsEnabled = false;
@@ -878,9 +871,7 @@ bool Load_Game(const char *file_name) {
 		}
 
 	} else {
-
 		if (load_net) {
-
 			CCFileClass scenario_file(Scen.ScenarioName);
 
 			/*
@@ -888,14 +879,10 @@ bool Load_Game(const char *file_name) {
 			*/
 			for (int s = 0; s < Session.Scenarios.Count(); s++) {
 				if (Session.Scenarios[s]->Description() == Scen.Description) {
-
-					memcpy(Session.Options.ScenarioDescription, Scen.Description,
-					       sizeof(Session.Options.ScenarioDescription));
-					memcpy(Session.ScenarioFileName, Scen.ScenarioName,
-					       sizeof(Session.ScenarioFileName));
+					memcpy(Session.Options.ScenarioDescription, Scen.Description, sizeof(Session.Options.ScenarioDescription));
+					memcpy(Session.ScenarioFileName, Scen.ScenarioName, sizeof(Session.ScenarioFileName));
 					Session.ScenarioFileLength = scenario_file.Size();
-					memcpy(Session.ScenarioDigest, Session.Scenarios[s]->Get_Digest(),
-					       sizeof(Session.ScenarioDigest));
+					memcpy(Session.ScenarioDigest, Session.Scenarios[s]->Get_Digest(), sizeof(Session.ScenarioDigest));
 					Session.ScenarioIsOfficial = Session.Scenarios[s]->Get_Official();
 					Scen.Scenario = s;
 					Session.Options.ScenarioIndex = s;
@@ -913,7 +900,6 @@ bool Load_Game(const char *file_name) {
 	ScenarioInit = 0;
 
 	if (load_net) {
-
 		// Removed as this is ensured by the GlyphX & DLL save/load code. ST - 10/22/2019 5:20PM
 		// if (!Reconcile_Players()) {	// (must do after Decode pointers)
 		//	return(false);
@@ -999,9 +985,8 @@ bool Load_Game(const char *file_name) {
 #ifndef FIXIT_VERSION_3 //	WChat eliminated.
 #ifdef WIN32
 					if (Special.IsFromWChat || SpawnedFromWChat) {
-						char packet[10] = {"Hello"};
-						Send_Data_To_DDE_Server(packet, strlen(packet),
-									DDEServerClass::DDE_CONNECTION_FAILED);
+						char packet[10] = { "Hello" };
+						Send_Data_To_DDE_Server(packet, strlen(packet), DDEServerClass::DDE_CONNECTION_FAILED);
 					}
 #endif
 #endif
@@ -1055,7 +1040,7 @@ bool Load_Game(const char *file_name) {
  *=========================================================================*/
 bool Save_Misc_Values(Pipe &file) {
 	int i, j;
-	int count;	  // # ptrs in 'CurrentObject'
+	int count; // # ptrs in 'CurrentObject'
 	ObjectClass *ptr; // for saving 'CurrentObject' ptrs
 
 	/*
@@ -1544,7 +1529,6 @@ static int Reconcile_Players(void) {
 	for (i = 0; i < Session.Players.Count(); i++) {
 		found = 0;
 		for (house = HOUSE_MULTI1; house < HOUSE_MULTI1 + Session.MaxPlayers; house++) {
-
 			housep = HouseClass::As_Pointer(house);
 			if (!housep) {
 				continue;
@@ -1593,7 +1577,6 @@ static int Reconcile_Players(void) {
 		**	If this name wasn't found, remove it
 		*/
 		if (!found) {
-
 			/*
 			**	Turn the player's house over to the computer's AI
 			*/

@@ -67,9 +67,8 @@ typedef enum WinCommDialMethodType { WC_TOUCH_TONE = 0, WC_PULSE } WinCommDialMe
 */
 
 class WinModemClass {
-
 public:
-	WinModemClass(void);	      // WinModemClass Contructor
+	WinModemClass(void); // WinModemClass Contructor
 	virtual ~WinModemClass(void); // WinModemClass Destructor
 
 	/*
@@ -79,8 +78,7 @@ public:
 	** Replacement for Greenleaf function: PortOpenGreenleafFast
 	*/
 	// virtual	HANDLE	Serial_Port_Open (int port, int baud, int parity, int wordlen, int stopbits);
-	virtual HANDLE Serial_Port_Open(char *device_name, int baud, int parity, int wordlen, int stopbits,
-					int flowcontrol);
+	virtual HANDLE Serial_Port_Open(char *device_name, int baud, int parity, int wordlen, int stopbits, int flowcontrol);
 
 	/*
 	** This function releases the COM port handle and should be called after
@@ -151,8 +149,7 @@ public:
 	** Send a command to the modem. This is usually an 'AT' command.
 	** Function will optionally retry until 'OK' is received.
 	*/
-	virtual int Send_Command_To_Modem(char *command, char terminator, char *buffer, int buflen, int delay,
-					  int retries);
+	virtual int Send_Command_To_Modem(char *command, char terminator, char *buffer, int buflen, int delay, int retries);
 
 	/*
 	** Sets a pointer to a function that will be called for each incoming serial char
@@ -268,14 +265,19 @@ protected:
 ** via a 'null modem' cable.
 */
 class WinNullModemClass : public WinModemClass {
-
 public:
 	virtual inline void Set_Modem_Dial_Type(int) {};
-	virtual inline unsigned Get_Modem_Status(void) { return (0); };
+	virtual inline unsigned Get_Modem_Status(void) {
+		return (0);
+	};
 	virtual inline void Set_Serial_DTR(BOOL){};
-	virtual inline int Get_Modem_Result(int, char *, int) { return (0); };
+	virtual inline int Get_Modem_Result(int, char *, int) {
+		return (0);
+	};
 	virtual inline void Dial_Modem(char *) {};
-	virtual inline int Send_Command_To_Modem(char *, char, char *, int, int, int) { return (0); };
+	virtual inline int Send_Command_To_Modem(char *, char, char *, int, int, int) {
+		return (0);
+	};
 	virtual inline void Set_Echo_Function(void (*)(char)) {};
 	virtual inline void Set_Abort_Function(int (*)(void)) {};
 };
@@ -315,14 +317,14 @@ typedef struct _MODEMDEVCAPS {
 	DWORD dwModemVersionSize;
 
 	// local option capabilities
-	DWORD dwDialOptions;	    // bitmap of supported values
+	DWORD dwDialOptions; // bitmap of supported values
 	DWORD dwCallSetupFailTimer; // maximum in seconds
-	DWORD dwInactivityTimeout;  // maximum in seconds
-	DWORD dwSpeakerVolume;	    // bitmap of supported values
-	DWORD dwSpeakerMode;	    // bitmap of supported values
-	DWORD dwModemOptions;	    // bitmap of supported values
-	DWORD dwMaxDTERate;	    // maximum value in bit/s
-	DWORD dwMaxDCERate;	    // maximum value in bit/s
+	DWORD dwInactivityTimeout; // maximum in seconds
+	DWORD dwSpeakerVolume; // bitmap of supported values
+	DWORD dwSpeakerMode; // bitmap of supported values
+	DWORD dwModemOptions; // bitmap of supported values
+	DWORD dwMaxDTERate; // maximum value in bit/s
+	DWORD dwMaxDCERate; // maximum value in bit/s
 
 	// Variable portion for proprietary expansion
 	BYTE abVariablePortion[1];
@@ -335,23 +337,23 @@ typedef struct _MODEMSETTINGS {
 	DWORD dwDevSpecificSize;
 
 	// static local options (read/write)
-	DWORD dwCallSetupFailTimer;    // seconds
-	DWORD dwInactivityTimeout;     // seconds
-	DWORD dwSpeakerVolume;	       // level
-	DWORD dwSpeakerMode;	       // mode
+	DWORD dwCallSetupFailTimer; // seconds
+	DWORD dwInactivityTimeout; // seconds
+	DWORD dwSpeakerVolume; // level
+	DWORD dwSpeakerMode; // mode
 	DWORD dwPreferredModemOptions; // bitmap
 
 	// negotiated options (read only) for current or last call
 	DWORD dwNegotiatedModemOptions; // bitmap
-	DWORD dwNegotiatedDCERate;	// bit/s
+	DWORD dwNegotiatedDCERate; // bit/s
 
 	// Variable portion for proprietary expansion
 	BYTE abVariablePortion[1];
 } MODEMSETTINGS, *PMODEMSETTINGS, *LPMODEMSETTINGS;
 
 // Dial Options
-#define DIALOPTION_BILLING 0x00000040  // Supports wait for bong "$"
-#define DIALOPTION_QUIET 0x00000080    // Supports wait for quiet "@"
+#define DIALOPTION_BILLING 0x00000040 // Supports wait for bong "$"
+#define DIALOPTION_QUIET 0x00000080 // Supports wait for quiet "@"
 #define DIALOPTION_DIALTONE 0x00000100 // Supports wait for dial tone "W"
 
 // SpeakerVolume for MODEMDEVCAPS

@@ -36,11 +36,11 @@
  *   LZWPipe::~LZWPipe -- Deconstructor for the LZW pipe object.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <assert.h>
+#include <string.h>
 #include "lzwpipe.h"
 #include "buff.h"
 #include "lzw.h"
-#include <assert.h>
-#include <string.h>
 
 /***********************************************************************************************
  * LZWPipe::LZWPipe -- Constructor for the LZW processor pipe.                                 *
@@ -59,8 +59,7 @@
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LZWPipe::LZWPipe(CompControl control, int blocksize)
-    : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
+LZWPipe::LZWPipe(CompControl control, int blocksize) : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
 	SafetyMargin = BlockSize;
 	//	SafetyMargin = BlockSize/128+1;
 	Buffer = new char[BlockSize + SafetyMargin];
@@ -122,18 +121,14 @@ int LZWPipe::Put(void const *source, int slen) {
 	**	Copy as much as can fit into the buffer from the source data supplied.
 	*/
 	if (Control == DECOMPRESS) {
-
 		while (slen > 0) {
-
 			/*
 			**	First check to see if we are in the block header accumulation phase.
 			**	When a whole block header has been accumulated, only then will the regular
 			**	data processing begin for the block.
 			*/
 			if (BlockHeader.CompCount == 0xFFFF) {
-				int len = (slen < ((int)sizeof(BlockHeader) - Counter))
-					      ? slen
-					      : (sizeof(BlockHeader) - Counter);
+				int len = (slen < ((int)sizeof(BlockHeader) - Counter)) ? slen : (sizeof(BlockHeader) - Counter);
 				memmove(&Buffer[Counter], source, len);
 				source = ((char *)source) + len;
 				slen -= len;
@@ -153,9 +148,7 @@ int LZWPipe::Put(void const *source, int slen) {
 			**	data block.
 			*/
 			if (slen > 0) {
-				int len = (slen < (BlockHeader.CompCount - Counter))
-					      ? slen
-					      : (BlockHeader.CompCount - Counter);
+				int len = (slen < (BlockHeader.CompCount - Counter)) ? slen : (BlockHeader.CompCount - Counter);
 
 				memmove(&Buffer[Counter], source, len);
 				slen -= len;
@@ -176,7 +169,6 @@ int LZWPipe::Put(void const *source, int slen) {
 		}
 
 	} else {
-
 		/*
 		**	If the buffer already contains some data, then any new data must be stored
 		**	into the staging buffer until a full set has been accumulated.
@@ -257,7 +249,6 @@ int LZWPipe::Flush(void) {
 	*/
 	if (Counter > 0) {
 		if (Control == DECOMPRESS) {
-
 			/*
 			**	If the accumulated data is insufficient to make a block header, then
 			**	this means the data has been truncated. Just dump the data through
@@ -282,7 +273,6 @@ int LZWPipe::Flush(void) {
 			}
 
 		} else {
-
 			/*
 			**	A partial block in the compression process is a normal occurrence. Just
 			**	compress the partial block and output normally.

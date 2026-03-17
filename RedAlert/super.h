@@ -41,8 +41,12 @@ class SuperClass {
 public:
 	SuperClass(NoInitClass const &x) : Control(x) {};
 	SuperClass(void) : Control(NoInitClass()) {};
-	SuperClass(int recharge, bool powered, VoxType charging = VOX_NONE, VoxType ready = VOX_NONE,
-		   VoxType impatient = VOX_NONE, VoxType suspend = VOX_NONE);
+	SuperClass(int recharge,
+		   bool powered,
+		   VoxType charging = VOX_NONE,
+		   VoxType ready = VOX_NONE,
+		   VoxType impatient = VOX_NONE,
+		   VoxType suspend = VOX_NONE);
 
 	bool Suspend(bool on);
 	bool Enable(bool onetime = false, bool player = false, bool quiet = false);
@@ -52,13 +56,23 @@ public:
 	void Impatient_Click(void) const;
 	int Anim_Stage(void) const;
 	bool Discharged(bool player);
-	bool Is_Ready(void) const { return (IsReady); }
-	bool Is_Present(void) const { return (IsPresent); }
-	bool Is_One_Time(void) const { return (IsOneTime && IsPresent); }
-	bool Is_Powered(void) const { return (IsPowered); }
+	bool Is_Ready(void) const {
+		return (IsReady);
+	}
+	bool Is_Present(void) const {
+		return (IsPresent);
+	}
+	bool Is_One_Time(void) const {
+		return (IsOneTime && IsPresent);
+	}
+	bool Is_Powered(void) const {
+		return (IsPowered);
+	}
 
 	// Needed access to recharge times for tooltips - 2019/08/14 Jason Scott
-	int Get_Recharge_Time() const { return (RechargeTime); };
+	int Get_Recharge_Time() const {
+		return (RechargeTime);
+	};
 
 private:
 	bool Recharge(bool player = false);

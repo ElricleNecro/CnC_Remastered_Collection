@@ -42,10 +42,16 @@ public:
 	virtual int Draw_Me(int forced = false);
 	virtual int Set_Maximum(int value);
 	virtual int Set_Value(int value);
-	virtual int Get_Value(void) const { return (CurValue); };
-	virtual void Use_Thumb(int value) { HasThumb = value ? true : false; };
+	virtual int Get_Value(void) const {
+		return (CurValue);
+	};
+	virtual void Use_Thumb(int value) {
+		HasThumb = value ? true : false;
+	};
 
-	virtual int Thumb_Pixels(void) { return (4); }
+	virtual int Thumb_Pixels(void) {
+		return (4);
+	}
 
 	/*
 	**	If this gauge has a color to the left of the current setting, then this
@@ -66,7 +72,7 @@ protected:
 
 	int MaxValue; // maximum value (in application units)
 	int CurValue; // index of 1st displayed string in box
-		      //  (in application units)
+		//  (in application units)
 
 	/*
 	** This value records the difference between where the user clicked
@@ -90,7 +96,7 @@ public:
 	virtual int Set_Yellow_Limit(int value);
 
 protected:
-	int RedLimit;	 // maximum value for red
+	int RedLimit; // maximum value for red
 	int YellowLimit; // maximum value for yellow
 };
 

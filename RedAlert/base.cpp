@@ -62,7 +62,9 @@
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-int BaseNodeClass::operator==(BaseNodeClass const &node) { return (Type == node.Type && Cell == node.Cell); }
+int BaseNodeClass::operator==(BaseNodeClass const &node) {
+	return (Type == node.Type && Cell == node.Cell);
+}
 
 /***********************************************************************************************
  * BaseNodeClass::operator != -- inequality operator                                           *
@@ -79,7 +81,9 @@ int BaseNodeClass::operator==(BaseNodeClass const &node) { return (Type == node.
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-int BaseNodeClass::operator!=(BaseNodeClass const &node) { return (!(*this == node)); }
+int BaseNodeClass::operator!=(BaseNodeClass const &node) {
+	return (!(*this == node));
+}
 
 /***********************************************************************************************
  * BaseNodeClass::operator > -- greater-than operator                                          *
@@ -96,7 +100,9 @@ int BaseNodeClass::operator!=(BaseNodeClass const &node) { return (!(*this == no
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-int BaseNodeClass::operator>(BaseNodeClass const &) { return (true); }
+int BaseNodeClass::operator>(BaseNodeClass const &) {
+	return (true);
+}
 
 /***********************************************************************************************
  * BaseClass::Load -- loads from a saved game file                                             *
@@ -260,7 +266,6 @@ BuildingClass *BaseClass::Get_Building(int index) const {
 	for (int i = 0; i < count; i++) {
 		if (obj[i] && Coord_Cell(obj[i]->Coord) == Nodes[index].Cell && obj[i]->What_Am_I() == RTTI_BUILDING &&
 		    ((BuildingClass *)obj[i])->Class->Type == Nodes[index].Type) {
-
 			bldg = (BuildingClass *)obj[i];
 			break;
 		}
@@ -364,7 +369,6 @@ BaseNodeClass *BaseClass::Next_Buildable(StructType type) {
 	** un-built one that matches the requested type.
 	*/
 	for (int i = 0; i < Nodes.Count(); i++) {
-
 		/*
 		** For STRUCT_NONE, return the first hole found
 		*/
@@ -374,7 +378,6 @@ BaseNodeClass *BaseClass::Next_Buildable(StructType type) {
 			}
 
 		} else {
-
 			/*
 			** For a "real" building type, return the first hold for that type
 			*/
@@ -433,7 +436,6 @@ void BaseClass::Read_INI(CCINIClass &ini) {
 	**	Read each entry in turn, in the same order they were written out.
 	*/
 	for (int i = 0; i < count; i++) {
-
 		/*
 		** Get an INI entry
 		*/
@@ -479,7 +481,6 @@ void BaseClass::Write_INI(CCINIClass &ini) {
 	ini.Clear(INI_Name());
 
 	if (House != HOUSE_NONE) {
-
 		/*
 		**	Write out the owner of this buildable list.
 		*/

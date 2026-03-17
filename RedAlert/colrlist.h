@@ -47,11 +47,11 @@ public:
 	*/
 	// lint -esym(578,SELECT_NONE)
 	typedef enum SelectEnum {
-		SELECT_NORMAL,	  // selected items aren't drawn differently
+		SELECT_NORMAL, // selected items aren't drawn differently
 		SELECT_HIGHLIGHT, // item is highlighted
-		SELECT_BOX,	  // draw a box around the item
-		SELECT_BAR,	  // draw a bar behind the item
-		SELECT_INVERT	  // draw the string inverted
+		SELECT_BOX, // draw a box around the item
+		SELECT_BAR, // draw a bar behind the item
+		SELECT_INVERT // draw the string inverted
 	} SelectStyleType;
 
 	ColorListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down);

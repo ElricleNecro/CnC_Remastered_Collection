@@ -43,7 +43,8 @@ IconCacheClass::IconCacheClass(void) {
 	IconSource = NULL;
 }
 
-IconCacheClass::~IconCacheClass(void) {}
+IconCacheClass::~IconCacheClass(void) {
+}
 
 IconCacheClass CachedIcons[MAX_CACHED_ICONS];
 
@@ -52,12 +53,14 @@ IconSetType IconSetList[MAX_ICON_SETS];
 short IconCacheLookup[MAX_LOOKUP_ENTRIES];
 }
 
-int CachedIconsDrawn = 0;   // Counter of number of cache hits
+int CachedIconsDrawn = 0; // Counter of number of cache hits
 int UnCachedIconsDrawn = 0; // Counter of number of cache misses
-BOOL CacheMemoryExhausted;  // Flag set if we have run out of video RAM
+BOOL CacheMemoryExhausted; // Flag set if we have run out of video RAM
 
-void Invalidate_Cached_Icons(void) {}
-void Restore_Cached_Icons(void) {}
+void Invalidate_Cached_Icons(void) {
+}
+void Restore_Cached_Icons(void) {
+}
 void Register_Icon_Set(void *icon_data, BOOL pre_cache) {};
 
 //
@@ -65,19 +68,36 @@ void Register_Icon_Set(void *icon_data, BOOL pre_cache) {};
 //
 extern "C" void __cdecl Clear_Icon_Pointers(void){};
 extern "C" void __cdecl Cache_Copy_Icon(void const *icon_ptr, void *, int){};
-extern "C" int __cdecl Is_Icon_Cached(void const *icon_data, int icon) { return -1; };
-extern "C" int __cdecl Get_Icon_Index(void *icon_ptr) { return 0; };
-extern "C" int __cdecl Get_Free_Index(void) { return 0; };
-extern "C" BOOL __cdecl Cache_New_Icon(int icon_index, void *icon_ptr) { return -1; };
-extern "C" int __cdecl Get_Free_Cache_Slot(void) { return -1; }
+extern "C" int __cdecl Is_Icon_Cached(void const *icon_data, int icon) {
+	return -1;
+};
+extern "C" int __cdecl Get_Icon_Index(void *icon_ptr) {
+	return 0;
+};
+extern "C" int __cdecl Get_Free_Index(void) {
+	return 0;
+};
+extern "C" BOOL __cdecl Cache_New_Icon(int icon_index, void *icon_ptr) {
+	return -1;
+};
+extern "C" int __cdecl Get_Free_Cache_Slot(void) {
+	return -1;
+}
 
-void IconCacheClass::Draw_It(LPDIRECTDRAWSURFACE dest_surface, int x_pixel, int y_pixel, int window_left,
-			     int window_top, int window_width, int window_height) {}
+void IconCacheClass::Draw_It(LPDIRECTDRAWSURFACE dest_surface,
+			     int x_pixel,
+			     int y_pixel,
+			     int window_left,
+			     int window_top,
+			     int window_width,
+			     int window_height) {
+}
 
 extern int CachedIconsDrawn;
 extern int UnCachedIconsDrawn;
 
-extern "C" void __cdecl Set_Font_Palette_Range(void const *palette, INT start_idx, INT end_idx) {}
+extern "C" void __cdecl Set_Font_Palette_Range(void const *palette, INT start_idx, INT end_idx) {
+}
 
 /*
 ;***************************************************************************
@@ -116,7 +136,7 @@ void __cdecl Buffer_Draw_Line(void *this_object, int sx, int sy, int dx, int dy,
 	//		DD	a_rgt,a_up,a_rgt,nada
 	//		DD	nada,nada,nada,nada
 
-	static void *_clip_table[4 * 4] = {0};
+	static void *_clip_table[4 * 4] = { 0 };
 
 	unsigned int int_color = color;
 	unsigned int x1_pixel = (unsigned int)sx;
@@ -148,9 +168,9 @@ init_done:
 		mov	eax,[ebx]GraphicViewPortClass.Height
 		mov	[clip_max_y],eax
 
-		   //;*==================================================================
-		   //;* Adjust max pixels as they are tested inclusively.
-		   //;*==================================================================
+		       //;*==================================================================
+		       //;* Adjust max pixels as they are tested inclusively.
+		       //;*==================================================================
 		dec	[clip_max_x]
 		dec	[clip_max_y]
 
@@ -189,9 +209,9 @@ init_done:
 		cmp	edx,[clip_max_y]
 		jle	short on_screen
 
-		   //;*==================================================================
-		   //;* Takes care off clipping the line.
-		   //;*==================================================================
+		       //;*==================================================================
+		       //;* Takes care off clipping the line.
+		       //;*==================================================================
 	clip_it:
 		call	set_bits
 		xchg	eax,ecx
@@ -220,13 +240,13 @@ init_done:
 	off_screen:
 		jmp	and_out
 
-		   //;*==================================================================
-		   //;* Jump table for clipping conditions
-		   //;*==================================================================
-		   // clip_tbl	DD	nada,a_up,a_dwn,nada
-		   //		DD	a_lft,a_lft,a_dwn,nada
-		   //		DD	a_rgt,a_up,a_rgt,nada
-		   //		DD	nada,nada,nada,nada
+		       //;*==================================================================
+		       //;* Jump table for clipping conditions
+		       //;*==================================================================
+		       // clip_tbl	DD	nada,a_up,a_dwn,nada
+		       //		DD	a_lft,a_lft,a_dwn,nada
+		       //		DD	a_rgt,a_up,a_rgt,nada
+		       //		DD	nada,nada,nada,nada
 
 	nada:
 		clc
@@ -249,9 +269,9 @@ init_done:
 		stc
 		ret
 
-		    //;*==================================================================
-		    //;* xa'=xa+[(miny-ya)(xb-xa)/(yb-ya)]
-		    //;*==================================================================
+			//;*==================================================================
+			//;* xa'=xa+[(miny-ya)(xb-xa)/(yb-ya)]
+			//;*==================================================================
 	clip_vert:
 		push	edx
 		push	eax
@@ -286,9 +306,9 @@ init_done:
 		stc
 		ret
 
-		    //;*==================================================================
-		    //;* ya'=ya+[(minx-xa)(yb-ya)/(xb-xa)]
-		    //;*==================================================================
+			//;*==================================================================
+			//;* ya'=ya+[(minx-xa)(yb-ya)/(xb-xa)]
+			//;*==================================================================
 	clip_horiz:
 		push	edx
 		mov	[clip_var],ecx //; clip_var = xb
@@ -303,9 +323,9 @@ init_done:
 		mov	eax,esi
 		ret
 
-		    //;*==================================================================
-		    //;* Sets the condition bits
-		    //;*==================================================================
+			//;*==================================================================
+			//;* Sets the condition bits
+			//;*==================================================================
 	set_bits:
 		xor	esi,esi
 		cmp	ebx,[clip_min_y] //; if y >= top its not up
@@ -330,10 +350,10 @@ init_done:
 	a_not_right:
 		ret
 
-		   //;*==================================================================
-		   //;* Draw the line to the screen.
-		   //;* PORTABLE end
-		   //;*==================================================================
+		       //;*==================================================================
+		       //;* Draw the line to the screen.
+		       //;* PORTABLE end
+		       //;*==================================================================
 	draw_it:
 		sub	edx,ebx //; see if line is being draw down
 		jnz	short not_hline //; if not then its not a hline
@@ -364,7 +384,7 @@ init_done:
 	not_vline:
 		jg	short right //; if so, the difference = length
 
-		   // left:
+		       // left:
 		neg	ecx //; else negate for actual pixel length
 		neg	esi //; negate counter to move left
 
@@ -372,7 +392,7 @@ init_done:
 		cmp	ecx,edx //; is it a horiz or vert line
 		jge	short horiz //; if ecx > edx then |x|>|y| or horiz
 
-			// vert:
+				// vert:
 		xchg	ecx,edx //; make ecx greater and edx lesser
 		mov	edi,ecx //; set greater
 		mov	[accum],ecx //; set accumulator to 1/2 greater
@@ -425,9 +445,9 @@ init_done:
 		add	ebx,[bpr] //; goto next line
 		jmp	h_midloop
 
-		    //;*==================================================================
-		    //;* Special case routine for horizontal line draws
-		    //;*==================================================================
+			//;*==================================================================
+			//;* Special case routine for horizontal line draws
+			//;*==================================================================
 	hline:
 		cmp	eax,ecx //; make eax < ecx
 		jl	short hl_ac
@@ -486,9 +506,9 @@ init_done:
 		rep	stosb
 		jmp	and_out
 
-		    //;*==================================================================
-		    //;* a special case routine for vertical line draws
-		    //;*==================================================================
+			//;*==================================================================
+			//;* a special case routine for vertical line draws
+			//;*==================================================================
 	vline:
 		mov	ecx,edx //; get length of line to draw
 		inc	ecx
@@ -1343,8 +1363,15 @@ void __cdecl Buffer_Clear(void *this_object, unsigned char color) {
 	}
 }
 
-BOOL __cdecl Linear_Blit_To_Linear(void *this_object, void *dest, int x_pixel, int y_pixel, int dest_x0, int dest_y0,
-				   int pixel_width, int pixel_height, BOOL trans) {
+BOOL __cdecl Linear_Blit_To_Linear(void *this_object,
+				   void *dest,
+				   int x_pixel,
+				   int y_pixel,
+				   int dest_x0,
+				   int dest_y0,
+				   int pixel_width,
+				   int pixel_height,
+				   BOOL trans) {
 	/*
 		;*===================================================================
 		;* define the arguements that our function takes.
@@ -1814,8 +1841,17 @@ BOOL __cdecl Linear_Blit_To_Linear(void *this_object, void *dest, int x_pixel, i
 #pragma warning(push)
 #pragma warning(disable : 4731)
 
-BOOL __cdecl Linear_Scale_To_Linear(void *this_object, void *dest, int src_x, int src_y, int dst_x, int dst_y,
-				    int src_width, int src_height, int dst_width, int dst_height, BOOL trans,
+BOOL __cdecl Linear_Scale_To_Linear(void *this_object,
+				    void *dest,
+				    int src_x,
+				    int src_y,
+				    int dst_x,
+				    int dst_y,
+				    int src_width,
+				    int src_height,
+				    int dst_width,
+				    int dst_height,
+				    BOOL trans,
 				    char *remap) {
 	/*
 
@@ -2566,34 +2602,34 @@ unsigned int StampPtr = 0; //	DD	0	; Pointer to icon data.
 
 unsigned int IsTrans = 0; //		DD	0	; Pointer to transparent icon flag table.
 
-unsigned int MapPtr = 0;     //		DD	0	; Pointer to icon map.
-unsigned int IconWidth = 0;  //	DD	0	; Width of icon in pixels.
+unsigned int MapPtr = 0; //		DD	0	; Pointer to icon map.
+unsigned int IconWidth = 0; //	DD	0	; Width of icon in pixels.
 unsigned int IconHeight = 0; //	DD	0	; Height of icon in pixels.
-unsigned int IconSize = 0;   //	DD	0	; Number of bytes for each icon data.
-unsigned int IconCount = 0;  //	DD	0	; Number of icons in the set.
+unsigned int IconSize = 0; //	DD	0	; Number of bytes for each icon data.
+unsigned int IconCount = 0; //	DD	0	; Number of icons in the set.
 
 #if (0)
 LastIconset DD 0;
 Pointer to last iconset initialized.StampPtr DD 0;
 Pointer to icon data.
 
-    IsTrans DD 0;
+	IsTrans DD 0;
 Pointer to transparent icon flag table.
 
-    MapPtr DD 0;
+	MapPtr DD 0;
 Pointer to icon map.IconWidth DD 0;
 Width of icon in pixels.IconHeight DD 0;
 Height of icon in pixels.IconSize DD 0; Number of bytes for each icon data.
 IconCount	DD	0	;
 Number of icons in the set.
 
-    GLOBAL C Buffer_Draw_Stamp : near GLOBAL C Buffer_Draw_Stamp_Clip : near
+	GLOBAL C Buffer_Draw_Stamp : near GLOBAL C Buffer_Draw_Stamp_Clip : near
 
-    ;
+	;
 256 color icon system.
 #endif
 
-    /*
+	/*
     ;***********************************************************
     ; INIT_STAMPS
     ;
@@ -2604,7 +2640,7 @@ Number of icons in the set.
     ;
     ;*
     */
-    extern "C" void __cdecl Init_Stamps(unsigned int icondata) {
+	extern "C" void __cdecl Init_Stamps(unsigned int icondata) {
 
 	__asm {
 		pushad // ST - 12/20/2018 10:30AM
@@ -2674,8 +2710,7 @@ fini:
 ;*
 */
 
-void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel,
-			       void const *remap) {
+void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap) {
 	unsigned int modulo = 0;
 	unsigned int iwidth = 0;
 	unsigned char doremap = 0;
@@ -2874,9 +2909,16 @@ min_y, LONG max_x, LONG max_y);
 ; This routine is fastest when no remap table is passed in.
 ;*
 */
-void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel,
-				    void const *remap, int min_x, int min_y, int max_x, int max_y) {
-
+void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object,
+				    void const *icondata,
+				    int icon,
+				    int x_pixel,
+				    int y_pixel,
+				    void const *remap,
+				    int min_x,
+				    int min_y,
+				    int max_x,
+				    int max_y) {
 	unsigned int modulo = 0;
 	unsigned int iwidth = 0;
 	unsigned int skip = 0;
@@ -3160,12 +3202,18 @@ proc_out:
 VOID __cdecl Buffer_Draw_Line(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color);
 VOID __cdecl Buffer_Fill_Rect(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color);
 VOID __cdecl Buffer_Remap(void *thisptr, int sx, int sy, int width, int height, void *remap);
-VOID __cdecl Buffer_Fill_Quad(void *thisptr, VOID *span_buff, int x0, int y0, int x1, int y1, int x2, int y2, int x3,
-			      int y3, int color);
-void __cdecl Buffer_Draw_Stamp(void const *thisptr, void const *icondata, int icon, int x_pixel, int y_pixel,
-			       void const *remap);
-void __cdecl Buffer_Draw_Stamp_Clip(void const *thisptr, void const *icondata, int icon, int x_pixel, int y_pixel,
-				    void const *remap, int, int, int, int);
+VOID __cdecl Buffer_Fill_Quad(void *thisptr, VOID *span_buff, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int color);
+void __cdecl Buffer_Draw_Stamp(void const *thisptr, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap);
+void __cdecl Buffer_Draw_Stamp_Clip(void const *thisptr,
+				    void const *icondata,
+				    int icon,
+				    int x_pixel,
+				    int y_pixel,
+				    void const *remap,
+				    int,
+				    int,
+				    int,
+				    int);
 void *__cdecl Get_Font_Palette_Ptr(void);
 
 /*
@@ -3941,14 +3989,14 @@ void *__cdecl Build_Fading_Table(void const *palette, void const *dest, long int
 	LOCAL	matchcolor:BYTE		; Tentative match color.
 	*/
 
-	int matchvalue = 0;	       //: DWORD	; Last recorded match value.
-	unsigned char targetred = 0;   // BYTE		; Target gun red.
+	int matchvalue = 0; //: DWORD	; Last recorded match value.
+	unsigned char targetred = 0; // BYTE		; Target gun red.
 	unsigned char targetgreen = 0; // BYTE		; Target gun green.
-	unsigned char targetblue = 0;  // BYTE		; Target gun blue.
-	unsigned char idealred = 0;    // BYTE
-	unsigned char idealgreen = 0;  // BYTE
-	unsigned char idealblue = 0;   // BYTE
-	unsigned char matchcolor = 0;  //: BYTE		; Tentative match color.
+	unsigned char targetblue = 0; // BYTE		; Target gun blue.
+	unsigned char idealred = 0; // BYTE
+	unsigned char idealgreen = 0; // BYTE
+	unsigned char idealblue = 0; // BYTE
+	unsigned char matchcolor = 0; //: BYTE		; Tentative match color.
 
 	__asm {
 		cld
@@ -4149,9 +4197,8 @@ ENDIF
 	CODESEG
 */
 
-extern "C" unsigned char CurrentPalette[768] = {
-    255};					   //	DB	768 DUP(255)	; copy of current values of DAC regs
-extern "C" unsigned char PaletteTable[1024] = {0}; //	DB	1024 DUP(0)
+extern "C" unsigned char CurrentPalette[768] = { 255 }; //	DB	768 DUP(255)	; copy of current values of DAC regs
+extern "C" unsigned char PaletteTable[1024] = { 0 }; //	DB	1024 DUP(0)
 
 /*
 ;***************************************************************************
@@ -4316,7 +4363,6 @@ CODESEG
 */
 
 void __cdecl Buffer_Put_Pixel(void *this_object, int x_pixel, int y_pixel, unsigned char color) {
-
 	/*
 	ARG    	this_object:DWORD				; this is a member function
 	ARG	x_pixel:DWORD				; x position of pixel to set
@@ -4417,7 +4463,6 @@ CODESEG
 */
 
 extern "C" int __cdecl Clip_Rect(int *x, int *y, int *w, int *h, int width, int height) {
-
 	/*
 		PROC	Clip_Rect C near
 		uses	ebx,ecx,edx,esi,edi
@@ -4569,7 +4614,6 @@ extern "C" int __cdecl Clip_Rect(int *x, int *y, int *w, int *h, int width, int 
 */
 
 extern "C" int __cdecl Confine_Rect(int *x, int *y, int w, int h, int width, int height) {
-
 	/*
 		PROC	Confine_Rect C near
 		uses	ebx, esi,edi
@@ -4970,9 +5014,7 @@ CODESEG
 ;*=========================================================================*
  */
 
-extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width, int pixel_height, void *src,
-				       void *dest) {
-
+extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width, int pixel_height, void *src, void *dest) {
 	/*
 		PROC	Buffer_To_Page C near
 		USES	eax,ebx,ecx,edx,esi,edi
@@ -5162,46 +5204,46 @@ extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width
    		    add	edi , [ dest_ajust_width ]
    		    dec	edx					; decrement the height
    		    jnz	forward_loop_bytes
-		    //  ret
+			//  ret
 
-		    // IF  TRANSP
-		    //
-		    //
-		    // forward_Blit_trans:
-		    //
-		    //
-		    //	    mov	ecx , eax
-		    //	    and	ecx , 01fh
-		    //	    lea	ecx , [ ecx + ecx * 4 ]
-		    //	    neg	ecx
-		    //	    shr	eax , 5
-		    //	    lea	ecx , [ transp_reference + ecx * 2 ]
-		    //	    mov	[ y1_pixel ] , ecx
-		    //
-		    //
-		    // forward_loop_trans:
-		    //	    mov	ecx , eax
-		    //	    jmp	[ y1_pixel ]
-		    // forward_trans_line:
-		    //	    REPT	32
-		    //	    local	transp_pixel
-		    //	    		mov	bl , [ esi ]
-		    //	    		inc	esi
-		    //	    		test	bl , bl
-		    //	    		jz	transp_pixel
-		    //	    		mov	[ edi ] , bl
-		    //	 	    transp_pixel:
-		    //	    		inc	edi
-		    //	ENDM
-		    //	 transp_reference:
-		    //	    dec	ecx
-		    //	    jge	forward_trans_line
-		    //	    add	esi , [ scr_ajust_width ]
-		    //	    add	edi , [ dest_ajust_width ]
-		    //	    dec	edx
-		    //	    jnz	forward_loop_trans
-		    //	    ret
-		    // ENDIF
+			// IF  TRANSP
+			//
+			//
+			// forward_Blit_trans:
+			//
+			//
+			//	    mov	ecx , eax
+			//	    and	ecx , 01fh
+			//	    lea	ecx , [ ecx + ecx * 4 ]
+			//	    neg	ecx
+			//	    shr	eax , 5
+			//	    lea	ecx , [ transp_reference + ecx * 2 ]
+			//	    mov	[ y1_pixel ] , ecx
+			//
+			//
+			// forward_loop_trans:
+			//	    mov	ecx , eax
+			//	    jmp	[ y1_pixel ]
+			// forward_trans_line:
+			//	    REPT	32
+			//	    local	transp_pixel
+			//	    		mov	bl , [ esi ]
+			//	    		inc	esi
+			//	    		test	bl , bl
+			//	    		jz	transp_pixel
+			//	    		mov	[ edi ] , bl
+			//	 	    transp_pixel:
+			//	    		inc	edi
+			//	ENDM
+			//	 transp_reference:
+			//	    dec	ecx
+			//	    jge	forward_trans_line
+			//	    add	esi , [ scr_ajust_width ]
+			//	    add	edi , [ dest_ajust_width ]
+			//	    dec	edx
+			//	    jnz	forward_loop_trans
+			//	    ret
+			// ENDIF
 
 		real_out:
 		// ret

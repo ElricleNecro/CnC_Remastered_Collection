@@ -35,5 +35,7 @@
 #include "mpu.h"
 
 #ifdef __BORLANDC__
-unsigned long __cdecl Get_CPU_Clock(unsigned long &high) { __asm db 0fh, 031h __asm mov[high], edx return (_EAX); }
+unsigned long __cdecl Get_CPU_Clock(unsigned long &high) {
+	__asm db 0fh, 031h __asm mov[high], edx return (_EAX);
+}
 #endif

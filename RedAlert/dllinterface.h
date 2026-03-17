@@ -182,8 +182,7 @@ struct CNCObjectLineStruct {
 struct CNCObjectStruct {
 	void *CNCInternalObjectPointer;
 	char TypeName[CNC_OBJECT_ASSET_NAME_LENGTH];
-	char
-	    AssetName[CNC_OBJECT_ASSET_NAME_LENGTH]; // CNC uses 8.3 filenames, so it shouldn't need to be bigger than 9
+	char AssetName[CNC_OBJECT_ASSET_NAME_LENGTH]; // CNC uses 8.3 filenames, so it shouldn't need to be bigger than 9
 	DllObjectTypeEnum Type;
 	int ID;
 	int BaseObjectID;
@@ -271,8 +270,8 @@ struct CNCObjectListStruct {
 */
 struct CNCPlacementCellInfoStruct {
 	bool PassesProximityCheck; // If the structure was placed in this cell, does that satisfy the proximity check
-				   // for the whole structure?
-	bool GenerallyClear;	   // Is this cell generally clear of obstructions that would prevent placement?
+		// for the whole structure?
+	bool GenerallyClear; // Is this cell generally clear of obstructions that would prevent placement?
 };
 
 struct CNCPlacementInfoStruct {
@@ -308,43 +307,42 @@ enum DllSuperweaponTypeEnum {
 
 struct CNCSidebarEntryStruct {
 	char AssetName[16]; // CNC uses 8.3 filenames, so it shouldn't need to be bigger than 9
-	int BuildableType;  // This is the original buildable type that should be passed back if we want to start/cancel
-			    // construction
-	int BuildableID;    // This is the original buildable id that should be passed back if we want to start/cancel
-			    // construction
+	int BuildableType; // This is the original buildable type that should be passed back if we want to start/cancel
+		// construction
+	int BuildableID; // This is the original buildable id that should be passed back if we want to start/cancel
+		// construction
 	DllObjectTypeEnum Type; // Type converted to shared enum
 	DllSuperweaponTypeEnum SuperWeaponType;
-	int Cost;			       // Cost to construct
-	int PowerProvided;		       // Power cost to construct
-	int BuildTime;			       // Cost to construct
-	float Progress;			       // Construction progress (0.0 - 1.0)
+	int Cost; // Cost to construct
+	int PowerProvided; // Power cost to construct
+	int BuildTime; // Cost to construct
+	float Progress; // Construction progress (0.0 - 1.0)
 	short PlacementList[MAX_OCCUPY_CELLS]; // Which cells this structure occupies for placement (if structure)
-	int PlacementListLength;	       // How many cells
-	bool Completed;			       // Construction has completed
-	bool Constructing;		       // Is it currently constructing
-	bool ConstructionOnHold;	       // Is the current construction on hold
-	bool Busy;			       // Is the associated factory busy
+	int PlacementListLength; // How many cells
+	bool Completed; // Construction has completed
+	bool Constructing; // Is it currently constructing
+	bool ConstructionOnHold; // Is the current construction on hold
+	bool Busy; // Is the associated factory busy
 	bool BuildableViaCapture; // Is this buildable due to the capture of a structure of a different faction. This
-				  // will be false for captured structures of the same faction (ActLike)
-	bool Fake;		  // Is this a fake structure?
+		// will be false for captured structures of the same faction (ActLike)
+	bool Fake; // Is this a fake structure?
 };
 
 struct CNCSidebarStruct {
-	int EntryCount[2];  // Counts for the left and right columns
-	int Credits;	    // Amount of currency available (excluding Tiberium)
+	int EntryCount[2]; // Counts for the left and right columns
+	int Credits; // Amount of currency available (excluding Tiberium)
 	int CreditsCounter; // Visible credits to display in the sidebar (includes count up/down logic)
-	int Tiberium;	    // Amount of Tiberium in reserve
-	int MaxTiberium;    // Maximum amount of Tiberium storage available
+	int Tiberium; // Amount of Tiberium in reserve
+	int MaxTiberium; // Maximum amount of Tiberium storage available
 	int PowerProduced;
 	int PowerDrained;
 	int MissionTimer;
-	unsigned int
-	    UnitsKilled; // Total count of enemy units killed by this player; Includes Infantry, Vehicles, Aircraft
-	unsigned int BuildingsKilled;	    // Total count of enemy structures killed by this player
-	unsigned int UnitsLost;		    // Total count player-owned units killed/lost
-	unsigned int BuildingsLost;	    // Total count player-owned structures killed/lost
+	unsigned int UnitsKilled; // Total count of enemy units killed by this player; Includes Infantry, Vehicles, Aircraft
+	unsigned int BuildingsKilled; // Total count of enemy structures killed by this player
+	unsigned int UnitsLost; // Total count player-owned units killed/lost
+	unsigned int BuildingsLost; // Total count player-owned structures killed/lost
 	unsigned int TotalHarvestedCredits; // Complete total of gained credits over the match (does not include
-					    // starting credits)
+		// starting credits)
 	bool RepairBtnEnabled;
 	bool SellBtnEnabled;
 	bool RadarMapActive;
@@ -425,8 +423,8 @@ enum UnitRequestEnum {
 	INPUT_UNIT_SELECT_PREVIOUS,
 	INPUT_UNIT_GUARD_MODE,
 	INPUT_UNIT_STOP,
-	INPUT_UNIT_FORMATION_TOGGLE,	// RA Only
-	INPUT_UNIT_QUEUED_MOVEMENT_ON,	// RA Only
+	INPUT_UNIT_FORMATION_TOGGLE, // RA Only
+	INPUT_UNIT_QUEUED_MOVEMENT_ON, // RA Only
 	INPUT_UNIT_QUEUED_MOVEMENT_OFF, // RA Only
 };
 
@@ -530,8 +528,9 @@ enum EventCallbackType {
 
 struct GameOverMultiPlayerStatsStruct {
 	GameOverMultiPlayerStatsStruct()
-	    : GlyphXPlayerID(0), IsHuman(false), WasHuman(false), IsWinner(false), ResourcesGathered(0),
-	      TotalUnitsKilled(0), TotalStructuresKilled(0), Efficiency(0), Score(0) {}
+		: GlyphXPlayerID(0), IsHuman(false), WasHuman(false), IsWinner(false), ResourcesGathered(0), TotalUnitsKilled(0),
+		  TotalStructuresKilled(0), Efficiency(0), Score(0) {
+	}
 	__int64 GlyphXPlayerID;
 	bool IsHuman;
 	bool WasHuman;
@@ -553,15 +552,14 @@ enum EventCallbackMessageEnum {
 };
 
 struct EventCallbackStruct {
-
-	EventCallbackStruct::EventCallbackStruct(void) : EventType(CALLBACK_EVENT_INVALID), GlyphXPlayerID(0) {}
+	EventCallbackStruct::EventCallbackStruct(void) : EventType(CALLBACK_EVENT_INVALID), GlyphXPlayerID(0) {
+	}
 
 	EventCallbackType EventType;
 
 	__int64 GlyphXPlayerID;
 
 	union {
-
 		struct SoundEffectEvent {
 			int SFXIndex;
 			int Variation;
@@ -608,8 +606,7 @@ struct EventCallbackStruct {
 			// Multi-player data
 			//
 			int MultiPlayerTotalPlayers;
-			GameOverMultiPlayerStatsStruct
-			    MultiPlayerPlayersData[GAME_OVER_MULTIPLAYER_MAX_PLAYERS_TRACKED];
+			GameOverMultiPlayerStatsStruct MultiPlayerPlayersData[GAME_OVER_MULTIPLAYER_MAX_PLAYERS_TRACKED];
 		} GameOver;
 
 		struct DebugPrintEvent {
@@ -677,16 +674,16 @@ struct CNCMultiplayerOptionsStruct {
 	// int MPlayerColorIdx;					// actual color index of this player
 	// CnCHousesType MPlayerHouse;		// House of this player (GDI/NOD)
 	// unsigned char MPlayerLocalID;		// ID of this player
-	int MPlayerCount;	 // # of human players in this game
-	int MPlayerBases;	 // 1 = bases are on for this scenario
-	int MPlayerCredits;	 // # credits everyone gets
-	int MPlayerTiberium;	 // >0 = tiberium enabled for this scenario
-	int MPlayerGoodies;	 // 1 = goodies enabled for this scenario
-	int MPlayerGhosts;	 // 1 = houses with no players will still play
-	int MPlayerSolo;	 // 1 = allows a single-player net game
-	int MPlayerUnitCount;	 // # units for non-base multiplayer scenarios
-	bool IsMCVDeploy;	 // MCV undeploys instead of selling
-	bool SpawnVisceroids;	 // Do visceroids spawn
+	int MPlayerCount; // # of human players in this game
+	int MPlayerBases; // 1 = bases are on for this scenario
+	int MPlayerCredits; // # credits everyone gets
+	int MPlayerTiberium; // >0 = tiberium enabled for this scenario
+	int MPlayerGoodies; // 1 = goodies enabled for this scenario
+	int MPlayerGhosts; // 1 = houses with no players will still play
+	int MPlayerSolo; // 1 = allows a single-player net game
+	int MPlayerUnitCount; // # units for non-base multiplayer scenarios
+	bool IsMCVDeploy; // MCV undeploys instead of selling
+	bool SpawnVisceroids; // Do visceroids spawn
 	bool EnableSuperweapons; // Are superweapons available
 	bool MPlayerShadowRegrow;
 	bool MPlayerAftermathUnits;
@@ -826,7 +823,8 @@ struct CNCOccupierHeaderStruct {
 **
 */
 struct CarryoverObjectStruct {
-	CarryoverObjectStruct() : Next(0) {}
+	CarryoverObjectStruct() : Next(0) {
+	}
 
 	CarryoverObjectStruct *Next;
 

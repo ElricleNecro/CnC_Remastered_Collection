@@ -43,23 +43,23 @@
 /*	GraphicMode is set to one of these values.
  */
 /*=========================================================================*/
-#define CGA_MODE 4		// DOS 320x200 4 color mode
-#define TGA_MODE 9		// TANDY 320x200 16 color mode
-#define EGA_MODE 13		// DOS 320x200 16 color mode
-#define MCGA_MODE 0x13		// DOS 320x200 256 color mode
-#define VGA_MODE 0x13		// DOS 320x200 256 color mode
-#define EEGA_MODE 14		// DOS 640x400 16 color mode
-#define ETGA_MODE 9		// TANDY 640x400 16 color mode
-#define HGA_MODE 7		// DOS 768x400 2 color mode
-#define TXT_MODE 3		// DOS plain old color text mode
-#define VESA_640X400_256 0x100	// VESA 640x400 256 color mode
-#define VESA_640X480_256 0x101	// VESA 640x480 256 color mode
-#define VESA_800X600_256 0x103	// VESA 800x600 256 color mode
+#define CGA_MODE 4 // DOS 320x200 4 color mode
+#define TGA_MODE 9 // TANDY 320x200 16 color mode
+#define EGA_MODE 13 // DOS 320x200 16 color mode
+#define MCGA_MODE 0x13 // DOS 320x200 256 color mode
+#define VGA_MODE 0x13 // DOS 320x200 256 color mode
+#define EEGA_MODE 14 // DOS 640x400 16 color mode
+#define ETGA_MODE 9 // TANDY 640x400 16 color mode
+#define HGA_MODE 7 // DOS 768x400 2 color mode
+#define TXT_MODE 3 // DOS plain old color text mode
+#define VESA_640X400_256 0x100 // VESA 640x400 256 color mode
+#define VESA_640X480_256 0x101 // VESA 640x480 256 color mode
+#define VESA_800X600_256 0x103 // VESA 800x600 256 color mode
 #define VESA_1024X768_256 0x105 //	VESA 1024x768 256 color mode
 #define VESA_1280X400_256 0x107 // VESA 1280x400 256 color mode
-#define VESA_TEXT_80X60 0x108	// VESA 80x60 text mode
-#define VESA_TEXT_132X25 0x109	// VESA 132x25 text mode
-#define VESA_TEXT_132X60 0x10C	// VESA 132x60 text mode
+#define VESA_TEXT_80X60 0x108 // VESA 80x60 text mode
+#define VESA_TEXT_132X25 0x109 // VESA 132x25 text mode
+#define VESA_TEXT_132X60 0x10C // VESA 132x60 text mode
 #define RESET_MODE -1
 #define UNINITIALIZED_MODE -1
 #define VESA_MIN VESA_640X400_256

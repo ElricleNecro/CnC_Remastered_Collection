@@ -32,9 +32,9 @@
  * int Save_PCX_File (char* name, GraphicViewPortClass& pic, char* palette)*
  *= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =*/
 
-#include "filepcx.h"
 #include <wwlib32.h>
 #include <wwmem.h>
+#include "filepcx.h"
 static void Write_Pcx_ScanLine(int file_handle, int scansize, unsigned char *ptr);
 
 /***************************************************************************
@@ -65,7 +65,7 @@ int Write_PCX_File(char *name, GraphicViewPortClass &pic, unsigned char *palette
 	char *ptr;
 	RGB *pal;
 	GraphicBufferClass *Graphic_Buffer;
-	PCX_HEADER header = {10, 5, 1, 8, 0, 0, 319, 199, 320, 200, {0}, 0, 1, 320, 1, {0}};
+	PCX_HEADER header = { 10, 5, 1, 8, 0, 0, 319, 199, 320, 200, { 0 }, 0, 1, 320, 1, { 0 } };
 
 	// Open file name
 	file_handle = Open_File(name, WRITE);
@@ -115,13 +115,13 @@ int Write_PCX_File(char *name, GraphicViewPortClass &pic, unsigned char *palette
  *=========================================================================*/
 
 #define POOL_SIZE 2048
-#define WRITE_CHAR(x)                                                                                                  \
-	{                                                                                                              \
-		*file_ptr++ = x;                                                                                       \
-		if (file_ptr >= &pool[POOL_SIZE]) {                                                                    \
-			Write_File(file_handle, pool, POOL_SIZE);                                                      \
-			file_ptr = pool;                                                                               \
-		}                                                                                                      \
+#define WRITE_CHAR(x)                                                                                                                                \
+	{                                                                                                                                            \
+		*file_ptr++ = x;                                                                                                                     \
+		if (file_ptr >= &pool[POOL_SIZE]) {                                                                                                  \
+			Write_File(file_handle, pool, POOL_SIZE);                                                                                    \
+			file_ptr = pool;                                                                                                             \
+		}                                                                                                                                    \
 	}
 
 void Write_Pcx_ScanLine(int file_handle, int scansize, unsigned char *ptr) {

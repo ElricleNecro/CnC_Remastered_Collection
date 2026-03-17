@@ -63,8 +63,8 @@
 **	Array of all missions supported by the map editor
 */
 MissionType MapEditClass::MapEditMissions[] = {
-    MISSION_GUARD,  MISSION_STICKY, MISSION_HARMLESS, MISSION_HARVEST, MISSION_GUARD_AREA,
-    MISSION_RETURN, MISSION_AMBUSH, MISSION_HUNT,     MISSION_SLEEP,
+	MISSION_GUARD,	MISSION_STICKY, MISSION_HARMLESS, MISSION_HARVEST, MISSION_GUARD_AREA,
+	MISSION_RETURN, MISSION_AMBUSH, MISSION_HUNT,	  MISSION_SLEEP,
 };
 #define NUM_EDIT_MISSIONS (sizeof(MapEditClass::MapEditMissions) / sizeof(MapEditClass::MapEditMissions[0]))
 
@@ -135,8 +135,7 @@ void MapEditClass::One_Time(void) {
 	**	The map: a single large "button"
 	*/
 #ifdef WIN32
-	MapArea = new ControlClass(MAP_AREA, 0, 8, 640 - 8, 400 - 8, GadgetClass::LEFTPRESS | GadgetClass::LEFTRELEASE,
-				   false);
+	MapArea = new ControlClass(MAP_AREA, 0, 8, 640 - 8, 400 - 8, GadgetClass::LEFTPRESS | GadgetClass::LEFTRELEASE, false);
 #else
 	MapArea = new ControlClass(MAP_AREA, 0, 8, 312, 192, GadgetClass::LEFTPRESS | GadgetClass::LEFTRELEASE, false);
 #endif
@@ -144,9 +143,14 @@ void MapEditClass::One_Time(void) {
 	/*
 	**	House buttons
 	*/
-	HouseList =
-	    new ListClass(POPUP_HOUSELIST, POPUP_HOUSE_X, POPUP_HOUSE_Y, POPUP_HOUSE_W, POPUP_HOUSE_H,
-			  TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	HouseList = new ListClass(POPUP_HOUSELIST,
+				  POPUP_HOUSE_X,
+				  POPUP_HOUSE_Y,
+				  POPUP_HOUSE_W,
+				  POPUP_HOUSE_H,
+				  TPF_EFNT | TPF_NOSHADOW,
+				  MFCD::Retrieve("EBTN-UP.SHP"),
+				  MFCD::Retrieve("EBTN-DN.SHP"));
 	for (HousesType house = HOUSE_FIRST; house < HOUSE_COUNT; house++) {
 		HouseList->Add_Item(HouseTypeClass::As_Reference(house).IniName);
 	}
@@ -154,9 +158,14 @@ void MapEditClass::One_Time(void) {
 	/*
 	**	The mission list box
 	*/
-	MissionList =
-	    new ListClass(POPUP_MISSIONLIST, POPUP_MISSION_X, POPUP_MISSION_Y, POPUP_MISSION_W, POPUP_MISSION_H,
-			  TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	MissionList = new ListClass(POPUP_MISSIONLIST,
+				    POPUP_MISSION_X,
+				    POPUP_MISSION_Y,
+				    POPUP_MISSION_W,
+				    POPUP_MISSION_H,
+				    TPF_EFNT | TPF_NOSHADOW,
+				    MFCD::Retrieve("EBTN-UP.SHP"),
+				    MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (int i = 0; i < NUM_EDIT_MISSIONS; i++) {
 		MissionList->Add_Item(MissionClass::Mission_Name(MapEditMissions[i]));
@@ -165,8 +174,7 @@ void MapEditClass::One_Time(void) {
 	/*
 	**	The health bar
 	*/
-	HealthGauge =
-	    new TriColorGaugeClass(POPUP_HEALTHGAUGE, POPUP_HEALTH_X, POPUP_HEALTH_Y, POPUP_HEALTH_W, POPUP_HEALTH_H);
+	HealthGauge = new TriColorGaugeClass(POPUP_HEALTHGAUGE, POPUP_HEALTH_X, POPUP_HEALTH_Y, POPUP_HEALTH_W, POPUP_HEALTH_H);
 	HealthGauge->Use_Thumb(true);
 	HealthGauge->Set_Maximum(0x100);
 	HealthGauge->Set_Red_Limit(0x3f - 1);
@@ -176,9 +184,11 @@ void MapEditClass::One_Time(void) {
 	**	The health text label
 	*/
 	HealthBuf[0] = 0;
-	HealthText =
-	    new TextLabelClass(HealthBuf, POPUP_HEALTH_X + POPUP_HEALTH_W / 2, POPUP_HEALTH_Y + POPUP_HEALTH_H + 1,
-			       GadgetClass::Get_Color_Scheme(), TPF_CENTER | TPF_FULLSHADOW | TPF_EFNT);
+	HealthText = new TextLabelClass(HealthBuf,
+					POPUP_HEALTH_X + POPUP_HEALTH_W / 2,
+					POPUP_HEALTH_Y + POPUP_HEALTH_H + 1,
+					GadgetClass::Get_Color_Scheme(),
+					TPF_CENTER | TPF_FULLSHADOW | TPF_EFNT);
 
 	/*
 	**	Building attribute buttons.
@@ -189,15 +199,13 @@ void MapEditClass::One_Time(void) {
 	/*
 	**	The facing dial
 	*/
-	FacingDial = new Dial8Class(POPUP_FACINGDIAL, POPUP_FACEBOX_X, POPUP_FACEBOX_Y, POPUP_FACEBOX_W,
-				    POPUP_FACEBOX_H, (DirType)0);
+	FacingDial = new Dial8Class(POPUP_FACINGDIAL, POPUP_FACEBOX_X, POPUP_FACEBOX_Y, POPUP_FACEBOX_W, POPUP_FACEBOX_H, (DirType)0);
 
 	/*
 	**	The base percent-built slider & its label
 	*/
 	BaseGauge = new GaugeClass(POPUP_BASEPERCENT, POPUP_BASE_X, POPUP_BASE_Y, POPUP_BASE_W, POPUP_BASE_H);
-	BaseLabel = new TextLabelClass("Base:", POPUP_BASE_X - 3, POPUP_BASE_Y, GadgetClass::Get_Color_Scheme(),
-				       TPF_RIGHT | TPF_NOSHADOW | TPF_EFNT);
+	BaseLabel = new TextLabelClass("Base:", POPUP_BASE_X - 3, POPUP_BASE_Y, GadgetClass::Get_Color_Scheme(), TPF_RIGHT | TPF_NOSHADOW | TPF_EFNT);
 	BaseGauge->Set_Maximum(100);
 	BaseGauge->Set_Value(Scen.Percent);
 }
@@ -219,11 +227,9 @@ void MapEditClass::Init_IO(void) {
 	**	For normal game mode, jump to the parent's Init routine.
 	*/
 	if (!Debug_Map) {
-
 		MouseClass::Init_IO();
 
 	} else {
-
 		/*
 		**	For editor mode, add the map area to the button input list
 		*/
@@ -407,8 +413,8 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	int strength;
 	CELL cell;
 	int i;
-	int found;	     // for removing a waypoint label
-	int waypt_idx;	     // for labelling a waypoint
+	int found; // for removing a waypoint label
+	int waypt_idx; // for labelling a waypoint
 	BaseNodeClass *node; // for removing from an AI Base
 	HousesType house;
 	char wayname[4];
@@ -433,7 +439,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 				**	User wants to save
 				*/
 				if (rc == 0) {
-
 					/*
 					**	If save cancelled, abort game
 					*/
@@ -444,7 +449,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 						Go_Editor(!Debug_Map);
 					}
 				} else {
-
 					/*
 					**	User doesn't want to save
 					*/
@@ -478,9 +482,8 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	/*
 	**	Do special mouse processing if the mouse is over the map
 	*/
-	if (Get_Mouse_X() > TacPixelX && Get_Mouse_X() < TacPixelX + Lepton_To_Pixel(TacLeptonWidth) &&
-	    Get_Mouse_Y() > TacPixelY && Get_Mouse_Y() < TacPixelY + Lepton_To_Pixel(TacLeptonHeight)) {
-
+	if (Get_Mouse_X() > TacPixelX && Get_Mouse_X() < TacPixelX + Lepton_To_Pixel(TacLeptonWidth) && Get_Mouse_Y() > TacPixelY &&
+	    Get_Mouse_Y() < TacPixelY + Lepton_To_Pixel(TacLeptonHeight)) {
 		/*
 		**	When the mouse moves over a scrolling edge, ScrollClass changes its
 		**	shape to the appropriate arrow or NO symbol; it's our job to change it
@@ -498,9 +501,8 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	**	Set 'ZoneCell' to track the mouse cursor around over the map.  Do this
 	**	even if the map is scrolling.
 	*/
-	if (Get_Mouse_X() >= TacPixelX && Get_Mouse_X() <= TacPixelX + Lepton_To_Pixel(TacLeptonWidth) &&
-	    Get_Mouse_Y() >= TacPixelY && Get_Mouse_Y() <= TacPixelY + Lepton_To_Pixel(TacLeptonHeight)) {
-
+	if (Get_Mouse_X() >= TacPixelX && Get_Mouse_X() <= TacPixelX + Lepton_To_Pixel(TacLeptonWidth) && Get_Mouse_Y() >= TacPixelY &&
+	    Get_Mouse_Y() <= TacPixelY + Lepton_To_Pixel(TacLeptonHeight)) {
 		cell = Click_Cell_Calc(Get_Mouse_X(), Get_Mouse_Y());
 		if (cell != -1) {
 			Set_Cursor_Pos(cell);
@@ -515,7 +517,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	*/
 	rc = Mouse_Moved();
 	if (LMouseDown && rc) {
-
 		/*
 		**	"Paint" mode: place current object, and restart placement
 		*/
@@ -526,7 +527,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 				Start_Placement();
 			}
 		} else {
-
 			/*
 			**	Move the currently-grabbed object
 			*/
@@ -626,7 +626,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 			input = KN_NONE;
 			break;
 		} else {
-
 			/*
 			**	Exit trigger placement mode
 			*/
@@ -661,7 +660,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 					**	User wants to save
 					*/
 					if (rc == 0) {
-
 						/*
 						**	If save cancelled, abort exit
 						*/
@@ -726,7 +724,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 		if (PendingObject) {
 			Place_Home();
 		} else {
-
 			/*
 			**	Set map position
 			*/
@@ -749,7 +746,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	*/
 	case ((int)KN_HOME | (int)KN_SHIFT_BIT):
 		if (CurrentCell != 0) {
-
 			/*
 			** Unflag the old Home Cell, if there are no other waypoints
 			** pointing to it
@@ -906,7 +902,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 				HouseClass::As_Pointer(house)->Flag_Attach(CurrentCell, true);
 			}
 		} else {
-
 			/*
 			**	If there's a current object, attach the flag to it and clear the
 			**	waypoint.
@@ -928,7 +923,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	*/
 	case ((int)KN_SPACE | (int)KN_ALT_BIT):
 		if (CurrentCell != 0) {
-
 			/*
 			**	Loop through letter waypoints; if this cell is one of them,
 			**	clear that waypoint.
@@ -944,8 +938,7 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 			*/
 			for (i = 0; i < MAX_PLAYERS; i++) {
 				house = (HousesType)(HOUSE_MULTI1 + i);
-				if (HouseClass::As_Pointer(house) &&
-				    CurrentCell == HouseClass::As_Pointer(house)->FlagHome)
+				if (HouseClass::As_Pointer(house) && CurrentCell == HouseClass::As_Pointer(house)->FlagHome)
 					HouseClass::As_Pointer(house)->Flag_Remove(As_Target(CurrentCell), true);
 			}
 
@@ -1001,7 +994,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 					Start_Placement();
 				}
 			} else {
-
 				/*
 				**	Place a trigger
 				*/
@@ -1009,7 +1001,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 					Place_Trigger();
 					Changed = 1;
 				} else {
-
 					/*
 					**	Select an object or a cell
 					**	Check for double-click
@@ -1025,12 +1016,10 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 							CurrentCell = 0;
 							Grab_Object();
 						} else {
-
 							/*
 							**	No object: select the cell
 							*/
-							CurrentCell =
-							    Click_Cell_Calc(Keyboard->MouseQX, Keyboard->MouseQY);
+							CurrentCell = Click_Cell_Calc(Keyboard->MouseQX, Keyboard->MouseQY);
 							HidPage.Clear();
 							Flag_To_Redraw(true);
 							Render();
@@ -1041,7 +1030,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 			LastClickTime = TickCount();
 			input = KN_NONE;
 		} else {
-
 			/*
 			**	Left Button UP
 			*/
@@ -1074,7 +1062,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 		**	Delete currently-selected object's trigger, or the object
 		*/
 		if (CurrentObject.Count()) {
-
 			/*
 			**	Delete trigger
 			*/
@@ -1085,8 +1072,7 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 				** If the current object is part of the AI's Base, remove it
 				** from the Base's Node list.
 				*/
-				if (CurrentObject[0]->What_Am_I() == RTTI_BUILDING &&
-				    Base.Is_Node((BuildingClass *)CurrentObject[0])) {
+				if (CurrentObject[0]->What_Am_I() == RTTI_BUILDING && Base.Is_Node((BuildingClass *)CurrentObject[0])) {
 					node = Base.Get_Node((BuildingClass *)CurrentObject[0]);
 					Base.Nodes.Delete(*node);
 				}
@@ -1109,7 +1095,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 			Flag_To_Redraw(true);
 			Changed = 1;
 		} else {
-
 			/*
 			**	Remove trigger from current cell
 			*/
@@ -1249,7 +1234,6 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	*/
 	case (POPUP_HEALTHGAUGE | KN_BUTTON):
 		if (CurrentObject[0]->Is_Techno()) {
-
 			/*
 			**	Derive strength from current gauge reading
 			*/
@@ -1288,12 +1272,10 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 	*/
 	case (POPUP_FACINGDIAL | KN_BUTTON):
 		if (CurrentObject[0]->Is_Techno()) {
-
 			/*
 			**	Set new facing
 			*/
 			if (FacingDial->Get_Direction() != ((TechnoClass *)CurrentObject[0])->PrimaryFacing.Get()) {
-
 				/*
 				**	Set body's facing
 				*/
@@ -1303,8 +1285,7 @@ void MapEditClass::AI(KeyNumType &input, int x, int y) {
 				**	Set turret facing, if there is one
 				*/
 				if (CurrentObject[0]->What_Am_I() == RTTI_UNIT) {
-					((UnitClass *)CurrentObject[0])
-					    ->SecondaryFacing.Set(FacingDial->Get_Direction());
+					((UnitClass *)CurrentObject[0])->SecondaryFacing.Set(FacingDial->Get_Direction());
 				}
 
 				HidPage.Clear();
@@ -1364,8 +1345,7 @@ void MapEditClass::Draw_It(bool forced) {
 	/*
 	**	Display the total value of all Tiberium on the map.
 	*/
-	Fancy_Text_Print("Tiberium=%ld   ", 0, 0, GadgetClass::Get_Color_Scheme(), BLACK, TPF_EFNT | TPF_NOSHADOW,
-			 TotalValue);
+	Fancy_Text_Print("Tiberium=%ld   ", 0, 0, GadgetClass::Get_Color_Scheme(), BLACK, TPF_EFNT | TPF_NOSHADOW, TotalValue);
 
 	/*
 	**	If there are no object controls displayed, just invoke parent's Redraw
@@ -1381,7 +1361,6 @@ void MapEditClass::Draw_It(bool forced) {
 	**	then invoke the parent's Redraw to blit the HIDPAGE to SEENPAGE.
 	*/
 	if (forced) {
-
 		/*
 		**	Update the text labels
 		*/
@@ -1396,8 +1375,7 @@ void MapEditClass::Draw_It(bool forced) {
 			/*
 			**	print the label
 			*/
-			Fancy_Text_Print(buf, 160, 0, &ColorRemaps[PCOLOR_BROWN], TBLACK,
-					 TPF_CENTER | TPF_NOSHADOW | TPF_EFNT);
+			Fancy_Text_Print(buf, 160, 0, &ColorRemaps[PCOLOR_BROWN], TBLACK, TPF_CENTER | TPF_NOSHADOW | TPF_EFNT);
 		}
 	}
 }
@@ -1493,7 +1471,7 @@ bool MapEditClass::Mouse_Moved(void) {
 void MapEditClass::Main_Menu(void) {
 	char const *_menus[MAX_MAIN_MENU_NUM + 1];
 	int selection; // option the user picks
-	bool process;  // menu stays up while true
+	bool process; // menu stays up while true
 	int rc;
 
 	/*
@@ -1515,7 +1493,6 @@ void MapEditClass::Main_Menu(void) {
 	Override_Mouse_Shape(MOUSE_NORMAL); // display default mouse cursor
 	process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback, to update music
 		*/
@@ -1535,7 +1512,6 @@ void MapEditClass::Main_Menu(void) {
 		**	Process selection
 		*/
 		switch (selection) {
-
 		/*
 		**	New scenario
 		*/
@@ -1683,7 +1659,7 @@ void MapEditClass::Main_Menu(void) {
  *=========================================================================*/
 void MapEditClass::AI_Menu(void) {
 	int selection; // option the user picks
-	bool process;  // menu stays up while true
+	bool process; // menu stays up while true
 	char const *_menus[MAX_AI_MENU_NUM + 1];
 
 	/*
@@ -1700,7 +1676,6 @@ void MapEditClass::AI_Menu(void) {
 	Override_Mouse_Shape(MOUSE_NORMAL); // display default mouse cursor
 	process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback, to update music
 		*/
@@ -1801,7 +1776,6 @@ HousesType MapEditClass::Cycle_House(HousesType curhouse, ObjectTypeClass const 
 	*/
 	count = HOUSE_NONE;
 	while (1) {
-
 		/*
 		**	Go to next house
 		*/
@@ -1865,7 +1839,9 @@ bool MapEditClass::Scroll_Map(DirType facing, int &distance, bool really) {
 }
 
 #ifdef OBSOLETE
-void MapEditClass::Flag_To_Redraw(bool complete) { MouseClass::Flag_To_Redraw(complete); }
+void MapEditClass::Flag_To_Redraw(bool complete) {
+	MouseClass::Flag_To_Redraw(complete);
+}
 #endif
 
 void MapEditClass::Detach(ObjectClass *object) {
@@ -1879,14 +1855,14 @@ bool MapEditClass::Get_Waypoint_Name(char wayptname[]) {
 	**	Dialog & button dimensions
 	*/
 	enum {
-		D_DIALOG_W = 100,			     // dialog width
-		D_DIALOG_H = 56,			     // dialog height
-		D_DIALOG_X = ((320 - D_DIALOG_W) / 2),	     // centered x-coord
-		D_DIALOG_Y = ((200 - D_DIALOG_H) / 2),	     // centered y-coord
+		D_DIALOG_W = 100, // dialog width
+		D_DIALOG_H = 56, // dialog height
+		D_DIALOG_X = ((320 - D_DIALOG_W) / 2), // centered x-coord
+		D_DIALOG_Y = ((200 - D_DIALOG_H) / 2), // centered y-coord
 		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2), // coord of x-center
 
 		D_TXT8_H = 11, // ht of 8-pt text
-		D_MARGIN = 7,  // margin width/height
+		D_MARGIN = 7, // margin width/height
 
 		D_EDIT_W = D_DIALOG_W - (D_MARGIN * 2),
 		D_EDIT_H = 13,
@@ -1927,8 +1903,7 @@ bool MapEditClass::Get_Waypoint_Name(char wayptname[]) {
 
 	TextButtonClass button(BUTTON_OK, TXT_OK, TPF_EBUTTON, D_BUTTON_X, D_BUTTON_Y, D_BUTTON_W);
 	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W);
-	EditClass editbtn(BUTTON_EDIT, wayptname, 3, TPF_EFNT | TPF_NOSHADOW, D_EDIT_X, D_EDIT_Y, D_EDIT_W, -1,
-			  EditClass::ALPHANUMERIC);
+	EditClass editbtn(BUTTON_EDIT, wayptname, 3, TPF_EFNT | TPF_NOSHADOW, D_EDIT_X, D_EDIT_Y, D_EDIT_W, -1, EditClass::ALPHANUMERIC);
 
 	/*
 	**	Initialize.
@@ -1950,7 +1925,6 @@ bool MapEditClass::Get_Waypoint_Name(char wayptname[]) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -1965,7 +1939,6 @@ bool MapEditClass::Get_Waypoint_Name(char wayptname[]) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			/*
 			**	Display the dialog box.
 			*/

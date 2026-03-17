@@ -53,7 +53,6 @@
 **
 */
 class IPXInterfaceClass : public WinsockInterfaceClass {
-
 public:
 	IPXInterfaceClass(void);
 	// virtual ~IPXInterfaceClass(void){Close();};
@@ -61,9 +60,13 @@ public:
 	virtual long Message_Handler(HWND window, UINT message, UINT wParam, LONG lParam);
 	virtual bool Open_Socket(SOCKET socketnum);
 
-	virtual ProtocolEnum Get_Protocol(void) { return (PROTOCOL_IPX); };
+	virtual ProtocolEnum Get_Protocol(void) {
+		return (PROTOCOL_IPX);
+	};
 
-	virtual int Protocol_Event_Message(void) { return (WM_IPXASYNCEVENT); };
+	virtual int Protocol_Event_Message(void) {
+		return (WM_IPXASYNCEVENT);
+	};
 
 private:
 	/*

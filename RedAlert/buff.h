@@ -63,13 +63,23 @@ public:
 	~Buffer(void);
 
 	Buffer &operator=(Buffer const &buffer);
-	operator void *(void) const { return (BufferPtr); }
-	operator char *(void) const { return ((char *)BufferPtr); }
+	operator void *(void) const {
+		return (BufferPtr);
+	}
+	operator char *(void) const {
+		return ((char *)BufferPtr);
+	}
 
 	void Reset(void);
-	void *Get_Buffer(void) const { return (BufferPtr); }
-	long Get_Size(void) const { return (Size); }
-	bool Is_Valid(void) const { return (BufferPtr != 0); }
+	void *Get_Buffer(void) const {
+		return (BufferPtr);
+	}
+	long Get_Size(void) const {
+		return (Size);
+	}
+	bool Is_Valid(void) const {
+		return (BufferPtr != 0);
+	}
 
 protected:
 	/*

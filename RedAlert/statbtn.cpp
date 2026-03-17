@@ -64,7 +64,7 @@
  * HISTORY:  01/15/1995 JLB : Created.                                                         *
  *=============================================================================================*/
 StaticButtonClass::StaticButtonClass(unsigned, char const *text, TextPrintType style, int x, int y, int w, int h)
-    : GadgetClass(x, y, w, h, FlagEnum(0)), String(NULL), PrintFlags(style) {
+	: GadgetClass(x, y, w, h, FlagEnum(0)), String(NULL), PrintFlags(style) {
 	/*
 	**	Make a duplicate of the string to display.
 	*/
@@ -93,8 +93,8 @@ StaticButtonClass::StaticButtonClass(unsigned, char const *text, TextPrintType s
  *                                                                                             *
  * HISTORY:  01/15/1995 JLB : Created.                                                         *
  *=============================================================================================*/
-StaticButtonClass::StaticButtonClass(void)
-    : GadgetClass(0, 0, 0, 0, FlagEnum(0)), String(NULL), PrintFlags(TPF_8POINT) {}
+StaticButtonClass::StaticButtonClass(void) : GadgetClass(0, 0, 0, 0, FlagEnum(0)), String(NULL), PrintFlags(TPF_8POINT) {
+}
 
 /***********************************************************************************************
  * StaticButtonClass::Draw_Me -- Draws the text buttons as indicated.                          *

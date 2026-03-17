@@ -62,7 +62,8 @@ typedef int bool;
 */
 class BlowfishEngine {
 public:
-	BlowfishEngine(void) : IsKeyed(false) {}
+	BlowfishEngine(void) : IsKeyed(false) {
+	}
 	~BlowfishEngine(void);
 
 	void Submit_Key(void const *key, int length);
@@ -84,7 +85,7 @@ private:
 	void Initialize_Tables(void);
 
 	enum {
-		ROUNDS = 16,	    // Feistal round count (16 is standard).
+		ROUNDS = 16, // Feistal round count (16 is standard).
 		BYTES_PER_BLOCK = 8 // The number of bytes in each cypher block (don't change).
 	};
 

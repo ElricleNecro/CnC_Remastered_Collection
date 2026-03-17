@@ -85,7 +85,9 @@ public:
 
 	void Reset(void);
 	unsigned long Value(void) const;
-	unsigned long Count(void) const { return (TotalCount); }
+	unsigned long Count(void) const {
+		return (TotalCount);
+	}
 
 private:
 	/*

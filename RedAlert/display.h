@@ -89,7 +89,7 @@ public:
 	short ZoneOffset;
 	short const *CursorSize;
 	short CursorShapeSave[256]; // For save/load
-	bool ProximityCheck;	    // Is proximity check ok?
+	bool ProximityCheck; // Is proximity check ok?
 
 	/*
 	** This holds the building type that is about to be placed upon the map.
@@ -126,9 +126,9 @@ public:
 	/*
 	** Initialization
 	*/
-	virtual void One_Time(void);			// One-time inits
-	virtual void Init_Clear(void);			// Clears all to known state
-	virtual void Init_IO(void);			// Inits button list
+	virtual void One_Time(void); // One-time inits
+	virtual void Init_Clear(void); // Clears all to known state
+	virtual void Init_IO(void); // Inits button list
 	virtual void Init_Theater(TheaterType theater); // Theater-specific inits
 
 	/*
@@ -140,19 +140,19 @@ public:
 	/*
 	**	Added functionality.
 	*/
-	void All_To_Look(
-	    HouseClass *house,
-	    bool units_only = false); // Added house parameter so it can work for multiple players. ST - 8/6/2019 2:30PM
-	void Constrained_Look(
-	    COORDINATE coord, LEPTON distance,
-	    HouseClass *house); // Added house parameter for client/server multiplayer. ST - 8/12/2019 3:25PM
+	void All_To_Look(HouseClass *house,
+			 bool units_only = false); // Added house parameter so it can work for multiple players. ST - 8/6/2019 2:30PM
+	void Constrained_Look(COORDINATE coord,
+			      LEPTON distance,
+			      HouseClass *house); // Added house parameter for client/server multiplayer. ST - 8/12/2019 3:25PM
 	void Shroud_Cell(CELL cell, HouseClass *house);
 	void Encroach_Shadow(HouseClass *house);
 	COORDINATE Center_Map(COORDINATE center = 0L);
-	virtual bool
-	Map_Cell(CELL cell, HouseClass *house, bool check_radar_spied = true,
-		 bool and_for_allies = true); // Added check_radar_spied parameter to prevent recursion. ST - 8/6/2019
-					      // 10:16AM. Added and_for_allies ST - 10/31/2019 1:18PM
+	virtual bool Map_Cell(CELL cell,
+			      HouseClass *house,
+			      bool check_radar_spied = true,
+			      bool and_for_allies = true); // Added check_radar_spied parameter to prevent recursion. ST - 8/6/2019
+		// 10:16AM. Added and_for_allies ST - 10/31/2019 1:18PM
 	virtual CELL Click_Cell_Calc(int x, int y) const;
 	virtual void Help_Text(int, int = -1, int = -1, int = YELLOW, bool = false) {};
 	virtual MouseType Get_Mouse_Shape(void) const = 0;
@@ -180,11 +180,14 @@ public:
 	bool Push_Onto_TacMap(COORDINATE &source, COORDINATE &dest);
 	void Remove(ObjectClass const *object, LayerType layer);
 	void Submit(ObjectClass const *object, LayerType layer);
-	CELL Calculated_Cell(SourceType dir, WAYPOINT waypoint = -1, CELL cell = -1, SpeedType loco = SPEED_FOOT,
-			     bool zonecheck = true, MZoneType mzone = MZONE_NORMAL) const;
+	CELL Calculated_Cell(SourceType dir,
+			     WAYPOINT waypoint = -1,
+			     CELL cell = -1,
+			     SpeedType loco = SPEED_FOOT,
+			     bool zonecheck = true,
+			     MZoneType mzone = MZONE_NORMAL) const;
 	bool In_View(register CELL cell) const;
-	bool Passes_Proximity_Check(ObjectTypeClass const *object, HousesType house, short const *list,
-				    CELL trycell) const;
+	bool Passes_Proximity_Check(ObjectTypeClass const *object, HousesType house, short const *list, CELL trycell) const;
 	ObjectClass *Cell_Object(CELL cell, int x = 0, int y = 0) const;
 	ObjectClass *Next_Object(ObjectClass *object) const;
 	ObjectClass *Prev_Object(ObjectClass *object) const;
@@ -196,7 +199,9 @@ public:
 	void Repair_Mode_Control(int control);
 
 	virtual void Flag_Cell(CELL cell);
-	bool Is_Cell_Flagged(CELL cell) const { return CellRedraw.Is_True(cell); };
+	bool Is_Cell_Flagged(CELL cell) const {
+		return CellRedraw.Is_True(cell);
+	};
 
 	/*
 	** Computes starting position based on player's units' Coords.
@@ -214,8 +219,7 @@ protected:
 	virtual void Mouse_Left_Press(int x, int y);
 	virtual void Mouse_Left_Up(CELL cell, bool shadow, ObjectClass *object, ActionType action, bool wsmall = false);
 	virtual void Mouse_Left_Held(int x, int y);
-	virtual void Mouse_Left_Release(CELL cell, int x, int y, ObjectClass *object, ActionType action,
-					bool wsmall = false);
+	virtual void Mouse_Left_Release(CELL cell, int x, int y, ObjectClass *object, ActionType action, bool wsmall = false);
 
 public:
 	/*
@@ -277,8 +281,7 @@ protected:
 	*/
 	class TacticalClass : public GadgetClass {
 	public:
-		TacticalClass(void)
-		    : GadgetClass(0, 0, 0, 0, LEFTPRESS | LEFTRELEASE | LEFTHELD | LEFTUP | RIGHTPRESS, true) {};
+		TacticalClass(void) : GadgetClass(0, 0, 0, 0, LEFTPRESS | LEFTRELEASE | LEFTHELD | LEFTUP | RIGHTPRESS, true) {};
 
 		int Selection_At_Mouse(unsigned flags, KeyNumType &key);
 		int Command_Object(unsigned flags, KeyNumType &key);

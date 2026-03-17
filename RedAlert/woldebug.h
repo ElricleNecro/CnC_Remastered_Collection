@@ -26,8 +26,8 @@
 #include "w95trace.h"
 
 #define debugprogress debugprint("...%s: %i\n", __FILE__, __LINE__)
-#define _ASSERTE(x)                                                                                                    \
-	if (!(x))                                                                                                      \
+#define _ASSERTE(x)                                                                                                                                  \
+	if (!(x))                                                                                                                                    \
 		debugprint("ASSERT FALSE!\n");
 
 #endif

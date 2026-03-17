@@ -28,18 +28,18 @@ extern "C" {
 #endif
 
 typedef enum MemoryFlagType {
-	MEM_NORMAL = 0x0000,  // Default memory (normal).
-	MEM_PUBLIC = 0x0000,  // Default memory (normal).
-	MEM_CHIP = 0x0000,    // Graphic & sound buffer memory (Amiga).
-	MEM_UNUSED = 0x0001,  // <unused>
-	MEM_SYSTEM = 0x0002,  // Allocate out of system heap (XMS or EMS only).
+	MEM_NORMAL = 0x0000, // Default memory (normal).
+	MEM_PUBLIC = 0x0000, // Default memory (normal).
+	MEM_CHIP = 0x0000, // Graphic & sound buffer memory (Amiga).
+	MEM_UNUSED = 0x0001, // <unused>
+	MEM_SYSTEM = 0x0002, // Allocate out of system heap (XMS or EMS only).
 	MEM_RELAXED = 0x0004, // Don't worry about page conservation in EMS.
-	MEM_TEMP = 0x0008,    // Temporary allocation (used by library only).
-	MEM_CLEAR = 0x0010,   // Fill memory with '\0' characters.
-	MEM_PARA = 0x0020,    // Paragraph aligned (IBM only).
-	MEM_XMS = 0x0040,     // XMS memory.
-	MEM_EMS = 0x0080,     // EMS memory (not implemented).
-	MEM_X = 0x8000	      // Here to force this enum to be unsigned sized.
+	MEM_TEMP = 0x0008, // Temporary allocation (used by library only).
+	MEM_CLEAR = 0x0010, // Fill memory with '\0' characters.
+	MEM_PARA = 0x0020, // Paragraph aligned (IBM only).
+	MEM_XMS = 0x0040, // XMS memory.
+	MEM_EMS = 0x0080, // EMS memory (not implemented).
+	MEM_X = 0x8000 // Here to force this enum to be unsigned sized.
 } MemoryFlagType;
 MemoryFlagType operator|(MemoryFlagType, MemoryFlagType);
 MemoryFlagType operator&(MemoryFlagType, MemoryFlagType);

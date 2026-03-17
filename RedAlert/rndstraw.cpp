@@ -42,10 +42,10 @@
  *   RandomStraw::~RandomStraw -- Destructor for random straw class.                           *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "rndstraw.h"
-#include "sha.h"
 #include <limits.h>
 #include <string.h>
+#include "rndstraw.h"
+#include "sha.h"
 
 /***********************************************************************************************
  * RandomStraw::RandomStraw -- Constructor for the random straw class.                         *
@@ -62,7 +62,9 @@
  * HISTORY:                                                                                    *
  *   07/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-RandomStraw::RandomStraw(void) : SeedBits(0), Current(0) { Reset(); }
+RandomStraw::RandomStraw(void) : SeedBits(0), Current(0) {
+	Reset();
+}
 
 /***********************************************************************************************
  * RandomStraw::~RandomStraw -- Destructor for random straw class.                             *
@@ -79,7 +81,9 @@ RandomStraw::RandomStraw(void) : SeedBits(0), Current(0) { Reset(); }
  * HISTORY:                                                                                    *
  *   07/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-RandomStraw::~RandomStraw(void) { Reset(); }
+RandomStraw::~RandomStraw(void) {
+	Reset();
+}
 
 /***********************************************************************************************
  * RandomStraw::Reset -- Reset the data to known initial state.                                *

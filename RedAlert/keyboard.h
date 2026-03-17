@@ -387,22 +387,22 @@ enum {
 	KA_SETX = 25,
 	KA_SETY = 26,
 
-	KA_SPACE = 32,	/*   */
+	KA_SPACE = 32, /*   */
 	KA_EXCLAMATION, /* ! */
-	KA_DQUOTE,	/* " */
-	KA_POUND,	/* # */
-	KA_DOLLAR,	/* $ */
-	KA_PERCENT,	/* % */
-	KA_AMPER,	/* & */
-	KA_SQUOTE,	/* ' */
-	KA_LPAREN,	/* ( */
-	KA_RPAREN,	/* ) */
-	KA_ASTERISK,	/* * */
-	KA_PLUS,	/* + */
-	KA_COMMA,	/* , */
-	KA_MINUS,	/* - */
-	KA_PERIOD,	/* . */
-	KA_SLASH,	/* / */
+	KA_DQUOTE, /* " */
+	KA_POUND, /* # */
+	KA_DOLLAR, /* $ */
+	KA_PERCENT, /* % */
+	KA_AMPER, /* & */
+	KA_SQUOTE, /* ' */
+	KA_LPAREN, /* ( */
+	KA_RPAREN, /* ) */
+	KA_ASTERISK, /* * */
+	KA_PLUS, /* + */
+	KA_COMMA, /* , */
+	KA_MINUS, /* - */
+	KA_PERIOD, /* . */
+	KA_SLASH, /* / */
 
 	KA_0,
 	KA_1,
@@ -414,79 +414,79 @@ enum {
 	KA_7,
 	KA_8,
 	KA_9,
-	KA_COLON,	 /* : */
-	KA_SEMICOLON,	 /* ; */
-	KA_LESS_THAN,	 /* < */
-	KA_EQUAL,	 /* = */
+	KA_COLON, /* : */
+	KA_SEMICOLON, /* ; */
+	KA_LESS_THAN, /* < */
+	KA_EQUAL, /* = */
 	KA_GREATER_THAN, /* > */
-	KA_QUESTION,	 /* ? */
+	KA_QUESTION, /* ? */
 
 	KA_AT, /* @ */
-	KA_A,  /* A */
-	KA_B,  /* B */
-	KA_C,  /* C */
-	KA_D,  /* D */
-	KA_E,  /* E */
-	KA_F,  /* F */
-	KA_G,  /* G */
-	KA_H,  /* H */
-	KA_I,  /* I */
-	KA_J,  /* J */
-	KA_K,  /* K */
-	KA_L,  /* L */
-	KA_M,  /* M */
-	KA_N,  /* N */
-	KA_O,  /* O */
+	KA_A, /* A */
+	KA_B, /* B */
+	KA_C, /* C */
+	KA_D, /* D */
+	KA_E, /* E */
+	KA_F, /* F */
+	KA_G, /* G */
+	KA_H, /* H */
+	KA_I, /* I */
+	KA_J, /* J */
+	KA_K, /* K */
+	KA_L, /* L */
+	KA_M, /* M */
+	KA_N, /* N */
+	KA_O, /* O */
 
-	KA_P,	      /* P */
-	KA_Q,	      /* Q */
-	KA_R,	      /* R */
-	KA_S,	      /* S */
-	KA_T,	      /* T */
-	KA_U,	      /* U */
-	KA_V,	      /* V */
-	KA_W,	      /* W */
-	KA_X,	      /* X */
-	KA_Y,	      /* Y */
-	KA_Z,	      /* Z */
-	KA_LBRACKET,  /* [ */
+	KA_P, /* P */
+	KA_Q, /* Q */
+	KA_R, /* R */
+	KA_S, /* S */
+	KA_T, /* T */
+	KA_U, /* U */
+	KA_V, /* V */
+	KA_W, /* W */
+	KA_X, /* X */
+	KA_Y, /* Y */
+	KA_Z, /* Z */
+	KA_LBRACKET, /* [ */
 	KA_BACKSLASH, /* \ */
-	KA_RBRACKET,  /* ] */
-	KA_CARROT,    /* ^ */
+	KA_RBRACKET, /* ] */
+	KA_CARROT, /* ^ */
 	KA_UNDERLINE, /* _ */
 
 	KA_GRAVE, /* ` */
-	KA_a,	  /* a */
-	KA_b,	  /* b */
-	KA_c,	  /* c */
-	KA_d,	  /* d */
-	KA_e,	  /* e */
-	KA_f,	  /* f */
-	KA_g,	  /* g */
-	KA_h,	  /* h */
-	KA_i,	  /* i */
-	KA_j,	  /* j */
-	KA_k,	  /* k */
-	KA_l,	  /* l */
-	KA_m,	  /* m */
-	KA_n,	  /* n */
-	KA_o,	  /* o */
+	KA_a, /* a */
+	KA_b, /* b */
+	KA_c, /* c */
+	KA_d, /* d */
+	KA_e, /* e */
+	KA_f, /* f */
+	KA_g, /* g */
+	KA_h, /* h */
+	KA_i, /* i */
+	KA_j, /* j */
+	KA_k, /* k */
+	KA_l, /* l */
+	KA_m, /* m */
+	KA_n, /* n */
+	KA_o, /* o */
 
-	KA_p,	   /* p */
-	KA_q,	   /* q */
-	KA_r,	   /* r */
-	KA_s,	   /* s */
-	KA_t,	   /* t */
-	KA_u,	   /* u */
-	KA_v,	   /* v */
-	KA_w,	   /* w */
-	KA_x,	   /* x */
-	KA_y,	   /* y */
-	KA_z,	   /* z */
+	KA_p, /* p */
+	KA_q, /* q */
+	KA_r, /* r */
+	KA_s, /* s */
+	KA_t, /* t */
+	KA_u, /* u */
+	KA_v, /* v */
+	KA_w, /* w */
+	KA_x, /* x */
+	KA_y, /* y */
+	KA_z, /* z */
 	KA_LBRACE, /* { */
-	KA_BAR,	   /* | */
+	KA_BAR, /* | */
 	KA_RBRACE, /* ] */
-	KA_TILDA,  /* ~ */
+	KA_TILDA, /* ~ */
 
 	KA_ESC = VK_ESCAPE,
 	KA_EXTEND = VK_ESCAPE,
@@ -495,17 +495,17 @@ enum {
 	KA_TAB = VK_TAB,
 	KA_DELETE = VK_DELETE, /* <DELETE> */
 	KA_INSERT = VK_INSERT, /* <INSERT> */
-	KA_PGDN = VK_NEXT,     /* <PAGE DOWN> */
+	KA_PGDN = VK_NEXT, /* <PAGE DOWN> */
 	KA_DOWNRIGHT = VK_NEXT,
 	KA_DOWN = VK_DOWN, /* <DOWN ARROW> */
-	KA_END = VK_END,   /* <END> */
+	KA_END = VK_END, /* <END> */
 	KA_DOWNLEFT = VK_END,
-	KA_RIGHT = VK_RIGHT,	/* <RIGHT ARROW> */
+	KA_RIGHT = VK_RIGHT, /* <RIGHT ARROW> */
 	KA_KEYPAD5 = VK_SELECT, /* NUMERIC KEY PAD <5> */
-	KA_LEFT = VK_LEFT,	/* <LEFT ARROW> */
-	KA_PGUP = VK_PRIOR,	/* <PAGE UP> */
+	KA_LEFT = VK_LEFT, /* <LEFT ARROW> */
+	KA_PGUP = VK_PRIOR, /* <PAGE UP> */
 	KA_UPRIGHT = VK_PRIOR,
-	KA_UP = VK_UP,	   /* <UP ARROW> */
+	KA_UP = VK_UP, /* <UP ARROW> */
 	KA_HOME = VK_HOME, /* <HOME> */
 	KA_UPLEFT = VK_HOME,
 	KA_F12 = VK_F12,

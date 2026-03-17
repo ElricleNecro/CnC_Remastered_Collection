@@ -60,10 +60,14 @@ typedef int bool;
 class CRCEngine {
 public:
 	// Constructor for CRC engine (it can have an override initial CRC value).
-	CRCEngine(long initial = 0) : CRC(initial), Index(0) { StagingBuffer.Composite = 0; };
+	CRCEngine(long initial = 0) : CRC(initial), Index(0) {
+		StagingBuffer.Composite = 0;
+	};
 
 	// Fetches CRC value.
-	long operator()(void) const { return (Value()); };
+	long operator()(void) const {
+		return (Value());
+	};
 
 	// Submits one byte sized datum to the CRC accumulator.
 	void operator()(char datum);
@@ -72,10 +76,14 @@ public:
 	long operator()(void const *buffer, int length);
 
 	// Implicit conversion operator so this object appears like a 'long integer'.
-	operator long(void) const { return (Value()); };
+	operator long(void) const {
+		return (Value());
+	};
 
 protected:
-	bool Buffer_Needs_Data(void) const { return (Index != 0); };
+	bool Buffer_Needs_Data(void) const {
+		return (Index != 0);
+	};
 
 	long Value(void) const {
 		if (Buffer_Needs_Data()) {

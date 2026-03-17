@@ -17,11 +17,11 @@
     Implementation of Win95 tracing facility to mimic that of NT
 */
 
-#include "w95trace.h"
 #include <process.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <windows.h>
+#include "w95trace.h"
 
 void OutputDebugStringW95(LPCTSTR /*lpOutputString*/, ...) {
 #if 0

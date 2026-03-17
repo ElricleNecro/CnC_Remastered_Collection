@@ -29,7 +29,9 @@ public:
 	virtual ~MPGSettings(void);
 
 	void SetDeviceName(const char *device);
-	const char *GetDeviceName(void) const { return mDeviceName; }
+	const char *GetDeviceName(void) const {
+		return mDeviceName;
+	}
 	bool Save(FileClass &file);
 	void Dialog(void);
 

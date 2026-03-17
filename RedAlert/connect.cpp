@@ -42,8 +42,8 @@
  **
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
 #include <stdio.h>
+#include "function.h"
 // #include <mem.h>
 #include "connect.h"
 #include <sys\timeb.h>
@@ -53,7 +53,7 @@
 /*
 ********************************* Globals ***********************************
 */
-char *ConnectionClass::Commands[PACKET_COUNT] = {"ADATA", "NDATA", "ACK"};
+char *ConnectionClass::Commands[PACKET_COUNT] = { "ADATA", "NDATA", "ACK" };
 
 /***************************************************************************
  * ConnectionClass::ConnectionClass -- class constructor                   *
@@ -81,8 +81,13 @@ char *ConnectionClass::Commands[PACKET_COUNT] = {"ADATA", "NDATA", "ACK"};
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-ConnectionClass::ConnectionClass(int numsend, int numreceive, int maxlen, unsigned short magicnum,
-				 unsigned long retry_delta, unsigned long max_retries, unsigned long timeout,
+ConnectionClass::ConnectionClass(int numsend,
+				 int numreceive,
+				 int maxlen,
+				 unsigned short magicnum,
+				 unsigned long retry_delta,
+				 unsigned long max_retries,
+				 unsigned long timeout,
 				 int extralen) {
 	/*------------------------------------------------------------------------
 	Compute our maximum packet length
@@ -267,11 +272,11 @@ int ConnectionClass::Send_Packet(void *buf, int buflen, int ack_req) {
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 int ConnectionClass::Receive_Packet(void *buf, int buflen) {
-	CommHeaderType *packet;	     // ptr to packet header
-	SendQueueType *send_entry;   // ptr to send entry header
+	CommHeaderType *packet; // ptr to packet header
+	SendQueueType *send_entry; // ptr to send entry header
 	ReceiveQueueType *rec_entry; // ptr to recv entry header
-	CommHeaderType *entry_data;  // ptr to queue entry data
-	CommHeaderType ackpacket;    // ACK packet to send
+	CommHeaderType *entry_data; // ptr to queue entry data
+	CommHeaderType ackpacket; // ACK packet to send
 	int i;
 	int save_packet = 1; // 0 = this is a resend
 	int found;
@@ -288,7 +293,6 @@ int ConnectionClass::Receive_Packet(void *buf, int buflen) {
 	Handle an incoming ACK
 	------------------------------------------------------------------------*/
 	if (packet->Code == PACKET_ACK) {
-
 		for (i = 0; i < Queue->Num_Send(); i++) {
 			/*..................................................................
 			Get queue entry ptr
@@ -359,14 +363,12 @@ int ConnectionClass::Receive_Packet(void *buf, int buflen) {
 				rec_entry = Queue->Get_Receive(i);
 
 				if (rec_entry) {
-
 					entry_data = (CommHeaderType *)rec_entry->Buffer;
 
 					/*...........................................................
 					Packet is found; it's a resend
 					...........................................................*/
-					if (entry_data->Code == PACKET_DATA_ACK &&
-					    entry_data->PacketID == packet->PacketID) {
+					if (entry_data->Code == PACKET_DATA_ACK && entry_data->PacketID == packet->PacketID) {
 						save_packet = 0;
 						break;
 					}
@@ -413,7 +415,6 @@ int ConnectionClass::Receive_Packet(void *buf, int buflen) {
 				do {
 					found = 0;
 					for (i = 0; i < Queue->Num_Receive(); i++) {
-
 						rec_entry = Queue->Get_Receive(i);
 
 						if (rec_entry) {
@@ -422,9 +423,7 @@ int ConnectionClass::Receive_Packet(void *buf, int buflen) {
 							/*......................................................
 							Entry is found
 							......................................................*/
-							if (entry_data->Code == PACKET_DATA_ACK &&
-							    entry_data->PacketID == (LastSeqID + 1)) {
-
+							if (entry_data->Code == PACKET_DATA_ACK && entry_data->PacketID == (LastSeqID + 1)) {
 								LastSeqID = entry_data->PacketID;
 								found = 1;
 								break;
@@ -470,7 +469,7 @@ int ConnectionClass::Receive_Packet(void *buf, int buflen) {
  *=========================================================================*/
 int ConnectionClass::Get_Packet(void *buf, int *buflen) {
 	ReceiveQueueType *rec_entry; // ptr to receive entry header
-	int packetlen;		     // size of received packet
+	int packetlen; // size of received packet
 	CommHeaderType *entry_data;
 	int i;
 
@@ -479,14 +478,12 @@ int ConnectionClass::Get_Packet(void *buf, int *buflen) {
 	last PACKET_DATA_ACK packet we read.
 	------------------------------------------------------------------------*/
 	for (i = 0; i < Queue->Num_Receive(); i++) {
-
 		rec_entry = Queue->Get_Receive(i);
 
 		/*.....................................................................
 		Only read this entry if it hasn't been yet
 		.....................................................................*/
 		if (rec_entry && rec_entry->IsRead == 0) {
-
 			entry_data = (CommHeaderType *)rec_entry->Buffer;
 
 			/*..................................................................
@@ -494,7 +491,6 @@ int ConnectionClass::Get_Packet(void *buf, int *buflen) {
 			the last one we read.
 			..................................................................*/
 			if ((entry_data->Code == PACKET_DATA_ACK) && (entry_data->PacketID == (LastReadID + 1))) {
-
 				LastReadID = entry_data->PacketID;
 				rec_entry->IsRead = 1;
 
@@ -583,9 +579,9 @@ int ConnectionClass::Service(void) {
 int ConnectionClass::Service_Send_Queue(void) {
 	int i;
 	int num_entries;
-	SendQueueType *send_entry;  // ptr to send queue entry
+	SendQueueType *send_entry; // ptr to send queue entry
 	CommHeaderType *packet_hdr; // packet header
-	unsigned long curtime;	    // current time
+	unsigned long curtime; // current time
 	int bad_conn = 0;
 
 	/*------------------------------------------------------------------------
@@ -601,7 +597,6 @@ int ConnectionClass::Service_Send_Queue(void) {
 		If ACK has been received, unqueue it
 		.....................................................................*/
 		if (send_entry->IsACK) {
-
 			/*..................................................................
 			Update this queue's response time
 			..................................................................*/
@@ -638,7 +633,6 @@ int ConnectionClass::Service_Send_Queue(void) {
 		.....................................................................*/
 		curtime = Time();
 		if (curtime - send_entry->LastTime > RetryDelta) {
-
 			/*..................................................................
 			Send the message
 			..................................................................*/
@@ -711,7 +705,7 @@ int ConnectionClass::Service_Send_Queue(void) {
  *=========================================================================*/
 int ConnectionClass::Service_Receive_Queue(void) {
 	ReceiveQueueType *rec_entry; // ptr to receive entry header
-	CommHeaderType *packet_hdr;  // packet header
+	CommHeaderType *packet_hdr; // packet header
 	int i;
 
 	/*------------------------------------------------------------------------

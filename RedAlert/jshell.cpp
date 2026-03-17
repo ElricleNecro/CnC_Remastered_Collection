@@ -72,8 +72,8 @@ void *Small_Icon(void const *iconptr, int iconnum) {
 		//		data = &iptr->Icons[iconnum*(24*24)];
 
 		for (int index = 0; index < 9; index++) {
-			int _offsets[9] = {4 + 4 * 24,	 12 + 4 * 24, 20 + 4 * 24,  4 + 12 * 24, 12 + 12 * 24,
-					   20 + 12 * 24, 4 + 20 * 24, 12 + 20 * 24, 20 + 20 * 24};
+			int _offsets[9] = { 4 + 4 * 24,	  12 + 4 * 24, 20 + 4 * 24,  4 + 12 * 24, 12 + 12 * 24,
+					    20 + 12 * 24, 4 + 20 * 24, 12 + 20 * 24, 20 + 20 * 24 };
 			_icon[index] = data[_offsets[index]];
 		}
 	}
@@ -245,8 +245,7 @@ long Load_Uncompress(FileClass &file, BuffType &uncomp_buff, BuffType &dest_buff
 	return ((long)size);
 }
 
-int Load_Picture(char const *filename, BufferClass &scratchbuf, BufferClass &destbuf, unsigned char *palette,
-		 PicturePlaneType) {
+int Load_Picture(char const *filename, BufferClass &scratchbuf, BufferClass &destbuf, unsigned char *palette, PicturePlaneType) {
 	return (Load_Uncompress(CCFileClass(filename), scratchbuf, destbuf, palette) / 8000);
 }
 
@@ -294,7 +293,9 @@ void *Load_Alloc_Data(FileClass &file) {
  * HISTORY:                                                                                    *
  *   04/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-long Translucent_Table_Size(int count) { return (256L + (256L * count)); }
+long Translucent_Table_Size(int count) {
+	return (256L + (256L * count));
+}
 
 /***********************************************************************************************
  * Build_Translucent_Table -- Creates a translucent control table.                             *
@@ -325,7 +326,7 @@ long Translucent_Table_Size(int count) { return (256L + (256L * count)); }
  *=============================================================================================*/
 void *Build_Translucent_Table(PaletteClass const &palette, TLucentType const *control, int count, void *buffer) {
 	unsigned char const *table; // Remap table pointer.
-	int index;		    // Working color index.
+	int index; // Working color index.
 
 	if (count && control /* && palette*/) { // palette can't be NULL... ST - 5/9/2019
 		if (!buffer) {
@@ -341,8 +342,7 @@ void *Build_Translucent_Table(PaletteClass const &palette, TLucentType const *co
 			*/
 			for (index = 0; index < count; index++) {
 				((unsigned char *)buffer)[control[index].SourceColor] = index;
-				Build_Fading_Table(palette.Get_Data(), (void *)table, control[index].DestColor,
-						   control[index].Fading);
+				Build_Fading_Table(palette.Get_Data(), (void *)table, control[index].DestColor, control[index].Fading);
 				table = (unsigned char *)table + 256;
 			}
 		}
@@ -376,8 +376,7 @@ void *Build_Translucent_Table(PaletteClass const &palette, TLucentType const *co
  * HISTORY:                                                                                    *
  *   06/27/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void *Conquer_Build_Translucent_Table(PaletteClass const &palette, TLucentType const *control, int count,
-				      void *buffer) {
+void *Conquer_Build_Translucent_Table(PaletteClass const &palette, TLucentType const *control, int count, void *buffer) {
 	unsigned char const *table; // Remap table pointer.
 
 	if (count && control) {
@@ -394,8 +393,7 @@ void *Conquer_Build_Translucent_Table(PaletteClass const &palette, TLucentType c
 			*/
 			for (int index = 0; index < count; index++) {
 				((unsigned char *)buffer)[control[index].SourceColor] = index;
-				Conquer_Build_Fading_Table(palette, (void *)table, control[index].DestColor,
-							   control[index].Fading);
+				Conquer_Build_Fading_Table(palette, (void *)table, control[index].DestColor, control[index].Fading);
 				table = (unsigned char *)table + 256;
 			}
 		}
@@ -413,7 +411,6 @@ void *Make_Fading_Table(PaletteClass const &palette, void *dest, int color, int 
 		**	loop.
 		*/
 		for (int index = 0; index < PaletteClass::COLOR_COUNT; index++) {
-
 			/*
 			**	Find the color that, ideally, the working color should be remapped
 			**	to in the special remap range.
@@ -443,7 +440,6 @@ void *Conquer_Build_Fading_Table(PaletteClass const &palette, void *dest, int co
 		**	loop.
 		*/
 		for (int index = 0; index < PaletteClass::COLOR_COUNT; index++) {
-
 			/*
 			**	If this color should not be remapped, then it will be stored as a remap
 			**	to itself. This is effectively no remap.
@@ -451,7 +447,6 @@ void *Conquer_Build_Fading_Table(PaletteClass const &palette, void *dest, int co
 			if (index > PaletteClass::COLOR_COUNT - 16 || index == 0) {
 				*ptr++ = index;
 			} else {
-
 				/*
 				**	Find the color that, ideally, the working color should be remapped
 				**	to in the special remap range.
@@ -466,8 +461,7 @@ void *Conquer_Build_Fading_Table(PaletteClass const &palette, void *dest, int co
 				*/
 				int best = -1;
 				int bvalue = 0;
-				for (int id = PaletteClass::COLOR_COUNT - 16; id < PaletteClass::COLOR_COUNT - 1;
-				     id++) {
+				for (int id = PaletteClass::COLOR_COUNT - 16; id < PaletteClass::COLOR_COUNT - 1; id++) {
 					int diff = palette[id].Difference(trycolor);
 					if (best == -1 || diff < bvalue) {
 						best = id;

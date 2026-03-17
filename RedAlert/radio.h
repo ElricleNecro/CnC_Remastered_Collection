@@ -73,19 +73,26 @@ public:
 	*/
 	RadioClass(RTTIType rtti, int id) : MissionClass(rtti, id), Radio(0) {};
 	RadioClass(NoInitClass const &x) : MissionClass(x) {};
-	virtual ~RadioClass(void) { Radio = 0; };
+	virtual ~RadioClass(void) {
+		Radio = 0;
+	};
 
 	/*---------------------------------------------------------------------
 	**	Member function prototypes.
 	*/
-	bool In_Radio_Contact(void) const { return (Radio != 0); };
-	void Radio_Off(void) { Radio = 0; };
-	TechnoClass *Contact_With_Whom(void) const { return (TechnoClass *)Radio; };
+	bool In_Radio_Contact(void) const {
+		return (Radio != 0);
+	};
+	void Radio_Off(void) {
+		Radio = 0;
+	};
+	TechnoClass *Contact_With_Whom(void) const {
+		return (TechnoClass *)Radio;
+	};
 
 	// Inherited from base class(es).
 	virtual RadioMessageType Receive_Message(RadioClass *from, RadioMessageType message, long &param);
-	virtual RadioMessageType Transmit_Message(RadioMessageType message, long &param = LParam,
-						  RadioClass *to = NULL);
+	virtual RadioMessageType Transmit_Message(RadioMessageType message, long &param = LParam, RadioClass *to = NULL);
 	virtual RadioMessageType Transmit_Message(RadioMessageType message, RadioClass *to);
 #ifdef CHEAT_KEYS
 	virtual void Debug_Dump(MonoClass *mono) const;

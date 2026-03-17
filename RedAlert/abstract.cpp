@@ -127,8 +127,7 @@ int AbstractClass::Distance(TARGET target) const {
  * HISTORY:                                                                                    *
  *   05/22/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-AbstractTypeClass::AbstractTypeClass(RTTIType rtti, int id, int name, char const *ini)
-    : RTTI(rtti), ID(id), FullName(name) {
+AbstractTypeClass::AbstractTypeClass(RTTIType rtti, int id, int name, char const *ini) : RTTI(rtti), ID(id), FullName(name) {
 	strncpy((char *)IniName, ini, sizeof(IniName));
 	((char &)IniName[sizeof(IniName) - 1]) = '\0';
 }
@@ -149,7 +148,9 @@ AbstractTypeClass::AbstractTypeClass(RTTIType rtti, int id, int name, char const
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-COORDINATE AbstractTypeClass::Coord_Fixup(COORDINATE coord) const { return (coord); }
+COORDINATE AbstractTypeClass::Coord_Fixup(COORDINATE coord) const {
+	return (coord);
+}
 
 /***********************************************************************************************
  * AbstractTypeClass::Full_Name -- Returns the full name (number) of this object type.         *
@@ -193,4 +194,6 @@ int AbstractTypeClass::Full_Name(void) const {
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int AbstractTypeClass::Get_Ownable(void) const { return (HOUSEF_ALLIES | HOUSEF_SOVIET | HOUSEF_OTHERS); }
+int AbstractTypeClass::Get_Ownable(void) const {
+	return (HOUSEF_ALLIES | HOUSEF_SOVIET | HOUSEF_OTHERS);
+}

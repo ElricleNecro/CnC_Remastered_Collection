@@ -51,8 +51,8 @@ typedef int bool;
 #endif
 #endif
 
-#include "straw.h"
 #include <stdlib.h>
+#include "straw.h"
 
 extern unsigned short primeTable[3511];
 
@@ -119,9 +119,13 @@ int XMP_DER_Length_Encode(unsigned long length, unsigned char *output);
 int XMP_DER_Encode(digit const *from, unsigned char *output, int precision);
 void XMP_DER_Decode(digit *result, unsigned char const *input, int precision);
 
-inline int XMP_Digits_To_Bits(int digits) { return (digits << LOG_UNITSIZE); }
+inline int XMP_Digits_To_Bits(int digits) {
+	return (digits << LOG_UNITSIZE);
+}
 
-inline int XMP_Bits_To_Digits(int bits) { return ((bits + (UNITSIZE - 1)) / UNITSIZE); }
+inline int XMP_Bits_To_Digits(int bits) {
+	return ((bits + (UNITSIZE - 1)) / UNITSIZE);
+}
 
 inline digit XMP_Bits_To_Mask(int bits) {
 	if (!bits)
@@ -129,11 +133,17 @@ inline digit XMP_Bits_To_Mask(int bits) {
 	return (1 << ((bits - 1) % UNITSIZE));
 }
 
-inline bool XMP_Is_Negative(const digit *r, int precision) { return ((signeddigit) * (r + (precision - 1)) < 0); }
+inline bool XMP_Is_Negative(const digit *r, int precision) {
+	return ((signeddigit) * (r + (precision - 1)) < 0);
+}
 
-inline bool XMP_Test_Eq_Int(digit const *r, int i, int p) { return ((*r == i) && XMP_Significance(r, p) <= 1); }
+inline bool XMP_Test_Eq_Int(digit const *r, int i, int p) {
+	return ((*r == i) && XMP_Significance(r, p) <= 1);
+}
 
-inline void XMP_Set_Bit(digit *r, unsigned bit) { r[bit >> LOG_UNITSIZE] |= ((digit)1 << (bit & (UNITSIZE - 1))); }
+inline void XMP_Set_Bit(digit *r, unsigned bit) {
+	r[bit >> LOG_UNITSIZE] |= ((digit)1 << (bit & (UNITSIZE - 1)));
+}
 
 inline bool XMP_Test_Bit(const digit *r, unsigned bit) {
 	return (r[bit >> LOG_UNITSIZE] & ((digit)1 << (bit & (UNITSIZE - 1))));

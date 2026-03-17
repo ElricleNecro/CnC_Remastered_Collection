@@ -161,10 +161,10 @@ void Shutdown_MPATH(void) {
 void Connect_MPATH(void) {
 #if (MPATH)
 	typedef struct ConnectPacketTag {
-		NetCommandType Dummy;	     // packet type; set to PING
+		NetCommandType Dummy; // packet type; set to PING
 		char Name[MPLAYER_NAME_MAX]; // player's name
-		HousesType House;	     // player's ActLike
-		unsigned char Color;	     // player's Color
+		HousesType House; // player's ActLike
+		unsigned char Color; // player's Color
 	} ConnectPacketType;
 	int num_players;
 	int num_found;
@@ -231,7 +231,6 @@ void Connect_MPATH(void) {
 	//
 	display = 1;
 	while (num_found < num_players) {
-
 #ifdef WIN32
 		/*
 		** If we have just received input focus again after running in the background then
@@ -256,10 +255,13 @@ void Connect_MPATH(void) {
 			// Set_Logic_Page(SeenBuff);
 			Dialog_Box(x * RESFACTOR, y * RESFACTOR, w * RESFACTOR, h * RESFACTOR);
 
-			Fancy_Text_Print(buf1, 160 * RESFACTOR, (y + (D_MARGIN * 2)) * RESFACTOR, scheme, TBLACK,
+			Fancy_Text_Print(buf1, 160 * RESFACTOR, (y + (D_MARGIN * 2)) * RESFACTOR, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+			Fancy_Text_Print(buf2,
+					 160 * RESFACTOR,
+					 (y + (D_MARGIN * 2) + D_TXT6_H + D_MARGIN) * RESFACTOR,
+					 scheme,
+					 TBLACK,
 					 TPF_CENTER | TPF_TEXT);
-			Fancy_Text_Print(buf2, 160 * RESFACTOR, (y + (D_MARGIN * 2) + D_TXT6_H + D_MARGIN) * RESFACTOR,
-					 scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 			Show_Mouse();
 			display = 0;
 		}
@@ -283,7 +285,6 @@ void Connect_MPATH(void) {
 			// Create a new connection and a new node in the list.
 			//
 			if (!found) {
-
 				who = new NodeNameType;
 				strcpy(who->Name, receive_packet.Name);
 				who->MPathAddress = address;
@@ -365,8 +366,7 @@ void Destroy_MPATH_Connection(int id, int error) {
 	}
 
 	if (strlen(txt)) {
-		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT,
-					     Rule.MessageDelay * TICKS_PER_MINUTE);
+		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT, Rule.MessageDelay * TICKS_PER_MINUTE);
 		Map.Flag_To_Redraw(false);
 	}
 
@@ -400,8 +400,7 @@ void Destroy_MPATH_Connection(int id, int error) {
 	------------------------------------------------------------------------*/
 	if (Session.NumPlayers == 1) {
 		sprintf(txt, "%s", Text_String(TXT_JUST_YOU_AND_ME));
-		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT,
-					     Rule.MessageDelay * TICKS_PER_MINUTE);
+		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT, Rule.MessageDelay * TICKS_PER_MINUTE);
 		Map.Flag_To_Redraw(false);
 	}
 

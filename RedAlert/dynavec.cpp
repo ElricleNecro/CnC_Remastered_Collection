@@ -92,7 +92,8 @@ DynamicVectorClass<T>::DynamicVectorClass(unsigned size, T const *array) : Vecto
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int DynamicVectorClass<T>::Resize(unsigned newsize, T const *array) {
+template <class T>
+int DynamicVectorClass<T>::Resize(unsigned newsize, T const *array) {
 	if (VectorClass<T>::Resize(newsize, array)) {
 		if (Length() < (unsigned)ActiveCount)
 			ActiveCount = Length();
@@ -119,7 +120,8 @@ template <class T> int DynamicVectorClass<T>::Resize(unsigned newsize, T const *
  * HISTORY:                                                                                    *
  *   03/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int DynamicVectorClass<T>::ID(T const &object) {
+template <class T>
+int DynamicVectorClass<T>::ID(T const &object) {
 	for (int index = 0; index < Count(); index++) {
 		if ((*this)[index] == object)
 			return (index);
@@ -144,11 +146,11 @@ template <class T> int DynamicVectorClass<T>::ID(T const &object) {
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int DynamicVectorClass<T>::Add(T const &object) {
+template <class T>
+int DynamicVectorClass<T>::Add(T const &object) {
 	if (ActiveCount >= Length()) {
 		if ((IsAllocated || !VectorMax) && GrowthStep > 0) {
 			if (!Resize(Length() + GrowthStep)) {
-
 				/*
 				**	Failure to increase the size of the vector is an error condition.
 				**	Return with the error flag.
@@ -156,7 +158,6 @@ template <class T> int DynamicVectorClass<T>::Add(T const &object) {
 				return (false);
 			}
 		} else {
-
 			/*
 			**	Increasing the size of this vector is not allowed! Bail this
 			**	routine with the error code.
@@ -187,11 +188,11 @@ template <class T> int DynamicVectorClass<T>::Add(T const &object) {
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int DynamicVectorClass<T>::Add_Head(T const &object) {
+template <class T>
+int DynamicVectorClass<T>::Add_Head(T const &object) {
 	if (ActiveCount >= Length()) {
 		if ((IsAllocated || !VectorMax) && GrowthStep > 0) {
 			if (!Resize(Length() + GrowthStep)) {
-
 				/*
 				**	Failure to increase the size of the vector is an error condition.
 				**	Return with the error flag.
@@ -199,7 +200,6 @@ template <class T> int DynamicVectorClass<T>::Add_Head(T const &object) {
 				return (false);
 			}
 		} else {
-
 			/*
 			**	Increasing the size of this vector is not allowed! Bail this
 			**	routine with the error code.
@@ -236,7 +236,10 @@ template <class T> int DynamicVectorClass<T>::Add_Head(T const &object) {
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int DynamicVectorClass<T>::Delete(T const &object) { return (Delete(ID(object))); }
+template <class T>
+int DynamicVectorClass<T>::Delete(T const &object) {
+	return (Delete(ID(object)));
+}
 
 /***********************************************************************************************
  * DynamicVectorClass<T>::Delete -- Deletes the specified index from the vector.               *
@@ -255,7 +258,8 @@ template <class T> int DynamicVectorClass<T>::Delete(T const &object) { return (
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int DynamicVectorClass<T>::Delete(int index) {
+template <class T>
+int DynamicVectorClass<T>::Delete(int index) {
 	if ((unsigned)index < ActiveCount) {
 		ActiveCount--;
 

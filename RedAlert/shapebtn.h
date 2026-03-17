@@ -43,11 +43,13 @@ public:
 	ShapeButtonClass(unsigned id, void const *shapes, int x, int y);
 	virtual int Draw_Me(int forced = false);
 	virtual void Set_Shape(void const *data);
-	void const *Get_Shape_Data(void) { return (ShapeData); };
+	void const *Get_Shape_Data(void) {
+		return (ShapeData);
+	};
 
 	enum ShapeButtonClassEnums {
-		UP_SHAPE,      // Shape to use when button is "up".
-		DOWN_SHAPE,    // Shape to use when button is "down".
+		UP_SHAPE, // Shape to use when button is "up".
+		DOWN_SHAPE, // Shape to use when button is "down".
 		DISABLED_SHAPE // Shape to use when button is disabled.
 	};
 

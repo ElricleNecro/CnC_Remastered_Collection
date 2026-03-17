@@ -27,7 +27,8 @@
 class WOLEditClass : public EditClass {
 public:
 	WOLEditClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w, int h, EditStyle style)
-	    : EditClass(id, text, max_len, flags, x, y, w, h, style) {}
+		: EditClass(id, text, max_len, flags, x, y, w, h, style) {
+	}
 
 	virtual int Action(unsigned flags, KeyNumType &key); //	Override of base
 

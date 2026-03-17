@@ -69,7 +69,7 @@ public:
 	** Initialization
 	*/
 	void Init_Clear(HouseClass *player_ptr); // Clears all to known state
-	void Init_IO(void);			 // Inits button list
+	void Init_IO(void); // Inits button list
 
 	void AI(KeyNumType &input, int x, int y);
 
@@ -116,7 +116,9 @@ public:
 		bool Factory_Link(int factory, RTTIType type, int id);
 		void const *Get_Special_Cameo(int type);
 
-		void Set_Parent_Sidebar(SidebarGlyphxClass *parent) { ParentSidebar = parent; }
+		void Set_Parent_Sidebar(SidebarGlyphxClass *parent) {
+			ParentSidebar = parent;
+		}
 
 		/*
 		**	File I/O.
@@ -165,7 +167,7 @@ public:
 		typedef struct BuildType {
 			int BuildableID;
 			RTTIType BuildableType;
-			int Factory;		  // Production manager.
+			int Factory; // Production manager.
 			bool BuildableViaCapture; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
 		} BuildType;
 		BuildType Buildables[MAX_BUILDABLES];

@@ -47,7 +47,6 @@ void Get_Scenario_Digest(char *digest, char *buffer) {
 	WWGetPrivateProfileString("DIGEST", NULL, NULL, tbuffer, sizeof(_staging_buffer) - len, buffer);
 	stage[0] = '\0';
 	while (*tbuffer != '\0') {
-
 		WWGetPrivateProfileString("DIGEST", tbuffer, NULL, buf, sizeof(buf) - 1, buffer);
 		strcat(stage, buf);
 		tbuffer += strlen(tbuffer) + 1;
@@ -96,10 +95,10 @@ void Get_Scenario_Digest(char *digest, char *buffer) {
 }
 
 bool Read_Scenario_INI_Write_INB(char *root, bool fresh) {
-	char *buffer;			   // Scenario.ini staging buffer pointer.
-	char *binbuf;			   // Scenario.inb staging buffer pointer.
+	char *buffer; // Scenario.ini staging buffer pointer.
+	char *binbuf; // Scenario.inb staging buffer pointer.
 	char fname[_MAX_FNAME + _MAX_EXT]; // full INI filename
-	char buf[256];			   // Working string staging buffer.
+	char buf[256]; // Working string staging buffer.
 	char scenarioname[40];
 	int len;
 	unsigned char val;
@@ -234,15 +233,13 @@ bool Read_Scenario_INI_Write_INB(char *root, bool fresh) {
 
 		int carryover;
 		if (Scen.CarryOverCap != -1) {
-			carryover = MIN(Fixed_To_Cardinal(Scen.CarryOverMoney, Scen.CarryOverPercent),
-					(Scen.CarryOverCap * 100));
+			carryover = MIN(Fixed_To_Cardinal(Scen.CarryOverMoney, Scen.CarryOverPercent), (Scen.CarryOverCap * 100));
 		} else {
 			carryover = Fixed_To_Cardinal(Scen.CarryOverMoney, Scen.CarryOverPercent);
 		}
 		PlayerPtr->Credits += carryover;
 		PlayerPtr->Control.InitialCredits += carryover;
 	} else {
-
 		Assign_Houses();
 	}
 

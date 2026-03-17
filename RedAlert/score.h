@@ -90,7 +90,9 @@ public:
 	CDTimerClass<SystemTimerClass> Timer;
 	void const *DataPtr;
 	virtual void Update(void) {};
-	virtual ~ScoreAnimClass(void) { DataPtr = 0; };
+	virtual ~ScoreAnimClass(void) {
+		DataPtr = 0;
+	};
 };
 
 class ScoreCredsClass : public ScoreAnimClass {
@@ -127,7 +129,9 @@ public:
 	virtual void Update(void);
 	ScorePrintClass(void const *string, int xpos, int ypos, void const *palette, int background = TBLACK);
 	ScorePrintClass(int string, int xpos, int ypos, void const *palette, int background = TBLACK);
-	virtual ~ScorePrintClass(void) { PrimaryPalette = 0; };
+	virtual ~ScorePrintClass(void) {
+		PrimaryPalette = 0;
+	};
 };
 
 class ScoreScaleClass : public ScoreAnimClass {
@@ -136,7 +140,9 @@ public:
 	char const *Palette;
 	virtual void Update(void);
 	ScoreScaleClass(void const *data, int xpos, int ypos, char const pal[]);
-	virtual ~ScoreScaleClass(void) { Palette = 0; };
+	virtual ~ScoreScaleClass(void) {
+		Palette = 0;
+	};
 };
 
 #define MAXSCOREOBJS 8

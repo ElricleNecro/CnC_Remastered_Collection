@@ -55,8 +55,7 @@
  *                                                                         *
  * HISTORY:  01/05/1995 MML : Created.                                     *
  *=========================================================================*/
-GaugeClass::GaugeClass(unsigned id, int x, int y, int w, int h)
-    : ControlClass(id, x, y, w, h, LEFTHELD | LEFTPRESS | LEFTRELEASE, true) {
+GaugeClass::GaugeClass(unsigned id, int x, int y, int w, int h) : ControlClass(id, x, y, w, h, LEFTHELD | LEFTPRESS | LEFTRELEASE, true) {
 	Set_Maximum(255);
 	Set_Value(0);
 
@@ -196,7 +195,6 @@ int GaugeClass::Value_To_Pixel(int value) {
  *=============================================================================================*/
 int GaugeClass::Draw_Me(int forced) {
 	if (ControlClass::Draw_Me(forced)) {
-
 		/*
 		**	Hide the mouse
 		*/
@@ -275,7 +273,6 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key) {
 	**	button being held down.
 	*/
 	if ((flags & LEFTPRESS) || ((flags & LEFTHELD) && StuckOn == this)) {
-
 		/*
 		** Compute the difference between where we clicked, and the edge of
 		** the thumb (only if we clicked on the thumb.)
@@ -290,8 +287,7 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key) {
 				ClickDiff = 0;
 			}
 
-			int testval =
-			    Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff);
+			int testval = Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff);
 
 			/*
 			** Correct for round-down errors in Pixel_To_Value() and
@@ -301,8 +297,7 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key) {
 			*/
 			while (testval < CurValue && ClickDiff > 0) {
 				ClickDiff--;
-				testval = Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff
-								      : Get_Mouse_Y() - ClickDiff);
+				testval = Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff);
 			}
 		}
 
@@ -312,7 +307,6 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key) {
 		** Thus, no button ID will be returned by Input.
 		*/
 		if (!Set_Value(Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff))) {
-
 			flags &= ~(LEFTHELD | LEFTRELEASE | LEFTPRESS);
 			ControlClass::Action(0, key);
 			key = KN_NONE;
@@ -320,7 +314,6 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key) {
 		}
 
 	} else {
-
 		/*
 		**	Ignore the left mouse button being held down if this gauge is not
 		**	currently in "sticky" mode. This allows processing of the LEFTPRESS
@@ -377,7 +370,7 @@ void GaugeClass::Draw_Thumb(void) {
  * HISTORY:    01/16/1995 MML : Created.                                                       *
  *=============================================================================================*/
 TriColorGaugeClass::TriColorGaugeClass(unsigned id, int x, int y, int w, int h) : GaugeClass(id, x, y, w, h) {
-	RedLimit = 0;	 // maximum value for red
+	RedLimit = 0; // maximum value for red
 	YellowLimit = 0; // maximum value for yellow
 }
 
@@ -394,7 +387,6 @@ TriColorGaugeClass::TriColorGaugeClass(unsigned id, int x, int y, int w, int h) 
  *=============================================================================================*/
 int TriColorGaugeClass::Set_Red_Limit(int value) {
 	if (value >= 0 && value < MaxValue) {
-
 		//		if (value > YellowLimit) {
 		//			RedLimit = YellowLimit;
 		//			YellowLimit = value;
@@ -420,7 +412,6 @@ int TriColorGaugeClass::Set_Red_Limit(int value) {
  *=============================================================================================*/
 int TriColorGaugeClass::Set_Yellow_Limit(int value) {
 	if (value >= 0 && value < MaxValue) {
-
 		//		if (value < RedLimit) {
 		//			YellowLimit = RedLimit;
 		//			RedLimit = value;
@@ -446,7 +437,6 @@ int TriColorGaugeClass::Set_Yellow_Limit(int value) {
  *=============================================================================================*/
 int TriColorGaugeClass::Draw_Me(int forced) {
 	if (ControlClass::Draw_Me(forced)) {
-
 		/*
 		**	Hide the mouse
 		*/
@@ -481,7 +471,6 @@ int TriColorGaugeClass::Draw_Me(int forced) {
 				LogicPage->Fill_Rect(X + 1, red, X + Width - 2, middle, YELLOW);
 			}
 		} else if (CurValue > YellowLimit && CurValue <= MaxValue) {
-
 			if (IsHorizontal) {
 				LogicPage->Fill_Rect(X + 1, Y + 1, red, Y + Height - 2, PINK);
 				LogicPage->Fill_Rect(red, Y + 1, yellow, Y + Height - 2, YELLOW);

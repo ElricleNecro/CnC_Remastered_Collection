@@ -51,7 +51,8 @@
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ShapeButtonClass::ShapeButtonClass(void) : ToggleClass(0, 0, 0, 0, 0), ReflectButtonState(false) {}
+ShapeButtonClass::ShapeButtonClass(void) : ToggleClass(0, 0, 0, 0, 0), ReflectButtonState(false) {
+}
 
 /***********************************************************************************************
  * ShapeButtonClass::ShapeButtonClass -- Constructor for a shape type button.                  *
@@ -76,8 +77,7 @@ ShapeButtonClass::ShapeButtonClass(void) : ToggleClass(0, 0, 0, 0, 0), ReflectBu
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ShapeButtonClass::ShapeButtonClass(unsigned id, void const *shape, int x, int y)
-    : ToggleClass(id, x, y, 0, 0), ReflectButtonState(false) {
+ShapeButtonClass::ShapeButtonClass(unsigned id, void const *shape, int x, int y) : ToggleClass(id, x, y, 0, 0), ReflectButtonState(false) {
 	//	Width = 0;
 	//	Height = 0;
 	Set_Shape(shape);
@@ -123,7 +123,6 @@ void ShapeButtonClass::Set_Shape(void const *data) {
  *=============================================================================================*/
 int ShapeButtonClass::Draw_Me(int forced) {
 	if (ControlClass::Draw_Me(forced) && ShapeData) {
-
 		/*
 		**	Hide the mouse.
 		*/
@@ -138,9 +137,7 @@ int ShapeButtonClass::Draw_Me(int forced) {
 		if (IsDisabled) {
 			shapenum = DISABLED_SHAPE;
 		} else {
-
 			if (!ReflectButtonState) {
-
 				if (IsPressed) {
 					shapenum = DOWN_SHAPE;
 				} else {

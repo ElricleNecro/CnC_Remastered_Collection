@@ -53,81 +53,81 @@
 **	These are the text names for the various actions. If the action name ends with "..." then
 **	this means that additional data is probably required.
 */
-static const char *ActionText[TACTION_COUNT] = {"-No Action-",
-						"Winner is...",
-						"Loser is...",
-						"Production Begins",
-						"Create Team...",
-						"Destroy All Teams",
-						"All to Hunt...",
-						"Reinforcement (team)...",
-						"Drop Zone Flare (waypoint)...",
-						"Fire Sale...",
-						"Play Movie...",
-						"Text Trigger (ID num)...",
-						"Destroy Trigger...",
-						"Autocreate Begins...",
-						"~don't use~",
-						"Allow Win",
-						"Reveal all map",
-						"Reveal around waypoint...",
-						"Reveal zone of waypoint...",
-						"Play sound effect...",
-						"Play music theme...",
-						"Play speech...",
-						"Force Trigger...",
-						"Timer Start",
-						"Timer Stop",
-						"Timer Extend (1/10th min)...",
-						"Timer Shorten (1/10th min)...",
-						"Timer Set (1/10th min)...",
-						"Global Set...",
-						"Global Clear...",
-						"Auto Base Building...",
-						"Grow shroud one 'step'",
-						"Destroy attached building",
-						"Add 1-time special weapon...",
-						"Add repeating special weapon...",
-						"Preferred target...",
-						"Launch Nukes"};
+static const char *ActionText[TACTION_COUNT] = { "-No Action-",
+						 "Winner is...",
+						 "Loser is...",
+						 "Production Begins",
+						 "Create Team...",
+						 "Destroy All Teams",
+						 "All to Hunt...",
+						 "Reinforcement (team)...",
+						 "Drop Zone Flare (waypoint)...",
+						 "Fire Sale...",
+						 "Play Movie...",
+						 "Text Trigger (ID num)...",
+						 "Destroy Trigger...",
+						 "Autocreate Begins...",
+						 "~don't use~",
+						 "Allow Win",
+						 "Reveal all map",
+						 "Reveal around waypoint...",
+						 "Reveal zone of waypoint...",
+						 "Play sound effect...",
+						 "Play music theme...",
+						 "Play speech...",
+						 "Force Trigger...",
+						 "Timer Start",
+						 "Timer Stop",
+						 "Timer Extend (1/10th min)...",
+						 "Timer Shorten (1/10th min)...",
+						 "Timer Set (1/10th min)...",
+						 "Global Set...",
+						 "Global Clear...",
+						 "Auto Base Building...",
+						 "Grow shroud one 'step'",
+						 "Destroy attached building",
+						 "Add 1-time special weapon...",
+						 "Add repeating special weapon...",
+						 "Preferred target...",
+						 "Launch Nukes" };
 
-ActionChoiceClass ActionChoices[TACTION_COUNT] = {{TACTION_NONE},
-						  {TACTION_WIN},
-						  {TACTION_LOSE},
-						  {TACTION_BEGIN_PRODUCTION},
-						  {TACTION_CREATE_TEAM},
-						  {TACTION_DESTROY_TEAM},
-						  {TACTION_ALL_HUNT},
-						  {TACTION_REINFORCEMENTS},
-						  {TACTION_DZ},
-						  {TACTION_FIRE_SALE},
-						  {TACTION_PLAY_MOVIE},
-						  {TACTION_TEXT_TRIGGER},
-						  {TACTION_DESTROY_TRIGGER},
-						  {TACTION_AUTOCREATE},
-						  {TACTION_WINLOSE},
-						  {TACTION_ALLOWWIN},
-						  {TACTION_REVEAL_ALL},
-						  {TACTION_REVEAL_SOME},
-						  {TACTION_REVEAL_ZONE},
-						  {TACTION_PLAY_SOUND},
-						  {TACTION_PLAY_MUSIC},
-						  {TACTION_PLAY_SPEECH},
-						  {TACTION_FORCE_TRIGGER},
-						  {TACTION_START_TIMER},
-						  {TACTION_STOP_TIMER},
-						  {TACTION_ADD_TIMER},
-						  {TACTION_SUB_TIMER},
-						  {TACTION_SET_TIMER},
-						  {TACTION_SET_GLOBAL},
-						  {TACTION_CLEAR_GLOBAL},
-						  {TACTION_BASE_BUILDING},
-						  {TACTION_CREEP_SHADOW},
-						  {TACTION_DESTROY_OBJECT},
-						  {TACTION_1_SPECIAL},
-						  {TACTION_FULL_SPECIAL},
-						  {TACTION_PREFERRED_TARGET},
-						  {TACTION_LAUNCH_NUKES}};
+ActionChoiceClass ActionChoices[TACTION_COUNT] = { { TACTION_NONE },
+						   { TACTION_WIN },
+						   { TACTION_LOSE },
+						   { TACTION_BEGIN_PRODUCTION },
+						   { TACTION_CREATE_TEAM },
+						   { TACTION_DESTROY_TEAM },
+						   { TACTION_ALL_HUNT },
+						   { TACTION_REINFORCEMENTS },
+						   { TACTION_DZ },
+						   { TACTION_FIRE_SALE },
+						   { TACTION_PLAY_MOVIE },
+						   { TACTION_TEXT_TRIGGER },
+						   { TACTION_DESTROY_TRIGGER },
+						   { TACTION_AUTOCREATE },
+						   { TACTION_WINLOSE },
+						   { TACTION_ALLOWWIN },
+						   { TACTION_REVEAL_ALL },
+						   { TACTION_REVEAL_SOME },
+						   { TACTION_REVEAL_ZONE },
+						   { TACTION_PLAY_SOUND },
+						   { TACTION_PLAY_MUSIC },
+						   { TACTION_PLAY_SPEECH },
+						   { TACTION_FORCE_TRIGGER },
+						   { TACTION_START_TIMER },
+						   { TACTION_STOP_TIMER },
+						   { TACTION_ADD_TIMER },
+						   { TACTION_SUB_TIMER },
+						   { TACTION_SET_TIMER },
+						   { TACTION_SET_GLOBAL },
+						   { TACTION_CLEAR_GLOBAL },
+						   { TACTION_BASE_BUILDING },
+						   { TACTION_CREEP_SHADOW },
+						   { TACTION_DESTROY_OBJECT },
+						   { TACTION_1_SPECIAL },
+						   { TACTION_FULL_SPECIAL },
+						   { TACTION_PREFERRED_TARGET },
+						   { TACTION_LAUNCH_NUKES } };
 
 /***********************************************************************************************
  * ActionChoiceClass::Draw_It -- Display the action choice as part of a list box.              *
@@ -152,9 +152,8 @@ ActionChoiceClass ActionChoices[TACTION_COUNT] = {{TACTION_NONE},
  *=============================================================================================*/
 void ActionChoiceClass::Draw_It(int, int x, int y, int width, int height, bool selected, TextPrintType flags) const {
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
-	static int _tabs[] = {13, 40};
+	static int _tabs[] = { 13, 40 };
 	if ((flags & 0x0F) == TPF_6PT_GRAD || (flags & 0x0F) == TPF_EFNT) {
-
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
 			LogicPage->Fill_Rect(x, y, x + width - 1, y + height - 1, scheme->Shadow);
@@ -166,9 +165,14 @@ void ActionChoiceClass::Draw_It(int, int x, int y, int width, int height, bool s
 
 		Conquer_Clip_Text_Print(Description(), x, y, scheme, TBLACK, flags, width, _tabs);
 	} else {
-		Conquer_Clip_Text_Print(Description(), x, y,
+		Conquer_Clip_Text_Print(Description(),
+					x,
+					y,
 					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
-					TBLACK, flags, width, _tabs);
+					TBLACK,
+					flags,
+					width,
+					_tabs);
 	}
 }
 
@@ -278,7 +282,8 @@ void TActionClass::Read_INI(void) {
  * HISTORY:                                                                                    *
  *   02/22/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TActionClass::Code_Pointers(void) {}
+void TActionClass::Code_Pointers(void) {
+}
 
 /***********************************************************************************************
  * TActionClass::Decode_Pointers -- Converts coded pointers into usable format.                *
@@ -296,7 +301,8 @@ void TActionClass::Code_Pointers(void) {}
  * HISTORY:                                                                                    *
  *   02/22/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TActionClass::Decode_Pointers(void) {}
+void TActionClass::Decode_Pointers(void) {
+}
 
 /***********************************************************************************************
  * TActionClass::operator -- Performs the action that this object does.                        *
@@ -350,7 +356,10 @@ bool TActionClass::operator()(HousesType house, ObjectClass *object, int id, CEL
 	**	Display a text message overlayed onto the tactical map.
 	*/
 	case TACTION_TEXT_TRIGGER:
-		Session.Messages.Add_Message(NULL, Data.Value, (char *)TutorialText[Data.Value], PCOLOR_GREEN,
+		Session.Messages.Add_Message(NULL,
+					     Data.Value,
+					     (char *)TutorialText[Data.Value],
+					     PCOLOR_GREEN,
 					     TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW,
 					     Rule.MessageDelay * TICKS_PER_MINUTE);
 		break;
@@ -792,7 +801,9 @@ TActionType Action_From_Name(char const *name) {
  * HISTORY:                                                                                    *
  *   11/29/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-char const *Name_From_Action(TActionType action) { return (ActionText[action]); }
+char const *Name_From_Action(TActionType action) {
+	return (ActionText[action]);
+}
 
 /***********************************************************************************************
  * Action_Needs -- Figures out what data an action object needs.                               *

@@ -44,7 +44,8 @@
 */
 class CRCStraw : public Straw {
 public:
-	CRCStraw(void) {}
+	CRCStraw(void) {
+	}
 	virtual int Get(void *source, int slen);
 
 	// Calculate and return the CRC value.

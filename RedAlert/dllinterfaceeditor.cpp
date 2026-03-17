@@ -27,25 +27,32 @@
 
 extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Startup();
 extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Cleanup();
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map(char *cncdata_directory, char *house_name,
-								 int scenario_index, char *east_west, char *variant);
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map_By_Scenario_Name(char *cncdata_directory,
-										  char *scenario_name);
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map(char *cncdata_directory,
+								 char *house_name,
+								 int scenario_index,
+								 char *east_west,
+								 char *variant);
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map_By_Scenario_Name(char *cncdata_directory, char *scenario_name);
 extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Clear_Map();
 extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Map_Stats(int &map_width, int &map_height, int &theater);
-extern "C"
-    __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data_By_Index(int cell_index, char *cell_name,
-									unsigned long cell_name_size,
-									int &template_type, int &template_icon_index);
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data(int x, int y, char *cell_name,
-								      unsigned long cell_name_size, int &template_type,
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data_By_Index(int cell_index,
+									       char *cell_name,
+									       unsigned long cell_name_size,
+									       int &template_type,
+									       int &template_icon_index);
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data(int x,
+								      int y,
+								      char *cell_name,
+								      unsigned long cell_name_size,
+								      int &template_type,
 								      int &template_icon_index);
-extern "C"
-    __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Texture_Buffer(int x, int y, int &out_width, int &out_height,
-									 SAFEARRAY *&out_texture_array);
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Texture_Buffer(int x,
+										int y,
+										int &out_width,
+										int &out_height,
+										SAFEARRAY *&out_texture_array);
 extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Scenario_Names(char *cncdata_directory);
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Template_Data(int template_type_index,
-									  SAFEARRAY *&template_points);
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Template_Data(int template_type_index, SAFEARRAY *&template_points);
 
 int LoadScenario();
 
@@ -122,26 +129,26 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Cleanup() {
  **************************************************************************************************/
 void CNC_Editor_Load_Mix_Files() {
 	const char *MixFileNames[] = {
-	    "MAIN.MIX",
-	    "REDALERT.MIX",
-	    "EXPAND2.MIX",
-	    "EXPAND.MIX",
-	    "HIRES1.MIX",
-	    //"LORES1.MIX"
+		"MAIN.MIX",
+		"REDALERT.MIX",
+		"EXPAND2.MIX",
+		"EXPAND.MIX",
+		"HIRES1.MIX",
+		//"LORES1.MIX"
 
-	    "GENERAL.MIX",
+		"GENERAL.MIX",
 
-	    "LOCAL.MIX",
-	    "HIRES.MIX",
-	    "NCHIRES.MIX",
-	    "CONQUER.MIX",
+		"LOCAL.MIX",
+		"HIRES.MIX",
+		"NCHIRES.MIX",
+		"CONQUER.MIX",
 
-	    "RUSSIAN.MIX",
-	    "ALLIES.MIX",
+		"RUSSIAN.MIX",
+		"ALLIES.MIX",
 
-	    "SNOW.MIX",
-	    "TEMPERAT.MIX",
-	    "INTERIOR.MIX",
+		"SNOW.MIX",
+		"TEMPERAT.MIX",
+		"INTERIOR.MIX",
 	};
 
 	int count = sizeof(MixFileNames) / sizeof(MixFileNames[0]);
@@ -164,7 +171,6 @@ void CNC_Editor_Load_Mix_Files() {
  * CD1: if true, consider this disc 1, otherwise consider this disc 2.
  **************************************************************************************************/
 void CNC_Editor_Setup_Content_Directory(char *cncdata_directory, int CD, char (&content_directory)[_MAX_PATH]) {
-
 	switch (CD) {
 	default:
 	case 1:
@@ -202,9 +208,11 @@ void CNC_Editor_Setup_Content_Directory(char *cncdata_directory, int CD, char (&
  *
  * returns EDITOR_COMMMAND_SUCCESS on success, all other values are failure
  **************************************************************************************************/
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map(char *cncdata_directory, char *house_name,
-								 int scenario_index, char *east_west, char *variant) {
-
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map(char *cncdata_directory,
+								 char *house_name,
+								 int scenario_index,
+								 char *east_west,
+								 char *variant) {
 	CNC_Editor_Clear_Map();
 
 	ScenarioPlayerType scen_player;
@@ -301,8 +309,7 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map(char *cncdata_d
  *
  * returns EDITOR_COMMMAND_SUCCESS on success, all other values are failure
  **************************************************************************************************/
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map_By_Scenario_Name(char *cncdata_directory,
-										  char *scenario_name) {
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Load_Map_By_Scenario_Name(char *cncdata_directory, char *scenario_name) {
 	int CD = 3; // Always use the aftermath cd
 	if (strnlen(scenario_name, _MAX_PATH) >= 3 && (scenario_name[2] == 'a' || scenario_name[2] == 'A')) {
 		// Ant missions are CD 2
@@ -415,10 +422,11 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Map_Stats(int &map_w
  *
  * returns EDITOR_COMMMAND_SUCCESS on success, all other values are failure
  **************************************************************************************************/
-extern "C"
-    __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data_By_Index(int cell_index, char *cell_name,
-									unsigned long cell_name_size,
-									int &template_type, int &template_icon_index) {
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data_By_Index(int cell_index,
+									       char *cell_name,
+									       unsigned long cell_name_size,
+									       int &template_type,
+									       int &template_icon_index) {
 	CELL index = (CELL)cell_index;
 
 	CellClass *cellptr = &Map[index];
@@ -453,8 +461,11 @@ extern "C"
  * returns EDITOR_COMMMAND_SUCCESS on success, all other values are failure
  **************************************************************************************************/
 
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data(int x, int y, char *cell_name,
-								      unsigned long cell_name_size, int &template_type,
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data(int x,
+								      int y,
+								      char *cell_name,
+								      unsigned long cell_name_size,
+								      int &template_type,
 								      int &template_icon_index) {
 	if (!EditorMapInitialized) {
 		return EDITOR_COMMMAND_FAILURE;
@@ -485,8 +496,7 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data(int x, int
 
 	CELL cell = XY_Cell(map_cell_x + x, map_cell_y + y);
 
-	return CNC_Editor_Get_Cell_Data_By_Index((int)cell, cell_name, cell_name_size, template_type,
-						 template_icon_index);
+	return CNC_Editor_Get_Cell_Data_By_Index((int)cell, cell_name, cell_name_size, template_type, template_icon_index);
 }
 
 /**************************************************************************************************
@@ -497,10 +507,11 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Data(int x, int
  * out_texture_array: output array of unsigned chars storing the color data for the requested object,
  *							every 3 chars is a set of RGB values
  **************************************************************************************************/
-extern "C"
-    __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Texture_Buffer(int x, int y, int &out_width, int &out_height,
-									 SAFEARRAY *&out_texture_array) {
-
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Cell_Texture_Buffer(int x,
+										int y,
+										int &out_width,
+										int &out_height,
+										SAFEARRAY *&out_texture_array) {
 	int map_cell_x = Map.MapCellX;
 	int map_cell_y = Map.MapCellY;
 	int map_cell_width = Map.MapCellWidth;
@@ -574,10 +585,8 @@ extern "C"
 
 					int palette_index = (*pallete_index_ptr);
 					out_buffer_ptr[0] = ((unsigned char)GamePalette[palette_index].Red_Component());
-					out_buffer_ptr[1] =
-					    ((unsigned char)GamePalette[palette_index].Green_Component());
-					out_buffer_ptr[2] =
-					    ((unsigned char)GamePalette[palette_index].Blue_Component());
+					out_buffer_ptr[1] = ((unsigned char)GamePalette[palette_index].Green_Component());
+					out_buffer_ptr[2] = ((unsigned char)GamePalette[palette_index].Blue_Component());
 				}
 			}
 
@@ -600,8 +609,7 @@ extern "C"
  *
  * returns EDITOR_COMMMAND_SUCCESS on success, all other values are failure
  **************************************************************************************************/
-extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Template_Data(int template_type_index,
-									  SAFEARRAY *&template_points) {
+extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Template_Data(int template_type_index, SAFEARRAY *&template_points) {
 	if (template_type_index >= TEMPLATE_COUNT || template_type_index == TEMPLATE_NONE) {
 		return EDITOR_COMMMAND_FAILURE;
 	}
@@ -656,8 +664,7 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Scenario_Names(char 
 	DLL_Startup(command_line);
 
 	char team_ids[] = {
-	    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-	    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 	};
 	/*
 	{
@@ -670,14 +677,13 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Scenario_Names(char 
 	const int team_count = sizeof(team_ids) / sizeof(char);
 
 	char direction_ids[] = {
-	    'e',
-	    'w',
+		'e',
+		'w',
 	};
 	const int direction_count = sizeof(direction_ids) / sizeof(char);
 
 	char variant_ids[] = {
-	    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-	    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 	};
 	/*
 	{
@@ -701,8 +707,12 @@ extern "C" __declspec(dllexport) int __cdecl CNC_Editor_Get_Scenario_Names(char 
 		for (int scenario_index = min_scenario_index; scenario_index <= max_scenario_index; ++scenario_index) {
 			for (int direction_index = 0; direction_index < direction_count; direction_index++) {
 				for (int variant_index = 0; variant_index < variant_count; variant_index++) {
-					sprintf(scenario_name, "sc%c%.2d%c%c", team_ids[team_index], scenario_index,
-						direction_ids[direction_index], variant_ids[variant_index]);
+					sprintf(scenario_name,
+						"sc%c%.2d%c%c",
+						team_ids[team_index],
+						scenario_index,
+						direction_ids[direction_index],
+						variant_ids[variant_index]);
 
 					sprintf(file_name, "%s.INI", scenario_name);
 					CCFileClass file(file_name);

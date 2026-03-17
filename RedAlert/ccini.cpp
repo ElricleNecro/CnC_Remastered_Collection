@@ -102,7 +102,9 @@
  *   07/03/1996 JLB : Created.                                                                 *
  *   08/21/1996 JLB : Handles digest control.                                                  *
  *=============================================================================================*/
-bool CCINIClass::Load(FileClass &file, bool withdigest) { return (Load(FileStraw(file), withdigest)); }
+bool CCINIClass::Load(FileClass &file, bool withdigest) {
+	return (Load(FileStraw(file), withdigest));
+}
 
 /***********************************************************************************************
  * CCINIClass::Load -- Load the INI database from the data stream specified.                   *
@@ -128,7 +130,6 @@ int CCINIClass::Load(Straw &file, bool withdigest) {
 
 	Invalidate_Message_Digest();
 	if (ok && withdigest) {
-
 		/*
 		**	If a digest is present, fetch it.
 		*/
@@ -172,7 +173,9 @@ int CCINIClass::Load(Straw &file, bool withdigest) {
  *   07/03/1996 JLB : Created.                                                                 *
  *   08/21/1996 JLB : Handles message digest control.                                          *
  *=============================================================================================*/
-int CCINIClass::Save(FileClass &file, bool withdigest) const { return (Save(FilePipe(file), withdigest)); }
+int CCINIClass::Save(FileClass &file, bool withdigest) const {
+	return (Save(FilePipe(file), withdigest));
+}
 
 /***********************************************************************************************
  * CCINIClass::Save -- Pipes the INI database to the pipe specified.                           *
@@ -364,7 +367,6 @@ long CCINIClass::Get_Owners(char const *section, char const *entry, long defvalu
 	long ownable = defvalue;
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-
 		ownable = 0;
 		char *name = strtok(buffer, ",");
 
@@ -1256,7 +1258,6 @@ long CCINIClass::Get_Buildings(char const *section, char const *entry, long defv
 	long pre;
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-
 		pre = 0;
 		char *token = strtok(buffer, ",");
 		while (token != NULL && *token != '\0') {
@@ -1301,7 +1302,6 @@ bool CCINIClass::Put_Buildings(char const *section, char const *entry, long valu
 
 	for (StructType index = STRUCT_FIRST; index < maxi; index++) {
 		if ((value & (1L << index)) != 0) {
-
 			if (buffer[0] != '\0') {
 				strcat(buffer, ",");
 			}
@@ -1377,4 +1377,6 @@ void CCINIClass::Calculate_Message_Digest(void) {
  * HISTORY:                                                                                    *
  *   11/01/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void CCINIClass::Invalidate_Message_Digest(void) { IsDigestPresent = false; }
+void CCINIClass::Invalidate_Message_Digest(void) {
+	IsDigestPresent = false;
+}

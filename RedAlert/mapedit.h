@@ -52,8 +52,8 @@
 */
 enum MapEdit1Enum {
 	MAX_EDIT_OBJECTS = // max # of ObjectTypeClasses allowed
-	(int)TEMPLATE_COUNT + (int)OVERLAY_COUNT + (int)SMUDGE_COUNT + (int)TERRAIN_COUNT + (int)UNIT_COUNT +
-	(int)INFANTRY_COUNT + (int)VESSEL_COUNT + (int)STRUCT_COUNT,
+	(int)TEMPLATE_COUNT + (int)OVERLAY_COUNT + (int)SMUDGE_COUNT + (int)TERRAIN_COUNT + (int)UNIT_COUNT + (int)INFANTRY_COUNT +
+	(int)VESSEL_COUNT + (int)STRUCT_COUNT,
 
 	MAX_TEAM_CLASSES = // max # ObjectTypeClasses for a team
 	(int)UNIT_COUNT + (int)INFANTRY_COUNT + (int)AIRCRAFT_COUNT,
@@ -144,14 +144,14 @@ enum MapEditButtonIDEnum {
 	POPUP_GERMANY,
 	POPUP_FRANCE,
 	POPUP_TURKEY,
-	POPUP_HOUSELIST,   // House selection list.
-	POPUP_SELLABLE,	   // Allowed to sell.
+	POPUP_HOUSELIST, // House selection list.
+	POPUP_SELLABLE, // Allowed to sell.
 	POPUP_REBUILDABLE, // Allowed to rebuild.
 	POPUP_MISSIONLIST, // list box for missions
 	POPUP_HEALTHGAUGE, // health of object
-	POPUP_FACINGDIAL,  // object's facing
+	POPUP_FACINGDIAL, // object's facing
 	POPUP_BASEPERCENT, // Base's percent-built slider
-	MAP_AREA,	   // map as a click-able thingy
+	MAP_AREA, // map as a click-able thingy
 	BUTTON_FLAG = 0x8000
 };
 
@@ -171,14 +171,16 @@ public:
 	void Update_Waypoint(int waypt_index);
 
 	virtual void One_Time(void); // One-time init
-	virtual void Init_IO(void);  // Inits button list
+	virtual void Init_IO(void); // Inits button list
 	virtual void AI(KeyNumType &input, int x, int y);
 	virtual void Draw_It(bool forced = true);
 	virtual bool Scroll_Map(DirType facing, int &distance, bool really = true);
 	virtual void Read_INI(CCINIClass &ini);
 	virtual void Write_INI(CCINIClass &ini);
 	virtual void Detach(ObjectClass *object);
-	void Detach(TARGET target, bool all = true) { MouseClass::Detach(target, all); }
+	void Detach(TARGET target, bool all = true) {
+		MouseClass::Detach(target, all);
+	}
 	void Clear_List(void);
 	bool Add_To_List(ObjectTypeClass const *object);
 	void Main_Menu(void);
@@ -195,8 +197,7 @@ public:
 	int New_Scenario(void);
 	int Load_Scenario(void);
 	int Save_Scenario(void);
-	int Pick_Scenario(char const *caption, int &scen_nump, ScenarioPlayerType &playerp, ScenarioDirType &dirp,
-			  ScenarioVarType &varp);
+	int Pick_Scenario(char const *caption, int &scen_nump, ScenarioPlayerType &playerp, ScenarioDirType &dirp, ScenarioVarType &varp);
 	int Size_Map(int x, int y, int w, int h);
 	int Scenario_Dialog(void);
 	void Handle_Triggers(void);
@@ -260,29 +261,29 @@ private:
 	/*
 	**	Last-selected object to place, and last-selected house of object
 	*/
-	int LastChoice;	      // index of item user picked last
+	int LastChoice; // index of item user picked last
 	HousesType LastHouse; // house of last item picked
 
 	/*
 	**	Variables for grabbing/moving objects
 	*/
-	ObjectClass *GrabbedObject;  // object "grabbed" with mouse
-	CELL GrabOffset;	     // offset to grabbed obj's upper-left
+	ObjectClass *GrabbedObject; // object "grabbed" with mouse
+	CELL GrabOffset; // offset to grabbed obj's upper-left
 	unsigned long LastClickTime; // time of last LMOUSE click
 
 	/*
 	**	Number of each type of object in Objects, so we can switch categories
 	*/
 	int NumType[NUM_EDIT_CLASSES]; // # of each type of class:
-				       // 0 = Template
-				       // 1 = Overlay
-				       // 2 = Smudge
-				       // 3 = Terrain
-				       // 4 = Unit
-				       // 5 = Infantry
-				       // 6 = Vessels
-				       // 7 = Building
-				       // 8 = Aircraft
+		// 0 = Template
+		// 1 = Overlay
+		// 2 = Smudge
+		// 3 = Terrain
+		// 4 = Unit
+		// 5 = Infantry
+		// 6 = Vessels
+		// 7 = Building
+		// 8 = Aircraft
 
 	/*
 	**	The offset of each type of object within the Objects[] array
@@ -302,8 +303,8 @@ private:
 	/*
 	**	Bitfields for flags & such
 	*/
-	unsigned Changed : 1;	   // 1 = changes are unsaved
-	unsigned LMouseDown : 1;   // 1 = left mouse is held down
+	unsigned Changed : 1; // 1 = changes are unsaved
+	unsigned LMouseDown : 1; // 1 = left mouse is held down
 	unsigned BaseBuilding : 1; // 1 = we're in base-building mode
 
 	/*

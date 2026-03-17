@@ -39,8 +39,8 @@
  *   LoadOptionsClass::Compare -- for qsort                                                    *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
 #include <io.h> // for unlink
+#include "function.h"
 
 /***********************************************************************************************
  * LoadOptionsClass::LoadOptionsClass -- class constructor                                     *
@@ -103,14 +103,14 @@ int LoadOptionsClass::Process(void) {
 	/*
 	**	Dialog & button dimensions
 	*/
-	int d_dialog_w = 250 * RESFACTOR;			 // dialog width
-	int d_dialog_h = 156 * RESFACTOR;			 // dialog height
+	int d_dialog_w = 250 * RESFACTOR; // dialog width
+	int d_dialog_h = 156 * RESFACTOR; // dialog height
 	int d_dialog_x = (((320 * RESFACTOR) - d_dialog_w) / 2); // centered x-coord
 	int d_dialog_y = (((200 * RESFACTOR) - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);	 // coord of x-center
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // coord of x-center
 
 	int d_txt8_h = 11 * RESFACTOR; // ht of 8-pt text
-	int d_margin = 7 * RESFACTOR;  // margin width/height
+	int d_margin = 7 * RESFACTOR; // margin width/height
 	int x_margin = 16 * RESFACTOR; // margin width/height
 
 	int d_list_w = d_dialog_w - (x_margin * 2);
@@ -161,20 +161,20 @@ int LoadOptionsClass::Process(void) {
 	/*
 	**	Dialog variables
 	*/
-	bool cancel = false;	// true = user cancels
+	bool cancel = false; // true = user cancels
 	int list_ht = d_list_h; // adjusted list box height
 
 	/*
 	**	Other Variables
 	*/
-	int btn_txt;			    // text on the 'OK' button
-	int btn_id;			    // ID of 'OK' button
-	int caption;			    // dialog caption
-	int game_idx = 0;		    // index of game to save/load/etc
-	int game_num = 0;		    // file number of game to load/save/etc
-	char game_descr[DESCRIP_MAX] = {0}; // save-game description
-	char fname[_MAX_NAME + _MAX_EXT];   // for generating filename to delete
-	int rc;				    // return code
+	int btn_txt; // text on the 'OK' button
+	int btn_id; // ID of 'OK' button
+	int caption; // dialog caption
+	int game_idx = 0; // index of game to save/load/etc
+	int game_num = 0; // file number of game to load/save/etc
+	char game_descr[DESCRIP_MAX] = { 0 }; // save-game description
+	char fname[_MAX_NAME + _MAX_EXT]; // for generating filename to delete
+	int rc; // return code
 
 	/*
 	**	Buttons
@@ -205,11 +205,24 @@ int LoadOptionsClass::Process(void) {
 	TextButtonClass button(btn_id, btn_txt, TPF_BUTTON, d_button_x, d_button_y, d_button_w);
 	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w);
 
-	ListClass listbtn(BUTTON_LIST, d_list_x, d_list_y, d_list_w, list_ht, TPF_6PT_GRAD | TPF_NOSHADOW,
-			  MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass listbtn(BUTTON_LIST,
+			  d_list_x,
+			  d_list_y,
+			  d_list_w,
+			  list_ht,
+			  TPF_6PT_GRAD | TPF_NOSHADOW,
+			  MFCD::Retrieve("BTN-UP.SHP"),
+			  MFCD::Retrieve("BTN-DN.SHP"));
 
-	EditClass editbtn(BUTTON_EDIT, game_descr, sizeof(game_descr) - 4, TPF_6PT_GRAD | TPF_NOSHADOW, d_edit_x,
-			  d_edit_y, d_edit_w, -1, EditClass::ALPHANUMERIC);
+	EditClass editbtn(BUTTON_EDIT,
+			  game_descr,
+			  sizeof(game_descr) - 4,
+			  TPF_6PT_GRAD | TPF_NOSHADOW,
+			  d_edit_x,
+			  d_edit_y,
+			  d_edit_w,
+			  -1,
+			  EditClass::ALPHANUMERIC);
 
 	/*
 	**	Initialize.
@@ -246,7 +259,6 @@ int LoadOptionsClass::Process(void) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -274,7 +286,6 @@ int LoadOptionsClass::Process(void) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			/*
 			**	Display the dialog box.
 			*/
@@ -284,8 +295,11 @@ int LoadOptionsClass::Process(void) {
 				Draw_Caption(caption, d_dialog_x, d_dialog_y, d_dialog_w);
 
 				if (Style == SAVE) {
-					Fancy_Text_Print(TXT_MISSION_DESCRIPTION, d_dialog_cx, d_edit_y - d_txt8_h,
-							 GadgetClass::Get_Color_Scheme(), TBLACK,
+					Fancy_Text_Print(TXT_MISSION_DESCRIPTION,
+							 d_dialog_cx,
+							 d_edit_y - d_txt8_h,
+							 GadgetClass::Get_Color_Scheme(),
+							 TBLACK,
 							 TPF_TEXT | TPF_CENTER);
 				}
 			}
@@ -376,7 +390,6 @@ int LoadOptionsClass::Process(void) {
 			game_idx = listbtn.Current_Index();
 			game_num = Files[game_idx]->Num;
 			if (Files[game_idx]->Valid) {
-
 				/*
 				** Start a timer before we load the game
 				*/
@@ -600,12 +613,12 @@ void LoadOptionsClass::Clear_List(ListClass *list) {
  *   06/25/1995 JLB : Shows which saved games are "(old)".                                     *
  *=============================================================================================*/
 void LoadOptionsClass::Fill_List(ListClass *list) {
-#if (0)			       // PG
+#if (0) // PG
 	FileEntryClass *fdata; // for adding entries to 'Files'
 	char descr[DESCRIP_MAX + 32];
 	unsigned scenario; // scenario #
-	HousesType house;  // house
-	struct find_t ff;  // for _dos_findfirst
+	HousesType house; // house
+	struct find_t ff; // for _dos_findfirst
 	int id;
 
 	/*
@@ -629,9 +642,7 @@ void LoadOptionsClass::Fill_List(ListClass *list) {
 	int rc = _dos_findfirst("SAVEGAME.*", _A_NORMAL, &ff);
 
 	while (!rc) {
-
 		if (stricmp(ff.name, NET_SAVE_FILE_NAME) != 0) {
-
 			/*
 			** Extract the game ID from the filename
 			*/
@@ -687,10 +698,10 @@ void LoadOptionsClass::Fill_List(ListClass *list) {
 		** in the list; if any number isn't found, use that number; otherwise,
 		** use 'N + 1'.
 		*/
-		for (int i = 0; i < Files.Count(); i++) {	  // i = the # we're searching for
-			id = -1;				  // mark as 'not found'
+		for (int i = 0; i < Files.Count(); i++) { // i = the # we're searching for
+			id = -1; // mark as 'not found'
 			for (int j = 0; j < Files.Count(); j++) { // loop through all game ID's
-				if (Files[j]->Num == i) {	  // if found, mark as found
+				if (Files[j]->Num == i) { // if found, mark as found
 					id = j;
 					break;
 				}

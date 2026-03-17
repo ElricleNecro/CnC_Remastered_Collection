@@ -58,22 +58,30 @@ public:
 	CheckListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down);
 	~CheckListClass(void);
 
-	virtual int Add_Item(int text) { return ListClass::Add_Item(text); }
+	virtual int Add_Item(int text) {
+		return ListClass::Add_Item(text);
+	}
 	virtual int Add_Item(char const *text);
 	virtual char const *Current_Item(void) const;
 	virtual char const *Get_Item(int index) const;
 	virtual void Remove_Item(char const *text);
-	virtual void Remove_Item(int text) { ListClass::Remove_Item(text); }
+	virtual void Remove_Item(int text) {
+		ListClass::Remove_Item(text);
+	}
 	virtual void Set_Selected_Index(char const *text);
-	virtual void Set_Selected_Index(int index) { ListClass::Set_Selected_Index(index); };
+	virtual void Set_Selected_Index(int index) {
+		ListClass::Set_Selected_Index(index);
+	};
 
 	/*
 	**	Checkmark utility functions
 	*/
 	void Check_Item(int index, bool checked); // sets checked state of item
-	bool Is_Checked(int index) const;	  // gets checked state of item
+	bool Is_Checked(int index) const; // gets checked state of item
 
-	void Set_Read_Only(int rdonly) { IsReadOnly = rdonly; }
+	void Set_Read_Only(int rdonly) {
+		IsReadOnly = rdonly;
+	}
 
 	/*
 	**	This defines the ASCII value of the checkmark character & non-checkmark

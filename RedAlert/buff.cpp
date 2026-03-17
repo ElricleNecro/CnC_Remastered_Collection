@@ -38,8 +38,8 @@
  *   Buffer::~Buffer -- Destructor for buffer object.                                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "buff.h"
 #include <stddef.h>
+#include "buff.h"
 
 /***********************************************************************************************
  * Buffer::Buffer -- Constructor for buffer object.                                            *
@@ -60,13 +60,16 @@
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Buffer::Buffer(void *buffer, long size) : BufferPtr(buffer), Size(size), IsAllocated(false) {}
+Buffer::Buffer(void *buffer, long size) : BufferPtr(buffer), Size(size), IsAllocated(false) {
+}
 
 // Alternate constructor for char * pointer.
-Buffer::Buffer(char *buffer, long size) : BufferPtr(buffer), Size(size), IsAllocated(false) {}
+Buffer::Buffer(char *buffer, long size) : BufferPtr(buffer), Size(size), IsAllocated(false) {
+}
 
 // Alternate constructor for void const * pointer.
-Buffer::Buffer(void const *buffer, long size) : BufferPtr((void *)buffer), Size(size), IsAllocated(false) {}
+Buffer::Buffer(void const *buffer, long size) : BufferPtr((void *)buffer), Size(size), IsAllocated(false) {
+}
 
 /***********************************************************************************************
  * Buffer::Buffer -- Self-allocating constructor for buffer object.                            *
@@ -153,7 +156,9 @@ Buffer &Buffer::operator=(Buffer const &buffer) {
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Buffer::~Buffer(void) { Reset(); }
+Buffer::~Buffer(void) {
+	Reset();
+}
 
 /***********************************************************************************************
  * Buffer::Reset -- Clears the buffer object to null state.                                    *

@@ -59,11 +59,14 @@ typedef int bool;
 */
 class Straw {
 public:
-	Straw(void) : ChainTo(0), ChainFrom(0) {}
+	Straw(void) : ChainTo(0), ChainFrom(0) {
+	}
 	virtual ~Straw(void);
 
 	virtual void Get_From(Straw *pipe);
-	void Get_From(Straw &pipe) { Get_From(&pipe); }
+	void Get_From(Straw &pipe) {
+		Get_From(&pipe);
+	}
 	virtual int Get(void *buffer, int slen);
 
 	/*

@@ -62,7 +62,8 @@
 **	The size parameter MUST be an exact power of two (2, 4, 8, 16, etc.) otherwise the internal
 **	indexing algorithm will fail.
 */
-template <class T, int size> class QueueClass {
+template <class T, int size>
+class QueueClass {
 public:
 	/*
 	**	This is the count of the number of objects in the queue. If this count is zero,
@@ -131,7 +132,10 @@ private:
  * HISTORY:                                                                                    *
  *   12/09/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T, int size> inline QueueClass<T, size>::QueueClass(void) : Count(0) { Init(); }
+template <class T, int size>
+inline QueueClass<T, size>::QueueClass(void) : Count(0) {
+	Init();
+}
 
 /***********************************************************************************************
  * QueueClass<T,size>::Init -- Initializes queue to empty state.                               *
@@ -147,7 +151,8 @@ template <class T, int size> inline QueueClass<T, size>::QueueClass(void) : Coun
  * HISTORY:                                                                                    *
  *   12/09/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T, int size> inline void QueueClass<T, size>::Init(void) {
+template <class T, int size>
+inline void QueueClass<T, size>::Init(void) {
 	((int &)Count) = 0;
 	Head = 0;
 	Tail = 0;
@@ -168,7 +173,8 @@ template <class T, int size> inline void QueueClass<T, size>::Init(void) {
  * HISTORY:                                                                                    *
  *   12/09/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T, int size> inline int QueueClass<T, size>::Add(T const &q) {
+template <class T, int size>
+inline int QueueClass<T, size>::Add(T const &q) {
 	if (Count < size) {
 		Array[Tail] = q;
 		Tail = (Tail + 1) & (size - 1);
@@ -195,7 +201,8 @@ template <class T, int size> inline int QueueClass<T, size>::Add(T const &q) {
  * HISTORY:                                                                                    *
  *   12/09/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T, int size> inline int QueueClass<T, size>::Next(void) {
+template <class T, int size>
+inline int QueueClass<T, size>::Next(void) {
 	if (Count) {
 		Head = (Head + 1) & (size - 1);
 		((int &)Count) = Count - 1;
@@ -223,7 +230,8 @@ template <class T, int size> inline int QueueClass<T, size>::Next(void) {
  * HISTORY:                                                                                    *
  *   12/09/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T, int size> inline T &QueueClass<T, size>::operator[](int index) {
+template <class T, int size>
+inline T &QueueClass<T, size>::operator[](int index) {
 	return Array[(Head + index) & (size - 1)];
 }
 
@@ -245,12 +253,24 @@ template <class T, int size> inline T &QueueClass<T, size>::operator[](int index
  * HISTORY:                                                                                    *
  *   12/09/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T, int size> inline T &QueueClass<T, size>::First(void) { return Array[Head]; }
+template <class T, int size>
+inline T &QueueClass<T, size>::First(void) {
+	return Array[Head];
+}
 
-template <class T, int size> inline int QueueClass<T, size>::Get_Head(void) { return Head; }
+template <class T, int size>
+inline int QueueClass<T, size>::Get_Head(void) {
+	return Head;
+}
 
-template <class T, int size> inline int QueueClass<T, size>::Get_Tail(void) { return Tail; }
+template <class T, int size>
+inline int QueueClass<T, size>::Get_Tail(void) {
+	return Tail;
+}
 
-template <class T, int size> inline T *QueueClass<T, size>::Get_Array(void) { return Array; }
+template <class T, int size>
+inline T *QueueClass<T, size>::Get_Array(void) {
+	return Array;
+}
 
 #endif

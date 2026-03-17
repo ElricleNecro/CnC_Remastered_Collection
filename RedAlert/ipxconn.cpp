@@ -43,11 +43,11 @@
  *   IPXConnClass::Broadcast -- broadcasts the given packet						*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
 #include <stdio.h>
+#include "function.h"
 // #include <mem.h>
-#include "ipxconn.h"
 #include <string.h>
+#include "ipxconn.h"
 
 #ifdef WINSOCK_IPX
 #include "WSProto.h"
@@ -102,13 +102,15 @@ int IPXConnClass::PacketLen;
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-IPXConnClass::IPXConnClass(int numsend, int numreceive, int maxlen, unsigned short magicnum, IPXAddressClass *address,
-			   int id, char *name, int extralen)
-    : ConnectionClass(numsend, numreceive, maxlen, magicnum,
-		      2,	// retry delta
-		      -1,	// max retries
-		      60,	// timeout
-		      extralen) // (currently, this is only used by the Global Channel)
+IPXConnClass::IPXConnClass(int numsend, int numreceive, int maxlen, unsigned short magicnum, IPXAddressClass *address, int id, char *name, int extralen)
+	: ConnectionClass(numsend,
+			  numreceive,
+			  maxlen,
+			  magicnum,
+			  2, // retry delta
+			  -1, // max retries
+			  60, // timeout
+			  extralen) // (currently, this is only used by the Global Channel)
 {
 	NetNumType net;
 	NetNodeType node;
@@ -219,9 +221,16 @@ void IPXConnClass::Init(void) {
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-void IPXConnClass::Configure(unsigned short socket, int conn_num, ECBType *listen_ecb, ECBType *send_ecb,
-			     IPXHeaderType *listen_header, IPXHeaderType *send_header, char *listen_buf, char *send_buf,
-			     long handler_rm_ptr, int maxpacketlen) {
+void IPXConnClass::Configure(unsigned short socket,
+			     int conn_num,
+			     ECBType *listen_ecb,
+			     ECBType *send_ecb,
+			     IPXHeaderType *listen_header,
+			     IPXHeaderType *send_header,
+			     char *listen_buf,
+			     char *send_buf,
+			     long handler_rm_ptr,
+			     int maxpacketlen) {
 	/*------------------------------------------------------------------------
 	Save the values passed in
 	------------------------------------------------------------------------*/
@@ -505,7 +514,6 @@ int IPXConnClass::Open_Socket(unsigned short socket) {
 	------------------------------------------------------------------------*/
 	rc = IPX_Open_Socket(socket);
 	if (rc) {
-
 		/*.....................................................................
 		If already open, close & reopen it
 		.....................................................................*/
@@ -554,7 +562,7 @@ void IPXConnClass::Close_Socket(unsigned short socket) {
 	socket = socket;
 	PacketTransport->Close_Socket();
 	SocketOpen = 0;
-#else  // WINSOCK_IPX
+#else // WINSOCK_IPX
 	if (Winsock.Get_Connected()) {
 		SocketOpen = 0;
 		return;
@@ -655,8 +663,7 @@ int IPXConnClass::Send_To(char *buf, int buflen, IPXAddressClass *address, NetNo
 		}
 	}
 
-	return (IPX_Send_Packet95(&send_address[0], (unsigned char *)buf, buflen, (unsigned char *)net,
-				  (unsigned char *)node));
+	return (IPX_Send_Packet95(&send_address[0], (unsigned char *)buf, buflen, (unsigned char *)net, (unsigned char *)node));
 
 #else // WIN32
 
@@ -688,7 +695,7 @@ int IPXConnClass::Send_To(char *buf, int buflen, IPXAddressClass *address, NetNo
 	Fill in ECB
 	------------------------------------------------------------------------*/
 	SendECB->SocketNumber = Socket; // my output socket
-	SendECB->PacketCount = 2;	// 2 data areas
+	SendECB->PacketCount = 2; // 2 data areas
 	SendECB->Packet[0].Address = hdr_ptr;
 	SendECB->Packet[0].Length = sizeof(IPXHeaderType);
 	SendECB->Packet[1].Address = buf_ptr;
@@ -724,8 +731,8 @@ int IPXConnClass::Send_To(char *buf, int buflen, IPXAddressClass *address, NetNo
 	/*------------------------------------------------------------------------
 	Fill in outgoing header
 	------------------------------------------------------------------------*/
-	SendHeader->PacketType = 4;		// 4 = IPX packet
-	address->Get_Address(SendHeader);	// fill in header addresses
+	SendHeader->PacketType = 4; // 4 = IPX packet
+	address->Get_Address(SendHeader); // fill in header addresses
 	SendHeader->DestNetworkSocket = Socket; // destination socket id
 
 	/*------------------------------------------------------------------------
@@ -814,7 +821,7 @@ int IPXConnClass::Broadcast(char *buf, int buflen) {
 	Fill in ECB
 	------------------------------------------------------------------------*/
 	SendECB->SocketNumber = Socket; // my output socket
-	SendECB->PacketCount = 2;	// 2 data areas
+	SendECB->PacketCount = 2; // 2 data areas
 	SendECB->Packet[0].Address = hdr_ptr;
 	SendECB->Packet[0].Length = sizeof(IPXHeaderType);
 	SendECB->Packet[1].Address = buf_ptr;
@@ -829,7 +836,7 @@ int IPXConnClass::Broadcast(char *buf, int buflen) {
 	/*------------------------------------------------------------------------
 	Fill in outgoing header
 	------------------------------------------------------------------------*/
-	SendHeader->PacketType = 4;		 // 4 = IPX packet
+	SendHeader->PacketType = 4; // 4 = IPX packet
 	SendHeader->DestNetworkNumber[0] = 0xff; // 0xff = broadcast
 	SendHeader->DestNetworkNumber[1] = 0xff;
 	SendHeader->DestNetworkNumber[2] = 0xff;

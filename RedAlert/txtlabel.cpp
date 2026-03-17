@@ -55,8 +55,7 @@
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-TextLabelClass::TextLabelClass(char *txt, int x, int y, RemapControlType *color, TextPrintType style)
-    : GadgetClass(x, y, 1, 1, 0, 0) {
+TextLabelClass::TextLabelClass(char *txt, int x, int y, RemapControlType *color, TextPrintType style) : GadgetClass(x, y, 1, 1, 0, 0) {
 	Text = txt;
 	Color = color;
 	Style = style;

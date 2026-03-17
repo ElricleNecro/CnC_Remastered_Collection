@@ -39,9 +39,9 @@
  *   harderr_handler -- Handles hard DOS errors.                                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "cdfile.h"
 #include <stdio.h>
 #include <string.h>
+#include "cdfile.h"
 
 #ifndef WIN32
 #include <playcd.h>
@@ -55,14 +55,15 @@ CDFileClass::SearchDriveType *CDFileClass::First = 0;
 
 int CDFileClass::CurrentCDDrive = 0;
 int CDFileClass::LastCDDrive = 0;
-char CDFileClass::RawPath[512] = {0};
+char CDFileClass::RawPath[512] = { 0 };
 
 CDFileClass::CDFileClass(char const *filename) : IsDisabled(false) {
 	CDFileClass::Set_Name(filename);
 	//	memset (RawPath, 0, sizeof(RawPath));
 }
 
-CDFileClass::CDFileClass(void) : IsDisabled(false) {}
+CDFileClass::CDFileClass(void) : IsDisabled(false) {
+}
 extern int Get_CD_Index(int cd_drive, int timeout);
 
 /***********************************************************************************************
@@ -131,10 +132,10 @@ int cdecl Is_Disk_Inserted(int disk) {
 			char Reserved[8];
 		} ReqHdr;
 		char MediaDescriptor; // Media descriptor byte from BPB.
-		void *Transfer;	      // Pointer to transfer address block.
-		short Length;	      // Number of bytes to transfer.
-		short Sector;	      // Starting sector number.
-		void *Volume;	      // Pointer to requested volume.
+		void *Transfer; // Pointer to transfer address block.
+		short Length; // Number of bytes to transfer.
+		short Sector; // Starting sector number.
+		void *Volume; // Pointer to requested volume.
 	} IOCTLI;
 	char status[5];
 
@@ -169,7 +170,9 @@ int cdecl Is_Disk_Inserted(int disk) {
  * HISTORY:                                                                                    *
  *   10/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int CDFileClass::Open(int rights) { return (BufferIOFileClass::Open(rights)); }
+int CDFileClass::Open(int rights) {
+	return (BufferIOFileClass::Open(rights));
+}
 /***********************************************************************************************
  * CDFC::Refresh_Search_Drives -- Updates the search path when a CD changes or is added        *
  *                                                                                             *
@@ -375,7 +378,6 @@ int CDFileClass::Set_Search_Drives(char *pathlist) {
 	char const *ptr = strtok(pathlist, ";");
 	while (ptr != NULL) {
 		if (strlen(ptr) > 0) {
-
 			char path[MAX_PATH]; // Working path buffer.
 
 			/*
@@ -642,7 +644,6 @@ int CDFileClass::Open(char const *filename, int rights) {
 	**	If writing is requested, then multiple drive searching is not performed.
 	*/
 	if (IsDisabled || rights == WRITE) {
-
 		BufferIOFileClass::Set_Name(filename);
 		return (BufferIOFileClass::Open(rights));
 	}

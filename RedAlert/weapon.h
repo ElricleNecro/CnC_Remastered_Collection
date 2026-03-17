@@ -43,18 +43,25 @@
 class WeaponTypeClass {
 public:
 	WeaponTypeClass(char const *name);
-	WeaponTypeClass(NoInitClass const &) {}
+	WeaponTypeClass(NoInitClass const &) {
+	}
 	~WeaponTypeClass(void);
 
 	void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	void operator delete(void *pointer);
 
-	char const *Name(void) const { return (IniName); }
+	char const *Name(void) const {
+		return (IniName);
+	}
 	bool Read_INI(CCINIClass &ini);
 	static WeaponTypeClass *As_Pointer(WeaponType weapon);
-	void Code_Pointers(void) {}
-	void Decode_Pointers(void) {}
+	void Code_Pointers(void) {
+	}
+	void Decode_Pointers(void) {
+	}
 	ThreatType Allowed_Threats(void) const;
 	bool Is_Wall_Destroyer(void) const;
 

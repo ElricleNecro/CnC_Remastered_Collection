@@ -63,318 +63,318 @@
 
 #define MCW MAP_CELL_W
 int const MapClass::RadiusOffset[] = {
-    /* 0  */ 0,
-    /* 1  */ (-MCW * 1) - 1,
-    (-MCW * 1) + 0,
-    (-MCW * 1) + 1,
-    -1,
-    1,
-    (MCW * 1) - 1,
-    (MCW * 1) + 0,
-    (MCW * 1) + 1,
-    /* 2  */ (-MCW * 2) - 1,
-    (-MCW * 2) + 0,
-    (-MCW * 2) + 1,
-    (-MCW * 1) - 2,
-    (-MCW * 1) + 2,
-    -2,
-    2,
-    (MCW * 1) - 2,
-    (MCW * 1) + 2,
-    (MCW * 2) - 1,
-    (MCW * 2) + 0,
-    (MCW * 2) + 1,
-    /* 3  */ (-MCW * 3) - 1,
-    (-MCW * 3) + 0,
-    (-MCW * 3) + 1,
-    (-MCW * 2) - 2,
-    (-MCW * 2) + 2,
-    (-MCW * 1) - 3,
-    (-MCW * 1) + 3,
-    -3,
-    3,
-    (MCW * 1) - 3,
-    (MCW * 1) + 3,
-    (MCW * 2) - 2,
-    (MCW * 2) + 2,
-    (MCW * 3) - 1,
-    (MCW * 3) + 0,
-    (MCW * 3) + 1,
-    /* 4  */ (-MCW * 4) - 1,
-    (-MCW * 4) + 0,
-    (-MCW * 4) + 1,
-    (-MCW * 3) - 3,
-    (-MCW * 3) - 2,
-    (-MCW * 3) + 2,
-    (-MCW * 3) + 3,
-    (-MCW * 2) - 3,
-    (-MCW * 2) + 3,
-    (-MCW * 1) - 4,
-    (-MCW * 1) + 4,
-    -4,
-    4,
-    (MCW * 1) - 4,
-    (MCW * 1) + 4,
-    (MCW * 2) - 3,
-    (MCW * 2) + 3,
-    (MCW * 3) - 3,
-    (MCW * 3) - 2,
-    (MCW * 3) + 2,
-    (MCW * 3) + 3,
-    (MCW * 4) - 1,
-    (MCW * 4) + 0,
-    (MCW * 4) + 1,
-    /* 5  */ (-MCW * 5) - 1,
-    (-MCW * 5) + 0,
-    (-MCW * 5) + 1,
-    (-MCW * 4) - 3,
-    (-MCW * 4) - 2,
-    (-MCW * 4) + 2,
-    (-MCW * 4) + 3,
-    (-MCW * 3) - 4,
-    (-MCW * 3) + 4,
-    (-MCW * 2) - 4,
-    (-MCW * 2) + 4,
-    (-MCW * 1) - 5,
-    (-MCW * 1) + 5,
-    -5,
-    5,
-    (MCW * 1) - 5,
-    (MCW * 1) + 5,
-    (MCW * 2) - 4,
-    (MCW * 2) + 4,
-    (MCW * 3) - 4,
-    (MCW * 3) + 4,
-    (MCW * 4) - 3,
-    (MCW * 4) - 2,
-    (MCW * 4) + 2,
-    (MCW * 4) + 3,
-    (MCW * 5) - 1,
-    (MCW * 5) + 0,
-    (MCW * 5) + 1,
-    /* 6  */ (-MCW * 6) - 1,
-    (-MCW * 6) + 0,
-    (-MCW * 6) + 1,
-    (-MCW * 5) - 3,
-    (-MCW * 5) - 2,
-    (-MCW * 5) + 2,
-    (-MCW * 5) + 3,
-    (-MCW * 4) - 4,
-    (-MCW * 4) + 4,
-    (-MCW * 3) - 5,
-    (-MCW * 3) + 5,
-    (-MCW * 2) - 5,
-    (-MCW * 2) + 5,
-    (-MCW * 1) - 6,
-    (-MCW * 1) + 6,
-    -6,
-    6,
-    (MCW * 1) - 6,
-    (MCW * 1) + 6,
-    (MCW * 2) - 5,
-    (MCW * 2) + 5,
-    (MCW * 3) - 5,
-    (MCW * 3) + 5,
-    (MCW * 4) - 4,
-    (MCW * 4) + 4,
-    (MCW * 5) - 3,
-    (MCW * 5) - 2,
-    (MCW * 5) + 2,
-    (MCW * 5) + 3,
-    (MCW * 6) - 1,
-    (MCW * 6) + 0,
-    (MCW * 6) + 1,
-    /* 7  */ (-MCW * 7) - 1,
-    (-MCW * 7) + 0,
-    (-MCW * 7) + 1,
-    (-MCW * 6) - 3,
-    (-MCW * 6) - 2,
-    (-MCW * 6) + 2,
-    (-MCW * 6) + 3,
-    (-MCW * 5) - 5,
-    (-MCW * 5) - 4,
-    (-MCW * 5) + 4,
-    (-MCW * 5) + 5,
-    (-MCW * 4) - 5,
-    (-MCW * 4) + 5,
-    (-MCW * 3) - 6,
-    (-MCW * 3) + 6,
-    (-MCW * 2) - 6,
-    (-MCW * 2) + 6,
-    (-MCW * 1) - 7,
-    (-MCW * 1) + 7,
-    -7,
-    7,
-    (MCW * 1) - 7,
-    (MCW * 1) + 7,
-    (MCW * 2) - 6,
-    (MCW * 2) + 6,
-    (MCW * 3) - 6,
-    (MCW * 3) + 6,
-    (MCW * 4) - 5,
-    (MCW * 4) + 5,
-    (MCW * 5) - 5,
-    (MCW * 5) - 4,
-    (MCW * 5) + 4,
-    (MCW * 5) + 5,
-    (MCW * 6) - 3,
-    (MCW * 6) - 2,
-    (MCW * 6) + 2,
-    (MCW * 6) + 3,
-    (MCW * 7) - 1,
-    (MCW * 7) + 0,
-    (MCW * 7) + 1,
-    /* 8  */ (-MCW * 8) - 1,
-    (-MCW * 8) + 0,
-    (-MCW * 8) + 1,
-    (-MCW * 7) - 3,
-    (-MCW * 7) - 2,
-    (-MCW * 7) + 2,
-    (-MCW * 7) + 3,
-    (-MCW * 6) - 5,
-    (-MCW * 6) - 4,
-    (-MCW * 6) + 4,
-    (-MCW * 6) + 5,
-    (-MCW * 5) - 6,
-    (-MCW * 5) + 6,
-    (-MCW * 4) - 6,
-    (-MCW * 4) + 6,
-    (-MCW * 3) - 7,
-    (-MCW * 3) + 7,
-    (-MCW * 2) - 7,
-    (-MCW * 2) + 7,
-    (-MCW * 1) - 8,
-    (-MCW * 1) + 8,
-    -8,
-    8,
-    (MCW * 1) - 8,
-    (MCW * 1) + 8,
-    (MCW * 2) - 7,
-    (MCW * 2) + 7,
-    (MCW * 3) - 7,
-    (MCW * 3) + 7,
-    (MCW * 4) - 6,
-    (MCW * 4) + 6,
-    (MCW * 5) - 6,
-    (MCW * 5) + 6,
-    (MCW * 6) - 5,
-    (MCW * 6) - 4,
-    (MCW * 6) + 4,
-    (MCW * 6) + 5,
-    (MCW * 7) - 3,
-    (MCW * 7) - 2,
-    (MCW * 7) + 2,
-    (MCW * 7) + 3,
-    (MCW * 8) - 1,
-    (MCW * 8) + 0,
-    (MCW * 8) + 1,
-    /* 9  */ (-MCW * 9) - 1,
-    (-MCW * 9) + 0,
-    (-MCW * 9) + 1,
-    (-MCW * 8) - 3,
-    (-MCW * 8) - 2,
-    (-MCW * 8) + 2,
-    (-MCW * 8) + 3,
-    (-MCW * 7) - 5,
-    (-MCW * 7) - 4,
-    (-MCW * 7) + 4,
-    (-MCW * 7) + 5,
-    (-MCW * 6) - 6,
-    (-MCW * 6) + 6,
-    (-MCW * 5) - 7,
-    (-MCW * 5) + 7,
-    (-MCW * 4) - 7,
-    (-MCW * 4) + 7,
-    (-MCW * 3) - 8,
-    (-MCW * 3) + 8,
-    (-MCW * 2) - 8,
-    (-MCW * 2) + 8,
-    (-MCW * 1) - 9,
-    (-MCW * 1) + 9,
-    -9,
-    9,
-    (MCW * 1) - 9,
-    (MCW * 1) + 9,
-    (MCW * 2) - 8,
-    (MCW * 2) + 8,
-    (MCW * 3) - 8,
-    (MCW * 3) + 8,
-    (MCW * 4) - 7,
-    (MCW * 4) + 7,
-    (MCW * 5) - 7,
-    (MCW * 5) + 7,
-    (MCW * 6) - 6,
-    (MCW * 6) + 6,
-    (MCW * 7) - 5,
-    (MCW * 7) - 4,
-    (MCW * 7) + 4,
-    (MCW * 7) + 5,
-    (MCW * 8) - 3,
-    (MCW * 8) - 2,
-    (MCW * 8) + 2,
-    (MCW * 8) + 3,
-    (MCW * 9) - 1,
-    (MCW * 9) + 0,
-    (MCW * 9) + 1,
-    /* 10 */ (-MCW * 10) - 1,
-    (-MCW * 10) + 0,
-    (-MCW * 10) + 1,
-    (-MCW * 9) - 3,
-    (-MCW * 9) - 2,
-    (-MCW * 9) + 2,
-    (-MCW * 9) + 3,
-    (-MCW * 8) - 5,
-    (-MCW * 8) - 4,
-    (-MCW * 8) + 4,
-    (-MCW * 8) + 5,
-    (-MCW * 7) - 7,
-    (-MCW * 7) - 6,
-    (-MCW * 7) + 6,
-    (-MCW * 7) + 7,
-    (-MCW * 6) - 7,
-    (-MCW * 6) + 7,
-    (-MCW * 5) - 8,
-    (-MCW * 5) + 8,
-    (-MCW * 4) - 8,
-    (-MCW * 4) + 8,
-    (-MCW * 3) - 9,
-    (-MCW * 3) + 9,
-    (-MCW * 2) - 9,
-    (-MCW * 2) + 9,
-    (-MCW * 1) - 10,
-    (-MCW * 1) + 10,
-    -10,
-    10,
-    (MCW * 1) - 10,
-    (MCW * 1) + 10,
-    (MCW * 2) - 9,
-    (MCW * 2) + 9,
-    (MCW * 3) - 9,
-    (MCW * 3) + 9,
-    (MCW * 4) - 8,
-    (MCW * 4) + 8,
-    (MCW * 5) - 8,
-    (MCW * 5) + 8,
-    (MCW * 6) - 7,
-    (MCW * 6) + 7,
-    (MCW * 7) - 7,
-    (MCW * 7) - 6,
-    (MCW * 7) + 6,
-    (MCW * 7) + 7,
-    (MCW * 8) - 5,
-    (MCW * 8) - 4,
-    (MCW * 8) + 4,
-    (MCW * 8) + 5,
-    (MCW * 9) - 3,
-    (MCW * 9) - 2,
-    (MCW * 9) + 2,
-    (MCW * 9) + 3,
-    (MCW * 10) - 1,
-    (MCW * 10) + 0,
-    (MCW * 10) + 1,
+	/* 0  */ 0,
+	/* 1  */ (-MCW * 1) - 1,
+	(-MCW * 1) + 0,
+	(-MCW * 1) + 1,
+	-1,
+	1,
+	(MCW * 1) - 1,
+	(MCW * 1) + 0,
+	(MCW * 1) + 1,
+	/* 2  */ (-MCW * 2) - 1,
+	(-MCW * 2) + 0,
+	(-MCW * 2) + 1,
+	(-MCW * 1) - 2,
+	(-MCW * 1) + 2,
+	-2,
+	2,
+	(MCW * 1) - 2,
+	(MCW * 1) + 2,
+	(MCW * 2) - 1,
+	(MCW * 2) + 0,
+	(MCW * 2) + 1,
+	/* 3  */ (-MCW * 3) - 1,
+	(-MCW * 3) + 0,
+	(-MCW * 3) + 1,
+	(-MCW * 2) - 2,
+	(-MCW * 2) + 2,
+	(-MCW * 1) - 3,
+	(-MCW * 1) + 3,
+	-3,
+	3,
+	(MCW * 1) - 3,
+	(MCW * 1) + 3,
+	(MCW * 2) - 2,
+	(MCW * 2) + 2,
+	(MCW * 3) - 1,
+	(MCW * 3) + 0,
+	(MCW * 3) + 1,
+	/* 4  */ (-MCW * 4) - 1,
+	(-MCW * 4) + 0,
+	(-MCW * 4) + 1,
+	(-MCW * 3) - 3,
+	(-MCW * 3) - 2,
+	(-MCW * 3) + 2,
+	(-MCW * 3) + 3,
+	(-MCW * 2) - 3,
+	(-MCW * 2) + 3,
+	(-MCW * 1) - 4,
+	(-MCW * 1) + 4,
+	-4,
+	4,
+	(MCW * 1) - 4,
+	(MCW * 1) + 4,
+	(MCW * 2) - 3,
+	(MCW * 2) + 3,
+	(MCW * 3) - 3,
+	(MCW * 3) - 2,
+	(MCW * 3) + 2,
+	(MCW * 3) + 3,
+	(MCW * 4) - 1,
+	(MCW * 4) + 0,
+	(MCW * 4) + 1,
+	/* 5  */ (-MCW * 5) - 1,
+	(-MCW * 5) + 0,
+	(-MCW * 5) + 1,
+	(-MCW * 4) - 3,
+	(-MCW * 4) - 2,
+	(-MCW * 4) + 2,
+	(-MCW * 4) + 3,
+	(-MCW * 3) - 4,
+	(-MCW * 3) + 4,
+	(-MCW * 2) - 4,
+	(-MCW * 2) + 4,
+	(-MCW * 1) - 5,
+	(-MCW * 1) + 5,
+	-5,
+	5,
+	(MCW * 1) - 5,
+	(MCW * 1) + 5,
+	(MCW * 2) - 4,
+	(MCW * 2) + 4,
+	(MCW * 3) - 4,
+	(MCW * 3) + 4,
+	(MCW * 4) - 3,
+	(MCW * 4) - 2,
+	(MCW * 4) + 2,
+	(MCW * 4) + 3,
+	(MCW * 5) - 1,
+	(MCW * 5) + 0,
+	(MCW * 5) + 1,
+	/* 6  */ (-MCW * 6) - 1,
+	(-MCW * 6) + 0,
+	(-MCW * 6) + 1,
+	(-MCW * 5) - 3,
+	(-MCW * 5) - 2,
+	(-MCW * 5) + 2,
+	(-MCW * 5) + 3,
+	(-MCW * 4) - 4,
+	(-MCW * 4) + 4,
+	(-MCW * 3) - 5,
+	(-MCW * 3) + 5,
+	(-MCW * 2) - 5,
+	(-MCW * 2) + 5,
+	(-MCW * 1) - 6,
+	(-MCW * 1) + 6,
+	-6,
+	6,
+	(MCW * 1) - 6,
+	(MCW * 1) + 6,
+	(MCW * 2) - 5,
+	(MCW * 2) + 5,
+	(MCW * 3) - 5,
+	(MCW * 3) + 5,
+	(MCW * 4) - 4,
+	(MCW * 4) + 4,
+	(MCW * 5) - 3,
+	(MCW * 5) - 2,
+	(MCW * 5) + 2,
+	(MCW * 5) + 3,
+	(MCW * 6) - 1,
+	(MCW * 6) + 0,
+	(MCW * 6) + 1,
+	/* 7  */ (-MCW * 7) - 1,
+	(-MCW * 7) + 0,
+	(-MCW * 7) + 1,
+	(-MCW * 6) - 3,
+	(-MCW * 6) - 2,
+	(-MCW * 6) + 2,
+	(-MCW * 6) + 3,
+	(-MCW * 5) - 5,
+	(-MCW * 5) - 4,
+	(-MCW * 5) + 4,
+	(-MCW * 5) + 5,
+	(-MCW * 4) - 5,
+	(-MCW * 4) + 5,
+	(-MCW * 3) - 6,
+	(-MCW * 3) + 6,
+	(-MCW * 2) - 6,
+	(-MCW * 2) + 6,
+	(-MCW * 1) - 7,
+	(-MCW * 1) + 7,
+	-7,
+	7,
+	(MCW * 1) - 7,
+	(MCW * 1) + 7,
+	(MCW * 2) - 6,
+	(MCW * 2) + 6,
+	(MCW * 3) - 6,
+	(MCW * 3) + 6,
+	(MCW * 4) - 5,
+	(MCW * 4) + 5,
+	(MCW * 5) - 5,
+	(MCW * 5) - 4,
+	(MCW * 5) + 4,
+	(MCW * 5) + 5,
+	(MCW * 6) - 3,
+	(MCW * 6) - 2,
+	(MCW * 6) + 2,
+	(MCW * 6) + 3,
+	(MCW * 7) - 1,
+	(MCW * 7) + 0,
+	(MCW * 7) + 1,
+	/* 8  */ (-MCW * 8) - 1,
+	(-MCW * 8) + 0,
+	(-MCW * 8) + 1,
+	(-MCW * 7) - 3,
+	(-MCW * 7) - 2,
+	(-MCW * 7) + 2,
+	(-MCW * 7) + 3,
+	(-MCW * 6) - 5,
+	(-MCW * 6) - 4,
+	(-MCW * 6) + 4,
+	(-MCW * 6) + 5,
+	(-MCW * 5) - 6,
+	(-MCW * 5) + 6,
+	(-MCW * 4) - 6,
+	(-MCW * 4) + 6,
+	(-MCW * 3) - 7,
+	(-MCW * 3) + 7,
+	(-MCW * 2) - 7,
+	(-MCW * 2) + 7,
+	(-MCW * 1) - 8,
+	(-MCW * 1) + 8,
+	-8,
+	8,
+	(MCW * 1) - 8,
+	(MCW * 1) + 8,
+	(MCW * 2) - 7,
+	(MCW * 2) + 7,
+	(MCW * 3) - 7,
+	(MCW * 3) + 7,
+	(MCW * 4) - 6,
+	(MCW * 4) + 6,
+	(MCW * 5) - 6,
+	(MCW * 5) + 6,
+	(MCW * 6) - 5,
+	(MCW * 6) - 4,
+	(MCW * 6) + 4,
+	(MCW * 6) + 5,
+	(MCW * 7) - 3,
+	(MCW * 7) - 2,
+	(MCW * 7) + 2,
+	(MCW * 7) + 3,
+	(MCW * 8) - 1,
+	(MCW * 8) + 0,
+	(MCW * 8) + 1,
+	/* 9  */ (-MCW * 9) - 1,
+	(-MCW * 9) + 0,
+	(-MCW * 9) + 1,
+	(-MCW * 8) - 3,
+	(-MCW * 8) - 2,
+	(-MCW * 8) + 2,
+	(-MCW * 8) + 3,
+	(-MCW * 7) - 5,
+	(-MCW * 7) - 4,
+	(-MCW * 7) + 4,
+	(-MCW * 7) + 5,
+	(-MCW * 6) - 6,
+	(-MCW * 6) + 6,
+	(-MCW * 5) - 7,
+	(-MCW * 5) + 7,
+	(-MCW * 4) - 7,
+	(-MCW * 4) + 7,
+	(-MCW * 3) - 8,
+	(-MCW * 3) + 8,
+	(-MCW * 2) - 8,
+	(-MCW * 2) + 8,
+	(-MCW * 1) - 9,
+	(-MCW * 1) + 9,
+	-9,
+	9,
+	(MCW * 1) - 9,
+	(MCW * 1) + 9,
+	(MCW * 2) - 8,
+	(MCW * 2) + 8,
+	(MCW * 3) - 8,
+	(MCW * 3) + 8,
+	(MCW * 4) - 7,
+	(MCW * 4) + 7,
+	(MCW * 5) - 7,
+	(MCW * 5) + 7,
+	(MCW * 6) - 6,
+	(MCW * 6) + 6,
+	(MCW * 7) - 5,
+	(MCW * 7) - 4,
+	(MCW * 7) + 4,
+	(MCW * 7) + 5,
+	(MCW * 8) - 3,
+	(MCW * 8) - 2,
+	(MCW * 8) + 2,
+	(MCW * 8) + 3,
+	(MCW * 9) - 1,
+	(MCW * 9) + 0,
+	(MCW * 9) + 1,
+	/* 10 */ (-MCW * 10) - 1,
+	(-MCW * 10) + 0,
+	(-MCW * 10) + 1,
+	(-MCW * 9) - 3,
+	(-MCW * 9) - 2,
+	(-MCW * 9) + 2,
+	(-MCW * 9) + 3,
+	(-MCW * 8) - 5,
+	(-MCW * 8) - 4,
+	(-MCW * 8) + 4,
+	(-MCW * 8) + 5,
+	(-MCW * 7) - 7,
+	(-MCW * 7) - 6,
+	(-MCW * 7) + 6,
+	(-MCW * 7) + 7,
+	(-MCW * 6) - 7,
+	(-MCW * 6) + 7,
+	(-MCW * 5) - 8,
+	(-MCW * 5) + 8,
+	(-MCW * 4) - 8,
+	(-MCW * 4) + 8,
+	(-MCW * 3) - 9,
+	(-MCW * 3) + 9,
+	(-MCW * 2) - 9,
+	(-MCW * 2) + 9,
+	(-MCW * 1) - 10,
+	(-MCW * 1) + 10,
+	-10,
+	10,
+	(MCW * 1) - 10,
+	(MCW * 1) + 10,
+	(MCW * 2) - 9,
+	(MCW * 2) + 9,
+	(MCW * 3) - 9,
+	(MCW * 3) + 9,
+	(MCW * 4) - 8,
+	(MCW * 4) + 8,
+	(MCW * 5) - 8,
+	(MCW * 5) + 8,
+	(MCW * 6) - 7,
+	(MCW * 6) + 7,
+	(MCW * 7) - 7,
+	(MCW * 7) - 6,
+	(MCW * 7) + 6,
+	(MCW * 7) + 7,
+	(MCW * 8) - 5,
+	(MCW * 8) - 4,
+	(MCW * 8) + 4,
+	(MCW * 8) + 5,
+	(MCW * 9) - 3,
+	(MCW * 9) - 2,
+	(MCW * 9) + 2,
+	(MCW * 9) + 3,
+	(MCW * 10) - 1,
+	(MCW * 10) + 0,
+	(MCW * 10) + 1,
 };
 
-int const MapClass::RadiusCount[11] = {1, 9, 21, 37, 61, 89, 121, 161, 205, 253, 309};
+int const MapClass::RadiusCount[11] = { 1, 9, 21, 37, 61, 89, 121, 161, 205, 253, 309 };
 
 CellClass *BlubCell;
 
@@ -482,7 +482,9 @@ void MapClass::Alloc_Cells(void) {
  * HISTORY:                                                                                    *
  *   03/17/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-void MapClass::Free_Cells(void) { Array.Clear(); }
+void MapClass::Free_Cells(void) {
+	Array.Clear();
+}
 
 /***********************************************************************************************
  * MapClass::Init_Cells -- Initializes the cell array to a fresh state.                        *
@@ -563,9 +565,9 @@ void MapClass::Set_Map_Dimensions(int x, int y, int w, int h) {
  *   05/18/1994 JLB : Converted to member function.                                            *
  *=============================================================================================*/
 void MapClass::Sight_From(CELL cell, int sightrange, HouseClass *house, bool incremental) {
-	int xx;		// Center cell X coordinate (bounds checking).
+	int xx; // Center cell X coordinate (bounds checking).
 	int const *ptr; // Offset pointer.
-	int count;	// Counter for number of offsets to process.
+	int count; // Counter for number of offsets to process.
 
 	/*
 	**	Units that are off-map cannot sight.
@@ -598,7 +600,7 @@ void MapClass::Sight_From(CELL cell, int sightrange, HouseClass *house, bool inc
 	*/
 	while (count--) {
 		CELL newcell; // New cell with offset.
-		int xdiff;    // New cell's X coordinate distance from center.
+		int xdiff; // New cell's X coordinate distance from center.
 
 		newcell = cell + *ptr++;
 
@@ -647,9 +649,9 @@ void MapClass::Sight_From(CELL cell, int sightrange, HouseClass *house, bool inc
  *   08/09/2019  ST : Added house parameter                                                    *
  *=============================================================================================*/
 void MapClass::Shroud_From(CELL cell, int sightrange, HouseClass *house) {
-	int xx;		// Center cell X coordinate (bounds checking).
+	int xx; // Center cell X coordinate (bounds checking).
 	int const *ptr; // Offset pointer.
-	int count;	// Counter for number of offsets to process.
+	int count; // Counter for number of offsets to process.
 
 	/*
 	**	Units that are off-map cannot sight.
@@ -676,7 +678,7 @@ void MapClass::Shroud_From(CELL cell, int sightrange, HouseClass *house) {
 	*/
 	while (count--) {
 		CELL newcell; // New cell with offset.
-		int xdiff;    // New cell's X coordinate distance from center.
+		int xdiff; // New cell's X coordinate distance from center.
 
 		newcell = cell + *ptr++;
 
@@ -721,9 +723,9 @@ void MapClass::Shroud_From(CELL cell, int sightrange, HouseClass *house) {
  *   11/09/1995 BWG : Created.                                                                 *
  *=============================================================================================*/
 void MapClass::Jam_From(CELL cell, int jamrange, HouseClass *house) {
-	int xx;		// Center cell X coordinate (bounds checking).
+	int xx; // Center cell X coordinate (bounds checking).
 	int const *ptr; // Offset pointer.
-	int count;	// Counter for number of offsets to process.
+	int count; // Counter for number of offsets to process.
 
 	/*
 	**	Units that are off-map cannot jam.
@@ -748,7 +750,7 @@ void MapClass::Jam_From(CELL cell, int jamrange, HouseClass *house) {
 	*/
 	while (count--) {
 		CELL newcell; // New cell with offset.
-		int xdiff;    // New cell's X coordinate distance from center.
+		int xdiff; // New cell's X coordinate distance from center.
 
 		newcell = cell + *ptr++;
 
@@ -782,12 +784,10 @@ void MapClass::Jam_From(CELL cell, int jamrange, HouseClass *house) {
 		}
 
 	} else {
-
 		for (int i = 0; i < Session.Players.Count(); i++) {
 			HouseClass *player_house = HouseClass::As_Pointer(Session.Players[i]->Player.ID);
 			if (player_house->IsHuman && player_house != house) {
-				Map.Constrained_Look(Cell_Coord(cell), Rule.GapShroudRadius * CELL_LEPTON_W,
-						     player_house);
+				Map.Constrained_Look(Cell_Coord(cell), Rule.GapShroudRadius * CELL_LEPTON_W, player_house);
 			}
 		}
 	}
@@ -807,11 +807,9 @@ void MapClass::Jam_From(CELL cell, int jamrange, HouseClass *house) {
 
 				if (tech->IsDiscoveredByPlayer &&
 				    (tech->Distance(As_Target(cell)) / CELL_LEPTON_W) <=
-					tech->Techno_Type_Class()->SightRange + Rule.GapShroudRadius &&
+					    tech->Techno_Type_Class()->SightRange + Rule.GapShroudRadius &&
 				    (tech->House->IsPlayerControl ||
-				     (tech->What_Am_I() == RTTI_BUILDING && Rule.IsAllyReveal &&
-				      tech->House->Is_Ally(PlayerPtr)))) {
-
+				     (tech->What_Am_I() == RTTI_BUILDING && Rule.IsAllyReveal && tech->House->Is_Ally(PlayerPtr)))) {
 					object->Look();
 				}
 			}
@@ -875,9 +873,9 @@ void MapClass::Jam_From(CELL cell, int jamrange, HouseClass *house) {
  *   11/09/1995 BWG : Created.                                                                 *
  *=============================================================================================*/
 void MapClass::UnJam_From(CELL cell, int jamrange, HouseClass *house) {
-	int xx;		// Center cell X coordinate (bounds checking).
+	int xx; // Center cell X coordinate (bounds checking).
 	int const *ptr; // Offset pointer.
-	int count;	// Counter for number of offsets to process.
+	int count; // Counter for number of offsets to process.
 
 	/*
 	**	Units that are off-map cannot jam.
@@ -902,7 +900,7 @@ void MapClass::UnJam_From(CELL cell, int jamrange, HouseClass *house) {
 	*/
 	while (count--) {
 		CELL newcell; // New cell with offset.
-		int xdiff;    // New cell's X coordinate distance from center.
+		int xdiff; // New cell's X coordinate distance from center.
 
 		newcell = cell + *ptr++;
 
@@ -1290,7 +1288,6 @@ void MapClass::Logic(void) {
 	**	Crate regeneration is handled here.
 	*/
 	if (Session.Type != GAME_NORMAL && Session.Options.Goodies) {
-
 		/*
 		**	Find any crate that has expired and then regenerate it at a new
 		**	spot.
@@ -1335,7 +1332,6 @@ void MapClass::Logic(void) {
 			**	Tiberium cells can grow.
 			*/
 			if (ptr->Can_Tiberium_Grow()) {
-
 				/*
 				**	Either replace an existing recorded cell value or add the new cell value to
 				**	the list.
@@ -1630,7 +1626,6 @@ int MapClass::Validate(void) {
 			if (((unsigned int)obj & 0xff000000) || ((unsigned int)obj->Next & 0xff000000) ||
 			    //				((unsigned int)obj->Trigger & 0xff000000) ||
 			    obj->IsInLimbo || ((unsigned int)Coord_Cell(obj->Coord) >= MAP_CELL_TOTAL)) {
-
 				return (false);
 			}
 		}
@@ -1644,7 +1639,6 @@ int MapClass::Validate(void) {
 				if (((unsigned int)obj & 0xff000000) || ((unsigned int)obj->Next & 0xff000000) ||
 				    //					((unsigned int)obj->Trigger & 0xff000000) ||
 				    obj->IsInLimbo || ((unsigned int)Coord_Cell(obj->Coord) >= MAP_CELL_TOTAL)) {
-
 					return (false);
 				}
 			}
@@ -1679,17 +1673,14 @@ ObjectClass *MapClass::Close_Object(COORDINATE coord) const {
 	**	Scan through current and adjacent cells, looking for the
 	**	closest object (within reason) to the specified coordinate.
 	*/
-	static int _offsets[] = {
-	    0, -1, 1, -MAP_CELL_W, MAP_CELL_W, MAP_CELL_W - 1, MAP_CELL_W + 1, -(MAP_CELL_W - 1), -(MAP_CELL_W + 1)};
+	static int _offsets[] = { 0, -1, 1, -MAP_CELL_W, MAP_CELL_W, MAP_CELL_W - 1, MAP_CELL_W + 1, -(MAP_CELL_W - 1), -(MAP_CELL_W + 1) };
 	for (int index = 0; index < (sizeof(_offsets) / sizeof(_offsets[0])); index++) {
-
 		/*
 		**	Examine the cell for close object. Make sure that the cell actually is a
 		**	legal one.
 		*/
 		CELL newcell = cell + _offsets[index];
 		if (In_Radar(newcell)) {
-
 			/*
 			**	Search through all objects that occupy this cell and then
 			**	find the closest object. Check against any previously found object
@@ -1697,7 +1688,6 @@ ObjectClass *MapClass::Close_Object(COORDINATE coord) const {
 			*/
 			ObjectClass *o = Array[newcell].Cell_Occupier();
 			while (o != NULL) {
-
 				/*
 				**	Special case check to ignore cloaked object if not allied with the player.
 				*/
@@ -1731,8 +1721,7 @@ ObjectClass *MapClass::Close_Object(COORDINATE coord) const {
 
 		if (aircraft->In_Which_Layer() != LAYER_GROUND) {
 			if (!aircraft->Is_Cloaked(PlayerPtr)) {
-				int d = Distance(coord,
-						 Coord_Add(aircraft->Center_Coord(), XY_Coord(0, -aircraft->Height)));
+				int d = Distance(coord, Coord_Add(aircraft->Center_Coord(), XY_Coord(0, -aircraft->Height)));
 				if (d >= 0 && (!object || d < distance)) {
 					distance = d;
 					object = aircraft;
@@ -1884,9 +1873,7 @@ int MapClass::Zone_Span(CELL cell, int zone, MZoneType check) {
 	for (; xbegin >= MapCellX; xbegin--) {
 		CellClass *cellptr = &(*this)[XY_Cell(xbegin, y)];
 		if (cellptr->Zones[check] != 0 ||
-		    (!cellptr->Is_Clear_To_Move(check == MZONE_WATER ? SPEED_FLOAT : SPEED_TRACK, true, true, -1,
-						check))) {
-
+		    (!cellptr->Is_Clear_To_Move(check == MZONE_WATER ? SPEED_FLOAT : SPEED_TRACK, true, true, -1, check))) {
 			/*
 			**	Special short circuit code to bail from this entire routine if
 			**	it was called for a cell that is not a legal candidate for
@@ -1912,8 +1899,7 @@ int MapClass::Zone_Span(CELL cell, int zone, MZoneType check) {
 	for (; xend < MapCellX + MapCellWidth; xend++) {
 		CellClass *cellptr = &(*this)[XY_Cell(xend, y)];
 		if (cellptr->Zones[check] != 0 ||
-		    (!cellptr->Is_Clear_To_Move(check == MZONE_WATER ? SPEED_FLOAT : SPEED_TRACK, true, true, -1,
-						check))) {
+		    (!cellptr->Is_Clear_To_Move(check == MZONE_WATER ? SPEED_FLOAT : SPEED_TRACK, true, true, -1, check))) {
 			xend--;
 			break;
 		}
@@ -1969,8 +1955,7 @@ int MapClass::Zone_Span(CELL cell, int zone, MZoneType check) {
  * HISTORY:                                                                                    *
  *   10/05/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-CELL MapClass::Nearby_Location(CELL cell, SpeedType speed, int zone, MZoneType check, bool checkflagged,
-			       int locationmod) const {
+CELL MapClass::Nearby_Location(CELL cell, SpeedType speed, int zone, MZoneType check, bool checkflagged, int locationmod) const {
 	CELL topten[10];
 	int count = 0;
 	int xx = Cell_X(cell);
@@ -2002,8 +1987,7 @@ CELL MapClass::Nearby_Location(CELL cell, SpeedType speed, int zone, MZoneType c
 				if (y >= top) {
 					newcell = XY_Cell(x, y);
 					cellptr = &Map[newcell];
-					if (Map.In_Radar(newcell) &&
-					    cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
+					if (Map.In_Radar(newcell) && cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
 					    (!checkflagged || !cellptr->IsFlagged)) {
 						topten[count++] = newcell;
 					}
@@ -2015,8 +1999,7 @@ CELL MapClass::Nearby_Location(CELL cell, SpeedType speed, int zone, MZoneType c
 				if (y <= bottom) {
 					newcell = XY_Cell(x, y);
 					cellptr = &Map[newcell];
-					if (Map.In_Radar(newcell) &&
-					    cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
+					if (Map.In_Radar(newcell) && cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
 					    (!checkflagged || !cellptr->IsFlagged)) {
 						topten[count++] = newcell;
 					}
@@ -2038,8 +2021,7 @@ CELL MapClass::Nearby_Location(CELL cell, SpeedType speed, int zone, MZoneType c
 				if (x >= left) {
 					newcell = XY_Cell(x, y);
 					cellptr = &Map[newcell];
-					if (Map.In_Radar(newcell) &&
-					    cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
+					if (Map.In_Radar(newcell) && cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
 					    (!checkflagged || !cellptr->IsFlagged)) {
 						topten[count++] = newcell;
 					}
@@ -2051,8 +2033,7 @@ CELL MapClass::Nearby_Location(CELL cell, SpeedType speed, int zone, MZoneType c
 				if (x <= right) {
 					newcell = XY_Cell(x, y);
 					cellptr = &Map[newcell];
-					if (Map.In_Radar(newcell) &&
-					    cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
+					if (Map.In_Radar(newcell) && cellptr->Is_Clear_To_Move(speed, false, false, zone, check) &&
 					    (!checkflagged || !cellptr->IsFlagged)) {
 						topten[count++] = newcell;
 					}
@@ -2202,7 +2183,6 @@ bool MapClass::Destroy_Bridge_At(CELL cell) {
 				for (int x = 0; x < bridge_w; x++) {
 					CellClass *bridge_cell = &(*this)[cell2];
 					if (bridge_cell->TType == ttype) {
-
 						/*
 						**	Any unit that is firing on the bridge at this location, will
 						*stop *	firing because the bridge has been destroyed.
@@ -2269,11 +2249,9 @@ bool MapClass::Destroy_Bridge_At(CELL cell) {
 					if (celptr->TType == TEMPLATE_BRIDGE_3C) {
 						if (cellptr->TType == TEMPLATE_BRIDGE_3D) {
 							// if we're already one-sided, turn us to all water
-							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3F,
-									cell);
+							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3F, cell);
 						} else {
-							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3E,
-									cell);
+							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3E, cell);
 						}
 						Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3D, cell2);
 					}
@@ -2308,12 +2286,10 @@ bool MapClass::Destroy_Bridge_At(CELL cell) {
 						case TEMPLATE_BRIDGE_3A:
 						case TEMPLATE_BRIDGE_3B:
 						case TEMPLATE_BRIDGE_3C:
-							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3D,
-									cell2);
+							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3D, cell2);
 							break;
 						case TEMPLATE_BRIDGE_3E:
-							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3F,
-									cell2);
+							Add_Cell_Update(cell_updates, update_count, TEMPLATE_BRIDGE_3F, cell2);
 							break;
 						}
 					}
@@ -2324,19 +2300,16 @@ bool MapClass::Destroy_Bridge_At(CELL cell) {
 					for (y = 0; y < h; y++) {
 						for (x = 0; x < w; x++) {
 							CellClass *ptr = &(*this)[(CELL)(cell + x)];
-							if (ptr->TType == cellptr->TType ||
-							    ptr->Land_Type() == LAND_RIVER ||
+							if (ptr->TType == cellptr->TType || ptr->Land_Type() == LAND_RIVER ||
 							    ptr->Land_Type() == LAND_WATER) {
-								Detach_This_From_All(As_Target((CELL)(cell + tdata)),
-										     true);
+								Detach_This_From_All(As_Target((CELL)(cell + tdata)), true);
 
 								ObjectClass *obj = ptr->Cell_Occupier();
 								while (obj != NULL) {
 									ObjectClass *next = obj->Next;
 									if (obj->Is_Techno()) {
 										int damage = obj->Strength;
-										obj->Take_Damage(damage, 0, WARHEAD_HE,
-												 NULL, true);
+										obj->Take_Damage(damage, 0, WARHEAD_HE, NULL, true);
 									}
 									obj = next;
 								}
@@ -2353,8 +2326,8 @@ bool MapClass::Destroy_Bridge_At(CELL cell) {
 		}
 
 		int cell_index = 0;
-		char cell_name[_MAX_PATH] = {0};
-		char icon_number[32] = {0};
+		char cell_name[_MAX_PATH] = { 0 };
+		char icon_number[32] = { 0 };
 		int icon = 0;
 		void *image_data = 0;
 		for (int i = 0; i < update_count; i++) {
@@ -2503,7 +2476,6 @@ void MapClass::Shroud_The_Map(HouseClass *house) {
 	for (CELL cell = 0; cell < MAP_CELL_TOTAL; cell++) {
 		CellClass *cellptr = &Map[cell];
 		if (cellptr->Is_Mapped(house) || cellptr->Is_Visible(house)) {
-
 			cellptr->Redraw_Objects();
 
 			/*

@@ -66,7 +66,7 @@ void DOSSegmentClass::Swap(DOSSegmentClass &src, int soffset, DOSSegmentClass &d
 						ah mov es : [di],
 							    al inc di inc si dec cx jnz again
 
-								pop ds pop es
+								    pop ds pop es
 	}
 }
 #endif
@@ -74,11 +74,11 @@ void DOSSegmentClass::Swap(DOSSegmentClass &src, int soffset, DOSSegmentClass &d
 void DOSSegmentClass::Swap(DOSSegmentClass &src, int soffset, DOSSegmentClass &dest, int doffset, int size) {
 	extern void dss_swap(char *src, char *dest, int size);
 
-#pragma aux dss_swap = "again: mov	al,[esi]"                                                                           \
-		       "mov	ah,[edi]"                                                                                  \
-		       "mov	[esi],ah"                                                                                  \
-		       "stosb"                                                                                         \
-		       "inc	esi"                                                                                       \
+#pragma aux dss_swap = "again: mov	al,[esi]"                                                                                                         \
+		       "mov	ah,[edi]"                                                                                                                \
+		       "mov	[esi],ah"                                                                                                                \
+		       "stosb"                                                                                                                       \
+		       "inc	esi"                                                                                                                     \
 		       "loop	again" parm[esi][edi][ecx] modify[ax];
 
 	if (!size)
@@ -89,14 +89,14 @@ void DOSSegmentClass::Swap(DOSSegmentClass &src, int soffset, DOSSegmentClass &d
 #ifdef OBSOLETE
 void DOSSegmentClass::Copy(DOSSegmentClass &src, int soffset, DOSSegmentClass &dest, int doffset, int size) {
 	extern void dss_copy(char *src, char *dest, int size);
-#pragma aux dss_copy = "mov		ebx,ecx"                                                                                  \
-		       "shr		ecx,2"                                                                                    \
-		       "jecxz	copskip1"                                                                                \
-		       "rep 		movsd"                                                                                   \
-		       "copskip1: mov ecx,ebx"                                                                         \
-		       "and		ecx,3"                                                                                    \
-		       "jecxz	copskip2"                                                                                \
-		       "rep		movsb"                                                                                    \
+#pragma aux dss_copy = "mov		ebx,ecx"                                                                                                                \
+		       "shr		ecx,2"                                                                                                                  \
+		       "jecxz	copskip1"                                                                                                              \
+		       "rep 		movsd"                                                                                                                 \
+		       "copskip1: mov ecx,ebx"                                                                                                       \
+		       "and		ecx,3"                                                                                                                  \
+		       "jecxz	copskip2"                                                                                                              \
+		       "rep		movsb"                                                                                                                  \
 		       "copskip2:" parm[esi edi ecx] modify[ebx];
 
 	if (!size)
@@ -109,14 +109,14 @@ void DOSSegmentClass::Copy(DOSSegmentClass &src, int soffset, DOSSegmentClass &d
 void DOSSegmentClass::Copy_To(void *source, int dest, int size) {
 	extern void dss_copy_to(void *src, (void *)dest, int size);
 
-#pragma aux dss_copy_to = "mov		ebx,ecx"                                                                               \
-			  "shr		ecx,2"                                                                                 \
-			  "jecxz	cop2skip1"                                                                            \
-			  "rep		movsd"                                                                                 \
-			  "cop2skip1: mov ecx,ebx"                                                                     \
-			  "and		ecx,3"                                                                                 \
-			  "jecxz	cop2skip2"                                                                            \
-			  "rep		movsb"                                                                                 \
+#pragma aux dss_copy_to = "mov		ebx,ecx"                                                                                                             \
+			  "shr		ecx,2"                                                                                                               \
+			  "jecxz	cop2skip1"                                                                                                          \
+			  "rep		movsd"                                                                                                               \
+			  "cop2skip1: mov ecx,ebx"                                                                                                   \
+			  "and		ecx,3"                                                                                                               \
+			  "jecxz	cop2skip2"                                                                                                          \
+			  "rep		movsb"                                                                                                               \
 			  "cop2skip2:" parm[esi edi ecx] modify[ebx];
 
 	if (!size)
@@ -129,14 +129,14 @@ void DOSSegmentClass::Copy_To(void *source, int dest, int size) {
 void DOSSegmentClass::Copy_From(void *dest, int source, int size) {
 	extern void dss_copy_from(void *dest, (void *)source, int size);
 
-#pragma aux dss_copy_from = "mov		ebx,ecx"                                                                             \
-			    "shr		ecx,2"                                                                               \
-			    "jecxz	copfskip1"                                                                          \
-			    "rep		movsd"                                                                               \
-			    "copfskip1: mov ecx,ebx"                                                                   \
-			    "and		ecx,3"                                                                               \
-			    "jecxz	copfskip2"                                                                          \
-			    "rep		movsb"                                                                               \
+#pragma aux dss_copy_from = "mov		ebx,ecx"                                                                                                           \
+			    "shr		ecx,2"                                                                                                             \
+			    "jecxz	copfskip1"                                                                                                        \
+			    "rep		movsd"                                                                                                             \
+			    "copfskip1: mov ecx,ebx"                                                                                                 \
+			    "and		ecx,3"                                                                                                             \
+			    "jecxz	copfskip2"                                                                                                        \
+			    "rep		movsb"                                                                                                             \
 			    "copfskip2:" parm[edi esi ecx] modify[ebx];
 
 	if (!size)

@@ -52,7 +52,7 @@
  *   06/18/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
 void VisualControlsClass::Process(void) {
-	static int _titles[4] = {TXT_BRIGHTNESS, TXT_COLOR, TXT_CONTRAST, TXT_TINT};
+	static int _titles[4] = { TXT_BRIGHTNESS, TXT_COLOR, TXT_CONTRAST, TXT_TINT };
 
 	enum {
 		NUM_OF_BUTTONS = 6,
@@ -61,7 +61,7 @@ void VisualControlsClass::Process(void) {
 	/*
 	** Make em resolution independent
 	*/
-	int option_width = OPTION_WIDTH * RESFACTOR;   // Width of dialog box.
+	int option_width = OPTION_WIDTH * RESFACTOR; // Width of dialog box.
 	int option_height = OPTION_HEIGHT * RESFACTOR; // Height of dialog box.
 	int option_x = OPTION_X * RESFACTOR;
 	int option_y = OPTION_Y * RESFACTOR;
@@ -69,11 +69,11 @@ void VisualControlsClass::Process(void) {
 	int text_y = TEXT_Y * RESFACTOR;
 	int slider_x = SLIDER_X * RESFACTOR;
 	int slider_y = SLIDER_Y * RESFACTOR;
-	int slider_width = SLIDER_WIDTH * RESFACTOR;	     // Width of each control slider.
-	int slider_height = SLIDER_HEIGHT * RESFACTOR;	     // Height of each control slider.
+	int slider_width = SLIDER_WIDTH * RESFACTOR; // Width of each control slider.
+	int slider_height = SLIDER_HEIGHT * RESFACTOR; // Height of each control slider.
 	int slider_y_spacing = SLIDER_Y_SPACING * RESFACTOR; // Vertical spacing between sliders.
-	int button_x = BUTTON_X * RESFACTOR;		     // Options button x pos
-	int button_y = BUTTON_Y * RESFACTOR;		     // Options button y pos
+	int button_x = BUTTON_X * RESFACTOR; // Options button x pos
+	int button_y = BUTTON_Y * RESFACTOR; // Options button y pos
 
 	/*
 	**	Variables.
@@ -104,8 +104,7 @@ void VisualControlsClass::Process(void) {
 	/*
 	**	Brightness (value) control.
 	*/
-	SliderClass brightness(BUTTON_BRIGHTNESS, slider_x, slider_y + (slider_y_spacing * 0), slider_width,
-			       slider_height, true);
+	SliderClass brightness(BUTTON_BRIGHTNESS, slider_x, slider_y + (slider_y_spacing * 0), slider_width, slider_height, true);
 	brightness.Set_Thumb_Size(20 * RESFACTOR);
 	brightness.Set_Value(Options.Get_Brightness() * 256);
 	brightness.Add_Tail(optionsbtn);
@@ -121,8 +120,7 @@ void VisualControlsClass::Process(void) {
 	/*
 	**	Contrast control.
 	*/
-	SliderClass contrast(BUTTON_CONTRAST, slider_x, slider_y + (slider_y_spacing * 2), slider_width, slider_height,
-			     true);
+	SliderClass contrast(BUTTON_CONTRAST, slider_x, slider_y + (slider_y_spacing * 2), slider_width, slider_height, true);
 	contrast.Set_Thumb_Size(20 * RESFACTOR);
 	contrast.Set_Value(Options.Get_Contrast() * 256);
 	contrast.Add_Tail(optionsbtn);
@@ -146,8 +144,7 @@ void VisualControlsClass::Process(void) {
 	**	This causes a right click anywhere or a left click outside the dialog region
 	**	to be equivalent to clicking on the return to options dialog.
 	*/
-	ControlClass background(BUTTON_OPTIONS, 0, 0, SeenBuff.Get_Width(), SeenBuff.Get_Height(),
-				GadgetClass::LEFTPRESS | GadgetClass::RIGHTPRESS);
+	ControlClass background(BUTTON_OPTIONS, 0, 0, SeenBuff.Get_Width(), SeenBuff.Get_Height(), GadgetClass::LEFTPRESS | GadgetClass::RIGHTPRESS);
 	background.Add_Tail(optionsbtn);
 
 	curbutton = 0;
@@ -173,7 +170,6 @@ void VisualControlsClass::Process(void) {
 	bool partial = true;
 	pressed = false;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -217,10 +213,12 @@ void VisualControlsClass::Process(void) {
 			**	Draw the titles.
 			*/
 			for (int i = 0; i < (sizeof(_titles) / sizeof(_titles[0])); i++) {
-				Fancy_Text_Print(
-				    _titles[i], slider_x - (8 * RESFACTOR), text_y + (i * slider_y_spacing),
-				    GadgetClass::Get_Color_Scheme(), TBLACK,
-				    TPF_TEXT | TPF_RIGHT | ((curbutton == i) ? TPF_BRIGHT_COLOR : TPF_TEXT));
+				Fancy_Text_Print(_titles[i],
+						 slider_x - (8 * RESFACTOR),
+						 text_y + (i * slider_y_spacing),
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_TEXT | TPF_RIGHT | ((curbutton == i) ? TPF_BRIGHT_COLOR : TPF_TEXT));
 			}
 			optionsbtn.Draw_All();
 			Show_Mouse();

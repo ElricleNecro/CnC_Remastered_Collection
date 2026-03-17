@@ -39,8 +39,8 @@
 #define VERSION_RED_ALERT_107 0x00011000 // Shipped Counterstrike number
 #define VERSION_RED_ALERT_106 0x00010500 // Patch without CS installed
 #define VERSION_RED_ALERT_108 0x00011500 // Patch with CS installed
-#define VERSION_AFTERMATH_CS 0x00011FFF	 // Aftermath with CS installed
-#define VERSION_AFTERMATH 0x00012000	 // Aftermath
+#define VERSION_AFTERMATH_CS 0x00011FFF // Aftermath with CS installed
+#define VERSION_AFTERMATH 0x00012000 // Aftermath
 
 //	Aftermath has, in a sense, used version 2.00. (Because of the text on title screen.) Call ourselves version 3.
 #define VERSION_RA_300 0x00030000 //	RA, CS, AM executables unified into one. All are now the same version. -ajw
@@ -65,8 +65,8 @@
 //---------------------------------------------------------------------------
 typedef enum CommProtocolEnum {
 	COMM_PROTOCOL_SINGLE_NO_COMP = 0, // single frame with no compression
-	COMM_PROTOCOL_SINGLE_E_COMP,	  // single frame with event compression
-	COMM_PROTOCOL_MULTI_E_COMP,	  // multiple frame with event compression
+	COMM_PROTOCOL_SINGLE_E_COMP, // single frame with event compression
+	COMM_PROTOCOL_MULTI_E_COMP, // multiple frame with event compression
 	COMM_PROTOCOL_COUNT,
 	DEFAULT_COMM_PROTOCOL = COMM_PROTOCOL_MULTI_E_COMP
 } CommProtocolType;
@@ -102,7 +102,9 @@ public:
 	//.....................................................................
 	// Retrieves a pointer to the current version text.
 	//.....................................................................
-	char *Version_Text() { return (VersionText); }
+	char *Version_Text() {
+		return (VersionText);
+	}
 
 	//.....................................................................
 	// Returns the default comm protocol for a given version number.
@@ -114,7 +116,9 @@ public:
 	//.....................................................................
 	void Init_Clipping(void);
 	unsigned long Clip_Version(unsigned long minver, unsigned long maxver);
-	unsigned long Get_Clipped_Version(void) { return (MaxClipVer); }
+	unsigned long Get_Clipped_Version(void) {
+		return (MaxClipVer);
+	}
 
 	//.....................................................................
 	// These routines return the theoretical lowest & highest version #'s
@@ -157,7 +161,7 @@ private:
 		MAX_VERSION = VERSION_RA_300
 #else
 		MIN_VERSION = VERSION_RED_ALERT_104, // 0x00010000,	// Version: 1.0
-		MAX_VERSION = VERSION_AFTERMATH	     // 0x00012000	// Version: 1.2
+		MAX_VERSION = VERSION_AFTERMATH // 0x00012000	// Version: 1.2
 #endif
 	};
 

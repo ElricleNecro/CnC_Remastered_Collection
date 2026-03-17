@@ -38,8 +38,8 @@
  ** IPXGlobalConnClass::Set_Bridge -- Sets up connection to cross a bridge*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
 #include <stdio.h>
+#include "function.h"
 // #include <mem.h>
 #include "ipxgconn.h"
 
@@ -69,12 +69,14 @@
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 IPXGlobalConnClass::IPXGlobalConnClass(int numsend, int numreceive, int maxlen, unsigned short product_id)
-    : IPXConnClass(numsend, numreceive, maxlen + sizeof(GlobalHeaderType) - sizeof(CommHeaderType),
-		   GLOBAL_MAGICNUM,	    // magic number for this connection
-		   NULL,		    // IPX Address (none)
-		   0,			    // Connection ID
-		   "",			    // Connection Name
-		   sizeof(IPXAddressClass)) // extra storage for the sender's address
+	: IPXConnClass(numsend,
+		       numreceive,
+		       maxlen + sizeof(GlobalHeaderType) - sizeof(CommHeaderType),
+		       GLOBAL_MAGICNUM, // magic number for this connection
+		       NULL, // IPX Address (none)
+		       0, // Connection ID
+		       "", // Connection Name
+		       sizeof(IPXAddressClass)) // extra storage for the sender's address
 {
 	int i;
 
@@ -185,10 +187,10 @@ int IPXGlobalConnClass::Send_Packet(void *buf, int buflen, IPXAddressClass *addr
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 int IPXGlobalConnClass::Receive_Packet(void *buf, int buflen, IPXAddressClass *address) {
-	GlobalHeaderType *packet;     // ptr to this packet
-	SendQueueType *send_entry;    // ptr to send entry header
+	GlobalHeaderType *packet; // ptr to this packet
+	SendQueueType *send_entry; // ptr to send entry header
 	GlobalHeaderType *entry_data; // ptr to queue entry data
-	GlobalHeaderType ackpacket;   // ACK packet to send
+	GlobalHeaderType ackpacket; // ACK packet to send
 	int i;
 	int resend;
 
@@ -290,8 +292,7 @@ int IPXGlobalConnClass::Receive_Packet(void *buf, int buflen, IPXAddressClass *a
 			/*...............................................................
 			If ACK is for this entry, mark it
 			...............................................................*/
-			if (packet->Header.PacketID == entry_data->Header.PacketID &&
-			    entry_data->Header.Code == PACKET_DATA_ACK) {
+			if (packet->Header.PacketID == entry_data->Header.PacketID && entry_data->Header.Code == PACKET_DATA_ACK) {
 				send_entry->IsACK = 1;
 				break;
 			}
@@ -349,7 +350,6 @@ int IPXGlobalConnClass::Get_Packet(void *buf, int *buflen, IPXAddressClass *addr
 	Read it if it's un-read
 	------------------------------------------------------------------------*/
 	if (rec_entry != NULL && rec_entry->IsRead == 0) {
-
 		/*.....................................................................
 		Mark as read
 		.....................................................................*/
@@ -501,7 +501,7 @@ void IPXGlobalConnClass::Set_Bridge(NetNumType bridge) {
 		IsBridge = 0;
 	}
 
-#else  // WINSOCK_IPX
+#else // WINSOCK_IPX
 	if (Configured) {
 		memcpy(BridgeNet, bridge, 4);
 		memset(BridgeNode, 0xff, 6);

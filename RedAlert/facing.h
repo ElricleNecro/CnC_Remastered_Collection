@@ -47,10 +47,16 @@ public:
 	FacingClass(DirType dir) : CurrentFacing(dir), DesiredFacing(dir) {};
 	FacingClass(NoInitClass const &) {};
 
-	operator DirType(void) const { return (CurrentFacing); };
+	operator DirType(void) const {
+		return (CurrentFacing);
+	};
 
-	DirType Current(void) const { return (CurrentFacing); };
-	DirType Desired(void) const { return (DesiredFacing); };
+	DirType Current(void) const {
+		return (CurrentFacing);
+	};
+	DirType Desired(void) const {
+		return (DesiredFacing);
+	};
 
 	int Set_Desired(DirType facing);
 	int Set_Current(DirType facing);
@@ -60,11 +66,19 @@ public:
 		Set_Desired(facing);
 	};
 
-	DirType Get(void) const { return CurrentFacing; }
+	DirType Get(void) const {
+		return CurrentFacing;
+	}
 
-	int Is_Rotating(void) const { return (DesiredFacing != CurrentFacing); };
-	int Difference(void) const { return (int)(signed char)((int)DesiredFacing - (int)CurrentFacing); }
-	int Difference(DirType facing) const { return (int)(signed char)((int)facing - (int)CurrentFacing); }
+	int Is_Rotating(void) const {
+		return (DesiredFacing != CurrentFacing);
+	};
+	int Difference(void) const {
+		return (int)(signed char)((int)DesiredFacing - (int)CurrentFacing);
+	}
+	int Difference(DirType facing) const {
+		return (int)(signed char)((int)facing - (int)CurrentFacing);
+	}
 	int Rotation_Adjust(int rate);
 
 private:

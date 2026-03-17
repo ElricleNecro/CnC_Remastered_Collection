@@ -44,8 +44,10 @@
 */
 class Transmuter {
 public:
-	Transmuter(void) : Output(0) {}
-	virtual ~Transmuter(void) {}
+	Transmuter(void) : Output(0) {
+	}
+	virtual ~Transmuter(void) {
+	}
 
 	/*
 	**	These are the interface function that are used to pass data to the transmuter. The
@@ -53,7 +55,9 @@ public:
 	**	the subsequent transmuter. For practical use, these functions should be overloaded to
 	**	do something more useful.
 	*/
-	virtual void Attach(Transmuter *transmuter) { Output = transmuter; }
+	virtual void Attach(Transmuter *transmuter) {
+		Output = transmuter;
+	}
 	virtual void Flush(void) {
 		if (Output)
 			Output->Flush();
@@ -72,10 +76,14 @@ protected:
 
 class FileTransmuter {
 public:
-	FileTransmuter(FileClass *file = NULL) : OutputFile(file) {}
+	FileTransmuter(FileClass *file = NULL) : OutputFile(file) {
+	}
 
-	virtual void Attach(FileClass *file) { OutputFile = file; }
-	virtual void Flush(void) {}
+	virtual void Attach(FileClass *file) {
+		OutputFile = file;
+	}
+	virtual void Flush(void) {
+	}
 	virtual void Put(const void *input, unsigned length) {
 		if (OutputFile)
 			OutputFile->Write(input, length);
@@ -87,10 +95,14 @@ protected:
 
 class BufferTransmuter {
 public:
-	BufferTransmuter(void *buffer = NULL) : BufferPtr(buffer) {}
+	BufferTransmuter(void *buffer = NULL) : BufferPtr(buffer) {
+	}
 
-	virtual void Attach(void *buffer) { BufferPtr = buffer; }
-	virtual void Flush(void) {}
+	virtual void Attach(void *buffer) {
+		BufferPtr = buffer;
+	}
+	virtual void Flush(void) {
+	}
 	virtual void Put(const void *input, unsigned length) {
 		if (BufferPtr) {
 			memcpy(BufferPtr, input, length);

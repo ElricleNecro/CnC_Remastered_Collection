@@ -80,6 +80,8 @@ private:
 	short Proximity;
 };
 
-inline COORDINATE FuseClass::Fuse_Target(void) { return (HeadTo); }
+inline COORDINATE FuseClass::Fuse_Target(void) {
+	return (HeadTo);
+}
 
 #endif

@@ -730,7 +730,7 @@ public:
 	*/
 	int BailCount; // was STEP_COUNT
 	int GoldValue; // was GOLD_WORTH
-	int GemValue;  // was GEM_WORTH
+	int GemValue; // was GEM_WORTH
 
 	/*
 	**	This specifies the heap maximum for the various game objects.

@@ -40,7 +40,8 @@
 **	it requires no fixups for saving and loading. If pointer fixups are not an issue, than using
 **	regular pointers would be more efficient.
 */
-template <class T> class CCPtr {
+template <class T>
+class CCPtr {
 public:
 	CCPtr(void) : ID(-1) {};
 	CCPtr(NoInitClass const &) {};
@@ -63,19 +64,37 @@ public:
 		return ((T *)(*Heap)[ID]);
 	}
 
-	bool Is_Valid(void) const { return (ID != -1); }
+	bool Is_Valid(void) const {
+		return (ID != -1);
+	}
 
-	bool operator==(CCPtr<T> const &rvalue) const { return (ID == rvalue.ID); }
-	bool operator!=(CCPtr<T> const &rvalue) const { return (ID != rvalue.ID); }
+	bool operator==(CCPtr<T> const &rvalue) const {
+		return (ID == rvalue.ID);
+	}
+	bool operator!=(CCPtr<T> const &rvalue) const {
+		return (ID != rvalue.ID);
+	}
 	bool operator>(CCPtr<T> const &rvalue) const;
-	bool operator<=(CCPtr<T> const &rvalue) const { return (rvalue > *this); }
-	bool operator<(CCPtr<T> const &rvalue) const { return (*this != rvalue && rvalue > *this); }
-	bool operator>=(CCPtr<T> const &rvalue) const { return (*this == rvalue || rvalue > *this); }
+	bool operator<=(CCPtr<T> const &rvalue) const {
+		return (rvalue > *this);
+	}
+	bool operator<(CCPtr<T> const &rvalue) const {
+		return (*this != rvalue && rvalue > *this);
+	}
+	bool operator>=(CCPtr<T> const &rvalue) const {
+		return (*this == rvalue || rvalue > *this);
+	}
 
-	long Raw(void) const { return (ID); }
-	void Set_Raw(long value) { ID = value; }
+	long Raw(void) const {
+		return (ID);
+	}
+	void Set_Raw(long value) {
+		ID = value;
+	}
 
-	static void Set_Heap(FixedIHeapClass *heap) { Heap = heap; }
+	static void Set_Heap(FixedIHeapClass *heap) {
+		Heap = heap;
+	}
 
 private:
 	static FixedIHeapClass *Heap;
@@ -97,8 +116,14 @@ private:
 **	creating a temporary object. This presumes that the conversion operator is
 **	cheaper than constructing a temporary and that cheaper solutions are desirable.
 */
-template <class T> int operator==(CCPtr<T> &lvalue, T *rvalue) { return ((T *)lvalue == rvalue); }
+template <class T>
+int operator==(CCPtr<T> &lvalue, T *rvalue) {
+	return ((T *)lvalue == rvalue);
+}
 
-template <class T> int operator==(T *lvalue, CCPtr<T> &rvalue) { return (lvalue == (T *)rvalue); }
+template <class T>
+int operator==(T *lvalue, CCPtr<T> &rvalue) {
+	return (lvalue == (T *)rvalue);
+}
 
 #endif

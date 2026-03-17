@@ -48,8 +48,8 @@
  *   BufferIOFileClass::~BufferIOFileClass -- Destructor for the file object.                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "bfiofile.h"
 #include <string.h>
+#include "bfiofile.h"
 
 /***********************************************************************************************
  * BufferIOFileClass::BufferIOFileClass -- Filename based constructor for a file object.       *
@@ -69,9 +69,8 @@
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
 BufferIOFileClass::BufferIOFileClass(char const *filename)
-    : IsAllocated(false), IsOpen(false), IsDiskOpen(false), IsCached(false), IsChanged(false), UseBuffer(false),
-      BufferRights(0), Buffer(0), BufferSize(0), BufferPos(0), BufferFilePos(0), BufferChangeBeg(-1),
-      BufferChangeEnd(-1), FileSize(0), FilePos(0), TrueFileStart(0) {
+	: IsAllocated(false), IsOpen(false), IsDiskOpen(false), IsCached(false), IsChanged(false), UseBuffer(false), BufferRights(0), Buffer(0),
+	  BufferSize(0), BufferPos(0), BufferFilePos(0), BufferChangeBeg(-1), BufferChangeEnd(-1), FileSize(0), FilePos(0), TrueFileStart(0) {
 	BufferIOFileClass::Set_Name(filename);
 }
 
@@ -90,9 +89,9 @@ BufferIOFileClass::BufferIOFileClass(char const *filename)
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
 BufferIOFileClass::BufferIOFileClass(void)
-    : IsAllocated(false), IsOpen(false), IsDiskOpen(false), IsCached(false), IsChanged(false), UseBuffer(false),
-      BufferRights(0), Buffer(0), BufferSize(0), BufferPos(0), BufferFilePos(0), BufferChangeBeg(-1),
-      BufferChangeEnd(-1), FileSize(0), FilePos(0), TrueFileStart(0) {}
+	: IsAllocated(false), IsOpen(false), IsDiskOpen(false), IsCached(false), IsChanged(false), UseBuffer(false), BufferRights(0), Buffer(0),
+	  BufferSize(0), BufferPos(0), BufferFilePos(0), BufferChangeBeg(-1), BufferChangeEnd(-1), FileSize(0), FilePos(0), TrueFileStart(0) {
+}
 
 /***********************************************************************************************
  * BufferIOFileClass::~BufferIOFileClass -- Destructor for the file object.                    *
@@ -108,7 +107,9 @@ BufferIOFileClass::BufferIOFileClass(void)
  * HISTORY:                                                                                    *
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-BufferIOFileClass::~BufferIOFileClass(void) { Free(); }
+BufferIOFileClass::~BufferIOFileClass(void) {
+	Free();
+}
 
 /***********************************************************************************************
  * BufferIOFileClass::Cache -- Load part or all of a file data into RAM.                       *
@@ -466,11 +467,9 @@ int BufferIOFileClass::Open(int rights) {
 	BufferIOFileClass::Close();
 
 	if (UseBuffer) {
-
 		BufferRights = rights; // save rights requested for checks later
 
 		if (rights != READ || (rights == READ && FileSize > BufferSize)) {
-
 			if (rights == WRITE) {
 				RawFileClass::Open(rights);
 				RawFileClass::Close();
@@ -549,7 +548,6 @@ long BufferIOFileClass::Write(void const *buffer, long size) {
 				}
 
 				if (sizetowrite != BufferSize) {
-
 					if (!IsCached) {
 						long readsize;
 
@@ -896,7 +894,6 @@ void BufferIOFileClass::Close(void) {
 		Commit();
 
 		if (IsDiskOpen) {
-
 			if (TrueFileStart) {
 				UseBuffer = false;
 				Close();

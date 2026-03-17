@@ -182,7 +182,8 @@ void GScreenClass::Init_Clear(void) {
  * HISTORY:                                                                                    *
  *   12/28/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-void GScreenClass::Init_Theater(TheaterType) {}
+void GScreenClass::Init_Theater(TheaterType) {
+}
 
 /***********************************************************************************************
  * GScreenClass::Init_IO -- Initializes the Button list ('Buttons').                           *
@@ -258,7 +259,6 @@ void GScreenClass::Input(KeyNumType &key, int &x, int &y) {
 	y = Keyboard->Mouse_Y();
 
 	if (Buttons != NULL) {
-
 		/*
 		** If any buttons need redrawing, they will do so in the Input routine, and
 		** they should draw themselves to the HidPage.  So, flag ourselves for a Blit
@@ -279,7 +279,6 @@ void GScreenClass::Input(KeyNumType &key, int &x, int &y) {
 		Set_Logic_Page(oldpage);
 
 	} else {
-
 		if (key != 0) {
 			key = Keyboard->Get();
 		}
@@ -342,7 +341,9 @@ void GScreenClass::Add_A_Button(GadgetClass &gadget) {
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GScreenClass::Remove_A_Button(GadgetClass &gadget) { Buttons = gadget.Remove(); }
+void GScreenClass::Remove_A_Button(GadgetClass &gadget) {
+	Buttons = gadget.Remove();
+}
 
 /***********************************************************************************************
  * GScreenClass::Render -- General drawing dispatcher an display update function.              *

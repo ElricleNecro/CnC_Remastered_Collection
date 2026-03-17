@@ -40,7 +40,7 @@ class ConfirmationClass {
 private:
 	enum ConfirmationClassEnum {
 		BUTTON_YES = 1, // Button number for "Options menu"
-		BUTTON_NO	// Button number for "Options menu"
+		BUTTON_NO // Button number for "Options menu"
 	};
 
 public:

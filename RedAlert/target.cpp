@@ -58,7 +58,9 @@
 #include "target.h"
 #include "function.h"
 
-TargetClass::TargetClass(TARGET target) { Target.Target = target; }
+TargetClass::TargetClass(TARGET target) {
+	Target.Target = target;
+}
 
 TargetClass::TargetClass(AbstractClass const *ptr) {
 	if (ptr != NULL) {
@@ -461,7 +463,9 @@ bool Target_Legal(TARGET target) {
  * HISTORY:                                                                                    *
  *   05/27/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-CELL As_Cell(TARGET target) { return (Coord_Cell(As_Coord(target))); }
+CELL As_Cell(TARGET target) {
+	return (Coord_Cell(As_Coord(target)));
+}
 
 /***********************************************************************************************
  * As_Coord -- Converts a target value into a coordinate value.                                *

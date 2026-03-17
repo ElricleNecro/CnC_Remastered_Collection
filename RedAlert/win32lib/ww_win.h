@@ -58,12 +58,12 @@ void Window_Print(char const string[], ...);
 **	defines when accessing the WindowList.
 */
 typedef enum {
-	WINDOWX,       // X byte position of left edge.
-	WINDOWY,       // Y pixel position of top edge.
-	WINDOWWIDTH,   // Width in bytes of the window.
-	WINDOWHEIGHT,  // Height in pixels of the window.
-	WINDOWFCOL,    // Default foreground color.
-	WINDOWBCOL,    // Default background color.
+	WINDOWX, // X byte position of left edge.
+	WINDOWY, // Y pixel position of top edge.
+	WINDOWWIDTH, // Width in bytes of the window.
+	WINDOWHEIGHT, // Height in pixels of the window.
+	WINDOWFCOL, // Default foreground color.
+	WINDOWBCOL, // Default background color.
 	WINDOWCURSORX, // Current cursor X position (in rows).
 	WINDOWCURSORY, // Current cursor Y position (in lines).
 	WINDOWPADDING = 0x1000

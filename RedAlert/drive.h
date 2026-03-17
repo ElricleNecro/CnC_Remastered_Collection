@@ -120,8 +120,8 @@ public:
 	*/
 	enum DriveClassEnum {
 		BACKUP_INTO_REFINERY = 64, // Track to backup into refinery.
-		OUT_OF_REFINERY,	   // Track to leave refinery.
-		OUT_OF_WEAPON_FACTORY	   // Track to leave weapons factory.
+		OUT_OF_REFINERY, // Track to leave refinery.
+		OUT_OF_WEAPON_FACTORY // Track to leave weapons factory.
 	};
 
 	/****************************************************************************
@@ -129,31 +129,31 @@ public:
 	**	processing bits.
 	*/
 	typedef enum TrackControlType : unsigned char {
-		F_ = 0x00,  // No translation necessary?
+		F_ = 0x00, // No translation necessary?
 		F_T = 0x01, // Transpose X and Y components?
 		F_X = 0x02, // Reverse X component sign?
 		F_Y = 0x04, // Reverse Y component sign?
-		F_D = 0x08  // Two cell consumption?
+		F_D = 0x08 // Two cell consumption?
 	} TrackControlType;
 
 private:
 	typedef struct {
-		char Track;			   // Which track to use.
-		char StartTrack;		   // Track when starting from stand-still.
-		DirType Facing;			   // Facing when track has been completed.
+		char Track; // Which track to use.
+		char StartTrack; // Track when starting from stand-still.
+		DirType Facing; // Facing when track has been completed.
 		DriveClass::TrackControlType Flag; // List processing flag bits.
 	} TurnTrackType;
 
 	typedef struct {
 		COORDINATE Offset; // Offset to origin coordinate.
-		DirType Facing;	   // Facing (primary track).
+		DirType Facing; // Facing (primary track).
 	} TrackType;
 
 	typedef struct {
 		TrackType const *Track; // Pointer to track list.
-		int Jump;		// Index where track jumping is allowed.
-		int Entry;		// Entry point if jumping to this track.
-		int Cell;		// Per cell process should occur at this index.
+		int Jump; // Index where track jumping is allowed.
+		int Entry; // Entry point if jumping to this track.
+		int Cell; // Per cell process should occur at this index.
 	} RawTrackType;
 
 	/*

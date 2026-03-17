@@ -50,23 +50,23 @@ typedef struct _tagCOMPRESS_INFO {
 	short wIndex;
 
 	unsigned long dwSampleIndex2; // added BP for channel 2
-	long dwPredicted2;	      // added BP for channel 2
-	long dwDifference2;	      // added BP for channel 2
-	short wCodeBuf2;	      // added BP for channel 2
-	short wCode2;		      // added BP for channel 2
-	short wStep2;		      // added BP for channel 2
-	short wIndex2;		      // added BP for channel 2
+	long dwPredicted2; // added BP for channel 2
+	long dwDifference2; // added BP for channel 2
+	short wCodeBuf2; // added BP for channel 2
+	short wCode2; // added BP for channel 2
+	short wStep2; // added BP for channel 2
+	short wIndex2; // added BP for channel 2
 	short wBitSize;
 	short wChannels; // added BP for # of channels
 } _SOS_COMPRESS_INFO;
 
 /* compressed file type header */
 typedef struct _tagCOMPRESS_HEADER {
-	unsigned long dwType;		  // type of compression
-	unsigned long dwCompressedSize;	  // compressed file size
+	unsigned long dwType; // type of compression
+	unsigned long dwCompressedSize; // compressed file size
 	unsigned long dwUnCompressedSize; // uncompressed file size
-	unsigned long dwSourceBitSize;	  // original bit size
-	char szName[16];		  // file type, for error checking
+	unsigned long dwSourceBitSize; // original bit size
+	char szName[16]; // file type, for error checking
 } _SOS_COMPRESS_HEADER;
 
 /* Prototypes */

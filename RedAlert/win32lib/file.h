@@ -62,12 +62,12 @@
 
 typedef enum {
 	FILEB_PROCESSED = 8, // Was the packed file header of this file processed?
-	FILEB_PRELOAD,	     // Scan for and make file resident at WWDOS_Init time?
-	FILEB_RESIDENT,	     // Make resident at Open_File time?
-	FILEB_FLUSH,	     // Un-resident at Close_File time?
-	FILEB_PACKED,	     // Is this file packed?
-	FILEB_KEEP,	     // Don't ever flush this resident file?
-	FILEB_PRIORITY,	     // Flush this file last?
+	FILEB_PRELOAD, // Scan for and make file resident at WWDOS_Init time?
+	FILEB_RESIDENT, // Make resident at Open_File time?
+	FILEB_FLUSH, // Un-resident at Close_File time?
+	FILEB_PACKED, // Is this file packed?
+	FILEB_KEEP, // Don't ever flush this resident file?
+	FILEB_PRIORITY, // Flush this file last?
 
 	FILEB_LAST
 } FileFlags_Type;
@@ -137,13 +137,13 @@ extern short (*Open_Error)(FileErrorType, BYTE const *);
 
 // lint -strong(AJX,FileDataType)
 typedef struct {
-	char *Name;		 // File name (include sub-directory but not volume).
-	long Size;		 // File size (0=indeterminate).
-	void *Ptr;		 // Resident file pointer.
-	long Start;		 // Starting offset in DOS handle file.
-	unsigned char Disk;	 // Disk number location.
+	char *Name; // File name (include sub-directory but not volume).
+	long Size; // File size (0=indeterminate).
+	void *Ptr; // Resident file pointer.
+	long Start; // Starting offset in DOS handle file.
+	unsigned char Disk; // Disk number location.
 	unsigned char OpenCount; // Count of open locks on resident file.
-	unsigned short Flag;	 // File control flags.
+	unsigned short Flag; // File control flags.
 } FileDataType;
 
 /*=========================================================================*/

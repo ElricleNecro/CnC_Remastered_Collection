@@ -68,8 +68,8 @@ CDTimerClass<SystemTimerClass> MouseClass::Timer = 0;
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-MouseClass::MouseClass(void)
-    : IsSmall(false), CurrentMouseShape(MOUSE_NORMAL), NormalMouseShape(MOUSE_NORMAL), Frame(0) {}
+MouseClass::MouseClass(void) : IsSmall(false), CurrentMouseShape(MOUSE_NORMAL), NormalMouseShape(MOUSE_NORMAL), Frame(0) {
+}
 
 /***********************************************************************************************
  * MouseClass::Set_Default_Mouse -- Sets the mouse to match the shape specified.               *
@@ -107,7 +107,9 @@ void MouseClass::Set_Default_Mouse(MouseType mouse, bool size) {
  * HISTORY:                                                                                    *
  *   03/27/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void MouseClass::Revert_Mouse_Shape(void) { Override_Mouse_Shape(NormalMouseShape, false); }
+void MouseClass::Revert_Mouse_Shape(void) {
+	Override_Mouse_Shape(NormalMouseShape, false);
+}
 
 /***********************************************************************************************
  * MouseClass::Mouse_Small -- Controls the sizing of the mouse.                                *
@@ -136,11 +138,9 @@ void MouseClass::Mouse_Small(bool wsmall) {
 
 	if (wsmall) {
 		if (control->SmallFrame != -1) {
-			Set_Mouse_Cursor(control->X, control->Y,
-					 Extract_Shape(MouseShapes, control->SmallFrame + Frame / 4));
+			Set_Mouse_Cursor(control->X, control->Y, Extract_Shape(MouseShapes, control->SmallFrame + Frame / 4));
 		} else {
-			Set_Mouse_Cursor(MouseControl[MOUSE_NORMAL].X, MouseControl[MOUSE_NORMAL].Y,
-					 Extract_Shape(MouseShapes, MOUSE_NORMAL));
+			Set_Mouse_Cursor(MouseControl[MOUSE_NORMAL].X, MouseControl[MOUSE_NORMAL].Y, Extract_Shape(MouseShapes, MOUSE_NORMAL));
 		}
 	} else {
 		Set_Mouse_Cursor(control->X, control->Y, Extract_Shape(MouseShapes, control->StartFrame + Frame / 4));
@@ -235,7 +235,6 @@ void MouseClass::AI(KeyNumType &input, int x, int y) {
 	MouseStruct const *control = &MouseControl[CurrentMouseShape];
 
 	if (control->FrameRate && Timer == 0) {
-
 		Frame++;
 		Frame %= control->FrameCount;
 		Timer = control->FrameRate;
@@ -319,50 +318,50 @@ void MouseClass::Init_Clear(void) {
 // #endif
 
 MouseClass::MouseStruct MouseClass::MouseControl[MOUSE_COUNT] = {
-    {0, 1, 0, 80, 0, 0},       //	MOUSE_NORMAL
-    {1, 1, 0, -1, WD / 2, 0},  //	MOUSE_N
-    {2, 1, 0, -1, WD, 0},      //	MOUSE_NE
-    {3, 1, 0, -1, WD, HT / 2}, //	MOUSE_E
-    {4, 1, 0, -1, WD, HT},     //	MOUSE_SE
-    {5, 1, 0, -1, WD / 2, HT}, //	MOUSE_S
-    {6, 1, 0, -1, 0, HT},      //	MOUSE_SW
-    {7, 1, 0, -1, 0, HT / 2},  //	MOUSE_W
-    {8, 1, 0, -1, 0, 0},       //	MOUSE_NW
+	{ 0, 1, 0, 80, 0, 0 }, //	MOUSE_NORMAL
+	{ 1, 1, 0, -1, WD / 2, 0 }, //	MOUSE_N
+	{ 2, 1, 0, -1, WD, 0 }, //	MOUSE_NE
+	{ 3, 1, 0, -1, WD, HT / 2 }, //	MOUSE_E
+	{ 4, 1, 0, -1, WD, HT }, //	MOUSE_SE
+	{ 5, 1, 0, -1, WD / 2, HT }, //	MOUSE_S
+	{ 6, 1, 0, -1, 0, HT }, //	MOUSE_SW
+	{ 7, 1, 0, -1, 0, HT / 2 }, //	MOUSE_W
+	{ 8, 1, 0, -1, 0, 0 }, //	MOUSE_NW
 
-    {124, 1, 0, -1, WD / 2, 0},	 //	MOUSE_NO_N
-    {125, 1, 0, -1, WD, 0},	 //	MOUSE_NO_NE
-    {126, 1, 0, -1, WD, HT / 2}, //	MOUSE_NO_E
-    {127, 1, 0, -1, WD, HT},	 //	MOUSE_NO_SE
-    {128, 1, 0, -1, WD / 2, HT}, //	MOUSE_NO_S
-    {129, 1, 0, -1, 0, HT},	 //	MOUSE_NO_SW
-    {130, 1, 0, -1, 0, HT / 2},	 //	MOUSE_NO_W
-    {131, 1, 0, -1, 0, 0},	 //	MOUSE_NO_NW
+	{ 124, 1, 0, -1, WD / 2, 0 }, //	MOUSE_NO_N
+	{ 125, 1, 0, -1, WD, 0 }, //	MOUSE_NO_NE
+	{ 126, 1, 0, -1, WD, HT / 2 }, //	MOUSE_NO_E
+	{ 127, 1, 0, -1, WD, HT }, //	MOUSE_NO_SE
+	{ 128, 1, 0, -1, WD / 2, HT }, //	MOUSE_NO_S
+	{ 129, 1, 0, -1, 0, HT }, //	MOUSE_NO_SW
+	{ 130, 1, 0, -1, 0, HT / 2 }, //	MOUSE_NO_W
+	{ 131, 1, 0, -1, 0, 0 }, //	MOUSE_NO_NW
 
-    {14, 1, 0, 33, WD / 2, HT / 2},   //	MOUSE_NO_MOVE
-    {10, 4, 4, 29, WD / 2, HT / 2},   //	MOUSE_CAN_MOVE
-    {113, 3, 4, 142, WD / 2, HT / 2}, //	MOUSE_ENTER
-    {59, 9, 4, -1, WD / 2, HT / 2},   //	MOUSE_DEPLOY
-    {15, 6, 4, -1, WD / 2, HT / 2},   //	MOUSE_CAN_SELECT
-    {21, 8, 4, 134, WD / 2, HT / 2},  //	MOUSE_CAN_ATTACK
-    {68, 12, 2, -1, WD / 2, HT / 2},  //	MOUSE_SELL_BACK
-    {148, 12, 2, -1, WD / 2, HT / 2}, //	MOUSE_SELL_UNIT
-    {35, 24, 2, -1, WD / 2, HT / 2},  //	MOUSE_REPAIR
-    {120, 1, 0, -1, WD / 2, HT / 2},  //	MOUSE_NO_REPAIR
-    {119, 1, 0, -1, WD / 2, HT / 2},  //	MOUSE_NO_SELL_BACK
-    {81, 1, 0, 145, WD / 2, HT / 2},  //	MOUSE_RADAR_CURSOR
-    {90, 7, 4, -1, WD / 2, HT / 2},   //	MOUSE_NUCLEAR_BOMB
-    {82, 8, 2, 213, WD / 2, HT / 2},  //	MOUSE_AIR_STRIKE
-    {116, 3, 4, 121, WD / 2, HT / 2}, //	MOUSE_DEMOLITIONS
-    {147, 1, 0, 146, WD / 2, HT / 2}, //	MOUSE_AREA_GUARD
-    {160, 4, 4, 194, WD / 2, HT / 2}, //	MOUSE_HEAL
-    {164, 3, 4, 167, WD / 2, HT / 2}, //	MOUSE_DAMAGE
-    {170, 24, 2, -1, WD / 2, HT / 2}, //	MOUSE_GREPAIR
-    {195, 8, 4, 203, WD / 2, HT / 2}, // MOUSE_STAY_ATTACK
-    {211, 1, 0, -1, WD / 2, HT / 2},  // MOUSE_NO_DEPLOY
-    {212, 1, 0, -1, WD / 2, HT / 2},  // MOUSE_NO_ENTER
-    {213, 1, 0, -1, WD / 2, HT / 2},  // MOUSE_NO_REPAIR
+	{ 14, 1, 0, 33, WD / 2, HT / 2 }, //	MOUSE_NO_MOVE
+	{ 10, 4, 4, 29, WD / 2, HT / 2 }, //	MOUSE_CAN_MOVE
+	{ 113, 3, 4, 142, WD / 2, HT / 2 }, //	MOUSE_ENTER
+	{ 59, 9, 4, -1, WD / 2, HT / 2 }, //	MOUSE_DEPLOY
+	{ 15, 6, 4, -1, WD / 2, HT / 2 }, //	MOUSE_CAN_SELECT
+	{ 21, 8, 4, 134, WD / 2, HT / 2 }, //	MOUSE_CAN_ATTACK
+	{ 68, 12, 2, -1, WD / 2, HT / 2 }, //	MOUSE_SELL_BACK
+	{ 148, 12, 2, -1, WD / 2, HT / 2 }, //	MOUSE_SELL_UNIT
+	{ 35, 24, 2, -1, WD / 2, HT / 2 }, //	MOUSE_REPAIR
+	{ 120, 1, 0, -1, WD / 2, HT / 2 }, //	MOUSE_NO_REPAIR
+	{ 119, 1, 0, -1, WD / 2, HT / 2 }, //	MOUSE_NO_SELL_BACK
+	{ 81, 1, 0, 145, WD / 2, HT / 2 }, //	MOUSE_RADAR_CURSOR
+	{ 90, 7, 4, -1, WD / 2, HT / 2 }, //	MOUSE_NUCLEAR_BOMB
+	{ 82, 8, 2, 213, WD / 2, HT / 2 }, //	MOUSE_AIR_STRIKE
+	{ 116, 3, 4, 121, WD / 2, HT / 2 }, //	MOUSE_DEMOLITIONS
+	{ 147, 1, 0, 146, WD / 2, HT / 2 }, //	MOUSE_AREA_GUARD
+	{ 160, 4, 4, 194, WD / 2, HT / 2 }, //	MOUSE_HEAL
+	{ 164, 3, 4, 167, WD / 2, HT / 2 }, //	MOUSE_DAMAGE
+	{ 170, 24, 2, -1, WD / 2, HT / 2 }, //	MOUSE_GREPAIR
+	{ 195, 8, 4, 203, WD / 2, HT / 2 }, // MOUSE_STAY_ATTACK
+	{ 211, 1, 0, -1, WD / 2, HT / 2 }, // MOUSE_NO_DEPLOY
+	{ 212, 1, 0, -1, WD / 2, HT / 2 }, // MOUSE_NO_ENTER
+	{ 213, 1, 0, -1, WD / 2, HT / 2 }, // MOUSE_NO_REPAIR
 
-    {97, 8, 3, -1, WD / 2, HT / 2},  //	MOUSE_CHRONO_SELECT
-    {105, 8, 2, -1, WD / 2, HT / 2}, //	MOUSE_CHRONO_DEST
+	{ 97, 8, 3, -1, WD / 2, HT / 2 }, //	MOUSE_CHRONO_SELECT
+	{ 105, 8, 2, -1, WD / 2, HT / 2 }, //	MOUSE_CHRONO_DEST
 
 };

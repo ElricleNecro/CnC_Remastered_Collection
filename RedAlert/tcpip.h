@@ -69,21 +69,20 @@ extern bool Server;
 // Custom messages: WM_USER + 1 to WM_USER + 100
 // These will be sent to the dialog procedure, for display only.
 //...........................................................................
-#define WM_UPDATE_STATUS (WM_USER + 1)	// update status text
+#define WM_UPDATE_STATUS (WM_USER + 1) // update status text
 #define WM_UPDATE_CLIENTS (WM_USER + 2) // update client list box
 #define WM_UPDATE_MESSAGE (WM_USER + 3) // update received message list
 
 //...........................................................................
 // Messages for Async processing.
 //...........................................................................
-#define WM_ACCEPT (WM_USER + 101)	 // client wants to connect
+#define WM_ACCEPT (WM_USER + 101) // client wants to connect
 #define WM_HOSTBYADDRESS (WM_USER + 102) // async get host by address
-#define WM_HOSTBYNAME (WM_USER + 103)	 // async get host by name
-#define WM_ASYNCEVENT (WM_USER + 104)	 // other Async event
+#define WM_HOSTBYNAME (WM_USER + 103) // async get host by name
+#define WM_ASYNCEVENT (WM_USER + 104) // other Async event
 #define WM_UDPASYNCEVENT (WM_USER + 105) // UDP socket Async event
 
 class TcpipManagerClass {
-
 public:
 	TcpipManagerClass(void);
 	~TcpipManagerClass(void);
@@ -102,7 +101,9 @@ public:
 	void Set_Protocol_UDP(BOOL state);
 	void Clear_Socket_Error(SOCKET socket);
 
-	inline BOOL Get_Connected(void) { return (Connected); }
+	inline BOOL Get_Connected(void) {
+		return (Connected);
+	}
 
 	typedef enum ConnectStatusEnum {
 		CONNECTED_OK = 0,
@@ -117,7 +118,9 @@ public:
 		CONNECTION_LOST
 	} ConnectStatusEnum;
 
-	inline ConnectStatusEnum Get_Connection_Status(void) { return (ConnectStatus); }
+	inline ConnectStatusEnum Get_Connection_Status(void) {
+		return (ConnectStatus);
+	}
 
 private:
 	//...........................................................................
@@ -125,8 +128,8 @@ private:
 	//...........................................................................
 	typedef struct {
 		struct in_addr Addr; // address
-		char DotAddr[16];    // decimal-dot address string
-		char Name[255];	     // character-string name
+		char DotAddr[16]; // decimal-dot address string
+		char Name[255]; // character-string name
 	} HostType;
 
 	typedef struct {

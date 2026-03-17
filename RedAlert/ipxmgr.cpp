@@ -64,8 +64,8 @@
  *   IPXManagerClass::Free_RealMode_Mem -- frees real-mode memory				*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
 #include <stdio.h>
+#include "function.h"
 // #include <mem.h> PG
 // #include <i86.h> PG
 #include "ipxmgr.h"
@@ -112,8 +112,12 @@
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-IPXManagerClass::IPXManagerClass(int glb_maxlen, int pvt_maxlen, int glb_num_packets, int pvt_num_packets,
-				 unsigned short socket, unsigned short product_id) {
+IPXManagerClass::IPXManagerClass(int glb_maxlen,
+				 int pvt_maxlen,
+				 int glb_num_packets,
+				 int pvt_num_packets,
+				 unsigned short socket,
+				 unsigned short product_id) {
 	int i;
 #ifdef WINSOCK_IPX
 	/*
@@ -134,7 +138,7 @@ IPXManagerClass::IPXManagerClass(int glb_maxlen, int pvt_maxlen, int glb_num_pac
 	delete PacketTransport;
 	PacketTransport = NULL;
 
-#else  // WINSOCK_IPX
+#else // WINSOCK_IPX
 
 	//------------------------------------------------------------------------
 	//	Initialize data members
@@ -204,9 +208,9 @@ IPXManagerClass::IPXManagerClass(int glb_maxlen, int pvt_maxlen, int glb_num_pac
 	//------------------------------------------------------------------------
 	//	Init timing parameters
 	//------------------------------------------------------------------------
-	RetryDelta = 2;	 // 2 ticks between retries
+	RetryDelta = 2; // 2 ticks between retries
 	MaxRetries = -1; // disregard # retries
-	Timeout = 60;	 // report bad connection after 1 second
+	Timeout = 60; // report bad connection after 1 second
 
 } /* end of IPXManagerClass */
 
@@ -292,7 +296,6 @@ int IPXManagerClass::Init() {
 	int i;
 
 	if (Session.Type != GAME_INTERNET) {
-
 		//------------------------------------------------------------------------
 		//	Error if IPX not installed
 		//------------------------------------------------------------------------
@@ -360,8 +363,7 @@ int IPXManagerClass::Init() {
 	//------------------------------------------------------------------------
 	//	Configure the IPX Connections
 	//------------------------------------------------------------------------
-	IPXConnClass::Configure(Socket, ConnectionNum, ListenECB, SendECB, FirstHeaderBuf, SendHeader, FirstDataBuf,
-				SendBuf, Handler, PacketLen);
+	IPXConnClass::Configure(Socket, ConnectionNum, ListenECB, SendECB, FirstHeaderBuf, SendHeader, FirstDataBuf, SendBuf, Handler, PacketLen);
 
 	//------------------------------------------------------------------------
 	//	Start Listening
@@ -394,7 +396,9 @@ int IPXManagerClass::Init() {
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-int IPXManagerClass::Is_IPX(void) { return (IPXStatus); } /* end of Is_IPX */
+int IPXManagerClass::Is_IPX(void) {
+	return (IPXStatus);
+} /* end of Is_IPX */
 
 /***************************************************************************
  * IPXManagerClass::Set_Timing -- sets timing for all connections				*
@@ -477,8 +481,7 @@ int IPXManagerClass::Create_Connection(int id, char *name, IPXAddressClass *addr
 	//------------------------------------------------------------------------
 	//	Create new connection
 	//------------------------------------------------------------------------
-	Connection[NumConnections] =
-	    new IPXConnClass(Pvt_NumPackets, Pvt_NumPackets, Pvt_MaxPacketLen, ProductID, address, id, name);
+	Connection[NumConnections] = new IPXConnClass(Pvt_NumPackets, Pvt_NumPackets, Pvt_MaxPacketLen, ProductID, address, id, name);
 	if (!Connection[NumConnections]) {
 		return (0);
 	}
@@ -581,7 +584,9 @@ int IPXManagerClass::Delete_Connection(int id) {
  * HISTORY:                                                                *
  *   01/25/1995 BR : Created.                                              *
  *=========================================================================*/
-int IPXManagerClass::Num_Connections(void) { return (NumConnections); } /* end of Num_Connections */
+int IPXManagerClass::Num_Connections(void) {
+	return (NumConnections);
+} /* end of Num_Connections */
 
 /***************************************************************************
  * IPXManagerClass::Connection_ID -- gets the given connection's ID        *
@@ -818,7 +823,7 @@ int IPXManagerClass::Get_Global_Message(void *buf, int *buflen, IPXAddressClass 
  *   01/25/1995 BR : Created.                                              *
  *=========================================================================*/
 int IPXManagerClass::Send_Private_Message(void *buf, int buflen, int ack_req, int conn_id) {
-	int i;		 // loop counter
+	int i; // loop counter
 	int connect_idx; // index of channel to send to, if specified
 
 	//------------------------------------------------------------------------
@@ -921,7 +926,6 @@ int IPXManagerClass::Get_Private_Message(void *buf, int *buflen, int *conn_id) {
 	//	Scan all connections for a received packet, starting with 'CurConnection'
 	//------------------------------------------------------------------------
 	for (i = 0; i < NumConnections; i++) {
-
 		//.....................................................................
 		//	Check this connection for a packet
 		//.....................................................................
@@ -983,19 +987,16 @@ int IPXManagerClass::Service(void) {
 	char temp_address[128];
 
 	if (PacketTransport) {
-
 		do {
 			temp_receive_buffer_len = sizeof(temp_receive_buffer);
 			temp_address_len = sizeof(temp_address);
-			packetlen = PacketTransport->Read(temp_receive_buffer, temp_receive_buffer_len, temp_address,
-							  temp_address_len);
+			packetlen = PacketTransport->Read(temp_receive_buffer, temp_receive_buffer_len, temp_address, temp_address_len);
 			if (packetlen) {
 				CurDataBuf = (char *)temp_receive_buffer;
 				address = *((IPXAddressClass *)temp_address);
 
 				packet = (CommHeaderType *)CurDataBuf;
 				if (packet->MagicNumber == GlobalChannel->Magic_Num()) {
-
 					/*
 					** Put the packet in the Global Queue
 					*/
@@ -1003,7 +1004,6 @@ int IPXManagerClass::Service(void) {
 						ReceiveOverflows++;
 				} else {
 					if (packet->MagicNumber == ProductID) {
-
 						/*
 						** Find the Private Queue that this packet is for
 						*/
@@ -1023,15 +1023,12 @@ int IPXManagerClass::Service(void) {
 							** packets then it might be from a player whos IP has changed.
 							*/
 							if (!found_address) {
-								if (packet->Code ==
-								    ConnectionClass::PACKET_DATA_NOACK) {
+								if (packet->Code == ConnectionClass::PACKET_DATA_NOACK) {
 									/*
 									** Magic number and packet code are valid. It's
 									*probably a C&C packet.
 									*/
-									EventClass *event =
-									    (EventClass *)(((char *)packet) +
-											   sizeof(CommHeaderType));
+									EventClass *event = (EventClass *)(((char *)packet) + sizeof(CommHeaderType));
 
 									/*
 									** If this is a framesync packet then grab the
@@ -1041,14 +1038,9 @@ int IPXManagerClass::Service(void) {
 										int id = event->ID;
 
 										assert(id != PlayerPtr->ID);
-										for (int i = 1;
-										     i < Session.Players.Count(); i++) {
-											if (Session.Players[i]
-												->Player.ID == id) {
-
-												int iConnectionIndex =
-												    Connection_Index(
-													id);
+										for (int i = 1; i < Session.Players.Count(); i++) {
+											if (Session.Players[i]->Player.ID == id) {
+												int iConnectionIndex = Connection_Index(id);
 												if (iConnectionIndex !=
 												    CONNECTION_NONE) //	(else Create_Connections() has not yet been called)
 												{
@@ -1067,14 +1059,9 @@ int IPXManagerClass::Service(void) {
 													*will pick up
 													*the next one.
 													*/
-													Session
-													    .Players[i]
-													    ->Address =
-													    address;
-													Connection
-													    [iConnectionIndex]
-														->Address =
-													    address;
+													Session.Players[i]->Address = address;
+													Connection[iConnectionIndex]->Address =
+														address;
 												}
 												break;
 											}
@@ -1098,7 +1085,6 @@ int IPXManagerClass::Service(void) {
 	int recv_length;
 
 	if (Winsock.Get_Connected() || Special.IsFromWChat) {
-
 		if (!Winsock.Get_Connected())
 			return (0);
 
@@ -1106,7 +1092,6 @@ int IPXManagerClass::Service(void) {
 		** This is an internet connection so get the packets from winsock
 		*/
 		while ((recv_length = Winsock.Read(temp_receive_buffer, 1024)) != 0) {
-
 			CurHeaderBuf = NULL;
 			CurDataBuf = (char *)&temp_receive_buffer[0];
 
@@ -1149,7 +1134,6 @@ int IPXManagerClass::Service(void) {
 	} else {
 #if (0) // PG
 		while (IPX_Get_Outstanding_Buffer95(&temp_receive_buffer[0])) {
-
 			CurHeaderBuf = (IPXHEADER *)&temp_receive_buffer[0];
 			CurDataBuf = (char *)&temp_receive_buffer[sizeof(IPXHeaderType)];
 
@@ -1206,7 +1190,6 @@ int IPXManagerClass::Service(void) {
 	//	Loop until there are no more packets to process.
 	//------------------------------------------------------------------------
 	while (1) {
-
 		//.....................................................................
 		//	Check the BufferFlags for the "current" buffer; if it's empty,
 		//	break; out of the loop.
@@ -1232,7 +1215,6 @@ int IPXManagerClass::Service(void) {
 		//.....................................................................
 		packet = (CommHeaderType *)CurDataBuf;
 		if (packet->MagicNumber == GlobalChannel->Magic_Num()) {
-
 			//..................................................................
 			//	Put the packet in the Global Queue
 			//..................................................................
@@ -1320,7 +1302,9 @@ int IPXManagerClass::Service(void) {
  * HISTORY:                                                                *
  *   05/04/1995 BRR : Created.                                             *
  *=========================================================================*/
-int IPXManagerClass::Get_Bad_Connection(void) { return (BadConnection); } /* end of Get_Bad_Connection */
+int IPXManagerClass::Get_Bad_Connection(void) {
+	return (BadConnection);
+} /* end of Get_Bad_Connection */
 
 /***************************************************************************
  * IPXManagerClass::Global_Num_Send	-- reports # entries in send queue		*
@@ -1638,7 +1622,6 @@ void *IPXManagerClass::Oldest_Send(void) {
 	void *buf = NULL;
 
 	for (i = 0; i < NumConnections; i++) {
-
 		send_entry = NULL;
 
 		for (j = 0; j < Connection[i]->Queue->Num_Send(); j++) {
@@ -1654,7 +1637,6 @@ void *IPXManagerClass::Oldest_Send(void) {
 		}
 
 		if (send_entry != NULL) {
-
 			time = send_entry->FirstTime;
 
 			if (time < mintime) {
@@ -1723,8 +1705,7 @@ void IPXManagerClass::Set_Bridge(NetNumType bridge) {
  * HISTORY:                                                                *
  *   05/31/1995 BRR : Created.                                             *
  *=========================================================================*/
-void IPXManagerClass::Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart,
-				      int namecount) {
+void IPXManagerClass::Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart, int namecount) {
 	if (index == -1) {
 		GlobalChannel->Queue->Configure_Debug(type_offset, type_size, names, namestart, namecount);
 	} else if (Connection[index]) {
@@ -1830,16 +1811,15 @@ void IPXManagerClass::Mono_Debug_Print(int index, int refresh) {
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 int IPXManagerClass::Alloc_RealMode_Mem(void) {
-
 #ifdef WIN32
 	return (1);
 #else
 
 	union REGS regs;
 	struct SREGS sregs;
-	int size;		 // required size of allocation
+	int size; // required size of allocation
 	unsigned char *realmode; // start addresses of real-mode data
-	int realmodelen;	 // length of real-mode data
+	int realmodelen; // length of real-mode data
 	unsigned long func_val;
 	char *p; // for parsing buffer
 	int i;
@@ -1868,11 +1848,11 @@ int IPXManagerClass::Alloc_RealMode_Mem(void) {
 	//------------------------------------------------------------------------
 	realmode = (unsigned char *)Get_RM_IPX_Address();
 	realmodelen = Get_RM_IPX_Size();
-	size = realmodelen +		   // assembly routine & its data
+	size = realmodelen + // assembly routine & its data
 	       (FullPacketLen * NumBufs) + // array of packet buffers
-	       sizeof(ECBType) +	   // SendECB
-	       FullPacketLen +		   // SendHeader & SendBuf
-	       NumBufs;			   // BufferFlags
+	       sizeof(ECBType) + // SendECB
+	       FullPacketLen + // SendHeader & SendBuf
+	       NumBufs; // BufferFlags
 	if (size > 65535) {
 		return (0);
 	}
@@ -1886,8 +1866,8 @@ int IPXManagerClass::Alloc_RealMode_Mem(void) {
 	//------------------------------------------------------------------------
 	memset(&regs, 0, sizeof(regs));
 	segread(&sregs);
-	regs.x.eax = DPMI_ALLOC_DOS_MEM;	 // DPMI function to call
-	regs.x.ebx = ((size + 15) >> 4);	 // # paragraphs to allocate
+	regs.x.eax = DPMI_ALLOC_DOS_MEM; // DPMI function to call
+	regs.x.ebx = ((size + 15) >> 4); // # paragraphs to allocate
 	int386x(DPMI_INT, &regs, &regs, &sregs); // allocate the memory
 
 	//------------------------------------------------------------------------
@@ -1927,8 +1907,8 @@ int IPXManagerClass::Alloc_RealMode_Mem(void) {
 	if (regs.x.cflag) {
 		memset(&regs, 0, sizeof(regs));
 		segread(&sregs);
-		regs.x.eax = DPMI_FREE_DOS_MEM;		 // DPMI function to call
-		regs.x.edx = Selector;			 // ptr to free
+		regs.x.eax = DPMI_FREE_DOS_MEM; // DPMI function to call
+		regs.x.edx = Selector; // ptr to free
 		int386x(DPMI_INT, &regs, &regs, &sregs); // free the memory
 		return (0);
 	}
@@ -1976,8 +1956,7 @@ int IPXManagerClass::Alloc_RealMode_Mem(void) {
 	RealModeData->NumBufs = (short)NumBufs;
 	RealModeData->BufferFlags = (char *)((((long)BufferFlags & 0xffff0) << 12) | ((long)BufferFlags & 0x0000f));
 	RealModeData->PacketSize = (short)FullPacketLen;
-	RealModeData->FirstPacketBuf =
-	    (IPXHeaderType *)((((long)FirstHeaderBuf & 0xffff0) << 12) | ((long)FirstHeaderBuf & 0x0000f));
+	RealModeData->FirstPacketBuf = (IPXHeaderType *)((((long)FirstHeaderBuf & 0xffff0) << 12) | ((long)FirstHeaderBuf & 0x0000f));
 	RealModeData->CurIndex = 0;
 	RealModeData->CurPacketBuf = RealModeData->FirstPacketBuf;
 	RealModeData->Semaphore = 0;
@@ -2021,12 +2000,11 @@ int IPXManagerClass::Alloc_RealMode_Mem(void) {
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 int IPXManagerClass::Free_RealMode_Mem(void) {
-
 #ifdef WIN32
 
 	return (1);
 
-#else  // WIN32
+#else // WIN32
 
 	union REGS regs;
 	struct SREGS sregs;
@@ -2056,8 +2034,8 @@ int IPXManagerClass::Free_RealMode_Mem(void) {
 	//------------------------------------------------------------------------
 	memset(&regs, 0, sizeof(regs));
 	segread(&sregs);
-	regs.x.eax = DPMI_FREE_DOS_MEM;		 // DPMI function to call
-	regs.x.edx = Selector;			 // ptr to free
+	regs.x.eax = DPMI_FREE_DOS_MEM; // DPMI function to call
+	regs.x.edx = Selector; // ptr to free
 	int386x(DPMI_INT, &regs, &regs, &sregs); // free the memory
 
 	return (rc);

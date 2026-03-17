@@ -89,41 +89,34 @@ static inline int _Scale_To_256(int val) {
  *   06/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 RulesClass::RulesClass(void)
-    : TurboBoost("1.5"), AttackInterval(3), AttackDelay(5), PowerEmergencyFraction(fixed::_3_4), BadgerBombCount(1),
-      AirstripRatio(".12"), AirstripLimit(5), HelipadRatio(".12"), HelipadLimit(5), TeslaRatio(".16"), TeslaLimit(10),
-      AARatio(".14"), AALimit(10), DefenseRatio(".5"), DefenseLimit(40), WarRatio(".1"), WarLimit(2),
-      BarracksRatio(".16"), BarracksLimit(2), RefineryLimit(4), RefineryRatio(".16"), BaseSizeAdd(3), PowerSurplus(50),
-      InfantryReserve(2000), InfantryBaseMult(2), ChronoDuration(3), WaterCrateChance(".2"), SoloCrateMoney(2000),
-      GPSTechLevel(0), UnitCrateType(UNIT_NONE), PatrolTime(".016"), TeamDelay(".6"), CloakDelay(0), GameSpeedBias(1),
-      NervousBias(1), VortexRange(10 * CELL_LEPTON_W), VortexSpeed((MPHType)10), VortexDamage(200), VortexChance(".2"),
-      ExplosionSpread(fixed::_1_2), SupressRadius(CELL_LEPTON_W), ParaInfantryTechLevel(10), SpyPlaneTechLevel(10),
-      ParaBombTechLevel(10), MaxIQ(5), IQSuperWeapons(4), IQProduction(5), IQGuardArea(4), IQRepairSell(3), IQCrush(2),
-      IQScatter(3), IQContentScan(4), IQAircraft(4), IQHarvester(3), IQSellBack(2), SilverCrate(CRATE_HEAL_BASE),
-      WoodCrate(CRATE_MONEY), WaterCrate(CRATE_MONEY), CrateMinimum(1), CrateMaximum(255),
-      LZScanRadius(16 * CELL_LEPTON_W), MPDefaultMoney(3000), MPMaxMoney(10000), IsMPShadowGrow(true),
-      IsMPBasesOn(true), IsMPTiberiumGrow(true), IsMPCrates(true), IsMPAIPlayers(false), IsMPCaptureTheFlag(false),
-      DropZoneRadius(4 * CELL_LEPTON_W), MessageDelay(".6"), SavourDelay(".03"), AVMineDamage(1200), APMineDamage(1000),
-      MaxPlayers(8), BaseDefenseDelay(fixed::_1_4), SuspendPriority(20), SuspendDelay(2), SurvivorFraction(fixed::_1_2),
-      ReloadRate(".05"), AutocreateTime(5), BuildupTime(".05"), OreDumpRate(2), AtomDamage(1000),
-      IsComputerParanoid(true), IsCurleyShuffle(false), IsFlashLowPower(true), IsCompEasyBonus(true),
-      IsFineDifficulty(false), IsExplosiveHarvester(false), IsMCVDeploy(false), IsAllyReveal(true), IsSeparate(false),
-      IsTreeTarget(false), IsMineAware(true), IsTGrowth(true), IsTSpread(true), IsNamed(false), IsAutoCrush(false),
-      IsSmartDefense(false), IsScatter(false), IsChronoKill(true), ProneDamageBias(fixed::_1_2),
-      QuakeDamagePercent(".33"), QuakeChance(".2"), GrowthRate(2), ShroudRate(4), CrateTime(10), TimerWarning(2),
-      ChronoTechLevel(1), SonarTime(14), ChronoTime(3), ParaBombTime(14), ParaInfantryTime(2), ParaSaboteurTime(14),
-      SpyTime(2), IronCurtainTime(14), GPSTime(1), NukeTime(14), SpeakDelay(2), DamageDelay(1), Gravity(3),
-      GapShroudRadius(10), GapRegenInterval(".1"), RadarJamRadius(10 * CELL_LEPTON_W), Incoming(MPH_IMMOBILE),
-      MinDamage(1), MaxDamage(1000), RepairStep(5), RepairPercent(fixed::_1_4), URepairStep(5),
-      URepairPercent(fixed::_1_4), RepairRate(".016"), ConditionGreen(1), ConditionYellow(fixed::_1_2),
-      ConditionRed(fixed::_1_4), RandomAnimateTime(".083"), BailCount(28), GoldValue(35), GemValue(110),
-      AircraftMax(100), AnimMax(100), BuildingMax(500), BulletMax(40), FactoryMax(20), InfantryMax(500), OverlayMax(1),
-      SmudgeMax(1), TeamMax(60), TeamTypeMax(60), TemplateMax(1), TerrainMax(500), TriggerMax(60), UnitMax(500),
-      VesselMax(100), ProjectileMax(20), WeaponMax(20), WarheadMax(20), TrigTypeMax(80), CloseEnoughDistance(0x0280),
-      StrayDistance(0x0200), CrushDistance(0x0180), CrateRadius(0x0280), HomingScatter(0x0200),
-      BallisticScatter(0x0100), RefundPercent(fixed::_1_2), IronCurtainDuration(fixed::_1_2), BridgeStrength(1000),
-      BuildSpeedBias(1), C4Delay(".03"), RepairThreshhold(1000), PathDelay(".016"), MovieTime(fixed::_1_4),
-      TiberiumShortScan(0x0600), TiberiumLongScan(0x2000), HealthBarDisplayMode(HB_SELECTED),
-      ResourceBarDisplayMode(RB_SELECTED) {
+	: TurboBoost("1.5"), AttackInterval(3), AttackDelay(5), PowerEmergencyFraction(fixed::_3_4), BadgerBombCount(1), AirstripRatio(".12"),
+	  AirstripLimit(5), HelipadRatio(".12"), HelipadLimit(5), TeslaRatio(".16"), TeslaLimit(10), AARatio(".14"), AALimit(10), DefenseRatio(".5"),
+	  DefenseLimit(40), WarRatio(".1"), WarLimit(2), BarracksRatio(".16"), BarracksLimit(2), RefineryLimit(4), RefineryRatio(".16"),
+	  BaseSizeAdd(3), PowerSurplus(50), InfantryReserve(2000), InfantryBaseMult(2), ChronoDuration(3), WaterCrateChance(".2"),
+	  SoloCrateMoney(2000), GPSTechLevel(0), UnitCrateType(UNIT_NONE), PatrolTime(".016"), TeamDelay(".6"), CloakDelay(0), GameSpeedBias(1),
+	  NervousBias(1), VortexRange(10 * CELL_LEPTON_W), VortexSpeed((MPHType)10), VortexDamage(200), VortexChance(".2"),
+	  ExplosionSpread(fixed::_1_2), SupressRadius(CELL_LEPTON_W), ParaInfantryTechLevel(10), SpyPlaneTechLevel(10), ParaBombTechLevel(10),
+	  MaxIQ(5), IQSuperWeapons(4), IQProduction(5), IQGuardArea(4), IQRepairSell(3), IQCrush(2), IQScatter(3), IQContentScan(4), IQAircraft(4),
+	  IQHarvester(3), IQSellBack(2), SilverCrate(CRATE_HEAL_BASE), WoodCrate(CRATE_MONEY), WaterCrate(CRATE_MONEY), CrateMinimum(1),
+	  CrateMaximum(255), LZScanRadius(16 * CELL_LEPTON_W), MPDefaultMoney(3000), MPMaxMoney(10000), IsMPShadowGrow(true), IsMPBasesOn(true),
+	  IsMPTiberiumGrow(true), IsMPCrates(true), IsMPAIPlayers(false), IsMPCaptureTheFlag(false), DropZoneRadius(4 * CELL_LEPTON_W),
+	  MessageDelay(".6"), SavourDelay(".03"), AVMineDamage(1200), APMineDamage(1000), MaxPlayers(8), BaseDefenseDelay(fixed::_1_4),
+	  SuspendPriority(20), SuspendDelay(2), SurvivorFraction(fixed::_1_2), ReloadRate(".05"), AutocreateTime(5), BuildupTime(".05"),
+	  OreDumpRate(2), AtomDamage(1000), IsComputerParanoid(true), IsCurleyShuffle(false), IsFlashLowPower(true), IsCompEasyBonus(true),
+	  IsFineDifficulty(false), IsExplosiveHarvester(false), IsMCVDeploy(false), IsAllyReveal(true), IsSeparate(false), IsTreeTarget(false),
+	  IsMineAware(true), IsTGrowth(true), IsTSpread(true), IsNamed(false), IsAutoCrush(false), IsSmartDefense(false), IsScatter(false),
+	  IsChronoKill(true), ProneDamageBias(fixed::_1_2), QuakeDamagePercent(".33"), QuakeChance(".2"), GrowthRate(2), ShroudRate(4), CrateTime(10),
+	  TimerWarning(2), ChronoTechLevel(1), SonarTime(14), ChronoTime(3), ParaBombTime(14), ParaInfantryTime(2), ParaSaboteurTime(14), SpyTime(2),
+	  IronCurtainTime(14), GPSTime(1), NukeTime(14), SpeakDelay(2), DamageDelay(1), Gravity(3), GapShroudRadius(10), GapRegenInterval(".1"),
+	  RadarJamRadius(10 * CELL_LEPTON_W), Incoming(MPH_IMMOBILE), MinDamage(1), MaxDamage(1000), RepairStep(5), RepairPercent(fixed::_1_4),
+	  URepairStep(5), URepairPercent(fixed::_1_4), RepairRate(".016"), ConditionGreen(1), ConditionYellow(fixed::_1_2), ConditionRed(fixed::_1_4),
+	  RandomAnimateTime(".083"), BailCount(28), GoldValue(35), GemValue(110), AircraftMax(100), AnimMax(100), BuildingMax(500), BulletMax(40),
+	  FactoryMax(20), InfantryMax(500), OverlayMax(1), SmudgeMax(1), TeamMax(60), TeamTypeMax(60), TemplateMax(1), TerrainMax(500),
+	  TriggerMax(60), UnitMax(500), VesselMax(100), ProjectileMax(20), WeaponMax(20), WarheadMax(20), TrigTypeMax(80),
+	  CloseEnoughDistance(0x0280), StrayDistance(0x0200), CrushDistance(0x0180), CrateRadius(0x0280), HomingScatter(0x0200),
+	  BallisticScatter(0x0100), RefundPercent(fixed::_1_2), IronCurtainDuration(fixed::_1_2), BridgeStrength(1000), BuildSpeedBias(1),
+	  C4Delay(".03"), RepairThreshhold(1000), PathDelay(".016"), MovieTime(fixed::_1_4), TiberiumShortScan(0x0600), TiberiumLongScan(0x2000),
+	  HealthBarDisplayMode(HB_SELECTED), ResourceBarDisplayMode(RB_SELECTED) {
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	NewUnitsEnabled = SecretUnitsEnabled = 0;
 	MTankDistance = 30;
@@ -132,9 +125,9 @@ RulesClass::RulesClass(void)
 	QuakeInfantryDamage = 0;
 	QuakeDelay = 120;
 	ChronoTankDuration = 0x300;
-#ifdef FIXIT_ENGINEER			      //	checked - ajw 9/28/98
+#ifdef FIXIT_ENGINEER //	checked - ajw 9/28/98
 	EngineerDamage = (fixed)1 / (fixed)3; // Amount of damage an engineer does
-	EngineerCaptureLevel = ConditionRed;  // Building damage level before engineer can capture
+	EngineerCaptureLevel = ConditionRed; // Building damage level before engineer can capture
 #endif
 #ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
 	CarrierLaunchDelay = 60;
@@ -249,11 +242,10 @@ bool RulesClass::General(CCINIClass &ini) {
 #ifdef FIXIT_ENGINEER //	checked - ajw 9/28/98
 		//	Engineer changing fields were specifically left out of Aftrmath.ini, thus these values are not
 		// found to set. ajw 	Implies interesting security hole if user creates a separate Aftrmath.ini file!
-		EngineerDamage =
-		    ini.Get_Fixed(AFTERMATH, "EngineerDamage", EngineerDamage); // Amount of damage an engineer does
-		EngineerCaptureLevel =
-		    ini.Get_Fixed(AFTERMATH, "EngineerCaptureLevel",
-				  EngineerCaptureLevel); // Building damage level before engineer can capture
+		EngineerDamage = ini.Get_Fixed(AFTERMATH, "EngineerDamage", EngineerDamage); // Amount of damage an engineer does
+		EngineerCaptureLevel = ini.Get_Fixed(AFTERMATH,
+						     "EngineerCaptureLevel",
+						     EngineerCaptureLevel); // Building damage level before engineer can capture
 #endif
 	}
 
@@ -624,7 +616,6 @@ bool RulesClass::Powerups(CCINIClass &ini) {
 		for (CrateType crate = CRATE_FIRST; crate < CRATE_COUNT; crate++) {
 			char buffer[128];
 			if (ini.Get_String(POWERUPS, CrateNames[crate], "0,NONE", buffer, sizeof(buffer))) {
-
 				/*
 				**	Share odds.
 				*/
@@ -681,8 +672,7 @@ bool RulesClass::Land_Types(CCINIClass &ini) {
 	**	Fetch the movement characteristic data for terrain types.
 	*/
 	for (LandType land = LAND_FIRST; land < LAND_COUNT; land++) {
-		static char const *_lands[LAND_COUNT] = {"Clear", "Road",  "Water", "Rock", "Wall",
-							 "Ore",	  "Beach", "Rough", "River"};
+		static char const *_lands[LAND_COUNT] = { "Clear", "Road", "Water", "Rock", "Wall", "Ore", "Beach", "Rough", "River" };
 
 		GroundType *gptr = &Ground[land];
 
@@ -720,7 +710,6 @@ bool RulesClass::Themes(CCINIClass &ini) {
 	if (ini.Is_Present(THEMECONTROL)) {
 		for (ThemeType theme = THEME_FIRST; theme < THEME_COUNT; theme++) {
 			if (ini.Is_Present(THEMECONTROL, Theme.Base_Name(theme))) {
-
 				char buffer[128];
 				int scen = 1;
 				int owners = HOUSEF_ALLIES | HOUSEF_SOVIET | HOUSEF_OTHERS;
@@ -888,4 +877,6 @@ bool RulesClass::Difficulty(CCINIClass &ini) {
  * HISTORY:                                                                                    *
  *   10/24/2019 SKY : Created.                                                                 *
  *=============================================================================================*/
-bool Is_MCV_Deploy() { return Special.UseMCVDeploy ? Special.IsMCVDeploy : Rule.IsMCVDeploy; }
+bool Is_MCV_Deploy() {
+	return Special.UseMCVDeploy ? Special.IsMCVDeploy : Rule.IsMCVDeploy;
+}

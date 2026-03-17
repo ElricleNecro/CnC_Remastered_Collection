@@ -123,11 +123,15 @@ public:
 	**	Constructors, Destructors, and overloaded operators.
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 	UnitClass(UnitType classid, HousesType house);
 	UnitClass(NoInitClass const &x) : DriveClass(x), Class(x), Reload(x), SecondaryFacing(x) {};
-	operator UnitType(void) const { return Class->Type; };
+	operator UnitType(void) const {
+		return Class->Type;
+	};
 	virtual ~UnitClass(void);
 
 	/*---------------------------------------------------------------------
@@ -201,8 +205,7 @@ public:
 	/*
 	**	Combat related.
 	*/
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0, bool forced = false);
 	virtual BulletClass *Fire_At(TARGET target, int which = 0);
 
 	/*
@@ -256,7 +259,9 @@ public:
 	*/
 	static void Read_INI(CCINIClass &ini);
 	static void Write_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "UNITS"; };
+	static char *INI_Name(void) {
+		return "UNITS";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 };

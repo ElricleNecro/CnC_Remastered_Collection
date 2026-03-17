@@ -53,13 +53,22 @@ typedef int bool;
 
 class CrateClass {
 public:
-	CrateClass(void) : Timer(NoInitClass()), Cell(-1) {}
-	void Init(void) { Make_Invalid(); }
+	CrateClass(void) : Timer(NoInitClass()), Cell(-1) {
+	}
+	void Init(void) {
+		Make_Invalid();
+	}
 	bool Create_Crate(CELL cell);
-	bool Is_Here(CELL cell) const { return (Is_Valid() && cell == Cell); }
+	bool Is_Here(CELL cell) const {
+		return (Is_Valid() && cell == Cell);
+	}
 	bool Remove_It(void);
-	bool Is_Expired(void) const { return (Is_Valid() && Timer == 0); }
-	bool Is_Valid(void) const { return (Cell != -1); }
+	bool Is_Expired(void) const {
+		return (Is_Valid() && Timer == 0);
+	}
+	bool Is_Valid(void) const {
+		return (Cell != -1);
+	}
 
 private:
 	static bool Put_Crate(CELL &cell);

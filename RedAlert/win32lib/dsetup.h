@@ -48,12 +48,12 @@ extern "C" {
 #define MAX_INFLINE (16 * 1024)
 #define MAX_DESCRIPTION 256
 
-#define DSETUP_DDRAW 0x00000001	    /* install DirectDraw           */
-#define DSETUP_DSOUND 0x00000002    /* install DirectSound          */
-#define DSETUP_DPLAY 0x00000004	    /* install DirectPlay           */
-#define DSETUP_DDRAWDRV 0x00000008  /* install DirectDraw Drivers   */
+#define DSETUP_DDRAW 0x00000001 /* install DirectDraw           */
+#define DSETUP_DSOUND 0x00000002 /* install DirectSound          */
+#define DSETUP_DPLAY 0x00000004 /* install DirectPlay           */
+#define DSETUP_DDRAWDRV 0x00000008 /* install DirectDraw Drivers   */
 #define DSETUP_DSOUNDDRV 0x00000010 /* install DirectSound Drivers  */
-#define DSETUP_DPLAYSP 0x00000020   /* install DirectPlay Providers */
+#define DSETUP_DPLAYSP 0x00000020 /* install DirectPlay Providers */
 #define DSETUP_DIRECTX DSETUP_DDRAW | DSETUP_DSOUND | DSETUP_DPLAY | DSETUP_DDRAWDRV | DSETUP_DSOUNDDRV | DSETUP_DPLAYSP
 #define DSETUP_REINSTALL 0x00000080 /* install DirectX even if existing components have the same version */
 

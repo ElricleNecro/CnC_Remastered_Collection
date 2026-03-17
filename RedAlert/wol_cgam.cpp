@@ -56,7 +56,7 @@ CREATEGAMEINFO WOL_CreateGame_Dialog(WolapiObject *pWO) {
 	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // coord of x-center
 
 	int d_txt8_h = 11 * RESFACTOR; // ht of 8-pt text
-	int d_margin = 7 * RESFACTOR;  // margin width/height
+	int d_margin = 7 * RESFACTOR; // margin width/height
 	int x_margin = 16 * RESFACTOR; // margin width/height
 
 	int top_margin = 0;
@@ -128,8 +128,7 @@ CREATEGAMEINFO WOL_CreateGame_Dialog(WolapiObject *pWO) {
 	TextButtonClass CancelBtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w);
 
 	StaticButtonClass PlayerCountStatic(0, "               ", TPF_TEXT, d_gaugeplayers_x, d_gaugeplayers_y - 16);
-	GaugeClass PlayerCountGauge(GAUGE_PLAYERCOUNT, d_gaugeplayers_x, d_gaugeplayers_y, d_gaugeplayers_w,
-				    d_gaugeplayers_h);
+	GaugeClass PlayerCountGauge(GAUGE_PLAYERCOUNT, d_gaugeplayers_x, d_gaugeplayers_y, d_gaugeplayers_w, d_gaugeplayers_h);
 
 	if (pWO->bEgg8Player)
 		PlayerCountGauge.Set_Maximum(6);
@@ -137,19 +136,48 @@ CREATEGAMEINFO WOL_CreateGame_Dialog(WolapiObject *pWO) {
 		PlayerCountGauge.Set_Maximum(2);
 	PlayerCountGauge.Set_Value(cgiReturn.iPlayerMax - 2);
 
-	BigCheckBoxClass TournamentCheck(CHECK_TOURNAMENT, d_checktourn_x, d_checktourn_y, d_checktourn_w,
-					 d_checktourn_h, TXT_WOL_CG_TOURNAMENT, TPF_6PT_GRAD | TPF_NOSHADOW,
+	BigCheckBoxClass TournamentCheck(CHECK_TOURNAMENT,
+					 d_checktourn_x,
+					 d_checktourn_y,
+					 d_checktourn_w,
+					 d_checktourn_h,
+					 TXT_WOL_CG_TOURNAMENT,
+					 TPF_6PT_GRAD | TPF_NOSHADOW,
 					 cgiReturn.bTournament);
 
-	BigCheckBoxClass PrivacyCheck(CHECK_PRIVACY, d_checkpriv_x, d_checkpriv_y, d_checkpriv_w, d_checkpriv_h,
-				      TXT_WOL_CG_PRIVACY, TPF_6PT_GRAD | TPF_NOSHADOW, cgiReturn.bPrivate);
+	BigCheckBoxClass PrivacyCheck(CHECK_PRIVACY,
+				      d_checkpriv_x,
+				      d_checkpriv_y,
+				      d_checkpriv_w,
+				      d_checkpriv_h,
+				      TXT_WOL_CG_PRIVACY,
+				      TPF_6PT_GRAD | TPF_NOSHADOW,
+				      cgiReturn.bPrivate);
 
-	BigCheckBoxClass RA_Check(CHECK_RA, d_checkra_x, d_checkra_y, d_checkra_w, d_checkra_h, TXT_WOL_CG_RAGAME,
-				  TPF_6PT_GRAD | TPF_NOSHADOW, cgiReturn.GameKind == CREATEGAMEINFO::RAGAME);
-	BigCheckBoxClass CS_Check(CHECK_CS, d_checkcs_x, d_checkcs_y, d_checkcs_w, d_checkcs_h, TXT_WOL_CG_CSGAME,
-				  TPF_6PT_GRAD | TPF_NOSHADOW, cgiReturn.GameKind == CREATEGAMEINFO::CSGAME);
-	BigCheckBoxClass AM_Check(CHECK_AM, d_checkam_x, d_checkam_y, d_checkam_w, d_checkam_h, TXT_WOL_CG_AMGAME,
-				  TPF_6PT_GRAD | TPF_NOSHADOW, cgiReturn.GameKind == CREATEGAMEINFO::AMGAME);
+	BigCheckBoxClass RA_Check(CHECK_RA,
+				  d_checkra_x,
+				  d_checkra_y,
+				  d_checkra_w,
+				  d_checkra_h,
+				  TXT_WOL_CG_RAGAME,
+				  TPF_6PT_GRAD | TPF_NOSHADOW,
+				  cgiReturn.GameKind == CREATEGAMEINFO::RAGAME);
+	BigCheckBoxClass CS_Check(CHECK_CS,
+				  d_checkcs_x,
+				  d_checkcs_y,
+				  d_checkcs_w,
+				  d_checkcs_h,
+				  TXT_WOL_CG_CSGAME,
+				  TPF_6PT_GRAD | TPF_NOSHADOW,
+				  cgiReturn.GameKind == CREATEGAMEINFO::CSGAME);
+	BigCheckBoxClass AM_Check(CHECK_AM,
+				  d_checkam_x,
+				  d_checkam_y,
+				  d_checkam_w,
+				  d_checkam_h,
+				  TXT_WOL_CG_AMGAME,
+				  TPF_6PT_GRAD | TPF_NOSHADOW,
+				  cgiReturn.GameKind == CREATEGAMEINFO::AMGAME);
 
 	if (!Is_Counterstrike_Installed())
 		CS_Check.Disable();
@@ -186,7 +214,6 @@ CREATEGAMEINFO WOL_CreateGame_Dialog(WolapiObject *pWO) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -207,7 +234,6 @@ CREATEGAMEINFO WOL_CreateGame_Dialog(WolapiObject *pWO) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			/*
 			**	Display the dialog box.
 			*/
@@ -333,8 +359,7 @@ CREATEGAMEINFO WOL_CreateGame_Dialog(WolapiObject *pWO) {
 		//	Get a password for the channel.
 		Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK,
 				 TPF_TEXT); //	Required before String_Pixel_Width() call, for god's sake.
-		SimpleEditDlgClass *pEditDlg =
-		    new SimpleEditDlgClass(300, TXT_WOL_CREATEPRIVGAMETITLE, TXT_WOL_PASSPROMPT, WOL_CHANKEY_LEN_MAX);
+		SimpleEditDlgClass *pEditDlg = new SimpleEditDlgClass(300, TXT_WOL_CREATEPRIVGAMETITLE, TXT_WOL_PASSPROMPT, WOL_CHANKEY_LEN_MAX);
 		pWO->bPump_In_Call_Back = true;
 		if (strcmp(pEditDlg->Show(), Text_String(TXT_OK)) == 0 && *pEditDlg->szEdit)
 			strcpy(cgiReturn.szPassword, pEditDlg->szEdit);

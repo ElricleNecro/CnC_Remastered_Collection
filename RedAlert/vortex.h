@@ -38,10 +38,9 @@
 #define VORTEX_H
 
 #define MAX_REMAP_SHADES 16 // Number of lookup tables required for vortex shading.
-#define VORTEX_FRAMES 16    // Number of frames in one complete rotation of the vortex.
+#define VORTEX_FRAMES 16 // Number of frames in one complete rotation of the vortex.
 
 class ChronalVortexClass {
-
 public:
 	/*
 	** Constructor and destructor.
@@ -90,7 +89,9 @@ public:
 	/*
 	** Returns true of vortex is currently active.
 	*/
-	bool Is_Active(void) { return (Active); };
+	bool Is_Active(void) {
+		return (Active);
+	};
 
 	/*
 	** Makes the vortex attack the specified target. Target must be in range of the vortex.
@@ -105,25 +106,39 @@ public:
 	/*
 	** Members to allow read access to private data
 	*/
-	COORDINATE Get_Position(void) { return (Position); };
-	int Get_Range(void) { return (Range); };
-	int Get_Speed(void) { return (Speed); };
-	int Get_Damage(void) { return (Damage); };
+	COORDINATE Get_Position(void) {
+		return (Position);
+	};
+	int Get_Range(void) {
+		return (Range);
+	};
+	int Get_Speed(void) {
+		return (Speed);
+	};
+	int Get_Damage(void) {
+		return (Damage);
+	};
 
 	/*
 	** Members to allow write access to private data.
 	*/
-	void Set_Range(int range) { Range = range; };
-	void Set_Speed(int speed) { Speed = speed; };
-	void Set_Damage(int damage) { Damage = damage; };
+	void Set_Range(int range) {
+		Range = range;
+	};
+	void Set_Speed(int speed) {
+		Speed = speed;
+	};
+	void Set_Damage(int damage) {
+		Damage = damage;
+	};
 
 	/*
 	** Possible states the vortex can be in.
 	*/
 	typedef enum AnimStateType : unsigned char {
-		STATE_GROW,   // Vortex has just appeared and is growing larger
+		STATE_GROW, // Vortex has just appeared and is growing larger
 		STATE_ROTATE, // Vortex is rotating
-		STATE_SHRINK  // Vortex is shrinking and about to disappear
+		STATE_SHRINK // Vortex is shrinking and about to disappear
 	} AnimStateType;
 
 private:
@@ -131,8 +146,7 @@ private:
 	** Members for setting up the lookup tables.
 	*/
 	void Build_Fading_Table(PaletteClass const &palette, void *dest, int color, int frac);
-	void Coordinate_Remap(GraphicViewPortClass *inbuffer, int x, int y, int width, int height,
-			      unsigned char *remap_table);
+	void Coordinate_Remap(GraphicViewPortClass *inbuffer, int x, int y, int width, int height, unsigned char *remap_table);
 
 	/*
 	** Misc internal functions

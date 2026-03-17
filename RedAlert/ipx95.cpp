@@ -49,17 +49,31 @@
 
 // Stub in old IPX here ST - 12/20/2018 1:53PM
 extern "C" {
-extern BOOL __stdcall IPX_Initialise(void) { return 0; }
-extern BOOL __stdcall IPX_Get_Outstanding_Buffer95(unsigned char *buffer) { return 0; }
-extern void __stdcall IPX_Shut_Down95(void) {}
+extern BOOL __stdcall IPX_Initialise(void) {
+	return 0;
+}
+extern BOOL __stdcall IPX_Get_Outstanding_Buffer95(unsigned char *buffer) {
+	return 0;
+}
+extern void __stdcall IPX_Shut_Down95(void) {
+}
 extern int __stdcall IPX_Send_Packet95(unsigned char *, unsigned char *, int, unsigned char *, unsigned char *) {
 	return 0;
 }
-extern int __stdcall IPX_Broadcast_Packet95(unsigned char *, int) { return 0; }
-extern BOOL __stdcall IPX_Start_Listening95(void) { return 0; }
-extern int __stdcall IPX_Open_Socket95(int socket) { return 0; }
-extern void __stdcall IPX_Close_Socket95(int socket) {}
-extern int __stdcall IPX_Get_Connection_Number95(void) { return 0; }
+extern int __stdcall IPX_Broadcast_Packet95(unsigned char *, int) {
+	return 0;
+}
+extern BOOL __stdcall IPX_Start_Listening95(void) {
+	return 0;
+}
+extern int __stdcall IPX_Open_Socket95(int socket) {
+	return 0;
+}
+extern void __stdcall IPX_Close_Socket95(int socket) {
+}
+extern int __stdcall IPX_Get_Connection_Number95(void) {
+	return 0;
+}
 extern int __stdcall IPX_Get_Local_Target95(unsigned char *, unsigned char *, unsigned short, unsigned char *) {
 	return 0;
 }
@@ -87,17 +101,17 @@ IPXGetConnectionNumber95Type IPX_Get_Connection_Number95 = NULL;
 IPXGetLocalTarget95 IPX_Get_Local_Target95 = NULL;
 //}
 
-char const *FunctionNames[] = {"_IPX_Initialise",
-			       "_IPX_Get_Outstanding_Buffer95",
-			       "_IPX_Shut_Down95",
-			       "_IPX_Send_Packet95",
-			       "_IPX_Broadcast_Packet95",
-			       "_IPX_Start_Listening95",
-			       "_IPX_Open_Socket95",
-			       "_IPX_Close_Socket95",
-			       "_IPX_Get_Connection_Number95",
-			       "_IPX_Get_Local_Target95",
-			       NULL};
+char const *FunctionNames[] = { "_IPX_Initialise",
+				"_IPX_Get_Outstanding_Buffer95",
+				"_IPX_Shut_Down95",
+				"_IPX_Send_Packet95",
+				"_IPX_Broadcast_Packet95",
+				"_IPX_Start_Listening95",
+				"_IPX_Open_Socket95",
+				"_IPX_Close_Socket95",
+				"_IPX_Get_Connection_Number95",
+				"_IPX_Get_Local_Target95",
+				NULL };
 #endif
 
 extern void Get_OS_Version(void);
@@ -132,7 +146,6 @@ bool Load_IPX_Dll(void) {
 	SetErrorMode(0);
 
 	if (IpxDllInstance) {
-
 		const char *function_name;
 		unsigned long *fptr = (unsigned long *)&IPX_Initialise;
 		int count = 0;
@@ -183,7 +196,7 @@ void Unload_IPX_Dll(void) {
 
 int IPX_Open_Socket(unsigned short socket) {
 	return -1; // ST 5/13/2019
-		   // return ( IPX_Open_Socket95((int)socket));
+		// return ( IPX_Open_Socket95((int)socket));
 }
 
 int IPX_Close_Socket(unsigned short socket) {
@@ -193,12 +206,12 @@ int IPX_Close_Socket(unsigned short socket) {
 
 int IPX_Get_Connection_Number(void) {
 	return -1; // ST 5/13/2019
-		   // return (IPX_Get_Connection_Number95());
+		// return (IPX_Get_Connection_Number95());
 }
 
 int IPX_Broadcast_Packet(unsigned char *buf, int buflen) {
 	return 0; // ST 5/13/2019
-		  // return(IPX_Broadcast_Packet95(buf, buflen));
+		// return(IPX_Broadcast_Packet95(buf, buflen));
 }
 
 #if (0) // ST 5/13/2019
@@ -207,12 +220,11 @@ extern void __cdecl Int3(void);
 }
 #endif
 
-int IPX_Get_Local_Target(unsigned char *dest_network, unsigned char *dest_node, unsigned short dest_socket,
-			 unsigned char *bridge_address) {
+int IPX_Get_Local_Target(unsigned char *dest_network, unsigned char *dest_node, unsigned short dest_socket, unsigned char *bridge_address) {
 	// Int3();
 
 	return 0; // ST 5/13/2019
-		  // return (IPX_Get_Local_Target95(dest_network, dest_node, dest_socket, bridge_address));
+		// return (IPX_Get_Local_Target95(dest_network, dest_node, dest_socket, bridge_address));
 }
 
 #endif // WIN32

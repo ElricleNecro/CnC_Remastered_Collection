@@ -92,14 +92,7 @@ char SidebarClass::StripClass::ClockTranslucentTable[(1 + 1) * 256];
 */
 // TheaterType SidebarClass::StripClass::LastTheater = THEATER_NONE;
 
-typedef enum ButtonNumberType {
-	BUTTON_RADAR = 100,
-	BUTTON_REPAIR,
-	BUTTON_DEMOLISH,
-	BUTTON_UPGRADE,
-	BUTTON_SELECT,
-	BUTTON_ZOOM
-} ButtonNumberType;
+typedef enum ButtonNumberType { BUTTON_RADAR = 100, BUTTON_REPAIR, BUTTON_DEMOLISH, BUTTON_UPGRADE, BUTTON_SELECT, BUTTON_ZOOM } ButtonNumberType;
 
 /*
 ** Sidebar buttons
@@ -134,8 +127,7 @@ void const *SidebarClass::StripClass::SpecialShapes[SPC_COUNT];
  * HISTORY:                                                                                    *
  *   11/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-SidebarClass::SidebarClass(void)
-    : IsSidebarActive(false), IsToRedraw(true), IsRepairActive(false), IsUpgradeActive(false), IsDemolishActive(false) {
+SidebarClass::SidebarClass(void) : IsSidebarActive(false), IsToRedraw(true), IsRepairActive(false), IsUpgradeActive(false), IsDemolishActive(false) {
 	/*
 	**	This sets up the clipping window. This window is used by the shape drawing
 	**	code so that as the sidebar buildable buttons scroll, they get properly
@@ -255,7 +247,6 @@ void SidebarClass::One_Time(void) {
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 void SidebarClass::Init_Clear(void) {
-
 	PowerClass::Init_Clear();
 
 	IsToRedraw = true;
@@ -288,7 +279,6 @@ void SidebarClass::Init_IO(void) {
 	** Add the sidebar's buttons only if we're not in editor mode.
 	*/
 	if (!Debug_Map) {
-
 		Repair.IsSticky = true;
 		Repair.ID = BUTTON_REPAIR;
 		Repair.X = (0x1f2 / 2) * RESFACTOR;
@@ -375,14 +365,14 @@ void SidebarClass::Init_Theater(TheaterType theater) {
  *=============================================================================================*/
 void SidebarClass::Reload_Sidebar(void) {
 	static char *sidebarnames[] = {
-	    "SIDE?NA.SHP", // NATO
-	    "SIDE?NA.SHP",
-	    "SIDE?US.SHP", // USSR
-	    "SIDE?NA.SHP",
-	    "SIDE?US.SHP", // UKRAINE
-	    "SIDE?NA.SHP", "SIDE?NA.SHP", "SIDE?NA.SHP",
-	    "SIDE?NA.SHP", // HOUSE_GOOD
-	    "SIDE?US.SHP"  // HOUSE_BAD
+		"SIDE?NA.SHP", // NATO
+		"SIDE?NA.SHP",
+		"SIDE?US.SHP", // USSR
+		"SIDE?NA.SHP",
+		"SIDE?US.SHP", // UKRAINE
+		"SIDE?NA.SHP", "SIDE?NA.SHP", "SIDE?NA.SHP",
+		"SIDE?NA.SHP", // HOUSE_GOOD
+		"SIDE?US.SHP" // HOUSE_BAD
 	};
 	int houseloaded = 0;
 
@@ -740,10 +730,8 @@ void SidebarClass::Draw_It(bool complete) {
 			** The sidebar shape is too big in 640x400 so it needs to be drawn in three chunks.
 			*/
 			CC_Draw_Shape(SidebarShape, 0, SIDE_X * RESFACTOR, 8 * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL);
-			CC_Draw_Shape(SidebarMiddleShape, shape, SIDE_X * RESFACTOR, (8 + 80) * RESFACTOR, WINDOW_MAIN,
-				      SHAPE_WIN_REL);
-			CC_Draw_Shape(SidebarBottomShape, shape, SIDE_X * RESFACTOR, (8 + 80 + 50) * RESFACTOR,
-				      WINDOW_MAIN, SHAPE_WIN_REL);
+			CC_Draw_Shape(SidebarMiddleShape, shape, SIDE_X * RESFACTOR, (8 + 80) * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL);
+			CC_Draw_Shape(SidebarBottomShape, shape, SIDE_X * RESFACTOR, (8 + 80 + 50) * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL);
 
 			Repair.Draw_Me(true);
 			Upgrade.Draw_Me(true);
@@ -822,7 +810,6 @@ void SidebarClass::AI(KeyNumType &input, int x, int y) {
 
 #ifdef NEVER
 	if (IsSidebarActive && !Debug_Map) {
-
 		if (input == KN_DOWN) {
 			int scr = 0;
 			scr |= Column[0].Scroll(false);
@@ -847,7 +834,6 @@ void SidebarClass::AI(KeyNumType &input, int x, int y) {
 #endif
 
 	if (IsSidebarActive) {
-
 		/*
 		**	If there are any buildings in the payer's inventory, then allow the repair
 		**	option.
@@ -980,7 +966,6 @@ bool SidebarClass::Activate(int control) {
 	**	be done to change it.
 	*/
 	if (IsSidebarActive != old) {
-
 		/*
 		**	If the sidebar is activated but was on the right side of the screen, then
 		**	activate it on the left side of the screen.
@@ -1041,14 +1026,13 @@ bool SidebarClass::Activate(int control) {
  *   12/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 SidebarClass::StripClass::StripClass(InitClass const &)
-    : X(0), Y(0), ID(0), IsToRedraw(true), IsBuilding(false), IsScrollingDown(false), IsScrolling(false), Flasher(-1),
-      TopIndex(0), Scroller(0), Slid(0), BuildableCount(0) {
+	: X(0), Y(0), ID(0), IsToRedraw(true), IsBuilding(false), IsScrollingDown(false), IsScrolling(false), Flasher(-1), TopIndex(0), Scroller(0),
+	  Slid(0), BuildableCount(0) {
 	for (int index = 0; index < MAX_BUILDABLES; index++) {
 		Buildables[index].BuildableID = 0;
 		Buildables[index].BuildableType = RTTI_NONE;
 		Buildables[index].Factory = -1;
-		Buildables[index].BuildableViaCapture =
-		    false; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
+		Buildables[index].BuildableViaCapture = false; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
 	}
 }
 
@@ -1133,8 +1117,7 @@ void SidebarClass::StripClass::Init_Clear(void) {
 		Buildables[index].BuildableID = 0;
 		Buildables[index].BuildableType = RTTI_NONE;
 		Buildables[index].Factory = -1;
-		Buildables[index].BuildableViaCapture =
-		    false; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
+		Buildables[index].BuildableViaCapture = false; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
 	}
 }
 
@@ -1166,7 +1149,7 @@ void SidebarClass::StripClass::Init_IO(int id) {
 #else
 	UpButton[ID].Set_Shape(MFCD::Retrieve("STUP_FIX.SHP"));
 #endif
-#else  // FRENCH
+#else // FRENCH
 	UpButton[ID].Set_Shape(MFCD::Retrieve("STRIPUP.SHP"));
 #endif // FRENCH
 
@@ -1207,13 +1190,11 @@ void SidebarClass::StripClass::Init_IO(int id) {
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 void SidebarClass::StripClass::Init_Theater(TheaterType theater) {
-
 	Reload_LogoShapes();
 
 	if ((theater != THEATER_NONE) && (theater != ::LastTheater)) {
-
 		static TLucentType const ClockCols[1] = {
-		    {GREEN, BLACK, 100, 0} //			{GREEN, LTGREY, 180, 0}
+			{ GREEN, BLACK, 100, 0 } //			{GREEN, LTGREY, 180, 0}
 		};
 
 		/*
@@ -1241,14 +1222,14 @@ void SidebarClass::StripClass::Reload_LogoShapes(void) {
 	** Load hi-res strip art here since it is player side specific
 	*/
 	static char *stripnames[] = {
-	    "stripna.shp", // Nato
-	    "stripna.shp",
-	    "stripus.shp", // USSR
-	    "stripna.shp",
-	    "stripus.shp", // UKRAINE
-	    "stripna.shp", "stripna.shp", "stripna.shp",
-	    "stripna.shp", // HOUSE_GOOD
-	    "stripus.shp", // HOUSE_BAD
+		"stripna.shp", // Nato
+		"stripna.shp",
+		"stripus.shp", // USSR
+		"stripna.shp",
+		"stripus.shp", // UKRAINE
+		"stripna.shp", "stripna.shp", "stripna.shp",
+		"stripna.shp", // HOUSE_GOOD
+		"stripus.shp", // HOUSE_BAD
 	};
 	int houseloaded = 0;
 
@@ -1452,7 +1433,6 @@ bool SidebarClass::StripClass::AI(KeyNumType &input, int, int) {
 		if (BuildableCount <= MAX_VISIBLE) {
 			Scroller = 0;
 		} else {
-
 			/*
 			**	Top of list is moving toward lower ordered entries in the object list. It looks like
 			**	the "window" to the object list is moving up even though the actual object images are
@@ -1531,7 +1511,6 @@ bool SidebarClass::StripClass::AI(KeyNumType &input, int, int) {
 				if (factory && (factory->Has_Changed() || factory->Is_Blocked())) {
 					redraw = true;
 					if (factory->Has_Completed()) {
-
 						/*
 						**	Construction has been completed. Announce this fact to the
 						*player and *	try to get the object to automatically leave the
@@ -1544,8 +1523,7 @@ bool SidebarClass::StripClass::AI(KeyNumType &input, int, int) {
 							case RTTI_VESSEL:
 							case RTTI_UNIT:
 							case RTTI_AIRCRAFT:
-								OutList.Add(EventClass(EventClass::PLACE,
-										       pending->What_Am_I(), -1));
+								OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
 								if (!factory->Is_Blocked()) {
 									Speak(VOX_UNIT_READY);
 								}
@@ -1556,8 +1534,7 @@ bool SidebarClass::StripClass::AI(KeyNumType &input, int, int) {
 								break;
 
 							case RTTI_INFANTRY:
-								OutList.Add(EventClass(EventClass::PLACE,
-										       pending->What_Am_I(), -1));
+								OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
 								if (!factory->Is_Blocked()) {
 									Speak(VOX_UNIT_READY);
 								}
@@ -1616,8 +1593,7 @@ void SidebarClass::StripClass::Draw_It(bool complete) {
 		** New sidebar needs to be drawn not filled
 		*/
 		if (BuildableCount < MAX_VISIBLE) {
-			CC_Draw_Shape(LogoShapes, ID, X + (2 * RESFACTOR), Y, WINDOW_MAIN, SHAPE_WIN_REL | SHAPE_NORMAL,
-				      0);
+			CC_Draw_Shape(LogoShapes, ID, X + (2 * RESFACTOR), Y, WINDOW_MAIN, SHAPE_WIN_REL | SHAPE_NORMAL, 0);
 		}
 
 		/*
@@ -1660,27 +1636,21 @@ void SidebarClass::StripClass::Draw_It(bool complete) {
 				SpecialWeaponType spc = SPC_NONE;
 
 				if (Buildables[index].BuildableType != RTTI_SPECIAL) {
-
-					obj = Fetch_Techno_Type(Buildables[index].BuildableType,
-								Buildables[index].BuildableID);
+					obj = Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
 					if (obj != NULL) {
-
 						/*
 						**	Fetch the remap table that is appropriate for this object
 						**	type.
 						*/
-						remapper = PlayerPtr->Remap_Table(
-						    false, ((TechnoTypeClass const *)obj)->Remap);
+						remapper = PlayerPtr->Remap_Table(false, ((TechnoTypeClass const *)obj)->Remap);
 
 						/*
 						**	If there is already a factory producing this kind of object,
 						*then all *	objects of this type are displays in a disabled state.
 						*/
-						bool isbusy =
-						    (PlayerPtr->Fetch_Factory(Buildables[index].BuildableType) != NULL);
+						bool isbusy = (PlayerPtr->Fetch_Factory(Buildables[index].BuildableType) != NULL);
 						if (!isbusy &&
-						    PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType,
-										 Buildables[index].BuildableID)) {
+						    PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType, Buildables[index].BuildableID)) {
 							isbusy = true;
 						}
 
@@ -1711,12 +1681,10 @@ void SidebarClass::StripClass::Draw_It(bool complete) {
 							darken = isbusy;
 						}
 					} else {
-						darken = PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType,
-										      Buildables[index].BuildableID);
+						darken = PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType, Buildables[index].BuildableID);
 					}
 
 				} else {
-
 					spc = SpecialWeaponType(Buildables[index].BuildableID);
 					shapefile = Get_Special_Cameo(spc);
 					shapenum = 0;
@@ -1756,22 +1724,27 @@ void SidebarClass::StripClass::Draw_It(bool complete) {
 			** Don't draw blank shapes over the new 640x400 sidebar art - ST 5/1/96 6:01PM
 			*/
 			if (shapenum != SB_BLANK || shapefile != LogoShapes) {
-				CC_Draw_Shape(
-				    shapefile, shapenum,
-				    x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
-				    y - WindowList[WINDOW_SIDEBAR][WINDOWY], WINDOW_SIDEBAR,
-				    SHAPE_NORMAL | SHAPE_WIN_REL | (remapper ? SHAPE_FADING : SHAPE_NORMAL), remapper);
+				CC_Draw_Shape(shapefile,
+					      shapenum,
+					      x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
+					      y - WindowList[WINDOW_SIDEBAR][WINDOWY],
+					      WINDOW_SIDEBAR,
+					      SHAPE_NORMAL | SHAPE_WIN_REL | (remapper ? SHAPE_FADING : SHAPE_NORMAL),
+					      remapper);
 
 				/*
 				**	Darken this object because it cannot be produced or is otherwise
 				**	unavailable.
 				*/
 				if (darken) {
-					CC_Draw_Shape(
-					    ClockShapes, 0,
-					    x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
-					    y - WindowList[WINDOW_SIDEBAR][WINDOWY], WINDOW_SIDEBAR,
-					    SHAPE_NORMAL | SHAPE_WIN_REL | SHAPE_GHOST, NULL, ClockTranslucentTable);
+					CC_Draw_Shape(ClockShapes,
+						      0,
+						      x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
+						      y - WindowList[WINDOW_SIDEBAR][WINDOWY],
+						      WINDOW_SIDEBAR,
+						      SHAPE_NORMAL | SHAPE_WIN_REL | SHAPE_GHOST,
+						      NULL,
+						      ClockTranslucentTable);
 				}
 			}
 
@@ -1781,33 +1754,35 @@ void SidebarClass::StripClass::Draw_It(bool complete) {
 			*/
 			if (production) {
 				if (completed) {
-
 					/*
 					**	Display text showing that the object is ready to place.
 					*/
-					CC_Draw_Shape(ObjectTypeClass::PipShapes, PIP_READY,
-						      (x - (WindowList[WINDOW_SIDEBAR][WINDOWX])) +
-							  (LEFT_EDGE_OFFSET + 15) * RESFACTOR,
+					CC_Draw_Shape(ObjectTypeClass::PipShapes,
+						      PIP_READY,
+						      (x - (WindowList[WINDOW_SIDEBAR][WINDOWX])) + (LEFT_EDGE_OFFSET + 15) * RESFACTOR,
 						      (y - WindowList[WINDOW_SIDEBAR][WINDOWY]) + (4 * RESFACTOR),
-						      WINDOW_SIDEBAR, SHAPE_CENTER);
+						      WINDOW_SIDEBAR,
+						      SHAPE_CENTER);
 				} else {
-
-					CC_Draw_Shape(
-					    ClockShapes, stage + 1,
-					    x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
-					    y - WindowList[WINDOW_SIDEBAR][WINDOWY], WINDOW_SIDEBAR,
-					    SHAPE_NORMAL | SHAPE_WIN_REL | SHAPE_GHOST, NULL, ClockTranslucentTable);
+					CC_Draw_Shape(ClockShapes,
+						      stage + 1,
+						      x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
+						      y - WindowList[WINDOW_SIDEBAR][WINDOWY],
+						      WINDOW_SIDEBAR,
+						      SHAPE_NORMAL | SHAPE_WIN_REL | SHAPE_GHOST,
+						      NULL,
+						      ClockTranslucentTable);
 
 					/*
 					**	Display text showing that the construction is temporarily on hold.
 					*/
 					if (factory && !factory->Is_Building()) {
-						CC_Draw_Shape(ObjectTypeClass::PipShapes, PIP_HOLDING,
-							      (x - (WindowList[WINDOW_SIDEBAR][WINDOWX])) +
-								  ((LEFT_EDGE_OFFSET + 15) * RESFACTOR),
-							      (y - WindowList[WINDOW_SIDEBAR][WINDOWY]) +
-								  (4 * RESFACTOR),
-							      WINDOW_SIDEBAR, SHAPE_CENTER);
+						CC_Draw_Shape(ObjectTypeClass::PipShapes,
+							      PIP_HOLDING,
+							      (x - (WindowList[WINDOW_SIDEBAR][WINDOWX])) + ((LEFT_EDGE_OFFSET + 15) * RESFACTOR),
+							      (y - WindowList[WINDOW_SIDEBAR][WINDOWY]) + (4 * RESFACTOR),
+							      WINDOW_SIDEBAR,
+							      SHAPE_CENTER);
 					}
 				}
 			}
@@ -1850,8 +1825,7 @@ bool SidebarClass::StripClass::Recalc(void) {
 	*/
 	bool redraw = false;
 	for (int index = 0; index < BuildableCount; index++) {
-		TechnoTypeClass const *tech =
-		    Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
+		TechnoTypeClass const *tech = Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
 		if (tech != NULL) {
 			ok = tech->Who_Can_Build_Me(true, false, PlayerPtr->Class->House) != NULL;
 		} else {
@@ -1863,13 +1837,11 @@ bool SidebarClass::StripClass::Recalc(void) {
 		}
 
 		if (!ok) {
-
 			/*
 			**	Removes this entry from the list.
 			*/
 			if (BuildableCount > 1 && index < BuildableCount - 1) {
-				memcpy(&Buildables[index], &Buildables[index + 1],
-				       sizeof(Buildables[0]) * ((BuildableCount - index) - 1));
+				memcpy(&Buildables[index], &Buildables[index + 1], sizeof(Buildables[0]) * ((BuildableCount - index) - 1));
 			}
 			TopIndex = 0;
 			IsToRedraw = true;
@@ -1907,8 +1879,8 @@ bool SidebarClass::StripClass::Recalc(void) {
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
 SidebarClass::StripClass::SelectClass::SelectClass(void)
-    : ControlClass(0, 0, 0, (OBJECT_WIDTH - 1) * RESFACTOR, OBJECT_HEIGHT * RESFACTOR, LEFTPRESS | RIGHTPRESS | LEFTUP),
-      Strip(0), Index(0) {}
+	: ControlClass(0, 0, 0, (OBJECT_WIDTH - 1) * RESFACTOR, OBJECT_HEIGHT * RESFACTOR, LEFTPRESS | RIGHTPRESS | LEFTUP), Strip(0), Index(0) {
+}
 
 /***********************************************************************************************
  * SidebarClass::StripClass::SelectClass:: -- Assigns special values to a buildable select but *
@@ -1991,7 +1963,6 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 	}
 
 	if (spc != SPC_NONE) {
-
 		/*
 		**	Display the help text if the mouse is over the button.
 		*/
@@ -2012,7 +1983,6 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 		** available then we should activate it.
 		*/
 		if (flags & LEFTPRESS) {
-
 			if ((unsigned)spc < SPC_COUNT) {
 				if (PlayerPtr->SuperWeapon[spc].Is_Ready()) {
 					if (spc != SPC_SONAR_PULSE) {
@@ -2029,9 +1999,7 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 		}
 
 	} else {
-
 		if (choice != NULL) {
-
 			/*
 			**	Display the help text if the mouse is over the button.
 			*/
@@ -2045,7 +2013,6 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 			**	A right mouse button signals "cancel".
 			*/
 			if (flags & RIGHTPRESS) {
-
 				/*
 				**	If production is in progress, put it on hold. If production is already
 				**	on hold, then abandon it. Money will be refunded, the factory
@@ -2053,7 +2020,6 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 				**	the free pool.
 				*/
 				if (factory != NULL) {
-
 					/*
 					**	Cancels placement mode if the sidebar factory is abandoned or
 					**	suspended.
@@ -2078,7 +2044,6 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 			}
 
 			if (flags & LEFTPRESS) {
-
 				/*
 				**	If there is already a factory attached to this strip but the player didn't click
 				**	on the icon that has the attached factory, then say that the factory is busy and
@@ -2091,7 +2056,6 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 				}
 
 				if (factory != NULL) {
-
 					/*
 					**	If this object is currently being built, then give a scold sound and
 					*text and then *	bail.
@@ -2099,25 +2063,20 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 					if (factory->Is_Building()) {
 						Speak(VOX_NO_FACTORY);
 					} else {
-
 						/*
 						**	If production has completed, then attempt to have the object
 						*exit *	the factory or go into placement mode.
 						*/
 						if (factory->Has_Completed()) {
-
 							TechnoClass *pending = factory->Get_Object();
 							if (!pending && factory->Get_Special_Item()) {
 								Map.IsTargettingMode = SPC_ANY;
 							} else {
-								BuildingClass *builder =
-								    pending->Who_Can_Build_Me(false, false);
+								BuildingClass *builder = pending->Who_Can_Build_Me(false, false);
 								if (!builder) {
-									OutList.Add(EventClass(EventClass::ABANDON,
-											       otype, oid));
+									OutList.Add(EventClass(EventClass::ABANDON, otype, oid));
 									Speak(VOX_NO_FACTORY);
 								} else {
-
 									/*
 									**	If the completed object is a building,
 									*then change the *	game state into building
@@ -2126,23 +2085,19 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 									**	the building is actually placed down.
 									*/
 									if (pending->What_Am_I() == RTTI_BUILDING) {
-										PlayerPtr->Manual_Place(
-										    builder, (BuildingClass *)pending);
+										PlayerPtr->Manual_Place(builder, (BuildingClass *)pending);
 									} else {
-
 										/*
 										**	For objects that can leave the
 										*factory under their own *	power,
 										*queue this event and process through
 										*normal house *	production channels.
 										*/
-										OutList.Add(EventClass(
-										    EventClass::PLACE, otype, -1));
+										OutList.Add(EventClass(EventClass::PLACE, otype, -1));
 									}
 								}
 							}
 						} else {
-
 							if (PlayerPtr->Is_Hack_Prevented(otype, oid)) {
 								// Eva scolds the player here.
 							} else {
@@ -2155,20 +2110,17 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &ke
 								} else {
 									Speak(VOX_BUILDING);
 								}
-								OutList.Add(
-								    EventClass(EventClass::PRODUCE,
-									       Strip->Buildables[index].BuildableType,
-									       Strip->Buildables[index].BuildableID));
+								OutList.Add(EventClass(EventClass::PRODUCE,
+										       Strip->Buildables[index].BuildableType,
+										       Strip->Buildables[index].BuildableID));
 							}
 						}
 					}
 
 				} else {
-
 					if (PlayerPtr->Is_Hack_Prevented(otype, oid)) {
 						// Eva scolds the player here.
 					} else {
-
 						/*
 						**	If this side strip is already busy with production, then ignore
 						*the *	input and announce this fact.

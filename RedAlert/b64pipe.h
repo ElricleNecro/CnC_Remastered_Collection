@@ -45,7 +45,8 @@ class Base64Pipe : public Pipe {
 public:
 	typedef enum CodeControl { ENCODE, DECODE } CodeControl;
 
-	Base64Pipe(CodeControl control) : Control(control), Counter(0) {}
+	Base64Pipe(CodeControl control) : Control(control), Counter(0) {
+	}
 
 	virtual int Flush(void);
 	virtual int Put(void const *source, int slen);

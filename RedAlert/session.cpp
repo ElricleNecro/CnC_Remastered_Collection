@@ -46,9 +46,9 @@
  *   SessionClass::Compute_Unique_ID -- computes unique local ID number                        *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
-#include <dos.h>  // for station ID computation
+#include <dos.h> // for station ID computation
 #include <time.h> // for station ID computation
+#include "function.h"
 
 // #include "WolDebug.h"
 
@@ -79,8 +79,8 @@
 /*---------------------------------------------------------------------------
 Min & Max unit count values; index0 = bases OFF, index1 = bases ON
 ---------------------------------------------------------------------------*/
-int SessionClass::CountMin[2] = {1, 0};
-int SessionClass::CountMax[2] = {50, 12};
+int SessionClass::CountMin[2] = { 1, 0 };
+int SessionClass::CountMax[2] = { 50, 12 };
 
 //---------------------------------------------------------------------------
 //	This is a list of all the names of the multiplayer scenarios
@@ -91,16 +91,16 @@ char SessionClass::Descriptions[100][40];
 // These values are used purely for the Mono debug display.  They show the
 // names of the Global Channel packet types, and the event types.
 //---------------------------------------------------------------------------
-char *SessionClass::GlobalPacketNames[] = {"Game?",	  "Game!",    "Player?", "Player!", "Join?", "Join!", "Reject",
-					   "GameOptions", "Sign Off", "GO!",	 "Message", "Ping",  "Load"};
+char *SessionClass::GlobalPacketNames[] = { "Game?",	   "Game!",    "Player?", "Player!", "Join?", "Join!", "Reject",
+					    "GameOptions", "Sign Off", "GO!",	  "Message", "Ping",  "Load" };
 
 char *SessionClass::SerialPacketNames[] = {
-    "CONNECT", "GAME_OPTIONS", "SIGN_OFF", "GO", "MESSAGE", "TIMING", "SCORE_SCREEN", "LOADGAME", "LAST_COMMAND",
+	"CONNECT", "GAME_OPTIONS", "SIGN_OFF", "GO", "MESSAGE", "TIMING", "SCORE_SCREEN", "LOADGAME", "LAST_COMMAND",
 };
 
-char *SessionClass::DialMethodCheck[DIAL_METHODS] = {"T", "P"};
+char *SessionClass::DialMethodCheck[DIAL_METHODS] = { "T", "P" };
 
-char *SessionClass::CallWaitStrings[CALL_WAIT_STRINGS_NUM] = {"*70,", "70#,", "1170,", "CUSTOM -                "};
+char *SessionClass::CallWaitStrings[CALL_WAIT_STRINGS_NUM] = { "*70,", "70#,", "1170,", "CUSTOM -                " };
 
 /***************************************************************************
  * SessionClass::SessionClass -- Constructor                               *
@@ -154,9 +154,9 @@ SessionClass::SessionClass(void) {
 	WWChat = 0;
 
 	RecordFile.Set_Name("RECORD.BIN"); // always uses this name
-	Record = 0;			   // set via command line
-	Play = 0;			   // set via command line
-	Attract = 0;			   // set via command line
+	Record = 0; // set via command line
+	Play = 0; // set via command line
+	Attract = 0; // set via command line
 
 	IsBridge = 0;
 	NetStealth = 0;
@@ -168,24 +168,24 @@ SessionClass::SessionClass(void) {
 	MetaSize = MAX_IPX_PACKET_SIZE;
 
 	ModemService = true;
-	CurPhoneIdx = 0;			     // set from INI file
-	SerialDefaults.Port = 0x2f8;		     // set from INI file
-	SerialDefaults.IRQ = 3;			     // set from INI file
-	SerialDefaults.Baud = 9600;		     // set from INI file
+	CurPhoneIdx = 0; // set from INI file
+	SerialDefaults.Port = 0x2f8; // set from INI file
+	SerialDefaults.IRQ = 3; // set from INI file
+	SerialDefaults.Baud = 9600; // set from INI file
 	SerialDefaults.DialMethod = DIAL_TOUCH_TONE; // set from INI file
-	SerialDefaults.InitStringIndex = 0;	     // set from INI file
-	SerialDefaults.CallWaitStringIndex = 0;	     // set from INI file
+	SerialDefaults.InitStringIndex = 0; // set from INI file
+	SerialDefaults.CallWaitStringIndex = 0; // set from INI file
 	strcpy(SerialDefaults.CallWaitString, "");
 	ModemType = MODEM_NULL_HOST; // set from INI file
 
-	TrapFrame = 0x7fffffff;	   // frame to start trapping object values at
-	TrapObjType = RTTI_NONE;   // type of object to trap
+	TrapFrame = 0x7fffffff; // frame to start trapping object values at
+	TrapObjType = RTTI_NONE; // type of object to trap
 	TrapObject.Ptr.All = NULL; // ptr to object being trapped
-	TrapCoord = 0;		   // COORDINATE of object to trap
-	TrapTarget = TARGET_NONE;  // TARGET value of object to trap
-	TrapCell = NULL;	   // for trapping a cell
-	TrapCheckHeap = 0;	   // start checking the Heap
-	TrapPrintCRC = 0;	   // output CRC file
+	TrapCoord = 0; // COORDINATE of object to trap
+	TrapTarget = TARGET_NONE; // TARGET value of object to trap
+	TrapCell = NULL; // for trapping a cell
+	TrapCheckHeap = 0; // start checking the Heap
+	TrapPrintCRC = 0; // output CRC file
 
 #if (TEN)
 	TenPacket = NULL;
@@ -224,7 +224,8 @@ SessionClass::SessionClass(void) {
  * HISTORY:                                                                *
  *   11/30/1995 BRR : Created.                                             *
  *=========================================================================*/
-SessionClass::~SessionClass(void) {} // end of ~SessionClass
+SessionClass::~SessionClass(void) {
+} // end of ~SessionClass
 
 /***************************************************************************
  * SessionClass::One_Time -- one-time initializations                      *
@@ -273,7 +274,8 @@ void SessionClass::One_Time(void) {
  * HISTORY:                                                                *
  *   11/30/1995 BRR : Created.                                             *
  *=========================================================================*/
-void SessionClass::Init(void) {} // end of Init
+void SessionClass::Init(void) {
+} // end of Init
 
 /***************************************************************************
  * SessionClass::Create_Connections -- forms connections to other players  *
@@ -419,8 +421,7 @@ int SessionClass::Create_MPATH_Connections(void) {
 		// Make sure the name matches before creating the connection
 		//.....................................................................
 		if (!stricmp(Players[i]->Name, HouseClass::As_Pointer(Players[i]->Player.ID)->IniName)) {
-			MPath->Create_Connection((int)Players[i]->Player.ID, Players[i]->Name,
-						 Players[i]->MPathAddress);
+			MPath->Create_Connection((int)Players[i]->Player.ID, Players[i]->Name, Players[i]->MPathAddress);
 			Players[i]->Player.ProcessTime = -1;
 		} else {
 			return (0);
@@ -685,11 +686,11 @@ int SessionClass::Load(CCFileClass &file) {
  *   02/14/1995 BR : Created.                                              *
  *=========================================================================*/
 void SessionClass::Read_MultiPlayer_Settings(void) {
-#if (0)				// PG
-	char *tokenptr;		// ptr to token
+#if (0) // PG
+	char *tokenptr; // ptr to token
 	PhoneEntryClass *phone; // a phone book entry
-	char *entry;		// a phone book entry
-	char buf[128];		// buffer for parsing INI entry
+	char *entry; // a phone book entry
+	char buf[128]; // buffer for parsing INI entry
 	int i;
 	CELL cell;
 
@@ -712,7 +713,6 @@ void SessionClass::Read_MultiPlayer_Settings(void) {
 	//	Create filename and read the file.
 	INIClass ini;
 	if (ini.Load(RawFileClass(CONFIG_FILE_NAME))) {
-
 		//	Get the player's last-used Handle
 		ini.Get_String("MultiPlayer", "Handle", "Noname", Handle, sizeof(Handle));
 
@@ -768,8 +768,7 @@ void SessionClass::Read_MultiPlayer_Settings(void) {
 
 		SerialDefaults.InitStringIndex = ini.Get_Int("SerialDefaults", "InitStringIndex", 0);
 
-		SerialDefaults.CallWaitStringIndex =
-		    ini.Get_Int("SerialDefaults", "CallWaitStringIndex", CALL_WAIT_CUSTOM);
+		SerialDefaults.CallWaitStringIndex = ini.Get_Int("SerialDefaults", "CallWaitStringIndex", CALL_WAIT_CUSTOM);
 
 		ini.Get_String("SerialDefaults", "CallWaitString", "", SerialDefaults.CallWaitString, CWAITSTRBUF_MAX);
 
@@ -872,7 +871,6 @@ void SessionClass::Read_MultiPlayer_Settings(void) {
 				// if method not found set to touch tone
 
 				if (i == DIAL_METHODS) {
-
 					phone->Settings.Compression = atoi(tokenptr);
 
 					tokenptr = strtok(NULL, "|");
@@ -1060,11 +1058,19 @@ void SessionClass::Write_MultiPlayer_Settings(void) {
 	//	Format: Entry=Name,PhoneNum,Port,IRQ,Baud,InitString
 	//------------------------------------------------------------------------
 	for (i = (PhoneBook.Count() - 1); i >= 0; i--) {
-		sprintf(buf, "%s|%s|%x|%d|%d|%d|%d|%d|%s|%d|%d|%s", PhoneBook[i]->Name, PhoneBook[i]->Number,
-			PhoneBook[i]->Settings.Port, PhoneBook[i]->Settings.IRQ, PhoneBook[i]->Settings.Baud,
-			PhoneBook[i]->Settings.Compression, PhoneBook[i]->Settings.ErrorCorrection,
-			PhoneBook[i]->Settings.HardwareFlowControl, DialMethodCheck[PhoneBook[i]->Settings.DialMethod],
-			PhoneBook[i]->Settings.InitStringIndex, PhoneBook[i]->Settings.CallWaitStringIndex,
+		sprintf(buf,
+			"%s|%s|%x|%d|%d|%d|%d|%d|%s|%d|%d|%s",
+			PhoneBook[i]->Name,
+			PhoneBook[i]->Number,
+			PhoneBook[i]->Settings.Port,
+			PhoneBook[i]->Settings.IRQ,
+			PhoneBook[i]->Settings.Baud,
+			PhoneBook[i]->Settings.Compression,
+			PhoneBook[i]->Settings.ErrorCorrection,
+			PhoneBook[i]->Settings.HardwareFlowControl,
+			DialMethodCheck[PhoneBook[i]->Settings.DialMethod],
+			PhoneBook[i]->Settings.InitStringIndex,
+			PhoneBook[i]->Settings.CallWaitStringIndex,
 			PhoneBook[i]->Settings.CallWaitString);
 		sprintf(entrytext, "%03d", i);
 		WWWritePrivateProfileString("PhoneBook", entrytext, buf, buffer);
@@ -1082,7 +1088,6 @@ void SessionClass::Write_MultiPlayer_Settings(void) {
 	INIClass ini;
 	RawFileClass file(CONFIG_FILE_NAME);
 	if (ini.Load(file)) {
-
 		//	Save the player's last-used Handle & Color
 		ini.Put_Int("MultiPlayer", "PhoneIndex", CurPhoneIdx);
 		ini.Put_Int("MultiPlayer", "Color", (int)PrefColor);
@@ -1123,12 +1128,19 @@ void SessionClass::Write_MultiPlayer_Settings(void) {
 		for (int i = (PhoneBook.Count() - 1); i >= 0; i--) {
 			char buf[128];
 			char entrytext[10];
-			sprintf(buf, "%s|%s|%x|%d|%d|%d|%d|%d|%s|%d|%d|%s", PhoneBook[i]->Name, PhoneBook[i]->Number,
-				PhoneBook[i]->Settings.Port, PhoneBook[i]->Settings.IRQ, PhoneBook[i]->Settings.Baud,
-				PhoneBook[i]->Settings.Compression, PhoneBook[i]->Settings.ErrorCorrection,
+			sprintf(buf,
+				"%s|%s|%x|%d|%d|%d|%d|%d|%s|%d|%d|%s",
+				PhoneBook[i]->Name,
+				PhoneBook[i]->Number,
+				PhoneBook[i]->Settings.Port,
+				PhoneBook[i]->Settings.IRQ,
+				PhoneBook[i]->Settings.Baud,
+				PhoneBook[i]->Settings.Compression,
+				PhoneBook[i]->Settings.ErrorCorrection,
 				PhoneBook[i]->Settings.HardwareFlowControl,
 				DialMethodCheck[PhoneBook[i]->Settings.DialMethod],
-				PhoneBook[i]->Settings.InitStringIndex, PhoneBook[i]->Settings.CallWaitStringIndex,
+				PhoneBook[i]->Settings.InitStringIndex,
+				PhoneBook[i]->Settings.CallWaitStringIndex,
 				PhoneBook[i]->Settings.CallWaitString);
 			sprintf(entrytext, "%03d", i);
 			ini.Put_String("PhoneBook", entrytext, buf);
@@ -1217,7 +1229,6 @@ bool Is_Mission_126x126(char *file_name) //	This is no longer used. ajw
  *   09/10/1996 JLB : Searches using different method.                     *
  *=========================================================================*/
 void SessionClass::Read_Scenario_Descriptions(void) {
-
 	//	Clear the scenario description lists
 	Scenarios.Clear();
 
@@ -1235,20 +1246,17 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 			char buffer[128];
 			ini.Get_String("Missions", fname, "", buffer, sizeof(buffer));
 #ifdef FIXIT_VERSION_3
-			Scenarios.Add(
-			    new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
-#else		  //	FIXIT_VERSION_3
+			Scenarios.Add(new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
+#else //	FIXIT_VERSION_3
 #ifdef FIXIT_CSII //	checked - ajw
 			bool official = Is_Mission_126x126((char *)fname);
 			if (!official) {
 				official = !Is_Mission_Aftermath((char *)fname);
 			}
 
-			Scenarios.Add(
-			    new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
+			Scenarios.Add(new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
 #else
-			Scenarios.Add(
-			    new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
+			Scenarios.Add(new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
 #endif
 #endif //	FIXIT_VERSION_3
 		}
@@ -1269,8 +1277,8 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 	WIN32_FIND_DATA block;
 	HANDLE handle = FindFirstFile("*.PKT", &block);
 	while (handle != INVALID_HANDLE_VALUE) {
-		if ((block.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN |
-					       FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY)) == 0) {
+		if ((block.dwFileAttributes &
+		     (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY)) == 0) {
 			char const *name = &block.cAlternateFileName[0];
 			if (*name == '\0')
 				name = &block.cFileName[0];
@@ -1290,19 +1298,16 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 				ini.Get_String("Missions", fname, "", buffer, sizeof(buffer));
 
 #ifdef FIXIT_VERSION_3
-				Scenarios.Add(new MultiMission(fname, buffer, NULL, true,
-							       Is_Mission_Counterstrike((char *)fname)));
-#else		  //	FIXIT_VERSION_3
+				Scenarios.Add(new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
+#else //	FIXIT_VERSION_3
 #ifdef FIXIT_CSII //	checked - ajw
 				bool official = Is_Mission_126x126((char *)fname);
 				if (!official) {
 					official = !Is_Mission_Aftermath((char *)fname);
 				}
-				Scenarios.Add(new MultiMission(fname, buffer, NULL, official,
-							       Is_Mission_Counterstrike((char *)fname)));
+				Scenarios.Add(new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
 #else
-				Scenarios.Add(new MultiMission(fname, buffer, NULL, true,
-							       Is_Mission_Counterstrike((char *)fname)));
+				Scenarios.Add(new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
 #endif
 #endif //	FIXIT_VERSION_3
 			}
@@ -1313,7 +1318,7 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 	}
 
 #ifdef FIXIT_CSII //	checked - ajw
-		  /*
+	/*
 		  **	Fetch the Counterstrike multiplayer scenario packet data.
 		  ** Load the scenarios regardless of whether counterstrike's installed,
 		  ** and at the point of hosting a network game, enable the counterstrike
@@ -1335,15 +1340,13 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 				char buffer[128];
 				ini.Get_String("Missions", fname, "", buffer, sizeof(buffer));
 #ifdef FIXIT_VERSION_3
-				Scenarios.Add(new MultiMission(fname, buffer, NULL, true,
-							       Is_Mission_Counterstrike((char *)fname)));
+				Scenarios.Add(new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
 #else
 			bool official = Is_Mission_126x126((char *)fname);
 			if (!official) {
 				official = !Is_Mission_Aftermath((char *)fname);
 			}
-			Scenarios.Add(
-			    new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
+			Scenarios.Add(new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
 #endif
 			}
 /*			//	ajw Copy file for viewing.
@@ -1372,8 +1375,7 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 				char const *fname = ini.Get_Entry("Missions", index);
 				char buffer[128];
 				ini.Get_String("Missions", fname, "", buffer, sizeof(buffer));
-				Scenarios.Add(new MultiMission(fname, buffer, NULL, true,
-							       Is_Mission_Counterstrike((char *)fname)));
+				Scenarios.Add(new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
 			}
 		}
 	}
@@ -1389,8 +1391,8 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 
 	handle = FindFirstFile("*.MPR", &block);
 	while (handle != INVALID_HANDLE_VALUE) {
-		if ((block.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN |
-					       FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY)) == 0) {
+		if ((block.dwFileAttributes &
+		     (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY)) == 0) {
 			file_name = &block.cAlternateFileName[0];
 			if (*file_name == '\0')
 				file_name = &block.cFileName[0];
@@ -1401,8 +1403,7 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 
 			ini.Get_String("Basic", "Name", "No Name", name_buffer, sizeof(name_buffer));
 			ini.Get_String("Digest", "1", "No Digest", digest_buffer, sizeof(digest_buffer));
-			Scenarios.Add(new MultiMission(file_name, name_buffer, digest_buffer,
-						       ini.Get_Bool("Basic", "Official", false), false));
+			Scenarios.Add(new MultiMission(file_name, name_buffer, digest_buffer, ini.Get_Bool("Basic", "Official", false), false));
 		}
 
 		if (FindNextFile(handle, &block) == 0)
@@ -1432,11 +1433,9 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 				if (!official) {
 					official = !Is_Mission_Aftermath((char *)fname);
 				}
-				Scenarios.Add(new MultiMission(fname, buffer, NULL, official,
-							       Is_Mission_Counterstrike((char *)fname)));
+				Scenarios.Add(new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
 #else
-				Scenarios.Add(new MultiMission(fname, buffer, NULL, true,
-							       Is_Mission_Counterstrike((char *)fname)));
+				Scenarios.Add(new MultiMission(fname, buffer, NULL, true, Is_Mission_Counterstrike((char *)fname)));
 #endif
 			}
 
@@ -1483,8 +1482,7 @@ void SessionClass::Read_Scenario_Descriptions(void) {
 				official = !Is_Mission_Aftermath((char *)fname);
 			}
 
-			Scenarios.Add(
-			    new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
+			Scenarios.Add(new MultiMission(fname, buffer, NULL, official, Is_Mission_Counterstrike((char *)fname)));
 		}
 	}
 //	}
@@ -1527,9 +1525,9 @@ void SessionClass::Free_Scenario_Descriptions(void) {
 		delete InitStrings[i];
 	}
 	InitStrings.Clear();
-#if (0) // PG
-	//------------------------------------------------------------------------
-	//	Clear the dialing entries
+#if (0) // PG                                                                                                                                        \
+	//------------------------------------------------------------------------                                                                   \
+	//	Clear the dialing entries                                                                                                                 \
 	//------------------------------------------------------------------------
 	for (i = 0; i < PhoneBook.Count(); i++) {
 		delete PhoneBook[i];
@@ -1642,8 +1640,7 @@ void SessionClass::Trap_Object(void) {
 			}
 		}
 		for (i = 0; i < Buildings.Count(); i++) {
-			if (Buildings.Raw_Ptr(i)->Coord == TrapCoord ||
-			    Buildings.Raw_Ptr(i)->As_Target() == TrapTarget) {
+			if (Buildings.Raw_Ptr(i)->Coord == TrapCoord || Buildings.Raw_Ptr(i)->As_Target() == TrapTarget) {
 				TrapObject.Ptr.Building = Buildings.Raw_Ptr(i);
 				TrapObjType = RTTI_BUILDING;
 				return;
@@ -1696,7 +1693,7 @@ void SessionClass::Trap_Object(void) {
  *=========================================================================*/
 unsigned long SessionClass::Compute_Unique_ID(void) {
 	return 1; // PG
-#if (0)		  // PG
+#if (0) // PG
 	time_t tm;
 	unsigned long id;
 	struct diskfree_t dtable;
@@ -1733,8 +1730,7 @@ unsigned long SessionClass::Compute_Unique_ID(void) {
 #endif
 } // end of Compute_Unique_ID
 
-MultiMission::MultiMission(char const *filename, char const *description, char const *digest, bool official,
-			   bool expansion) {
+MultiMission::MultiMission(char const *filename, char const *description, char const *digest, bool official, bool expansion) {
 	Set_Filename(filename);
 	Set_Description(description);
 	Set_Digest(digest);
@@ -1744,9 +1740,8 @@ MultiMission::MultiMission(char const *filename, char const *description, char c
 
 void MultiMission::Draw_It(int, int x, int y, int width, int height, bool selected, TextPrintType flags) const {
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
-	static int _tabs[] = {35, 60, 80, 100};
+	static int _tabs[] = { 35, 60, 80, 100 };
 	if ((flags & 0x0F) == TPF_6PT_GRAD || (flags & 0x0F) == TPF_EFNT) {
-
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
 			LogicPage->Fill_Rect(x, y, x + width - 1, y + height - 1, scheme->Shadow);
@@ -1758,9 +1753,14 @@ void MultiMission::Draw_It(int, int x, int y, int width, int height, bool select
 
 		Conquer_Clip_Text_Print(ScenarioDescription, x, y, scheme, TBLACK, flags, width, _tabs);
 	} else {
-		Conquer_Clip_Text_Print(ScenarioDescription, x, y,
+		Conquer_Clip_Text_Print(ScenarioDescription,
+					x,
+					y,
 					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
-					TBLACK, flags, width, _tabs);
+					TBLACK,
+					flags,
+					width,
+					_tabs);
 	}
 }
 
@@ -1787,8 +1787,12 @@ void MultiMission::Set_Digest(char const *digest) {
 	}
 }
 
-void MultiMission::Set_Official(bool official) { IsOfficial = official; }
+void MultiMission::Set_Official(bool official) {
+	IsOfficial = official;
+}
 
-void MultiMission::Set_Expansion(bool expansion) { IsExpansion = expansion; }
+void MultiMission::Set_Expansion(bool expansion) {
+	IsExpansion = expansion;
+}
 
 /************************** end of session.cpp *****************************/

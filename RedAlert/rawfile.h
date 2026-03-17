@@ -63,63 +63,63 @@
 **	use numbers starting with 100. Note that these errors here are listed in numerical order.
 **	These errors are defined in the standard header file "ERRNO.H".
 */
-EZERO,		      // Non-error.
-    EINVFNC,	      // Invalid function number.
-    ENOFILE,	      // File not found.
-    ENOENT = ENOFILE, // No such file or directory.
-    ENOPATH,	      // Path not found.
-    EMFILE,	      // Too many open files.
-    EACCES,	      // Permission denied.
-    EBADF,	      // Bad file number.
-    ECONTR,	      // Memory blocks destroyed.
-    ENOMEM,	      // Not enough core memory.
-    EINVMEM,	      // Invalid memory block address.
-    EINVENV,	      // Invalid environment.
-    EINVFMT,	      // Invalid format.
-    EINVACC,	      // Invalid access code.
-    EINVDAT,	      // Invalid data.
-    EFAULT,	      // Unknown error.
-    EINVDRV,	      // Invalid drive specified.
-    ENODEV = EINVDRV, // No such device.
-    ECURDIR,	      // Attempt to remove CurDir.
-    ENOTSAM,	      // Not same device.
-    ENMFILE,	      // No more files.
-    EINVAL,	      // Invalid argument.
-    E2BIG,	      // Argument list too long.
-    ENOEXEC,	      // exec format error.
-    EXDEV,	      // Cross-device link.
-    ENFILE,	      // Too many open files.
-    ECHILD,	      // No child process.
-    ENOTTY,	      // not used
-    ETXTBSY,	      // not used
-    EFBIG,	      // not used
-    ENOSPC,	      // No space left on device.
-    ESPIPE,	      // Illegal seek.
-    EROFS,	      // Read-only file system.
-    EMLINK,	      // not used
-    EPIPE,	      // Broken pipe.
-    EDOM,	      // Math argument.
-    ERANGE,	      // Result too large.
-    EEXIST,	      // File already exists.
-    EDEADLOCK,	      // Locking violation.
-    EPERM,	      // Operation not permitted.
-    ESRCH,	      // not used
-    EINTR,	      // Interrupted function call.
-    EIO,	      // Input/output error.
-    ENXIO,	      // No such device or address.
-    EAGAIN,	      // Resource temporarily unavailable.
-    ENOTBLK,	      // not used
-    EBUSY,	      // Resource busy.
-    ENOTDIR,	      // not used
-    EISDIR,	      // not used
-    EUCLEAN,	      // not used
+EZERO, // Non-error.
+	EINVFNC, // Invalid function number.
+	ENOFILE, // File not found.
+	ENOENT = ENOFILE, // No such file or directory.
+	ENOPATH, // Path not found.
+	EMFILE, // Too many open files.
+	EACCES, // Permission denied.
+	EBADF, // Bad file number.
+	ECONTR, // Memory blocks destroyed.
+	ENOMEM, // Not enough core memory.
+	EINVMEM, // Invalid memory block address.
+	EINVENV, // Invalid environment.
+	EINVFMT, // Invalid format.
+	EINVACC, // Invalid access code.
+	EINVDAT, // Invalid data.
+	EFAULT, // Unknown error.
+	EINVDRV, // Invalid drive specified.
+	ENODEV = EINVDRV, // No such device.
+	ECURDIR, // Attempt to remove CurDir.
+	ENOTSAM, // Not same device.
+	ENMFILE, // No more files.
+	EINVAL, // Invalid argument.
+	E2BIG, // Argument list too long.
+	ENOEXEC, // exec format error.
+	EXDEV, // Cross-device link.
+	ENFILE, // Too many open files.
+	ECHILD, // No child process.
+	ENOTTY, // not used
+	ETXTBSY, // not used
+	EFBIG, // not used
+	ENOSPC, // No space left on device.
+	ESPIPE, // Illegal seek.
+	EROFS, // Read-only file system.
+	EMLINK, // not used
+	EPIPE, // Broken pipe.
+	EDOM, // Math argument.
+	ERANGE, // Result too large.
+	EEXIST, // File already exists.
+	EDEADLOCK, // Locking violation.
+	EPERM, // Operation not permitted.
+	ESRCH, // not used
+	EINTR, // Interrupted function call.
+	EIO, // Input/output error.
+	ENXIO, // No such device or address.
+	EAGAIN, // Resource temporarily unavailable.
+	ENOTBLK, // not used
+	EBUSY, // Resource busy.
+	ENOTDIR, // not used
+	EISDIR, // not used
+	EUCLEAN, // not used
 #endif
 
 #ifndef WWERROR
 #define WWERROR -1
 #endif
 
-    /*
+	/*
     **	This is the definition of the raw file class. It is derived from the abstract base FileClass
     **	and handles the interface to the low level DOS routines. This is the first class in the
     **	chain of derived file classes that actually performs a useful function. With this class,
@@ -130,7 +130,7 @@ EZERO,		      // Non-error.
     **	error handling is required. This is more than likely if greater functionality is derived
     **	from this base class.
     */
-    class RawFileClass : public FileClass {
+	class RawFileClass : public FileClass {
 public:
 	/*
 	**	This is a record of the access rights used to open the file. These rights are
@@ -163,7 +163,9 @@ public:
 
 	void Bias(int start, int length = -1);
 
-	HANDLE_TYPE Get_File_Handle(void) { return (Handle); };
+	HANDLE_TYPE Get_File_Handle(void) {
+		return (Handle);
+	};
 
 	/*
 	**	These bias values enable a sub-portion of a file to appear as if it
@@ -178,7 +180,9 @@ protected:
 	**	This function returns the largest size a low level DOS read or write may
 	**	perform. Larger file transfers are performed in chunks of this size or less.
 	*/
-	long Transfer_Block_Size(void) { return (long)((unsigned)UINT_MAX) - 16L; };
+	long Transfer_Block_Size(void) {
+		return (long)((unsigned)UINT_MAX) - 16L;
+	};
 
 	long Raw_Seek(long pos, int dir = SEEK_CUR);
 
@@ -234,7 +238,9 @@ private:
  * HISTORY:                                                                                    *
  *   10/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline char const *RawFileClass::File_Name(void) const { return (Filename); }
+inline char const *RawFileClass::File_Name(void) const {
+	return (Filename);
+}
 
 /***********************************************************************************************
  * RawFileClass::RawFileClass -- Default constructor for a file object.                        *
@@ -253,13 +259,13 @@ inline char const *RawFileClass::File_Name(void) const { return (Filename); }
  *   10/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 inline RawFileClass::RawFileClass(void)
-    : Rights(READ), BiasStart(0), BiasLength(-1),
+	: Rights(READ), BiasStart(0), BiasLength(-1),
 #ifdef WIN32
-      Handle(INVALID_HANDLE_VALUE),
+	  Handle(INVALID_HANDLE_VALUE),
 #else
-      Handle(-1),
+	  Handle(-1),
 #endif
-      Filename(0), Date(0), Time(0), Allocated(false) {
+	  Filename(0), Date(0), Time(0), Allocated(false) {
 }
 
 /***********************************************************************************************

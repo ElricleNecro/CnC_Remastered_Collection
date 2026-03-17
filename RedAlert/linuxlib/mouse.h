@@ -69,32 +69,32 @@ private:
 	void Low_Show_Mouse(int x, int y);
 
 	char *MouseCursor; // pointer to the mouse cursor in memory
-	int MouseXHot;	   // X hot spot of the current mouse cursor
-	int MouseYHot;	   // Y hot spot of the current mouse cursor
-	int CursorWidth;   // width of the mouse cursor in pixels
-	int CursorHeight;  // height of the mouse cursor in pixels
+	int MouseXHot; // X hot spot of the current mouse cursor
+	int MouseYHot; // Y hot spot of the current mouse cursor
+	int CursorWidth; // width of the mouse cursor in pixels
+	int CursorHeight; // height of the mouse cursor in pixels
 
 	char *MouseBuffer; // pointer to background buffer in memory
-	int MouseBuffX;	   // pixel x mouse buffer was preserved at
-	int MouseBuffY;	   // pixel y mouse buffer was preserved at
-	int MaxWidth;	   // maximum width of mouse background buffer
-	int MaxHeight;	   // maximum height of mouse background buffer
+	int MouseBuffX; // pixel x mouse buffer was preserved at
+	int MouseBuffY; // pixel y mouse buffer was preserved at
+	int MaxWidth; // maximum width of mouse background buffer
+	int MaxHeight; // maximum height of mouse background buffer
 
-	int MouseCXLeft;  // left x pos if conditional hide mouse in effect
+	int MouseCXLeft; // left x pos if conditional hide mouse in effect
 	int MouseCYUpper; // upper y pos if conditional hide mouse in effect
 	int MouseCXRight; // right x pos if conditional hide mouse in effect
 	int MouseCYLower; // lower y pos if conditional hide mouse in effect
-	char MCFlags;	  // conditional hide mouse flags
-	char MCCount;	  // nesting count for conditional hide mouse
+	char MCFlags; // conditional hide mouse flags
+	char MCCount; // nesting count for conditional hide mouse
 
 	GraphicViewPortClass *Screen; // pointer to the surface mouse was init'd with
-	char *PrevCursor;	      // pointer to previous cursor shape
+	char *PrevCursor; // pointer to previous cursor shape
 	int MouseUpdate;
 	int State;
 
 	char *EraseBuffer; // Buffer which holds background to restore to hidden page
-	int EraseBuffX;	   // X position of the hidden page background
-	int EraseBuffY;	   // Y position of the hidden page background
+	int EraseBuffX; // X position of the hidden page background
+	int EraseBuffY; // Y position of the hidden page background
 	int EraseBuffHotX; // X position of the hidden page background
 	int EraseBuffHotY; // Y position of the hidden page background
 
@@ -105,8 +105,7 @@ private:
 };
 
 extern "C" {
-void __cdecl Mouse_Shadow_Buffer(void *thisptr, GraphicViewPortClass *srcdst, void *buffer, int x, int y, int hotx,
-				 int hoty, int store);
+void __cdecl Mouse_Shadow_Buffer(void *thisptr, GraphicViewPortClass *srcdst, void *buffer, int x, int y, int hotx, int hoty, int store);
 void __cdecl Draw_Mouse(void *thisptr, GraphicViewPortClass *srcdst, int x, int y);
 void *__cdecl ASM_Set_Mouse_Cursor(void *thisptr, int hotspotx, int hotspoty, VOID *cursor);
 };

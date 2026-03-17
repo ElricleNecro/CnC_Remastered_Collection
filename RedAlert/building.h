@@ -43,8 +43,8 @@
 #include "target.h"
 #include "techno.h"
 
-#define MAX_DOOR_STAGE 18	// # of frames of door opening on weapons factory
-#define DOOR_OPEN_STAGE 9	// frame on which the door is entirely open
+#define MAX_DOOR_STAGE 18 // # of frames of door opening on weapons factory
+#define DOOR_OPEN_STAGE 9 // frame on which the door is entirely open
 #define MAX_REPAIR_ANIM_STAGE 5 // # of stages of anim for repair center cycling
 
 /****************************************************************************
@@ -210,7 +210,9 @@ public:
 	**	Constructors, Destructors, and overloaded operators.
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 	BuildingClass(StructType type, HousesType house);
 #ifdef FIXIT_MULTI_SAVE
@@ -219,7 +221,9 @@ public:
 	BuildingClass(NoInitClass const &x) : TechnoClass(x), Class(x), CountDown(x), PlacementDelay(x) {};
 #endif
 	virtual ~BuildingClass(void);
-	operator StructType(void) const { return Class->Type; };
+	operator StructType(void) const {
+		return Class->Type;
+	};
 
 	/*---------------------------------------------------------------------
 	**	Member function prototypes.
@@ -227,7 +231,9 @@ public:
 	static void Init(void);
 
 	TARGET Target_Scan(void);
-	BuildingTypeClass::AnimControlType const *Fetch_Anim_Control(void) { return (&Class->Anims[BState]); };
+	BuildingTypeClass::AnimControlType const *Fetch_Anim_Control(void) {
+		return (&Class->Anims[BState]);
+	};
 
 	/*
 	**	Query functions.
@@ -245,7 +251,9 @@ public:
 	virtual bool Can_Demolish(void) const;
 	virtual bool Can_Demolish_Unit(void) const;
 	virtual bool Can_Capture(void) const;
-	virtual ObjectTypeClass const &Class_Of(void) const { return *Class; };
+	virtual ObjectTypeClass const &Class_Of(void) const {
+		return *Class;
+	};
 	virtual DirType Fire_Direction(void) const;
 	virtual short const *Overlap_List(bool redraw = false) const;
 	int Shape_Number(void) const;
@@ -296,8 +304,7 @@ public:
 	virtual void Death_Announcement(TechnoClass const *source = 0) const;
 	virtual FireErrorType Can_Fire(TARGET, int which) const;
 	virtual TARGET Greatest_Threat(ThreatType threat) const;
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0, bool forced = false);
 	virtual bool Captured(HouseClass *newowner);
 	void Update_Radar_Spied(void);
 
@@ -341,7 +348,9 @@ public:
 	*/
 	static void Read_INI(CCINIClass &ini);
 	static void Write_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "STRUCTURES"; };
+	static char *INI_Name(void) {
+		return "STRUCTURES";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 

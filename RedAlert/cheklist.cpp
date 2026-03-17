@@ -66,9 +66,9 @@
  * HISTORY:                                                                *
  *   02/16/1995 BR : Created.                                              *
  *=========================================================================*/
-CheckListClass::CheckListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up,
-			       void const *down)
-    : ListClass(id, x, y, w, h, flags, up, down), IsReadOnly(false) {}
+CheckListClass::CheckListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down)
+	: ListClass(id, x, y, w, h, flags, up, down), IsReadOnly(false) {
+}
 
 /***********************************************************************************************
  * CheckListClass::~CheckListClass -- Destructor for check list object.                        *

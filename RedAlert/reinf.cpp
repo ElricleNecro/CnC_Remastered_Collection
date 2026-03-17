@@ -72,7 +72,6 @@ static bool _Pop_Group_Out_Of_Object(FootClass *group, TechnoClass *object) {
 		todo->Next = NULL;
 
 		switch (object->What_Am_I()) {
-
 		/*
 		**	The infantry just walks out of a building.
 		*/
@@ -131,8 +130,7 @@ bool _Need_To_Take(AircraftClass const *air) {
 		*/
 		for (int index = 0; index < Aircraft.Count(); index++) {
 			AircraftClass const *airptr = Aircraft.Ptr(index);
-			if ((*airptr == AIRCRAFT_YAK || *airptr == AIRCRAFT_MIG) && airptr->IsOwnedByPlayer &&
-			    !airptr->IsALoaner && airptr != air) {
+			if ((*airptr == AIRCRAFT_YAK || *airptr == AIRCRAFT_MIG) && airptr->IsOwnedByPlayer && !airptr->IsALoaner && airptr != air) {
 				deficit -= 1;
 				if (deficit == 0)
 					break;
@@ -191,7 +189,6 @@ static FootClass *_Create_Group(TeamTypeClass const *teamtype) {
 			ScenarioInit--;
 
 			if (temp != NULL) {
-
 				/*
 				**	Add the member to the team.
 				*/
@@ -212,7 +209,6 @@ static FootClass *_Create_Group(TeamTypeClass const *teamtype) {
 				**	Build the list of transporters and passengers.
 				*/
 				if (tclass->Max_Passengers() > 0) {
-
 					/*
 					**	Link to the list of transports.
 					*/
@@ -220,7 +216,6 @@ static FootClass *_Create_Group(TeamTypeClass const *teamtype) {
 					transport = temp;
 
 				} else {
-
 					/*
 					**	Link to the list of normal objects.
 					*/
@@ -252,8 +247,7 @@ static FootClass *_Create_Group(TeamTypeClass const *teamtype) {
 	**	For JUST transport helicopters, consider the loaner a gift if there are
 	**	no passengers.
 	*/
-	if (transport != NULL && object == NULL && transport->What_Am_I() == RTTI_AIRCRAFT &&
-	    *((AircraftClass *)transport) == AIRCRAFT_TRANSPORT) {
+	if (transport != NULL && object == NULL && transport->What_Am_I() == RTTI_AIRCRAFT && *((AircraftClass *)transport) == AIRCRAFT_TRANSPORT) {
 		transport->IsALoaner = false;
 	}
 
@@ -402,7 +396,6 @@ bool Do_Reinforcements(TeamTypeClass const *teamtype) {
 	**	that infantry are never a transport (which is safe to do).
 	*/
 	if (object != NULL && teamtype->Origin != -1 && _Consists_Only_Of_Infantry(object)) {
-
 		/*
 		**	Search for an object that these infantry can pop out of.
 		*/
@@ -437,8 +430,7 @@ bool Do_Reinforcements(TeamTypeClass const *teamtype) {
 	**	For the ants, they will pop out of the ant hill directly.
 	*/
 	if (teamtype->Origin != -1 && object->What_Am_I() == RTTI_UNIT &&
-	    (*((UnitClass *)object) == UNIT_ANT1 || *((UnitClass *)object) == UNIT_ANT2 ||
-	     *((UnitClass *)object) == UNIT_ANT3)) {
+	    (*((UnitClass *)object) == UNIT_ANT1 || *((UnitClass *)object) == UNIT_ANT2 || *((UnitClass *)object) == UNIT_ANT3)) {
 		CELL newcell = Scen.Waypoint[teamtype->Origin];
 		if (newcell != -1) {
 			if (Map[newcell].TType == TEMPLATE_HILL01) {
@@ -474,7 +466,6 @@ bool Do_Reinforcements(TeamTypeClass const *teamtype) {
 			}
 
 		} else {
-
 			/*
 			**	Could not unlimbo at location specified so find an adjacent location that it can
 			**	be unlimboed at. If this fails, then abort the whole placement process.
@@ -549,8 +540,11 @@ bool Do_Reinforcements(TeamTypeClass const *teamtype) {
  * HISTORY:                                                                                    *
  *   07/04/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool Create_Special_Reinforcement(HouseClass *house, TechnoTypeClass const *type, TechnoTypeClass const *another,
-				  TeamMissionType mission, int argument) {
+bool Create_Special_Reinforcement(HouseClass *house,
+				  TechnoTypeClass const *type,
+				  TechnoTypeClass const *another,
+				  TeamMissionType mission,
+				  int argument) {
 	assert(house != 0);
 	assert(type != 0);
 
@@ -558,7 +552,6 @@ bool Create_Special_Reinforcement(HouseClass *house, TechnoTypeClass const *type
 		TeamTypeClass *team = new TeamTypeClass();
 
 		if (team) {
-
 			/*
 			**	If there is no overridden mission assign to this special reinforcement, then
 			**	we must assign something. If not, the reinforcement will just sit at the edge
@@ -629,8 +622,13 @@ bool Create_Special_Reinforcement(HouseClass *house, TechnoTypeClass const *type
  * HISTORY:                                                                                    *
  *   07/04/1995 JLB : Commented.                                                               *
  *=============================================================================================*/
-int Create_Air_Reinforcement(HouseClass *house, AircraftType air, int number, MissionType mission, TARGET tarcom,
-			     TARGET navcom, InfantryType passenger) {
+int Create_Air_Reinforcement(HouseClass *house,
+			     AircraftType air,
+			     int number,
+			     MissionType mission,
+			     TARGET tarcom,
+			     TARGET navcom,
+			     InfantryType passenger) {
 	assert(house != 0);
 	assert((unsigned)air < AIRCRAFT_COUNT);
 	assert(number != 0);
@@ -653,7 +651,6 @@ int Create_Air_Reinforcement(HouseClass *house, AircraftType air, int number, Mi
 	*/
 	int sub;
 	for (sub = 0; sub < number; sub++) {
-
 		/*
 		** Create one of the required objects.  If this fails we could have
 		** a real problem.
@@ -694,7 +691,6 @@ int Create_Air_Reinforcement(HouseClass *house, AircraftType air, int number, Mi
 		int placed = obj->Unlimbo(Cell_Coord(newcell), DIR_N);
 		ScenarioInit--;
 		if (placed) {
-
 			/*
 			** If we succeeded in placing the obj onto the map then
 			** now we need to give it a mission and destination.

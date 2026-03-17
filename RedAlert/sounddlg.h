@@ -56,9 +56,9 @@ class SoundControlsClass {
 
 		BUTTON_WIDTH = 70,
 		BUTTON_X = OPTION_WIDTH - (BUTTON_WIDTH + 17), // Options button x pos
-		BUTTON_Y = 128,				       // Options button y pos
+		BUTTON_Y = 128, // Options button y pos
 
-		STOP_X = 17,  // Stop button X.
+		STOP_X = 17, // Stop button X.
 		STOP_Y = 128, //	Stop button Y.
 
 		PLAY_X = 35,
@@ -104,7 +104,8 @@ class SoundControlsClass {
 	};
 
 public:
-	SoundControlsClass(void) {}
+	SoundControlsClass(void) {
+	}
 	void Process(void);
 };
 

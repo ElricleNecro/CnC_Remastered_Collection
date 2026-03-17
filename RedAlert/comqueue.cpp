@@ -235,11 +235,11 @@ int CommQueueClass::Queue_Send(void *buf, int buflen) {
 	/*
 	**	Set entry flags
 	*/
-	SendQueue[SendEmpty].IsActive = 1;    // entry is now active
-	SendQueue[SendEmpty].IsACK = 0;	      // entry hasn't been ACK'd
-	SendQueue[SendEmpty].FirstTime = 0L;  // filled in by Manager when sent
-	SendQueue[SendEmpty].LastTime = 0L;   // filled in by Manager when sent
-	SendQueue[SendEmpty].SendCount = 0L;  // filled in by Manager when sent
+	SendQueue[SendEmpty].IsActive = 1; // entry is now active
+	SendQueue[SendEmpty].IsACK = 0; // entry hasn't been ACK'd
+	SendQueue[SendEmpty].FirstTime = 0L; // filled in by Manager when sent
+	SendQueue[SendEmpty].LastTime = 0L; // filled in by Manager when sent
+	SendQueue[SendEmpty].SendCount = 0L; // filled in by Manager when sent
 	SendQueue[SendEmpty].BufLen = buflen; // save buffer size
 
 	/*
@@ -610,7 +610,9 @@ void CommQueueClass::Add_Delay(unsigned long delay) {
  * HISTORY:                                                                *
  *   01/19/1995 BR : Created.                                              *
  *=========================================================================*/
-unsigned long CommQueueClass::Avg_Response_Time(void) { return (MeanDelay); }
+unsigned long CommQueueClass::Avg_Response_Time(void) {
+	return (MeanDelay);
+}
 
 /***************************************************************************
  * CommQueueClass::Max_Response_Time -- returns max response time    		*
@@ -630,7 +632,9 @@ unsigned long CommQueueClass::Avg_Response_Time(void) { return (MeanDelay); }
  * HISTORY:                                                                *
  *   01/19/1995 BR : Created.                                              *
  *=========================================================================*/
-unsigned long CommQueueClass::Max_Response_Time(void) { return (MaxDelay); }
+unsigned long CommQueueClass::Max_Response_Time(void) {
+	return (MaxDelay);
+}
 
 /***************************************************************************
  * CommQueueClass::Reset_Response_Time -- resets computations					*
@@ -711,11 +715,11 @@ void CommQueueClass::Configure_Debug(int offset, int size, char **names, int max
  *=========================================================================*/
 void CommQueueClass::Mono_Debug_Print(int refresh) {
 #ifdef WWLIB32_H
-	int i;					 // loop counter
-	static int send_col[] = {1, 14, 28};	 // coords of send queue columns
-	static int receive_col[] = {40, 54, 68}; // coords of recv queue columns
-	int row, col;				 // current row,col for printing
-	int num;				 // max # items to print
+	int i; // loop counter
+	static int send_col[] = { 1, 14, 28 }; // coords of send queue columns
+	static int receive_col[] = { 40, 54, 68 }; // coords of recv queue columns
+	int row, col; // current row,col for printing
+	int num; // max # items to print
 
 	struct CommHdr { // this mirrors the CommHeaderType
 		unsigned short MagicNumber;
@@ -898,15 +902,13 @@ void CommQueueClass::Mono_Debug_Print2(int refresh) {
 		**	Print an active entry
 		*/
 		if (SendQueue[i].IsActive) {
-
 			/*
 			**	Get header info
 			*/
 			hdr = (CommHdr *)SendQueue[i].Buffer;
 			hdr->MagicNumber = hdr->MagicNumber;
 			hdr->Code = hdr->Code;
-			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, SendQueue[i].SendCount,
-				ConnectionClass::Command_Name(hdr->Code));
+			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, SendQueue[i].SendCount, ConnectionClass::Command_Name(hdr->Code));
 
 			/*
 			**	Decode app's ID & its name
@@ -932,7 +934,6 @@ void CommQueueClass::Mono_Debug_Print2(int refresh) {
 				}
 			}
 		} else {
-
 			/*
 			**	Entry isn't active; print blanks
 			*/
@@ -950,15 +951,13 @@ void CommQueueClass::Mono_Debug_Print2(int refresh) {
 		**	Print an active entry
 		*/
 		if (ReceiveQueue[i].IsActive) {
-
 			/*
 			**	Get header info
 			*/
 			hdr = (CommHdr *)ReceiveQueue[i].Buffer;
 			hdr->MagicNumber = hdr->MagicNumber;
 			hdr->Code = hdr->Code;
-			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, ReceiveQueue[i].IsRead,
-				ConnectionClass::Command_Name(hdr->Code));
+			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, ReceiveQueue[i].IsRead, ConnectionClass::Command_Name(hdr->Code));
 
 			/*
 			**	Decode app's ID & its name
@@ -984,7 +983,6 @@ void CommQueueClass::Mono_Debug_Print2(int refresh) {
 				}
 			}
 		} else {
-
 			/*
 			**	Entry isn't active; print blanks
 			*/

@@ -16,4 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void main(void) { printf("Run C&C.COM.\n"); }
+void main(void) {
+	printf("Run C&C.COM.\n");
+}

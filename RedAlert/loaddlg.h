@@ -37,12 +37,12 @@
 
 class FileEntryClass {
 public:
-	char Descr[80];		// save-game description
-	unsigned Scenario;	// scenario #
-	HousesType House;	// house
-	int Num;		// save file number (from the extension)
+	char Descr[80]; // save-game description
+	unsigned Scenario; // scenario #
+	HousesType House; // house
+	int Num; // save file number (from the extension)
 	unsigned long DateTime; // date/time stamp of file
-	bool Valid;		// Is the scenario valid?
+	bool Valid; // Is the scenario valid?
 };
 
 class LoadOptionsClass {
@@ -60,9 +60,9 @@ protected:
 	/*
 	** Internal routines
 	*/
-	void Clear_List(ListClass *list);		    // clears the list & game # array
-	void Fill_List(ListClass *list);		    // fills the list & game # array
-	int Num_From_Ext(char *fname);			    // translates filename to file #
+	void Clear_List(ListClass *list); // clears the list & game # array
+	void Fill_List(ListClass *list); // fills the list & game # array
+	int Num_From_Ext(char *fname); // translates filename to file #
 	static int Compare(const void *p1, const void *p2); // for qsort()
 
 	/*

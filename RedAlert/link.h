@@ -57,7 +57,7 @@ public:
 	virtual LinkClass *Remove(void);
 
 	LinkClass &operator=(LinkClass const &link); // Assignment operator.
-	LinkClass(LinkClass const &link);	     // Copy constructor.
+	LinkClass(LinkClass const &link); // Copy constructor.
 
 private:
 	/*

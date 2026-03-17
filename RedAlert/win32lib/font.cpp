@@ -32,14 +32,14 @@
  *   Get_Next_Text_Print_XY -- Calculates X and Y given ret value from Text_P*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "font.h"
 #include <dos.h>
 #include <fcntl.h>
 #include <io.h>
 #include <malloc.h>
 #include <string.h>
-#include <sys\stat.h>
 #include <wwstd.h>
+#include "font.h"
+#include <sys\stat.h>
 
 /***************************************************************************
  * CHAR_PIXEL_WIDTH -- Return pixel width of a character.						*
@@ -84,7 +84,7 @@ int __cdecl Char_Pixel_Width(char chr) {
  *   06/30/1994 SKB : Converted to 32 bit library.                         *
  *=========================================================================*/
 unsigned int __cdecl String_Pixel_Width(char const *string) {
-	WORD width;	  // Working accumulator of string width.
+	WORD width; // Working accumulator of string width.
 	WORD largest = 0; // Largest recorded width of the string.
 
 	if (!string)

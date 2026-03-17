@@ -56,11 +56,11 @@
 //**********************************************************************
 #if (0) // ST - 5/8/2019
 /* header files */
-#include "dibutil.h"
-#include "dibapi.h"
 #include <assert.h>
 #include <stdio.h>
 #include <windows.h>
+#include "dibutil.h"
+#include "dibapi.h"
 
 /*************************************************************************
  *
@@ -95,9 +95,9 @@
  ************************************************************************/
 
 HDIB FAR CreateDIB(DWORD dwWidth, DWORD dwHeight, WORD wBitCount) {
-	BITMAPINFOHEADER bi;	 // bitmap header
+	BITMAPINFOHEADER bi; // bitmap header
 	LPBITMAPINFOHEADER lpbi; // pointer to BITMAPINFOHEADER
-	DWORD dwLen;		 // size of memory block
+	DWORD dwLen; // size of memory block
 	HDIB hDIB;
 	DWORD dwBytesPerLine; // Number of bytes per scanline
 
@@ -115,9 +115,9 @@ HDIB FAR CreateDIB(DWORD dwWidth, DWORD dwHeight, WORD wBitCount) {
 
 	// initialize BITMAPINFOHEADER
 	bi.biSize = sizeof(BITMAPINFOHEADER);
-	bi.biWidth = dwWidth;	   // fill in width from parameter
-	bi.biHeight = dwHeight;	   // fill in height from parameter
-	bi.biPlanes = 1;	   // must be 1
+	bi.biWidth = dwWidth; // fill in width from parameter
+	bi.biHeight = dwHeight; // fill in height from parameter
+	bi.biPlanes = 1; // must be 1
 	bi.biBitCount = wBitCount; // from parameter
 	bi.biCompression = BI_RGB;
 	bi.biSizeImage = 0; // 0's here mean "default"
@@ -180,7 +180,9 @@ HDIB FAR CreateDIB(DWORD dwWidth, DWORD dwHeight, WORD wBitCount) {
  *
  ************************************************************************/
 
-LPSTR FAR FindDIBBits(LPCSTR lpDIB) { return (LPSTR)(lpDIB + *(LPDWORD)lpDIB + PaletteSize(lpDIB)); }
+LPSTR FAR FindDIBBits(LPCSTR lpDIB) {
+	return (LPSTR)(lpDIB + *(LPDWORD)lpDIB + PaletteSize(lpDIB));
+}
 
 /*************************************************************************
  *
@@ -389,14 +391,14 @@ WORD FAR DIBNumColors(LPCSTR lpDIB) {
  ************************************************************************/
 
 HPALETTE FAR CreateDIBPalette(HDIB hDIB) {
-	LPLOGPALETTE lpPal;	// pointer to a logical palette
-	HANDLE hLogPal;		// handle to a logical palette
-	HPALETTE hPal = NULL;	// handle to a palette
-	int i, wNumColors;	// loop index, number of colors in color table
-	LPSTR lpbi;		// pointer to packed-DIB
-	LPBITMAPINFO lpbmi;	// pointer to BITMAPINFO structure (Win3.0)
+	LPLOGPALETTE lpPal; // pointer to a logical palette
+	HANDLE hLogPal; // handle to a logical palette
+	HPALETTE hPal = NULL; // handle to a palette
+	int i, wNumColors; // loop index, number of colors in color table
+	LPSTR lpbi; // pointer to packed-DIB
+	LPBITMAPINFO lpbmi; // pointer to BITMAPINFO structure (Win3.0)
 	LPBITMAPCOREINFO lpbmc; // pointer to BITMAPCOREINFO structure (OS/2)
-	BOOL bWinStyleDIB;	// flag which signifies whether this is a Win3.0 DIB
+	BOOL bWinStyleDIB; // flag which signifies whether this is a Win3.0 DIB
 
 	/* if handle to DIB is invalid, return NULL */
 
@@ -521,9 +523,9 @@ HPALETTE FAR CreateDIBPalette(HDIB hDIB) {
 
 HBITMAP FAR DIBToBitmap(HDIB hDIB, HPALETTE hPal) {
 	LPSTR lpDIBHdr, lpDIBBits; // pointer to DIB header, pointer to DIB bits
-	HBITMAP hBitmap;	   // handle to device-dependent bitmap
-	HDC hDC;		   // handle to DC
-	HPALETTE hOldPal = NULL;   // handle to a palette
+	HBITMAP hBitmap; // handle to device-dependent bitmap
+	HDC hDC; // handle to DC
+	HPALETTE hOldPal = NULL; // handle to a palette
 
 	/* if invalid handle, return NULL */
 
@@ -550,8 +552,7 @@ HBITMAP FAR DIBToBitmap(HDIB hDIB, HPALETTE hPal) {
 	RealizePalette(hDC);
 
 	/* create bitmap from DIB info. and bits */
-	hBitmap = CreateDIBitmap(hDC, (LPBITMAPINFOHEADER)lpDIBHdr, CBM_INIT, lpDIBBits, (LPBITMAPINFO)lpDIBHdr,
-				 DIB_RGB_COLORS);
+	hBitmap = CreateDIBitmap(hDC, (LPBITMAPINFOHEADER)lpDIBHdr, CBM_INIT, lpDIBBits, (LPBITMAPINFO)lpDIBHdr, DIB_RGB_COLORS);
 
 	/* restore previous palette */
 	if (hOldPal)
@@ -592,13 +593,13 @@ HBITMAP FAR DIBToBitmap(HDIB hDIB, HPALETTE hPal) {
  ************************************************************************/
 
 HDIB FAR BitmapToDIB(HBITMAP hBitmap, HPALETTE hPal) {
-	BITMAP bm;		    // bitmap structure
-	BITMAPINFOHEADER bi;	    // bitmap header
+	BITMAP bm; // bitmap structure
+	BITMAPINFOHEADER bi; // bitmap header
 	BITMAPINFOHEADER FAR *lpbi; // pointer to BITMAPINFOHEADER
-	DWORD dwLen;		    // size of memory block
-	HANDLE hDIB, h;		    // handle to DIB, temp handle
-	HDC hDC;		    // handle to DC
-	WORD biBits;		    // bits per pixel
+	DWORD dwLen; // size of memory block
+	HANDLE hDIB, h; // handle to DIB, temp handle
+	HDC hDC; // handle to DC
+	WORD biBits; // bits per pixel
 
 	/* check if bitmap handle is valid */
 
@@ -701,8 +702,13 @@ HDIB FAR BitmapToDIB(HBITMAP hBitmap, HPALETTE hPal) {
 	/*  call GetDIBits with a NON-NULL lpBits param, and actualy get the
 	 *  bits this time
 	 */
-	if (GetDIBits(hDC, hBitmap, 0, (WORD)bi.biHeight, (LPSTR)lpbi + (WORD)lpbi->biSize + PaletteSize((LPSTR)lpbi),
-		      (LPBITMAPINFO)lpbi, DIB_RGB_COLORS) == 0) {
+	if (GetDIBits(hDC,
+		      hBitmap,
+		      0,
+		      (WORD)bi.biHeight,
+		      (LPSTR)lpbi + (WORD)lpbi->biSize + PaletteSize((LPSTR)lpbi),
+		      (LPBITMAPINFO)lpbi,
+		      DIB_RGB_COLORS) == 0) {
 		/* clean up and return NULL */
 		GlobalUnlock(hDIB);
 		hDIB = NULL;
@@ -791,11 +797,11 @@ int FAR PalEntriesOnDevice(HDC hDC) {
  ************************************************************************/
 
 HPALETTE FAR GetSystemPalette(void) {
-	HDC hDC;		     // handle to a DC
+	HDC hDC; // handle to a DC
 	static HPALETTE hPal = NULL; // handle to a palette
-	HANDLE hLogPal;		     // handle to a logical palette
-	LPLOGPALETTE lpLogPal;	     // pointer to a logical palette
-	int nColors;		     // number of colors
+	HANDLE hLogPal; // handle to a logical palette
+	LPLOGPALETTE lpLogPal; // pointer to a logical palette
+	int nColors; // number of colors
 
 	/* Find out how many palette entries we want. */
 
@@ -959,15 +965,15 @@ HANDLE AllocRoomForDIB(BITMAPINFOHEADER bi, HBITMAP hBitmap) {
  ************************************************************************/
 
 HDIB FAR ChangeDIBFormat(HDIB hDIB, WORD wBitCount, DWORD dwCompression) {
-	HDC hDC;		 // Handle to DC
-	HBITMAP hBitmap;	 // Handle to bitmap
-	BITMAP Bitmap;		 // BITMAP data structure
-	BITMAPINFOHEADER bi;	 // Bitmap info header
+	HDC hDC; // Handle to DC
+	HBITMAP hBitmap; // Handle to bitmap
+	BITMAP Bitmap; // BITMAP data structure
+	BITMAPINFOHEADER bi; // Bitmap info header
 	LPBITMAPINFOHEADER lpbi; // Pointer to bitmap info
-	HDIB hNewDIB = NULL;	 // Handle to new DIB
-	HPALETTE hPal, hOldPal;	 // Handle to palette, prev pal
-	WORD DIBBPP, NewBPP;	 // DIB bits per pixel, new bpp
-	DWORD DIBComp, NewComp;	 // DIB compression, new compression
+	HDIB hNewDIB = NULL; // Handle to new DIB
+	HPALETTE hPal, hOldPal; // Handle to palette, prev pal
+	WORD DIBBPP, NewBPP; // DIB bits per pixel, new bpp
+	DWORD DIBComp, NewComp; // DIB compression, new compression
 
 	/* Check for a valid DIB handle */
 	if (!hDIB)
@@ -984,8 +990,7 @@ HDIB FAR ChangeDIBFormat(HDIB hDIB, WORD wBitCount, DWORD dwCompression) {
 	 * BI_RLE8 and 8BPP, etc.) or we return failure */
 	if (wBitCount == 0) {
 		NewBPP = DIBBPP;
-		if ((dwCompression == BI_RLE4 && NewBPP == 4) || (dwCompression == BI_RLE8 && NewBPP == 8) ||
-		    (dwCompression == BI_RGB))
+		if ((dwCompression == BI_RLE4 && NewBPP == 4) || (dwCompression == BI_RLE8 && NewBPP == 8) || (dwCompression == BI_RGB))
 			NewComp = dwCompression;
 		else
 			return NULL;
@@ -1052,8 +1057,12 @@ HDIB FAR ChangeDIBFormat(HDIB hDIB, WORD wBitCount, DWORD dwCompression) {
 	RealizePalette(hDC);
 
 	/* Call GetDIBits and get the new DIB bits */
-	if (!GetDIBits(hDC, hBitmap, 0, (WORD)lpbi->biHeight,
-		       (LPSTR)lpbi + (WORD)lpbi->biSize + PaletteSize((LPSTR)lpbi), (LPBITMAPINFO)lpbi,
+	if (!GetDIBits(hDC,
+		       hBitmap,
+		       0,
+		       (WORD)lpbi->biHeight,
+		       (LPSTR)lpbi + (WORD)lpbi->biSize + PaletteSize((LPSTR)lpbi),
+		       (LPBITMAPINFO)lpbi,
 		       DIB_RGB_COLORS)) {
 		GlobalUnlock(hNewDIB);
 		GlobalFree(hNewDIB);
@@ -1117,14 +1126,14 @@ HDIB FAR ChangeDIBFormat(HDIB hDIB, WORD wBitCount, DWORD dwCompression) {
  ************************************************************************/
 
 HDIB FAR ChangeBitmapFormat(HBITMAP hBitmap, WORD wBitCount, DWORD dwCompression, HPALETTE hPal) {
-	HDC hDC;		 // Screen DC
-	HDIB hNewDIB = NULL;	 // Handle to new DIB
-	BITMAP Bitmap;		 // BITMAP data structure
-	BITMAPINFOHEADER bi;	 // Bitmap info. header
+	HDC hDC; // Screen DC
+	HDIB hNewDIB = NULL; // Handle to new DIB
+	BITMAP Bitmap; // BITMAP data structure
+	BITMAPINFOHEADER bi; // Bitmap info. header
 	LPBITMAPINFOHEADER lpbi; // Pointer to bitmap header
 	HPALETTE hOldPal = NULL; // Handle to palette
-	WORD NewBPP;		 // New bits per pixel
-	DWORD NewComp;		 // New compression format
+	WORD NewBPP; // New bits per pixel
+	DWORD NewComp; // New compression format
 
 	/* Check for a valid bitmap handle */
 	if (!hBitmap)
@@ -1195,8 +1204,12 @@ HDIB FAR ChangeBitmapFormat(HBITMAP hBitmap, WORD wBitCount, DWORD dwCompression
 	}
 
 	/* Call GetDIBits and get the new DIB bits */
-	if (!GetDIBits(hDC, hBitmap, 0, (WORD)lpbi->biHeight,
-		       (LPSTR)lpbi + (WORD)lpbi->biSize + PaletteSize((LPSTR)lpbi), (LPBITMAPINFO)lpbi,
+	if (!GetDIBits(hDC,
+		       hBitmap,
+		       0,
+		       (WORD)lpbi->biHeight,
+		       (LPSTR)lpbi + (WORD)lpbi->biSize + PaletteSize((LPSTR)lpbi),
+		       (LPBITMAPINFO)lpbi,
 		       DIB_RGB_COLORS)) {
 		GlobalUnlock(hNewDIB);
 		GlobalFree(hNewDIB);

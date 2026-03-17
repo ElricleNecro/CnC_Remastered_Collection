@@ -42,7 +42,6 @@
  *   Window_Print -- Displays and wraps text into a window.                *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "ww_win.h"
 #include <ctype.h>
 #include <dipthong.h>
 #include <font.h>
@@ -52,6 +51,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <wwstd.h>
+#include "ww_win.h"
 
 PRIVATE void Scroll_Window(void);
 PRIVATE void Flush_Line(void);
@@ -59,10 +59,10 @@ PRIVATE void In_Char(char *str);
 PRIVATE char Fetch_Char(void);
 
 PRIVATE int ScrollCounter = 0; //	Count of the lines displayed before a pause.
-PRIVATE char Line[84];	       // Staging line buffer.
-PRIVATE int Pos;	       // Char Position of next free character.
-PRIVATE int PPos;	       // Pixel position of next free character.
-PRIVATE int WPos;	       // Char position in window.
+PRIVATE char Line[84]; // Staging line buffer.
+PRIVATE int Pos; // Char Position of next free character.
+PRIVATE int PPos; // Pixel position of next free character.
+PRIVATE int WPos; // Char position in window.
 PRIVATE char *MainSource;
 PRIVATE char *AltSource;
 PRIVATE char Char[2];
@@ -124,8 +124,7 @@ void Standard_More_Prompt(char const *prompt, int space, int fcolor, int bcolor)
 	y = WinY + (WinCy - 1) * (FontHeight + FontYSpacing);
 
 	// Default "more" prompter.
-	LogicPage->Print(prompt, x, y, fcolor ? fcolor : WindowList[Window][WINDOWBCOL],
-			 bcolor ? bcolor : WindowList[Window][WINDOWFCOL]);
+	LogicPage->Print(prompt, x, y, fcolor ? fcolor : WindowList[Window][WINDOWBCOL], bcolor ? bcolor : WindowList[Window][WINDOWFCOL]);
 	// BG	if (LogicPage == SEENPAGE) {
 	// BG		Window_Show_Mouse();
 	// BG	}
@@ -217,7 +216,9 @@ void Set_More_On(void) {
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-void Set_More_Off(void) { MoreOn = FALSE; }
+void Set_More_Off(void) {
+	MoreOn = FALSE;
+}
 
 /***************************************************************************
  * CHANGE_WINDOW -- Changes the 'current' window in the system.            *
@@ -328,7 +329,9 @@ void New_Window(void) {
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-void Window_Int_Print(int num) { Window_Print("%d", num); }
+void Window_Int_Print(int num) {
+	Window_Print("%d", num);
+}
 
 /***************************************************************************
  * WINDOW_PRINT -- Displays and wraps text into a window.                  *
@@ -387,11 +390,11 @@ void Window_Int_Print(int num) { Window_Print("%d", num); }
  *   07/29/1991 JLB : Added MORE, SETX, and SETY                           *
  *=========================================================================*/
 void Window_Print(char const string[], ...) {
-	int oldcx, x, y;  // Scratch variables.
-	char c;		  // Current character.
-	char buffer[10];  // Working %d buffer.
+	int oldcx, x, y; // Scratch variables.
+	char c; // Current character.
+	char buffer[10]; // Working %d buffer.
 	int old_c, old_b; // Original window colors.
-	va_list arg;	  // Argument list var.
+	va_list arg; // Argument list var.
 
 	va_start(arg, string);
 
@@ -409,7 +412,6 @@ void Window_Print(char const string[], ...) {
 	// BG	}
 
 	while (TRUE) {
-
 		c = Fetch_Char();
 
 		if (!c)
@@ -446,7 +448,6 @@ void Window_Print(char const string[], ...) {
 		}
 
 		switch (c) {
-
 #if (FALSE)
 			// these are the positions of foreign language characters
 		/*
@@ -582,8 +583,7 @@ void Window_Print(char const string[], ...) {
 
 				// Fill_Rect instead of printing spaces
 
-				LogicPage->Fill_Rect(x + oldcx, y, x + WindowWidth - 1,
-						     y + (FontHeight + FontYSpacing) - 1, (unsigned char)WinB);
+				LogicPage->Fill_Rect(x + oldcx, y, x + WindowWidth - 1, y + (FontHeight + FontYSpacing) - 1, (unsigned char)WinB);
 
 				ScrollCounter++;
 				WinCy++;
@@ -592,8 +592,7 @@ void Window_Print(char const string[], ...) {
 
 				// Fill_Rect instead of printing spaces
 
-				LogicPage->Fill_Rect(x + oldcx, y, x + WinCx - 1, y + (FontHeight + FontYSpacing) - 1,
-						     (unsigned char)WinB);
+				LogicPage->Fill_Rect(x + oldcx, y, x + WinCx - 1, y + (FontHeight + FontYSpacing) - 1, (unsigned char)WinB);
 			}
 			break;
 
@@ -695,8 +694,7 @@ PRIVATE void Scroll_Window(void) {
 	**	Scroll the window up one line.
 	*/
 	y = ((WinH / (FontHeight + FontYSpacing)) - 1) * (FontHeight + FontYSpacing);
-	LogicPage->Blit(*LogicPage, WinX << 3, WinY + (FontHeight + FontYSpacing), WinX << 3, WinY, WinW << 3,
-			WinH - (FontHeight + FontYSpacing));
+	LogicPage->Blit(*LogicPage, WinX << 3, WinY + (FontHeight + FontYSpacing), WinX << 3, WinY, WinW << 3, WinH - (FontHeight + FontYSpacing));
 	LogicPage->Fill_Rect(WinX << 3, WinY + y, ((WinX + WinW) << 3) - 1, WinY + WinH - 1, (unsigned char)WinB);
 }
 
@@ -717,10 +715,10 @@ PRIVATE void Scroll_Window(void) {
  *=========================================================================*/
 PRIVATE void Flush_Line(void) {
 	int breakit, breaksize, breakwidth;
-	int x, y;	// Coordinates of text print.
+	int x, y; // Coordinates of text print.
 	int breakpoint; // Point to break the line (if possible).
 	char breakchar; // Break replace character.
-	int index;	// Backward moving index var.
+	int index; // Backward moving index var.
 
 	/*
 	** There could be a held <CR> and this is implied by the cursor Y position
@@ -749,7 +747,6 @@ PRIVATE void Flush_Line(void) {
 	breakpoint = Pos;
 	breaksize = PPos;
 	if (WinCx + breaksize > (unsigned)breakwidth) {
-
 		/*
 		**	Since the text WILL spill past the edge of the window, determine the
 		**	point where the break should occur.  If this line is ready for the <MORE>
@@ -790,7 +787,7 @@ PRIVATE void Flush_Line(void) {
 		if (!index) {
 			if (WinCx && !WordWrapFlag) {
 				breakpoint = breaksize = 0; // Continue text on next line.
-				WordWrapFlag = TRUE;	    // indicate a word continuation.
+				WordWrapFlag = TRUE; // indicate a word continuation.
 			} else {
 				breakpoint = breakit; // Just print as much as possible.
 			}
@@ -857,7 +854,7 @@ PRIVATE void Flush_Line(void) {
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
 PRIVATE void In_Char(char *str) {
-	char c;	   // Character to return.
+	char c; // Character to return.
 	char next; // Following character (if any).
 
 	c = next = '\0';
@@ -892,7 +889,7 @@ PRIVATE void In_Char(char *str) {
 		c = (char)((c & (char)0x78) >> 3);
 
 		next = Dipthong[c][next]; // Dipthong character.
-		c = Common[c];		  // Common character.
+		c = Common[c]; // Common character.
 	}
 
 	*str++ = c;

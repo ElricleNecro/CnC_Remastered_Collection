@@ -53,9 +53,13 @@ public:
 
 	//-----------------------------------------------------------------------------
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *);
-	operator AircraftType(void) const { return Class->Type; };
+	operator AircraftType(void) const {
+		return Class->Type;
+	};
 	AircraftClass(AircraftType classid, HousesType house);
 	AircraftClass(NoInitClass const &x) : FootClass(x), FlyClass(x), Class(x), SecondaryFacing(x), SightTimer(x) {};
 	virtual ~AircraftClass(void);
@@ -83,10 +87,14 @@ public:
 	**	Query functions.
 	*/
 	virtual LayerType In_Which_Layer(void) const;
-	virtual DirType Turret_Facing(void) const { return (SecondaryFacing.Current()); }
+	virtual DirType Turret_Facing(void) const {
+		return (SecondaryFacing.Current());
+	}
 	int Shape_Number(void) const;
 	virtual MoveType Can_Enter_Cell(CELL cell, FacingType facing = FACING_NONE) const;
-	virtual ObjectTypeClass const &Class_Of(void) const { return *Class; };
+	virtual ObjectTypeClass const &Class_Of(void) const {
+		return *Class;
+	};
 	virtual ActionType What_Action(ObjectClass const *target) const;
 	virtual ActionType What_Action(CELL cell) const;
 	virtual DirType Desired_Load_Dir(ObjectClass *passenger, CELL &moveto) const;
@@ -132,8 +140,7 @@ public:
 	*/
 	virtual void Active_Click_With(ActionType action, ObjectClass *object);
 	virtual void Active_Click_With(ActionType action, CELL cell);
-	virtual void Player_Assign_Mission(MissionType mission, TARGET target = TARGET_NONE,
-					   TARGET destination = TARGET_NONE);
+	virtual void Player_Assign_Mission(MissionType mission, TARGET target = TARGET_NONE, TARGET destination = TARGET_NONE);
 	virtual void Response_Select(void);
 	virtual void Response_Move(void);
 	virtual void Response_Attack(void);
@@ -141,8 +148,7 @@ public:
 	/*
 	**	Combat related.
 	*/
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source, bool forced = false);
 	virtual BulletClass *Fire_At(TARGET target, int which);
 
 	/*
@@ -169,7 +175,9 @@ public:
 	**	File I/O.
 	*/
 	static void Read_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "AIRCRAFT"; };
+	static char *INI_Name(void) {
+		return "AIRCRAFT";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 

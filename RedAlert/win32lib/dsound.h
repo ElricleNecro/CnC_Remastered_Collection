@@ -88,7 +88,6 @@ typedef struct _DSCAPS {
 } DSCAPS, *LPDSCAPS;
 
 typedef struct _DSBCAPS {
-
 	DWORD dwSize;
 	DWORD dwFlags;
 	DWORD dwBufferBytes;
@@ -330,7 +329,7 @@ DECLARE_INTERFACE_(IDirectSoundBuffer, IUnknown) {
 #define DSBCAPS_CTRLPAN 0x00000040
 #define DSBCAPS_CTRLVOLUME 0x00000080
 #define DSBCAPS_CTRLDEFAULT 0x000000E0 // Pan + volume + frequency.
-#define DSBCAPS_CTRLALL 0x000000E0     // All control capabilities
+#define DSBCAPS_CTRLALL 0x000000E0 // All control capabilities
 #define DSBCAPS_STICKYFOCUS 0x00004000
 
 #define DSSPEAKER_HEADPHONE 1

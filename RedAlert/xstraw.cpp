@@ -34,10 +34,10 @@
  *   FileStraw::Get -- Fetch data from the file.                                               *
  *   FileStraw::~FileStraw -- The destructor for the file straw.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#include "xstraw.h"
-#include "FUNCTION.H"
 #include <stddef.h>
 #include <string.h>
+#include "xstraw.h"
+#include "FUNCTION.H"
 
 //---------------------------------------------------------------------------------------------------------
 // BufferStraw

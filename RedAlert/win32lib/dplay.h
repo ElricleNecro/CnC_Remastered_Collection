@@ -76,16 +76,16 @@ typedef DPCAPS FAR *LPDPCAPS;
 
 typedef struct {
 	DWORD dwSize;
-	GUID guidSession;		      // Id for Game.  Null is all games.
-	DWORD dwSession;		      // session identifier
-	DWORD dwMaxPlayers;		      // Maximum players allowed in game.
-	DWORD dwCurrentPlayers;		      // Current  players in Game.
-	DWORD dwFlags;			      // DPOPEN_* flags
+	GUID guidSession; // Id for Game.  Null is all games.
+	DWORD dwSession; // session identifier
+	DWORD dwMaxPlayers; // Maximum players allowed in game.
+	DWORD dwCurrentPlayers; // Current  players in Game.
+	DWORD dwFlags; // DPOPEN_* flags
 	char szSessionName[DPSESSIONNAMELEN]; // Human readable name for Game
 	char szUserField[DPUSERRESERVED];
-	DWORD dwReserved1;		// Reserved for future MS use.
+	DWORD dwReserved1; // Reserved for future MS use.
 	char szPassword[DPPASSWORDLEN]; // Password to be allowed into game.
-	DWORD dwReserved2;		// Reserved for future MS use.
+	DWORD dwReserved2; // Reserved for future MS use.
 	DWORD dwUser1;
 	DWORD dwUser2;
 	DWORD dwUser3;
@@ -96,18 +96,15 @@ typedef DPSESSIONDESC FAR *LPDPSESSIONDESC;
 /*
  * Create API
  */
-typedef BOOL(FAR PASCAL *LPDPENUMDPCALLBACK)(LPGUID lpSPGuid, LPSTR lpFriendlyName, DWORD dwMajorVersion,
-					     DWORD dwMinorVersion, LPVOID lpContext);
+typedef BOOL(FAR PASCAL *LPDPENUMDPCALLBACK)(LPGUID lpSPGuid, LPSTR lpFriendlyName, DWORD dwMajorVersion, DWORD dwMinorVersion, LPVOID lpContext);
 
-typedef BOOL(FAR PASCAL *LPDPENUMSESSIONSCALLBACK)(LPDPSESSIONDESC lpDPSGameDesc, LPVOID lpContext, LPDWORD lpdwTimeOut,
-						   DWORD dwFlags);
+typedef BOOL(FAR PASCAL *LPDPENUMSESSIONSCALLBACK)(LPDPSESSIONDESC lpDPSGameDesc, LPVOID lpContext, LPDWORD lpdwTimeOut, DWORD dwFlags);
 
 extern HRESULT WINAPI DirectPlayCreate(LPGUID lpGUID, LPDIRECTPLAY FAR *lplpDP, IUnknown FAR *pUnk);
 extern HRESULT WINAPI DirectPlayEnumerate(LPDPENUMDPCALLBACK, LPVOID);
 
 /* Player enumeration callback prototype */
-typedef BOOL(FAR PASCAL *LPDPENUMPLAYERSCALLBACK)(DPID dpId, LPSTR lpFriendlyName, LPSTR lpFormalName, DWORD dwFlags,
-						  LPVOID lpContext);
+typedef BOOL(FAR PASCAL *LPDPENUMPLAYERSCALLBACK)(DPID dpId, LPSTR lpFriendlyName, LPSTR lpFormalName, DWORD dwFlags, LPVOID lpContext);
 
 /*
  * IDirectPlay
@@ -199,12 +196,12 @@ DECLARE_INTERFACE_(IDirectPlay, IUnknown) {
 #define DPRECEIVE_PEEK 0x00000008
 
 #define DPCAPS_NAMESERVICE 0x00000001 // A name server is supported.
-#define DPCAPS_NAMESERVER 0x00000002  // You are the name server.
-#define DPCAPS_GUARANTEED 0x00000004  // SP's don't have to implement guarantees.
+#define DPCAPS_NAMESERVER 0x00000002 // You are the name server.
+#define DPCAPS_GUARANTEED 0x00000004 // SP's don't have to implement guarantees.
 
-#define DPENUMSESSIONS_AVAILABLE                                                                                       \
-	0x00000001 // All games that match password (if given)
-		   // and have openings.
+#define DPENUMSESSIONS_AVAILABLE                                                                                                                     \
+	0x00000001 // All games that match password (if given)                                                                                       \
+		// and have openings.
 #define DPENUMSESSIONS_ALL 0x00000002
 #define DPENUMSESSIONS_PREVIOUS 0x00000004
 
@@ -231,14 +228,14 @@ DECLARE_INTERFACE_(IDirectPlay, IUnknown) {
 // an app knows it is a system message because it is addressed 'To' player 0.
 //
 
-#define DPSYS_ADDPLAYER 0x0003	  // DPMSG_ADDPLAYER
+#define DPSYS_ADDPLAYER 0x0003 // DPMSG_ADDPLAYER
 #define DPSYS_DELETEPLAYER 0x0005 // DPMSG_DELETEPLAYER
 
 #define DPSYS_ADDPLAYERTOGROUP 0x0007 // DPMSG_GROUPADD
 
 #define DPSYS_INVITE 0x000e // DPMSG_INVITE, Net only.
 
-#define DPSYS_DELETEGROUP 0x0020	 // DPMSG_DELETEPLAYER
+#define DPSYS_DELETEGROUP 0x0020 // DPMSG_DELETEPLAYER
 #define DPSYS_DELETEPLAYERFROMGRP 0x0021 // DPMSG_GROUPDELETE
 #define DPSYS_SESSIONLOST 0x0031
 

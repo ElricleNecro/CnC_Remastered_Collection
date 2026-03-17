@@ -44,7 +44,8 @@
 */
 class CRCPipe : public Pipe {
 public:
-	CRCPipe(void) {}
+	CRCPipe(void) {
+	}
 	virtual int Put(void const *source, int slen);
 
 	// Fetch the CRC value.

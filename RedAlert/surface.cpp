@@ -48,7 +48,6 @@ Surface::Surface(int w, int h, Buffer const *buffer, int pitch) : Width(w), Heig
 		**	possible if the buffer size is known. Otherwise, presume that it is big enough.
 		*/
 		if (buffer->Get_Size() > 0 && Get_Size() > buffer->Get_Size()) {
-
 			Height = buffer->Get_Size() / (Width + Pitch);
 			if (Height == 0) {
 				Height = 1;
@@ -64,8 +63,7 @@ Surface::Surface(int w, int h, Buffer const *buffer, int pitch) : Width(w), Heig
 	}
 }
 
-Surface::Surface(Surface const &surface, int x, int y, int w, int h)
-    : Width(w), Height(h), Pitch(surface.Bytes_Per_Line() % w) {
+Surface::Surface(Surface const &surface, int x, int y, int w, int h) : Width(w), Height(h), Pitch(surface.Bytes_Per_Line() % w) {
 	new (&SurfaceData) Buffer((char *)surface.Get_Buffer() + y * surface.Bytes_Per_Line() + x);
 }
 
@@ -133,7 +131,6 @@ void Surface::Copy_To(Rect const &fromrect, Buffer &tobuffer) const {
 	if (pitch == 0) {
 		memmove(dest, source, tocopy);
 	} else {
-
 		/*
 		**	Copy the source to the destination in line segments.
 		*/

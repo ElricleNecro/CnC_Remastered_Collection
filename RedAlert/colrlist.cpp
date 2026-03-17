@@ -59,9 +59,9 @@
  *                                                                         *
  * HISTORY:          01/05/1995 MML : Created.                             *
  *=========================================================================*/
-ColorListClass::ColorListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up,
-			       void const *down)
-    : ListClass(id, x, y, w, h, flags, up, down), Style(SELECT_HIGHLIGHT), SelectColor(NULL) {}
+ColorListClass::ColorListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down)
+	: ListClass(id, x, y, w, h, flags, up, down), Style(SELECT_HIGHLIGHT), SelectColor(NULL) {
+}
 
 /***************************************************************************
  * ColorListClass::~ColorListClass -- Class destructor                     *
@@ -220,8 +220,7 @@ void ColorListClass::Draw_Entry(int index, int x, int y, int width, int selected
 	*/
 	case SELECT_HIGHLIGHT:
 		if (TextFlags & TPF_6PT_GRAD) {
-			Conquer_Clip_Text_Print(List[index], x, y, color, TBLACK, TextFlags | TPF_BRIGHT_COLOR, width,
-						Tabs);
+			Conquer_Clip_Text_Print(List[index], x, y, color, TBLACK, TextFlags | TPF_BRIGHT_COLOR, width, Tabs);
 		} else {
 			Conquer_Clip_Text_Print(List[index], x, y, color, TBLACK, TextFlags, width, Tabs);
 		}
@@ -241,8 +240,7 @@ void ColorListClass::Draw_Entry(int index, int x, int y, int width, int selected
 	case SELECT_BAR:
 		if (TextFlags & TPF_6PT_GRAD) {
 			LogicPage->Fill_Rect(x, y, x + width - 1, y + LineHeight - 1, color->Color);
-			Conquer_Clip_Text_Print(List[index], x, y, Colors[index], TBLACK, TextFlags | TPF_BRIGHT_COLOR,
-						width, Tabs);
+			Conquer_Clip_Text_Print(List[index], x, y, Colors[index], TBLACK, TextFlags | TPF_BRIGHT_COLOR, width, Tabs);
 		} else {
 			LogicPage->Fill_Rect(x, y, x + width - 2, y + LineHeight - 2, color->Color);
 			Conquer_Clip_Text_Print(List[index], x, y, Colors[index], TBLACK, TextFlags, width, Tabs);

@@ -27,10 +27,13 @@ extern bool cancel_current_msgbox;
 bool disable_current_msgbox = false;
 
 //***********************************************************************************************
-SimpleEditDlgClass::SimpleEditDlgClass(int iDialogWidth, const char *szTitle, const char *szPrompt,
-				       int iEditCharsAccept, const char *szPrompt2 /* = NULL */,
+SimpleEditDlgClass::SimpleEditDlgClass(int iDialogWidth,
+				       const char *szTitle,
+				       const char *szPrompt,
+				       int iEditCharsAccept,
+				       const char *szPrompt2 /* = NULL */,
 				       int iEditCharsAccept2 /* = 0 */)
-    : iDialogWidth(iDialogWidth), iEditCharsAccept(iEditCharsAccept), iEditCharsAccept2(iEditCharsAccept2) {
+	: iDialogWidth(iDialogWidth), iEditCharsAccept(iEditCharsAccept), iEditCharsAccept2(iEditCharsAccept2) {
 	//	Copy strings.
 	if (szTitle) {
 		this->szTitle = new char[strlen(szTitle) + 1];
@@ -88,8 +91,7 @@ const char *SimpleEditDlgClass::Show() {
 	int d_gap_y = 5 * RESFACTOR;
 
 	int d_dialog_w = iDialogWidth;
-	int d_dialog_h =
-	    szPrompt2 ? (29 * RESFACTOR) + 2 * d_gap_y + 2 * y_margin : (19 * RESFACTOR) + d_gap_y + 2 * y_margin;
+	int d_dialog_h = szPrompt2 ? (29 * RESFACTOR) + 2 * d_gap_y + 2 * y_margin : (19 * RESFACTOR) + d_gap_y + 2 * y_margin;
 	if (szTitle)
 		d_dialog_h += 10 * RESFACTOR + 2 * d_gap_y;
 	int d_dialog_x = (((320 * RESFACTOR) - d_dialog_w) / 2);
@@ -126,8 +128,7 @@ const char *SimpleEditDlgClass::Show() {
 	int d_edit2_x = d_dialog_x + d_prompt2_w + x_margin;
 	int d_edit2_y = d_prompt2_y;
 
-	int d_ok_w, d_ok_h, d_ok_x, d_ok_y, d_cancel_w, d_cancel_h, d_cancel_x, d_cancel_y, d_mid_x, d_mid_y, d_mid_w,
-	    d_mid_h;
+	int d_ok_w, d_ok_h, d_ok_x, d_ok_y, d_cancel_w, d_cancel_h, d_cancel_x, d_cancel_y, d_mid_x, d_mid_y, d_mid_w, d_mid_h;
 
 	if (!szMiddleButton) {
 		d_ok_w = 40 * RESFACTOR;
@@ -180,10 +181,23 @@ const char *SimpleEditDlgClass::Show() {
 	TextButtonClass CancelBtn(BUTTON_CANCEL, szCancelButton, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w);
 	TextButtonClass MiddleBtn(BUTTON_MIDDLE, szMiddleButton, TPF_BUTTON, d_mid_x, d_mid_y, d_mid_w);
 
-	WOLEditClass EditBox(BUTTON_EDIT, szEdit, min(sizeof(szEdit), iEditCharsAccept), TPF_6PT_GRAD | TPF_NOSHADOW,
-			     d_edit_x, d_edit_y, d_edit_w, -1, EditClass::ALPHANUMERIC);
-	WOLEditClass EditBox2(BUTTON_EDIT2, szEdit2, min(sizeof(szEdit2), iEditCharsAccept2),
-			      TPF_6PT_GRAD | TPF_NOSHADOW, d_edit2_x, d_edit2_y, d_edit2_w, -1,
+	WOLEditClass EditBox(BUTTON_EDIT,
+			     szEdit,
+			     min(sizeof(szEdit), iEditCharsAccept),
+			     TPF_6PT_GRAD | TPF_NOSHADOW,
+			     d_edit_x,
+			     d_edit_y,
+			     d_edit_w,
+			     -1,
+			     EditClass::ALPHANUMERIC);
+	WOLEditClass EditBox2(BUTTON_EDIT2,
+			      szEdit2,
+			      min(sizeof(szEdit2), iEditCharsAccept2),
+			      TPF_6PT_GRAD | TPF_NOSHADOW,
+			      d_edit2_x,
+			      d_edit2_y,
+			      d_edit2_w,
+			      -1,
 			      EditClass::ALPHANUMERIC);
 
 	/*
@@ -211,7 +225,6 @@ const char *SimpleEditDlgClass::Show() {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -232,7 +245,6 @@ const char *SimpleEditDlgClass::Show() {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			/*
 			**	Display the dialog box.
 			*/
@@ -247,11 +259,9 @@ const char *SimpleEditDlgClass::Show() {
 			**	Redraw the buttons.
 			*/
 			if (display) {
-				Fancy_Text_Print(szPrompt, d_prompt_x, d_prompt_y, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_TEXT);
+				Fancy_Text_Print(szPrompt, d_prompt_x, d_prompt_y, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT);
 				if (szPrompt2)
-					Fancy_Text_Print(szPrompt2, d_prompt2_x, d_prompt2_y,
-							 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT);
+					Fancy_Text_Print(szPrompt2, d_prompt2_x, d_prompt2_y, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT);
 
 				commands->Flag_List_To_Redraw();
 			}

@@ -281,10 +281,9 @@ bool IPXInterfaceClass::Open_Socket(SOCKET socketnum) {
  *    8/4/97 5:55PM ST : Created                                                               *
  *=============================================================================================*/
 long IPXInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
-
-	int addr_len;		   // Length of address structure
-	int rc;			   // Result code
-	SOCKADDR_IPX addr;	   // Winsock IPX addressing structure
+	int addr_len; // Length of address structure
+	int rc; // Result code
+	SOCKADDR_IPX addr; // Winsock IPX addressing structure
 	WinsockBufferType *packet; // Ptr to packet
 	NetNumType netnum;
 	NetNodeType nodenum;
@@ -296,7 +295,6 @@ long IPXInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 		return (1);
 
 	switch (WSAGETSELECTEVENT(lParam)) {
-
 	/*
 	** Read event. Winsock has data it would like to give us.
 	*/
@@ -326,7 +324,6 @@ long IPXInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 		** rc is the number of bytes received from Winsock
 		*/
 		if (rc) {
-
 			/*
 			** Make a copy of the address that this packet came from.
 			*/
@@ -336,8 +333,7 @@ long IPXInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 			/*
 			** If this packet was from me then ignore it.
 			*/
-			if (!memcmp(netnum, BroadcastNet, sizeof(BroadcastNet)) &&
-			    !memcmp(nodenum, MyNode, sizeof(MyNode))) {
+			if (!memcmp(netnum, BroadcastNet, sizeof(BroadcastNet)) && !memcmp(nodenum, MyNode, sizeof(MyNode))) {
 				return (0);
 			}
 
@@ -403,8 +399,7 @@ long IPXInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 			** at this time. In this case, we clear the socket error and just exit. Winsock will
 			** send us another WRITE message when it is ready to receive more data.
 			*/
-			rc = sendto(Socket, (const char *)packet->Buffer, packet->BufferLen, 0, (LPSOCKADDR)&addr,
-				    sizeof(addr));
+			rc = sendto(Socket, (const char *)packet->Buffer, packet->BufferLen, 0, (LPSOCKADDR)&addr, sizeof(addr));
 
 			if (rc == SOCKET_ERROR) {
 				if (WSAGetLastError() != WSAEWOULDBLOCK) {

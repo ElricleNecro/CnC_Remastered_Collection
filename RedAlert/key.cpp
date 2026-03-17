@@ -203,7 +203,6 @@ bool WWKeyboardClass::Put_Key_Message(unsigned short vk_key, bool release) {
 	if (!Is_Mouse_Key(vk_key)) {
 		if (((GetKeyState(VK_SHIFT) & 0x8000) != 0) || ((GetKeyState(VK_CAPITAL) & 0x0008) != 0) ||
 		    ((GetKeyState(VK_NUMLOCK) & 0x0008) != 0)) {
-
 			vk_key |= WWKEY_SHIFT_BIT;
 		}
 		if ((GetKeyState(VK_CONTROL) & 0x8000) != 0) {
@@ -340,7 +339,9 @@ char WWKeyboardClass::To_ASCII(unsigned short key) {
  * HISTORY:                                                                                    *
  *   09/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool WWKeyboardClass::Down(unsigned short key) { return (GetAsyncKeyState(key & 0xFF) == 0 ? false : true); }
+bool WWKeyboardClass::Down(unsigned short key) {
+	return (GetAsyncKeyState(key & 0xFF) == 0 ? false : true);
+}
 
 extern "C" {
 void __cdecl Stop_Execution(void);
@@ -557,7 +558,6 @@ bool WWKeyboardClass::Message_Handler(HWND window, UINT message, UINT wParam, LO
 	**	pertinant mouse messages are processed.
 	*/
 	switch (message) {
-
 	/*
 	**	System key has been pressed. This is the normal keyboard event message.
 	*/

@@ -86,7 +86,6 @@ PRIVATE BOOL __cdecl Bump_Palette(void *palette1, unsigned int step);
  *   04/27/1994 BR : Converted to 32-bit                                   *
  *=========================================================================*/
 void __cdecl Set_Palette(void *palette) {
-
 #if (IBM)
 	Set_Palette_Range(palette);
 #else
@@ -155,10 +154,10 @@ void __cdecl Set_Palette_Color(void *palette, int color, void *data) {
  *   06/20/1991  BS : Created.                                             *
  *=========================================================================*/
 void Fade_Palette_To(void *palette1, unsigned int delay, void (*callback)()) {
-	BOOL changed;	     // Flag that palette has changed this tick.
-	short jump;	     // Gun values to jump per palette set.
+	BOOL changed; // Flag that palette has changed this tick.
+	short jump; // Gun values to jump per palette set.
 	unsigned long timer; // Tick count timer used for timing.
-	short ticksper;	     // The ticks (fixed point) per bit jump.
+	short ticksper; // The ticks (fixed point) per bit jump.
 	int tickaccum;
 
 	extern void (*cb_ptr)(void); // callback function pointer
@@ -177,14 +176,14 @@ void Fade_Palette_To(void *palette1, unsigned int delay, void (*callback)()) {
 	*/
 	Determine_Bump_Rate(palette1, delay, &ticksper, &jump);
 
-	tickaccum = 0;		  // init accumulated elapsed time
+	tickaccum = 0; // init accumulated elapsed time
 	timer = TickCount.Time(); // timer = current time
 	do {
 		changed = FALSE;
 
-		tickaccum += ticksper;	   // tickaccum = time of next change * 256
+		tickaccum += ticksper; // tickaccum = time of next change * 256
 		timer += (tickaccum >> 8); // timer = time of next change (rounded)
-		tickaccum &= 0x0FF;	   // shave off high byte, keep roundoff bits
+		tickaccum &= 0x0FF; // shave off high byte, keep roundoff bits
 
 		changed = Bump_Palette(palette1, jump); // increment palette
 
@@ -235,12 +234,12 @@ void Fade_Palette_To(void *palette1, unsigned int delay, void (*callback)()) {
  *   08/02/1994 SKB : Made private                                         *
  *=========================================================================*/
 PRIVATE void __cdecl Determine_Bump_Rate(void *palette, int delay, short *ticks, short *rate) {
-	int gun1;  // Palette 1 gun value.
-	int gun2;  // Palette 2 gun value.
-	int diff;  // Maximum color gun difference.
-	int tp;	   // Temporary tick accumulator.
+	int gun1; // Palette 1 gun value.
+	int gun2; // Palette 2 gun value.
+	int diff; // Maximum color gun difference.
+	int tp; // Temporary tick accumulator.
 	int index; // Color gun working index.
-	long t;	   // Working tick intermediate value.
+	long t; // Working tick intermediate value.
 	int adiff; // Absolute difference between guns.
 
 	/*
@@ -302,9 +301,9 @@ PRIVATE void __cdecl Determine_Bump_Rate(void *palette, int delay, short *ticks,
  *=========================================================================*/
 #if (IBM)
 PRIVATE BOOL __cdecl Bump_Palette(void *palette1, unsigned int step) {
-	BOOL changed = FALSE;		      // Flag that palette has changed this tick.
-	int index;			      // Index to DAC register gun.
-	int gun1, gun2;			      // Palette 1 gun value.
+	BOOL changed = FALSE; // Flag that palette has changed this tick.
+	int index; // Index to DAC register gun.
+	int gun1, gun2; // Palette 1 gun value.
 	unsigned char palette[PALETTE_BYTES]; // copy of current palette
 
 	/*

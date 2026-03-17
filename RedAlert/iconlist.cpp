@@ -33,14 +33,22 @@
 #include "iconlist.h"
 #include "dibapi.h"
 
-int Format_Window_String_New(const char *string, int maxlinelen, int &width, int &height, char *szReturn,
-			     int iExtraChars);
+int Format_Window_String_New(const char *string, int maxlinelen, int &width, int &height, char *szReturn, int iExtraChars);
 void CC_Draw_DIB(const char *pDIB, int xDest, int yDest, int iWidth, WindowNumberType window);
 
 //***********************************************************************************************
-IconListClass::IconListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down,
-			     bool bResponsibleForStringAlloc, int iSelectionType, int iMaxItemsSaved)
-    : ListClass(id, x, y, w, h, flags, up, down) {
+IconListClass::IconListClass(int id,
+			     int x,
+			     int y,
+			     int w,
+			     int h,
+			     TextPrintType flags,
+			     void const *up,
+			     void const *down,
+			     bool bResponsibleForStringAlloc,
+			     int iSelectionType,
+			     int iMaxItemsSaved)
+	: ListClass(id, x, y, w, h, flags, up, down) {
 	//	If bResponsibleForStringAlloc, COPIES of strings are stored in the list. Deletion is
 	//	handled by this class. Icons are different - the caller is responsible for what's on
 	//	the other end of the pointer.
@@ -85,15 +93,26 @@ IconListClass::~IconListClass(void) {
  * WARNINGS:   none                                                                            *
  * HISTORY:    07/07/1998 ajw : Created.                                                       *
  *=============================================================================================*/
-int IconListClass::Add_Item(char const *text) { return Add_Item(text, NULL, NULL, ICON_SHAPE); }
+int IconListClass::Add_Item(char const *text) {
+	return Add_Item(text, NULL, NULL, ICON_SHAPE);
+}
 
-int IconListClass::Add_Item(const char *text, const char *szHelp, void *pIcon0, ICONKIND IconKind0,
-			    const char *szExtraDataString /* = NULL */, void *pvExtraDataPtr /* = NULL */,
-			    RemapControlType *pColorRemap /* = NULL */, void *pIcon1 /* = NULL */,
-			    ICONKIND IconKind1 /* = ICON_SHAPE */, void *pIcon2 /* = NULL */,
-			    ICONKIND IconKind2 /* = ICON_SHAPE */, void *pFixedIcon /* = NULL */,
-			    ICONKIND FixedIconKind /* = ICON_SHAPE */, int iXFixedIcon /* = 0 */,
-			    int iYFixedIcon /* = 0 */, int iFixedIconWidth /* = -1 */) {
+int IconListClass::Add_Item(const char *text,
+			    const char *szHelp,
+			    void *pIcon0,
+			    ICONKIND IconKind0,
+			    const char *szExtraDataString /* = NULL */,
+			    void *pvExtraDataPtr /* = NULL */,
+			    RemapControlType *pColorRemap /* = NULL */,
+			    void *pIcon1 /* = NULL */,
+			    ICONKIND IconKind1 /* = ICON_SHAPE */,
+			    void *pIcon2 /* = NULL */,
+			    ICONKIND IconKind2 /* = ICON_SHAPE */,
+			    void *pFixedIcon /* = NULL */,
+			    ICONKIND FixedIconKind /* = ICON_SHAPE */,
+			    int iXFixedIcon /* = 0 */,
+			    int iYFixedIcon /* = 0 */,
+			    int iFixedIconWidth /* = -1 */) {
 	if (text) {
 		if (bDoAlloc) {
 			int iRetVal;
@@ -134,15 +153,39 @@ int IconListClass::Add_Item(const char *text, const char *szHelp, void *pIcon0, 
 					// adjacent. We want 	a line break for every break character, so add lines for
 					// each space that 	szNextChar is off by.
 					szNextChar++;
-					Add_Item_Detail(" ", szHelp, pIcon0, IconKind0, szExtraDataString,
-							pvExtraDataPtr, pColorRemap, pIcon1, IconKind1, pIcon2,
-							IconKind2, pFixedIcon, FixedIconKind, iXFixedIcon, iYFixedIcon,
+					Add_Item_Detail(" ",
+							szHelp,
+							pIcon0,
+							IconKind0,
+							szExtraDataString,
+							pvExtraDataPtr,
+							pColorRemap,
+							pIcon1,
+							IconKind1,
+							pIcon2,
+							IconKind2,
+							pFixedIcon,
+							FixedIconKind,
+							iXFixedIcon,
+							iYFixedIcon,
 							iFixedIconWidth);
 				}
-				iRetVal = Add_Item_Detail(szToken, szHelp, pIcon0, IconKind0, szExtraDataString,
-							  pvExtraDataPtr, pColorRemap, pIcon1, IconKind1, pIcon2,
-							  IconKind2, pFixedIcon, FixedIconKind, iXFixedIcon,
-							  iYFixedIcon, iFixedIconWidth);
+				iRetVal = Add_Item_Detail(szToken,
+							  szHelp,
+							  pIcon0,
+							  IconKind0,
+							  szExtraDataString,
+							  pvExtraDataPtr,
+							  pColorRemap,
+							  pIcon1,
+							  IconKind1,
+							  pIcon2,
+							  IconKind2,
+							  pFixedIcon,
+							  FixedIconKind,
+							  iXFixedIcon,
+							  iYFixedIcon,
+							  iFixedIconWidth);
 
 				//	Expect next token two chars after the end of this one.
 				szNextChar = szToken + strlen(szToken) + 1;
@@ -234,10 +277,22 @@ int IconListClass::Add_Item(const char *text, const char *szHelp, void *pIcon0, 
 }
 
 //***********************************************************************************************
-int IconListClass::Add_Item_Detail(const char *szToken, const char *szHelp, void *pIcon0, ICONKIND IconKind0,
-				   const char *szExtraDataString, void *pvExtraData, RemapControlType *pColorRemap,
-				   void *pIcon1, ICONKIND IconKind1, void *pIcon2, ICONKIND IconKind2, void *pFixedIcon,
-				   ICONKIND FixedIconKind, int iXFixedIcon, int iYFixedIcon, int iFixedIconWidth) {
+int IconListClass::Add_Item_Detail(const char *szToken,
+				   const char *szHelp,
+				   void *pIcon0,
+				   ICONKIND IconKind0,
+				   const char *szExtraDataString,
+				   void *pvExtraData,
+				   RemapControlType *pColorRemap,
+				   void *pIcon1,
+				   ICONKIND IconKind1,
+				   void *pIcon2,
+				   ICONKIND IconKind2,
+				   void *pFixedIcon,
+				   ICONKIND FixedIconKind,
+				   int iXFixedIcon,
+				   int iYFixedIcon,
+				   int iFixedIconWidth) {
 	//	Broken out of above function as it is repeated.
 
 	//	Add one item to list.
@@ -281,18 +336,42 @@ int IconListClass::Add_Item_Detail(const char *szToken, const char *szHelp, void
 }
 
 //***********************************************************************************************
-int IconListClass::Add_Item(int text) { return Add_Item(Text_String(text), NULL, NULL, ICON_SHAPE); }
+int IconListClass::Add_Item(int text) {
+	return Add_Item(Text_String(text), NULL, NULL, ICON_SHAPE);
+}
 
 //***********************************************************************************************
-int IconListClass::Add_Item(int text, const char *szHelp, void *pIcon0, ICONKIND IconKind0,
-			    const char *szExtraDataString /* = NULL */, void *pvExtraDataPtr /* = NULL */,
-			    RemapControlType *pColorRemap /* = NULL */, void *pIcon1 /* = NULL */,
-			    ICONKIND IconKind1 /* = ICON_SHAPE */, void *pIcon2 /* = NULL */,
-			    ICONKIND IconKind2 /* = ICON_SHAPE */, void *pFixedIcon /* = NULL */,
-			    ICONKIND FixedIconKind /* = ICON_SHAPE */, int iXFixedIcon /* = 0 */,
-			    int iYFixedIcon /* = 0 */, int iFixedIconWidth /* = -1 */) {
-	return Add_Item(Text_String(text), szHelp, pIcon0, IconKind0, szExtraDataString, pvExtraDataPtr, pColorRemap,
-			pIcon1, IconKind1, pIcon2, IconKind2, pFixedIcon, FixedIconKind, iXFixedIcon, iYFixedIcon,
+int IconListClass::Add_Item(int text,
+			    const char *szHelp,
+			    void *pIcon0,
+			    ICONKIND IconKind0,
+			    const char *szExtraDataString /* = NULL */,
+			    void *pvExtraDataPtr /* = NULL */,
+			    RemapControlType *pColorRemap /* = NULL */,
+			    void *pIcon1 /* = NULL */,
+			    ICONKIND IconKind1 /* = ICON_SHAPE */,
+			    void *pIcon2 /* = NULL */,
+			    ICONKIND IconKind2 /* = ICON_SHAPE */,
+			    void *pFixedIcon /* = NULL */,
+			    ICONKIND FixedIconKind /* = ICON_SHAPE */,
+			    int iXFixedIcon /* = 0 */,
+			    int iYFixedIcon /* = 0 */,
+			    int iFixedIconWidth /* = -1 */) {
+	return Add_Item(Text_String(text),
+			szHelp,
+			pIcon0,
+			IconKind0,
+			szExtraDataString,
+			pvExtraDataPtr,
+			pColorRemap,
+			pIcon1,
+			IconKind1,
+			pIcon2,
+			IconKind2,
+			pFixedIcon,
+			FixedIconKind,
+			iXFixedIcon,
+			iYFixedIcon,
 			iFixedIconWidth);
 }
 
@@ -435,12 +514,19 @@ void IconListClass::Draw_Entry(int index, int x, int y, int width, int selected)
 	//	Draw fixed position icon.
 	if (pExtras->FixedIcon.pIcon) {
 		if (pExtras->FixedIcon.IconKind == ICON_SHAPE)
-			CC_Draw_Shape(pExtras->FixedIcon.pIcon, 0, x + pExtras->FixedIcon.xOffset,
-				      y + pExtras->FixedIcon.yOffset, WINDOW_MAIN, SHAPE_NORMAL);
+			CC_Draw_Shape(pExtras->FixedIcon.pIcon,
+				      0,
+				      x + pExtras->FixedIcon.xOffset,
+				      y + pExtras->FixedIcon.yOffset,
+				      WINDOW_MAIN,
+				      SHAPE_NORMAL);
 		//	Put similar code in here for shapes if used...
 		else
-			CC_Draw_DIB((char *)pExtras->FixedIcon.pIcon, x + pExtras->FixedIcon.xOffset,
-				    y + pExtras->FixedIcon.yOffset, pExtras->FixedIcon.iWidth, WINDOW_MAIN);
+			CC_Draw_DIB((char *)pExtras->FixedIcon.pIcon,
+				    x + pExtras->FixedIcon.xOffset,
+				    y + pExtras->FixedIcon.yOffset,
+				    pExtras->FixedIcon.iWidth,
+				    WINDOW_MAIN);
 	}
 
 	//	Draw variable position left-of-text icons.
@@ -470,7 +556,7 @@ int IconListClass::Action(unsigned flags, KeyNumType &key) {
 				iSelected = min(iSelected, List.Count() - 1);
 				if (iSelected >= 0)
 					((IconList_ItemExtras *)ExtrasList[iSelected])->bMultiSelected =
-					    !((IconList_ItemExtras *)ExtrasList[iSelected])->bMultiSelected;
+						!((IconList_ItemExtras *)ExtrasList[iSelected])->bMultiSelected;
 			}
 		}
 	}
@@ -704,8 +790,7 @@ int IconListClass::OffsetToIndex(int iIndex, int y) {
 //	extra break characters when a break in a long single word has to be made.
 //	Hey - it's better than an infinite loop that forces you to reset your machine, as in the original code...
 
-int Format_Window_String_New(const char *string, int maxlinelen, int &width, int &height, char *szReturn,
-			     int iExtraChars) {
+int Format_Window_String_New(const char *string, int maxlinelen, int &width, int &height, char *szReturn, int iExtraChars) {
 	int linelen;
 	int lines = 0;
 	width = 0;
@@ -778,7 +863,6 @@ void CC_Draw_DIB(const char *pDIB, int xDest, int yDest, int iWidth, WindowNumbe
 	//	If iWidth is too large, default width of dib is used.
 	//	If iWidth is negative, dib isn't drawn.
 	if (pDIB && iWidth >= 0) {
-
 		int iWidthDIB = DIBWidth(pDIB);
 		int iHeight = DIBHeight(pDIB);
 		const char *pBits = FindDIBBits(pDIB);
@@ -791,11 +875,11 @@ void CC_Draw_DIB(const char *pDIB, int xDest, int yDest, int iWidth, WindowNumbe
 		GraphicViewPortClass draw_window(LogicPage->Get_Graphic_Buffer(),
 						 WindowList[window][WINDOWX] + LogicPage->Get_XPos(),
 						 WindowList[window][WINDOWY] + LogicPage->Get_YPos(),
-						 WindowList[window][WINDOWWIDTH], WindowList[window][WINDOWHEIGHT]);
+						 WindowList[window][WINDOWWIDTH],
+						 WindowList[window][WINDOWHEIGHT]);
 		if (draw_window.Lock()) {
 			int iDestPitch =
-			    draw_window.Get_Pitch() +
-			    draw_window.Get_Width(); //	Meaning of "Pitch" in this class seems to mean the eol skip.
+				draw_window.Get_Pitch() + draw_window.Get_Width(); //	Meaning of "Pitch" in this class seems to mean the eol skip.
 			char *pLineDest = (char *)draw_window.Get_Offset() + xDest + (yDest + iHeight - 1) * iDestPitch;
 
 			const char *pLineSrc = pBits;

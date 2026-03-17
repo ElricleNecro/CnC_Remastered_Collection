@@ -51,27 +51,27 @@ typedef int bool;
 class MonoClass {
 public:
 	enum MonoClassPageEnums {
-		COLUMNS = 80,	    // Number of columns.
-		LINES = 25,	    // Number of lines.
+		COLUMNS = 80, // Number of columns.
+		LINES = 25, // Number of lines.
 		MAX_MONO_PAGES = 16 // Maximum RAM pages on mono card.
 	};
 
 	typedef enum MonoAttribute {
 		INVISIBLE = 0x00, // Black on black.
 		UNDERLINE = 0x01, // Underline.
-		BLINKING = 0x90,  // Blinking white on black.
-		NORMAL = 0x02,	  // White on black.
-		INVERSE = 0x70,	  // Black on white.
+		BLINKING = 0x90, // Blinking white on black.
+		NORMAL = 0x02, // White on black.
+		INVERSE = 0x70, // Black on white.
 	} MonoAttribute;
 
 	/*
 	**	These are the various box styles that may be used.
 	*/
 	typedef enum BoxStyleType {
-		SINGLE,	     // Single thickness.
+		SINGLE, // Single thickness.
 		DOUBLE_HORZ, // Double thick on the horizontal axis.
 		DOUBLE_VERT, // Double thick on the vertical axis.
-		DOUBLE,	     // Double thickness.
+		DOUBLE, // Double thickness.
 
 		COUNT
 	} BoxStyleType;
@@ -79,15 +79,25 @@ public:
 	MonoClass(void);
 	~MonoClass(void);
 
-	static void Enable(void) { Enabled = true; };
-	static void Disable(void) { Enabled = false; };
-	static bool Is_Enabled(void) { return Enabled; };
-	static MonoClass *Get_Current(void) { return PageUsage[0]; };
+	static void Enable(void) {
+		Enabled = true;
+	};
+	static void Disable(void) {
+		Enabled = false;
+	};
+	static bool Is_Enabled(void) {
+		return Enabled;
+	};
+	static MonoClass *Get_Current(void) {
+		return PageUsage[0];
+	};
 
 	void Sub_Window(int x = 0, int y = 0, int w = -1, int h = -1);
 	void Fill_Attrib(int x, int y, int w, int h, MonoAttribute attrib);
 	void Draw_Box(int x, int y, int w, int h, MonoAttribute attrib = NORMAL, BoxStyleType thick = SINGLE);
-	void Set_Default_Attribute(MonoAttribute attrib) { Attrib = attrib; };
+	void Set_Default_Attribute(MonoAttribute attrib) {
+		Attrib = attrib;
+	};
 	void Clear(void);
 	void Set_Cursor(int x, int y);
 	void Print(char const *text);
@@ -99,10 +109,18 @@ public:
 	void View(void);
 	void Scroll(int lines = 1);
 	void Pan(int cols = 1);
-	int Get_X(void) const { return X; };
-	int Get_Y(void) const { return Y; };
-	int Get_Width(void) const { return (SubW); };
-	int Get_Height(void) const { return (SubH); };
+	int Get_X(void) const {
+		return X;
+	};
+	int Get_Y(void) const {
+		return Y;
+	};
+	int Get_Width(void) const {
+		return (SubW);
+	};
+	int Get_Height(void) const {
+		return (SubH);
+	};
 
 	/*
 	**	Handles deep copies for the mono class objects. This performs what is essentially
@@ -186,8 +204,8 @@ private:
 	**	These private constants are used in the various monochrome operations.
 	*/
 	enum MonoClassPortEnums {
-		CONTROL_PORT = 0x03B4,					    // CRTC control register.
-		DATA_PORT = 0x03B5,					    // CRTC data register.
+		CONTROL_PORT = 0x03B4, // CRTC control register.
+		DATA_PORT = 0x03B5, // CRTC data register.
 		SIZE_OF_PAGE = (int)LINES * (int)COLUMNS * sizeof(CellType) // Entire page size.
 	};
 
@@ -202,8 +220,12 @@ private:
 	/*
 	**	Fetches pointers to the appropriate mono RAM.
 	*/
-	MonoPageType *Raw_Ptr(int page) const { return &((MonoPageType *)0xB0000)[page]; }
-	MonoPageType *Page_Ptr(void) const { return (Raw_Ptr(Page)); }
+	MonoPageType *Raw_Ptr(int page) const {
+		return &((MonoPageType *)0xB0000)[page];
+	}
+	MonoPageType *Page_Ptr(void) const {
+		return (Raw_Ptr(Page));
+	}
 
 	/*
 	**	If this is true, then monochrome output is allowed. It defaults to false

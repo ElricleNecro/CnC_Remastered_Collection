@@ -52,7 +52,9 @@ public:
 	PKPipe(CryptControl control, RandomStraw &rnd);
 
 	virtual void Put_To(Pipe *pipe);
-	virtual void Put_To(Pipe &pipe) { Put_To(&pipe); }
+	virtual void Put_To(Pipe &pipe) {
+		Put_To(&pipe);
+	}
 
 	// Feed data through for processing.
 	virtual int Put(void const *source, int length);

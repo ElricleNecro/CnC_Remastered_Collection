@@ -51,46 +51,46 @@ public:
 	typedef enum EventType : unsigned char {
 		EMPTY,
 
-		ALLY,	       // Make allie of specified house.
-		MEGAMISSION,   // Full change of mission with target and destination.
+		ALLY, // Make allie of specified house.
+		MEGAMISSION, // Full change of mission with target and destination.
 		MEGAMISSION_F, // Full change of mission with target and destination, and formation overrides.
-		IDLE,	       // Request to enter idle mode.
-		SCATTER,       // Request to scatter from current location.
-		DESTRUCT,      // Self destruct request (surrender action).
-		DEPLOY,	       // MCV is to deploy at current location.
-		PLACE,	       // Place building at location specified.
-		OPTIONS,       // Bring up options screen.
-		GAMESPEED,     // Set game speed
-		PRODUCE,       // Start or Resume production.
-		SUSPEND,       // Suspend production.
-		ABANDON,       // Abandon production.
-		PRIMARY,       // Primary factory selected.
+		IDLE, // Request to enter idle mode.
+		SCATTER, // Request to scatter from current location.
+		DESTRUCT, // Self destruct request (surrender action).
+		DEPLOY, // MCV is to deploy at current location.
+		PLACE, // Place building at location specified.
+		OPTIONS, // Bring up options screen.
+		GAMESPEED, // Set game speed
+		PRODUCE, // Start or Resume production.
+		SUSPEND, // Suspend production.
+		ABANDON, // Abandon production.
+		PRIMARY, // Primary factory selected.
 		SPECIAL_PLACE, // Special target location selected
-		EXIT,	       // Exit game.
-		ANIMATION,     // Flash ground as movement feedback.
-		REPAIR,	       // Repair specified object.
-		SELL,	       //	Sell specified object.
-		SELLCELL,      // Sell wall at specified cell.
-		SPECIAL,       // Special options control.
+		EXIT, // Exit game.
+		ANIMATION, // Flash ground as movement feedback.
+		REPAIR, // Repair specified object.
+		SELL, //	Sell specified object.
+		SELLCELL, // Sell wall at specified cell.
+		SPECIAL, // Special options control.
 
 		// Private events.
 		FRAMESYNC, // Game-connection packet; includes Scenario CRC & sender's frame #
-			   // Used to initiate game connection phase & to reconnect;
-			   // When one of these is received, the receiver knows there are
-			   // no associated commands in this packet.
+		// Used to initiate game connection phase & to reconnect;
+		// When one of these is received, the receiver knows there are
+		// no associated commands in this packet.
 		MESSAGE, // Message to another player (The message is the 40 bytes
-			 // after the event class).
+		// after the event class).
 		RESPONSE_TIME, // use a new propagation delay value
-		FRAMEINFO,     // Game-heartbeat packet; includes Game CRC & command count
-			   // All packets sent for a frame are prefixed with one of these
-		SAVEGAME,  // allows multiplayer games to save
-		ARCHIVE,   // Updates archive target on specified object.
+		FRAMEINFO, // Game-heartbeat packet; includes Game CRC & command count
+		// All packets sent for a frame are prefixed with one of these
+		SAVEGAME, // allows multiplayer games to save
+		ARCHIVE, // Updates archive target on specified object.
 		ADDPLAYER, // Add a new player
 
-		TIMING,	      // new timing values for all systems to use
+		TIMING, // new timing values for all systems to use
 		PROCESS_TIME, // a system's average processing time, in ticks per frame
 
-#ifdef FIXIT_VERSION_3	      //	Stalemate games.
+#ifdef FIXIT_VERSION_3 //	Stalemate games.
 		PROPOSE_DRAW, //	Players proposes that 2-player game be called a stalemate.
 		RETRACT_DRAW, //	Player retracts proposed draw offer.
 #endif
@@ -131,38 +131,38 @@ public:
 			xTargetClass Whom; // The object to apply the event to.
 		} Target;
 		struct {
-			AnimType What;	  // The animation to create.
+			AnimType What; // The animation to create.
 			HousesType Owner; // The owner of the animation (when it matters).
 			COORDINATE Where; // The location to place the animation.
-			int Visible;	  // Who this animation is visible to.
+			int Visible; // Who this animation is visible to.
 		} Anim;
 		struct {
 			int Value; // general-purpose data
 		} General;
 		struct {
-			xTargetClass Whom;	  // Whom to apply mission to.
-			MissionType Mission;	  // What mission to apply.
-			xTargetClass Target;	  // Target to assign.
+			xTargetClass Whom; // Whom to apply mission to.
+			MissionType Mission; // What mission to apply.
+			xTargetClass Target; // Target to assign.
 			xTargetClass Destination; // Destination to assign.
 		} MegaMission;
 		struct {
-			xTargetClass Whom;	  // Whom to apply mission to.
-			MissionType Mission;	  // What mission to apply.
-			xTargetClass Target;	  // Target to assign.
+			xTargetClass Whom; // Whom to apply mission to.
+			MissionType Mission; // What mission to apply.
+			xTargetClass Target; // Target to assign.
 			xTargetClass Destination; // Destination to assign.
-			SpeedType Speed;	  // Formation override speed.
-			MPHType MaxSpeed;	  // Formation override maximum speed.
+			SpeedType Speed; // Formation override speed.
+			MPHType MaxSpeed; // Formation override maximum speed.
 		} MegaMission_F;
 		struct {
-			xTargetClass Whom;   // Whom to apply mission to.
+			xTargetClass Whom; // Whom to apply mission to.
 			MissionType Mission; // What mission to apply.
 		} Mission;
 		struct {
-			xTargetClass Whom;  // Whom to apply movement change to.
+			xTargetClass Whom; // Whom to apply movement change to.
 			xTargetClass Where; // Where to set NavCom to.
 		} NavCom;
 		struct {
-			xTargetClass Whom;   // Whom to apply attack change to.
+			xTargetClass Whom; // Whom to apply attack change to.
 			xTargetClass Target; // What to set TarCom to.
 		} TarCom;
 		struct {
@@ -189,8 +189,8 @@ public:
 		struct {
 			unsigned long CRC;
 			unsigned short CommandCount; // # commands sent so far
-			unsigned char Delay;	     // propagation delay used this frame
-						     // (Frame - Delay = sender's current frame #)
+			unsigned char Delay; // propagation delay used this frame
+				// (Frame - Delay = sender's current frame #)
 		} FrameInfo;
 		/*
 		** This structure is used for the special variable-length event.  This event
@@ -224,18 +224,18 @@ public:
 	} Data;
 
 	//-------------- Constructors ---------------------
-	EventClass(void) { Type = EMPTY; };
+	EventClass(void) {
+		Type = EMPTY;
+	};
 	EventClass(SpecialClass data);
 	EventClass(EventType type, TargetClass target);
 	EventClass(EventType type);
 	EventClass(EventType type, int val);
 	EventClass(EventType type, CELL cell);
 	EventClass(EventType type, TargetClass src, TargetClass dest);
-	EventClass(TargetClass src, MissionType mission, TargetClass target = TARGET_NONE,
-		   TargetClass destination = TARGET_NONE);
+	EventClass(TargetClass src, MissionType mission, TargetClass target = TARGET_NONE, TargetClass destination = TARGET_NONE);
 
-	EventClass(TargetClass src, MissionType mission, TargetClass target, TargetClass destination, SpeedType speed,
-		   MPHType maxspeed);
+	EventClass(TargetClass src, MissionType mission, TargetClass target, TargetClass destination, SpeedType speed, MPHType maxspeed);
 
 	EventClass(EventType type, RTTIType object, int id);
 	EventClass(EventType type, RTTIType object, CELL cell);
@@ -247,7 +247,9 @@ public:
 	// Process the event.
 	void Execute(void);
 
-	int operator==(EventClass &q) { return memcmp(this, &q, sizeof(q)) == 0; };
+	int operator==(EventClass &q) {
+		return memcmp(this, &q, sizeof(q)) == 0;
+	};
 
 	static unsigned char EventLength[LAST_EVENT];
 	static char *EventNames[LAST_EVENT];

@@ -92,7 +92,6 @@ int MapEditClass::Select_Object(void) {
 	*/
 	if (!object) {
 		if (CurrentObject.Count()) {
-
 			/*
 			**	Unselect all current objects
 			*/
@@ -105,12 +104,10 @@ int MapEditClass::Select_Object(void) {
 		}
 		rc = -1;
 	} else {
-
 		/*
 		**	Select object only if it's different
 		*/
 		if (!CurrentObject.Count() || (CurrentObject.Count() && object != CurrentObject[0])) {
-
 			/*
 			**	Unselect all current objects
 			*/
@@ -157,10 +154,10 @@ int MapEditClass::Select_Object(void) {
 void MapEditClass::Select_Next(void) {
 	ObjectClass *obj;
 	CELL obj_cell;
-	int smap_w;  // screen map width in icons
-	int smap_h;  // screen map height in icons
-	int cell_x;  // cell-x of next object
-	int cell_y;  // cell-y of next object
+	int smap_w; // screen map width in icons
+	int smap_h; // screen map height in icons
+	int cell_x; // cell-x of next object
+	int cell_y; // cell-y of next object
 	int tcell_x; // cell-x of TacticalCell
 	int tcell_y; // cell-y of TacticalCell
 
@@ -263,9 +260,9 @@ void MapEditClass::Select_Next(void) {
  *=========================================================================*/
 void MapEditClass::Popup_Controls(void) {
 	const TechnoTypeClass *objtype = NULL;
-	HousesType owner;  // object's current owner
+	HousesType owner; // object's current owner
 	int mission_index; // object's current mission
-	int strength;	   // object's 0-255 strength value
+	int strength; // object's 0-255 strength value
 	int i;
 
 	/*
@@ -437,7 +434,6 @@ int MapEditClass::Move_Grabbed_Object(void) {
 	**	If infantry, use a free spot in this cell
 	*/
 	if (GrabbedObject->Is_Infantry()) {
-
 		if (Is_Spot_Free(Pixel_To_Coord(Get_Mouse_X(), Get_Mouse_Y()))) {
 			new_coord = Closest_Free_Spot(Pixel_To_Coord(Get_Mouse_X(), Get_Mouse_Y()));
 
@@ -450,14 +446,12 @@ int MapEditClass::Move_Grabbed_Object(void) {
 		}
 
 	} else {
-
 		/*
 		**	Non-infantry: use cell's center coordinate
 		*/
 		new_coord = Cell_Coord(ZoneCell + GrabOffset);
 
 		if (GrabbedObject->What_Am_I() == RTTI_BUILDING || GrabbedObject->What_Am_I() == RTTI_TERRAIN) {
-
 			new_coord = Coord_Whole(new_coord);
 		}
 
@@ -469,7 +463,6 @@ int MapEditClass::Move_Grabbed_Object(void) {
 		}
 	}
 	if (new_coord != NULL) {
-
 		/*
 		** If this object is part of the AI's Base list, change the coordinate
 		** in the Base's Node list.

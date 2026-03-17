@@ -61,8 +61,13 @@ public:
 	/*.....................................................................
 	Constructor/destructor.
 	.....................................................................*/
-	SequencedConnClass(int numsend, int numrecieve, int maxlen, unsigned short magicnum, unsigned long retry_delta,
-			   unsigned long max_retries, unsigned long timeout);
+	SequencedConnClass(int numsend,
+			   int numrecieve,
+			   int maxlen,
+			   unsigned short magicnum,
+			   unsigned long retry_delta,
+			   unsigned long max_retries,
+			   unsigned long timeout);
 	virtual ~SequencedConnClass();
 
 	/*.....................................................................

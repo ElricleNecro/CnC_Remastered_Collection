@@ -42,8 +42,8 @@
 #ifndef NDEBUG
 #define NDEBUG
 #endif
-#include "lzo_conf.h"
 #include <assert.h>
+#include "lzo_conf.h"
 
 #if !defined(LZO1X) && !defined(LZO1Y)
 #define LZO1X
@@ -70,8 +70,8 @@
 #define M4_MARKER 16
 
 #define _DV2(p, shift1, shift2) (((((lzo_uint)(p[2]) << shift1) ^ p[1]) << shift2) ^ p[0])
-#define DVAL_NEXT(dv, p)                                                                                               \
-	dv ^= p[-1];                                                                                                   \
+#define DVAL_NEXT(dv, p)                                                                                                                             \
+	dv ^= p[-1];                                                                                                                                 \
 	dv = (((dv) >> 5) ^ ((lzo_uint)(p[2]) << (2 * 5)))
 #define _DV(p, shift) _DV2(p, shift, shift)
 #define DVAL_FIRST(dv, p) dv = _DV((p), 5)
@@ -197,8 +197,7 @@ static int do_compress(const lzo_byte *in, lzo_uint in_len, lzo_byte *out, lzo_u
 	code_match:
 		assert(ii == ip);
 		ip += 3;
-		if (*m_pos++ != *ip++ || *m_pos++ != *ip++ || *m_pos++ != *ip++ || *m_pos++ != *ip++ ||
-		    *m_pos++ != *ip++ || *m_pos++ != *ip++) {
+		if (*m_pos++ != *ip++ || *m_pos++ != *ip++ || *m_pos++ != *ip++ || *m_pos++ != *ip++ || *m_pos++ != *ip++ || *m_pos++ != *ip++) {
 			--ip;
 			m_len = ip - ii;
 			assert(m_len >= 3);

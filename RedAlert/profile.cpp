@@ -219,17 +219,16 @@ bool WWWritePrivateProfileInt(char const *section, char const *entry, int value,
  * HISTORY:                                                                                    *
  *   08/05/1992 JLB : Created.                                                                 *
  *=============================================================================================*/
-char *WWGetPrivateProfileString(char const *section, char const *entry, char const *def, char *retbuffer, int retlen,
-				char const *profile) {
+char *WWGetPrivateProfileString(char const *section, char const *entry, char const *def, char *retbuffer, int retlen, char const *profile) {
 	char const *workptr; // Working pointer into profile block.
-	char *altworkptr;    // Alternate work pointer.
-	char sec[50];	     // Working section buffer.
-	char const *retval;  // Start of section or entry pointer.
-	char *next;	     // Pointer to start of next section (or EOF).
-	char c, c2;	     // Working character values.
-	int len;	     // Working substring length value.
-	int entrylen;	     // Byte length of specified entry.
-	char *orig_retbuf;   // original retbuffer ptr
+	char *altworkptr; // Alternate work pointer.
+	char sec[50]; // Working section buffer.
+	char const *retval; // Start of section or entry pointer.
+	char *next; // Pointer to start of next section (or EOF).
+	char c, c2; // Working character values.
+	int len; // Working substring length value.
+	int entrylen; // Byte length of specified entry.
+	char *orig_retbuf; // original retbuffer ptr
 
 	//	if (!retlen) return(NULL);
 
@@ -267,7 +266,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 	retval = profile;
 	workptr = profile;
 	for (;;) {
-
 		/*
 		**	'workptr' = start of next section
 		*/
@@ -295,7 +293,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 		**	process this section
 		*/
 		if (memicmp(workptr, sec, len) == 0 && (c == '\n')) {
-
 			/*
 			**	Skip work pointer to start of first valid entry.
 			*/
@@ -321,7 +318,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 			next = (char *)strchr(workptr, '[');
 			for (;;) {
 				if (next) {
-
 					c = *(next - 1);
 
 					/*
@@ -340,7 +336,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 					*/
 					next = strchr(next + 1, '[');
 				} else {
-
 					/*
 					**	No bracket found; set 'next' to the end of the file
 					*/
@@ -381,10 +376,9 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 					/*
 					**	Entry found; extract it
 					*/
-					if (memicmp(workptr, entry, entrylen) == 0 && (c == '\n') &&
-					    (c2 == '=' || isspace(c2))) {
+					if (memicmp(workptr, entry, entrylen) == 0 && (c == '\n') && (c2 == '=' || isspace(c2))) {
 						retval = workptr;
-						workptr += entrylen;		// skip entry name
+						workptr += entrylen; // skip entry name
 						workptr = strchr(workptr, '='); // find '='
 
 						/*
@@ -409,7 +403,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 						*/
 						workptr++; // Skip the '='.
 						while (isspace(*workptr)) {
-
 							/*
 							**	Just return if there's no entry past the '='.
 							*/
@@ -441,7 +434,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 					workptr++;
 				}
 			} else {
-
 				/*
 				**	No entry was specified, so build a list of all entries.
 				**	'workptr' is at 1st entry after section name
@@ -450,7 +442,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 				retval = workptr;
 
 				if (retbuffer) {
-
 					/*
 					**	Keep accumulating the identifier strings in the retbuffer.
 					*/
@@ -468,10 +459,9 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 							*/
 							if (retbuffer - orig_retbuf + length + 3 < retlen) {
 								memcpy(retbuffer, workptr, length); // copy entry name
-								*(retbuffer + length) = '\0';	    // NULL-terminate it
-								strtrim(retbuffer);		    // trim spaces
-								retbuffer +=
-								    strlen(retbuffer) + 1; // next pos in dest buf
+								*(retbuffer + length) = '\0'; // NULL-terminate it
+								strtrim(retbuffer); // trim spaces
+								retbuffer += strlen(retbuffer) + 1; // next pos in dest buf
 							} else {
 								break;
 							}
@@ -486,7 +476,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 							}
 							workptr++;
 						} else {
-
 							/*
 							**	If no '=', break out of loop
 							*/
@@ -504,7 +493,6 @@ char *WWGetPrivateProfileString(char const *section, char const *entry, char con
 				break;
 			}
 		} else {
-
 			/*
 			**	Section name not found; go to the next bracket & try again
 			**	Advance past '[' and keep scanning.
@@ -538,7 +526,7 @@ bool WWWritePrivateProfileString(char const *section, char const *entry, char co
 	char buffer[250]; // Working section buffer
 	char const *offset;
 	char const *next; // ptr to next section
-	char c;		  // Working character value
+	char c; // Working character value
 
 	/*
 	**	Just return if nothing to do.
@@ -569,7 +557,6 @@ bool WWWritePrivateProfileString(char const *section, char const *entry, char co
 	**	If the section is there and 'entry' is NULL, remove the entire section
 	*/
 	if (offset && !entry) {
-
 		/*
 		**	'next = end of section or end of file.
 		*/
@@ -594,7 +581,6 @@ bool WWWritePrivateProfileString(char const *section, char const *entry, char co
 				*/
 				next = strchr(next + 1, '[');
 			} else {
-
 				/*
 				**	No bracket found; set 'next' to the end of the file
 				*/
@@ -637,7 +623,6 @@ bool WWWritePrivateProfileString(char const *section, char const *entry, char co
 			strcpy((char *)offset, offset + eol + 1);
 		}
 	} else {
-
 		/*
 		**	Entry doesn't exist, so point 'offset' to the 1st entry position in
 		**	the section.
@@ -649,7 +634,6 @@ bool WWWritePrivateProfileString(char const *section, char const *entry, char co
 	**	Add the desired entry.
 	*/
 	if (entry && string) {
-
 		/*
 		**	Generate entry string.
 		*/
@@ -669,7 +653,9 @@ bool WWWritePrivateProfileString(char const *section, char const *entry, char co
 	return (true);
 }
 
-char *Read_Bin_Buffer(void) { return (ReadBinBuffer); }
+char *Read_Bin_Buffer(void) {
+	return (ReadBinBuffer);
+}
 
 bool Read_Bin_Init(char *buffer, int length) {
 	ReadBinBuffer = buffer;
@@ -746,7 +732,9 @@ bool Read_Bin_String(char *string, char *buffer) {
 	}
 }
 
-char *Write_Bin_Buffer(void) { return (WriteBinBuffer); }
+char *Write_Bin_Buffer(void) {
+	return (WriteBinBuffer);
+}
 
 bool Write_Bin_Init(char *buffer, int length) {
 	WriteBinBuffer = buffer;
@@ -802,8 +790,7 @@ int Write_Bin_PosSet(unsigned int pos, char *buffer) {
 bool Write_Bin_String(char *string, int length, char *buffer) {
 	char *ptr;
 
-	if (buffer != WriteBinBuffer || length < 0 || length > 255 ||
-	    (WriteBinBufferPos + length + 2) > WriteBinBufferLen) {
+	if (buffer != WriteBinBuffer || length < 0 || length > 255 || (WriteBinBufferPos + length + 2) > WriteBinBufferLen) {
 		return (false);
 	} else {
 		ptr = WriteBinBuffer + WriteBinBufferPos;

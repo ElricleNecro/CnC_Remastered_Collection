@@ -54,12 +54,16 @@ public:
 	**	Constructor for terrain object class.
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 	TerrainClass(TerrainType id, CELL cell);
 	TerrainClass(NoInitClass const &x) : ObjectClass(x), Class(x), StageClass(x) {};
 	virtual ~TerrainClass(void);
-	operator TerrainType(void) const { return Class->Type; };
+	operator TerrainType(void) const {
+		return Class->Type;
+	};
 
 	static void Init(void);
 
@@ -71,15 +75,21 @@ public:
 	/*
 	**	Query functions.
 	*/
-	virtual ObjectTypeClass const &Class_Of(void) const { return *Class; };
+	virtual ObjectTypeClass const &Class_Of(void) const {
+		return *Class;
+	};
 
 	/*
 	**	Coordinate inquiry functions. These are used for both display and
 	**	combat purposes.
 	*/
 	virtual COORDINATE Center_Coord(void) const;
-	virtual COORDINATE Render_Coord(void) const { return Coord; };
-	virtual COORDINATE Sort_Y(void) const { return Coord_Add(Coord, Class->CenterBase); };
+	virtual COORDINATE Render_Coord(void) const {
+		return Coord;
+	};
+	virtual COORDINATE Sort_Y(void) const {
+		return Coord_Add(Coord, Class->CenterBase);
+	};
 	virtual COORDINATE Target_Coord(void) const;
 
 	/*
@@ -100,16 +110,14 @@ public:
 	/*
 	**	User I/O.
 	*/
-	virtual void Clicked_As_Target(HousesType house, int) {
-	}; // 2019/09/20 JAS - Added record of who clicked on the object
+	virtual void Clicked_As_Target(HousesType house, int) {}; // 2019/09/20 JAS - Added record of who clicked on the object
 
 	/*
 	**	Combat related.
 	*/
 	virtual void Fire_Out(void);
 	virtual bool Catch_Fire(void);
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source, bool forced = false);
 
 	/*
 	**	AI.
@@ -128,7 +136,9 @@ public:
 	*/
 	static void Read_INI(CCINIClass &ini);
 	static void Write_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "TERRAIN"; };
+	static char *INI_Name(void) {
+		return "TERRAIN";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 

@@ -270,18 +270,18 @@ const char *MCI::GetDeviceTypeName(unsigned long type) {
 		unsigned long typeID;
 		const char *typeName;
 	} _deviceTypeNames[] = {
-	    {MCI_DEVTYPE_ANIMATION, "Animation"},
-	    {MCI_DEVTYPE_CD_AUDIO, "CD Audio"},
-	    {MCI_DEVTYPE_DAT, "DAT"},
-	    {MCI_DEVTYPE_DIGITAL_VIDEO, "Digital Video"},
-	    {MCI_DEVTYPE_OTHER, "Other"},
-	    {MCI_DEVTYPE_OVERLAY, "Overlay"},
-	    {MCI_DEVTYPE_SCANNER, "Scanner"},
-	    {MCI_DEVTYPE_SEQUENCER, "MIDI Sequencer"},
-	    {MCI_DEVTYPE_VCR, "VCR"},
-	    {MCI_DEVTYPE_VIDEODISC, "VideoDisc"},
-	    {MCI_DEVTYPE_WAVEFORM_AUDIO, "Wave Audio"},
-	    {0, NULL},
+		{ MCI_DEVTYPE_ANIMATION, "Animation" },
+		{ MCI_DEVTYPE_CD_AUDIO, "CD Audio" },
+		{ MCI_DEVTYPE_DAT, "DAT" },
+		{ MCI_DEVTYPE_DIGITAL_VIDEO, "Digital Video" },
+		{ MCI_DEVTYPE_OTHER, "Other" },
+		{ MCI_DEVTYPE_OVERLAY, "Overlay" },
+		{ MCI_DEVTYPE_SCANNER, "Scanner" },
+		{ MCI_DEVTYPE_SEQUENCER, "MIDI Sequencer" },
+		{ MCI_DEVTYPE_VCR, "VCR" },
+		{ MCI_DEVTYPE_VIDEODISC, "VideoDisc" },
+		{ MCI_DEVTYPE_WAVEFORM_AUDIO, "Wave Audio" },
+		{ 0, NULL },
 	};
 
 	int i = 0;

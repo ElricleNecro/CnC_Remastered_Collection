@@ -102,9 +102,9 @@ int ControlQ; // cheat key to skip past score/mapsel screens
 bool StillUpdating;
 
 #ifdef WIN32
-char *ScreenNames[2] = {"ALIBACKH.PCX", "SOVBACKH.PCX"};
+char *ScreenNames[2] = { "ALIBACKH.PCX", "SOVBACKH.PCX" };
 #else
-char *ScreenNames[2] = {"ALI-TRAN.WSA", "SOV-TRAN.WSA"};
+char *ScreenNames[2] = { "ALI-TRAN.WSA", "SOV-TRAN.WSA" };
 #endif
 
 // #ifdef WIN32
@@ -127,8 +127,7 @@ ScoreAnimClass::ScoreAnimClass(int x, int y, void const *data) {
 	DataPtr = data;
 }
 
-ScoreTimeClass::ScoreTimeClass(int xpos, int ypos, void const *data, int maxval, int xtimer)
-    : ScoreAnimClass(xpos, ypos, data) {
+ScoreTimeClass::ScoreTimeClass(int xpos, int ypos, void const *data, int maxval, int xtimer) : ScoreAnimClass(xpos, ypos, data) {
 	Stage = 0;
 	MaxStage = maxval;
 	TimerReset = xtimer;
@@ -155,8 +154,7 @@ void ScoreTimeClass::Update(void) {
 	}
 }
 
-ScoreCredsClass::ScoreCredsClass(int xpos, int ypos, void const *data, int maxval, int xtimer)
-    : ScoreAnimClass(xpos, ypos, data) {
+ScoreCredsClass::ScoreCredsClass(int xpos, int ypos, void const *data, int maxval, int xtimer) : ScoreAnimClass(xpos, ypos, data) {
 	Stage = 0;
 	MaxStage = maxval;
 	TimerReset = xtimer;
@@ -191,23 +189,21 @@ void ScoreCredsClass::Update(void) {
 }
 
 ScorePrintClass::ScorePrintClass(int string, int xpos, int ypos, void const *palette, int background)
-    : ScoreAnimClass(xpos, ypos, Text_String(string)) {
+	: ScoreAnimClass(xpos, ypos, Text_String(string)) {
 	Background = background;
 	PrimaryPalette = palette;
 	Stage = 0;
 }
 
-ScorePrintClass::ScorePrintClass(void const *string, int xpos, int ypos, void const *palette, int background)
-    : ScoreAnimClass(xpos, ypos, string) {
+ScorePrintClass::ScorePrintClass(void const *string, int xpos, int ypos, void const *palette, int background) : ScoreAnimClass(xpos, ypos, string) {
 	Background = background;
 	PrimaryPalette = palette;
 	Stage = 0;
 }
 
 void ScorePrintClass::Update(void) {
-	static char localstr[2] = {0, 0};
-	static char _whitepal[] = {0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F,
-				   0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F};
+	static char localstr[2] = { 0, 0 };
+	static char _whitepal[] = { 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F };
 
 	if (Stage && (((char *)DataPtr)[Stage - 1] == 0)) {
 		for (int i = 0; i < MAXSCOREOBJS; i++) {
@@ -231,11 +227,21 @@ void ScorePrintClass::Update(void) {
 			Set_Font_Palette(PrimaryPalette);
 			localstr[0] = ((char *)DataPtr)[Stage - 1];
 			HidPage.Print(localstr, pos - 6 * RESFACTOR, YPos, TBLACK, TBLACK);
-			HidPage.Blit(SeenPage, pos - 6 * RESFACTOR, YPos - 1 * RESFACTOR, pos - 6 * RESFACTOR,
-				     YPos - 1 * RESFACTOR, 7 * RESFACTOR, 8 * RESFACTOR);
+			HidPage.Blit(SeenPage,
+				     pos - 6 * RESFACTOR,
+				     YPos - 1 * RESFACTOR,
+				     pos - 6 * RESFACTOR,
+				     YPos - 1 * RESFACTOR,
+				     7 * RESFACTOR,
+				     8 * RESFACTOR);
 #ifdef WIN32
-			HidPage.Blit(*PseudoSeenBuff, pos - 6 * RESFACTOR, YPos - 1 * RESFACTOR, pos - 6 * RESFACTOR,
-				     YPos - 1 * RESFACTOR, 7 * RESFACTOR, 8 * RESFACTOR);
+			HidPage.Blit(*PseudoSeenBuff,
+				     pos - 6 * RESFACTOR,
+				     YPos - 1 * RESFACTOR,
+				     pos - 6 * RESFACTOR,
+				     YPos - 1 * RESFACTOR,
+				     7 * RESFACTOR,
+				     8 * RESFACTOR);
 			PseudoSeenBuff->Print(localstr, pos - 6 * RESFACTOR, YPos, TBLACK, TBLACK);
 #endif
 		}
@@ -255,8 +261,7 @@ void ScorePrintClass::Update(void) {
 	}
 }
 
-ScoreScaleClass::ScoreScaleClass(void const *string, int xpos, int ypos, char const palette[])
-    : ScoreAnimClass(xpos, ypos, string) {
+ScoreScaleClass::ScoreScaleClass(void const *string, int xpos, int ypos, char const palette[]) : ScoreAnimClass(xpos, ypos, string) {
 	Palette = &palette[0];
 #ifdef WIN32
 	Stage = 0;
@@ -266,8 +271,8 @@ ScoreScaleClass::ScoreScaleClass(void const *string, int xpos, int ypos, char co
 }
 
 void ScoreScaleClass::Update(void) {
-	static int _destx[] = {0, 80, 107, 134, 180, 228};
-	static int _destw[] = {6, 20, 30, 40, 60, 80};
+	static int _destx[] = { 0, 80, 107, 134, 180, 228 };
+	static int _destw[] = { 6, 20, 30, 40, 60, 80 };
 
 	/*
 	** Restore the background for the scaled-up letter
@@ -278,7 +283,11 @@ void ScoreScaleClass::Update(void) {
 		if (Stage != 5) {
 			int destx = _destx[Stage + 1] * RESFACTOR;
 			int destw = _destw[Stage + 1] * RESFACTOR;
-			HidPage.Blit(SeenPage, destx, YPos, destx, YPos,
+			HidPage.Blit(SeenPage,
+				     destx,
+				     YPos,
+				     destx,
+				     YPos,
 				     (destx + destw) <= 320 * RESFACTOR ? destw : (320 * RESFACTOR) - destx,
 				     (YPos + destw) <= 200 * RESFACTOR ? destw : (200 * RESFACTOR) - YPos);
 		}
@@ -287,8 +296,16 @@ void ScoreScaleClass::Update(void) {
 			Set_Font_Palette(Palette);
 			HidPage.Fill_Rect(0, 0, 7 * RESFACTOR, 7 * RESFACTOR, TBLACK);
 			HidPage.Print((char *)DataPtr, 0, 0, TBLACK, TBLACK);
-			HidPage.Scale(SeenPage, 0, 0, _destx[Stage] * RESFACTOR, YPos, 5 * RESFACTOR, 6 * RESFACTOR,
-				      _destw[Stage] * RESFACTOR, _destw[Stage] * RESFACTOR, true);
+			HidPage.Scale(SeenPage,
+				      0,
+				      0,
+				      _destx[Stage] * RESFACTOR,
+				      YPos,
+				      5 * RESFACTOR,
+				      6 * RESFACTOR,
+				      _destw[Stage] * RESFACTOR,
+				      _destw[Stage] * RESFACTOR,
+				      true);
 			Stage--;
 		} else {
 			Set_Font_Palette(Palette);
@@ -336,33 +353,29 @@ int Alloc_Object(ScoreAnimClass *obj) {
  * HISTORY:                                                                                    *
  *   05/02/1994     : Created.                                                                 *
  *=============================================================================================*/
-static unsigned char const _bluepal[] = {0xC0, 0xC1, 0xC1, 0xC3, 0xC2, 0xC5, 0xC3, 0xC7,
-					 0xC4, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xC0, 0xCF};
-static unsigned char const _greenpal[] = {0x70, 0x71, 0x7C, 0x73, 0x7D, 0x75, 0x7E, 0x77,
-					  0x7F, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7C, 0x7F};
-static unsigned char const _redpal[] = {0xD0, 0xD1, 0xD7, 0xD3, 0xD9, 0xD5, 0xDA, 0xD7,
-					0xDB, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xD6, 0xDF};
-static unsigned char const _yellowpal[] = {0x0,	 0x0, 0xEC, 0x0, 0xEB, 0x0, 0xEA, 0x0,
-					   0xE9, 0x0, 0x0,  0x0, 0x0,  0x0, 0xED, 0x0};
+static unsigned char const _bluepal[] = { 0xC0, 0xC1, 0xC1, 0xC3, 0xC2, 0xC5, 0xC3, 0xC7, 0xC4, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xC0, 0xCF };
+static unsigned char const _greenpal[] = { 0x70, 0x71, 0x7C, 0x73, 0x7D, 0x75, 0x7E, 0x77, 0x7F, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7C, 0x7F };
+static unsigned char const _redpal[] = { 0xD0, 0xD1, 0xD7, 0xD3, 0xD9, 0xD5, 0xDA, 0xD7, 0xDB, 0xD9, 0xDA, 0xDB, 0xDC, 0xDD, 0xD6, 0xDF };
+static unsigned char const _yellowpal[] = { 0x0, 0x0, 0xEC, 0x0, 0xEB, 0x0, 0xEA, 0x0, 0xE9, 0x0, 0x0, 0x0, 0x0, 0x0, 0xED, 0x0 };
 void ScoreClass::Presentation(void) {
 #if (0) // PG
 #ifdef WIN32
 //	if (Keyboard != NULL) return;
 #endif
-	static int const _casuax[2] = {144, 150};
-	static int const _casuay[2] = {78, 78};
-	static int const _gditxy[2] = {90, 90};
+	static int const _casuax[2] = { 144, 150 };
+	static int const _casuay[2] = { 78, 78 };
+	static int const _gditxy[2] = { 90, 90 };
 
 #if defined(FRENCH) || defined(GERMAN)
-	static int const _gditxx[2] = {130, 150};
-	static int const _nodtxx[2] = {130, 150};
+	static int const _gditxx[2] = { 130, 150 };
+	static int const _nodtxx[2] = { 130, 150 };
 #else
-	static int const _gditxx[2] = {135, 150};
-	static int const _nodtxx[2] = {135, 150};
+	static int const _gditxx[2] = { 135, 150 };
+	static int const _nodtxx[2] = { 135, 150 };
 #endif
-	static int const _nodtxy[2] = {102, 102};
-	static int const _bldggy[2] = {138, 138};
-	static int const _bldgny[2] = {150, 150};
+	static int const _nodtxy[2] = { 102, 102 };
+	static int const _bldggy[2] = { 138, 138 };
+	static int const _bldgny[2] = { 150, 150 };
 
 #ifdef WIN32
 #ifdef FIXIT_SCORE_CRASH
@@ -412,8 +425,7 @@ void ScoreClass::Presentation(void) {
 	** Load the background for the score screen
 	*/
 #ifndef WIN32
-	void *anim = Open_Animation(ScreenNames[house], NULL, 0L, (WSAOpenType)(WSA_OPEN_FROM_MEM | WSA_OPEN_TO_PAGE),
-				    ScorePalette);
+	void *anim = Open_Animation(ScreenNames[house], NULL, 0L, (WSAOpenType)(WSA_OPEN_FROM_MEM | WSA_OPEN_TO_PAGE), ScorePalette);
 #endif
 
 	unsigned minutes = (unsigned)((ElapsedTime / (long)TIMER_MINUTE)) + 1;
@@ -557,8 +569,7 @@ void ScoreClass::Presentation(void) {
 
 	if (!leadership)
 		leadership++;
-	leadership =
-	    100 * fixed(leadership, (house ? NKilled + NBKilled + leadership : GKilled + GBKilled + leadership));
+	leadership = 100 * fixed(leadership, (house ? NKilled + NBKilled + leadership : GKilled + GBKilled + leadership));
 	leadership = min(150, leadership);
 
 	/*
@@ -725,7 +736,6 @@ void ScoreClass::Presentation(void) {
 	** make a new one filled with blanks.
 	*/
 	if (!file.Is_Available()) {
-
 		// hall of fame doesn't exist, so blank it out & write it
 		file.Open(WRITE);
 
@@ -790,8 +800,7 @@ void ScoreClass::Presentation(void) {
 			} else {
 				strcpy(str + 16, "**");
 			}
-			Alloc_Object(
-			    new ScorePrintClass(str + 16, HALLFAME_X + (6 * 11), HALLFAME_Y + (i * 8), pal, BLACK));
+			Alloc_Object(new ScorePrintClass(str + 16, HALLFAME_X + (6 * 11), HALLFAME_Y + (i * 8), pal, BLACK));
 			Call_Back_Delay(13);
 		}
 	}
@@ -879,7 +888,6 @@ void Cycle_Wait_Click(bool cycle) {
 	while (minclicks || (!Keyboard->Check() && !ControlQ)) {
 #if (0) // PG
 		if (Session.Type == GAME_NULL_MODEM || Session.Type == GAME_MODEM) {
-
 			//
 			// send a timing packet if enough time has gone by.
 			//
@@ -964,8 +972,14 @@ void ScoreClass::Do_Nod_Buildings_Graph(void) {
 		** Draw the building before Rambo
 		*/
 		if (i < 68) {
-			CC_Draw_Shape(factptr, shapenum, 0, 0, WINDOW_MAIN, SHAPE_GHOST | SHAPE_FADING | SHAPE_WIN_REL,
-				      ColorRemaps[PCOLOR_GOLD].RemapTable, DisplayClass::UnitShadow);
+			CC_Draw_Shape(factptr,
+				      shapenum,
+				      0,
+				      0,
+				      WINDOW_MAIN,
+				      SHAPE_GHOST | SHAPE_FADING | SHAPE_WIN_REL,
+				      ColorRemaps[PCOLOR_GOLD].RemapTable,
+				      DisplayClass::UnitShadow);
 		}
 
 		/*
@@ -980,8 +994,7 @@ void ScoreClass::Do_Nod_Buildings_Graph(void) {
 			if (i > 64) {
 				shapeindex = (i - 64) / 2;
 				if (shapeindex < firecount) {
-					CC_Draw_Shape(fball1ptr, shapeindex, 50, 30, WINDOW_MAIN,
-						      SHAPE_CENTER | SHAPE_WIN_REL);
+					CC_Draw_Shape(fball1ptr, shapeindex, 50, 30, WINDOW_MAIN, SHAPE_CENTER | SHAPE_WIN_REL);
 				}
 			}
 		}
@@ -990,9 +1003,13 @@ void ScoreClass::Do_Nod_Buildings_Graph(void) {
 		*/
 		CC_Draw_Shape(rmboptr,
 			      (ramboclass->DoControls[DO_WALK].Frame + ramboclass->DoControls[DO_WALK].Jump * 6) +
-				  ((unsigned(i) >> 1) % ramboclass->DoControls[DO_WALK].Count),
-			      i + 32, 40, WINDOW_MAIN, SHAPE_FADING | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_GHOST,
-			      ColorRemaps[PCOLOR_RED].RemapTable, DisplayClass::UnitShadow);
+				      ((unsigned(i) >> 1) % ramboclass->DoControls[DO_WALK].Count),
+			      i + 32,
+			      40,
+			      WINDOW_MAIN,
+			      SHAPE_FADING | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_GHOST,
+			      ColorRemaps[PCOLOR_RED].RemapTable,
+			      DisplayClass::UnitShadow);
 		HidPage.Blit(SeenPage, 0, 0, BUILDING_X, BUILDING_Y, 320 - BUILDING_X, 48);
 		/*BG		if (!Keyboard->Check()) */ Call_Back_Delay(1);
 	}
@@ -1081,18 +1098,14 @@ void ScoreClass::Do_GDI_Graph(void const *yellowptr, void const *redptr, int gki
 		if (i != gdikilled) {
 #ifdef WIN32
 			Set_Logic_Page(*PseudoSeenBuff);
-			CC_Draw_Shape(yellowptr, i, xpos * RESFACTOR, ypos * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL, 0,
-				      0);
+			CC_Draw_Shape(yellowptr, i, xpos * RESFACTOR, ypos * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL, 0, 0);
 			Set_Logic_Page(SeenBuff);
 #endif
-			CC_Draw_Shape(yellowptr, i, xpos * RESFACTOR, ypos * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL, 0,
-				      0);
+			CC_Draw_Shape(yellowptr, i, xpos * RESFACTOR, ypos * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL, 0, 0);
 		} else {
-			HidPage.Blit(SeenPage, 0, 0, xpos * RESFACTOR, ypos * RESFACTOR, (3 + gdikilled) * RESFACTOR,
-				     8 * RESFACTOR);
+			HidPage.Blit(SeenPage, 0, 0, xpos * RESFACTOR, ypos * RESFACTOR, (3 + gdikilled) * RESFACTOR, 8 * RESFACTOR);
 #ifdef WIN32
-			HidPage.Blit(*PseudoSeenBuff, 0, 0, xpos * RESFACTOR, ypos * RESFACTOR,
-				     (3 + gdikilled) * RESFACTOR, 8 * RESFACTOR);
+			HidPage.Blit(*PseudoSeenBuff, 0, 0, xpos * RESFACTOR, ypos * RESFACTOR, (3 + gdikilled) * RESFACTOR, 8 * RESFACTOR);
 #endif
 		}
 
@@ -1124,18 +1137,14 @@ void ScoreClass::Do_GDI_Graph(void const *yellowptr, void const *redptr, int gki
 		if (i != nodkilled) {
 #ifdef WIN32
 			Set_Logic_Page(*PseudoSeenBuff);
-			CC_Draw_Shape(redptr, i, xpos * RESFACTOR, (ypos + 12) * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL,
-				      0, 0);
+			CC_Draw_Shape(redptr, i, xpos * RESFACTOR, (ypos + 12) * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL, 0, 0);
 			Set_Logic_Page(SeenBuff);
 #endif
-			CC_Draw_Shape(redptr, i, xpos * RESFACTOR, (ypos + 12) * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL,
-				      0, 0);
+			CC_Draw_Shape(redptr, i, xpos * RESFACTOR, (ypos + 12) * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL, 0, 0);
 		} else {
-			HidPage.Blit(SeenPage, 0, 0, xpos * RESFACTOR, (ypos + 12) * RESFACTOR,
-				     (3 + nodkilled) * RESFACTOR, 8 * RESFACTOR);
+			HidPage.Blit(SeenPage, 0, 0, xpos * RESFACTOR, (ypos + 12) * RESFACTOR, (3 + nodkilled) * RESFACTOR, 8 * RESFACTOR);
 #ifdef WIN32
-			HidPage.Blit(*PseudoSeenBuff, 0, 0, xpos * RESFACTOR, (ypos + 12) * RESFACTOR,
-				     (3 + nodkilled) * RESFACTOR, 8 * RESFACTOR);
+			HidPage.Blit(*PseudoSeenBuff, 0, 0, xpos * RESFACTOR, (ypos + 12) * RESFACTOR, (3 + nodkilled) * RESFACTOR, 8 * RESFACTOR);
 #endif
 		}
 
@@ -1259,17 +1268,17 @@ void ScoreClass::Do_Nod_Casualties_Graph(void) {
 }
 
 void ScoreClass::Show_Credits(int house, char const pal[]) {
-	static int _credsx[2] = {276, 276};
-	static int _credsy[2] = {173, 58};
-	static int _credpx[2] = {228, 236};
+	static int _credsx[2] = { 276, 276 };
+	static int _credsy[2] = { 173, 58 };
+	static int _credpx[2] = { 228, 236 };
 #ifdef GERMAN
-	static int _credpy[2] = {181, 74};
-	static int _credtx[2] = {162, 162};
-	static int _credty[2] = {173, 62};
+	static int _credpy[2] = { 181, 74 };
+	static int _credtx[2] = { 162, 162 };
+	static int _credty[2] = { 173, 62 };
 #else
-	static int _credpy[2] = {189 - 12, 74};
-	static int _credtx[2] = {182, 182};
-	static int _credty[2] = {179 - 12, 62};
+	static int _credpy[2] = { 189 - 12, 74 };
+	static int _credtx[2] = { 182, 182 };
+	static int _credty[2] = { 179 - 12, 62 };
 #endif
 
 	int credobj, i;
@@ -1441,32 +1450,59 @@ void ScoreClass::Input_Name(char str[], int xpos, int ypos, char const pal[]) {
 					str[--index] = 0;
 
 					int xposindex6 = (xpos + (index * 6)) * RESFACTOR;
-					HidPage.Blit(SeenPage, xposindex6, (ypos - 100) * RESFACTOR, xposindex6,
-						     ypos * RESFACTOR, 6 * RESFACTOR, 6 * RESFACTOR);
+					HidPage.Blit(SeenPage,
+						     xposindex6,
+						     (ypos - 100) * RESFACTOR,
+						     xposindex6,
+						     ypos * RESFACTOR,
+						     6 * RESFACTOR,
+						     6 * RESFACTOR);
 #ifdef WIN32
-					HidPage.Blit(*PseudoSeenBuff, xposindex6, (ypos - 100) * RESFACTOR, xposindex6,
-						     ypos * RESFACTOR, 6 * RESFACTOR, 6 * RESFACTOR);
+					HidPage.Blit(*PseudoSeenBuff,
+						     xposindex6,
+						     (ypos - 100) * RESFACTOR,
+						     xposindex6,
+						     ypos * RESFACTOR,
+						     6 * RESFACTOR,
+						     6 * RESFACTOR);
 #endif
-					HidPage.Blit(HidPage, xposindex6, (ypos - 100) * RESFACTOR, xposindex6,
-						     ypos * RESFACTOR, 6 * RESFACTOR, 6 * RESFACTOR);
+					HidPage.Blit(HidPage,
+						     xposindex6,
+						     (ypos - 100) * RESFACTOR,
+						     xposindex6,
+						     ypos * RESFACTOR,
+						     6 * RESFACTOR,
+						     6 * RESFACTOR);
 				}
 
 			} else if (key != KA_RETURN) { // else if (key != KN_RETURN && key!=KN_KEYPAD_RETURN) {
-				ascii = key;	       // ascii = KN_To_KA(key);
+				ascii = key; // ascii = KN_To_KA(key);
 				if (ascii >= 'a' && ascii <= 'z')
 					ascii -= ('a' - 'A');
 				if ((ascii >= '!' && ascii <= KA_TILDA) || ascii == ' ') {
-					HidPage.Blit(SeenPage, (xpos + (index * 6)) * RESFACTOR,
-						     (ypos - 100) * RESFACTOR, (xpos + (index * 6)) * RESFACTOR,
-						     ypos * RESFACTOR, 6 * RESFACTOR, 6 * RESFACTOR);
+					HidPage.Blit(SeenPage,
+						     (xpos + (index * 6)) * RESFACTOR,
+						     (ypos - 100) * RESFACTOR,
+						     (xpos + (index * 6)) * RESFACTOR,
+						     ypos * RESFACTOR,
+						     6 * RESFACTOR,
+						     6 * RESFACTOR);
 #ifdef WIN32
-					HidPage.Blit(*PseudoSeenBuff, (xpos + (index * 6)) * RESFACTOR,
-						     (ypos - 100) * RESFACTOR, (xpos + (index * 6)) * RESFACTOR,
-						     ypos * RESFACTOR, 6 * RESFACTOR, 6 * RESFACTOR);
+					HidPage.Blit(*PseudoSeenBuff,
+						     (xpos + (index * 6)) * RESFACTOR,
+						     (ypos - 100) * RESFACTOR,
+						     (xpos + (index * 6)) * RESFACTOR,
+						     ypos * RESFACTOR,
+						     6 * RESFACTOR,
+						     6 * RESFACTOR);
 #endif
-					HidPage.Blit(HidPage, (xpos + (index * 6)) * RESFACTOR,
-						     (ypos - 100) * RESFACTOR, (xpos + (index * 6)) * RESFACTOR,
-						     ypos * RESFACTOR, 6 * RESFACTOR, 6 * RESFACTOR);
+					HidPage.Blit(HidPage,
+						     (xpos + (index * 6)) * RESFACTOR,
+						     (ypos - 100) * RESFACTOR,
+						     (xpos + (index * 6)) * RESFACTOR,
+						     ypos * RESFACTOR,
+						     6 * RESFACTOR,
+						     6 * RESFACTOR);
 					str[index] = ascii;
 					str[index + 1] = 0;
 
@@ -1476,8 +1512,7 @@ void ScoreClass::Input_Name(char str[], int xpos, int ypos, char const pal[]) {
 #else
 					Play_Sample(keystrok, 255, Options.Normalize_Volume(105));
 #endif
-					objindex = Alloc_Object(
-					    new ScoreScaleClass(str + index, xpos + (index * 6), ypos, pal));
+					objindex = Alloc_Object(new ScoreScaleClass(str + index, xpos + (index * 6), ypos, pal));
 					while (ScoreObjs[objindex])
 						Call_Back_Delay(1);
 
@@ -1499,20 +1534,32 @@ void Animate_Cursor(int pos, int ypos) {
 
 	// If they moved the cursor, erase old one and force state=0, to make green draw right away
 	if (pos != _lastpos) {
-		HidPage.Blit(SeenPage, (HALLFAME_X + (_lastpos * 6)) * RESFACTOR, ypos - 100 * RESFACTOR,
-			     (HALLFAME_X + (_lastpos * 6)) * RESFACTOR, ypos, 6 * RESFACTOR, 1 * RESFACTOR);
+		HidPage.Blit(SeenPage,
+			     (HALLFAME_X + (_lastpos * 6)) * RESFACTOR,
+			     ypos - 100 * RESFACTOR,
+			     (HALLFAME_X + (_lastpos * 6)) * RESFACTOR,
+			     ypos,
+			     6 * RESFACTOR,
+			     1 * RESFACTOR);
 #ifdef WIN32
-		HidPage.Blit(*PseudoSeenBuff, (HALLFAME_X + (_lastpos * 6)) * RESFACTOR, ypos - 100 * RESFACTOR,
-			     (HALLFAME_X + (_lastpos * 6)) * RESFACTOR, ypos, 6 * RESFACTOR, 1 * RESFACTOR);
+		HidPage.Blit(*PseudoSeenBuff,
+			     (HALLFAME_X + (_lastpos * 6)) * RESFACTOR,
+			     ypos - 100 * RESFACTOR,
+			     (HALLFAME_X + (_lastpos * 6)) * RESFACTOR,
+			     ypos,
+			     6 * RESFACTOR,
+			     1 * RESFACTOR);
 #endif
 		_lastpos = pos;
 		_state = 0;
 	}
-	SeenBuff.Draw_Line((HALLFAME_X + (pos * 6)) * RESFACTOR, ypos, (HALLFAME_X + (pos * 6) + 5) * RESFACTOR, ypos,
-			   _state ? LTBLUE : TBLACK);
+	SeenBuff.Draw_Line((HALLFAME_X + (pos * 6)) * RESFACTOR, ypos, (HALLFAME_X + (pos * 6) + 5) * RESFACTOR, ypos, _state ? LTBLUE : TBLACK);
 #ifdef WIN32
-	PseudoSeenBuff->Draw_Line((HALLFAME_X + (pos * 6)) * RESFACTOR, ypos, (HALLFAME_X + (pos * 6) + 5) * RESFACTOR,
-				  ypos, _state ? LTBLUE : TBLACK);
+	PseudoSeenBuff->Draw_Line((HALLFAME_X + (pos * 6)) * RESFACTOR,
+				  ypos,
+				  (HALLFAME_X + (pos * 6) + 5) * RESFACTOR,
+				  ypos,
+				  _state ? LTBLUE : TBLACK);
 #endif
 	/*
 	** Toggle the color of the cursor, green or black, if it's time to do so.
@@ -1582,8 +1629,13 @@ void Draw_InfantryMan(int index) {
 
 	stage = InfantryMan[index].stage + InfantryMan[index].Class->DoControls[InfantryMan[index].anim].Frame;
 
-	CC_Draw_Shape(InfantryMan[index].shapefile, stage, InfantryMan[index].xpos, InfantryMan[index].ypos,
-		      WINDOW_MAIN, SHAPE_FADING | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_GHOST, InfantryMan[index].remap,
+	CC_Draw_Shape(InfantryMan[index].shapefile,
+		      stage,
+		      InfantryMan[index].xpos,
+		      InfantryMan[index].ypos,
+		      WINDOW_MAIN,
+		      SHAPE_FADING | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_GHOST,
+		      InfantryMan[index].remap,
 		      DisplayClass::UnitShadow);
 	/*
 	** see if it's time to run a new anim
@@ -1591,7 +1643,6 @@ void Draw_InfantryMan(int index) {
 	if (--InfantryMan[index].delay <= 0) {
 		InfantryMan[index].delay = 3;
 		if (++InfantryMan[index].stage >= InfantryMan[index].Class->DoControls[InfantryMan[index].anim].Count) {
-
 			/*
 			** was he playing a death anim? If so, and it's done, erase him
 			*/
@@ -1645,13 +1696,14 @@ void New_Infantry_Anim(int index, int anim) {
  *   07/02/1996 BWG : Removed references to civilians.                     *
  *=========================================================================*/
 void Draw_Bar_Graphs(int i, int gkilled, int nkilled) {
-
 	if (gkilled) {
 		LogicPage->Fill_Rect(0, 0 + 4 * RESFACTOR, 0 + min(i, gkilled) * RESFACTOR, 0 + 5 * RESFACTOR, RED);
-		LogicPage->Draw_Line(0 + 1 * RESFACTOR, 0 + 6 * RESFACTOR, (0 + min(i, gkilled) + 1) * RESFACTOR,
-				     0 + 6 * RESFACTOR, TBLACK);
-		LogicPage->Draw_Line((0 + MIN(i, gkilled) + 1) * RESFACTOR, 0 + 5 * RESFACTOR,
-				     (0 + min(i, gkilled) + 1) * RESFACTOR, 0 + 5 * RESFACTOR, TBLACK);
+		LogicPage->Draw_Line(0 + 1 * RESFACTOR, 0 + 6 * RESFACTOR, (0 + min(i, gkilled) + 1) * RESFACTOR, 0 + 6 * RESFACTOR, TBLACK);
+		LogicPage->Draw_Line((0 + MIN(i, gkilled) + 1) * RESFACTOR,
+				     0 + 5 * RESFACTOR,
+				     (0 + min(i, gkilled) + 1) * RESFACTOR,
+				     0 + 5 * RESFACTOR,
+				     TBLACK);
 		if (i <= gkilled) {
 			int anim = InfantryMan[i / 11].anim;
 			if (anim != -1 && anim < DO_GUN_DEATH) {
@@ -1665,18 +1717,18 @@ void Draw_Bar_Graphs(int i, int gkilled, int nkilled) {
 		}
 	}
 	if (nkilled) {
-		LogicPage->Fill_Rect(0, 0 + 16 * RESFACTOR, 0 + min(i, nkilled) * RESFACTOR, 0 + 17 * RESFACTOR,
-				     LTCYAN);
-		LogicPage->Draw_Line(0 + 1 * RESFACTOR, 0 + 18 * RESFACTOR, (0 + min(i, nkilled) + 1) * RESFACTOR,
-				     0 + 18 * RESFACTOR, TBLACK);
-		LogicPage->Draw_Line((0 + MIN(i, nkilled) + 1) * RESFACTOR, 0 + 17 * RESFACTOR,
-				     (0 + min(i, nkilled) + 1) * RESFACTOR, 0 + 17 * RESFACTOR, TBLACK);
+		LogicPage->Fill_Rect(0, 0 + 16 * RESFACTOR, 0 + min(i, nkilled) * RESFACTOR, 0 + 17 * RESFACTOR, LTCYAN);
+		LogicPage->Draw_Line(0 + 1 * RESFACTOR, 0 + 18 * RESFACTOR, (0 + min(i, nkilled) + 1) * RESFACTOR, 0 + 18 * RESFACTOR, TBLACK);
+		LogicPage->Draw_Line((0 + MIN(i, nkilled) + 1) * RESFACTOR,
+				     0 + 17 * RESFACTOR,
+				     (0 + min(i, nkilled) + 1) * RESFACTOR,
+				     0 + 17 * RESFACTOR,
+				     TBLACK);
 		if (i <= nkilled) {
 			int anim = InfantryMan[(NUMINFANTRYMEN / 2) + (i / 11)].anim;
 			if (anim != -1 && anim < DO_GUN_DEATH) {
 				if (i / 11) {
-					New_Infantry_Anim((NUMINFANTRYMEN / 2) + (i / 11),
-							  DO_GUN_DEATH + (NonCriticalRandomNumber & 3));
+					New_Infantry_Anim((NUMINFANTRYMEN / 2) + (i / 11), DO_GUN_DEATH + (NonCriticalRandomNumber & 3));
 				} else {
 					New_Infantry_Anim((NUMINFANTRYMEN / 2) + (i / 11), DO_GUN_DEATH);
 				}
@@ -1793,8 +1845,7 @@ void Multi_Score_Presentation(void) {
 	SeenPage.Clear();
 	HidPage.Clear();
 	Hide_Mouse();
-	void *anim =
-	    Open_Animation("MLTIPLYR.WSA", NULL, 0L, (WSAOpenType)(WSA_OPEN_FROM_MEM | WSA_OPEN_TO_PAGE), ScorePalette);
+	void *anim = Open_Animation("MLTIPLYR.WSA", NULL, 0L, (WSAOpenType)(WSA_OPEN_FROM_MEM | WSA_OPEN_TO_PAGE), ScorePalette);
 	/*
 	** Display the background animation
 	*/
@@ -1888,8 +1939,7 @@ void Multi_Score_Presentation(void) {
 
 			for (k = 0; k <= min(Session.CurGame, MAX_MULTI_GAMES - 2); k++) {
 				if (Session.Score[i].Kills[k] >= 0) {
-					Alloc_Object(new ScorePrintClass(Int_Print(Session.Score[i].Kills[k]),
-									 225 + (24 * k), y, remap));
+					Alloc_Object(new ScorePrintClass(Int_Print(Session.Score[i].Kills[k]), 225 + (24 * k), y, remap));
 					Call_Back_Delay(6);
 				}
 			}
@@ -1898,11 +1948,9 @@ void Multi_Score_Presentation(void) {
 	}
 
 #if defined(GERMAN) || defined(FRENCH)
-	Alloc_Object(new ScorePrintClass(TXT_CLICK_CONTINUE, 95 /*(320-strlen(Text_String(TXT_MAP_CLICK2)))/2*/, 190,
-					 _yellowpal));
+	Alloc_Object(new ScorePrintClass(TXT_CLICK_CONTINUE, 95 /*(320-strlen(Text_String(TXT_MAP_CLICK2)))/2*/, 190, _yellowpal));
 #else
-	Alloc_Object(new ScorePrintClass(TXT_CLICK_CONTINUE, 109 /*(320-strlen(Text_String(TXT_MAP_CLICK2)))/2*/, 190,
-					 _yellowpal));
+	Alloc_Object(new ScorePrintClass(TXT_CLICK_CONTINUE, 109 /*(320-strlen(Text_String(TXT_MAP_CLICK2)))/2*/, 190, _yellowpal));
 #endif
 	Cycle_Wait_Click(false);
 

@@ -98,15 +98,15 @@ public:
 	friend class DLLExportClass; // ST - 5/13/2019
 
 	typedef enum FlagEnum {
-		LEFTPRESS = 0x0001,    // Left mouse button press.
-		LEFTHELD = 0x0002,     // Left mouse button is being held down.
-		LEFTRELEASE = 0x0004,  // Left mouse button released.
-		LEFTUP = 0x0008,       // Left mouse button is being held up.
-		RIGHTPRESS = 0x0010,   // Right mouse button press.
-		RIGHTHELD = 0x0020,    // Right mouse button is being held down.
+		LEFTPRESS = 0x0001, // Left mouse button press.
+		LEFTHELD = 0x0002, // Left mouse button is being held down.
+		LEFTRELEASE = 0x0004, // Left mouse button released.
+		LEFTUP = 0x0008, // Left mouse button is being held up.
+		RIGHTPRESS = 0x0010, // Right mouse button press.
+		RIGHTHELD = 0x0020, // Right mouse button is being held down.
 		RIGHTRELEASE = 0x0040, // Right mouse button released.
-		RIGHTUP = 0x0080,      // Right mouse button is being held up.
-		KEYBOARD = 0x0100      // Keyboard input processing (maybe).
+		RIGHTUP = 0x0080, // Right mouse button is being held up.
+		KEYBOARD = 0x0100 // Keyboard input processing (maybe).
 	} FlagEnum;
 
 	GadgetClass(int x, int y, int w, int h, unsigned flags, int sticky = false);
@@ -122,7 +122,9 @@ public:
 	virtual void Draw_All(bool forced = true);
 	virtual void Delete_List(void);
 	virtual ControlClass *Extract_Gadget(unsigned id);
-	virtual void Flag_List_To_Redraw(void) { LastList = 0; };
+	virtual void Flag_List_To_Redraw(void) {
+		LastList = 0;
+	};
 	virtual GadgetClass *Remove(void);
 	virtual GadgetClass *Get_Next(void) const;
 	virtual GadgetClass *Get_Prev(void) const;
@@ -132,14 +134,18 @@ public:
 	*/
 	virtual void Disable(void);
 	virtual void Enable(void);
-	virtual unsigned Get_ID(void) const { return 0; };
+	virtual unsigned Get_ID(void) const {
+		return 0;
+	};
 	virtual void Flag_To_Redraw(void);
 	virtual void Peer_To_Peer(unsigned, KeyNumType &, ControlClass &) {};
 	virtual void Set_Focus(void);
 	virtual void Clear_Focus(void);
 	virtual bool Has_Focus(void);
 	virtual int Is_List_To_Redraw(void);
-	virtual bool Is_To_Redraw(void) { return (IsToRepaint); }
+	virtual bool Is_To_Redraw(void) {
+		return (IsToRepaint);
+	}
 	virtual void Set_Position(int x, int y);
 
 	/*
@@ -150,9 +156,13 @@ public:
 	/*
 	** Sets the current color scheme
 	*/
-	static void Set_Color_Scheme(RemapControlType *scheme) { ColorScheme = scheme; }
+	static void Set_Color_Scheme(RemapControlType *scheme) {
+		ColorScheme = scheme;
+	}
 
-	static RemapControlType *Get_Color_Scheme(void) { return (ColorScheme); }
+	static RemapControlType *Get_Color_Scheme(void) {
+		return (ColorScheme);
+	}
 
 	/*
 	**	This is the coordinates and dimensions of the gadget region. These are in

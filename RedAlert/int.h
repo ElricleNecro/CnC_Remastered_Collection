@@ -35,23 +35,30 @@
 #ifndef INT_H
 #define INT_H
 
-#include "mp.h"
-#include "straw.h"
 #include <assert.h>
 #include <limits.h>
 #include <memory.h>
+#include "mp.h"
+#include "straw.h"
 
 // #pragma warn -inl
 
-template <int PRECISION> class Int {
+template <int PRECISION>
+class Int {
 public:
 	/*
 	**	Constructors and initializers.
 	*/
-	Int(void) { XMP_Init(&reg[0], 0, PRECISION); }
-	Int(unsigned long value) { XMP_Init(&reg[0], value, PRECISION); }
+	Int(void) {
+		XMP_Init(&reg[0], 0, PRECISION);
+	}
+	Int(unsigned long value) {
+		XMP_Init(&reg[0], value, PRECISION);
+	}
 
-	void Randomize(Straw &rng, int bitcount) { XMP_Randomize(&reg[0], rng, bitcount, PRECISION); }
+	void Randomize(Straw &rng, int bitcount) {
+		XMP_Randomize(&reg[0], rng, bitcount, PRECISION);
+	}
 	void Randomize(Straw &rng, const Int &minval, const Int &maxval) {
 		XMP_Randomize(&reg[0], rng, minval, maxval, PRECISION);
 		reg[0] |= 1;
@@ -62,13 +69,19 @@ public:
 	**	integers. Big number math is basically manipulation of arbitrary
 	**	length arrays.
 	*/
-	operator digit *() { return &reg[0]; }
-	operator const digit *() const { return &reg[0]; }
+	operator digit *() {
+		return &reg[0];
+	}
+	operator const digit *() const {
+		return &reg[0];
+	}
 
 	/*
 	**	Array access operator (references bit position). Bit 0 is the first bit.
 	*/
-	bool operator[](unsigned bit) const { return (XMP_Test_Bit(&reg[0], bit)); }
+	bool operator[](unsigned bit) const {
+		return (XMP_Test_Bit(&reg[0], bit));
+	}
 
 	/*
 	**	Unary operators.
@@ -81,7 +94,9 @@ public:
 		XMP_Dec(&reg[0], PRECISION);
 		return (*this);
 	}
-	int operator!(void) const { return (XMP_Test_Eq_Int(&reg[0], 0, PRECISION)); }
+	int operator!(void) const {
+		return (XMP_Test_Eq_Int(&reg[0], 0, PRECISION));
+	}
 	Int operator~(void) {
 		XMP_Not(&reg[0], PRECISION);
 		return (*this);
@@ -95,14 +110,30 @@ public:
 	/*
 	**	Attribute query functions.
 	*/
-	int ByteCount(void) const { return (XMP_Count_Bytes(&reg[0], PRECISION)); }
-	int BitCount(void) const { return (XMP_Count_Bits(&reg[0], PRECISION)); }
-	bool Is_Negative(void) const { return (XMP_Is_Negative(&reg[0], PRECISION)); }
-	unsigned MaxBitPrecision() const { return PRECISION * (sizeof(unsigned long) * CHAR_BIT); }
-	bool IsSmallPrime(void) const { return (XMP_Is_Small_Prime(&reg[0], PRECISION)); }
-	bool SmallDivisorsTest(void) const { return (XMP_Small_Divisors_Test(&reg[0], PRECISION)); }
-	bool FermatTest(unsigned rounds) const { return (XMP_Fermat_Test(&reg[0], rounds, PRECISION)); }
-	bool IsPrime(void) const { return (XMP_Is_Prime(&reg[0], PRECISION)); }
+	int ByteCount(void) const {
+		return (XMP_Count_Bytes(&reg[0], PRECISION));
+	}
+	int BitCount(void) const {
+		return (XMP_Count_Bits(&reg[0], PRECISION));
+	}
+	bool Is_Negative(void) const {
+		return (XMP_Is_Negative(&reg[0], PRECISION));
+	}
+	unsigned MaxBitPrecision() const {
+		return PRECISION * (sizeof(unsigned long) * CHAR_BIT);
+	}
+	bool IsSmallPrime(void) const {
+		return (XMP_Is_Small_Prime(&reg[0], PRECISION));
+	}
+	bool SmallDivisorsTest(void) const {
+		return (XMP_Small_Divisors_Test(&reg[0], PRECISION));
+	}
+	bool FermatTest(unsigned rounds) const {
+		return (XMP_Fermat_Test(&reg[0], rounds, PRECISION));
+	}
+	bool IsPrime(void) const {
+		return (XMP_Is_Prime(&reg[0], PRECISION));
+	}
 	bool RabinMillerTest(Straw &rng, unsigned int rounds) const {
 		return (XMP_Rabin_Miller_Test(rng, &reg[0], rounds, PRECISION));
 	}
@@ -184,7 +215,9 @@ public:
 		XMP_Signed_Div(Remainder, quotient, &reg[0], divisor, PRECISION);
 		return (quotient);
 	}
-	Int operator/(unsigned long b) const { return (*this / Int<PRECISION>(b)); }
+	Int operator/(unsigned long b) const {
+		return (*this / Int<PRECISION>(b));
+	}
 	Int operator/(unsigned short divisor) const {
 		Int quotient;
 		Error = XMP_Unsigned_Div_Int(quotient, &reg[0], divisor, PRECISION);
@@ -197,7 +230,9 @@ public:
 		XMP_Signed_Div(remainder, Remainder, &reg[0], divisor, PRECISION);
 		return (remainder);
 	}
-	Int operator%(unsigned long b) const { return (*this % Int<PRECISION>(b)); }
+	Int operator%(unsigned long b) const {
+		return (*this % Int<PRECISION>(b));
+	}
 	unsigned short operator%(unsigned short divisor) const {
 		return (XMP_Unsigned_Div_Int(Remainder, &reg[0], divisor, PRECISION));
 	}
@@ -221,17 +256,31 @@ public:
 	/*
 	**	Comparison binary operators.
 	*/
-	int operator==(const Int &b) const { return (memcmp(&reg[0], &b.reg[0], (MAX_BIT_PRECISION / CHAR_BIT)) == 0); }
-	int operator!=(const Int &b) const { return !(*this == b); }
-	int operator>(const Int &number) const { return (XMP_Compare(&reg[0], number, PRECISION) > 0); }
-	int operator>=(const Int &number) const { return (XMP_Compare(&reg[0], number, PRECISION) >= 0); }
-	int operator<(const Int &number) const { return (XMP_Compare(&reg[0], number, PRECISION) < 0); }
-	int operator<=(const Int &number) const { return (XMP_Compare(&reg[0], number, PRECISION) <= 0); }
+	int operator==(const Int &b) const {
+		return (memcmp(&reg[0], &b.reg[0], (MAX_BIT_PRECISION / CHAR_BIT)) == 0);
+	}
+	int operator!=(const Int &b) const {
+		return !(*this == b);
+	}
+	int operator>(const Int &number) const {
+		return (XMP_Compare(&reg[0], number, PRECISION) > 0);
+	}
+	int operator>=(const Int &number) const {
+		return (XMP_Compare(&reg[0], number, PRECISION) >= 0);
+	}
+	int operator<(const Int &number) const {
+		return (XMP_Compare(&reg[0], number, PRECISION) < 0);
+	}
+	int operator<=(const Int &number) const {
+		return (XMP_Compare(&reg[0], number, PRECISION) <= 0);
+	}
 
 	/*
 	**	Misc. mathematical and logical functions.
 	*/
-	void Negate(void) { XMP_Neg(&reg[0], PRECISION); }
+	void Negate(void) {
+		XMP_Neg(&reg[0], PRECISION);
+	}
 	Int Abs(void) {
 		XMP_Abs(&reg[0], PRECISION);
 		return (*this);
@@ -274,7 +323,9 @@ public:
 	}
 
 	// Number (sign independand) inserted into buffer.
-	int Encode(unsigned char *output) const { return (XMP_Encode(output, &reg[0], PRECISION)); }
+	int Encode(unsigned char *output) const {
+		return (XMP_Encode(output, &reg[0], PRECISION));
+	}
 	int Encode(unsigned char *output, unsigned length) const {
 		return (XMP_Encode(output, length, &reg[0], PRECISION));
 	}
@@ -286,8 +337,12 @@ public:
 	}
 
 	// encode Int using Distinguished Encoding Rules, returns size of output
-	int DEREncode(unsigned char *output) const { return (XMP_DER_Encode(&reg[0], output, PRECISION)); }
-	void DERDecode(const unsigned char *input) { XMP_DER_Decode(&reg[0], input, PRECISION); }
+	int DEREncode(unsigned char *output) const {
+		return (XMP_DER_Encode(&reg[0], output, PRECISION));
+	}
+	void DERDecode(const unsigned char *input) {
+		XMP_DER_Decode(&reg[0], input, PRECISION);
+	}
 
 	// Friend helper functions.
 	friend Int<PRECISION> Generate_Prime(Straw &rng, int pbits, Int<PRECISION> const * = 0);
@@ -316,7 +371,9 @@ private:
 				table[i] = p % primeTable[i];
 			}
 		}
-		bool HasZero() const { return (HasZeroEntry); }
+		bool HasZero() const {
+			return (HasZeroEntry);
+		}
 		void Increment(unsigned short increment = 1) {
 			HasZeroEntry = false;
 			for (unsigned int i = 0; i < ARRAY_SIZE(primeTable); i++) {
@@ -343,8 +400,9 @@ private:
 	};
 };
 
-template <class T> T Gcd(const T &a, const T &n) {
-	T g[3] = {n, a, 0UL};
+template <class T>
+T Gcd(const T &a, const T &n) {
+	T g[3] = { n, a, 0UL };
 
 	unsigned int i = 1;
 	while (!!g[i % 3]) {
@@ -356,7 +414,8 @@ template <class T> T Gcd(const T &a, const T &n) {
 
 // #pragma warning 604 9
 // #pragma warning 595 9
-template <class T> T Generate_Prime(Straw &rng, int pbits, T const *) {
+template <class T>
+T Generate_Prime(Straw &rng, int pbits, T const *) {
 	T minQ = (T(1UL) << (unsigned short)(pbits - (unsigned short)2));
 	T maxQ = ((T(1UL) << (unsigned short)(pbits - (unsigned short)1)) - (unsigned short)1);
 

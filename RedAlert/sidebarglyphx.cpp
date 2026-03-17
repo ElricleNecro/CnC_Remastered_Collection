@@ -379,9 +379,7 @@ bool SidebarGlyphxClass::StripClass::AI(KeyNumType &input, int, int) {
 				FactoryClass *factory = Factories.Raw_Ptr(factoryid);
 
 				if (factory && (factory->Has_Changed() || factory->Is_Blocked())) {
-
 					if (factory->Has_Completed()) {
-
 						/*
 						**	Construction has been completed. Announce this fact to the
 						*player and *	try to get the object to automatically leave the
@@ -394,8 +392,7 @@ bool SidebarGlyphxClass::StripClass::AI(KeyNumType &input, int, int) {
 							case RTTI_VESSEL:
 							case RTTI_UNIT:
 							case RTTI_AIRCRAFT:
-								OutList.Add(EventClass(EventClass::PLACE,
-										       pending->What_Am_I(), -1));
+								OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
 								if (!factory->Is_Blocked()) {
 									Speak(VOX_UNIT_READY);
 								}
@@ -408,8 +405,7 @@ bool SidebarGlyphxClass::StripClass::AI(KeyNumType &input, int, int) {
 								break;
 
 							case RTTI_INFANTRY:
-								OutList.Add(EventClass(EventClass::PLACE,
-										       pending->What_Am_I(), -1));
+								OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
 								if (!factory->Is_Blocked()) {
 									Speak(VOX_UNIT_READY);
 								}
@@ -457,28 +453,23 @@ bool SidebarGlyphxClass::StripClass::Recalc(void) {
 	**	any current production must be abandoned.
 	*/
 	for (int index = 0; index < BuildableCount; index++) {
-		TechnoTypeClass const *tech =
-		    Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
+		TechnoTypeClass const *tech = Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
 		if (tech) {
 			ok = tech->Who_Can_Build_Me(true, false, ParentSidebar->SidebarPlayerPtr->Class->House) != NULL;
 		} else {
-
 			if ((unsigned)Buildables[index].BuildableID < SPC_COUNT) {
-				ok = ParentSidebar->SidebarPlayerPtr->SuperWeapon[Buildables[index].BuildableID]
-					 .Is_Present();
+				ok = ParentSidebar->SidebarPlayerPtr->SuperWeapon[Buildables[index].BuildableID].Is_Present();
 			} else {
 				ok = false;
 			}
 		}
 
 		if (!ok) {
-
 			/*
 			**	Removes this entry from the list.
 			*/
 			if (BuildableCount > 1 && index < BuildableCount - 1) {
-				memcpy(&Buildables[index], &Buildables[index + 1],
-				       sizeof(Buildables[0]) * ((BuildableCount - index) - 1));
+				memcpy(&Buildables[index], &Buildables[index + 1], sizeof(Buildables[0]) * ((BuildableCount - index) - 1));
 			}
 			BuildableCount--;
 			index--;

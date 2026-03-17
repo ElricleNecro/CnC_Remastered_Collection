@@ -69,7 +69,7 @@
  *   04/19/1994 SKB : Update to 32 bit library.                            *
  *=========================================================================*/
 int __cdecl Open_Iff_File(char const *filename) {
-	int fh;	   // File handle.
+	int fh; // File handle.
 	long type; // IFF file type.
 
 	/* We want to be able to open the file for READ | WRITE, but we do not
@@ -87,14 +87,12 @@ int __cdecl Open_Iff_File(char const *filename) {
 	Read_File(fh, &type, 4L);
 
 	if (type == ID_FORM) {
-
 		//	The file is valid (so far).  Position the read so that the actual
 		//	IFF file type code can be read.
 
 		Seek_File(fh, 4L, SEEK_CUR); // Skip the filesize bytes.
 
 	} else {
-
 		// This is NOT an IFF file.  Close the source file and return with
 		//	the error code.
 		Close_File(fh);
@@ -138,8 +136,8 @@ void __cdecl Close_Iff_File(int fh) {
  *   04/19/1994 SKB : Update to 32 bit library.                            *
  *=========================================================================*/
 unsigned long __cdecl Get_Iff_Chunk_Size(int fh, long id) {
-	long form;	      // Chunk iff form name.
-	long chunksize;	      // Size of the chunk.
+	long form; // Chunk iff form name.
+	long chunksize; // Size of the chunk.
 	char first_iteration; // Check once the current chunk name
 
 	first_iteration = TRUE;
@@ -157,14 +155,12 @@ unsigned long __cdecl Get_Iff_Chunk_Size(int fh, long id) {
 
 		if (id == form) {
 			Seek_File(fh, -8L, SEEK_CUR); // Seek back to the start of
-			return (chunksize);	      // the chunk & return size
+			return (chunksize); // the chunk & return size
 		} else {
-
 			if (first_iteration) {
 				Seek_File(fh, 12L, SEEK_SET); // Start at beginning of file.
-				first_iteration = FALSE;      // Don't do this again
+				first_iteration = FALSE; // Don't do this again
 			} else {
-
 				/* Otherwise, go to the next chunk in the file */
 
 				chunksize = (chunksize + 1) & 0xFFFFFFFEL;
@@ -204,9 +200,9 @@ unsigned long __cdecl Get_Iff_Chunk_Size(int fh, long id) {
  *   04/19/1994 SKB : Update to 32 bit library.                            *
  *=========================================================================*/
 unsigned long __cdecl Read_Iff_Chunk(int fh, long id, void *buffer, unsigned long maxsize) {
-	long form;		 // Chunk iff form name.
+	long form; // Chunk iff form name.
 	unsigned long chunksize; // Size of the chunk.
-	char first_iteration;	 // Check once the current chunk name
+	char first_iteration; // Check once the current chunk name
 
 	first_iteration = TRUE;
 
@@ -222,7 +218,6 @@ unsigned long __cdecl Read_Iff_Chunk(int fh, long id, void *buffer, unsigned lon
 #endif
 
 		if (id == form) {
-
 			maxsize = MIN(maxsize, chunksize);
 			Read_File(fh, buffer, maxsize); // Read the buffer.
 
@@ -232,13 +227,11 @@ unsigned long __cdecl Read_Iff_Chunk(int fh, long id, void *buffer, unsigned lon
 			}
 			return (maxsize);
 		} else {
-
 			if (first_iteration) {
 				Seek_File(fh, 12L, SEEK_SET); // Start at beginning of file.
-				first_iteration = FALSE;      // Don't do this again
+				first_iteration = FALSE; // Don't do this again
 
 			} else {
-
 				/* Otherwise, go to the next chunk in the file */
 
 				chunksize = (chunksize + 1) & 0xFFFFFFFEL;
@@ -263,11 +256,11 @@ unsigned long __cdecl Read_Iff_Chunk(int fh, long id, void *buffer, unsigned lon
  *   04/19/1994 SKB : Created.                                             *
  *=========================================================================*/
 void __cdecl Write_Iff_Chunk(int file, long id, void *buffer, long length) {
-	long pos;    // Current position in the IFF file.
+	long pos; // Current position in the IFF file.
 	long oldpos; // Record of start of chunk offset.
 	long endpos; // end of file offset before we write our data
 	long value;
-	BOOL odd;     // Is length odd?
+	BOOL odd; // Is length odd?
 	char pad = 0; // Optional padding byte for even sized chunks.
 
 	/*

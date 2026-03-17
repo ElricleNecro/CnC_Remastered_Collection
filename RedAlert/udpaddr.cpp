@@ -21,15 +21,15 @@ bool Get_Broadcast_Addresses(void) {
 	return false;
 #if (0) // PG
 
-	int d_dialog_w = 320 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 160 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 320 * RESFACTOR; // dialog width
+	int d_dialog_h = 160 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 6 * RESFACTOR + 1; // ht of 6-pt text
-	int d_margin1 = 5 * RESFACTOR;	  // large margin
-	int d_margin2 = 7 * RESFACTOR;	  // small margin
+	int d_margin1 = 5 * RESFACTOR; // large margin
+	int d_margin2 = 7 * RESFACTOR; // small margin
 
 	int d_ip_address_list_w = 300 * RESFACTOR;
 	int d_ip_address_list_h = ((20 * 6) + 3) * RESFACTOR; // 6 rows high
@@ -62,19 +62,13 @@ bool Get_Broadcast_Addresses(void) {
 	//------------------------------------------------------------------------
 	//	Redraw values: in order from "top" to "bottom" layer of the dialog
 	//------------------------------------------------------------------------
-	typedef enum {
-		REDRAW_NONE = 0,
-		REDRAW_PARMS,
-		REDRAW_BUTTONS,
-		REDRAW_BACKGROUND,
-		REDRAW_ALL = REDRAW_BACKGROUND
-	} RedrawType;
+	typedef enum { REDRAW_NONE = 0, REDRAW_PARMS, REDRAW_BUTTONS, REDRAW_BACKGROUND, REDRAW_ALL = REDRAW_BACKGROUND } RedrawType;
 
 	//------------------------------------------------------------------------
 	//	Dialog variables
 	//------------------------------------------------------------------------
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 
 	int width;
@@ -87,13 +81,17 @@ bool Get_Broadcast_Addresses(void) {
 	Format_Window_String("IP Addresses", SeenBuff.Get_Height(), width, height);
 
 	GadgetClass *commands; // button list
-	ColorListClass ip_address_list(BUTTON_IPLIST, d_ip_address_list_x, d_ip_address_list_y, d_ip_address_list_w,
-				       d_ip_address_list_h, TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"),
+	ColorListClass ip_address_list(BUTTON_IPLIST,
+				       d_ip_address_list_x,
+				       d_ip_address_list_y,
+				       d_ip_address_list_w,
+				       d_ip_address_list_h,
+				       TPF_TEXT,
+				       MFCD::Retrieve("BTN-UP.SHP"),
 				       MFCD::Retrieve("BTN-DN.SHP"));
 
 	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_BUTTON, d_ok_x, d_ok_y, d_ok_w, d_ok_h);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 
 	ip_address_list.Set_Selected_Style(ColorListClass::SELECT_NORMAL);
 
@@ -130,7 +128,6 @@ bool Get_Broadcast_Addresses(void) {
 	//	Processing loop
 	//------------------------------------------------------------------------
 	while (process) {
-
 		/*
 		** If we have just received input focus again after running in the background then
 		** we need to redraw.
@@ -156,8 +153,7 @@ bool Get_Broadcast_Addresses(void) {
 				//...............................................................
 				//	Dialog & Field labels
 				//...............................................................
-				Fancy_Text_Print("IP Addresses", d_dialog_cx - width / 2, d_dialog_y + 25 * RESFACTOR,
-						 scheme, TBLACK, TPF_TEXT);
+				Fancy_Text_Print("IP Addresses", d_dialog_cx - width / 2, d_dialog_y + 25 * RESFACTOR, scheme, TBLACK, TPF_TEXT);
 
 				//...............................................................
 				//	Rebuild the button list
@@ -191,7 +187,6 @@ bool Get_Broadcast_Addresses(void) {
 		//	Process input
 		//.....................................................................
 		switch (input) {
-
 		//..................................................................
 		// ESC / CANCEL: send a SIGN_OFF
 		// - If we're part of a game, stay in this dialog; otherwise, exit

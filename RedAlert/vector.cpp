@@ -116,7 +116,10 @@ VectorClass<T>::VectorClass(unsigned size, T const *array) : Vector(0), VectorMa
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> VectorClass<T>::~VectorClass(void) { VectorClass<T>::Clear(); }
+template <class T>
+VectorClass<T>::~VectorClass(void) {
+	VectorClass<T>::Clear();
+}
 
 /***********************************************************************************************
  * VectorClass<T>::VectorClass -- Copy constructor for vector object.                          *
@@ -153,7 +156,8 @@ VectorClass<T>::VectorClass(VectorClass<T> const &vector) : Vector(0), VectorMax
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> VectorClass<T> &VectorClass<T>::operator=(VectorClass<T> const &vector) {
+template <class T>
+VectorClass<T> &VectorClass<T>::operator=(VectorClass<T> const &vector) {
 	if (this != &vector) {
 		Clear();
 		VectorMax = vector.Length();
@@ -189,7 +193,8 @@ template <class T> VectorClass<T> &VectorClass<T>::operator=(VectorClass<T> cons
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int VectorClass<T>::operator==(VectorClass<T> const &vector) const {
+template <class T>
+int VectorClass<T>::operator==(VectorClass<T> const &vector) const {
 	if (VectorMax == vector.Length()) {
 		for (int index = 0; index < (int)VectorMax; index++) {
 			if (Vector[index] != vector[index]) {
@@ -219,7 +224,8 @@ template <class T> int VectorClass<T>::operator==(VectorClass<T> const &vector) 
  * HISTORY:                                                                                    *
  *   03/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> inline int VectorClass<T>::ID(T const *ptr) {
+template <class T>
+inline int VectorClass<T>::ID(T const *ptr) {
 	return (((unsigned long)ptr - (unsigned long)&(*this)[0]) / sizeof(T));
 }
 
@@ -239,7 +245,8 @@ template <class T> inline int VectorClass<T>::ID(T const *ptr) {
  * HISTORY:                                                                                    *
  *   03/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int VectorClass<T>::ID(T const &object) {
+template <class T>
+int VectorClass<T>::ID(T const &object) {
 	for (int index = 0; index < (int)VectorMax; index++) {
 		if ((*this)[index] == object) {
 			return (index);
@@ -264,7 +271,8 @@ template <class T> int VectorClass<T>::ID(T const &object) {
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> void VectorClass<T>::Clear(void) {
+template <class T>
+void VectorClass<T>::Clear(void) {
 	if (Vector && IsAllocated) {
 		delete[] Vector;
 		Vector = 0;
@@ -292,9 +300,9 @@ template <class T> void VectorClass<T>::Clear(void) {
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int VectorClass<T>::Resize(unsigned newsize, T const *array) {
+template <class T>
+int VectorClass<T>::Resize(unsigned newsize, T const *array) {
 	if (newsize) {
-
 		/*
 		**	Allocate a new vector of the size specified. The default constructor
 		**	will be called for every object in this vector.
@@ -314,7 +322,6 @@ template <class T> int VectorClass<T>::Resize(unsigned newsize, T const *array) 
 		**	to the new vector.
 		*/
 		if (Vector) {
-
 			/*
 			**	Copy as much of the old vector into the new vector as possible. This
 			**	presumes that there is a functional assignment operator for each
@@ -345,7 +352,6 @@ template <class T> int VectorClass<T>::Resize(unsigned newsize, T const *array) 
 		IsAllocated = (Vector && !array);
 
 	} else {
-
 		/*
 		**	Resizing to zero is the same as clearing the vector.
 		*/
@@ -464,7 +470,6 @@ int BooleanVectorClass::Resize(unsigned size) {
 	Fixup();
 
 	if (size) {
-
 		/*
 		**	Record the previous bit count of the boolean vector. This is used
 		**	to determine if the array has grown in size and thus clearing is
@@ -599,7 +604,6 @@ void BooleanVectorClass::Fixup(int index) const {
 	**	be some fixing up required.
 	*/
 	if (index != LastIndex) {
-
 		/*
 		**	If the previously fetched boolean value was changed, then update
 		**	the boolean array accordingly.

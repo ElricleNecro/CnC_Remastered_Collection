@@ -128,13 +128,13 @@
 #define IPX_ADDRESS 0x4007
 
 typedef struct _IPX_ADDRESS_DATA {
-	INT adapternum;	  /* input: 0-based adapter number */
-	UCHAR netnum[4];  /* output: IPX network number */
+	INT adapternum; /* input: 0-based adapter number */
+	UCHAR netnum[4]; /* output: IPX network number */
 	UCHAR nodenum[6]; /* output: IPX node address */
-	BOOLEAN wan;	  /* output: TRUE = adapter is on a wan link */
-	BOOLEAN status;	  /* output: TRUE = wan link is up (or adapter is not wan) */
-	INT maxpkt;	  /* output: max packet size, not including IPX header */
-	ULONG linkspeed;  /* output: link speed in 100 bytes/sec (i.e. 96 == 9600 bps) */
+	BOOLEAN wan; /* output: TRUE = adapter is on a wan link */
+	BOOLEAN status; /* output: TRUE = wan link is up (or adapter is not wan) */
+	INT maxpkt; /* output: max packet size, not including IPX header */
+	ULONG linkspeed; /* output: link speed in 100 bytes/sec (i.e. 96 == 9600 bps) */
 } IPX_ADDRESS_DATA, *PIPX_ADDRESS_DATA;
 
 /*
@@ -152,10 +152,10 @@ typedef struct _IPX_NETNUM_DATA {
 	UCHAR netnum[4]; /* input: IPX network number */
 	USHORT hopcount; /* output: hop count to this network, in machine order */
 	USHORT netdelay; /* output: tick count to this network, in machine order */
-	INT cardnum;	 /* output: 0-based adapter number used to route to this net */
-			 /*         can be used as adapternum input to IPX_ADDRESS */
+	INT cardnum; /* output: 0-based adapter number used to route to this net */
+	/*         can be used as adapternum input to IPX_ADDRESS */
 	UCHAR router[6]; /* output: MAC address of the next hop router, zeroed if */
-			 /*         the network is directly attached */
+	/*         the network is directly attached */
 } IPX_NETNUM_DATA, *PIPX_NETNUM_DATA;
 
 /*

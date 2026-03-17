@@ -96,8 +96,7 @@ typedef LPDDENUMCALLBACKA LPDDENUMCALLBACK;
 #define DirectDrawEnumerate DirectDrawEnumerateA
 #endif
 extern HRESULT WINAPI DirectDrawCreate(GUID FAR *lpGUID, LPDIRECTDRAW FAR *lplpDD, IUnknown FAR *pUnkOuter);
-extern HRESULT WINAPI DirectDrawCreateClipper(DWORD dwFlags, LPDIRECTDRAWCLIPPER FAR *lplpDDClipper,
-					      IUnknown FAR *pUnkOuter);
+extern HRESULT WINAPI DirectDrawCreateClipper(DWORD dwFlags, LPDIRECTDRAWCLIPPER FAR *lplpDDClipper, IUnknown FAR *pUnkOuter);
 #ifdef WINNT
 // This is the user-mode entry stub to the kernel mode procedure.
 extern HRESULT NtDirectDrawCreate(GUID FAR *lpGUID, HANDLE *lplpDD, IUnknown FAR *pUnkOuter);
@@ -123,10 +122,10 @@ typedef HRESULT(FAR PASCAL *LPDDENUMSURFACESCALLBACK)(LPDIRECTDRAWSURFACE, LPDDS
  * DDCOLORKEY
  */
 typedef struct _DDCOLORKEY {
-	DWORD dwColorSpaceLowValue;  // low boundary of color space that is to
-				     // be treated as Color Key, inclusive
+	DWORD dwColorSpaceLowValue; // low boundary of color space that is to
+		// be treated as Color Key, inclusive
 	DWORD dwColorSpaceHighValue; // high boundary of color space that is
-				     // to be treated as Color Key, inclusive
+		// to be treated as Color Key, inclusive
 } DDCOLORKEY;
 
 typedef DDCOLORKEY FAR *LPDDCOLORKEY;
@@ -136,45 +135,45 @@ typedef DDCOLORKEY FAR *LPDDCOLORKEY;
  * Used to pass override information to the DIRECTDRAWSURFACE callback Blt.
  */
 typedef struct _DDBLTFX {
-	DWORD dwSize;		    // size of structure
-	DWORD dwDDFX;		    // FX operations
-	DWORD dwROP;		    // Win32 raster operations
-	DWORD dwDDROP;		    // Raster operations new for DirectDraw
-	DWORD dwRotationAngle;	    // Rotation angle for blt
-	DWORD dwZBufferOpCode;	    // ZBuffer compares
-	DWORD dwZBufferLow;	    // Low limit of Z buffer
-	DWORD dwZBufferHigh;	    // High limit of Z buffer
-	DWORD dwZBufferBaseDest;    // Destination base value
+	DWORD dwSize; // size of structure
+	DWORD dwDDFX; // FX operations
+	DWORD dwROP; // Win32 raster operations
+	DWORD dwDDROP; // Raster operations new for DirectDraw
+	DWORD dwRotationAngle; // Rotation angle for blt
+	DWORD dwZBufferOpCode; // ZBuffer compares
+	DWORD dwZBufferLow; // Low limit of Z buffer
+	DWORD dwZBufferHigh; // High limit of Z buffer
+	DWORD dwZBufferBaseDest; // Destination base value
 	DWORD dwZDestConstBitDepth; // Bit depth used to specify Z constant for destination
 	union {
-		DWORD dwZDestConst;		      // Constant to use as Z buffer for dest
+		DWORD dwZDestConst; // Constant to use as Z buffer for dest
 		LPDIRECTDRAWSURFACE lpDDSZBufferDest; // Surface to use as Z buffer for dest
 	};
 	DWORD dwZSrcConstBitDepth; // Bit depth used to specify Z constant for source
 	union {
-		DWORD dwZSrcConst;		     // Constant to use as Z buffer for src
+		DWORD dwZSrcConst; // Constant to use as Z buffer for src
 		LPDIRECTDRAWSURFACE lpDDSZBufferSrc; // Surface to use as Z buffer for src
 	};
 	DWORD dwAlphaEdgeBlendBitDepth; // Bit depth used to specify constant for alpha edge blend
-	DWORD dwAlphaEdgeBlend;		// Alpha for edge blending
+	DWORD dwAlphaEdgeBlend; // Alpha for edge blending
 	DWORD dwReserved;
 	DWORD dwAlphaDestConstBitDepth; // Bit depth used to specify alpha constant for destination
 	union {
-		DWORD dwAlphaDestConst;		    // Constant to use as Alpha Channel
+		DWORD dwAlphaDestConst; // Constant to use as Alpha Channel
 		LPDIRECTDRAWSURFACE lpDDSAlphaDest; // Surface to use as Alpha Channel
 	};
 	DWORD dwAlphaSrcConstBitDepth; // Bit depth used to specify alpha constant for source
 	union {
-		DWORD dwAlphaSrcConst;		   // Constant to use as Alpha Channel
+		DWORD dwAlphaSrcConst; // Constant to use as Alpha Channel
 		LPDIRECTDRAWSURFACE lpDDSAlphaSrc; // Surface to use as Alpha Channel
 	};
 	union {
-		DWORD dwFillColor;		  // color in RGB or Palettized
-		DWORD dwFillDepth;		  // depth value for z-buffer
+		DWORD dwFillColor; // color in RGB or Palettized
+		DWORD dwFillDepth; // depth value for z-buffer
 		LPDIRECTDRAWSURFACE lpDDSPattern; // Surface to use as pattern
 	};
 	DDCOLORKEY ddckDestColorkey; // DestColorkey override
-	DDCOLORKEY ddckSrcColorkey;  // SrcColorkey override
+	DDCOLORKEY ddckSrcColorkey; // SrcColorkey override
 } DDBLTFX;
 
 typedef DDBLTFX FAR *LPDDBLTFX;
@@ -194,61 +193,61 @@ typedef DDSCAPS FAR *LPDDSCAPS;
 #define DD_ROP_SPACE (256 / 32) // space required to store ROP array
 
 typedef struct _DDCAPS {
-	DWORD dwSize;			      // size of the DDDRIVERCAPS structure
-	DWORD dwCaps;			      // driver specific capabilities
-	DWORD dwCaps2;			      // more driver specific capabilites
-	DWORD dwCKeyCaps;		      // color key capabilities of the surface
-	DWORD dwFXCaps;			      // driver specific stretching and effects capabilites
-	DWORD dwFXAlphaCaps;		      // alpha driver specific capabilities
-	DWORD dwPalCaps;		      // palette capabilities
-	DWORD dwSVCaps;			      // stereo vision capabilities
-	DWORD dwAlphaBltConstBitDepths;	      // DDBD_2,4,8
-	DWORD dwAlphaBltPixelBitDepths;	      // DDBD_1,2,4,8
-	DWORD dwAlphaBltSurfaceBitDepths;     // DDBD_1,2,4,8
-	DWORD dwAlphaOverlayConstBitDepths;   // DDBD_2,4,8
-	DWORD dwAlphaOverlayPixelBitDepths;   // DDBD_1,2,4,8
+	DWORD dwSize; // size of the DDDRIVERCAPS structure
+	DWORD dwCaps; // driver specific capabilities
+	DWORD dwCaps2; // more driver specific capabilites
+	DWORD dwCKeyCaps; // color key capabilities of the surface
+	DWORD dwFXCaps; // driver specific stretching and effects capabilites
+	DWORD dwFXAlphaCaps; // alpha driver specific capabilities
+	DWORD dwPalCaps; // palette capabilities
+	DWORD dwSVCaps; // stereo vision capabilities
+	DWORD dwAlphaBltConstBitDepths; // DDBD_2,4,8
+	DWORD dwAlphaBltPixelBitDepths; // DDBD_1,2,4,8
+	DWORD dwAlphaBltSurfaceBitDepths; // DDBD_1,2,4,8
+	DWORD dwAlphaOverlayConstBitDepths; // DDBD_2,4,8
+	DWORD dwAlphaOverlayPixelBitDepths; // DDBD_1,2,4,8
 	DWORD dwAlphaOverlaySurfaceBitDepths; // DDBD_1,2,4,8
-	DWORD dwZBufferBitDepths;	      // DDBD_8,16,24,32
-	DWORD dwVidMemTotal;		      // total amount of video memory
-	DWORD dwVidMemFree;		      // amount of free video memory
-	DWORD dwMaxVisibleOverlays;	      // maximum number of visible overlays
-	DWORD dwCurrVisibleOverlays;	      // current number of visible overlays
-	DWORD dwNumFourCCCodes;		      // number of four cc codes
-	DWORD dwAlignBoundarySrc;	      // source rectangle alignment
-	DWORD dwAlignSizeSrc;		      // source rectangle byte size
-	DWORD dwAlignBoundaryDest;	      // dest rectangle alignment
-	DWORD dwAlignSizeDest;		      // dest rectangle byte size
-	DWORD dwAlignStrideAlign;	      // stride alignment
-	DWORD dwRops[DD_ROP_SPACE];	      // ROPS supported
-	DDSCAPS ddsCaps;		      // DDSCAPS structure has all the general capabilities
+	DWORD dwZBufferBitDepths; // DDBD_8,16,24,32
+	DWORD dwVidMemTotal; // total amount of video memory
+	DWORD dwVidMemFree; // amount of free video memory
+	DWORD dwMaxVisibleOverlays; // maximum number of visible overlays
+	DWORD dwCurrVisibleOverlays; // current number of visible overlays
+	DWORD dwNumFourCCCodes; // number of four cc codes
+	DWORD dwAlignBoundarySrc; // source rectangle alignment
+	DWORD dwAlignSizeSrc; // source rectangle byte size
+	DWORD dwAlignBoundaryDest; // dest rectangle alignment
+	DWORD dwAlignSizeDest; // dest rectangle byte size
+	DWORD dwAlignStrideAlign; // stride alignment
+	DWORD dwRops[DD_ROP_SPACE]; // ROPS supported
+	DDSCAPS ddsCaps; // DDSCAPS structure has all the general capabilities
 	DWORD dwMinOverlayStretch; // minimum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
 	DWORD dwMaxOverlayStretch; // maximum overlay stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
 	DWORD
-	    dwMinLiveVideoStretch; // minimum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
+	dwMinLiveVideoStretch; // minimum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
 	DWORD
-	    dwMaxLiveVideoStretch; // maximum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
+	dwMaxLiveVideoStretch; // maximum live video stretch factor multiplied by 1000, eg 1000 == 1.0, 1300 == 1.3
 	DWORD dwMinHwCodecStretch; // minimum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300
-				   // == 1.3
+		// == 1.3
 	DWORD dwMaxHwCodecStretch; // maximum hardware codec stretch factor multiplied by 1000, eg 1000 == 1.0, 1300
-				   // == 1.3
-	DWORD dwReserved1;	   // reserved
-	DWORD dwReserved2;	   // reserved
-	DWORD dwReserved3;	   // reserved
-	DWORD dwSVBCaps;	   // driver specific capabilities for System->Vmem blts
-	DWORD dwSVBCKeyCaps;	   // driver color key capabilities for System->Vmem blts
-	DWORD dwSVBFXCaps;	   // driver FX capabilities for System->Vmem blts
+		// == 1.3
+	DWORD dwReserved1; // reserved
+	DWORD dwReserved2; // reserved
+	DWORD dwReserved3; // reserved
+	DWORD dwSVBCaps; // driver specific capabilities for System->Vmem blts
+	DWORD dwSVBCKeyCaps; // driver color key capabilities for System->Vmem blts
+	DWORD dwSVBFXCaps; // driver FX capabilities for System->Vmem blts
 	DWORD dwSVBRops[DD_ROP_SPACE]; // ROPS supported for System->Vmem blts
-	DWORD dwVSBCaps;	       // driver specific capabilities for Vmem->System blts
-	DWORD dwVSBCKeyCaps;	       // driver color key capabilities for Vmem->System blts
-	DWORD dwVSBFXCaps;	       // driver FX capabilities for Vmem->System blts
+	DWORD dwVSBCaps; // driver specific capabilities for Vmem->System blts
+	DWORD dwVSBCKeyCaps; // driver color key capabilities for Vmem->System blts
+	DWORD dwVSBFXCaps; // driver FX capabilities for Vmem->System blts
 	DWORD dwVSBRops[DD_ROP_SPACE]; // ROPS supported for Vmem->System blts
-	DWORD dwSSBCaps;	       // driver specific capabilities for System->System blts
-	DWORD dwSSBCKeyCaps;	       // driver color key capabilities for System->System blts
-	DWORD dwSSBFXCaps;	       // driver FX capabilities for System->System blts
+	DWORD dwSSBCaps; // driver specific capabilities for System->System blts
+	DWORD dwSSBCKeyCaps; // driver color key capabilities for System->System blts
+	DWORD dwSSBFXCaps; // driver FX capabilities for System->System blts
 	DWORD dwSSBRops[DD_ROP_SPACE]; // ROPS supported for System->System blts
-	DWORD dwReserved4;	       // reserved
-	DWORD dwReserved5;	       // reserved
-	DWORD dwReserved6;	       // reserved
+	DWORD dwReserved4; // reserved
+	DWORD dwReserved5; // reserved
+	DWORD dwReserved6; // reserved
 } DDCAPS;
 
 typedef DDCAPS FAR *LPDDCAPS;
@@ -257,14 +256,14 @@ typedef DDCAPS FAR *LPDDCAPS;
  * DDPIXELFORMAT
  */
 typedef struct _DDPIXELFORMAT {
-	DWORD dwSize;	// size of structure
-	DWORD dwFlags;	// pixel format flags
+	DWORD dwSize; // size of structure
+	DWORD dwFlags; // pixel format flags
 	DWORD dwFourCC; // (FOURCC code)
 	union {
-		DWORD dwRGBBitCount;	 // how many bits per pixel (BD_4,8,16,24,32)
-		DWORD dwYUVBitCount;	 // how many bits per pixel (BD_4,8,16,24,32)
+		DWORD dwRGBBitCount; // how many bits per pixel (BD_4,8,16,24,32)
+		DWORD dwYUVBitCount; // how many bits per pixel (BD_4,8,16,24,32)
 		DWORD dwZBufferBitDepth; // how many bits for z buffers (BD_8,16,24,32)
-		DWORD dwAlphaBitDepth;	 // how many bits for alpha channels (BD_1,2,4,8)
+		DWORD dwAlphaBitDepth; // how many bits for alpha channels (BD_1,2,4,8)
 	};
 	union {
 		DWORD dwRBitMask; // mask for red bit
@@ -290,24 +289,24 @@ typedef DDPIXELFORMAT FAR *LPDDPIXELFORMAT;
  * DDOVERLAYFX
  */
 typedef struct _DDOVERLAYFX {
-	DWORD dwSize;			// size of structure
+	DWORD dwSize; // size of structure
 	DWORD dwAlphaEdgeBlendBitDepth; // Bit depth used to specify constant for alpha edge blend
-	DWORD dwAlphaEdgeBlend;		// Constant to use as alpha for edge blend
+	DWORD dwAlphaEdgeBlend; // Constant to use as alpha for edge blend
 	DWORD dwReserved;
 	DWORD dwAlphaDestConstBitDepth; // Bit depth used to specify alpha constant for destination
 	union {
-		DWORD dwAlphaDestConst;		    // Constant to use as alpha channel for dest
+		DWORD dwAlphaDestConst; // Constant to use as alpha channel for dest
 		LPDIRECTDRAWSURFACE lpDDSAlphaDest; // Surface to use as alpha channel for dest
 	};
 	DWORD dwAlphaSrcConstBitDepth; // Bit depth used to specify alpha constant for source
 	union {
-		DWORD dwAlphaSrcConst;		   // Constant to use as alpha channel for src
+		DWORD dwAlphaSrcConst; // Constant to use as alpha channel for src
 		LPDIRECTDRAWSURFACE lpDDSAlphaSrc; // Surface to use as alpha channel for src
 	};
 	DDCOLORKEY dckDestColorkey; // DestColorkey override
-	DDCOLORKEY dckSrcColorkey;  // DestColorkey override
-	DWORD dwDDFX;		    // Overlay FX
-	DWORD dwFlags;		    // flags
+	DDCOLORKEY dckSrcColorkey; // DestColorkey override
+	DWORD dwDDFX; // Overlay FX
+	DWORD dwFlags; // flags
 } DDOVERLAYFX;
 
 typedef DDOVERLAYFX FAR *LPDDOVERLAYFX;
@@ -712,26 +711,26 @@ DECLARE_INTERFACE_(IDirectDrawSurface2, IUnknown) {
  * DDSURFACEDESC
  */
 typedef struct _DDSURFACEDESC {
-	DWORD dwSize;		 // size of the DDSURFACEDESC structure
-	DWORD dwFlags;		 // determines what fields are valid
-	DWORD dwHeight;		 // height of surface to be created
-	DWORD dwWidth;		 // width of input surface
-	LONG lPitch;		 // distance to start of next line (return value only)
+	DWORD dwSize; // size of the DDSURFACEDESC structure
+	DWORD dwFlags; // determines what fields are valid
+	DWORD dwHeight; // height of surface to be created
+	DWORD dwWidth; // width of input surface
+	LONG lPitch; // distance to start of next line (return value only)
 	DWORD dwBackBufferCount; // number of back buffers requested
 	union {
-		DWORD dwMipMapCount;	 // number of mip-map levels requested
+		DWORD dwMipMapCount; // number of mip-map levels requested
 		DWORD dwZBufferBitDepth; // depth of Z buffer requested
-		DWORD dwRefreshRate;	 // refresh rate (used when display mode is described)
+		DWORD dwRefreshRate; // refresh rate (used when display mode is described)
 	};
-	DWORD dwAlphaBitDepth;	       // depth of alpha buffer requested
-	DWORD dwReserved;	       // reserved
-	LPVOID lpSurface;	       // pointer to the associated surface memory
-	DDCOLORKEY ddckCKDestOverlay;  // color key for destination overlay use
-	DDCOLORKEY ddckCKDestBlt;      // color key for destination blt use
-	DDCOLORKEY ddckCKSrcOverlay;   // color key for source overlay use
-	DDCOLORKEY ddckCKSrcBlt;       // color key for source blt use
+	DWORD dwAlphaBitDepth; // depth of alpha buffer requested
+	DWORD dwReserved; // reserved
+	LPVOID lpSurface; // pointer to the associated surface memory
+	DDCOLORKEY ddckCKDestOverlay; // color key for destination overlay use
+	DDCOLORKEY ddckCKDestBlt; // color key for destination blt use
+	DDCOLORKEY ddckCKSrcOverlay; // color key for source overlay use
+	DDCOLORKEY ddckCKSrcBlt; // color key for source blt use
 	DDPIXELFORMAT ddpfPixelFormat; // pixel format description of the surface
-	DDSCAPS ddsCaps;	       // direct draw surface capabilities
+	DDSCAPS ddsCaps; // direct draw surface capabilities
 } DDSURFACEDESC;
 
 /*

@@ -200,34 +200,33 @@ void Send_Statistics_Packet(void) {
 	bool packet_later = false; // Should the packet be sent later
 	void *packet;
 
-	static char field_player_handle[5] = {"NAM?"};
-	static char field_player_team[5] = {"SID?"};
-	static char field_player_color[5] = {"COL?"};
-	static char field_player_credits[5] = {"CRD?"};
-	static char field_player_units_left[5] = {"UNL?"};
-	static char field_player_infantry_left[5] = {"INL?"};
-	static char field_player_planes_left[5] = {"PLL?"};
-	static char field_player_buildings_left[5] = {"BLL?"};
-	static char field_player_vessels_left[5] = {"VSL?"};
-	static char field_player_units_bought[5] = {"UNB?"};
-	static char field_player_infantry_bought[5] = {"INB?"};
-	static char field_player_planes_bought[5] = {"PLB?"};
-	static char field_player_buildings_bought[5] = {"BLB?"};
-	static char field_player_vessels_bought[5] = {"VSB?"};
-	static char field_player_units_killed[5] = {"UNK?"};
-	static char field_player_infantry_killed[5] = {"INK?"};
-	static char field_player_planes_killed[5] = {"PLK?"};
-	static char field_player_buildings_killed[5] = {"BLK?"};
-	static char field_player_vessels_killed[5] = {"VSK?"};
-	static char field_player_buildings_captured[5] = {"BLC?"};
-	static char field_player_crates_found[5] = {"CRA?"};
-	static char field_player_harvested[5] = {"HRV?"};
+	static char field_player_handle[5] = { "NAM?" };
+	static char field_player_team[5] = { "SID?" };
+	static char field_player_color[5] = { "COL?" };
+	static char field_player_credits[5] = { "CRD?" };
+	static char field_player_units_left[5] = { "UNL?" };
+	static char field_player_infantry_left[5] = { "INL?" };
+	static char field_player_planes_left[5] = { "PLL?" };
+	static char field_player_buildings_left[5] = { "BLL?" };
+	static char field_player_vessels_left[5] = { "VSL?" };
+	static char field_player_units_bought[5] = { "UNB?" };
+	static char field_player_infantry_bought[5] = { "INB?" };
+	static char field_player_planes_bought[5] = { "PLB?" };
+	static char field_player_buildings_bought[5] = { "BLB?" };
+	static char field_player_vessels_bought[5] = { "VSB?" };
+	static char field_player_units_killed[5] = { "UNK?" };
+	static char field_player_infantry_killed[5] = { "INK?" };
+	static char field_player_planes_killed[5] = { "PLK?" };
+	static char field_player_buildings_killed[5] = { "BLK?" };
+	static char field_player_vessels_killed[5] = { "VSK?" };
+	static char field_player_buildings_captured[5] = { "BLC?" };
+	static char field_player_crates_found[5] = { "CRA?" };
+	static char field_player_harvested[5] = { "HRV?" };
 
-	static char *houses[] = {"SPA", "GRE", "USS", "ENG", "ITA", "GER", "FRA", "TKY", "GUD", "BAD",
-				 "CIV", "JP ", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08"};
+	static char *houses[] = { "SPA", "GRE", "USS", "ENG", "ITA", "GER", "FRA", "TKY", "GUD", "BAD",
+				  "CIV", "JP ", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08" };
 
 	if (!PacketLater) {
-
 		/*
 		** Field to identify this as C&C 95 internet game statistics packet
 		*/
@@ -322,7 +321,7 @@ void Send_Statistics_Packet(void) {
 
 		stats.Add_Field(FIELD_SCENARIO, Session.Options.ScenarioDescription);
 
-#else  //(1)
+#else //(1)
 		char fname[128];
 		char namebuffer[40];
 		char *abuffer = (char *)_ShapeBuffer;
@@ -380,7 +379,6 @@ void Send_Statistics_Packet(void) {
 				Session.Players[0]->Address.Get_Address(net, node);
 				sprintf(szIPAddress, "%i.%i.%i.%i", node[0], node[1], node[2], node[3]);
 				if (strcmp(szIPAddress, "255.255.255.255") == 0) {
-
 					//	Ok. It's not set. Let's try to get it ourselves...
 					char szHostName[512];
 					int iRes = gethostname(szHostName, 512);
@@ -397,19 +395,15 @@ void Send_Statistics_Packet(void) {
 								//	There is a non-null value for this h_addr_list
 								// entry.
 								char szAsciiIP[30];
-								strcpy(szAsciiIP,
-								       inet_ntoa(*((struct in_addr *)piAddress)));
+								strcpy(szAsciiIP, inet_ntoa(*((struct in_addr *)piAddress)));
 								//	We have an address in the right form.
 								//	Now, is it an address in a private network? If
 								// so we should ignore it.
-								unsigned char q1 =
-								    ((char *)piAddress)[0]; //	First digit.
-								unsigned char q2 = ((char *)piAddress)
-								    [1]; //	Second digit.
-									 //								debugprint(
-									 //"ip: %s\n", szAsciiIP );
-								if (q1 == 10 || (q1 == 172 && (q2 >= 16 && q2 <= 31)) ||
-								    (q1 == 192 && q2 == 168)) {
+								unsigned char q1 = ((char *)piAddress)[0]; //	First digit.
+								unsigned char q2 = ((char *)piAddress)[1]; //	Second digit.
+									//								debugprint(
+									//"ip: %s\n", szAsciiIP );
+								if (q1 == 10 || (q1 == 172 && (q2 >= 16 && q2 <= 31)) || (q1 == 192 && q2 == 168)) {
 									//	This is a private network address -
 									// ignore it and go on to next.
 								} else {
@@ -449,10 +443,9 @@ void Send_Statistics_Packet(void) {
 							completion = COMPLETION_CONNECTION_LOST;
 							if (pWolapi->bDisconnectPingingCompleted) {
 								char szPingResult[8]; //	Format is "x/y a/b",
-										      // e.g., "3/5 4/5"
+									// e.g., "3/5 4/5"
 								pWolapi->DisconnectPingResultsString(szPingResult);
-								stats.Add_Field(FIELD_DISCONNECT_PINGS,
-										(char *)szPingResult);
+								stats.Add_Field(FIELD_DISCONNECT_PINGS, (char *)szPingResult);
 							}
 							//						else
 							//							debugprint(
@@ -463,7 +456,6 @@ void Send_Statistics_Packet(void) {
 				completion = COMPLETION_CONNECTION_LOST;
 #endif
 					} else {
-
 						if (player1->IsGiverUpper) {
 							completion = COMPLETION_PLAYER_2_WON_BY_DISCONNECTION;
 						}
@@ -481,25 +473,21 @@ void Send_Statistics_Packet(void) {
 								completion = COMPLETION_PLAYER_1_WON_BY_RESIGNATION;
 							} else {
 								if (player2->IsGiverUpper) {
-									completion =
-									    COMPLETION_PLAYER_1_WON_BY_DISCONNECTION;
+									completion = COMPLETION_PLAYER_1_WON_BY_DISCONNECTION;
 								}
 							}
 
 						} else {
-
 							if (player1->IsDefeated) {
 								/*
 								** Player 2 won. Find out how.
 								*/
 								completion = COMPLETION_PLAYER_2_WON;
 								if (player1->IsResigner) {
-									completion =
-									    COMPLETION_PLAYER_2_WON_BY_RESIGNATION;
+									completion = COMPLETION_PLAYER_2_WON_BY_RESIGNATION;
 								} else {
 									if (player1->IsGiverUpper) {
-										completion =
-										    COMPLETION_PLAYER_2_WON_BY_DISCONNECTION;
+										completion = COMPLETION_PLAYER_2_WON_BY_DISCONNECTION;
 									}
 								}
 							}
@@ -674,15 +662,20 @@ void Send_Statistics_Packet(void) {
 			player->BuildingTotals->To_Network_Format();
 			player->VesselTotals->To_Network_Format();
 
-			stats.Add_Field(field_player_infantry_bought, (void *)player->InfantryTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_infantry_bought,
+					(void *)player->InfantryTotals->Get_All_Totals(),
 					player->InfantryTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_units_bought, (void *)player->UnitTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_units_bought,
+					(void *)player->UnitTotals->Get_All_Totals(),
 					player->UnitTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_planes_bought, (void *)player->AircraftTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_planes_bought,
+					(void *)player->AircraftTotals->Get_All_Totals(),
 					player->AircraftTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_buildings_bought, (void *)player->BuildingTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_buildings_bought,
+					(void *)player->BuildingTotals->Get_All_Totals(),
 					player->BuildingTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_vessels_bought, (void *)player->VesselTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_vessels_bought,
+					(void *)player->VesselTotals->Get_All_Totals(),
 					player->VesselTotals->Get_Unit_Count() * 4);
 
 			player->InfantryTotals->To_PC_Format();
@@ -750,15 +743,20 @@ void Send_Statistics_Packet(void) {
 #ifdef FIXIT_IP_STATS
 			field_player_vessels_left[3] = '1' + (char)house;
 #endif
-			stats.Add_Field(field_player_infantry_left, (void *)player->InfantryTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_infantry_left,
+					(void *)player->InfantryTotals->Get_All_Totals(),
 					player->InfantryTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_units_left, (void *)player->UnitTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_units_left,
+					(void *)player->UnitTotals->Get_All_Totals(),
 					player->UnitTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_planes_left, (void *)player->AircraftTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_planes_left,
+					(void *)player->AircraftTotals->Get_All_Totals(),
 					player->AircraftTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_buildings_left, (void *)player->BuildingTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_buildings_left,
+					(void *)player->BuildingTotals->Get_All_Totals(),
 					player->BuildingTotals->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_vessels_left, (void *)player->VesselTotals->Get_All_Totals(),
+			stats.Add_Field(field_player_vessels_left,
+					(void *)player->VesselTotals->Get_All_Totals(),
 					player->VesselTotals->Get_Unit_Count() * 4);
 
 			/*
@@ -780,18 +778,22 @@ void Send_Statistics_Packet(void) {
 			stats.Add_Field(field_player_infantry_killed,
 					(void *)player->DestroyedInfantry->Get_All_Totals(),
 					player->DestroyedInfantry->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_units_killed, (void *)player->DestroyedUnits->Get_All_Totals(),
+			stats.Add_Field(field_player_units_killed,
+					(void *)player->DestroyedUnits->Get_All_Totals(),
 					player->DestroyedUnits->Get_Unit_Count() * 4);
-			stats.Add_Field(field_player_planes_killed, (void *)player->DestroyedAircraft->Get_All_Totals(),
+			stats.Add_Field(field_player_planes_killed,
+					(void *)player->DestroyedAircraft->Get_All_Totals(),
 					player->DestroyedAircraft->Get_Unit_Count() * 4);
 			stats.Add_Field(field_player_buildings_killed,
 					(void *)player->DestroyedBuildings->Get_All_Totals(),
 					player->DestroyedBuildings->Get_Unit_Count() * 4);
 #ifdef FIXIT_VERSION_3
-			stats.Add_Field(field_player_vessels_killed, (void *)player->DestroyedVessels->Get_All_Totals(),
+			stats.Add_Field(field_player_vessels_killed,
+					(void *)player->DestroyedVessels->Get_All_Totals(),
 					player->DestroyedVessels->Get_Unit_Count() * 4);
 #else
-			stats.Add_Field(field_player_vessels_killed, (void *)player->DestroyedVessels->Get_All_Totals(),
+			stats.Add_Field(field_player_vessels_killed,
+					(void *)player->DestroyedVessels->Get_All_Totals(),
 					player->DestroyedBuildings->Get_Unit_Count() * 4);
 #endif
 
@@ -809,7 +811,8 @@ void Send_Statistics_Packet(void) {
 			*/
 			field_player_crates_found[3] = '1' + (char)house;
 			player->TotalCrates->To_Network_Format();
-			stats.Add_Field(field_player_crates_found, (void *)player->TotalCrates->Get_All_Totals(),
+			stats.Add_Field(field_player_crates_found,
+					(void *)player->TotalCrates->Get_All_Totals(),
 					player->TotalCrates->Get_Unit_Count() * 4);
 
 			/*
@@ -828,8 +831,7 @@ void Send_Statistics_Packet(void) {
 		/*
 		** If a player disconnected then dont send the packet at this time - save it for later
 		*/
-		if (completion == COMPLETION_PLAYER_1_WON_BY_DISCONNECTION ||
-		    completion == COMPLETION_PLAYER_2_WON_BY_DISCONNECTION) {
+		if (completion == COMPLETION_PLAYER_1_WON_BY_DISCONNECTION || completion == COMPLETION_PLAYER_2_WON_BY_DISCONNECTION) {
 			PacketLater = packet;
 			return;
 		}
@@ -858,8 +860,7 @@ void Send_Statistics_Packet(void) {
 	}
 
 	if (*szGameResServer) {
-		if (pWolapi->pNetUtil->RequestGameresSend(szGameResServer, iPort, (unsigned char *)packet,
-							  packet_size) != S_OK)
+		if (pWolapi->pNetUtil->RequestGameresSend(szGameResServer, iPort, (unsigned char *)packet, packet_size) != S_OK)
 			// debugprint( "RequestGameresSend( %s, %i ) failed!!!\n", szGameResServer, iPort );
 			;
 	}
@@ -882,7 +883,6 @@ void Send_Statistics_Packet(void) {
 }
 
 void Register_Game_Start_Time(void) {
-
 	GameTimer.Set(0, true);
 	GameTimerInUse = true;
 }

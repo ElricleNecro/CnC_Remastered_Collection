@@ -101,8 +101,12 @@ public:
 		return (WindowsTimer->Get_System_Tick_Count());
 	};
 #else
-	long operator()(void) const { return (Get_System_Tick_Count()); };
-	operator long(void) const { return (Get_System_Tick_Count()); };
+	long operator()(void) const {
+		return (Get_System_Tick_Count());
+	};
+	operator long(void) const {
+		return (Get_System_Tick_Count());
+	};
 #endif
 };
 #endif
@@ -221,7 +225,6 @@ void PaletteClass::Adjust(int ratio) {
  *=============================================================================================*/
 void PaletteClass::Adjust(int ratio, PaletteClass const &palette) {
 	for (int index = 0; index < COLOR_COUNT; index++) {
-
 		// if (index == 1) {
 		//	Mono_Printf("From R=%d,G=%d,B=%d ", Palette[index].Red_Component(),
 		// Palette[index].Green_Component(), Palette[index].Blue_Component()); 	Mono_Printf("To R=%d,G=%d,B=%d
@@ -330,19 +333,19 @@ int PaletteClass::Closest_Color(RGBClass const &rgb) const {
 
 #ifndef WIN32
 extern void Vsync(void);
-#pragma aux Vsync modify[edx ebx eax] = "mov	edx,03DAh"                                                                \
-					"mov	ebx,[VertBlank]"                                                          \
-					"and	bl,001h"                                                                  \
-					"shl	bl,3"                                                                     \
-					"in_vbi:"                                                                      \
-					"in	al,dx"                                                                     \
-					"and	al,008h"                                                                  \
-					"xor	al,bl"                                                                    \
-					"je	in_vbi"                                                                    \
-					"out_vbi:"                                                                     \
-					"in	al,dx"                                                                     \
-					"and	al,008h"                                                                  \
-					"xor	al,bl"                                                                    \
+#pragma aux Vsync modify[edx ebx eax] = "mov	edx,03DAh"                                                                                              \
+					"mov	ebx,[VertBlank]"                                                                                        \
+					"and	bl,001h"                                                                                                \
+					"shl	bl,3"                                                                                                   \
+					"in_vbi:"                                                                                                    \
+					"in	al,dx"                                                                                                   \
+					"and	al,008h"                                                                                                \
+					"xor	al,bl"                                                                                                  \
+					"je	in_vbi"                                                                                                  \
+					"out_vbi:"                                                                                                   \
+					"in	al,dx"                                                                                                   \
+					"and	al,008h"                                                                                                \
+					"xor	al,bl"                                                                                                  \
 					"jne	out_vbi"
 #endif // WIN32
 
@@ -372,7 +375,6 @@ void PaletteClass::Set(int time, void (*callback)(void)) const {
 	PaletteClass original = CurrentPalette;
 
 	while (timer) {
-
 		/*
 		**	Build an intermediate palette that is as close to the destination palette
 		**	as the current time is proportional to the ending time.

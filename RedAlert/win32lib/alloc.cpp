@@ -91,7 +91,8 @@ extern void __cdecl Int3(void);
  *   06/23/1995 PWG : Created.                                             *
  *=========================================================================*/
 #include "mono.h"
-void DPMI_Lock(VOID const *, long const) {}
+void DPMI_Lock(VOID const *, long const) {
+}
 
 /***************************************************************************
  * DPMI_UNLOCK -- Handles unlocking a locked block of DPMI                 *
@@ -105,7 +106,8 @@ void DPMI_Lock(VOID const *, long const) {}
  * HISTORY:                                                                *
  *   06/23/1995 PWG : Created.                                             *
  *=========================================================================*/
-void DPMI_Unlock(void const *, long const) {}
+void DPMI_Unlock(void const *, long const) {
+}
 
 /***************************************************************************
  * Alloc -- Allocates system RAM.                                          *
@@ -137,7 +139,6 @@ void DPMI_Unlock(void const *, long const) {}
  *   09/28/1995 ST  : Simplified for win95                                                                      *
  *=========================================================================*/
 void *Alloc(unsigned long bytes_to_alloc, MemoryFlagType flags) {
-
 #ifdef WIN32
 
 	void *mem_ptr;
@@ -178,9 +179,9 @@ void *Alloc(unsigned long bytes_to_alloc, MemoryFlagType flags) {
 	union REGS regs;
 	struct SREGS sregs;
 	unsigned char *retval = NULL; // Pointer to allocated block.
-	unsigned long original_size;  // Original allocation size.
-	unsigned long bytesfree;      // Number of free bytes.
-	long *longptr = NULL;	      // Pointer used to store selector
+	unsigned long original_size; // Original allocation size.
+	unsigned long bytesfree; // Number of free bytes.
+	long *longptr = NULL; // Pointer used to store selector
 
 	/*
 	** Save the original allocated space size so that we can clear the
@@ -301,22 +302,19 @@ void *Alloc(unsigned long bytes_to_alloc, MemoryFlagType flags) {
 #ifdef WIN32
 
 void Free(void const *pointer) {
-
 	if (pointer) {
-
 #ifdef MEM_CHECK
 
 		unsigned long *magic_ptr = (unsigned long *)(((char *)pointer) - 16);
 
-		if (*magic_ptr++ != (unsigned long)pointer || *magic_ptr++ != (unsigned long)pointer ||
-		    *magic_ptr++ != (unsigned long)pointer) {
+		if (*magic_ptr++ != (unsigned long)pointer || *magic_ptr++ != (unsigned long)pointer || *magic_ptr++ != (unsigned long)pointer) {
 			Int3();
 		}
 
 		magic_ptr = (unsigned long *)(((char *)pointer) + *magic_ptr);
 
-		if (*magic_ptr++ != (unsigned long)pointer || *magic_ptr++ != (unsigned long)pointer ||
-		    *magic_ptr++ != (unsigned long)pointer || *magic_ptr++ != (unsigned long)pointer) {
+		if (*magic_ptr++ != (unsigned long)pointer || *magic_ptr++ != (unsigned long)pointer || *magic_ptr++ != (unsigned long)pointer ||
+		    *magic_ptr++ != (unsigned long)pointer) {
 			Int3();
 		}
 
@@ -330,7 +328,6 @@ void Free(void const *pointer) {
 #else
 
 void Free(void const *pointer) {
-
 	union REGS regs;
 	struct SREGS sregs;
 
@@ -385,7 +382,6 @@ void Free(void const *pointer) {
  *   02/01/1992 JLB : Commented.                                           *
  *=========================================================================*/
 void *Resize_Alloc(void *original_ptr, unsigned long new_size_in_bytes) {
-
 	unsigned long *temp;
 
 	temp = (unsigned long *)original_ptr;

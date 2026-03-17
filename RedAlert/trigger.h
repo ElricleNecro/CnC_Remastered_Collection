@@ -80,13 +80,17 @@ public:
 	TARGET As_Target(void) const;
 	char const *Description(void) const;
 	void Draw_It(int, int x, int y, int width, int height, bool selected, TextPrintType flags) const;
-	char const *Name(void) const { return (Class->Name()); }
+	char const *Name(void) const {
+		return (Class->Name());
+	}
 
 	/*
 	**	Overloaded operators
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	/*

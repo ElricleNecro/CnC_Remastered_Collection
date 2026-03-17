@@ -74,7 +74,9 @@ public:
 	void Debug_Dump(MonoClass *mono) const;
 #endif
 
-	void Shorten_Mission_Timer(void) { Timer = 0; }
+	void Shorten_Mission_Timer(void) {
+		Timer = 0;
+	}
 	virtual MissionType Get_Mission(void) const;
 	virtual void Assign_Mission(MissionType mission);
 	virtual bool Commence(void);
@@ -130,8 +132,12 @@ public:
 	MissionControlClass(void);
 
 	bool Read_INI(CCINIClass &ini);
-	int Normal_Delay(void) const { return (TICKS_PER_MINUTE * Rate); }
-	int AA_Delay(void) const { return (TICKS_PER_MINUTE * AARate); }
+	int Normal_Delay(void) const {
+		return (TICKS_PER_MINUTE * Rate);
+	}
+	int AA_Delay(void) const {
+		return (TICKS_PER_MINUTE * AARate);
+	}
 
 	/*
 	**	This is the mission identifier that this mission represents.

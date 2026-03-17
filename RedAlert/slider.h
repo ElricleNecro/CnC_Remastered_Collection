@@ -63,7 +63,9 @@ public:
 	virtual int Draw_Me(int forced);
 	virtual void Peer_To_Peer(unsigned flags, KeyNumType &key, ControlClass &whom);
 
-	virtual int Thumb_Pixels(void) { return (ThumbSize); }
+	virtual int Thumb_Pixels(void) {
+		return (ThumbSize);
+	}
 
 protected:
 	/*

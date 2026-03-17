@@ -109,12 +109,16 @@ public:
 	**	Constructors, Destructors, and overloaded operators.
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 	InfantryClass(InfantryType classid, HousesType house);
 	InfantryClass(NoInitClass const &x) : FootClass(x), Class(x), Comment(x) {};
 	virtual ~InfantryClass(void);
-	operator InfantryType(void) const { return Class->Type; };
+	operator InfantryType(void) const {
+		return Class->Type;
+	};
 
 	/*---------------------------------------------------------------------
 	**	Member function prototypes.
@@ -154,7 +158,9 @@ public:
 	virtual void Response_Move(void);
 	virtual void Response_Attack(void);
 	virtual void Active_Click_With(ActionType action, ObjectClass *object);
-	virtual void Active_Click_With(ActionType action, CELL cell) { FootClass::Active_Click_With(action, cell); }
+	virtual void Active_Click_With(ActionType action, CELL cell) {
+		FootClass::Active_Click_With(action, cell);
+	}
 
 	/*
 	**	Combat related.
@@ -162,14 +168,17 @@ public:
 	virtual ActionType What_Action(ObjectClass const *object) const;
 	virtual ActionType What_Action(CELL cell) const;
 	virtual BulletClass *Fire_At(TARGET target, int which);
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0, bool forced = false);
 	virtual FireErrorType Can_Fire(TARGET target, int which) const;
 	virtual COORDINATE Fire_Coord(int which) const;
 	virtual void Assign_Target(TARGET);
-	void Set_Occupy_Bit(COORDINATE coord) { Set_Occupy_Bit(Coord_Cell(coord), CellClass::Spot_Index(coord)); };
+	void Set_Occupy_Bit(COORDINATE coord) {
+		Set_Occupy_Bit(Coord_Cell(coord), CellClass::Spot_Index(coord));
+	};
 	void Set_Occupy_Bit(CELL cell, int spot_index);
-	void Clear_Occupy_Bit(COORDINATE coord) { Clear_Occupy_Bit(Coord_Cell(coord), CellClass::Spot_Index(coord)); };
+	void Clear_Occupy_Bit(COORDINATE coord) {
+		Clear_Occupy_Bit(Coord_Cell(coord), CellClass::Spot_Index(coord));
+	};
 	void Clear_Occupy_Bit(CELL cell, int spot_index);
 
 	/*
@@ -203,7 +212,9 @@ public:
 	*/
 	static void Read_INI(CCINIClass &ini);
 	static void Write_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "INFANTRY"; };
+	static char *INI_Name(void) {
+		return "INFANTRY";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 

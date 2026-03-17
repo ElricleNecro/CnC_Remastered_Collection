@@ -89,11 +89,14 @@ bool ConfirmationClass::Process(char const *string) {
 	bheight = FontHeight + FontYSpacing + 2;
 	bwidth = max((String_Pixel_Width(Text_String(TXT_YES)) + 8), 30);
 
-	TextButtonClass yesbtn(BUTTON_YES, TXT_YES, TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW, x + 10,
-			       y + height - (bheight + 5), bwidth);
+	TextButtonClass yesbtn(BUTTON_YES, TXT_YES, TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW, x + 10, y + height - (bheight + 5), bwidth);
 
-	TextButtonClass nobtn(BUTTON_NO, TXT_NO, TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
-			      x + width - (bwidth + 10), y + height - (bheight + 5), bwidth);
+	TextButtonClass nobtn(BUTTON_NO,
+			      TXT_NO,
+			      TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
+			      x + width - (bwidth + 10),
+			      y + height - (bheight + 5),
+			      bwidth);
 
 	nobtn.Add_Tail(yesbtn);
 
@@ -123,7 +126,6 @@ bool ConfirmationClass::Process(char const *string) {
 	bool process = true;
 	pressed = false;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -147,7 +149,11 @@ bool ConfirmationClass::Process(char const *string) {
 			*/
 			Dialog_Box(x, y, width, height);
 			Draw_Caption(TXT_CONFIRMATION, x, y, width);
-			Fancy_Text_Print(buffer, x + 20, y + 30, GadgetClass::Get_Color_Scheme(), TBLACK,
+			Fancy_Text_Print(buffer,
+					 x + 20,
+					 y + 30,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
 					 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 			/*

@@ -35,11 +35,11 @@
  *   fixed::fixed -- Constructor for fixed integral from ASCII initializer.                    *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "fixed.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "fixed.h"
 
 /*
 **	These are some handy fixed point constants. Using these constants instead of manually
@@ -117,7 +117,6 @@ fixed::fixed(char const *ascii) {
 	if (*tptr == '%') { // Removed '/' preceding '%'. ST - 5/8/2019
 		Data.Raw = (unsigned int)(((unsigned __int64)atoi(ascii) * PRECISION) / 100ULL);
 	} else {
-
 		Data.Composite.Whole = Data.Composite.Fraction = 0U;
 		if (wholepart && *wholepart != '.') {
 			Data.Composite.Whole = (unsigned short)atoi(wholepart);

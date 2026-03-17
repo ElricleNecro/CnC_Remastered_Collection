@@ -52,7 +52,6 @@
 class PacketClass;
 
 class FieldClass {
-
 public:
 	friend class PacketClass;
 	//
@@ -73,11 +72,11 @@ public:
 	void Net_To_Host(void);
 
 private:
-	char ID[4];		 // id value of this field
+	char ID[4]; // id value of this field
 	unsigned short DataType; // id of the data type we are using
-	unsigned short Size;	 // size of the data portion of this field
-	void *Data;		 // pointer to the data portion of this field
-	FieldClass *Next;	 // pointer to the next field in the field list
+	unsigned short Size; // size of the data portion of this field
+	void *Data; // pointer to the data portion of this field
+	FieldClass *Next; // pointer to the next field in the field list
 };
 
 #endif

@@ -35,27 +35,59 @@
 #ifndef TARGET_H
 #define TARGET_H
 
-inline RTTIType Target_Kind(TARGET a) { return (RTTIType(((TARGET_COMPOSITE &)a).Sub.Exponent)); }
+inline RTTIType Target_Kind(TARGET a) {
+	return (RTTIType(((TARGET_COMPOSITE &)a).Sub.Exponent));
+}
 
-inline unsigned Target_Value(TARGET a) { return (((TARGET_COMPOSITE &)a).Sub.Mantissa); }
+inline unsigned Target_Value(TARGET a) {
+	return (((TARGET_COMPOSITE &)a).Sub.Mantissa);
+}
 
-inline bool Is_Target_Team(TARGET a) { return (Target_Kind(a) == RTTI_TEAM); }
-inline bool Is_Target_TeamType(TARGET a) { return (Target_Kind(a) == RTTI_TEAMTYPE); }
-inline bool Is_Target_Trigger(TARGET a) { return (Target_Kind(a) == RTTI_TRIGGER); }
-inline bool Is_Target_TriggerType(TARGET a) { return (Target_Kind(a) == RTTI_TRIGGERTYPE); }
-inline bool Is_Target_Infantry(TARGET a) { return (Target_Kind(a) == RTTI_INFANTRY); }
-inline bool Is_Target_Bullet(TARGET a) { return (Target_Kind(a) == RTTI_BULLET); }
-inline bool Is_Target_Terrain(TARGET a) { return (Target_Kind(a) == RTTI_TERRAIN); }
-inline bool Is_Target_Cell(TARGET a) { return (Target_Kind(a) == RTTI_CELL); }
-inline bool Is_Target_Unit(TARGET a) { return (Target_Kind(a) == RTTI_UNIT); }
-inline bool Is_Target_Vessel(TARGET a) { return (Target_Kind(a) == RTTI_VESSEL); }
-inline bool Is_Target_Building(TARGET a) { return (Target_Kind(a) == RTTI_BUILDING); }
-inline bool Is_Target_Template(TARGET a) { return (Target_Kind(a) == RTTI_TEMPLATE); }
-inline bool Is_Target_Aircraft(TARGET a) { return (Target_Kind(a) == RTTI_AIRCRAFT); }
-inline bool Is_Target_Animation(TARGET a) { return (Target_Kind(a) == RTTI_ANIM); }
+inline bool Is_Target_Team(TARGET a) {
+	return (Target_Kind(a) == RTTI_TEAM);
+}
+inline bool Is_Target_TeamType(TARGET a) {
+	return (Target_Kind(a) == RTTI_TEAMTYPE);
+}
+inline bool Is_Target_Trigger(TARGET a) {
+	return (Target_Kind(a) == RTTI_TRIGGER);
+}
+inline bool Is_Target_TriggerType(TARGET a) {
+	return (Target_Kind(a) == RTTI_TRIGGERTYPE);
+}
+inline bool Is_Target_Infantry(TARGET a) {
+	return (Target_Kind(a) == RTTI_INFANTRY);
+}
+inline bool Is_Target_Bullet(TARGET a) {
+	return (Target_Kind(a) == RTTI_BULLET);
+}
+inline bool Is_Target_Terrain(TARGET a) {
+	return (Target_Kind(a) == RTTI_TERRAIN);
+}
+inline bool Is_Target_Cell(TARGET a) {
+	return (Target_Kind(a) == RTTI_CELL);
+}
+inline bool Is_Target_Unit(TARGET a) {
+	return (Target_Kind(a) == RTTI_UNIT);
+}
+inline bool Is_Target_Vessel(TARGET a) {
+	return (Target_Kind(a) == RTTI_VESSEL);
+}
+inline bool Is_Target_Building(TARGET a) {
+	return (Target_Kind(a) == RTTI_BUILDING);
+}
+inline bool Is_Target_Template(TARGET a) {
+	return (Target_Kind(a) == RTTI_TEMPLATE);
+}
+inline bool Is_Target_Aircraft(TARGET a) {
+	return (Target_Kind(a) == RTTI_AIRCRAFT);
+}
+inline bool Is_Target_Animation(TARGET a) {
+	return (Target_Kind(a) == RTTI_ANIM);
+}
 inline bool Is_Target_Object(TARGET a) {
-	return (Target_Kind(a) == RTTI_TERRAIN || Target_Kind(a) == RTTI_UNIT || Target_Kind(a) == RTTI_VESSEL ||
-		Target_Kind(a) == RTTI_INFANTRY || Target_Kind(a) == RTTI_BUILDING || Target_Kind(a) == RTTI_AIRCRAFT);
+	return (Target_Kind(a) == RTTI_TERRAIN || Target_Kind(a) == RTTI_UNIT || Target_Kind(a) == RTTI_VESSEL || Target_Kind(a) == RTTI_INFANTRY ||
+		Target_Kind(a) == RTTI_BUILDING || Target_Kind(a) == RTTI_AIRCRAFT);
 }
 
 TARGET As_Target(CELL cell);
@@ -89,23 +121,35 @@ protected:
 
 public:
 	// conversion operator to RTTIType
-	operator RTTIType(void) const { return (RTTIType(Target.Sub.Exponent)); }
+	operator RTTIType(void) const {
+		return (RTTIType(Target.Sub.Exponent));
+	}
 
 	// comparison operator
-	int operator==(xTargetClass &tgt) { return (tgt.Target.Target == Target.Target ? 1 : 0); }
+	int operator==(xTargetClass &tgt) {
+		return (tgt.Target.Target == Target.Target ? 1 : 0);
+	}
 
 	// conversion operator to regular TARGET type
-	TARGET As_TARGET(void) const { return (Target.Target); }
+	TARGET As_TARGET(void) const {
+		return (Target.Target);
+	}
 
-	unsigned Value(void) const { return (Target.Sub.Mantissa); };
+	unsigned Value(void) const {
+		return (Target.Sub.Mantissa);
+	};
 
 	void Invalidate(void) {
 		Target.Sub.Exponent = RTTI_NONE;
 		Target.Sub.Mantissa = -1;
 	}
-	bool Is_Valid(void) const { return (Target.Sub.Exponent != RTTI_NONE); }
+	bool Is_Valid(void) const {
+		return (Target.Sub.Exponent != RTTI_NONE);
+	}
 
-	TARGET As_Target(void) const { return (Target.Target); }
+	TARGET As_Target(void) const {
+		return (Target.Target);
+	}
 	AbstractTypeClass *As_TypeClass(void) const;
 	AbstractClass *As_Abstract(bool check_active = true) const;
 	TechnoClass *As_Techno(bool check_active = true) const;
@@ -183,8 +227,11 @@ public:
 */
 class TargetClass : public xTargetClass {
 public:
-	TargetClass(void) { Invalidate(); }
-	TargetClass(NoInitClass const &) {}
+	TargetClass(void) {
+		Invalidate();
+	}
+	TargetClass(NoInitClass const &) {
+	}
 	TargetClass(RTTIType rtti, int id) {
 		Target.Sub.Exponent = rtti;
 		Target.Sub.Mantissa = id;

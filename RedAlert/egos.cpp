@@ -67,17 +67,16 @@ DynamicVectorClass<EgoClass *> EgoList;
 */
 char SlideNames[NUM_SLIDES][13] = {
 
-    "aftr_hi.pcx",  "aly1.pcx", "apc_hi.pcx",	"aphi0049.pcx", "bnhi0020.pcx", "dchi0040.pcx",
-    "frhi0166.pcx", "lab.pcx",	"landsbrg.pcx", "mahi0107.pcx", "mig_hi.pcx",	"mtfacthi.pcx",
-    "needle.pcx",   "sov2.pcx", "spy.pcx",	"stalin.pcx",	"tent.pcx"};
+	"aftr_hi.pcx",	"aly1.pcx",   "apc_hi.pcx",   "aphi0049.pcx", "bnhi0020.pcx", "dchi0040.pcx", "frhi0166.pcx", "lab.pcx", "landsbrg.pcx",
+	"mahi0107.pcx", "mig_hi.pcx", "mtfacthi.pcx", "needle.pcx",   "sov2.pcx",     "spy.pcx",      "stalin.pcx",   "tent.pcx"
+};
 
 /*
 ** Names of low res slideshow pictures to play behind the text
 */
-char LoresSlideNames[NUM_SLIDES][13] = {"malo0107.cps", "mig_lo.cps",	"mtfactlo.cps", "needl-lo.cps", "sov2-lo.cps",
-					"spy-lo.cps",	"staln-lo.cps", "tent-lo.cps",	"aftr_lo.cps",	"aly1-lo.cps",
-					"apc_lo.cps",	"aplo0049.cps", "bnlo0020.cps", "dclo0040.cps", "frlo0166.cps",
-					"lab-lo.cps",	"lands-lo.cps"};
+char LoresSlideNames[NUM_SLIDES][13] = { "malo0107.cps", "mig_lo.cps",	 "mtfactlo.cps", "needl-lo.cps", "sov2-lo.cps", "spy-lo.cps",
+					 "staln-lo.cps", "tent-lo.cps",	 "aftr_lo.cps",	 "aly1-lo.cps",	 "apc_lo.cps",	"aplo0049.cps",
+					 "bnlo0020.cps", "dclo0040.cps", "frlo0166.cps", "lab-lo.cps",	 "lands-lo.cps" };
 
 /*
 ** Array of all the palettes required for the slides
@@ -118,19 +117,19 @@ char PaletteLUT[256];
 
 #ifndef WIN32
 extern void Vsync(void);
-#pragma aux Vsync modify[edx ebx eax] = "mov	edx,03DAh"                                                                \
-					"mov	ebx,[VertBlank]"                                                          \
-					"and	bl,001h"                                                                  \
-					"shl	bl,3"                                                                     \
-					"in_vbi:"                                                                      \
-					"in	al,dx"                                                                     \
-					"and	al,008h"                                                                  \
-					"xor	al,bl"                                                                    \
-					"je	in_vbi"                                                                    \
-					"out_vbi:"                                                                     \
-					"in	al,dx"                                                                     \
-					"and	al,008h"                                                                  \
-					"xor	al,bl"                                                                    \
+#pragma aux Vsync modify[edx ebx eax] = "mov	edx,03DAh"                                                                                              \
+					"mov	ebx,[VertBlank]"                                                                                        \
+					"and	bl,001h"                                                                                                \
+					"shl	bl,3"                                                                                                   \
+					"in_vbi:"                                                                                                    \
+					"in	al,dx"                                                                                                   \
+					"and	al,008h"                                                                                                \
+					"xor	al,bl"                                                                                                  \
+					"je	in_vbi"                                                                                                  \
+					"out_vbi:"                                                                                                   \
+					"in	al,dx"                                                                                                   \
+					"and	al,008h"                                                                                                \
+					"xor	al,bl"                                                                                                  \
 					"jne	out_vbi"
 #endif // WIN32
 
@@ -174,7 +173,9 @@ EgoClass::EgoClass(int x, int y, char *text, TextPrintType flags) {
  * HISTORY:                                                                                    *
  *    9/9/96 11:54PM ST : Created                                                              *
  *=============================================================================================*/
-EgoClass::~EgoClass(void) { delete[] Text; }
+EgoClass::~EgoClass(void) {
+	delete[] Text;
+}
 
 /***********************************************************************************************
  * EC::Scroll -- Apply the given distance to the y position of the text.                       *
@@ -295,7 +296,6 @@ void Set_Pal(char *palette) {
  *    9/10/96 0:16AM ST : Created                                                              *
  *=============================================================================================*/
 void Slide_Show(int slide, int frame) {
-
 	/*
 	** Temprary storage to save CCPalette to
 	*/
@@ -305,8 +305,14 @@ void Slide_Show(int slide, int frame) {
 		/*
 		** Blit in a quarter of the new frame to the background page.
 		*/
-		SlideBuffers[slide]->Blit(*BackgroundPage, 0, (frame - 1) * CHUNK_HEIGHT, 0, (frame - 1) * CHUNK_HEIGHT,
-					  SeenBuff.Get_Width(), CHUNK_HEIGHT, false);
+		SlideBuffers[slide]->Blit(*BackgroundPage,
+					  0,
+					  (frame - 1) * CHUNK_HEIGHT,
+					  0,
+					  (frame - 1) * CHUNK_HEIGHT,
+					  SeenBuff.Get_Width(),
+					  CHUNK_HEIGHT,
+					  false);
 		return;
 	}
 
@@ -314,8 +320,7 @@ void Slide_Show(int slide, int frame) {
 		/*
 		** Blit in a quarter of the new frame to the hid page.
 		*/
-		BackgroundPage->Blit(HidPage, 0, (frame - 5) * CHUNK_HEIGHT, 0, (frame - 5) * CHUNK_HEIGHT,
-				     SeenBuff.Get_Width(), CHUNK_HEIGHT, false);
+		BackgroundPage->Blit(HidPage, 0, (frame - 5) * CHUNK_HEIGHT, 0, (frame - 5) * CHUNK_HEIGHT, SeenBuff.Get_Width(), CHUNK_HEIGHT, false);
 		return;
 	}
 
@@ -390,7 +395,6 @@ void Slide_Show(int slide, int frame) {
  *    9/10/96 0:20AM ST : Created                                                              *
  *=============================================================================================*/
 void Show_Who_Was_Responsible(void) {
-
 	int i;
 	int key;
 
@@ -425,8 +429,7 @@ void Show_Who_Was_Responsible(void) {
 	** Initialise the text printing system.
 	*/
 	GadgetClass::Set_Color_Scheme(&ColorRemaps[PCOLOR_GREEN]);
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
-			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	/*
 	** Miscellaneous stuff for parsing the credits text file.
@@ -458,7 +461,6 @@ void Show_Who_Was_Responsible(void) {
 		** Look for a non whitespace character.
 		*/
 		switch (ch) {
-
 		case 13:
 			/*
 			** Char was carriage return. Go on to the next line starting at column 0.
@@ -671,10 +673,13 @@ void Show_Who_Was_Responsible(void) {
 		SlideBuffers[index] = new GraphicBufferClass;
 		SlideBuffers[index]->Init(SeenBuff.Get_Width(), SeenBuff.Get_Height(), NULL, 0, (GBC_Enum)0);
 		Load_Title_Screen(&SlideNames[index][0], SlideBuffers[index], (unsigned char *)&SlidePals[index][0]);
-#else  // WIN32
+#else // WIN32
 		SlideBuffers[index] = new GraphicBufferClass(SeenBuff.Get_Width(), SeenBuff.Get_Height(), (void *)NULL);
-		Load_Picture(&LoresSlideNames[index][0], *SlideBuffers[index], *SlideBuffers[index],
-			     (unsigned char *)&SlidePals[index][0], BM_DEFAULT);
+		Load_Picture(&LoresSlideNames[index][0],
+			     *SlideBuffers[index],
+			     *SlideBuffers[index],
+			     (unsigned char *)&SlidePals[index][0],
+			     BM_DEFAULT);
 #endif // WIN32
 	}
 
@@ -685,7 +690,7 @@ void Show_Who_Was_Responsible(void) {
 #ifdef WIN32
 	BackgroundPage = new GraphicBufferClass;
 	BackgroundPage->Init(SeenBuff.Get_Width(), SeenBuff.Get_Height(), NULL, 0, (GBC_Enum)(GBC_VIDEOMEM));
-#else  // WIN32
+#else // WIN32
 	BackgroundPage = new GraphicBufferClass(SeenBuff.Get_Width(), SeenBuff.Get_Height(), (void *)NULL);
 #endif // WIN32
 
@@ -727,7 +732,6 @@ void Show_Who_Was_Responsible(void) {
 	** Keeps going until all the EgoClass objects are deleted or esc is pressed.
 	*/
 	while (EgoList.Count()) {
-
 		frame++;
 
 		/*
@@ -813,8 +817,7 @@ void Show_Who_Was_Responsible(void) {
 		Wait_Vert_Blank(VertBlank);
 		// Vsync();
 #endif // WIN32
-		HidPage.Blit(SeenBuff, 0, 8 * RESFACTOR, 0, 8 * RESFACTOR, SeenBuff.Get_Width(),
-			     SeenBuff.Get_Height() - 16 * RESFACTOR, false);
+		HidPage.Blit(SeenBuff, 0, 8 * RESFACTOR, 0, 8 * RESFACTOR, SeenBuff.Get_Width(), SeenBuff.Get_Height() - 16 * RESFACTOR, false);
 
 		/*
 		** Try and prevent Win95 from swapping out pictures we havnt used yet.
@@ -823,8 +826,7 @@ void Show_Who_Was_Responsible(void) {
 		if (frame && 3 == 3) {
 			for (i = slide_number + 1; i < NUM_SLIDES; i++) {
 				if (!SlideBuffers[i]->Get_IsDirectDraw()) {
-					Force_VM_Page_In((void *)SlideBuffers[i]->Get_Offset(),
-							 SeenBuff.Get_Width() * SeenBuff.Get_Height());
+					Force_VM_Page_In((void *)SlideBuffers[i]->Get_Offset(), SeenBuff.Get_Width() * SeenBuff.Get_Height());
 				}
 			}
 		}

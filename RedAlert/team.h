@@ -193,12 +193,13 @@ public:
 
 	//------------------------------------------------------------
 	TeamClass(TeamTypeClass const *team = 0, HouseClass *owner = 0);
-	TeamClass(NoInitClass const &x)
-	    : AbstractClass(x), Class(x), House(x), SuspendTimer(x), Trigger(x), TimeOut(x), Member(x) {};
+	TeamClass(NoInitClass const &x) : AbstractClass(x), Class(x), House(x), SuspendTimer(x), Trigger(x), TimeOut(x), Member(x) {};
 	virtual ~TeamClass(void);
 	static void operator delete(void *ptr);
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void Init(void);
 	static void Suspend_Teams(int priority, HouseClass const *house);
 	void Debug_Dump(MonoClass *mono) const;
@@ -211,7 +212,9 @@ public:
 	void Code_Pointers(void);
 	void Decode_Pointers(void);
 
-	bool Is_Empty(void) const { return (Member == (void *)NULL); }
+	bool Is_Empty(void) const {
+		return (Member == (void *)NULL);
+	}
 	bool Has_Entered_Map(void) const;
 	void Force_Active(void) {
 		IsForcedActive = true;

@@ -75,16 +75,22 @@ public:
 	VesselClass(VesselType classid, HousesType house);
 	VesselClass(NoInitClass const &x) : DriveClass(x), Class(x), SecondaryFacing(x) {};
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
-	operator VesselType(void) const { return Class->Type; };
+	operator VesselType(void) const {
+		return Class->Type;
+	};
 
 	static void Init(void);
 
 	virtual ~VesselClass(void);
 	virtual ObjectTypeClass const &Class_Of(void) const;
 
-	virtual MZoneType Zone_Check_Type(void) const { return (MZONE_WATER); }
+	virtual MZoneType Zone_Check_Type(void) const {
+		return (MZONE_WATER);
+	}
 	int Shape_Number(void) const;
 	void Rotation_AI(void);
 	void Combat_AI(void);
@@ -112,8 +118,7 @@ public:
 	virtual void Assign_Destination(TARGET target);
 	virtual int Pip_Count(void) const;
 
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0, bool forced = false);
 	virtual FireErrorType Can_Fire(TARGET target, int which) const;
 
 	virtual void Enter_Idle_Mode(bool initial = false);
@@ -131,7 +136,9 @@ public:
 	*/
 	static void Read_INI(CCINIClass &ini);
 	static void Write_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "SHIPS"; };
+	static char *INI_Name(void) {
+		return "SHIPS";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 

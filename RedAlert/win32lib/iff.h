@@ -59,7 +59,7 @@
 // lint -strong(AJX,PicturePlaneType)
 typedef enum {
 	BM_AMIGA, // Bit plane format (8K per bitplane).
-	BM_MCGA,  // Byte per pixel format (64K).
+	BM_MCGA, // Byte per pixel format (64K).
 
 	BM_DEFAULT = BM_MCGA // Default picture format.
 } PicturePlaneType;
@@ -72,10 +72,10 @@ typedef enum {
 // lint -strong(AJX,CompressionType)
 typedef enum {
 	NOCOMPRESS, // No compression (raw data).
-	LZW12,	    // LZW 12 bit codes.
-	LZW14,	    // LZW 14 bit codes.
+	LZW12, // LZW 12 bit codes.
+	LZW14, // LZW 14 bit codes.
 	HORIZONTAL, // Run length encoding (RLE).
-	LCW	    // Westwood proprietary compression.
+	LCW // Westwood proprietary compression.
 } CompressionType;
 
 /*
@@ -86,9 +86,9 @@ typedef enum {
 // lint -strong(AJX,CompHeaderType)
 typedef struct {
 	char Method; // Compression method (CompressionType).
-	char pad;    // Reserved pad byte (always 0).
-	long Size;   // Size of the uncompressed data.
-	short Skip;  // Number of bytes to skip before data.
+	char pad; // Reserved pad byte (always 0).
+	long Size; // Size of the uncompressed data.
+	short Skip; // Number of bytes to skip before data.
 } CompHeaderType;
 
 /*=========================================================================*/
@@ -105,8 +105,11 @@ void __cdecl Write_Iff_Chunk(int file, long id, void *buffer, long length);
 /* The following prototypes are for the file: LOADPICT.CPP						*/
 /*=========================================================================*/
 
-int __cdecl Load_Picture(char const *filename, BufferClass &scratchbuf, BufferClass &destbuf,
-			 unsigned char *palette = NULL, PicturePlaneType format = BM_DEFAULT);
+int __cdecl Load_Picture(char const *filename,
+			 BufferClass &scratchbuf,
+			 BufferClass &destbuf,
+			 unsigned char *palette = NULL,
+			 PicturePlaneType format = BM_DEFAULT);
 
 /*=========================================================================*/
 /* The following prototypes are for the file: LOAD.CPP							*/
@@ -115,8 +118,7 @@ int __cdecl Load_Picture(char const *filename, BufferClass &scratchbuf, BufferCl
 unsigned long __cdecl Load_Data(char const *name, void *ptr, unsigned long size);
 unsigned long __cdecl Write_Data(char const *name, void *ptr, unsigned long size);
 void *__cdecl Load_Alloc_Data(char const *name, MemoryFlagType flags);
-unsigned long __cdecl Load_Uncompress(char const *file, BufferClass &uncomp_buff, BufferClass &dest_buff,
-				      void *reserved_data = NULL);
+unsigned long __cdecl Load_Uncompress(char const *file, BufferClass &uncomp_buff, BufferClass &dest_buff, void *reserved_data = NULL);
 unsigned long __cdecl Uncompress_Data(void const *src, void *dst);
 void __cdecl Set_Uncomp_Buffer(int buffer_segment, int size_of_buffer);
 

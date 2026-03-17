@@ -57,7 +57,7 @@ class CellClass;
 // Various limiting values
 //...........................................................................
 #define MPLAYER_BUILD_LEVEL_MAX 10 // max build level in multiplay
-#define MAX_MPLAYER_COLORS 8	   // max # of colors
+#define MAX_MPLAYER_COLORS 8 // max # of colors
 
 //...........................................................................
 // Max sizes of packets we want to send
@@ -104,7 +104,7 @@ class CellClass;
 #define INITSTRBUF_MAX 41
 #define CWAITSTRBUF_MAX 16
 #define CREDITSBUF_MAX 5
-#define PACKET_TIMING_TIMEOUT 40       // ticks b/w sending a timing packet
+#define PACKET_TIMING_TIMEOUT 40 // ticks b/w sending a timing packet
 #define MODEM_NAME_MAX PORTBUF_MAX - 1 // Max length of modem name in list box
 
 //---------------------------------------------------------------------------
@@ -114,14 +114,14 @@ class CellClass;
 // Types of games; used to tell which protocol we're using
 //...........................................................................
 typedef enum GameEnum {
-	GAME_NORMAL,		// not multiplayer
-	GAME_MODEM,		// modem game
-	GAME_NULL_MODEM,	// NULL-modem
-	GAME_IPX,		// IPX Network game
-	GAME_INTERNET,		// Internet H2H
-	GAME_SKIRMISH,		// 1 plr vs. AI's
-	GAME_TEN,		// TEN Network game
-	GAME_MPATH,		// MPath Network game
+	GAME_NORMAL, // not multiplayer
+	GAME_MODEM, // modem game
+	GAME_NULL_MODEM, // NULL-modem
+	GAME_IPX, // IPX Network game
+	GAME_INTERNET, // Internet H2H
+	GAME_SKIRMISH, // 1 plr vs. AI's
+	GAME_TEN, // TEN Network game
+	GAME_MPATH, // MPath Network game
 	GAME_GLYPHX_MULTIPLAYER // Multiplayer game controlled by the GLYPHX engine. ST - 5/14/2019 11:41AM
 } GameType;
 
@@ -130,14 +130,7 @@ typedef enum GameEnum {
 //...........................................................................
 typedef enum DetectPortType { PORT_VALID = 0, PORT_INVALID, PORT_IRQ_INUSE } DetectPortType;
 
-typedef enum DialStatusType {
-	DIAL_CONNECTED = 0,
-	DIAL_NO_CARRIER,
-	DIAL_BUSY,
-	DIAL_ERROR,
-	DIAL_NO_DIAL_TONE,
-	DIAL_CANCELED
-} DialStatusType;
+typedef enum DialStatusType { DIAL_CONNECTED = 0, DIAL_NO_CARRIER, DIAL_BUSY, DIAL_ERROR, DIAL_NO_DIAL_TONE, DIAL_CANCELED } DialStatusType;
 
 typedef enum DialMethodType { DIAL_TOUCH_TONE = 0, DIAL_PULSE, DIAL_METHODS } DialMethodType;
 
@@ -155,46 +148,46 @@ typedef enum ModemGameType { MODEM_NULL_HOST = 0, MODEM_NULL_JOIN, MODEM_DIALER,
 // Commands sent over the serial Global Channel
 //...........................................................................
 typedef enum SerialCommandType {
-	SERIAL_CONNECT = 100,	    // Are you there?  Hello?  McFly?
-	SERIAL_GAME_OPTIONS = 101,  // Hey, dudes, here's some new game options
-	SERIAL_SIGN_OFF = 102,	    // Bogus, dudes, my boss is coming; I'm outta here!
-	SERIAL_GO = 103,	    // OK, dudes, jump into the game loop!
-	SERIAL_MESSAGE = 104,	    // Here's a message
-	SERIAL_TIMING = 105,	    // timimg packet
-	SERIAL_SCORE_SCREEN = 106,  // player at score screen
-	SERIAL_LOADGAME = 107,	    // Start the game, loading a saved game first
-	SERIAL_LAST_COMMAND,	    // last command
+	SERIAL_CONNECT = 100, // Are you there?  Hello?  McFly?
+	SERIAL_GAME_OPTIONS = 101, // Hey, dudes, here's some new game options
+	SERIAL_SIGN_OFF = 102, // Bogus, dudes, my boss is coming; I'm outta here!
+	SERIAL_GO = 103, // OK, dudes, jump into the game loop!
+	SERIAL_MESSAGE = 104, // Here's a message
+	SERIAL_TIMING = 105, // timimg packet
+	SERIAL_SCORE_SCREEN = 106, // player at score screen
+	SERIAL_LOADGAME = 107, // Start the game, loading a saved game first
+	SERIAL_LAST_COMMAND, // last command
 	SERIAL_REQ_SCENARIO = 1000, // Reqest that host sends the scenario file to the other players.
-	SERIAL_FILE_INFO = 1001,    // Info about the file that is going to be transferred
-	SERIAL_FILE_CHUNK = 1002,   // A chunk of scenario
-	SERIAL_READY_TO_GO = 1003,  // Sent in response to a 'GO' command
-	SERIAL_NO_SCENARIO = 1004   // Scenario isnt available on remote machine so we cant play
+	SERIAL_FILE_INFO = 1001, // Info about the file that is going to be transferred
+	SERIAL_FILE_CHUNK = 1002, // A chunk of scenario
+	SERIAL_READY_TO_GO = 1003, // Sent in response to a 'GO' command
+	SERIAL_NO_SCENARIO = 1004 // Scenario isnt available on remote machine so we cant play
 } SerialCommandType;
 
 //...........................................................................
 // Commands sent over the network Global Channel
 //...........................................................................
 typedef enum NetCommandType {
-	NET_QUERY_GAME,		 // Hey, what games are out there?
-	NET_ANSWER_GAME,	 // Yo, Here's my game's name!
-	NET_QUERY_PLAYER,	 // Hey, what players are in this game?
-	NET_ANSWER_PLAYER,	 // Yo, I'm in that game!
-	NET_CHAT_ANNOUNCE,	 // I'm at the chat screen
-	NET_CHAT_REQUEST,	 // Respond with a CHAT_ANNOUNCE, please.
-	NET_QUERY_JOIN,		 // Hey guys, can I play too?
-	NET_CONFIRM_JOIN,	 // Well, OK, if you really want to.
-	NET_REJECT_JOIN,	 // No, you can't join; sorry, dude.
-	NET_GAME_OPTIONS,	 // Hey, dudes, here's some new game options
-	NET_SIGN_OFF,		 // Bogus, dudes, my boss is coming; I'm outta here!
-	NET_GO,			 // OK, jump into the game loop!
-	NET_MESSAGE,		 // Here's a message
-	NET_PING,		 // I'm pinging you to take a time measurement
-	NET_LOADGAME,		 // start a game by loading a saved game
+	NET_QUERY_GAME, // Hey, what games are out there?
+	NET_ANSWER_GAME, // Yo, Here's my game's name!
+	NET_QUERY_PLAYER, // Hey, what players are in this game?
+	NET_ANSWER_PLAYER, // Yo, I'm in that game!
+	NET_CHAT_ANNOUNCE, // I'm at the chat screen
+	NET_CHAT_REQUEST, // Respond with a CHAT_ANNOUNCE, please.
+	NET_QUERY_JOIN, // Hey guys, can I play too?
+	NET_CONFIRM_JOIN, // Well, OK, if you really want to.
+	NET_REJECT_JOIN, // No, you can't join; sorry, dude.
+	NET_GAME_OPTIONS, // Hey, dudes, here's some new game options
+	NET_SIGN_OFF, // Bogus, dudes, my boss is coming; I'm outta here!
+	NET_GO, // OK, jump into the game loop!
+	NET_MESSAGE, // Here's a message
+	NET_PING, // I'm pinging you to take a time measurement
+	NET_LOADGAME, // start a game by loading a saved game
 	NET_REQ_SCENARIO = 1000, // Reqest that host sends the scenario file to the other players.
-	NET_FILE_INFO = 1001,	 // Info about the file that is going to be transferred
-	NET_FILE_CHUNK = 1002,	 // A chunk of scenario
-	NET_READY_TO_GO = 1003,	 // Sent in response to a 'GO' command
-	NET_NO_SCENARIO = 1004	 // Scenario isnt available on remote machine so we cant play
+	NET_FILE_INFO = 1001, // Info about the file that is going to be transferred
+	NET_FILE_CHUNK = 1002, // A chunk of scenario
+	NET_READY_TO_GO = 1003, // Sent in response to a 'GO' command
+	NET_NO_SCENARIO = 1004 // Scenario isnt available on remote machine so we cant play
 } NetCommandType;
 
 //---------------------------------------------------------------------------
@@ -242,19 +235,19 @@ typedef struct NodeNameTag {
 #endif
 	union {
 		struct {
-			unsigned char IsOpen;	// is the game open?
+			unsigned char IsOpen; // is the game open?
 			unsigned long LastTime; // last time we heard from this guy
 		} Game;
 		struct {
-			HousesType House;      // "ActLike" House of this player
+			HousesType House; // "ActLike" House of this player
 			PlayerColorType Color; // Color of this player
-			HousesType ID;	       // Actual House of this player
-			int ProcessTime;       // Length of time to process players main loop
+			HousesType ID; // Actual House of this player
+			int ProcessTime; // Length of time to process players main loop
 		} Player;
 		struct {
-			unsigned long LastTime;	  // last time we heard from this guy
+			unsigned long LastTime; // last time we heard from this guy
 			unsigned char LastChance; // we're about to remove him from the list
-			PlayerColorType Color;	  // chat player's color
+			PlayerColorType Color; // chat player's color
 		} Chat;
 	};
 } NodeNameType;
@@ -263,42 +256,42 @@ typedef struct NodeNameTag {
 // Packet sent over the serial Global Channel
 //...........................................................................
 typedef struct {
-	SerialCommandType Command;   // One of the enum's defined above
+	SerialCommandType Command; // One of the enum's defined above
 	char Name[MPLAYER_NAME_MAX]; // Player or Game Name
-	unsigned char ID;	     // unique ID of sender of message
+	unsigned char ID; // unique ID of sender of message
 	union {
 		struct {
-			HousesType House;		   // player's House
-			PlayerColorType Color;		   // player's color or SIGNOFF ID
-			unsigned long MinVersion;	   // min version this game supports
-			unsigned long MaxVersion;	   // max version this game supports
-			char Scenario[DESCRIP_MAX];	   // Scenario name
-			unsigned int Credits;		   // player's credits
-			unsigned int IsBases : 1;	   // 1 = bases are allowed
-			unsigned int IsTiberium : 1;	   // 1 = tiberium is allowed
-			unsigned int IsGoodies : 1;	   // 1 = goodies are allowed
-			unsigned int IsGhosties : 1;	   // 1 = ghosts are allowed
+			HousesType House; // player's House
+			PlayerColorType Color; // player's color or SIGNOFF ID
+			unsigned long MinVersion; // min version this game supports
+			unsigned long MaxVersion; // max version this game supports
+			char Scenario[DESCRIP_MAX]; // Scenario name
+			unsigned int Credits; // player's credits
+			unsigned int IsBases : 1; // 1 = bases are allowed
+			unsigned int IsTiberium : 1; // 1 = tiberium is allowed
+			unsigned int IsGoodies : 1; // 1 = goodies are allowed
+			unsigned int IsGhosties : 1; // 1 = ghosts are allowed
 			unsigned int OfficialScenario : 1; //	Is this scenario an official Westwood one?
-			int CheatCheck;			   // Unique ID of "rules.ini" file.
-			unsigned char BuildLevel;	   // buildable level
-			unsigned char UnitCount;	   // max # units
-			unsigned char AIPlayers;	   // # of AI players allowed
-			int Seed;			   // random number seed
-			SpecialClass Special;		   // command-line options
-			unsigned int GameSpeed;		   // Game Speed
-			unsigned long ResponseTime;	   // packet response time
-			unsigned int FileLength;	   // Length of scenario file to expect from host.
+			int CheatCheck; // Unique ID of "rules.ini" file.
+			unsigned char BuildLevel; // buildable level
+			unsigned char UnitCount; // max # units
+			unsigned char AIPlayers; // # of AI players allowed
+			int Seed; // random number seed
+			SpecialClass Special; // command-line options
+			unsigned int GameSpeed; // Game Speed
+			unsigned long ResponseTime; // packet response time
+			unsigned int FileLength; // Length of scenario file to expect from host.
 #ifdef WOLAPI_INTEGRATION
 			char ShortFileName[13]; // Name of scenario file to expect from host
 #else
 			char ShortFileName[12]; // Name of scenario file to expect from host
 #endif
 			unsigned char FileDigest[32]; // Digest of scenario file to expect from host
-						      //	ajw - This is not necessarily null-terminated.
+				//	ajw - This is not necessarily null-terminated.
 		} ScenarioInfo;
 		struct {
 			char Message[MAX_MESSAGE_LENGTH]; // inter-player message
-			PlayerColorType Color;		  // player's color or SIGNOFF ID
+			PlayerColorType Color; // player's color or SIGNOFF ID
 		} Message;
 		struct {
 			PlayerColorType Color; // player's color or SIGNOFF ID
@@ -311,7 +304,7 @@ typedef struct {
 //...........................................................................
 #define MAX_SEND_FILE_PACKET_SIZE MAX_SERIAL_PACKET_SIZE - 64
 typedef struct {
-	SerialCommandType Command;  // Enum defined above. Should be a file transfer enum.
+	SerialCommandType Command; // Enum defined above. Should be a file transfer enum.
 	unsigned short BlockNumber; // Index position of this file chunk in the file
 	unsigned short BlockLength; // Length of data in the RawData buffer
 	unsigned char RawData[MAX_SEND_FILE_PACKET_SIZE];
@@ -321,48 +314,48 @@ typedef struct {
 // Packet sent over the network Global Channel
 //...........................................................................
 typedef struct GlobalPacketType {
-	NetCommandType Command;	     // One of the enum's defined above
+	NetCommandType Command; // One of the enum's defined above
 	char Name[MPLAYER_NAME_MAX]; // Player or Game Name
 	union {
 		struct {
 			unsigned int IsOpen : 1; // 1 = game is open for joining
 		} GameInfo;
 		struct {
-			HousesType House;	  // player's House
-			PlayerColorType Color;	  // player's color
-			unsigned long NameCRC;	  // CRC of player's game's name
+			HousesType House; // player's House
+			PlayerColorType Color; // player's color
+			unsigned long NameCRC; // CRC of player's game's name
 			unsigned long MinVersion; // game's min supported version
 			unsigned long MaxVersion; // game's max supported version
-			int CheatCheck;		  // Unique ID of "rules.ini" file.
+			int CheatCheck; // Unique ID of "rules.ini" file.
 		} PlayerInfo;
 		struct {
-			char Scenario[DESCRIP_MAX];	   // Scenario Name
-			unsigned int Credits;		   // player's credits
-			unsigned int IsBases : 1;	   // 1 = bases are allowed
-			unsigned int IsTiberium : 1;	   // 1 = tiberium is allowed
-			unsigned int IsGoodies : 1;	   // 1 = goodies are allowed
-			unsigned int IsGhosties : 1;	   // 1 = ghosts are allowed
+			char Scenario[DESCRIP_MAX]; // Scenario Name
+			unsigned int Credits; // player's credits
+			unsigned int IsBases : 1; // 1 = bases are allowed
+			unsigned int IsTiberium : 1; // 1 = tiberium is allowed
+			unsigned int IsGoodies : 1; // 1 = goodies are allowed
+			unsigned int IsGhosties : 1; // 1 = ghosts are allowed
 			unsigned int OfficialScenario : 1; // Is this scenario an official Westwood one?
-			unsigned char BuildLevel;	   // buildable level
-			unsigned char UnitCount;	   // max # units
-			unsigned char AIPlayers;	   // # of AI players allowed
-			int Seed;			   // random number seed
-			SpecialClass Special;		   // command-line options
-			unsigned int GameSpeed;		   // Game Speed
-			unsigned long Version;		   // version # common to all players
-			unsigned int FileLength;	   // Length of scenario file to expect from host.
+			unsigned char BuildLevel; // buildable level
+			unsigned char UnitCount; // max # units
+			unsigned char AIPlayers; // # of AI players allowed
+			int Seed; // random number seed
+			SpecialClass Special; // command-line options
+			unsigned int GameSpeed; // Game Speed
+			unsigned long Version; // version # common to all players
+			unsigned int FileLength; // Length of scenario file to expect from host.
 #ifdef WOLAPI_INTEGRATION
 			char ShortFileName[13]; // Name of scenario file to expect from host
 #else
 			char ShortFileName[12]; // Name of scenario file to expect from host
 #endif
 			unsigned char FileDigest[32]; // Digest of scenario file to expect from host
-						      //	ajw - This is not necessarily null-terminated.
+				//	ajw - This is not necessarily null-terminated.
 		} ScenarioInfo;
 		struct {
 			char Buf[MAX_MESSAGE_LENGTH]; // inter-user message
-			PlayerColorType Color;	      // color of sender of message
-			unsigned long NameCRC;	      // CRC of sender's Game Name
+			PlayerColorType Color; // color of sender of message
+			unsigned long NameCRC; // CRC of sender's Game Name
 		} Message;
 		struct {
 			int OneWay; // one-way response time
@@ -371,7 +364,7 @@ typedef struct GlobalPacketType {
 			int Why; // why were we rejected from the game?
 		} Reject;
 		struct {
-			unsigned long ID;      // unique ID for this chat node
+			unsigned long ID; // unique ID for this chat node
 			PlayerColorType Color; // my color
 		} Chat;
 	};
@@ -400,8 +393,11 @@ typedef struct {
 */
 class MultiMission {
 public:
-	MultiMission(char const *filename = NULL, char const *description = NULL, char const *digest = NULL,
-		     bool official = true, bool expansion = false);
+	MultiMission(char const *filename = NULL,
+		     char const *description = NULL,
+		     char const *digest = NULL,
+		     bool official = true,
+		     bool expansion = false);
 
 	void Set_Description(char const *description);
 	void Set_Filename(char const *filename);
@@ -409,11 +405,21 @@ public:
 	void Set_Official(bool official);
 	void Set_Expansion(bool expansion);
 	void Draw_It(int index, int x, int y, int width, int height, bool selected, TextPrintType flags) const;
-	char const *Description(void) const { return (ScenarioDescription); }
-	char const *Get_Filename(void) const { return (Filename); }
-	char const *Get_Digest(void) const { return (Digest); }
-	bool Get_Official(void) { return (IsOfficial); }
-	bool Get_Expansion(void) { return (IsExpansion); } //	Implied "IsCounterstrike". No longer used. -ajw
+	char const *Description(void) const {
+		return (ScenarioDescription);
+	}
+	char const *Get_Filename(void) const {
+		return (Filename);
+	}
+	char const *Get_Digest(void) const {
+		return (Digest);
+	}
+	bool Get_Official(void) {
+		return (IsOfficial);
+	}
+	bool Get_Expansion(void) {
+		return (IsExpansion);
+	} //	Implied "IsCounterstrike". No longer used. -ajw
 
 private:
 	char ScenarioDescription[DESCRIP_MAX];
@@ -431,7 +437,7 @@ typedef struct {
 	int Goodies;
 	int Ghosts;
 	int UnitCount;
-	int AIPlayers;			       // # of AI players allowed to be built
+	int AIPlayers; // # of AI players allowed to be built
 	char ScenarioDescription[DESCRIP_MAX]; // Used on client machines only
 } GameOptionsType;
 
@@ -518,11 +524,11 @@ public:
 	// Player's local options
 	//.....................................................................
 	char Handle[MPLAYER_NAME_MAX]; // player name
-	PlayerColorType PrefColor;     // preferred color index
-	PlayerColorType ColorIdx;      // actual color index
-	HousesType House;	       // GDI / NOD
-	int ObiWan;		       // 1 = player can see all
-	int Solo;		       // 1 = player can play alone
+	PlayerColorType PrefColor; // preferred color index
+	PlayerColorType ColorIdx; // actual color index
+	HousesType House; // GDI / NOD
+	int ObiWan; // 1 = player can see all
+	int Solo; // 1 = player can play alone
 
 	//.....................................................................
 	// Max allowable # of players & actual # of (human) players
@@ -586,9 +592,9 @@ public:
 	//.....................................................................
 	MPlayerScoreType Score[MAX_MULTI_NAMES];
 	int GamesPlayed; // # games played this run
-	int NumScores;	 // # active entries in MPlayerScore
-	int Winner;	 // index of winner of last game
-	int CurGame;	 // index of current game being played
+	int NumScores; // # active entries in MPlayerScore
+	int Winner; // index of winner of last game
+	int CurGame; // index of current game being played
 
 	//.....................................................................
 	// Static arrays
@@ -610,29 +616,29 @@ public:
 	//.....................................................................
 	// IPX-specific variables
 	//.....................................................................
-	int IsBridge;				    // 1 = we're crossing a bridge
-	IPXAddressClass BridgeNet;		    // address of bridge
-	bool NetStealth;			    // makes us invisible
-	bool NetProtect;			    // keeps others from messaging us
-	bool NetOpen;				    // 1 = game is open for joining
-	char GameName[MPLAYER_NAME_MAX];	    // game's name
-	GlobalPacketType GPacket;		    // global packet
-	int GPacketlen;				    // global packet length
-	IPXAddressClass GAddress;		    // address of sender
-	unsigned short GProductID;		    // product ID of sender
-	char MetaPacket[MAX_IPX_PACKET_SIZE];	    // packet building buffer
-	int MetaSize;				    // size of MetaPacket
-	DynamicVectorClass<NodeNameType *> Games;   // list of games
+	int IsBridge; // 1 = we're crossing a bridge
+	IPXAddressClass BridgeNet; // address of bridge
+	bool NetStealth; // makes us invisible
+	bool NetProtect; // keeps others from messaging us
+	bool NetOpen; // 1 = game is open for joining
+	char GameName[MPLAYER_NAME_MAX]; // game's name
+	GlobalPacketType GPacket; // global packet
+	int GPacketlen; // global packet length
+	IPXAddressClass GAddress; // address of sender
+	unsigned short GProductID; // product ID of sender
+	char MetaPacket[MAX_IPX_PACKET_SIZE]; // packet building buffer
+	int MetaSize; // size of MetaPacket
+	DynamicVectorClass<NodeNameType *> Games; // list of games
 	DynamicVectorClass<NodeNameType *> Players; // list of players
-	DynamicVectorClass<NodeNameType *> Chat;    // list of chat nodes
+	DynamicVectorClass<NodeNameType *> Chat; // list of chat nodes
 
 	//.....................................................................
 	// Modem-specific variables
 	//.....................................................................
-	unsigned ModemService : 1;	   // 1 = service modem in Call_Back
-	int CurPhoneIdx;		   // phone listing index
+	unsigned ModemService : 1; // 1 = service modem in Call_Back
+	int CurPhoneIdx; // phone listing index
 	SerialSettingsType SerialDefaults; // default serial settings
-	ModemGameType ModemType;	   // caller or answerer?
+	ModemGameType ModemType; // caller or answerer?
 
 	DynamicVectorClass<PhoneEntryClass *> PhoneBook;
 	DynamicVectorClass<char *> InitStrings;
@@ -642,14 +648,14 @@ public:
 	//.....................................................................
 	// For finding Sync Bugs
 	//.....................................................................
-	long TrapFrame;		   // frame # to start trapping 'TrapObject'
-	RTTIType TrapObjType;	   // type of object to trap
+	long TrapFrame; // frame # to start trapping 'TrapObject'
+	RTTIType TrapObjType; // type of object to trap
 	TrapObjectType TrapObject; // ptr to object to trap (watch)
-	COORDINATE TrapCoord;	   // coord of object, 0 = ignore
-	TARGET TrapTarget;	   // Target # of object, 0 = ignore
-	CellClass *TrapCell;	   // Ptr to cell to trap (watch)
-	int TrapCheckHeap;	   // true = check the heap as of TrapFrame
-	long TrapPrintCRC;	   // Frame # to print CRC state file
+	COORDINATE TrapCoord; // coord of object, 0 = ignore
+	TARGET TrapTarget; // Target # of object, 0 = ignore
+	CellClass *TrapCell; // Ptr to cell to trap (watch)
+	int TrapCheckHeap; // true = check the heap as of TrapFrame
+	long TrapPrintCRC; // Frame # to print CRC state file
 
 #if (TEN)
 	//

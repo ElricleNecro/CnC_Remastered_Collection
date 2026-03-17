@@ -50,10 +50,10 @@
 ** library.
 */
 typedef enum {
-	SCOMP_NONE = 0,	    // No compression -- raw data.
+	SCOMP_NONE = 0, // No compression -- raw data.
 	SCOMP_WESTWOOD = 1, // Special sliding window delta compression.
-	SCOMP_SONARC = 33,  // Sonarc frame compression.
-	SCOMP_SOS = 99	    // SOS frame compression.
+	SCOMP_SONARC = 33, // Sonarc frame compression.
+	SCOMP_SOS = 99 // SOS frame compression.
 } SCompressType;
 
 /*
@@ -205,7 +205,7 @@ typedef struct {
 	**	This is the compression that the sound data is using.
 	*/
 	SCompressType Compression;
-	short int TrailerLen;	     // Number of trailer bytes in buffer.
+	short int TrailerLen; // Number of trailer bytes in buffer.
 	BYTE Trailer[SONARC_MARGIN]; // Maximum number of 'order' samples needed.
 
 	DWORD Pitch;
@@ -228,17 +228,17 @@ typedef struct {
 	**	Streaming control handlers.
 	*/
 	BOOL (*Callback)(short int id, short int *odd, VOID **buffer, LONG *size);
-	VOID *QueueBuffer;    // Pointer to continued sample data.
-	LONG QueueSize;	      // Size of queue buffer attached.
-	short int Odd;	      // Block number tracker (0..StreamBufferCount-1).
-	int FilePending;      // Number of buffers already filled ahead.
+	VOID *QueueBuffer; // Pointer to continued sample data.
+	LONG QueueSize; // Size of queue buffer attached.
+	short int Odd; // Block number tracker (0..StreamBufferCount-1).
+	int FilePending; // Number of buffers already filled ahead.
 	long FilePendingSize; // Number of bytes in last filled buffer.
 
 	/*
 	**	The file variables are used when streaming directly off of the
 	**	hard drive.
 	*/
-	int FileHandle;	  // Streaming file handle (ERROR = not in use).
+	int FileHandle; // Streaming file handle (ERROR = not in use).
 	VOID *FileBuffer; // Temporary streaming buffer (allowed to be freed).
 	/*
 	** The following structure is used if the sample if compressed using
@@ -251,10 +251,10 @@ typedef struct {
 
 typedef struct LockedData {
 	unsigned int DigiHandle; // = -1;
-	BOOL ServiceSomething;	 // = FALSE;
-	long MagicNumber;	 // = 0xDEAF;
-	VOID *UncompBuffer;	 // = NULL;
-	long StreamBufferSize;	 // = (2*SECONDARY_BUFFER_SIZE)+128;
+	BOOL ServiceSomething; // = FALSE;
+	long MagicNumber; // = 0xDEAF;
+	VOID *UncompBuffer; // = NULL;
+	long StreamBufferSize; // = (2*SECONDARY_BUFFER_SIZE)+128;
 	short StreamBufferCount; // = 32;
 	SampleTrackerType SampleTracker[MAX_SFX];
 	unsigned int SoundVolume;
@@ -267,8 +267,16 @@ extern LockedDataType LockedData;
 
 void Init_Locked_Data(void);
 long Simple_Copy(void **source, long *ssize, void **alternate, long *altsize, void **dest, long size);
-long Sample_Copy(SampleTrackerType *st, void **source, long *ssize, void **alternate, long *altsize, void *dest,
-		 long size, SCompressType scomp, void *trailer, short int *trailersize);
+long Sample_Copy(SampleTrackerType *st,
+		 void **source,
+		 long *ssize,
+		 void **alternate,
+		 long *altsize,
+		 void *dest,
+		 long size,
+		 SCompressType scomp,
+		 void *trailer,
+		 short int *trailersize);
 VOID far __cdecl maintenance_callback(VOID);
 VOID __cdecl far DigiCallback(unsigned int driverhandle, unsigned int callsource, unsigned int sampleid);
 void far HMI_TimerCallback(void);

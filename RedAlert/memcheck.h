@@ -121,10 +121,10 @@
 /* *** Backwards compatibility with V2.1 *** */
 
 #define MCLINENO MCSL /* "MemCheck Source Line" */
-#define MFUNC ERF     /* error reporting function */
+#define MFUNC ERF /* error reporting function */
 
-#define mc_set_msgfunc mc_set_erf      /* "Message funcs" are now    */
-#define mc_get_msgfunc mc_get_erf      /* universally referred to as */
+#define mc_set_msgfunc mc_set_erf /* "Message funcs" are now    */
+#define mc_get_msgfunc mc_get_erf /* universally referred to as */
 #define mc_error_status mc_error_flags /* "error reporting functions"*/
 
 /*  Maintain source code compatibility with version 2.1.
@@ -145,22 +145,22 @@
     In MemCheck 3.0, there's now a global error number much
     like the "errno" variable in standard C.
 */
-#define MCE_NO_ERROR 0	  /* it's debugging time & all well */
+#define MCE_NO_ERROR 0 /* it's debugging time & all well */
 #define MCE_NULL_SOURCE 1 /* null source ptr on copy */
-#define MCE_NULL_DEST 2	  /* null dest ptr on copy */
-#define MCE_UNDERWRITE 3  /* allocated buf underwritten (front) */
-#define MCE_OVERWRITE 4	  /* allocated buf overwritten (end) */
-#define MCE_LEAK 5	  /* forgot to free alloc'd memory */
+#define MCE_NULL_DEST 2 /* null dest ptr on copy */
+#define MCE_UNDERWRITE 3 /* allocated buf underwritten (front) */
+#define MCE_OVERWRITE 4 /* allocated buf overwritten (end) */
+#define MCE_LEAK 5 /* forgot to free alloc'd memory */
 #define MCE_LEAKAGE MCE_LEAK
 #define MCE_UNFREED_MEMORY MCE_LEAK
-#define MCE_NULL_PTR_ASSIGN 6	/* assigned data through null ptr */
-#define MCE_BAD_STACK_PTR 7	/* bad stack pointer */
-#define MCE_STACK_OVERWRITE 8	/* copy trashes stack frame */
-#define MCE_INTERNAL 9		/* internal error msg */
+#define MCE_NULL_PTR_ASSIGN 6 /* assigned data through null ptr */
+#define MCE_BAD_STACK_PTR 7 /* bad stack pointer */
+#define MCE_STACK_OVERWRITE 8 /* copy trashes stack frame */
+#define MCE_INTERNAL 9 /* internal error msg */
 #define MCE_OVERLAPPING_COPY 10 /* source overlaps dest on copy */
-#define MCE_INVALID_PTR 11	/* bad ptr on free, realloc */
-#define MCE_DEST_OVERWRITE 12	/* copy too big for dest buffer */
-#define MCE_OUT_OF_MEMORY 13	/* out of memory */
+#define MCE_INVALID_PTR 11 /* bad ptr on free, realloc */
+#define MCE_DEST_OVERWRITE 12 /* copy too big for dest buffer */
+#define MCE_OUT_OF_MEMORY 13 /* out of memory */
 #define MCE_OOM MCE_OUT_OF_MEMORY
 #define MCE_GPF_PTR 14 /* ptr caused GPF */
 
@@ -268,7 +268,7 @@ extern "C" {
 
 #elif defined(__BORLANDC__)
 #define _CC_BORLAND_ /* Borland product */
-#define _CC_BCC_     /* Borland C compiler */
+#define _CC_BCC_ /* Borland C compiler */
 
 /* Major compiler rev */
 #if (__BORLANDC__ >= 0x0450)
@@ -305,7 +305,7 @@ extern "C" {
 /* Turbo C++ */
 #elif defined(MCTCP) /* homebrew */
 #define _CC_BORLAND_ /* Borland product */
-#define _CC_TCP_     /* Turbo C++ */
+#define _CC_TCP_ /* Turbo C++ */
 
 #elif defined(__TURBOC__)
 /*
@@ -319,7 +319,7 @@ extern "C" {
 			twenty-first century
 */
 #define _CC_BORLAND_ /* Borland C product */
-#define _CC_TCC_     /* Turbo C/C++ compiler */
+#define _CC_TCC_ /* Turbo C/C++ compiler */
 
 #elif defined(_INTELC32_)
 /*
@@ -517,7 +517,7 @@ extern unsigned cdecl _stklen;
 
 #elif defined(_CC_MSC_) /* ------------------------------- */
 
-extern char cdecl end;	       /* end of stack */
+extern char cdecl end; /* end of stack */
 extern unsigned cdecl _atopsp; /* top of stack */
 
 #define STACKTOP _atopsp
@@ -790,15 +790,15 @@ extern unsigned _STACKTOP; /* top of stack */
 /* User-Modifiable Defaults */
 
 #define D_CheckByteCt sizeof(int) /* word size is default */
-#define D_AlignSize sizeof(int)	  /* align returned memory ptrs */
+#define D_AlignSize sizeof(int) /* align returned memory ptrs */
 
 /*  Number of bytes to copy from null segment (to determine null
     pointer assignments)
 */
-#define D_NULLCHECK_BYTES_FAR 16     /* at 0000:0000 (far NULL) */
-#define D_NULLCHECK_BYTES_NEAR 16    /* at   DS:0000 (near NULL) */
+#define D_NULLCHECK_BYTES_FAR 16 /* at 0000:0000 (far NULL) */
+#define D_NULLCHECK_BYTES_NEAR 16 /* at   DS:0000 (near NULL) */
 #define MAX_NULLCHECK_BYTES_FAR 1024 /* extent of irupt vect tbl */
-#define MAX_NULLCHECK_BYTES_NEAR 66  /* reserved in DS */
+#define MAX_NULLCHECK_BYTES_NEAR 66 /* reserved in DS */
 
 /* Unroll the double-negative */
 /*
@@ -831,17 +831,17 @@ extern unsigned _STACKTOP; /* top of stack */
 /* *** Calling Conventions *** */
 
 #if !defined(_CC_ANSI_)
-#define _MCAPI pascal	  /* MemCheck API functions   */
-#define _FASTAPI pascal	  /* speed-critical functions */
-#define _MCCDECL cdecl	  /* MemCheck varargs API     */
+#define _MCAPI pascal /* MemCheck API functions   */
+#define _FASTAPI pascal /* speed-critical functions */
+#define _MCCDECL cdecl /* MemCheck varargs API     */
 #define _MCCALLBACK cdecl /* callback functions       */
-#define _MCVAR cdecl	  /* MemCheck global variable */
+#define _MCVAR cdecl /* MemCheck global variable */
 #else
-#define _MCAPI	    /* MemCheck API functions   */
-#define _FASTAPI    /* speed-critical functions */
-#define _MCCDECL    /* MemCheck varargs API     */
+#define _MCAPI /* MemCheck API functions   */
+#define _FASTAPI /* speed-critical functions */
+#define _MCCDECL /* MemCheck varargs API     */
 #define _MCCALLBACK /* callback functions       */
-#define _MCVAR	    /* MemCheck global variable */
+#define _MCVAR /* MemCheck global variable */
 #endif
 
 #if !defined(_CC_WATCOM_)
@@ -927,7 +927,7 @@ extern unsigned _STACKTOP; /* top of stack */
 /* Min, max orders for each node in the B-tree */
 
 #define BT_ORDER_MIN 5
-#define BT_ORDER_MAX 255    /* maximum tree order */
+#define BT_ORDER_MAX 255 /* maximum tree order */
 #define BT_ORDER_DEFAULT 19 /* default tree order */
 
 /*
@@ -998,14 +998,14 @@ extern unsigned _STACKTOP; /* top of stack */
 
 /* *** TYPEDEFS *** */
 
-typedef char *MCSF;	    /* MemCheck source file */
-typedef unsigned int MCSL;  /* MemCheck source line */
+typedef char *MCSF; /* MemCheck source file */
+typedef unsigned int MCSL; /* MemCheck source line */
 typedef unsigned char MCID; /* MemCheck function ID */
 
 typedef unsigned long MCEFLAGS; /* MemCheck error flags */
-typedef void _MCFAR *MCPTR;	/* type of ptr stored in tree */
-typedef unsigned char MRFLAGS;	/* flags in MEMRECORD */
-typedef unsigned long MCFLAGS;	/* MemCheck settings flags */
+typedef void _MCFAR *MCPTR; /* type of ptr stored in tree */
+typedef unsigned char MRFLAGS; /* flags in MEMRECORD */
+typedef unsigned long MCFLAGS; /* MemCheck settings flags */
 
 /* MemCheck Rocket allocator prototypes */
 typedef void _MCFAR *(_MCFAR *ROCKETALLOCF)(size_t);
@@ -1019,13 +1019,13 @@ typedef void(_MCFAR *ROCKETFREEF)(void _MCFAR *);
     tracked by MemCheck.
 */
 typedef struct MemRecord {
-	MCPTR ptr;	       /* heap/registered ptr */
-	MCID mcid;	       /* MemCheck function ID */
-	MRFLAGS flags;	       /* internal MC flags */
+	MCPTR ptr; /* heap/registered ptr */
+	MCID mcid; /* MemCheck function ID */
+	MRFLAGS flags; /* internal MC flags */
 	unsigned long allocno; /* cardinality of allocation */
-	unsigned long size;    /* size of block */
-	MCSF file;	       /* source file */
-	MCSL line;	       /* source line */
+	unsigned long size; /* size of block */
+	MCSF file; /* source file */
+	MCSL line; /* source line */
 
 } MEMREC, _MCFAR *MEMRECP;
 
@@ -1053,12 +1053,12 @@ typedef struct MCSETTINGS {
 	*/
 	MCFLAGS Flags; /* Main settings flags */
 
-	unsigned short MaxMem;	      /* Max mem for tree usage, in K */
+	unsigned short MaxMem; /* Max mem for tree usage, in K */
 	unsigned short NearNullBytes; /* bytes to check in near null */
-	unsigned short FarNullBytes;  /*  "    "    "    " far   "   */
-	unsigned char CheckByteCt;    /* check byte count */
-	unsigned char AlignSize;      /* alignment boundary size */
-	char TrackingDir[36];	      /* Rocket stores temp files here */
+	unsigned short FarNullBytes; /*  "    "    "    " far   "   */
+	unsigned char CheckByteCt; /* check byte count */
+	unsigned char AlignSize; /* alignment boundary size */
+	char TrackingDir[36]; /* Rocket stores temp files here */
 
 } MCSETTINGS, *MCSETTINGSP;
 
@@ -1066,8 +1066,7 @@ typedef struct MCSETTINGS {
 #define MC_CFG_FILE_SENTINEL ((unsigned long)0x10F23BC4)
 
 typedef struct MCCfgInfo {
-
-	unsigned long sentinel;	     /* always MC_CFG_FILE_SENTINEL */
+	unsigned long sentinel; /* always MC_CFG_FILE_SENTINEL */
 	MCSETTINGS MemCheckSettings; /* saved by user */
 
 } MCCFGINFO, *MCCFGINFOP;
@@ -1076,7 +1075,6 @@ typedef struct MCCfgInfo {
 
 /* 16-bit exception stack */
 typedef struct {
-
 	unsigned xRetIP;
 	unsigned xRetCS;
 	unsigned xErr;
@@ -1092,7 +1090,6 @@ typedef struct {
 
 /* 32-bit exception stack */
 typedef struct {
-
 	unsigned long xRetEIP;
 	unsigned short xRsvd1;
 	unsigned short xRetCS;
@@ -1124,8 +1121,8 @@ typedef struct {
 	of the underlying coordination of critical section locking.
 */
 typedef struct {
-	int nAction;	      /* MCCS_ENTER/LEAVE_SECTION */
-	int *pLocked;	      /* # times entered          */
+	int nAction; /* MCCS_ENTER/LEAVE_SECTION */
+	int *pLocked; /* # times entered          */
 	unsigned long ulRsvd; /* internal use             */
 } MCCRITSECT;
 
@@ -1148,9 +1145,9 @@ typedef void(_MCCALLBACK *GLOBALF)(void);
 typedef void(_MCCALLBACK *TRACKF)(int, MEMRECP);
 
 /* User-definable check function to add to transfer checking */
-typedef void(_MCCALLBACK *CHECKF)(int,		 /* 0 or MCE_... error val for this xfer op */
+typedef void(_MCCALLBACK *CHECKF)(int, /* 0 or MCE_... error val for this xfer op */
 				  void _MCFAR *, /* user ptr dest */
-				  long		 /* bytes to copy to dest */
+				  long /* bytes to copy to dest */
 );
 
 /* Funcs called at startup or shutdown */
@@ -1192,22 +1189,22 @@ typedef void(_MCCALLBACK *MCCRITF)(MCCRITSECT *);
     documentation for more details on stack frame handlers.
 */
 
-typedef void(_MCFAR _MCCDECL *_SSFRAMEHANDLER)(short const,	     /* AX: near/far/error flag   */
+typedef void(_MCFAR _MCCDECL *_SSFRAMEHANDLER)(short const, /* AX: near/far/error flag   */
 					       unsigned short const, /* CX: near (default) rtn CS */
 					       unsigned short const, /* ES: far rtn CS            */
-					       unsigned const,	     /* DI: rtn offset from stack */
-					       short const	     /* DX: frame count           */
+					       unsigned const, /* DI: rtn offset from stack */
+					       short const /* DX: frame count           */
 );
 
 /*  Values for "flag" constant parameter to a
     stack frame handler.
 */
 #define TRACE_BAD_FRAME 0x00 /* couldn't recognize frame     */
-#define TRACE_FAR_CALL 0x01  /* frame represents a far call  */
+#define TRACE_FAR_CALL 0x01 /* frame represents a far call  */
 #define TRACE_NEAR_CALL 0x02 /*   "        "     " near  "   */
 #define TRACE_BAD_CHAIN 0x03 /* frame BP chewed up           */
-#define TRACE_BEGIN 0x80     /* signals begin walk           */
-#define TRACE_END 0x81	     /* signals end of walk          */
+#define TRACE_BEGIN 0x80 /* signals begin walk           */
+#define TRACE_END 0x81 /* signals end of walk          */
 
 /* MC Settings Structure, "flags" member: */
 #define MCF_ACTIVE (MCFLAGS)(0x01)
@@ -1557,12 +1554,12 @@ extern int _MCCALLBACK mc_search_heap(void _MCFAR *);
 
 /* *** INTERNAL API HELPERS *** */
 extern void _MCAPI _mc_set_location(_LOCP);
-extern void _FASTAPI _mcsl(MCSF, MCSL);		 /* location run-ahead */
+extern void _FASTAPI _mcsl(MCSF, MCSL); /* location run-ahead */
 extern void _FASTAPI _mcslx(MCSF, MCSL, size_t); /* location run-ahead */
-extern void _FASTAPI _mcsl_new(MCSF, MCSL);	 /* location run-ahead */
-extern void _FASTAPI _mcsl_delete(MCSF, MCSL);	 /* location run-ahead */
-extern void _FASTAPI _mc_set_newflag(void);	 /* new's a'comin'     */
-extern void _FASTAPI _mc_set_delflag(void);	 /* delete's a'comin'  */
+extern void _FASTAPI _mcsl_new(MCSF, MCSL); /* location run-ahead */
+extern void _FASTAPI _mcsl_delete(MCSF, MCSL); /* location run-ahead */
+extern void _FASTAPI _mc_set_newflag(void); /* new's a'comin'     */
+extern void _FASTAPI _mc_set_delflag(void); /* delete's a'comin'  */
 
 /* Misc - uses INT 9 to output directly to screen */
 #if !defined(_CC_WATCOM32_)
@@ -1640,21 +1637,21 @@ extern void _MCCALLBACK trackf_big_alloc(int, MEMRECP);
 /* *** Stock End Functions *** */
 
 extern void _MCCALLBACK endf_default(void); /* does nothing */
-extern void _MCCALLBACK endf_info(void);    /* write run info to log */
-extern void _MCCALLBACK endf_alert(void);   /* warn if run errs */
+extern void _MCCALLBACK endf_info(void); /* write run info to log */
+extern void _MCCALLBACK endf_alert(void); /* warn if run errs */
 extern void _MCCALLBACK endf_summary(void); /* warn if run errs */
 
 /* *** Stock Start functions *** */
 
 extern void _MCCALLBACK startf_default(void); /* does nothing */
-extern void _MCCALLBACK startf_info(void);    /* write options to log */
+extern void _MCCALLBACK startf_info(void); /* write options to log */
 
 /* *** Stock Check Functions *** */
 
 extern void _MCCALLBACK checkf_default(int, void _MCFAR *, long);
-extern void _MCCALLBACK checkf_dataseg(int,	      /* 0 or MCE_... error val for this xfer op */
+extern void _MCCALLBACK checkf_dataseg(int, /* 0 or MCE_... error val for this xfer op */
 				       void _MCFAR *, /* user ptr dest */
-				       long	      /* bytes to copy to dest */
+				       long /* bytes to copy to dest */
 );
 extern void _MCCALLBACK checkf_verify_heap(int, void _MCFAR *, long);
 
@@ -1672,18 +1669,14 @@ extern void _MCCALLBACK reportf_default(MEMRECP);
 extern void _MCCALLBACK _MCFAR exceptf_default(void);
 
 /* *** Stock Stack Frame Handlers *** */
-extern void _MCFAR _MCCDECL ssfh_info(short const, unsigned short const, unsigned short const, unsigned const,
-				      short const);
+extern void _MCFAR _MCCDECL ssfh_info(short const, unsigned short const, unsigned short const, unsigned const, short const);
 
-extern void _MCFAR _MCCDECL ssfh_fast(short const, unsigned short const, unsigned short const, unsigned const,
-				      short const);
+extern void _MCFAR _MCCDECL ssfh_fast(short const, unsigned short const, unsigned short const, unsigned const, short const);
 /*  int         const   _flag,      */
 
-extern void _MCFAR _MCCDECL ssfh_standard(short const, unsigned short const, unsigned short const, unsigned const,
-					  short const);
+extern void _MCFAR _MCCDECL ssfh_standard(short const, unsigned short const, unsigned short const, unsigned const, short const);
 
-extern void _MCFAR _MCCDECL ssfh_debug(short const, unsigned short const, unsigned short const, unsigned const,
-				       short const);
+extern void _MCFAR _MCCDECL ssfh_debug(short const, unsigned short const, unsigned short const, unsigned const, short const);
 
 /* */
 extern unsigned int _MCAPI mc_stacktop(void); /* high address */
@@ -1706,36 +1699,36 @@ extern unsigned int _MCAPI mc_stackend(void); /* low  address */
 */
 /* *** GLOBALS *** */
 
-extern ERF _MCVAR MC_ERF;	      /* error reporting func ptr     */
-extern CHECKF _MCVAR MC_CheckF;	      /* transfer check func          */
-extern MCCRITF _MCVAR MC_CritF;	      /* crit section enter/exit */
-extern GLOBALF _MCVAR MC_GlobalF;     /* global interception callback */
+extern ERF _MCVAR MC_ERF; /* error reporting func ptr     */
+extern CHECKF _MCVAR MC_CheckF; /* transfer check func          */
+extern MCCRITF _MCVAR MC_CritF; /* crit section enter/exit */
+extern GLOBALF _MCVAR MC_GlobalF; /* global interception callback */
 extern GLOBALF _MCVAR MC_GlobalExitF; /* called on exit interception */
-extern TRACKF _MCVAR MC_TrackF;	      /* alloc/dealloc callback       */
-extern STARTF _MCVAR MC_StartF;	      /* startup callback             */
-extern ENDF _MCVAR MC_EndF;	      /* shutdown callback            */
+extern TRACKF _MCVAR MC_TrackF; /* alloc/dealloc callback       */
+extern STARTF _MCVAR MC_StartF; /* startup callback             */
+extern ENDF _MCVAR MC_EndF; /* shutdown callback            */
 
 extern VERIFYF _MCVAR MC_VerifyF; /* troubleshooting              */
 
 extern char *_MCVAR MC_LogFile; /* log file name used           */
 extern char _MCVAR MC_UserAutoInit;
-extern int _MCVAR MC_CheckFreq;		 /* for globalf_supercheck() et al */
-extern char *_MCVAR MC_EnvVar;		 /* Env var to detect 'active'   */
+extern int _MCVAR MC_CheckFreq; /* for globalf_supercheck() et al */
+extern char *_MCVAR MC_EnvVar; /* Env var to detect 'active'   */
 extern unsigned short _MCVAR MC_DataSeg; /* DS value                     */
 
 extern int _MCVAR MC_MaxTraceDepth;
 extern char *_MCVAR MCST_Desc; /* trace descrip to mc_..trc()  */
 
 extern MCSETTINGS _MCVAR MC_DefaultSettings; /* default settings         */
-extern MCSETTINGS _MCVAR MC_Settings;	     /* real settings--
+extern MCSETTINGS _MCVAR MC_Settings; /* real settings--
 						USE WITH CARE!!!         */
 
 extern MCVOIDFP _MCVAR MC_PMMap1; /* p-mode func in map seg 1     */
 
 /* Protected mode exception handling */
 extern unsigned char _MCVAR MC_ExceptList[]; /* exceptions to handle */
-extern MCEXCEPTINFO _MCVAR MC_ExceptInfo;    /* in exception */
-extern MCEXCEPTF _MCVAR MC_ExceptF;	     /* installed hdler */
+extern MCEXCEPTINFO _MCVAR MC_ExceptInfo; /* in exception */
+extern MCEXCEPTF _MCVAR MC_ExceptF; /* installed hdler */
 
 /* Rocket Guidance Systems */
 extern ROCKETALLOCF _MCVAR MC_RocketAllocF;
@@ -1817,9 +1810,9 @@ extern unsigned char _MCVAR MC_FreedBufferFillChar;
 */
 #define MC_BEGIN_EXCEPTLIST unsigned char _MCVAR MC_ExceptList[] = {
 #define MC_HANDLE_EXCEPTION(e) (unsigned char)(e),
-#define MC_END_EXCEPTLIST                                                                                              \
-	(unsigned char)0xFF                                                                                            \
-	}                                                                                                              \
+#define MC_END_EXCEPTLIST                                                                                                                            \
+	(unsigned char)0xFF                                                                                                                          \
+	}                                                                                                                                            \
 	; /* 0xFF MUST end list */
 
 /* ------------- End MemCheck 3.0 Library Calls --------------- */
@@ -1831,8 +1824,8 @@ extern unsigned char _MCVAR MC_FreedBufferFillChar;
     "It is better to be mugged than
      to live in fear." - Anon.
 */
-#define _VA_DEF(f, r, p)                                                                                               \
-	typedef r(_RTL *p_##f) p;                                                                                      \
+#define _VA_DEF(f, r, p)                                                                                                                             \
+	typedef r(_RTL *p_##f) p;                                                                                                                    \
 	extern p_##f _MCAPI _loc_##f(_LOCP);
 
 /* Declare sprintf helper function */
@@ -2201,7 +2194,7 @@ extern char *_RTL _mcwatcom_strcpy(char *, const char *);
 
 #error Unknown compiler in MemCheck.h
 
-#endif	      /* Compiler-specific Function Mapping Section */
+#endif /* Compiler-specific Function Mapping Section */
 
 /*  Location Transmitters
 
@@ -2242,9 +2235,9 @@ extern char *_RTL _mcwatcom_strcpy(char *, const char *);
 #define spawnve _SETLOC(spawnve)
 #define spawnvpe _SETLOC(spawnvpe)
 
-#endif		    /* end location transmission section */
-#endif		    /* not Borland C++ */
-#endif		    /* not def _lint */
+#endif /* end location transmission section */
+#endif /* not Borland C++ */
+#endif /* not def _lint */
 
 /* ****  THIRD-PARTY MAPPINGS  **** */
 
@@ -2348,8 +2341,12 @@ extern char *_RTL _mcwatcom_strcpy(char *, const char *);
 
 class MemCheck {
 public:
-	MemCheck() { mc_startcheck(NULL); }
-	~MemCheck() { mc_endcheck(); }
+	MemCheck() {
+		mc_startcheck(NULL);
+	}
+	~MemCheck() {
+		mc_endcheck();
+	}
 };
 
 #endif

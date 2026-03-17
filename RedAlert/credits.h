@@ -57,7 +57,8 @@ public:
 	void Update(bool forced = false, bool redraw = false);
 
 	void Graphic_Logic(bool forced = false);
-	void AI(bool forced = false, HouseClass *player_ptr = PlayerPtr,
+	void AI(bool forced = false,
+		HouseClass *player_ptr = PlayerPtr,
 		bool logic_only = false); // Added house and logic_only parameters. ST - 10/16/2019 2:26PM
 
 	long Current; // Credit value currently displayed.

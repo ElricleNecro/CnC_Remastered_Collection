@@ -60,7 +60,7 @@ WWKeyboardClass *_Kbd = NULL;
  *   10/16/1995 PWG : Created.                                                                 *
  *=============================================================================================*/
 WWKeyboardClass::WWKeyboardClass(void)
-    : MouseQX(0), MouseQY(0), Head(0), Tail(0)
+	: MouseQX(0), MouseQY(0), Head(0), Tail(0)
 //	MState(0),
 //	Conditional(0),
 //	CurrentCursor(0)
@@ -182,7 +182,6 @@ bool WWKeyboardClass::Put_Key_Message(unsigned short vk_key, bool release) {
 	if (!Is_Mouse_Key(vk_key)) {
 		if (((GetKeyState(VK_SHIFT) & 0x8000) != 0) || ((GetKeyState(VK_CAPITAL) & 0x0008) != 0) ||
 		    ((GetKeyState(VK_NUMLOCK) & 0x0008) != 0)) {
-
 			vk_key |= WWKEY_SHIFT_BIT;
 		}
 		if ((GetKeyState(VK_CONTROL) & 0x8000) != 0) {
@@ -277,7 +276,9 @@ char WWKeyboardClass::To_ASCII(unsigned short key) {
 	return (buffer[0]);
 }
 
-bool WWKeyboardClass::Down(unsigned short key) { return (GetAsyncKeyState(key & 0xFF) == 0 ? false : true); }
+bool WWKeyboardClass::Down(unsigned short key) {
+	return (GetAsyncKeyState(key & 0xFF) == 0 ? false : true);
+}
 
 extern "C" {
 void __cdecl Stop_Execution(void);
@@ -337,7 +338,9 @@ void WWKeyboardClass::Fill_Buffer_From_System(void) {
 	}
 }
 
-void WWKeyboardClass::Clear(void) { Head = Tail; }
+void WWKeyboardClass::Clear(void) {
+	Head = Tail;
+}
 
 void WWKeyboardClass::Message_Handler(HWND, UINT message, UINT wParam, LONG lParam) {
 	switch (message) {

@@ -89,7 +89,6 @@ void DescriptionClass::Process(char *string) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback
 		*/
@@ -99,7 +98,6 @@ void DescriptionClass::Process(char *string) {
 		**	Refresh display if needed
 		*/
 		if (display) {
-
 			Window_Hide_Mouse(WINDOW_EDITOR);
 
 			/*
@@ -125,7 +123,6 @@ void DescriptionClass::Process(char *string) {
 		**	Process Input
 		*/
 		switch (input) {
-
 		case KN_RETURN:
 		case KeyNumType(BUTTON_OPTIONS | KN_BUTTON):
 			strtrim(string);

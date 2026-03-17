@@ -44,8 +44,6 @@
 //*******************************************************************
 #if (0) // ST - 5/8/2019
 
-#include "dibapi.h"
-#include "dibutil.h"
 #include <direct.h>
 #include <io.h>
 #include <math.h>
@@ -53,6 +51,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include "dibapi.h"
+#include "dibutil.h"
 
 // #include "WolDebug.h"
 
@@ -154,8 +154,8 @@ HDIB FAR LoadDIB(LPSTR lpFileName) {
 WORD FAR SaveDIB(HDIB hDib, LPSTR lpFileName) {
 	BITMAPFILEHEADER bmfHdr; // Header for Bitmap file
 	LPBITMAPINFOHEADER lpBI; // Pointer to DIB info structure
-	int fh;			 // file handle for opened file
-	OFSTRUCT of;		 // OpenFile structure
+	int fh; // file handle for opened file
+	OFSTRUCT of; // OpenFile structure
 	DWORD dwDIBSize;
 	DWORD dwError; // Error return from MyWrite
 
@@ -207,7 +207,6 @@ WORD FAR SaveDIB(HDIB hDib, LPSTR lpFileName) {
 	// Now calculate the size of the image
 
 	if ((lpBI->biCompression == BI_RLE8) || (lpBI->biCompression == BI_RLE4)) {
-
 		// It's an RLE bitmap, we can't calculate size, so trust the
 		// biSizeImage field
 
@@ -385,7 +384,7 @@ HANDLE ReadDIBFile(int hFile) {
 	GlobalUnlock(hDIB);
 	hDIBtmp = GlobalReAlloc(hDIB, lpbi->biSize + nNumColors * sizeof(RGBQUAD) + lpbi->biSizeImage, 0);
 
-	if (!hDIBtmp)		      // can't resize buffer for loading
+	if (!hDIBtmp) // can't resize buffer for loading
 		goto ErrExitNoUnlock; // MPB
 	else
 		hDIB = hDIBtmp;
@@ -470,7 +469,7 @@ BOOL MyRead(int hFile, LPSTR lpBuffer, DWORD dwSize) {
  ****************************************************************************/
 
 DWORD PASCAL MyWrite(int iFileHandle, VOID FAR *lpBuffer, DWORD dwBytes) {
-	DWORD dwBytesTmp = dwBytes;		     // Save # of bytes for return value
+	DWORD dwBytesTmp = dwBytes; // Save # of bytes for return value
 	BYTE huge *hpBuffer = (BYTE huge *)lpBuffer; // make a huge pointer to the data
 
 	/*

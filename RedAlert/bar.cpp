@@ -67,8 +67,9 @@
  *   08/16/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 ProgressBarClass::ProgressBarClass(int x, int y, int width, int height, int forecolor, int backcolor, int bordercolor)
-    : X(x), Y(y), Width(width), Height(height), BarColor(forecolor), BackColor(backcolor), BorderColor(bordercolor),
-      CurrentValue(0), LastDisplayCurrent(0), IsDrawn(false) {}
+	: X(x), Y(y), Width(width), Height(height), BarColor(forecolor), BackColor(backcolor), BorderColor(bordercolor), CurrentValue(0),
+	  LastDisplayCurrent(0), IsDrawn(false) {
+}
 
 /***********************************************************************************************
  * ProgressBarClass::Is_Horizontal -- Determines if the bargraph is horizontal or not.         *

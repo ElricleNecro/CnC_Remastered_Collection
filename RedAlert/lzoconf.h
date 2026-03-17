@@ -132,11 +132,9 @@ typedef unsigned long lzo_ptr_t;
 #define LZO_EXTERN(_rettype) LZO_EXTERN_C _rettype __LZO_ENTRY __LZO_EXPORT
 #endif
 
-typedef int __LZO_ENTRY(__LZO_EXPORT *lzo_compress_t)(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst,
-						      lzo_uint *dst_len, lzo_voidp wrkmem);
+typedef int __LZO_ENTRY(__LZO_EXPORT *lzo_compress_t)(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst, lzo_uint *dst_len, lzo_voidp wrkmem);
 
-typedef int __LZO_ENTRY(__LZO_EXPORT *lzo_decompress_t)(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst,
-							lzo_uint *dst_len, lzo_voidp wrkmem);
+typedef int __LZO_ENTRY(__LZO_EXPORT *lzo_decompress_t)(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst, lzo_uint *dst_len, lzo_voidp wrkmem);
 
 /* a progress indicator callback function */
 typedef void __LZO_ENTRY(__LZO_EXPORT *lzo_progress_callback_t)(lzo_uint, lzo_uint);

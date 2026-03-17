@@ -183,8 +183,8 @@ char *PacketClass::Create_Comms_Packet(int &size) {
 	//
 	for (current = Head; current; current = current->Next) {
 		size += (unsigned short)FIELD_HEADER_SIZE; // add in packet header size
-		size += current->Size;			   // add in data size
-		size += (4 - (size & 3)) & 3;		   // add in pad value to dword align next packet
+		size += current->Size; // add in data size
+		size += (4 - (size & 3)) & 3; // add in pad value to dword align next packet
 	}
 
 	//

@@ -52,7 +52,9 @@ class RandomClass {
 public:
 	RandomClass(unsigned seed = 0);
 
-	operator int(void) { return (operator()()); };
+	operator int(void) {
+		return (operator()());
+	};
 	int operator()(void);
 	int operator()(int minval, int maxval);
 
@@ -74,8 +76,8 @@ protected:
 	*/
 	enum {
 		MULT_CONSTANT = 0x41C64E6D, // K multiplier value.
-		ADD_CONSTANT = 0x00003039,  // K additive value.
-		THROW_AWAY_BITS = 10	    // Low bits to throw away.
+		ADD_CONSTANT = 0x00003039, // K additive value.
+		THROW_AWAY_BITS = 10 // Low bits to throw away.
 	};
 };
 

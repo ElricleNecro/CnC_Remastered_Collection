@@ -47,8 +47,8 @@
  *   Mono_Debug_Print -- Debug output routine                              *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "function.h"
 #include <stdio.h>
+#include "function.h"
 // #include <mem.h>
 #include "combuf.h"
 #include "connect.h" // for command names for debug output
@@ -324,11 +324,11 @@ int CommBufferClass::Queue_Send(void *buf, int buflen, void *extrabuf, int extra
 	//------------------------------------------------------------------------
 	//	Set entry flags
 	//------------------------------------------------------------------------
-	SendQueue[index].IsActive = 1;	  // entry is now active
-	SendQueue[index].IsACK = 0;	  // entry hasn't been ACK'd
-	SendQueue[index].FirstTime = 0L;  // filled in by Manager when sent
-	SendQueue[index].LastTime = 0L;	  // filled in by Manager when sent
-	SendQueue[index].SendCount = 0L;  // filled in by Manager when sent
+	SendQueue[index].IsActive = 1; // entry is now active
+	SendQueue[index].IsACK = 0; // entry hasn't been ACK'd
+	SendQueue[index].FirstTime = 0L; // filled in by Manager when sent
+	SendQueue[index].LastTime = 0L; // filled in by Manager when sent
+	SendQueue[index].SendCount = 0L; // filled in by Manager when sent
 	SendQueue[index].BufLen = buflen; // save buffer size
 
 	//------------------------------------------------------------------------
@@ -598,8 +598,7 @@ int CommBufferClass::UnQueue_Receive(void *buf, int *buflen, int index, void *ex
 	//	Copy the extra data
 	//------------------------------------------------------------------------
 	if (extrabuf != NULL && extralen != NULL) {
-		memcpy(extrabuf, ReceiveQueue[ReceiveIndex[index]].ExtraBuffer,
-		       ReceiveQueue[ReceiveIndex[index]].ExtraLen);
+		memcpy(extrabuf, ReceiveQueue[ReceiveIndex[index]].ExtraBuffer, ReceiveQueue[ReceiveIndex[index]].ExtraLen);
 		(*extralen) = ReceiveQueue[ReceiveIndex[index]].ExtraLen;
 	}
 
@@ -723,7 +722,9 @@ void CommBufferClass::Add_Delay(unsigned long delay) {
  * HISTORY:                                                                *
  *   01/19/1995 BR : Created.                                              *
  *=========================================================================*/
-unsigned long CommBufferClass::Avg_Response_Time(void) { return (MeanDelay); } /* end of Avg_Response_Time */
+unsigned long CommBufferClass::Avg_Response_Time(void) {
+	return (MeanDelay);
+} /* end of Avg_Response_Time */
 
 /***************************************************************************
  * CommBufferClass::Max_Response_Time -- returns max response time    		*
@@ -743,7 +744,9 @@ unsigned long CommBufferClass::Avg_Response_Time(void) { return (MeanDelay); } /
  * HISTORY:                                                                *
  *   01/19/1995 BR : Created.                                              *
  *=========================================================================*/
-unsigned long CommBufferClass::Max_Response_Time(void) { return (MaxDelay); } /* end of Max_Response_Time */
+unsigned long CommBufferClass::Max_Response_Time(void) {
+	return (MaxDelay);
+} /* end of Max_Response_Time */
 
 /***************************************************************************
  * CommBufferClass::Reset_Response_Time -- resets computations					*
@@ -827,11 +830,11 @@ void CommBufferClass::Configure_Debug(int type_offset, int type_size, char **nam
  *=========================================================================*/
 void CommBufferClass::Mono_Debug_Print(int refresh) {
 #ifdef WWLIB32_H
-	int i;					 // loop counter
-	static int send_col[] = {1, 14, 28};	 // coords of send queue columns
-	static int receive_col[] = {40, 54, 68}; // coords of recv queue columns
-	int row, col;				 // current row,col for printing
-	int num;				 // max # items to print
+	int i; // loop counter
+	static int send_col[] = { 1, 14, 28 }; // coords of send queue columns
+	static int receive_col[] = { 40, 54, 68 }; // coords of recv queue columns
+	int row, col; // current row,col for printing
+	int num; // max # items to print
 
 	struct CommHdr { // this mirrors the CommHeaderType
 		unsigned short MagicNumber;
@@ -1014,15 +1017,13 @@ void CommBufferClass::Mono_Debug_Print2(int refresh) {
 		//	Print an active entry
 		//.....................................................................
 		if (SendQueue[i].IsActive) {
-
 			//..................................................................
 			//	Get header info
 			//..................................................................
 			hdr = (CommHdr *)SendQueue[i].Buffer;
 			hdr->MagicNumber = hdr->MagicNumber;
 			hdr->Code = hdr->Code;
-			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, SendQueue[i].SendCount,
-				ConnectionClass::Command_Name(hdr->Code));
+			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, SendQueue[i].SendCount, ConnectionClass::Command_Name(hdr->Code));
 
 			//..................................................................
 			//	Decode app's ID & its name
@@ -1040,8 +1041,7 @@ void CommBufferClass::Mono_Debug_Print2(int refresh) {
 				sprintf(txt + strlen(txt), "%4d  ", val);
 
 				if (DebugNameCount > 0 && val >= 0 && val < DebugNameCount) {
-					sprintf(txt + strlen(txt), "%-12s  %x", DebugNames[val - DebugNameStart],
-						SendQueue[i].IsACK);
+					sprintf(txt + strlen(txt), "%-12s  %x", DebugNames[val - DebugNameStart], SendQueue[i].IsACK);
 				} else {
 					sprintf(txt + strlen(txt), "              %x", SendQueue[i].IsACK);
 				}
@@ -1051,7 +1051,6 @@ void CommBufferClass::Mono_Debug_Print2(int refresh) {
 
 			Mono_Printf("%s", txt);
 		} else {
-
 			//..................................................................
 			//	Entry isn't active; print blanks
 			//..................................................................
@@ -1069,15 +1068,13 @@ void CommBufferClass::Mono_Debug_Print2(int refresh) {
 		//	Print an active entry
 		//.....................................................................
 		if (ReceiveQueue[i].IsActive) {
-
 			//..................................................................
 			//	Get header info
 			//..................................................................
 			hdr = (CommHdr *)ReceiveQueue[i].Buffer;
 			hdr->MagicNumber = hdr->MagicNumber;
 			hdr->Code = hdr->Code;
-			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, ReceiveQueue[i].IsRead,
-				ConnectionClass::Command_Name(hdr->Code));
+			sprintf(txt, "%4d %2d %-5s  ", hdr->PacketID, ReceiveQueue[i].IsRead, ConnectionClass::Command_Name(hdr->Code));
 
 			//..................................................................
 			//	Decode app's ID & its name
@@ -1095,8 +1092,7 @@ void CommBufferClass::Mono_Debug_Print2(int refresh) {
 				sprintf(txt + strlen(txt), "%4d  ", val);
 
 				if (DebugNameCount > 0 && val >= 0 && val < DebugNameCount) {
-					sprintf(txt + strlen(txt), "%-12s  %x", DebugNames[val - DebugNameStart],
-						ReceiveQueue[i].IsACK);
+					sprintf(txt + strlen(txt), "%-12s  %x", DebugNames[val - DebugNameStart], ReceiveQueue[i].IsACK);
 				} else {
 					sprintf(txt + strlen(txt), "              %x", ReceiveQueue[i].IsACK);
 				}
@@ -1106,7 +1102,6 @@ void CommBufferClass::Mono_Debug_Print2(int refresh) {
 
 			Mono_Printf("%s", txt);
 		} else {
-
 			//..................................................................
 			//	Entry isn't active; print blanks
 			//..................................................................

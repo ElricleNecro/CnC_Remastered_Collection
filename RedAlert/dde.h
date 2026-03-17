@@ -51,7 +51,7 @@
 #ifndef __DDE_H
 #define __DDE_H
 
-#define DDE_ADVISE_CONNECT -1	 // advisory "client has connected"
+#define DDE_ADVISE_CONNECT -1 // advisory "client has connected"
 #define DDE_ADVISE_DISCONNECT -2 // advisory "client has disconnected"
 
 /*
@@ -59,7 +59,6 @@
 */
 
 class Instance_Class {
-
 	/*
 	---------------------------- Public Interface ----------------------------
 	*/
@@ -70,8 +69,8 @@ public:
 	.....................................................................*/
 
 	Instance_Class( // constructor
-	    LPSTR,	// null terminated local sever name string
-	    LPSTR	// null terminated remote server name string
+		LPSTR, // null terminated local sever name string
+		LPSTR // null terminated remote server name string
 	);
 
 	/*.....................................................................
@@ -122,11 +121,11 @@ public:
 	.....................................................................*/
 	static BOOL(CALLBACK *callback)(
 
-	    LPBYTE pointer, // pointer to received data
-	    long length	    // if >0 length of received data
-			    // if <0
-			    //	-1 == client connect detected
-			    // -2 == client disconnect detected
+		LPBYTE pointer, // pointer to received data
+		long length // if >0 length of received data
+		// if <0
+		//	-1 == client connect detected
+		// -2 == client disconnect detected
 	);
 
 	/*.....................................................................
@@ -134,38 +133,38 @@ public:
 	.....................................................................*/
 	static HDDEDATA CALLBACK dde_callback(
 
-	    UINT uType,	    // transaction type
-	    UINT uFmt,	    // clipboard data format
-	    HCONV hconv,    // handle of the conversation
-	    HSZ hsz1,	    // handle of a string
-	    HSZ hsz2,	    // handle of a string
-	    HDDEDATA hdata, // handle of a global memory object
-	    DWORD dwData1,  // transaction-specific data
-	    DWORD dwData2   // transaction-specific data
+		UINT uType, // transaction type
+		UINT uFmt, // clipboard data format
+		HCONV hconv, // handle of the conversation
+		HSZ hsz1, // handle of a string
+		HSZ hsz2, // handle of a string
+		HDDEDATA hdata, // handle of a global memory object
+		DWORD dwData1, // transaction-specific data
+		DWORD dwData2 // transaction-specific data
 	);
 	HANDLE instance; // this application's instance
-	HWND hwnd;	 // valid window handle
+	HWND hwnd; // valid window handle
 
 	/*.....................................................................
 	member variables
 	.....................................................................*/
 
-	static DWORD id_inst;	    // instance identifier set by DdeInitialize
-	static BOOL process_pokes;  // controls response to pokes
+	static DWORD id_inst; // instance identifier set by DdeInitialize
+	static BOOL process_pokes; // controls response to pokes
 	static char ascii_name[32]; // name of server
 
 	//
 	// non-static member variables
 	//
 
-	HSZ remote_name;  // string handle for remote server name
-	HSZ local_name;	  // string handle for local server name
+	HSZ remote_name; // string handle for remote server name
+	HSZ local_name; // string handle for local server name
 	HSZ system_topic; // string handle for the "system" topic
-	HSZ poke_topic;	  // string handle for poking data to server topic
-	HSZ poke_item;	  // string handle for poking data to server item
+	HSZ poke_topic; // string handle for poking data to server topic
+	HSZ poke_item; // string handle for poking data to server item
 
 	HCONV conv_handle; // conversation handle
-	BOOL dde_error;	   // error flag
+	BOOL dde_error; // error flag
 };
 
 #endif

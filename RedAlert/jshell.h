@@ -40,8 +40,8 @@
 #ifdef WIN32
 // #define getch	Get_Key_Num
 // #define kbhit	Check_Key_Num
-#include "key.h"
 #include <conio.h>
+#include "key.h"
 #else
 #endif
 
@@ -56,7 +56,6 @@
 
 // lint -esym(1725,KeyboardClass::MouseQX,KeyboardClass::MouseQY)
 struct KeyboardClass : public WWKeyboardClass
-
 #else
 struct KeyboardClass
 #endif
@@ -73,26 +72,50 @@ struct KeyboardClass
 	int &MouseQX;
 	int &MouseQY;
 
-	KeyboardClass() : IsLibrary(true), MouseQX(::MouseQX), MouseQY(::MouseQY) {}
-	KeyNumType Get(void) { return (IsLibrary ? (KeyNumType)Get_Key_Num() : (KeyNumType)getch()); };
-	KeyNumType Check(void) { return (IsLibrary ? (KeyNumType)Check_Key_Num() : (KeyNumType)kbhit()); };
-	KeyASCIIType To_ASCII(KeyNumType key) { return ((KeyASCIIType)KN_To_KA(key)); };
+	KeyboardClass() : IsLibrary(true), MouseQX(::MouseQX), MouseQY(::MouseQY) {
+	}
+	KeyNumType Get(void) {
+		return (IsLibrary ? (KeyNumType)Get_Key_Num() : (KeyNumType)getch());
+	};
+	KeyNumType Check(void) {
+		return (IsLibrary ? (KeyNumType)Check_Key_Num() : (KeyNumType)kbhit());
+	};
+	KeyASCIIType To_ASCII(KeyNumType key) {
+		return ((KeyASCIIType)KN_To_KA(key));
+	};
 	void Clear(void) {
 		if (IsLibrary)
 			Clear_KeyBuffer();
 	};
-	int Down(KeyNumType key) { return (Key_Down(key)); };
+	int Down(KeyNumType key) {
+		return (Key_Down(key));
+	};
 #else
-	KeyboardClass() : IsLibrary(true) {}
-	KeyNumType Get(void) { return ((KeyNumType)WWKeyboardClass::Get()); };
-	KeyNumType Check(void) { return ((KeyNumType)WWKeyboardClass::Check()); };
-	KeyASCIIType To_ASCII(KeyNumType key) { return ((KeyASCIIType)WWKeyboardClass::To_ASCII(key)); };
-	void Clear(void) { WWKeyboardClass::Clear(); };
-	int Down(KeyNumType key) { return (WWKeyboardClass::Down(key)); };
+	KeyboardClass() : IsLibrary(true) {
+	}
+	KeyNumType Get(void) {
+		return ((KeyNumType)WWKeyboardClass::Get());
+	};
+	KeyNumType Check(void) {
+		return ((KeyNumType)WWKeyboardClass::Check());
+	};
+	KeyASCIIType To_ASCII(KeyNumType key) {
+		return ((KeyASCIIType)WWKeyboardClass::To_ASCII(key));
+	};
+	void Clear(void) {
+		WWKeyboardClass::Clear();
+	};
+	int Down(KeyNumType key) {
+		return (WWKeyboardClass::Down(key));
+	};
 #endif
 
-	int Mouse_X(void) { return (Get_Mouse_X()); };
-	int Mouse_Y(void) { return (Get_Mouse_Y()); };
+	int Mouse_X(void) {
+		return (Get_Mouse_X());
+	};
+	int Mouse_Y(void) {
+		return (Get_Mouse_Y());
+	};
 };
 
 /*
@@ -100,30 +123,44 @@ struct KeyboardClass
 **	arithmatic performed. The operators must be instatiated for the
 **	enumerated types desired.
 */
-template <class T> inline T operator++(T &a) {
+template <class T>
+inline T operator++(T &a) {
 	a = (T)((int)a + (int)1);
 	return (a);
 }
-template <class T> inline T operator++(T &a, int) {
+template <class T>
+inline T operator++(T &a, int) {
 	T aa = a;
 	a = (T)((int)a + (int)1);
 	return (aa);
 }
-template <class T> inline T operator--(T &a) {
+template <class T>
+inline T operator--(T &a) {
 	a = (T)((int)a - (int)1);
 	return (a);
 }
-template <class T> inline T operator--(T &a, int) {
+template <class T>
+inline T operator--(T &a, int) {
 	T aa = a;
 	a = (T)((int)a - (int)1);
 	return (aa);
 }
-template <class T> inline T operator|(T t1, T t2) { return ((T)((int)t1 | (int)t2)); }
-template <class T> inline T operator&(T t1, T t2) { return ((T)((int)t1 & (int)t2)); }
-template <class T> inline T operator~(T t1) { return ((T)(~(int)t1)); }
+template <class T>
+inline T operator|(T t1, T t2) {
+	return ((T)((int)t1 | (int)t2));
+}
+template <class T>
+inline T operator&(T t1, T t2) {
+	return ((T)((int)t1 & (int)t2));
+}
+template <class T>
+inline T operator~(T t1) {
+	return ((T)(~(int)t1));
+}
 
 #ifndef WIN32
-template <class T> inline T min(T value1, T value2) {
+template <class T>
+inline T min(T value1, T value2) {
 	if (value1 < value2) {
 		return (value1);
 	}
@@ -132,7 +169,8 @@ template <class T> inline T min(T value1, T value2) {
 int min(int, int);
 long min(long, long);
 
-template <class T> inline T max(T value1, T value2) {
+template <class T>
+inline T max(T value1, T value2) {
 	if (value1 > value2) {
 		return (value1);
 	}
@@ -142,7 +180,8 @@ int max(int, int);
 long max(long, long);
 #endif
 
-template <class T> inline void swap(T &value1, T &value2) {
+template <class T>
+inline void swap(T &value1, T &value2) {
 	T temp = value1;
 	value1 = value2;
 	value2 = temp;
@@ -150,7 +189,8 @@ template <class T> inline void swap(T &value1, T &value2) {
 int swap(int, int);
 long swap(long, long);
 
-template <class T> inline T Bound(T original, T minval, T maxval) {
+template <class T>
+inline T Bound(T original, T minval, T maxval) {
 	if (original < minval)
 		return (minval);
 	if (original > maxval)
@@ -161,7 +201,10 @@ int Bound(signed int, signed int, signed int);
 unsigned Bound(unsigned, unsigned, unsigned);
 long Bound(long, long, long);
 
-template <class T> T _rotl(T X, int n) { return ((T)((((X) << n) | ((X) >> ((sizeof(T) * 8) - n))))); }
+template <class T>
+T _rotl(T X, int n) {
+	return ((T)((((X) << n) | ((X) >> ((sizeof(T) * 8) - n)))));
+}
 
 /*
 **	This macro serves as a general way to determine the number of elements
@@ -186,84 +229,84 @@ int __cdecl Bound(int original, int min, int max);
 
 #if (0)
 void Set_Bit(void *array, int bit, int value);
-#pragma aux Set_Bit parm[esi][ecx][eax] modify[esi ebx] = "mov	ebx,ecx"                                                \
-							  "shr	ebx,5"                                                  \
-							  "and	ecx,01Fh"                                               \
-							  "btr	[esi+ebx*4],ecx"                                        \
-							  "or	eax,eax"                                                 \
-							  "jz	ok"                                                      \
-							  "bts	[esi+ebx*4],ecx"                                        \
+#pragma aux Set_Bit parm[esi][ecx][eax] modify[esi ebx] = "mov	ebx,ecx"                                                                              \
+							  "shr	ebx,5"                                                                                \
+							  "and	ecx,01Fh"                                                                             \
+							  "btr	[esi+ebx*4],ecx"                                                                      \
+							  "or	eax,eax"                                                                               \
+							  "jz	ok"                                                                                    \
+							  "bts	[esi+ebx*4],ecx"                                                                      \
 							  "ok:"
 
 int Get_Bit(void const *array, int bit);
-#pragma aux Get_Bit parm[esi][eax] modify[esi ebx] value[eax] = "mov	ebx,eax"                                          \
-								"shr	ebx,5"                                            \
-								"and	eax,01Fh"                                         \
-								"bt	[esi+ebx*4],eax"                                   \
+#pragma aux Get_Bit parm[esi][eax] modify[esi ebx] value[eax] = "mov	ebx,eax"                                                                        \
+								"shr	ebx,5"                                                                          \
+								"and	eax,01Fh"                                                                       \
+								"bt	[esi+ebx*4],eax"                                                                 \
 								"setc	al"
 
 int First_True_Bit(void const *array);
-#pragma aux First_True_Bit parm[esi] modify[esi ebx] value[eax] = "mov	eax,-32"                                        \
-								  "again:"                                             \
-								  "add	eax,32"                                         \
-								  "mov	ebx,[esi]"                                      \
-								  "add	esi,4"                                          \
-								  "bsf	ebx,ebx"                                        \
-								  "jz	again"                                           \
+#pragma aux First_True_Bit parm[esi] modify[esi ebx] value[eax] = "mov	eax,-32"                                                                      \
+								  "again:"                                                                           \
+								  "add	eax,32"                                                                       \
+								  "mov	ebx,[esi]"                                                                    \
+								  "add	esi,4"                                                                        \
+								  "bsf	ebx,ebx"                                                                      \
+								  "jz	again"                                                                         \
 								  "add	eax,ebx"
 
 int First_False_Bit(void const *array);
-#pragma aux First_False_Bit parm[esi] modify[esi ebx] value[eax] = "mov	eax,-32"                                       \
-								   "again:"                                            \
-								   "add	eax,32"                                        \
-								   "mov	ebx,[esi]"                                     \
-								   "not	ebx"                                           \
-								   "add	esi,4"                                         \
-								   "bsf	ebx,ebx"                                       \
-								   "jz	again"                                          \
+#pragma aux First_False_Bit parm[esi] modify[esi ebx] value[eax] = "mov	eax,-32"                                                                     \
+								   "again:"                                                                          \
+								   "add	eax,32"                                                                      \
+								   "mov	ebx,[esi]"                                                                   \
+								   "not	ebx"                                                                         \
+								   "add	esi,4"                                                                       \
+								   "bsf	ebx,ebx"                                                                     \
+								   "jz	again"                                                                        \
 								   "add	eax,ebx"
 
 #ifdef OBSOLETE
 extern int Bound(int original, int min, int max);
-#pragma aux Bound parm[eax][ebx][ecx] modify[eax] value[eax] = "cmp	ebx,ecx"                                           \
-							       "jl	okorder"                                            \
-							       "xchg	ebx,ecx"                                          \
-							       "okorder: cmp	eax,ebx"                                  \
-							       "jg	okmin"                                              \
-							       "mov	eax,ebx"                                           \
-							       "okmin: cmp	eax,ecx"                                    \
-							       "jl	okmax"                                              \
-							       "mov	eax,ecx"                                           \
+#pragma aux Bound parm[eax][ebx][ecx] modify[eax] value[eax] = "cmp	ebx,ecx"                                                                         \
+							       "jl	okorder"                                                                          \
+							       "xchg	ebx,ecx"                                                                        \
+							       "okorder: cmp	eax,ebx"                                                                \
+							       "jg	okmin"                                                                            \
+							       "mov	eax,ebx"                                                                         \
+							       "okmin: cmp	eax,ecx"                                                                  \
+							       "jl	okmax"                                                                            \
+							       "mov	eax,ecx"                                                                         \
 							       "okmax:"
 
 extern unsigned Bound(unsigned original, unsigned min, unsigned max);
-#pragma aux Bound parm[eax][ebx][ecx] modify[eax] value[eax] = "cmp	ebx,ecx"                                           \
-							       "jb	okorder"                                            \
-							       "xchg	ebx,ecx"                                          \
-							       "okorder: cmp	eax,ebx"                                  \
-							       "ja	okmin"                                              \
-							       "mov	eax,ebx"                                           \
-							       "okmin: cmp	eax,ecx"                                    \
-							       "jb	okmax"                                              \
-							       "mov	eax,ecx"                                           \
+#pragma aux Bound parm[eax][ebx][ecx] modify[eax] value[eax] = "cmp	ebx,ecx"                                                                         \
+							       "jb	okorder"                                                                          \
+							       "xchg	ebx,ecx"                                                                        \
+							       "okorder: cmp	eax,ebx"                                                                \
+							       "ja	okmin"                                                                            \
+							       "mov	eax,ebx"                                                                         \
+							       "okmin: cmp	eax,ecx"                                                                  \
+							       "jb	okmax"                                                                            \
+							       "mov	eax,ecx"                                                                         \
 							       "okmax:"
 #endif
 
 unsigned Fixed_To_Cardinal(unsigned base, unsigned fixed);
-#pragma aux Fixed_To_Cardinal parm[eax][edx] modify[edx] value[eax] = "mul	edx"                                        \
-								      "add	eax,080h"                                   \
-								      "test	eax,0FF000000h"                            \
-								      "jz	ok"                                          \
-								      "mov	eax,000FFFFFFh"                             \
-								      "ok:"                                            \
+#pragma aux Fixed_To_Cardinal parm[eax][edx] modify[edx] value[eax] = "mul	edx"                                                                      \
+								      "add	eax,080h"                                                                 \
+								      "test	eax,0FF000000h"                                                          \
+								      "jz	ok"                                                                        \
+								      "mov	eax,000FFFFFFh"                                                           \
+								      "ok:"                                                                          \
 								      "shr	eax,8"
 
 unsigned Cardinal_To_Fixed(unsigned base, unsigned cardinal);
-#pragma aux Cardinal_To_Fixed parm[ebx][eax] modify[edx] value[eax] = "or	ebx,ebx"                                     \
-								      "jz	fini"                                        \
-								      "shl	eax,8"                                      \
-								      "xor	edx,edx"                                    \
-								      "div	ebx"                                        \
+#pragma aux Cardinal_To_Fixed parm[ebx][eax] modify[edx] value[eax] = "or	ebx,ebx"                                                                   \
+								      "jz	fini"                                                                      \
+								      "shl	eax,8"                                                                    \
+								      "xor	edx,edx"                                                                  \
+								      "div	ebx"                                                                      \
 								      "fini:"
 
 #ifndef OUTPORTB
@@ -272,9 +315,9 @@ extern void outportb(int port, unsigned char data);
 #pragma aux outportb parm[edx][al] = "out	dx,al"
 
 extern void outport(int port, unsigned short data);
-#pragma aux outport parm[edx][ax] = "out	dx,al"                                                                        \
-				    "inc	dx"                                                                           \
-				    "mov	al,ah"                                                                        \
+#pragma aux outport parm[edx][ax] = "out	dx,al"                                                                                                      \
+				    "inc	dx"                                                                                                         \
+				    "mov	al,ah"                                                                                                      \
 				    "out	dx,al"
 #endif
 
@@ -287,8 +330,12 @@ extern void outport(int port, unsigned short data);
 extern long Frame;
 class FrameTimerClass {
 public:
-	long operator()(void) const { return (Frame); };
-	operator long(void) const { return (Frame); };
+	long operator()(void) const {
+		return (Frame);
+	};
+	operator long(void) const {
+		return (Frame);
+	};
 };
 
 #ifndef WIN32
@@ -319,8 +366,12 @@ public:
 		return (WindowsTimer->Get_System_Tick_Count());
 	};
 #else
-	long operator()(void) const { return (Get_System_Tick_Count()); };
-	operator long(void) const { return (Get_System_Tick_Count()); };
+	long operator()(void) const {
+		return (Get_System_Tick_Count());
+	};
+	operator long(void) const {
+		return (Get_System_Tick_Count());
+	};
 #endif
 };
 #endif
@@ -339,12 +390,17 @@ public:
 		return (WindowsTimer->Get_User_Tick_Count());
 	};
 #else
-	long operator()(void) const { return (Get_User_Tick_Count()); };
-	operator long(void) const { return (Get_User_Tick_Count()); };
+	long operator()(void) const {
+		return (Get_User_Tick_Count());
+	};
+	operator long(void) const {
+		return (Get_User_Tick_Count());
+	};
 #endif
 };
 
-template <class T> void Bubble_Sort(T *array, int count) {
+template <class T>
+void Bubble_Sort(T *array, int count) {
 	if (array != NULL && count > 1) {
 		bool swapflag;
 
@@ -362,7 +418,8 @@ template <class T> void Bubble_Sort(T *array, int count) {
 	}
 }
 
-template <class T> void PBubble_Sort(T *array, int count) {
+template <class T>
+void PBubble_Sort(T *array, int count) {
 	if (array != NULL && count > 1) {
 		bool swapflag;
 
@@ -380,7 +437,8 @@ template <class T> void PBubble_Sort(T *array, int count) {
 	}
 }
 
-template <class T> void PNBubble_Sort(T *array, int count) {
+template <class T>
+void PNBubble_Sort(T *array, int count) {
 	if (array != NULL && count > 1) {
 		bool swapflag;
 
@@ -398,16 +456,26 @@ template <class T> void PNBubble_Sort(T *array, int count) {
 	}
 }
 
-template <class T> class SmartPtr {
+template <class T>
+class SmartPtr {
 public:
-	SmartPtr(NoInitClass const &) {}
-	SmartPtr(T *realptr = 0) : Pointer(realptr) {}
-	SmartPtr(SmartPtr const &rvalue) : Pointer(rvalue.Pointer) {}
-	~SmartPtr(void) { Pointer = 0; }
+	SmartPtr(NoInitClass const &) {
+	}
+	SmartPtr(T *realptr = 0) : Pointer(realptr) {
+	}
+	SmartPtr(SmartPtr const &rvalue) : Pointer(rvalue.Pointer) {
+	}
+	~SmartPtr(void) {
+		Pointer = 0;
+	}
 
-	operator T *(void) const { return (Pointer); }
+	operator T *(void) const {
+		return (Pointer);
+	}
 
-	operator long(void) const { return ((long)Pointer); }
+	operator long(void) const {
+		return ((long)Pointer);
+	}
 
 	SmartPtr<T> operator++(int) {
 		assert(Pointer != 0);

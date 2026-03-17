@@ -39,7 +39,6 @@
 */
 
 class UnitTrackerClass {
-
 public:
 	UnitTrackerClass(int unit_count);
 	~UnitTrackerClass(void);
@@ -50,7 +49,9 @@ public:
 
 	int Get_Unit_Total(int unit_type);
 	long *Get_All_Totals(void);
-	int Get_Unit_Count(void) { return (UnitCount); };
+	int Get_Unit_Count(void) {
+		return (UnitCount);
+	};
 
 	void To_Network_Format(void);
 	void To_PC_Format(void);

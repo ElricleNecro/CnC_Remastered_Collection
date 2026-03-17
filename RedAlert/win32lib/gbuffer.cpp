@@ -74,8 +74,7 @@ BOOL AllowHardwareBlitFills = TRUE;
  * HISTORY:                                                                *
  *   05/09/1994 PWG : Created.                                             *
  *=========================================================================*/
-GraphicViewPortClass::GraphicViewPortClass(GraphicBufferClass *gbuffer, int x, int y, int w, int h)
-    : LockCount(0), GraphicBuff(NULL) {
+GraphicViewPortClass::GraphicViewPortClass(GraphicBufferClass *gbuffer, int x, int y, int w, int h) : LockCount(0), GraphicBuff(NULL) {
 	Attach(gbuffer, x, y, w, h);
 }
 
@@ -89,7 +88,8 @@ GraphicViewPortClass::GraphicViewPortClass(GraphicBufferClass *gbuffer, int x, i
  * HISTORY:                                                                *
  *   05/09/1994 PWG : Created.                                             *
  *=========================================================================*/
-GraphicViewPortClass::GraphicViewPortClass(void) {}
+GraphicViewPortClass::GraphicViewPortClass(void) {
+}
 
 /***************************************************************************
  * GVPC::~GRAPHICVIEWPORTCLASS -- Destructor for GraphicViewPortClass		*
@@ -103,12 +103,12 @@ GraphicViewPortClass::GraphicViewPortClass(void) {}
  *=========================================================================*/
 GraphicViewPortClass::~GraphicViewPortClass(void) {
 	Offset = 0;
-	Width = 0;  // Record width of Buffer
+	Width = 0; // Record width of Buffer
 	Height = 0; // Record height of Buffer
-	XAdd = 0;   // Record XAdd of Buffer
-	XPos = 0;   // Record XPos of Buffer
-	YPos = 0;   // Record YPos of Buffer
-	Pitch = 0;  // Record width of Buffer
+	XAdd = 0; // Record XAdd of Buffer
+	XPos = 0; // Record XPos of Buffer
+	YPos = 0; // Record YPos of Buffer
+	Pitch = 0; // Record width of Buffer
 	IsDirectDraw = FALSE;
 	LockCount = 0;
 	GraphicBuff = NULL;
@@ -143,23 +143,23 @@ void GraphicViewPortClass::Attach(GraphicBufferClass *gbuffer, int x, int y, int
 	/*		physical buffer.
 	 */
 	/*======================================================================*/
-	if (x < 0)			       // you cannot place view port off
-		x = 0;			       //		the left edge of physical buf
-	if (x >= gbuffer->Get_Width())	       // you cannot place left edge off
-		x = gbuffer->Get_Width() - 1;  //		the right edge of physical buf
-	if (y < 0)			       // you cannot place view port off
-		y = 0;			       //		the top edge of physical buf
-	if (y >= gbuffer->Get_Height())	       // you cannot place view port off
+	if (x < 0) // you cannot place view port off
+		x = 0; //		the left edge of physical buf
+	if (x >= gbuffer->Get_Width()) // you cannot place left edge off
+		x = gbuffer->Get_Width() - 1; //		the right edge of physical buf
+	if (y < 0) // you cannot place view port off
+		y = 0; //		the top edge of physical buf
+	if (y >= gbuffer->Get_Height()) // you cannot place view port off
 		y = gbuffer->Get_Height() - 1; //		bottom edge of physical buf
 
 	/*======================================================================*/
 	/* Adjust the width and height of necessary
 	 */
 	/*======================================================================*/
-	if (x + w > gbuffer->Get_Width())     // if the x plus width is larger
+	if (x + w > gbuffer->Get_Width()) // if the x plus width is larger
 		w = gbuffer->Get_Width() - x; //		than physical, fix width
 
-	if (y + h > gbuffer->Get_Height())     // if the y plus height is larger
+	if (y + h > gbuffer->Get_Height()) // if the y plus height is larger
 		h = gbuffer->Get_Height() - y; //		than physical, fix height
 
 	/*======================================================================*/
@@ -263,11 +263,11 @@ void GraphicBufferClass::DD_Init(GBC_Enum flags) {
 		PaletteSurface = VideoSurfacePtr;
 	}
 
-	Allocated = FALSE;   //	even if system alloced, dont flag it cuz
-			     //   we dont want it freed.
+	Allocated = FALSE; //	even if system alloced, dont flag it cuz
+		//   we dont want it freed.
 	IsDirectDraw = TRUE; //	flag it as a video surface
 	Offset = NOT_LOCKED; //	flag it as unavailable for reading or writing
-	LockCount = 0;	     //  surface is not locked
+	LockCount = 0; //  surface is not locked
 }
 
 void GraphicBufferClass::Attach_DD_Surface(GraphicBufferClass *attach_buffer) {
@@ -292,8 +292,8 @@ void GraphicBufferClass::Attach_DD_Surface(GraphicBufferClass *attach_buffer) {
  *=========================================================================*/
 void GraphicBufferClass::Init(int w, int h, void *buffer, long size, GBC_Enum flags) {
 	Size = size; // find size of physical buffer
-	Width = w;   // Record width of Buffer
-	Height = h;  // Record height of Buffer
+	Width = w; // Record width of Buffer
+	Height = h; // Record height of Buffer
 
 	//
 	// If the surface we are creating is a direct draw object then
@@ -303,23 +303,23 @@ void GraphicBufferClass::Init(int w, int h, void *buffer, long size, GBC_Enum fl
 	if (flags & (GBC_VIDEOMEM | GBC_VISIBLE)) {
 		DD_Init(flags);
 	} else {
-		if (buffer) {			 // if buffer is specified
+		if (buffer) { // if buffer is specified
 			Buffer = (BYTE *)buffer; //		point to it and mark
-			Allocated = FALSE;	 //		it as user allocated
+			Allocated = FALSE; //		it as user allocated
 		} else {
 			if (!Size)
 				Size = w * h;
 			Buffer = new BYTE[Size]; // otherwise allocate it and
-			Allocated = TRUE;	 //		mark it system alloced
+			Allocated = TRUE; //		mark it system alloced
 		}
 		Offset = (long)Buffer; // Get offset to the buffer
 		IsDirectDraw = FALSE;
 	}
 
-	Pitch = 0;	    // Record width of Buffer
-	XAdd = 0;	    // Record XAdd of Buffer
-	XPos = 0;	    // Record XPos of Buffer
-	YPos = 0;	    // Record YPos of Buffer
+	Pitch = 0; // Record width of Buffer
+	XAdd = 0; // Record XAdd of Buffer
+	XPos = 0; // Record XPos of Buffer
+	YPos = 0; // Record YPos of Buffer
 	GraphicBuff = this; // Get a pointer to our self
 }
 
@@ -340,11 +340,8 @@ void GraphicBufferClass::Init(int w, int h, void *buffer, long size, GBC_Enum fl
 
 void GraphicBufferClass::Un_Init(void) {
 	if (IsDirectDraw) {
-
 		if (VideoSurfacePtr) {
-
 			while (LockCount) {
-
 				if (VideoSurfacePtr->Unlock(NULL) == DDERR_SURFACELOST) {
 					if (Gbuffer_Focus_Loss_Function) {
 						Gbuffer_Focus_Loss_Function();
@@ -391,7 +388,9 @@ GraphicBufferClass::GraphicBufferClass(void) {
  * HISTORY:                                                                *
  *   05/13/1994 PWG : Created.                                             *
  *=========================================================================*/
-GraphicBufferClass::GraphicBufferClass(int w, int h, void *buffer, long size) { Init(w, h, buffer, size, GBC_NONE); }
+GraphicBufferClass::GraphicBufferClass(int w, int h, void *buffer, long size) {
+	Init(w, h, buffer, size, GBC_NONE);
+}
 /*=========================================================================*
  * GBC::GRAPHICBUFFERCLASS -- inline constructor for GraphicBufferClass		*
  *                                                                         *
@@ -404,7 +403,9 @@ GraphicBufferClass::GraphicBufferClass(int w, int h, void *buffer, long size) { 
  * HISTORY:                                                                *
  *   05/03/1994 PWG : Created.                                             *
  *=========================================================================*/
-GraphicBufferClass::GraphicBufferClass(int w, int h, void *buffer) { Init(w, h, buffer, w * h, GBC_NONE); }
+GraphicBufferClass::GraphicBufferClass(int w, int h, void *buffer) {
+	Init(w, h, buffer, w * h, GBC_NONE);
+}
 
 /*====================================================================================*
  * GBC::GRAPHICBUFFERCLASS -- contructor for GraphicsBufferClass with special flags   *
@@ -421,7 +422,9 @@ GraphicBufferClass::GraphicBufferClass(int w, int h, void *buffer) { Init(w, h, 
  * HISTORY:                                                                           *
  *   09-21-95 04:19pm ST : Created                                                    *
  *====================================================================================*/
-GraphicBufferClass::GraphicBufferClass(int w, int h, GBC_Enum flags) { Init(w, h, NULL, w * h, flags); }
+GraphicBufferClass::GraphicBufferClass(int w, int h, GBC_Enum flags) {
+	Init(w, h, NULL, w * h, flags);
+}
 
 /*=========================================================================*
  * GBC::~GRAPHICBUFFERCLASS -- Destructor for the graphic buffer class     *
@@ -435,7 +438,6 @@ GraphicBufferClass::GraphicBufferClass(int w, int h, GBC_Enum flags) { Init(w, h
  *   05/03/1994 PWG : Created.                                             *
  *=========================================================================*/
 GraphicBufferClass::~GraphicBufferClass() {
-
 	//
 	// Release the direct draw surface if it exists
 	//
@@ -542,7 +544,7 @@ BOOL GraphicBufferClass::Lock(void) {
 				Offset = (unsigned long)VideoSurfaceDescription.lpSurface;
 				Pitch = VideoSurfaceDescription.lPitch;
 				Pitch -= Width;
-				LockCount++;  // increment count so we can track if
+				LockCount++; // increment count so we can track if
 				TotalLocks++; // Total number of times we have locked (for debugging)
 				// Colour_Debug (1);
 				Unblock_Mouse(this);
@@ -630,8 +632,14 @@ BOOL GraphicBufferClass::Unlock(void) {
  *   09-22-95 11:05am ST : Created                                                             *
  *=============================================================================================*/
 
-HRESULT GraphicViewPortClass::DD_Linear_Blit_To_Linear(GraphicViewPortClass &dest, int source_x, int source_y,
-						       int dest_x, int dest_y, int width, int height, BOOL mask)
+HRESULT GraphicViewPortClass::DD_Linear_Blit_To_Linear(GraphicViewPortClass &dest,
+						       int source_x,
+						       int source_y,
+						       int dest_x,
+						       int dest_y,
+						       int width,
+						       int height,
+						       BOOL mask)
 
 {
 	RECT source_rectangle;
@@ -652,7 +660,6 @@ HRESULT GraphicViewPortClass::DD_Linear_Blit_To_Linear(GraphicViewPortClass &des
 	dest_rectangle.right = dest_x + width;
 	dest_rectangle.bottom = dest_y + height;
 
-	return (dest.GraphicBuff->Get_DD_Surface()->Blt(&dest_rectangle, GraphicBuff->Get_DD_Surface(),
-							&source_rectangle, key_source | DDBLT_WAIT | DDBLT_ASYNC,
-							NULL));
+	return (dest.GraphicBuff->Get_DD_Surface()
+			->Blt(&dest_rectangle, GraphicBuff->Get_DD_Surface(), &source_rectangle, key_source | DDBLT_WAIT | DDBLT_ASYNC, NULL));
 }

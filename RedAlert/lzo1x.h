@@ -60,13 +60,11 @@
 
 /* fast decompression */
 LZO_EXTERN(int)
-lzo1x_decompress(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst, lzo_uint *dst_len,
-		 lzo_voidp wrkmem /* NOT USED */);
+lzo1x_decompress(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst, lzo_uint *dst_len, lzo_voidp wrkmem /* NOT USED */);
 
 /* safe decompression with overrun testing */
 LZO_EXTERN(int)
-lzo1x_decompress_x(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst, lzo_uint *dst_len,
-		   lzo_voidp wrkmem /* NOT USED */);
+lzo1x_decompress_x(const lzo_byte *src, lzo_uint src_len, lzo_byte *dst, lzo_uint *dst_len, lzo_voidp wrkmem /* NOT USED */);
 
 /***********************************************************************
 //

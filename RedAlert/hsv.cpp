@@ -131,9 +131,9 @@ int HSVClass::Difference(HSVClass const &hsv) const {
  *   02/20/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 HSVClass::operator RGBClass(void) const {
-	unsigned int i;		// Integer part.
-	unsigned int f;		// Fractional or remainder part.  f/HSV_BASE gives fraction.
-	unsigned int tmp;	// Temporary variable to help with calculations.
+	unsigned int i; // Integer part.
+	unsigned int f; // Fractional or remainder part.  f/HSV_BASE gives fraction.
+	unsigned int tmp; // Temporary variable to help with calculations.
 	unsigned int values[7]; // Possible rgb values.  Don't use zero.
 
 	int hue = Hue_Component();

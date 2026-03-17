@@ -54,23 +54,24 @@ public:
 	/*===================================================================*/
 	/* Define the functions which work with the Keyboard Class				*/
 	/*===================================================================*/
-	BOOL Check(void);					// checks keybuff for meta key
-	int Get(void);						// gets a meta key from the keybuffer
-	BOOL Put(int key);					// dumps a key into the keybuffer
-	BOOL Put_Key_Message(UINT vk_key, BOOL release = FALSE, // handles keyboard related message
-			     BOOL dbl = FALSE);			//   and mouse clicks and dbl clicks
-	int Check_Num(void);					// checks keybuff for a keynum key
-	int Get_VK(void);					// gets keynum key from key buff
-	int Check_ACII(void);					// checks keybuff for an ascii key
-	int Get_ASCII(void);					// gets an ascii key from keybuff
-	int Check_Bits(void);					// checks keybuff for key w/ bits
-	int Get_Bits(void);					// get key from keybuff w/ bits
-	int To_ASCII(int num);					// converts keynum to ascii value
-	int Option_On(int option);				// turns specified option on
-	int Option_Off(int option);				// turns specified option off
-	void Clear(void);					// clears all keys from keybuffer
-	int Down(int key);					// tests to see if a key is down
-	void AI(void);						// messaging logic for key manager
+	BOOL Check(void); // checks keybuff for meta key
+	int Get(void); // gets a meta key from the keybuffer
+	BOOL Put(int key); // dumps a key into the keybuffer
+	BOOL Put_Key_Message(UINT vk_key,
+			     BOOL release = FALSE, // handles keyboard related message
+			     BOOL dbl = FALSE); //   and mouse clicks and dbl clicks
+	int Check_Num(void); // checks keybuff for a keynum key
+	int Get_VK(void); // gets keynum key from key buff
+	int Check_ACII(void); // checks keybuff for an ascii key
+	int Get_ASCII(void); // gets an ascii key from keybuff
+	int Check_Bits(void); // checks keybuff for key w/ bits
+	int Get_Bits(void); // get key from keybuff w/ bits
+	int To_ASCII(int num); // converts keynum to ascii value
+	int Option_On(int option); // turns specified option on
+	int Option_Off(int option); // turns specified option off
+	void Clear(void); // clears all keys from keybuffer
+	int Down(int key); // tests to see if a key is down
+	void AI(void); // messaging logic for key manager
 
 	/*===================================================================*/
 	/* Define the main hook for the message processing loop.					*/
@@ -104,10 +105,10 @@ private:
 	 */
 	/*===================================================================*/
 	unsigned char AsciiRemap[2048]; // remap for shft/ctrl/alt key combos
-	unsigned short Buffer[256];	// buffer which holds actual keypresses
-	unsigned char ToggleKeys[256];	// determines toggles which affect key
-	long Head;			// the head position in keyboard buffer
-	long Tail;			// the tail position in keyboard buffer
+	unsigned short Buffer[256]; // buffer which holds actual keypresses
+	unsigned char ToggleKeys[256]; // determines toggles which affect key
+	long Head; // the head position in keyboard buffer
+	long Tail; // the tail position in keyboard buffer
 	int MState;
 	int Conditional;
 	HANDLE CurrentCursor;
@@ -389,22 +390,22 @@ enum {
 	KA_SETX = 25,
 	KA_SETY = 26,
 
-	KA_SPACE = 32,	/*   */
+	KA_SPACE = 32, /*   */
 	KA_EXCLAMATION, /* ! */
-	KA_DQUOTE,	/* " */
-	KA_POUND,	/* # */
-	KA_DOLLAR,	/* $ */
-	KA_PERCENT,	/* % */
-	KA_AMPER,	/* & */
-	KA_SQUOTE,	/* ' */
-	KA_LPAREN,	/* ( */
-	KA_RPAREN,	/* ) */
-	KA_ASTERISK,	/* * */
-	KA_PLUS,	/* + */
-	KA_COMMA,	/* , */
-	KA_MINUS,	/* - */
-	KA_PERIOD,	/* . */
-	KA_SLASH,	/* / */
+	KA_DQUOTE, /* " */
+	KA_POUND, /* # */
+	KA_DOLLAR, /* $ */
+	KA_PERCENT, /* % */
+	KA_AMPER, /* & */
+	KA_SQUOTE, /* ' */
+	KA_LPAREN, /* ( */
+	KA_RPAREN, /* ) */
+	KA_ASTERISK, /* * */
+	KA_PLUS, /* + */
+	KA_COMMA, /* , */
+	KA_MINUS, /* - */
+	KA_PERIOD, /* . */
+	KA_SLASH, /* / */
 
 	KA_0,
 	KA_1,
@@ -416,79 +417,79 @@ enum {
 	KA_7,
 	KA_8,
 	KA_9,
-	KA_COLON,	 /* : */
-	KA_SEMICOLON,	 /* ; */
-	KA_LESS_THAN,	 /* < */
-	KA_EQUAL,	 /* = */
+	KA_COLON, /* : */
+	KA_SEMICOLON, /* ; */
+	KA_LESS_THAN, /* < */
+	KA_EQUAL, /* = */
 	KA_GREATER_THAN, /* > */
-	KA_QUESTION,	 /* ? */
+	KA_QUESTION, /* ? */
 
 	KA_AT, /* @ */
-	KA_A,  /* A */
-	KA_B,  /* B */
-	KA_C,  /* C */
-	KA_D,  /* D */
-	KA_E,  /* E */
-	KA_F,  /* F */
-	KA_G,  /* G */
-	KA_H,  /* H */
-	KA_I,  /* I */
-	KA_J,  /* J */
-	KA_K,  /* K */
-	KA_L,  /* L */
-	KA_M,  /* M */
-	KA_N,  /* N */
-	KA_O,  /* O */
+	KA_A, /* A */
+	KA_B, /* B */
+	KA_C, /* C */
+	KA_D, /* D */
+	KA_E, /* E */
+	KA_F, /* F */
+	KA_G, /* G */
+	KA_H, /* H */
+	KA_I, /* I */
+	KA_J, /* J */
+	KA_K, /* K */
+	KA_L, /* L */
+	KA_M, /* M */
+	KA_N, /* N */
+	KA_O, /* O */
 
-	KA_P,	      /* P */
-	KA_Q,	      /* Q */
-	KA_R,	      /* R */
-	KA_S,	      /* S */
-	KA_T,	      /* T */
-	KA_U,	      /* U */
-	KA_V,	      /* V */
-	KA_W,	      /* W */
-	KA_X,	      /* X */
-	KA_Y,	      /* Y */
-	KA_Z,	      /* Z */
-	KA_LBRACKET,  /* [ */
+	KA_P, /* P */
+	KA_Q, /* Q */
+	KA_R, /* R */
+	KA_S, /* S */
+	KA_T, /* T */
+	KA_U, /* U */
+	KA_V, /* V */
+	KA_W, /* W */
+	KA_X, /* X */
+	KA_Y, /* Y */
+	KA_Z, /* Z */
+	KA_LBRACKET, /* [ */
 	KA_BACKSLASH, /* \ */
-	KA_RBRACKET,  /* ] */
-	KA_CARROT,    /* ^ */
+	KA_RBRACKET, /* ] */
+	KA_CARROT, /* ^ */
 	KA_UNDERLINE, /* _ */
 
 	KA_GRAVE, /* ` */
-	KA_a,	  /* a */
-	KA_b,	  /* b */
-	KA_c,	  /* c */
-	KA_d,	  /* d */
-	KA_e,	  /* e */
-	KA_f,	  /* f */
-	KA_g,	  /* g */
-	KA_h,	  /* h */
-	KA_i,	  /* i */
-	KA_j,	  /* j */
-	KA_k,	  /* k */
-	KA_l,	  /* l */
-	KA_m,	  /* m */
-	KA_n,	  /* n */
-	KA_o,	  /* o */
+	KA_a, /* a */
+	KA_b, /* b */
+	KA_c, /* c */
+	KA_d, /* d */
+	KA_e, /* e */
+	KA_f, /* f */
+	KA_g, /* g */
+	KA_h, /* h */
+	KA_i, /* i */
+	KA_j, /* j */
+	KA_k, /* k */
+	KA_l, /* l */
+	KA_m, /* m */
+	KA_n, /* n */
+	KA_o, /* o */
 
-	KA_p,	   /* p */
-	KA_q,	   /* q */
-	KA_r,	   /* r */
-	KA_s,	   /* s */
-	KA_t,	   /* t */
-	KA_u,	   /* u */
-	KA_v,	   /* v */
-	KA_w,	   /* w */
-	KA_x,	   /* x */
-	KA_y,	   /* y */
-	KA_z,	   /* z */
+	KA_p, /* p */
+	KA_q, /* q */
+	KA_r, /* r */
+	KA_s, /* s */
+	KA_t, /* t */
+	KA_u, /* u */
+	KA_v, /* v */
+	KA_w, /* w */
+	KA_x, /* x */
+	KA_y, /* y */
+	KA_z, /* z */
 	KA_LBRACE, /* { */
-	KA_BAR,	   /* | */
+	KA_BAR, /* | */
 	KA_RBRACE, /* ] */
-	KA_TILDA,  /* ~ */
+	KA_TILDA, /* ~ */
 
 	KA_ESC = VK_ESCAPE | WWKEY_VK_BIT,
 	KA_EXTEND = VK_ESCAPE | WWKEY_VK_BIT,
@@ -497,17 +498,17 @@ enum {
 	KA_TAB = VK_TAB | WWKEY_VK_BIT,
 	KA_DELETE = VK_DELETE | WWKEY_VK_BIT, /* <DELETE> */
 	KA_INSERT = VK_INSERT | WWKEY_VK_BIT, /* <INSERT> */
-	KA_PGDN = VK_NEXT | WWKEY_VK_BIT,     /* <PAGE DOWN> */
+	KA_PGDN = VK_NEXT | WWKEY_VK_BIT, /* <PAGE DOWN> */
 	KA_DOWNRIGHT = VK_NEXT | WWKEY_VK_BIT,
 	KA_DOWN = VK_DOWN | WWKEY_VK_BIT, /* <DOWN ARROW> */
-	KA_END = VK_END | WWKEY_VK_BIT,	  /* <END> */
+	KA_END = VK_END | WWKEY_VK_BIT, /* <END> */
 	KA_DOWNLEFT = VK_END | WWKEY_VK_BIT,
-	KA_RIGHT = VK_RIGHT | WWKEY_VK_BIT,    /* <RIGHT ARROW> */
+	KA_RIGHT = VK_RIGHT | WWKEY_VK_BIT, /* <RIGHT ARROW> */
 	KA_KEYPAD5 = VK_SELECT | WWKEY_VK_BIT, /* NUMERIC KEY PAD <5> */
-	KA_LEFT = VK_LEFT | WWKEY_VK_BIT,      /* <LEFT ARROW> */
-	KA_PGUP = VK_PRIOR | WWKEY_VK_BIT,     /* <PAGE UP> */
+	KA_LEFT = VK_LEFT | WWKEY_VK_BIT, /* <LEFT ARROW> */
+	KA_PGUP = VK_PRIOR | WWKEY_VK_BIT, /* <PAGE UP> */
 	KA_UPRIGHT = VK_PRIOR | WWKEY_VK_BIT,
-	KA_UP = VK_UP | WWKEY_VK_BIT,	  /* <UP ARROW> */
+	KA_UP = VK_UP | WWKEY_VK_BIT, /* <UP ARROW> */
 	KA_HOME = VK_HOME | WWKEY_VK_BIT, /* <HOME> */
 	KA_UPLEFT = VK_HOME | WWKEY_VK_BIT,
 	KA_F12 = VK_F12 | WWKEY_VK_BIT,
@@ -562,8 +563,8 @@ enum {
 	KN_I = KA_i,
 	KN_O = KA_o,
 	KN_P = KA_p,
-	KN_LBRACKET = KA_LBRACKET,   /* [ */
-	KN_RBRACKET = KA_RBRACKET,   /* ] */
+	KN_LBRACKET = KA_LBRACKET, /* [ */
+	KN_RBRACKET = KA_RBRACKET, /* ] */
 	KN_BACKSLASH = KA_BACKSLASH, /* \ */
 
 	KN_A = KA_a,
@@ -576,7 +577,7 @@ enum {
 	KN_K = KA_k,
 	KN_L = KA_l,
 	KN_SEMICOLON = KA_SEMICOLON, /* ; */
-	KN_SQUOTE = KA_SQUOTE,	     /* ' */
+	KN_SQUOTE = KA_SQUOTE, /* ' */
 	KN_BACKSLASH2 = KA_BACKSLASH,
 	KN_RETURN = KA_RETURN,
 	KN_Z = KA_z,
@@ -586,9 +587,9 @@ enum {
 	KN_B = KA_b,
 	KN_N = KA_n,
 	KN_M = KA_m,
-	KN_COMMA = KA_COMMA,   /* , */
+	KN_COMMA = KA_COMMA, /* , */
 	KN_PERIOD = KA_PERIOD, /* . */
-	KN_SLASH = KA_SLASH,   /* / */
+	KN_SLASH = KA_SLASH, /* / */
 	KN_SPACE = KA_SPACE,
 	KN_LMOUSE = KA_LMOUSE,
 	KN_RMOUSE = KA_RMOUSE,
@@ -596,24 +597,24 @@ enum {
 	KN_HOME = KA_HOME, /* num key pad 7 */
 	KN_UPLEFT = KA_UPLEFT,
 	KN_LEFT = KA_LEFT, /* num key pad 4 */
-	KN_END = KA_END,   /* num key pad 1 */
+	KN_END = KA_END, /* num key pad 1 */
 	KN_DOWNLEFT = KA_DOWNLEFT,
 
-	KN_KEYPAD_SLASH = KA_SLASH,	  /* num key pad / */
-	KN_UP = KA_UP,			  /* num key pad 8 */
-	KN_CENTER = KA_KEYPAD5,		  /* num key pad 5 */
-	KN_DOWN = KA_DOWN,		  /* num key pad 2 */
-	KN_INSERT = KA_INSERT,		  /* num key pad 0 */
+	KN_KEYPAD_SLASH = KA_SLASH, /* num key pad / */
+	KN_UP = KA_UP, /* num key pad 8 */
+	KN_CENTER = KA_KEYPAD5, /* num key pad 5 */
+	KN_DOWN = KA_DOWN, /* num key pad 2 */
+	KN_INSERT = KA_INSERT, /* num key pad 0 */
 	KN_KEYPAD_ASTERISK = KA_ASTERISK, /* num key pad * */
-	KN_PGUP = KA_PGUP,		  /* num key pad 9 */
+	KN_PGUP = KA_PGUP, /* num key pad 9 */
 	KN_UPRIGHT = KA_UPRIGHT,
 	KN_RIGHT = KA_RIGHT, /* num key pad 6 */
-	KN_PGDN = KA_PGDN,   /* num key pad 3 */
+	KN_PGDN = KA_PGDN, /* num key pad 3 */
 	KN_DOWNRIGHT = KA_DOWNRIGHT,
 	KN_DELETE = KA_DELETE, /* num key pad . */
 
 	KN_KEYPAD_MINUS = KA_MINUS, /* num key pad - */
-	KN_KEYPAD_PLUS = KA_PLUS,   /* num key pad + */
+	KN_KEYPAD_PLUS = KA_PLUS, /* num key pad + */
 
 	KN_KEYPAD_RETURN = KA_RETURN, /* num key pad <ENTER> */
 
@@ -634,7 +635,7 @@ enum {
 	KN_PRNTSCRN = VK_PRINT | WWKEY_VK_BIT,
 	KN_CAPSLOCK = VK_CAPITAL | WWKEY_VK_BIT,
 	KN_SCROLLLOCK = VK_SCROLL | WWKEY_VK_BIT, /* <SCROLL LOCK> */
-	KN_PAUSE = VK_PAUSE | WWKEY_VK_BIT,	  /* <PAUSE> */
+	KN_PAUSE = VK_PAUSE | WWKEY_VK_BIT, /* <PAUSE> */
 	KN_LSHIFT = VK_SHIFT | WWKEY_VK_BIT,
 	KN_RSHIFT = VK_SHIFT | WWKEY_VK_BIT,
 	KN_LCTRL = VK_CONTROL | WWKEY_VK_BIT,
@@ -643,14 +644,14 @@ enum {
 	KN_RALT = VK_MENU | WWKEY_VK_BIT,
 	KN_E_INSERT = VK_INSERT | WWKEY_VK_BIT,
 	KN_E_DELETE = VK_DELETE | WWKEY_VK_BIT,
-	KN_E_LEFT = VK_LEFT | WWKEY_VK_BIT,	/* extended <LEFT ARROW> */
-	KN_E_HOME = VK_HOME | WWKEY_VK_BIT,	/* extended <HOME> */
-	KN_E_END = VK_END | WWKEY_VK_BIT,	/* extended <END> */
-	KN_E_UP = VK_UP | WWKEY_VK_BIT,		/* extended <UP ARROW> */
-	KN_E_DOWN = VK_DOWN | WWKEY_VK_BIT,	/* extended <DOWN ARROW> */
-	KN_E_PGUP = VK_PRIOR | WWKEY_VK_BIT,	/* extended <PAGE UP> */
-	KN_E_PGDN = VK_NEXT | WWKEY_VK_BIT,	/* extended <PAGE DOWN> */
-	KN_E_RIGHT = VK_RIGHT | WWKEY_VK_BIT,	/* extended <RIGHT ARROW> */
+	KN_E_LEFT = VK_LEFT | WWKEY_VK_BIT, /* extended <LEFT ARROW> */
+	KN_E_HOME = VK_HOME | WWKEY_VK_BIT, /* extended <HOME> */
+	KN_E_END = VK_END | WWKEY_VK_BIT, /* extended <END> */
+	KN_E_UP = VK_UP | WWKEY_VK_BIT, /* extended <UP ARROW> */
+	KN_E_DOWN = VK_DOWN | WWKEY_VK_BIT, /* extended <DOWN ARROW> */
+	KN_E_PGUP = VK_PRIOR | WWKEY_VK_BIT, /* extended <PAGE UP> */
+	KN_E_PGDN = VK_NEXT | WWKEY_VK_BIT, /* extended <PAGE DOWN> */
+	KN_E_RIGHT = VK_RIGHT | WWKEY_VK_BIT, /* extended <RIGHT ARROW> */
 	KN_NUMLOCK = VK_NUMLOCK | WWKEY_VK_BIT, /* <NUM LOCK> */
 
 	KN_SHIFT_BIT = WWKEY_SHIFT_BIT,

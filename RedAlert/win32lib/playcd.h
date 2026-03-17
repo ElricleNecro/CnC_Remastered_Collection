@@ -176,19 +176,20 @@ struct StopType {
 #define NO_CD_DRIVE -1
 
 class GetCDClass {
-
 protected:
 	int CDDrives[MAX_CD_DRIVES]; // Array containing CD drive letters
-	int CDCount;		     // Number of available CD drives
+	int CDCount; // Number of available CD drives
 	int CDIndex;
 
 public:
-	GetCDClass(VOID);  // This is the default constructor
+	GetCDClass(VOID); // This is the default constructor
 	~GetCDClass(VOID); // This is the destructor
 
 	inline int Get_First_CD_Drive(void);
 	inline int Get_Next_CD_Drive(void);
-	inline int Get_Number_Of_Drives(void) { return (CDCount); };
+	inline int Get_Number_Of_Drives(void) {
+		return (CDCount);
+	};
 };
 
 /***********************************************************************************************
@@ -247,7 +248,6 @@ inline int GetCDClass::Get_First_CD_Drive(void) {
 
 #ifdef NOT_FOR_WIN95
 class RedBookClass : public GetCDClass {
-
 private:
 	SEGSEL Tinfo_addrp;
 	SEGSEL Stat_addrp;
@@ -262,7 +262,7 @@ private:
 	TinfoType Tinfo;
 
 public:
-	RedBookClass(VOID);  // This is the default constructor
+	RedBookClass(VOID); // This is the default constructor
 	~RedBookClass(VOID); // This is the destructor
 
 	ULONG RedToHS(ULONG i);

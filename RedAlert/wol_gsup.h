@@ -66,10 +66,10 @@ public:
 public:
 	bool bHost; //	True when I created the game channel and am the host.
 
-	bool bHostSayGo;	       //	Trigger host instructing all to start game immediately.
+	bool bHostSayGo; //	Trigger host instructing all to start game immediately.
 	bool bHostWaitingForGoTrigger; //	True while host is waiting for go message to bounce back to him and
-				       // trigger start.
-	bool bExitForGameTrigger;      //	Trigger exiting dialog for game.
+		// trigger start.
+	bool bExitForGameTrigger; //	Trigger exiting dialog for game.
 
 	void ProcessGuestRequest(User *pUser, const char *szRequest);
 	void ProcessInform(char *szRequest);
@@ -266,13 +266,13 @@ protected:
 
 	HousesType HousePrevious;
 
-	unsigned int nHostLastParamID;	//	Host's send update tracking packet ID.
+	unsigned int nHostLastParamID; //	Host's send update tracking packet ID.
 	unsigned int nGuestLastParamID; //	Guest's record of last ID received from host.
 
 	bool bWaitingToStart;
 
-	bool bProcess;					      //	True means continue doing input loop.
-	RESULT_WOLGSUP ResultReturn;			      //	Value that will be returned from Show().
+	bool bProcess; //	True means continue doing input loop.
+	RESULT_WOLGSUP ResultReturn; //	Value that will be returned from Show().
 	char szNameOfHostWhoJustBailedOnUs[WOL_NAME_LEN_MAX]; //	If set, triggers setup cancellation.
 
 	bool bParamsReceived; //	True after any WOL_GAMEOPT_INFPARAMS messages have been received from a host.
@@ -285,7 +285,7 @@ protected:
 
 	//	Tooltips...
 	DWORD timeToolTipAppear;
-	ToolTipClass *pToolTipHead;    //	Head of list of ToolTips that parallels gadget list.
+	ToolTipClass *pToolTipHead; //	Head of list of ToolTips that parallels gadget list.
 	ToolTipClass *pToolTipHitLast; //	ToolTip the mouse was last over, or null.
 
 	//	Extra game params...
@@ -303,7 +303,7 @@ protected:
 	//------------------------------------------------------------------------
 	enum {
 		BUTTON_DISCONNECT = 100, //	Note: standard WOL button IDs must match values in
-					 // WolapiObject::PrepareButtonsAndIcons().
+		// WolapiObject::PrepareButtonsAndIcons().
 		BUTTON_LEAVE,
 		BUTTON_REFRESH,
 		BUTTON_SQUELCH,

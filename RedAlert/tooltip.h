@@ -28,9 +28,10 @@
 
 class ToolTipClass {
 public:
-	ToolTipClass(GadgetClass *pGadget, const char *szText, int xShow, int yShow, bool bRightAlign = false,
-		     bool bIconList = false);
-	~ToolTipClass() { delete[] pSaveRect; }
+	ToolTipClass(GadgetClass *pGadget, const char *szText, int xShow, int yShow, bool bRightAlign = false, bool bIconList = false);
+	~ToolTipClass() {
+		delete[] pSaveRect;
+	}
 
 	ToolTipClass *GetToolTipHit();
 	void Show();

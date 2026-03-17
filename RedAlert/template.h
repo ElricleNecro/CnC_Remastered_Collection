@@ -54,7 +54,9 @@ public:
 	**	Constructors and destructors.
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 	TemplateClass(TemplateType type, CELL pos = -1);
 	TemplateClass(NoInitClass const &x) : ObjectClass(x), Class(x) {};
@@ -63,14 +65,18 @@ public:
 			TemplateClass::Limbo();
 		Class = 0;
 	};
-	operator TemplateType(void) const { return Class->Type; };
+	operator TemplateType(void) const {
+		return Class->Type;
+	};
 
 	static void Init(void);
 
 	/*
 	**	Query functions.
 	*/
-	virtual ObjectTypeClass const &Class_Of(void) const { return *Class; };
+	virtual ObjectTypeClass const &Class_Of(void) const {
+		return *Class;
+	};
 	int Icon_Number(CELL cell);
 
 	/*

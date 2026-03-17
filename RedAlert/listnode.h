@@ -61,9 +61,14 @@ typedef int bool;
 class GenericList;
 class GenericNode {
 public:
-	GenericNode(void) : NextNode(0), PrevNode(0) {}
-	~GenericNode(void) { Unlink(); }
-	GenericNode(GenericNode &node) { node.Link(this); }
+	GenericNode(void) : NextNode(0), PrevNode(0) {
+	}
+	~GenericNode(void) {
+		Unlink();
+	}
+	GenericNode(GenericNode &node) {
+		node.Link(this);
+	}
 	GenericNode &operator=(GenericNode &node) {
 		if (&node != this) {
 			node.Link(this);
@@ -97,9 +102,15 @@ public:
 		NextNode = node;
 	}
 
-	GenericNode *Next(void) const { return (NextNode); }
-	GenericNode *Prev(void) const { return (PrevNode); }
-	bool Is_Valid(void) const { return (this != NULL && NextNode != NULL && PrevNode != NULL); }
+	GenericNode *Next(void) const {
+		return (NextNode);
+	}
+	GenericNode *Prev(void) const {
+		return (PrevNode);
+	}
+	bool Is_Valid(void) const {
+		return (this != NULL && NextNode != NULL && PrevNode != NULL);
+	}
 
 protected:
 	GenericNode *NextNode;
@@ -112,13 +123,25 @@ protected:
 */
 class GenericList {
 public:
-	GenericList(void) { FirstNode.Link(&LastNode); }
+	GenericList(void) {
+		FirstNode.Link(&LastNode);
+	}
 
-	GenericNode *First(void) const { return (FirstNode.Next()); }
-	GenericNode *Last(void) const { return (LastNode.Prev()); }
-	bool Is_Empty(void) const { return (!FirstNode.Next()->Is_Valid()); }
-	void Add_Head(GenericNode *node) { FirstNode.Link(node); }
-	void Add_Tail(GenericNode *node) { LastNode.Prev()->Link(node); }
+	GenericNode *First(void) const {
+		return (FirstNode.Next());
+	}
+	GenericNode *Last(void) const {
+		return (LastNode.Prev());
+	}
+	bool Is_Empty(void) const {
+		return (!FirstNode.Next()->Is_Valid());
+	}
+	void Add_Head(GenericNode *node) {
+		FirstNode.Link(node);
+	}
+	void Add_Tail(GenericNode *node) {
+		LastNode.Prev()->Link(node);
+	}
 	void Delete(void) {
 		while (FirstNode.Next()->Is_Valid())
 			delete FirstNode.Next();
@@ -141,23 +164,38 @@ private:
 **	interface class will work. You can usually ensure this by deriving the
 **	class T object from this node.
 */
-template <class T> class List;
-template <class T> class Node : public GenericNode {
+template <class T>
+class List;
+template <class T>
+class Node : public GenericNode {
 public:
-	List<T> *Main_List(void) const { return ((List<T> *)GenericNode::Main_List()); }
-	T *Next(void) const { return ((T *)GenericNode::Next()); }
-	T *Prev(void) const { return ((T *)GenericNode::Prev()); }
-	bool Is_Valid(void) const { return (GenericNode::Is_Valid()); }
+	List<T> *Main_List(void) const {
+		return ((List<T> *)GenericNode::Main_List());
+	}
+	T *Next(void) const {
+		return ((T *)GenericNode::Next());
+	}
+	T *Prev(void) const {
+		return ((T *)GenericNode::Prev());
+	}
+	bool Is_Valid(void) const {
+		return (GenericNode::Is_Valid());
+	}
 };
 
 /*
 **	This is an "interface class" for a list of nodes. The rules for the class T object
 **	are the same as the requirements required of the node class.
 */
-template <class T> class List : public GenericList {
+template <class T>
+class List : public GenericList {
 public:
-	T *First(void) const { return ((T *)GenericList::First()); }
-	T *Last(void) const { return ((T *)GenericList::Last()); }
+	T *First(void) const {
+		return ((T *)GenericList::First());
+	}
+	T *Last(void) const {
+		return ((T *)GenericList::Last());
+	}
 };
 
 #endif

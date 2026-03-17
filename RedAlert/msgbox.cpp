@@ -108,7 +108,6 @@ int WWMessageBox::Process(const char *msg, const char *b1txt, const char *b2txt,
 	int bwidth, bheight; // button width and height
 	int numbuttons = 0;
 	if (b1txt != NULL) {
-
 		/*
 		**	Build the button list.
 		*/
@@ -170,15 +169,22 @@ int WWMessageBox::Process(const char *msg, const char *b1txt, const char *b2txt,
 	**	actually be added to the button list.
 	*/
 	// DOS BUILD GERMAN BUTTONS NEED TO ONE ON TOP OF THE OTHER  VG 11/6/96
-	TextButtonClass button1(BUTTON_1, b1txt, TPF_BUTTON,
+	TextButtonClass button1(BUTTON_1,
+				b1txt,
+				TPF_BUTTON,
 				x + ((numbuttons == 1) ? ((width - bwidth) >> 1) : (20 * RESFACTOR)),
-				y + height - (bheight + (15 * RESFACTOR)), bwidth);
+				y + height - (bheight + (15 * RESFACTOR)),
+				bwidth);
 
 	/*
 	**	Center button.
 	*/
-	TextButtonClass button2(BUTTON_2, b2txt, TPF_BUTTON, x + width - (bwidth + (20 * RESFACTOR)),
-				y + height - (bheight + (15 * RESFACTOR)), bwidth);
+	TextButtonClass button2(BUTTON_2,
+				b2txt,
+				TPF_BUTTON,
+				x + width - (bwidth + (20 * RESFACTOR)),
+				y + height - (bheight + (15 * RESFACTOR)),
+				bwidth);
 
 	/*
 	**	Right button.
@@ -255,7 +261,6 @@ int WWMessageBox::Process(const char *msg, const char *b1txt, const char *b2txt,
 		process = true;
 		pressed = false;
 		while (process) {
-
 #ifdef WIN32
 			/*
 			** If we have just received input focus again after running in the background then
@@ -278,8 +283,7 @@ int WWMessageBox::Process(const char *msg, const char *b1txt, const char *b2txt,
 				/*
 				**	Draw the body of the message.
 				*/
-				Fancy_Text_Print(buffer, printx, y + 20 * RESFACTOR, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, tpf);
+				Fancy_Text_Print(buffer, printx, y + 20 * RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, tpf);
 
 				/*
 				**	Redraw the buttons.
@@ -384,7 +388,6 @@ int WWMessageBox::Process(const char *msg, const char *b1txt, const char *b2txt,
 			}
 
 			if (pressed) {
-
 				TextButtonClass *toggle;
 				/*
 				**	Turn all the buttons off.
@@ -409,8 +412,7 @@ int WWMessageBox::Process(const char *msg, const char *b1txt, const char *b2txt,
 				**	Turn on and depress the button that was selected.
 				*/
 				if (selection == BUTTON_1 || selection == BUTTON_2 || selection == BUTTON_3) {
-					TextButtonClass *toggle =
-					    (TextButtonClass *)buttonlist->Extract_Gadget(selection);
+					TextButtonClass *toggle = (TextButtonClass *)buttonlist->Extract_Gadget(selection);
 					if (toggle != NULL) {
 						toggle->Turn_On();
 						//						toggle->IsOn = true;
@@ -443,7 +445,6 @@ int WWMessageBox::Process(const char *msg, const char *b1txt, const char *b2txt,
 		}
 
 	} else {
-
 		Keyboard->Clear();
 	}
 

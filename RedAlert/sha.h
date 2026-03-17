@@ -53,14 +53,18 @@ public:
 		Acc.Long[4] = SE;
 	};
 
-	void Init(void) { new ((void *)this) SHAEngine; };
+	void Init(void) {
+		new ((void *)this) SHAEngine;
+	};
 
 	// Fetch result as if source data were to stop now.
 	int Result(void *result) const;
 
 	void Hash(void const *data, long length);
 
-	static int Digest_Size(void) { return (sizeof(SHADigest)); }
+	static int Digest_Size(void) {
+		return (sizeof(SHADigest));
+	}
 
 private:
 	typedef union {
@@ -108,16 +112,24 @@ private:
 	};
 
 	// Used for 0..19
-	long Function1(long X, long Y, long Z) const { return (Z ^ (X & (Y ^ Z))); };
+	long Function1(long X, long Y, long Z) const {
+		return (Z ^ (X & (Y ^ Z)));
+	};
 
 	// Used for 20..39
-	long Function2(long X, long Y, long Z) const { return (X ^ Y ^ Z); };
+	long Function2(long X, long Y, long Z) const {
+		return (X ^ Y ^ Z);
+	};
 
 	// Used for 40..59
-	long Function3(long X, long Y, long Z) const { return ((X & Y) | (Z & (X | Y))); };
+	long Function3(long X, long Y, long Z) const {
+		return ((X & Y) | (Z & (X | Y)));
+	};
 
 	// Used for 60..79
-	long Function4(long X, long Y, long Z) const { return (X ^ Y ^ Z); };
+	long Function4(long X, long Y, long Z) const {
+		return (X ^ Y ^ Z);
+	};
 
 	long Do_Function(int index, long X, long Y, long Z) const {
 		if (index < 20)

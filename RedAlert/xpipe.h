@@ -46,8 +46,10 @@
 */
 class BufferPipe : public Pipe {
 public:
-	BufferPipe(Buffer const &buffer) : BufferPtr(buffer), Index(0) {}
-	BufferPipe(void *buffer, int length) : BufferPtr(buffer, length), Index(0) {}
+	BufferPipe(Buffer const &buffer) : BufferPtr(buffer), Index(0) {
+	}
+	BufferPipe(void *buffer, int length) : BufferPtr(buffer, length), Index(0) {
+	}
 	virtual int Put(void const *source, int slen);
 
 private:
@@ -57,7 +59,9 @@ private:
 	//		void * Buffer;
 	//		int Length;
 
-	bool Is_Valid(void) { return (BufferPtr.Is_Valid()); }
+	bool Is_Valid(void) {
+		return (BufferPtr.Is_Valid());
+	}
 	BufferPipe(BufferPipe &rvalue);
 	BufferPipe &operator=(BufferPipe const &pipe);
 };
@@ -69,8 +73,10 @@ private:
 */
 class FilePipe : public Pipe {
 public:
-	FilePipe(FileClass *file) : File(file), HasOpened(false) {}
-	FilePipe(FileClass &file) : File(&file), HasOpened(false) {}
+	FilePipe(FileClass *file) : File(file), HasOpened(false) {
+	}
+	FilePipe(FileClass &file) : File(&file), HasOpened(false) {
+	}
 	virtual ~FilePipe(void);
 
 	virtual int Put(void const *source, int slen);
@@ -80,7 +86,9 @@ private:
 	FileClass *File;
 	bool HasOpened;
 
-	bool Valid_File(void) { return (File != NULL); }
+	bool Valid_File(void) {
+		return (File != NULL);
+	}
 	FilePipe(FilePipe &rvalue);
 	FilePipe &operator=(FilePipe const &pipe);
 };

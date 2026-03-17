@@ -58,7 +58,9 @@ public:
 	friend Rect const Union(Rect const &rect1, Rect const &rect2);
 
 	bool Is_Valid(void) const;
-	int Size(void) const { return (Width * Height); }
+	int Size(void) const {
+		return (Width * Height);
+	}
 
 	//	private:
 	int X;

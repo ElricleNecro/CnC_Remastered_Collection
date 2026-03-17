@@ -63,7 +63,8 @@
  * HISTORY:                                                                                    *
  *    8/5/97 12:11PM ST : Created                                                              *
  *=============================================================================================*/
-UDPInterfaceClass::UDPInterfaceClass(void) : WinsockInterfaceClass() {}
+UDPInterfaceClass::UDPInterfaceClass(void) : WinsockInterfaceClass() {
+}
 
 /***********************************************************************************************
  * UDPIC::~UDPInterfaceClass -- UDPInterface class destructor                                  *
@@ -195,8 +196,12 @@ bool UDPInterfaceClass::Open_Socket(SOCKET) {
 		// address = ntohl (address);
 
 		char temp[128];
-		sprintf(temp, "RA95: Found local address: %d.%d.%d.%d\n", address & 0xff, (address & 0xff00) >> 8,
-			(address & 0xff0000) >> 16, (address & 0xff000000) >> 24);
+		sprintf(temp,
+			"RA95: Found local address: %d.%d.%d.%d\n",
+			address & 0xff,
+			(address & 0xff00) >> 8,
+			(address & 0xff0000) >> 16,
+			(address & 0xff000000) >> 24);
 		OutputDebugString(temp);
 
 		unsigned char *a = new unsigned char[4];
@@ -207,7 +212,7 @@ bool UDPInterfaceClass::Open_Socket(SOCKET) {
 	/*
 	** Set options for the UDP socket
 	*/
-	ling.l_onoff = 0;  // linger off
+	ling.l_onoff = 0; // linger off
 	ling.l_linger = 0; // timeout in seconds (ie close now)
 	setsockopt(Socket, SOL_SOCKET, SO_LINGER, (LPSTR)&ling, sizeof(ling));
 
@@ -233,7 +238,6 @@ bool UDPInterfaceClass::Open_Socket(SOCKET) {
  *=============================================================================================*/
 void UDPInterfaceClass::Broadcast(void *buffer, int buffer_len) {
 	for (int i = 0; i < BroadcastAddresses.Count(); i++) {
-
 		/*
 		** Create a temporary holding area for the packet.
 		*/
@@ -303,7 +307,6 @@ long UDPInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 	** Handle UDP packet events
 	*/
 	switch (WSAGETSELECTEVENT(lParam)) {
-
 	/*
 	** Read event. Winsock has data it would like to give us.
 	*/
@@ -333,7 +336,6 @@ long UDPInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 		** rc is the number of bytes received from Winsock
 		*/
 		if (rc) {
-
 			/*
 			** Make sure this packet didn't come from us. If it did then throw it away.
 			*/
@@ -394,8 +396,7 @@ long UDPInterfaceClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 		** at this time. In this case, we clear the socket error and just exit. Winsock will
 		** send us another WRITE message when it is ready to receive more data.
 		*/
-		rc =
-		    sendto(Socket, (const char *)packet->Buffer, packet->BufferLen, 0, (LPSOCKADDR)&addr, sizeof(addr));
+		rc = sendto(Socket, (const char *)packet->Buffer, packet->BufferLen, 0, (LPSOCKADDR)&addr, sizeof(addr));
 
 		if (rc == SOCKET_ERROR) {
 			if (WSAGetLastError() != WSAEWOULDBLOCK) {

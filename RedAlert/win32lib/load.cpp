@@ -36,12 +36,12 @@
  *   Uncompress_Data -- Uncompresses data from one buffer to another.      *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "file.h"
-#include "iff.h"
 #include <dos.h>
 #include <misc.h>
 #include <wwmem.h>
 #include <wwstd.h>
+#include "file.h"
+#include "iff.h"
 
 /*=========================================================================*/
 /* The following PRIVATE functions are in this file:                       */
@@ -127,9 +127,9 @@ unsigned long __cdecl Write_Data(char const *name, void *ptr, unsigned long size
  *   05/28/1992 JLB : Created.                                             *
  *=========================================================================*/
 void *__cdecl Load_Alloc_Data(char const *name, MemoryFlagType flags) {
-	int fd;		    // Working file handle.
+	int fd; // Working file handle.
 	unsigned long size; // Size of the file to load.
-	void *buffer;	    // Buffer to hold the file.
+	void *buffer; // Buffer to hold the file.
 
 	fd = Open_File(name, READ);
 	size = File_Size(fd);
@@ -156,13 +156,12 @@ void *__cdecl Load_Alloc_Data(char const *name, MemoryFlagType flags) {
  *   05/28/1991  CY : Created.                                             *
  *   06/26/1991 JLB : Handles load & uncompress to same buffer.            *
  *=========================================================================*/
-unsigned long __cdecl Load_Uncompress(char const *file, BufferClass &uncomp_buff, BufferClass &dest_buff,
-				      void *reserved_data) {
-	int fd;			// Source file handle.
+unsigned long __cdecl Load_Uncompress(char const *file, BufferClass &uncomp_buff, BufferClass &dest_buff, void *reserved_data) {
+	int fd; // Source file handle.
 	unsigned int isize = 0; // Size of the file.
-	unsigned int skipsize;	// Size of the skip data bytes.
-	void *uncomp_ptr;	//	Source buffer pointer.
-	char *newuncomp_ptr;	// Adjusted source pointer.
+	unsigned int skipsize; // Size of the skip data bytes.
+	void *uncomp_ptr; //	Source buffer pointer.
+	char *newuncomp_ptr; // Adjusted source pointer.
 
 	uncomp_ptr = uncomp_buff.Get_Buffer(); // get a pointer to buffer
 
@@ -170,10 +169,10 @@ unsigned long __cdecl Load_Uncompress(char const *file, BufferClass &uncomp_buff
 	/* Read the file into the uncompression buffer. */
 	/*======================================================================*/
 
-	fd = Open_File(file, READ);	   // Open up the file to read from
+	fd = Open_File(file, READ); // Open up the file to read from
 	Read_File(fd, (char *)&isize, 2L); // Read the file size
-	Read_File(fd, uncomp_ptr, 8L);	   // Read the header bytes in.
-	isize -= 8;			   // Remaining data in file.
+	Read_File(fd, uncomp_ptr, 8L); // Read the header bytes in.
+	isize -= 8; // Remaining data in file.
 
 	/*======================================================================*/
 	/* Check for and read in the skip data block. */
@@ -233,11 +232,11 @@ unsigned long __cdecl Load_Uncompress(char const *file, BufferClass &uncomp_buff
  *   06/26/1991 JLB : Handles load & uncompress to same buffer.            *
  *=========================================================================*/
 unsigned long __cdecl Load_Uncompress(char const *file, BuffType uncomp_buff, BuffType dest_buff, void *reserved_data) {
-	int fd;		       // Source file handle.
-	unsigned int isize;    // Size of the file.
+	int fd; // Source file handle.
+	unsigned int isize; // Size of the file.
 	unsigned int skipsize; // Size of the skip data bytes.
-	void *uncomp_ptr;      //	Source buffer pointer.
-	char *newuncomp_ptr;   // Adjusted source pointer.
+	void *uncomp_ptr; //	Source buffer pointer.
+	char *newuncomp_ptr; // Adjusted source pointer.
 
 	uncomp_ptr = Get_Buff(uncomp_buff); /* Get pointer to uncomp buffer */
 
@@ -250,7 +249,7 @@ unsigned long __cdecl Load_Uncompress(char const *file, BuffType uncomp_buff, Bu
 #endif
 
 	Read_File(fd, uncomp_ptr, 8L); // Read the header bytes in.
-	isize -= 8;		       // Remaining data in file.
+	isize -= 8; // Remaining data in file.
 
 	/*
 	**	Check for and read in the skip data block.
@@ -317,7 +316,7 @@ unsigned long __cdecl Load_Uncompress(char const *file, BuffType uncomp_buff, Bu
  *   09/17/1993 JLB : Created.                                             *
  *=========================================================================*/
 unsigned long __cdecl Uncompress_Data(void const *src, void *dst) {
-	unsigned int skip;	// Number of leading data to skip.
+	unsigned int skip; // Number of leading data to skip.
 	CompressionType method; // Compression method used.
 	unsigned long uncomp_size = NULL;
 
@@ -340,7 +339,6 @@ unsigned long __cdecl Uncompress_Data(void const *src, void *dst) {
 	src = Add_Long_To_Pointer((void *)src, (long)sizeof(CompHeaderType) + (long)skip);
 
 	switch (method) {
-
 	default:
 	case NOCOMPRESS:
 		Mem_Copy((void *)src, dst, uncomp_size);

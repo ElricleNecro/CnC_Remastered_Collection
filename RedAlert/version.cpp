@@ -62,9 +62,9 @@
 // the table is the default protocol for this version.
 //---------------------------------------------------------------------------
 static VersionProtocolType VersionProtocol[] = {
-    {0x00001000, COMM_PROTOCOL_SINGLE_NO_COMP}, // (obsolete)
-    {0x00002000, COMM_PROTOCOL_SINGLE_E_COMP},	// (obsolete)
-    {0x00010000, COMM_PROTOCOL_MULTI_E_COMP},
+	{ 0x00001000, COMM_PROTOCOL_SINGLE_NO_COMP }, // (obsolete)
+	{ 0x00002000, COMM_PROTOCOL_SINGLE_E_COMP }, // (obsolete)
+	{ 0x00010000, COMM_PROTOCOL_MULTI_E_COMP },
 };
 
 /***************************************************************************
@@ -87,8 +87,8 @@ static VersionProtocolType VersionProtocol[] = {
  *   09/17/1996 JLB : Converted to used initializer list.                  *
  *=========================================================================*/
 VersionClass::VersionClass(void)
-    : Version(0), MajorVer(0), MinorVer(0), MinClipVer(0), MaxClipVer(0), VersionInit(false), MajorInit(false),
-      MinorInit(false), TextInit(false) {
+	: Version(0), MajorVer(0), MinorVer(0), MinClipVer(0), MaxClipVer(0), VersionInit(false), MajorInit(false), MinorInit(false),
+	  TextInit(false) {
 	VersionText[0] = '\0';
 	VersionName[0] = '\0';
 }

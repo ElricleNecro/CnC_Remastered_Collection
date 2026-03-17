@@ -60,12 +60,12 @@ protected:
 	virtual int Action(unsigned flags, KeyNumType &key);
 
 private:
-	int FaceX;	      // x-coord of center of face
-	int FaceY;	      // y-coord of center of face
-	int FacePoint[8][2];  // coords of the little dial decorations
-	int FaceLine[8][2];   // coords for drawing the dial hand
-	DirType Direction;    // 0-255 numerical direction of dial
-	FacingType Facing;    // numerical facing direction of dial (0 - 7)
+	int FaceX; // x-coord of center of face
+	int FaceY; // y-coord of center of face
+	int FacePoint[8][2]; // coords of the little dial decorations
+	int FaceLine[8][2]; // coords for drawing the dial hand
+	DirType Direction; // 0-255 numerical direction of dial
+	FacingType Facing; // numerical facing direction of dial (0 - 7)
 	FacingType OldFacing; // previous Facing value
 };
 

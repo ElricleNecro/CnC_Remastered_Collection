@@ -75,20 +75,28 @@ public:
 	AbstractTypeClass(NoInitClass const &) {};
 	~AbstractTypeClass(void) {};
 
-	RTTIType What_Am_I(void) const { return (RTTI); };
-	TARGET As_Target(void) const { return (Build_Target(RTTI, ID)); };
+	RTTIType What_Am_I(void) const {
+		return (RTTI);
+	};
+	TARGET As_Target(void) const {
+		return (Build_Target(RTTI, ID));
+	};
 
 	virtual COORDINATE Coord_Fixup(COORDINATE coord) const;
 	virtual int Full_Name(void) const;
-	char const *Name(void) const { return (IniName); }
+	char const *Name(void) const {
+		return (IniName);
+	}
 	void Set_Name(char const *buf) const {
 		strncpy((char *)IniName, buf, sizeof(IniName));
 		((char &)IniName[sizeof(IniName) - 1]) = '\0';
 	};
 	virtual int Get_Ownable(void) const;
 
-	void Code_Pointers(void) {}
-	void Decode_Pointers(void) {}
+	void Code_Pointers(void) {
+	}
+	void Decode_Pointers(void) {
+	}
 };
 
 /**********************************************************************
@@ -143,14 +151,16 @@ public:
 	fixed BuildSpeedBias;
 
 	//------------------------------------------------------------------------
-	HouseTypeClass(NoInitClass const &x) : AbstractTypeClass(x) {}
-	HouseTypeClass(HousesType house, char const *ini, int fullname, char const *ext, int lemon,
-		       PlayerColorType remapcolor, char prefix);
+	HouseTypeClass(NoInitClass const &x) : AbstractTypeClass(x) {
+	}
+	HouseTypeClass(HousesType house, char const *ini, int fullname, char const *ext, int lemon, PlayerColorType remapcolor, char prefix);
 
 	unsigned char const *Remap_Table(void) const;
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static HousesType From_Name(char const *name);
@@ -258,16 +268,24 @@ public:
 	void const *RadarIcon;
 
 	//--------------------------------------------------------------------
-	ObjectTypeClass(NoInitClass const &x) : AbstractTypeClass(x) {}
-	ObjectTypeClass(RTTIType rtti, int id, bool is_sentient, bool is_stealthy, bool is_selectable,
-			bool is_legal_target, bool is_insignificant, bool is_immune, bool is_footprint, int fullname,
+	ObjectTypeClass(NoInitClass const &x) : AbstractTypeClass(x) {
+	}
+	ObjectTypeClass(RTTIType rtti,
+			int id,
+			bool is_sentient,
+			bool is_stealthy,
+			bool is_selectable,
+			bool is_legal_target,
+			bool is_insignificant,
+			bool is_immune,
+			bool is_footprint,
+			int fullname,
 			char const *name);
 
 	static void One_Time(void);
 
 	bool Is_Foot(void) const {
-		return (RTTI == RTTI_INFANTRYTYPE || RTTI == RTTI_UNITTYPE || RTTI == RTTI_VESSELTYPE ||
-			RTTI == RTTI_AIRCRAFTTYPE);
+		return (RTTI == RTTI_INFANTRYTYPE || RTTI == RTTI_UNITTYPE || RTTI == RTTI_VESSELTYPE || RTTI == RTTI_AIRCRAFTTYPE);
 	};
 	char const *Graphic_Name(void) const {
 		if (GraphicName[0] != '\0')
@@ -284,8 +302,12 @@ public:
 	virtual short const *Overlap_List(void) const;
 	virtual BuildingClass *Who_Can_Build_Me(bool intheory, bool legal, HousesType house) const;
 	virtual void const *Get_Cameo_Data(void) const;
-	void const *Get_Image_Data(void) const { return ImageData; };
-	void const *Get_Radar_Data(void) const { return RadarIcon; };
+	void const *Get_Image_Data(void) const {
+		return ImageData;
+	};
+	void const *Get_Radar_Data(void) const {
+		return RadarIcon;
+	};
 
 #ifdef SCENARIO_EDITOR
 	virtual void Display(int, int, WindowNumberType, HousesType) const {};
@@ -507,9 +529,9 @@ public:
 	**	at the proper location.
 	*/
 	int HorizontalOffset; // Distance to move east (compensates for offsets in animation from center coordinate).
-	int VerticalOffset;   // Distance to move north (compensates for perspective).
-	int PrimaryOffset;    // Offset along turret centerline and facing.
-	int PrimaryLateral;   // Sideways offset from turret centerline and facing.
+	int VerticalOffset; // Distance to move north (compensates for perspective).
+	int PrimaryOffset; // Offset along turret centerline and facing.
+	int PrimaryLateral; // Sideways offset from turret centerline and facing.
 	int SecondaryOffset;
 	int SecondaryLateral;
 
@@ -520,17 +542,38 @@ public:
 	int Points;
 
 	//--------------------------------------------------------------------
-	TechnoTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {}
-	TechnoTypeClass(RTTIType rtti, int id, int name, char const *ininame, RemapType remap, int verticaloffset,
-			int primaryoffset, int primarylateral, int secondaryoffset, int secondarylateral,
-			bool is_nominal, bool is_stealthy, bool is_selectable, bool is_legal_target,
-			bool is_insignificant, bool is_immune, bool is_theater, bool is_turret_equipped,
-			bool is_remappable, bool is_footprint, int rotation, SpeedType speed, int horizontaloffset = 0);
+	TechnoTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {
+	}
+	TechnoTypeClass(RTTIType rtti,
+			int id,
+			int name,
+			char const *ininame,
+			RemapType remap,
+			int verticaloffset,
+			int primaryoffset,
+			int primarylateral,
+			int secondaryoffset,
+			int secondarylateral,
+			bool is_nominal,
+			bool is_stealthy,
+			bool is_selectable,
+			bool is_legal_target,
+			bool is_insignificant,
+			bool is_immune,
+			bool is_theater,
+			bool is_turret_equipped,
+			bool is_remappable,
+			bool is_footprint,
+			int rotation,
+			SpeedType speed,
+			int horizontaloffset = 0);
 
 	bool Is_Two_Shooter(void) const;
 	int Legal_Placement(CELL pos) const;
 	virtual int Raw_Cost(void) const;
-	virtual int Max_Passengers(void) const { return (MaxPassengers); }
+	virtual int Max_Passengers(void) const {
+		return (MaxPassengers);
+	}
 	virtual int Repair_Cost(void) const;
 	virtual int Repair_Step(void) const;
 	virtual void const *Get_Cameo_Data(void) const;
@@ -695,24 +738,50 @@ public:
 	typedef struct {
 		int Start; // Starting frame of animation.
 		int Count; // Number of frames in this animation.
-		int Rate;  // Number of ticks to delay between each frame.
+		int Rate; // Number of ticks to delay between each frame.
 	} AnimControlType;
 	AnimControlType Anims[BSTATE_COUNT];
 
 	/*---------------------------------------------------------------------------
 	**	This is the building type explicit constructor.
 	*/
-	BuildingTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {}
-	BuildingTypeClass(StructType type, int name, char const *ininame, FacingType foundation, COORDINATE exitpoint,
-			  RemapType remap, int verticaloffset, int primaryoffset, int primarylateral, bool is_fake,
-			  bool is_regulated, bool is_nominal, bool is_wall, bool is_simpledamage, bool is_stealthy,
-			  bool is_selectable, bool is_legal_target, bool is_insignificant, bool is_theater,
-			  bool is_turret_equipped, bool is_remappable, RTTIType tobuild, DirType sframe, BSizeType size,
-			  short const *exitlist, short const *sizelist, short const *overlap);
-	operator StructType(void) const { return (Type); };
+	BuildingTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {
+	}
+	BuildingTypeClass(StructType type,
+			  int name,
+			  char const *ininame,
+			  FacingType foundation,
+			  COORDINATE exitpoint,
+			  RemapType remap,
+			  int verticaloffset,
+			  int primaryoffset,
+			  int primarylateral,
+			  bool is_fake,
+			  bool is_regulated,
+			  bool is_nominal,
+			  bool is_wall,
+			  bool is_simpledamage,
+			  bool is_stealthy,
+			  bool is_selectable,
+			  bool is_legal_target,
+			  bool is_insignificant,
+			  bool is_theater,
+			  bool is_turret_equipped,
+			  bool is_remappable,
+			  RTTIType tobuild,
+			  DirType sframe,
+			  BSizeType size,
+			  short const *exitlist,
+			  short const *sizelist,
+			  short const *overlap);
+	operator StructType(void) const {
+		return (Type);
+	};
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -736,9 +805,13 @@ public:
 	virtual ObjectClass *Create_One_Of(HouseClass *house) const;
 	virtual short const *Occupy_List(bool placement = false) const;
 	virtual short const *Overlap_List(void) const;
-	virtual void const *Get_Buildup_Data(void) const { return (BuildupData); };
+	virtual void const *Get_Buildup_Data(void) const {
+		return (BuildupData);
+	};
 
-	bool Is_Factory(void) const { return (ToBuild != RTTI_NONE); }
+	bool Is_Factory(void) const {
+		return (ToBuild != RTTI_NONE);
+	}
 	virtual int Raw_Cost(void) const;
 	bool Bib_And_Offset(SmudgeType &bib, CELL &cell) const;
 
@@ -881,16 +954,40 @@ public:
 	/*
 	**	This is the explicit unit class constructor.
 	*/
-	UnitTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {}
-	UnitTypeClass(UnitType type, int name, char const *ininame, AnimType exp, RemapType remap, int verticaloffset,
-		      int primaryoffset, int primarylateral, int secondaryoffset, int secondarylateral, bool is_goodie,
-		      bool is_nominal, bool is_crusher, bool is_harvest, bool is_stealthy, bool is_insignificant,
-		      bool is_turret_equipped, bool is_radar_equipped, bool is_fire_anim, bool is_lock_turret,
-		      bool is_gigundo, bool is_animating, bool is_jammer, bool is_gapper, int rotation, int toffset,
+	UnitTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {
+	}
+	UnitTypeClass(UnitType type,
+		      int name,
+		      char const *ininame,
+		      AnimType exp,
+		      RemapType remap,
+		      int verticaloffset,
+		      int primaryoffset,
+		      int primarylateral,
+		      int secondaryoffset,
+		      int secondarylateral,
+		      bool is_goodie,
+		      bool is_nominal,
+		      bool is_crusher,
+		      bool is_harvest,
+		      bool is_stealthy,
+		      bool is_insignificant,
+		      bool is_turret_equipped,
+		      bool is_radar_equipped,
+		      bool is_fire_anim,
+		      bool is_lock_turret,
+		      bool is_gigundo,
+		      bool is_animating,
+		      bool is_jammer,
+		      bool is_gapper,
+		      int rotation,
+		      int toffset,
 		      MissionType order);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -973,13 +1070,27 @@ public:
 	/*
 	**	This is the explicit unit class constructor.
 	*/
-	VesselTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {}
-	VesselTypeClass(VesselType type, int name, char const *ininame, AnimType exp, int verticaloffset,
-			int primaryoffset, int primarylateral, int secondaryoffset, int secondarylateral, bool is_eight,
-			bool is_nominal, bool is_turret_equipped, int rotation, int toffset);
+	VesselTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {
+	}
+	VesselTypeClass(VesselType type,
+			int name,
+			char const *ininame,
+			AnimType exp,
+			int verticaloffset,
+			int primaryoffset,
+			int primarylateral,
+			int secondaryoffset,
+			int secondarylateral,
+			bool is_eight,
+			bool is_nominal,
+			bool is_turret_equipped,
+			int rotation,
+			int toffset);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1107,15 +1218,31 @@ public:
 	/*
 	**	This is the explicit unit class constructor.
 	*/
-	InfantryTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {}
-	InfantryTypeClass(InfantryType type, int name, char const *ininame, int verticaloffset, int primaryoffset,
-			  bool is_female, bool is_crawling, bool is_civilian, bool is_remap_override, bool is_nominal,
-			  bool is_theater, PipEnum pip, DoInfoStruct const *controls,
-			  DoInfoStruct const *virtual_controls, int firelaunch, int pronelaunch,
-			  unsigned char const *override_remap, int horizontaloffset = 0);
+	InfantryTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {
+	}
+	InfantryTypeClass(InfantryType type,
+			  int name,
+			  char const *ininame,
+			  int verticaloffset,
+			  int primaryoffset,
+			  bool is_female,
+			  bool is_crawling,
+			  bool is_civilian,
+			  bool is_remap_override,
+			  bool is_nominal,
+			  bool is_theater,
+			  PipEnum pip,
+			  DoInfoStruct const *controls,
+			  DoInfoStruct const *virtual_controls,
+			  int firelaunch,
+			  int pronelaunch,
+			  unsigned char const *override_remap,
+			  int horizontaloffset = 0);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1189,15 +1316,32 @@ public:
 	*/
 	int LandingSpeed;
 
-	AircraftTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {}
-	AircraftTypeClass(AircraftType airtype, int name, char const *ininame, int verticaloffset, int primaryoffset,
-			  int primarylateral, bool is_fixedwing, bool is_rotorequipped, bool is_rotorcustom,
-			  bool is_landable, bool is_stealthy, bool is_selectable, bool is_legal_target,
-			  bool is_insignificant, bool is_immune, StructType building, int landingspeed, int rotation,
+	AircraftTypeClass(NoInitClass const &x) : TechnoTypeClass(x) {
+	}
+	AircraftTypeClass(AircraftType airtype,
+			  int name,
+			  char const *ininame,
+			  int verticaloffset,
+			  int primaryoffset,
+			  int primarylateral,
+			  bool is_fixedwing,
+			  bool is_rotorequipped,
+			  bool is_rotorcustom,
+			  bool is_landable,
+			  bool is_stealthy,
+			  bool is_selectable,
+			  bool is_legal_target,
+			  bool is_insignificant,
+			  bool is_immune,
+			  StructType building,
+			  int landingspeed,
+			  int rotation,
 			  MissionType deforder);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1370,11 +1514,14 @@ public:
 	int Tumble;
 
 	//---------------------------------------------------------------------
-	BulletTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {}
+	BulletTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {
+	}
 	BulletTypeClass(char const *name);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1383,8 +1530,12 @@ public:
 	static void One_Time(void);
 
 	virtual bool Read_INI(CCINIClass &ini);
-	virtual bool Create_And_Place(CELL, HousesType = HOUSE_NONE) const { return false; };
-	virtual ObjectClass *Create_One_Of(HouseClass *) const { return 0; };
+	virtual bool Create_And_Place(CELL, HousesType = HOUSE_NONE) const {
+		return false;
+	};
+	virtual ObjectClass *Create_One_Of(HouseClass *) const {
+		return 0;
+	};
 };
 
 /****************************************************************************
@@ -1418,12 +1569,22 @@ public:
 	unsigned IsWaterBased : 1;
 
 	//----------------------------------------------------------------
-	TerrainTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {}
-	TerrainTypeClass(TerrainType terrain, int theater, COORDINATE centerbase, bool is_immune, bool is_water,
-			 char const *ininame, int fullname, short const *occupy, short const *overlap);
+	TerrainTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {
+	}
+	TerrainTypeClass(TerrainType terrain,
+			 int theater,
+			 COORDINATE centerbase,
+			 bool is_immune,
+			 bool is_water,
+			 char const *ininame,
+			 int fullname,
+			 short const *occupy,
+			 short const *overlap);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1478,7 +1639,9 @@ public:
 	TemplateTypeClass(TemplateType iconset, int theater, char const *ininame, int fullname);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1667,24 +1830,52 @@ public:
 	AnimType VirtualAnim;
 
 	//---------------------------------------------------------------------------
-	AnimTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {}
-	AnimTypeClass(AnimType anim, char const *name, int size, int biggest, bool istheater, bool isnormal,
-		      bool iswhite, bool isscorcher, bool iscrater, bool issticky, bool ground, bool istrans,
-		      bool isflame, fixed damage, int delaytime, int start, int loopstart, int loopend, int stages,
-		      int loops, VocType sound, AnimType chainto, int virtualstages = -1, int virtualscale = 0x100,
-		      char const *virtualname = NULL, AnimType virtualanim = ANIM_NONE);
+	AnimTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {
+	}
+	AnimTypeClass(AnimType anim,
+		      char const *name,
+		      int size,
+		      int biggest,
+		      bool istheater,
+		      bool isnormal,
+		      bool iswhite,
+		      bool isscorcher,
+		      bool iscrater,
+		      bool issticky,
+		      bool ground,
+		      bool istrans,
+		      bool isflame,
+		      fixed damage,
+		      int delaytime,
+		      int start,
+		      int loopstart,
+		      int loopend,
+		      int stages,
+		      int loops,
+		      VocType sound,
+		      AnimType chainto,
+		      int virtualstages = -1,
+		      int virtualscale = 0x100,
+		      char const *virtualname = NULL,
+		      AnimType virtualanim = ANIM_NONE);
 
 	static void Init_Heap(void);
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static AnimTypeClass &As_Reference(AnimType type);
 	static void Init(TheaterType theater);
 	static void One_Time(void);
 
-	virtual bool Create_And_Place(CELL, HousesType = HOUSE_NONE) const { return false; };
-	virtual ObjectClass *Create_One_Of(HouseClass *) const { return 0; };
+	virtual bool Create_And_Place(CELL, HousesType = HOUSE_NONE) const {
+		return false;
+	};
+	virtual ObjectClass *Create_One_Of(HouseClass *) const {
+		return 0;
+	};
 };
 
 /****************************************************************************
@@ -1762,13 +1953,28 @@ public:
 	unsigned IsRadarVisible : 1;
 
 	//----------------------------------------------------------
-	OverlayTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {}
-	OverlayTypeClass(OverlayType iconset, char const *ininame, int fullname, LandType ground, int damagelevels,
-			 int damagepoints, bool isradarinvisible, bool iswooden, bool istarget, bool iscrushable,
-			 bool istiberium, bool high, bool theater, bool iswall, bool iscrate);
+	OverlayTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {
+	}
+	OverlayTypeClass(OverlayType iconset,
+			 char const *ininame,
+			 int fullname,
+			 LandType ground,
+			 int damagelevels,
+			 int damagepoints,
+			 bool isradarinvisible,
+			 bool iswooden,
+			 bool istarget,
+			 bool iscrushable,
+			 bool istiberium,
+			 bool high,
+			 bool theater,
+			 bool iswall,
+			 bool iscrate);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1824,12 +2030,14 @@ public:
 	unsigned IsBib : 1;
 
 	//----------------------------------------------------------
-	SmudgeTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {}
-	SmudgeTypeClass(SmudgeType smudge, char const *ininame, int fullname, int width, int height, bool isbib,
-			bool iscrater);
+	SmudgeTypeClass(NoInitClass const &x) : ObjectTypeClass(x) {
+	}
+	SmudgeTypeClass(SmudgeType smudge, char const *ininame, int fullname, int width, int height, bool isbib, bool iscrater);
 
 	static void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	static void Init_Heap(void);
@@ -1842,7 +2050,9 @@ public:
 	virtual bool Create_And_Place(CELL cell, HousesType house = HOUSE_NONE) const;
 	virtual ObjectClass *Create_One_Of(HouseClass *) const;
 	virtual short const *Occupy_List(bool placement = false) const;
-	virtual short const *Overlap_List(void) const { return Occupy_List(); };
+	virtual short const *Overlap_List(void) const {
+		return Occupy_List();
+	};
 	virtual void Draw_It(int x, int y, int data) const;
 
 #ifdef SCENARIO_EDITOR

@@ -35,10 +35,10 @@
  *   FilePipe::End -- End the file pipe handler.                                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "xpipe.h"
-#include "FUNCTION.H"
 #include <stddef.h>
 #include <string.h>
+#include "xpipe.h"
+#include "FUNCTION.H"
 
 //---------------------------------------------------------------------------------------------------------
 // BufferPipe

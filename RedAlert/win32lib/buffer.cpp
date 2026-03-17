@@ -63,12 +63,12 @@
 BufferClass::BufferClass(VOID *buffer, LONG size) {
 	Size = size; // find size of physical buffer
 
-	if (buffer) {			 // if buffer is specified
+	if (buffer) { // if buffer is specified
 		Buffer = (BYTE *)buffer; //		point to it and mark
-		Allocated = FALSE;	 //		it as user allocated
+		Allocated = FALSE; //		it as user allocated
 	} else {
 		Buffer = new BYTE[Size]; // otherwise allocate it and
-		Allocated = TRUE;	 //		mark it system alloced
+		Allocated = TRUE; //		mark it system alloced
 	}
 }
 
@@ -85,7 +85,7 @@ BufferClass::BufferClass(VOID *buffer, LONG size) {
 BufferClass::BufferClass(LONG size) {
 	Size = size;
 	Buffer = new BYTE[Size]; // otherwise allocate it and
-	Allocated = TRUE;	 //		mark it system alloced
+	Allocated = TRUE; //		mark it system alloced
 }
 
 /***************************************************************************

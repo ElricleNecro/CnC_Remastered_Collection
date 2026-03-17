@@ -22,26 +22,41 @@
 #include <windows.h>
 
 class ModemRegistryEntryClass {
-
 public:
 	ModemRegistryEntryClass(int modem_number);
 	~ModemRegistryEntryClass(void);
 
-	char *Get_Modem_Name(void) { return (ModemName); }
+	char *Get_Modem_Name(void) {
+		return (ModemName);
+	}
 
-	char *Get_Modem_Device_Name(void) { return (ModemDeviceName); }
+	char *Get_Modem_Device_Name(void) {
+		return (ModemDeviceName);
+	}
 
-	char *Get_Modem_Error_Correction_Enable(void) { return (ErrorCorrectionEnable); }
+	char *Get_Modem_Error_Correction_Enable(void) {
+		return (ErrorCorrectionEnable);
+	}
 
-	char *Get_Modem_Error_Correction_Disable(void) { return (ErrorCorrectionDisable); }
+	char *Get_Modem_Error_Correction_Disable(void) {
+		return (ErrorCorrectionDisable);
+	}
 
-	char *Get_Modem_Compression_Enable(void) { return (CompressionEnable); }
+	char *Get_Modem_Compression_Enable(void) {
+		return (CompressionEnable);
+	}
 
-	char *Get_Modem_Compression_Disable(void) { return (CompressionDisable); }
+	char *Get_Modem_Compression_Disable(void) {
+		return (CompressionDisable);
+	}
 
-	char *Get_Modem_Hardware_Flow_Control(void) { return (HardwareFlowControl); }
+	char *Get_Modem_Hardware_Flow_Control(void) {
+		return (HardwareFlowControl);
+	}
 
-	char *Get_Modem_No_Flow_Control(void) { return (HardwareFlowControl); }
+	char *Get_Modem_No_Flow_Control(void) {
+		return (HardwareFlowControl);
+	}
 
 private:
 	char *ModemName;

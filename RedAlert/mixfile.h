@@ -31,12 +31,13 @@ typedef int bool;
 #endif
 #endif
 
+#include <stdlib.h>
 #include "buff.h"
 #include "listnode.h"
 #include "pk.h"
-#include <stdlib.h>
 
-template <class T> class MixFileClass : public Node<MixFileClass<T>> {
+template <class T>
+class MixFileClass : public Node<MixFileClass<T>> {
 public:
 	char const *Filename; // Filename of mixfile.
 
@@ -48,18 +49,23 @@ public:
 	static void Free_All(void); // ST - 12/18/2019 11:35AM
 	bool Cache(Buffer const *buffer = NULL);
 	static bool Cache(char const *filename, Buffer const *buffer = NULL);
-	static bool Offset(char const *filename, void **realptr = 0, MixFileClass **mixfile = 0, long *offset = 0,
-			   long *size = 0);
+	static bool Offset(char const *filename, void **realptr = 0, MixFileClass **mixfile = 0, long *offset = 0, long *size = 0);
 	static void const *Retrieve(char const *filename);
 
 	struct SubBlock {
-		long CRC;    // CRC code for embedded file.
+		long CRC; // CRC code for embedded file.
 		long Offset; // Offset from start of data section.
-		long Size;   // Size of data subfile.
+		long Size; // Size of data subfile.
 
-		int operator<(SubBlock &two) const { return (CRC < two.CRC); };
-		int operator>(SubBlock &two) const { return (CRC > two.CRC); };
-		int operator==(SubBlock &two) const { return (CRC == two.CRC); };
+		int operator<(SubBlock &two) const {
+			return (CRC < two.CRC);
+		};
+		int operator>(SubBlock &two) const {
+			return (CRC > two.CRC);
+		};
+		int operator==(SubBlock &two) const {
+			return (CRC == two.CRC);
+		};
 	};
 
 private:

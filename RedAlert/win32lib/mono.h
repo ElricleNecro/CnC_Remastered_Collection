@@ -68,28 +68,28 @@ class MonoClass {
 	**	These private constants are used in the various monochrome operations.
 	*/
 	enum MonoClassPortEnums {
-		CONTROL_PORT = 0x03B4,				   // CRTC control register.
-		DATA_PORT = 0x03B5,				   // CRTC data register.
-		COLUMNS = 80,					   // Number of columns.
-		LINES = 25,					   // Number of lines.
+		CONTROL_PORT = 0x03B4, // CRTC control register.
+		DATA_PORT = 0x03B5, // CRTC data register.
+		COLUMNS = 80, // Number of columns.
+		LINES = 25, // Number of lines.
 		SIZE_OF_PAGE = LINES * COLUMNS * sizeof(CellType), // Entire page size.
-		DEFAULT_ATTRIBUTE = 0x02			   // Normal white on black color attribute.
+		DEFAULT_ATTRIBUTE = 0x02 // Normal white on black color attribute.
 	};
 
 public:
 	enum MonoClassPageEnums {
 		MAX_MONO_PAGES = 16, // Maximum RAM pages on mono card.
-		SEGMENT = 0xB000     // Monochrome screen segment.
+		SEGMENT = 0xB000 // Monochrome screen segment.
 	};
 
 	/*
 	**	These are the various box styles that may be used.
 	*/
 	typedef enum BoxStyleType {
-		SINGLE,	     // Single thickness.
+		SINGLE, // Single thickness.
 		DOUBLE_HORZ, // Double thick on the horizontal axis.
 		DOUBLE_VERT, // Double thick on the vertical axis.
-		DOUBLE,	     // Double thickness.
+		DOUBLE, // Double thickness.
 
 		COUNT
 	} BoxStyleType;
@@ -97,13 +97,23 @@ public:
 	MonoClass(void);
 	~MonoClass(void);
 
-	static void Enable(void) { Enabled = 1; };
-	static void Disable(void) { Enabled = 0; };
-	static int Is_Enabled(void) { return Enabled; };
-	static MonoClass *Get_Current(void) { return PageUsage[0]; };
+	static void Enable(void) {
+		Enabled = 1;
+	};
+	static void Disable(void) {
+		Enabled = 0;
+	};
+	static int Is_Enabled(void) {
+		return Enabled;
+	};
+	static MonoClass *Get_Current(void) {
+		return PageUsage[0];
+	};
 
 	void Draw_Box(int x, int y, int w, int h, char attrib = DEFAULT_ATTRIBUTE, BoxStyleType thick = SINGLE);
-	void Set_Default_Attribute(char attrib) { Attrib = attrib; };
+	void Set_Default_Attribute(char attrib) {
+		Attrib = attrib;
+	};
 	void Clear(void);
 	void Set_Cursor(int x, int y);
 	void Print(char const *text);
@@ -113,8 +123,12 @@ public:
 	void Text_Print(char const *text, int x, int y, char attrib = DEFAULT_ATTRIBUTE);
 	void Text_Print(int text, int x, int y, char attrib = DEFAULT_ATTRIBUTE);
 	void View(void);
-	int Get_X(void) const { return X; };
-	int Get_Y(void) const { return Y; };
+	int Get_X(void) const {
+		return X;
+	};
+	int Get_Y(void) const {
+		return Y;
+	};
 
 	/*
 	**	Handles deep copies for the mono class objects. This performs what is essentially
@@ -129,10 +143,10 @@ public:
 	MonoClass(MonoClass const &);
 
 private:
-	char X;	     // Cursor X position.
-	char Y;	     // Cursor Y position.
+	char X; // Cursor X position.
+	char Y; // Cursor Y position.
 	char Attrib; // Normal attribute to use if none specified.
-	char Page;   // The current page to write to.
+	char Page; // The current page to write to.
 
 	/*
 	**	Helper functions to help with display operations.
@@ -141,7 +155,9 @@ private:
 		return (SIZE_OF_PAGE * Page) + sizeof(CellType) * (x + (y * COLUMNS));
 	};
 	void Scroll(int lines);
-	void Store_Cell(CellType &cell, int x, int y) { *(CellType *)((long)MonoSegment + Offset(x, y)) = cell; };
+	void Store_Cell(CellType &cell, int x, int y) {
+		*(CellType *)((long)MonoSegment + Offset(x, y)) = cell;
+	};
 
 	/*
 	**	This is the segment/selector of the monochrome screen.

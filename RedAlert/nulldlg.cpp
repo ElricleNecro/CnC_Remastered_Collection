@@ -48,7 +48,9 @@
 #include "function.h"
 
 // PG
-GameType Select_Serial_Dialog(void) { return GAME_NORMAL; }
+GameType Select_Serial_Dialog(void) {
+	return GAME_NORMAL;
+}
 
 #if (0) // PG
 #ifdef FIXIT_RANDOM_GAME
@@ -58,7 +60,7 @@ GameType Select_Serial_Dialog(void) { return GAME_NORMAL; }
 #include "modemreg.h"
 #include "wincomm.h"
 ModemRegistryEntryClass *ModemRegistry = NULL; // Ptr to modem registry data
-#endif					       // WIN32
+#endif // WIN32
 #include "COORDA.h"
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 extern bool Is_Mission_126x126(char *file_name);
@@ -138,18 +140,15 @@ bool bSpecialAftermathScenario(const char *szScenarioDescription);
  *   8/2/96      ST : Win32 support added                                  *
  *=========================================================================*/
 int Init_Null_Modem(SerialSettingsType *settings) {
-
 #ifdef WIN32
-	if (NullModem.Init(settings->Port, settings->IRQ, settings->ModemName, settings->Baud, 0, 8, 1,
-			   settings->HardwareFlowControl)) {
+	if (NullModem.Init(settings->Port, settings->IRQ, settings->ModemName, settings->Baud, 0, 8, 1, settings->HardwareFlowControl)) {
 		return (true);
 	} else {
 		return (false);
 	}
 
-#else  // WIN32
-	if (NullModem.Init(settings->Port, settings->IRQ, settings->ModemName, settings->Baud, 'N', 8, 1,
-			   settings->HardwareFlowControl)) {
+#else // WIN32
+	if (NullModem.Init(settings->Port, settings->IRQ, settings->ModemName, settings->Baud, 'N', 8, 1, settings->HardwareFlowControl)) {
 		NullModem.Change_IRQ_Priority(settings->IRQ);
 
 		return (true);
@@ -292,7 +291,9 @@ int Test_Null_Modem(void) {
 	x = (SeenBuff.Get_Width() - width) / 2;
 	y = (SeenBuff.Get_Height() - height) / 2;
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
+				  TPF_BUTTON,
 				  x + ((width - (String_Pixel_Width(Text_String(TXT_CANCEL)) + 8 * RESFACTOR)) >> 1),
 				  y + height - (FontHeight + FontYSpacing + 2 * RESFACTOR) - 10 * RESFACTOR);
 
@@ -625,7 +626,9 @@ static int Reconnect_Null_Modem(void) {
 	x = (SeenBuff.Get_Width() - width) / 2;
 	y = (SeenBuff.Get_Height() - height) / 2;
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
+				  TPF_BUTTON,
 				  x + ((width - (String_Pixel_Width(Text_String(TXT_CANCEL)) + 8 * RESFACTOR)) >> 1),
 				  y + height - (FontHeight + FontYSpacing + 2 * RESFACTOR) - 10 * RESFACTOR);
 
@@ -713,11 +716,9 @@ static int Reconnect_Null_Modem(void) {
 		** Check for an incoming message
 		*/
 		if (NullModem.Get_Message(&ReceivePacket, &packetlen) > 0) {
-
 			lastmsgtime = TickCount;
 
 			if (ReceivePacket.Command == SERIAL_CONNECT) {
-
 				// are we getting our own packets back??
 
 				if (ReceivePacket.ID == Session.ColorIdx) {
@@ -810,9 +811,12 @@ void Destroy_Null_Connection(int id, int error) {
 	}
 
 	if (strlen(txt)) {
-		Session.Messages.Add_Message(
-		    NULL, 0, txt, (housep->RemapColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : housep->RemapColor,
-		    TPF_TEXT, Rule.MessageDelay * TICKS_PER_MINUTE);
+		Session.Messages.Add_Message(NULL,
+					     0,
+					     txt,
+					     (housep->RemapColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : housep->RemapColor,
+					     TPF_TEXT,
+					     Rule.MessageDelay * TICKS_PER_MINUTE);
 		Map.Flag_To_Redraw(false);
 	}
 
@@ -842,9 +846,12 @@ void Destroy_Null_Connection(int id, int error) {
 	*/
 	if (Session.NumPlayers == 1) {
 		sprintf(txt, "%s", Text_String(TXT_JUST_YOU_AND_ME));
-		Session.Messages.Add_Message(
-		    NULL, 0, txt, (housep->RemapColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : housep->RemapColor,
-		    TPF_TEXT, Rule.MessageDelay * TICKS_PER_MINUTE);
+		Session.Messages.Add_Message(NULL,
+					     0,
+					     txt,
+					     (housep->RemapColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : housep->RemapColor,
+					     TPF_TEXT,
+					     Rule.MessageDelay * TICKS_PER_MINUTE);
 		Map.Flag_To_Redraw(false);
 	}
 }
@@ -877,8 +884,8 @@ GameType Select_Serial_Dialog(void) {
 	/*
 	** Dialog & button dimensions
 	*/
-	int d_dialog_w = 160 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 94 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 160 * RESFACTOR; // dialog width
+	int d_dialog_h = 94 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = 80 * RESFACTOR;
 	//	int d_dialog_y = ((136 * RESFACTOR - d_dialog_h) / 2);	// dialog y-coord
@@ -934,11 +941,11 @@ GameType Select_Serial_Dialog(void) {
 	** Dialog variables
 	*/
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
-	char namebuf[MPLAYER_NAME_MAX] = {0}; // buffer for player's name
-	int tabs[] = {77 * RESFACTOR};	      // tabs for player list box
-	GameType retval;		      // return value
+	char namebuf[MPLAYER_NAME_MAX] = { 0 }; // buffer for player's name
+	int tabs[] = { 77 * RESFACTOR }; // tabs for player list box
+	GameType retval; // return value
 
 	int selection;
 	bool pressed;
@@ -955,14 +962,10 @@ GameType Select_Serial_Dialog(void) {
 	GadgetClass *commands; // button list
 
 	TextButtonClass dialbtn(BUTTON_DIAL, TXT_DIAL_MODEM, TPF_BUTTON, d_dial_x, d_dial_y, d_dial_w, d_dial_h);
-	TextButtonClass answerbtn(BUTTON_ANSWER, TXT_ANSWER_MODEM, TPF_BUTTON, d_answer_x, d_answer_y, d_answer_w,
-				  d_answer_h);
-	TextButtonClass nullmodembtn(BUTTON_NULLMODEM, TXT_NULL_MODEM, TPF_BUTTON, d_nullmodem_x, d_nullmodem_y,
-				     d_nullmodem_w, d_nullmodem_h);
-	TextButtonClass settingsbtn(BUTTON_SETTINGS, TXT_SETTINGS, TPF_BUTTON, d_settings_x, d_settings_y, d_settings_w,
-				    d_settings_h);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
+	TextButtonClass answerbtn(BUTTON_ANSWER, TXT_ANSWER_MODEM, TPF_BUTTON, d_answer_x, d_answer_y, d_answer_w, d_answer_h);
+	TextButtonClass nullmodembtn(BUTTON_NULLMODEM, TXT_NULL_MODEM, TPF_BUTTON, d_nullmodem_x, d_nullmodem_y, d_nullmodem_w, d_nullmodem_h);
+	TextButtonClass settingsbtn(BUTTON_SETTINGS, TXT_SETTINGS, TPF_BUTTON, d_settings_x, d_settings_y, d_settings_w, d_settings_h);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 
 	/*
 	** Initialize
@@ -1144,12 +1147,10 @@ GameType Select_Serial_Dialog(void) {
 					SerialPort = new WinModemClass;
 #endif // WIN32
 					if (Init_Null_Modem(settings)) {
-
 						if (settings->CallWaitStringIndex == CALL_WAIT_CUSTOM) {
 							strcpy(DialString, settings->CallWaitString);
 						} else {
-							strcpy(DialString,
-							       Session.CallWaitStrings[settings->CallWaitStringIndex]);
+							strcpy(DialString, Session.CallWaitStrings[settings->CallWaitStringIndex]);
 						}
 						strcat(DialString, Session.PhoneBook[Session.CurPhoneIdx]->Number);
 
@@ -1312,7 +1313,6 @@ GameType Select_Serial_Dialog(void) {
  *    12/16/96 2:29PM ST : Created                                                             *
  *=============================================================================================*/
 Advanced_Modem_Settings(SerialSettingsType *settings) {
-
 	/*........................................................................
 	Dialog & button dimensions
 	........................................................................*/
@@ -1322,7 +1322,7 @@ Advanced_Modem_Settings(SerialSettingsType *settings) {
 	int d_dialog_w = 340; // dialog width
 #endif
 
-	int d_dialog_h = 200;		       // dialog height
+	int d_dialog_h = 200; // dialog height
 	int d_dialog_x = 320 - d_dialog_w / 2; // dialog x-coord
 	int d_dialog_y = 200 - d_dialog_h / 4; // dialog y-coord
 
@@ -1385,30 +1385,45 @@ Advanced_Modem_Settings(SerialSettingsType *settings) {
 	/*
 	** Create the buttons
 	*/
-	TextButtonClass compressionbutton(BUTTON_COMPRESSION, compress_text,
-					  TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW, d_compression_x,
-					  d_compression_y, d_compression_w, d_compression_h);
+	TextButtonClass compressionbutton(BUTTON_COMPRESSION,
+					  compress_text,
+					  TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
+					  d_compression_x,
+					  d_compression_y,
+					  d_compression_w,
+					  d_compression_h);
 
-	TextButtonClass errorcorrectionbutton(
-	    BUTTON_ERROR_CORRECTION, correction_text, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
-	    d_errorcorrection_x, d_errorcorrection_y, d_errorcorrection_w, d_errorcorrection_h);
+	TextButtonClass errorcorrectionbutton(BUTTON_ERROR_CORRECTION,
+					      correction_text,
+					      TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
+					      d_errorcorrection_x,
+					      d_errorcorrection_y,
+					      d_errorcorrection_w,
+					      d_errorcorrection_h);
 
-	TextButtonClass hardwareflowcontrolbutton(
-	    BUTTON_HARDWARE_FLOW_CONTROL, flowcontrol_text, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
-	    d_hardwareflowcontrol_x, d_hardwareflowcontrol_y, d_hardwareflowcontrol_w, d_hardwareflowcontrol_h);
+	TextButtonClass hardwareflowcontrolbutton(BUTTON_HARDWARE_FLOW_CONTROL,
+						  flowcontrol_text,
+						  TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
+						  d_hardwareflowcontrol_x,
+						  d_hardwareflowcontrol_y,
+						  d_hardwareflowcontrol_w,
+						  d_hardwareflowcontrol_h);
 
-	TextButtonClass defaultbutton(BUTTON_DEFAULT, TXT_DEFAULT,
-				      TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW, d_default_x,
-				      d_default_y, d_default_w, d_default_h);
+	TextButtonClass defaultbutton(BUTTON_DEFAULT,
+				      TXT_DEFAULT,
+				      TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
+				      d_default_x,
+				      d_default_y,
+				      d_default_w,
+				      d_default_h);
 
-	TextButtonClass okbutton(BUTTON_OK, TXT_OK, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW, d_ok_x,
-				 d_ok_y, d_ok_w, d_ok_h);
+	TextButtonClass okbutton(BUTTON_OK, TXT_OK, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW, d_ok_x, d_ok_y, d_ok_w, d_ok_h);
 
 	/*
 	** Misc. variables.
 	*/
 	RedrawType display = REDRAW_ALL; // redraw level
-	BOOL process = true;		 // process while true
+	BOOL process = true; // process while true
 	KeyNumType input;
 	GadgetClass *commands; // button list
 
@@ -1422,7 +1437,6 @@ Advanced_Modem_Settings(SerialSettingsType *settings) {
 	** Main process loop
 	*/
 	while (process) {
-
 		/*
 		** If we have just received input focus again after running in the background then
 		** we need to redraw.
@@ -1460,14 +1474,26 @@ Advanced_Modem_Settings(SerialSettingsType *settings) {
 				...............................................................*/
 				Draw_Caption(TXT_MODEM_INITIALISATION, d_dialog_x, d_dialog_y, d_dialog_w);
 
-				Fancy_Text_Print(TXT_DATA_COMPRESSION, d_compression_x - 26, d_compression_y + 2,
-						 scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_DATA_COMPRESSION,
+						 d_compression_x - 26,
+						 d_compression_y + 2,
+						 scheme,
+						 TBLACK,
+						 TPF_TEXT | TPF_RIGHT);
 
-				Fancy_Text_Print(TXT_ERROR_CORRECTION, d_errorcorrection_x - 26,
-						 d_errorcorrection_y + 2, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_ERROR_CORRECTION,
+						 d_errorcorrection_x - 26,
+						 d_errorcorrection_y + 2,
+						 scheme,
+						 TBLACK,
+						 TPF_TEXT | TPF_RIGHT);
 
-				Fancy_Text_Print(TXT_HARDWARE_FLOW_CONTROL, d_hardwareflowcontrol_x - 26,
-						 d_hardwareflowcontrol_y + 2, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_HARDWARE_FLOW_CONTROL,
+						 d_hardwareflowcontrol_x - 26,
+						 d_hardwareflowcontrol_y + 2,
+						 scheme,
+						 TBLACK,
+						 TPF_TEXT | TPF_RIGHT);
 			}
 
 			/*
@@ -1508,8 +1534,7 @@ Advanced_Modem_Settings(SerialSettingsType *settings) {
 
 		case (BUTTON_HARDWARE_FLOW_CONTROL | KN_BUTTON):
 			settings->HardwareFlowControl = settings->HardwareFlowControl ^ 1;
-			strcpy(flowcontrol_text,
-			       settings->HardwareFlowControl ? Text_String(TXT_ON) : Text_String(TXT_OFF));
+			strcpy(flowcontrol_text, settings->HardwareFlowControl ? Text_String(TXT_ON) : Text_String(TXT_OFF));
 			if (display < REDRAW_BUTTONS)
 				display = REDRAW_BUTTONS;
 			break;
@@ -1523,8 +1548,7 @@ Advanced_Modem_Settings(SerialSettingsType *settings) {
 
 			strcpy(correction_text, settings->ErrorCorrection ? Text_String(TXT_ON) : Text_String(TXT_OFF));
 
-			strcpy(flowcontrol_text,
-			       settings->HardwareFlowControl ? Text_String(TXT_ON) : Text_String(TXT_OFF));
+			strcpy(flowcontrol_text, settings->HardwareFlowControl ? Text_String(TXT_ON) : Text_String(TXT_OFF));
 
 			if (display < REDRAW_BUTTONS)
 				display = REDRAW_BUTTONS;
@@ -1587,15 +1611,14 @@ Advanced_Modem_Settings(SerialSettingsType *settings) {
  *   04/29/1995 BRR : Created.                                             *
  *=========================================================================*/
 static int Com_Settings_Dialog(SerialSettingsType *settings) {
-
 	/*
 	** Dialog & button dimensions
 	*/
-	int d_dialog_w = 320 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 200 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 320 * RESFACTOR; // dialog width
+	int d_dialog_h = 200 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // dialog y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 7 * RESFACTOR; // ht of 6-pt text
 	int d_margin = 5 * RESFACTOR; // margin width/height
@@ -1748,55 +1771,55 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 	typedef enum { REDRAW_NONE = 0, REDRAW_BUTTONS, REDRAW_BACKGROUND, REDRAW_ALL = REDRAW_BACKGROUND } RedrawType;
 
 	static char *portname[4] = {
-	    "COM1 - 3F8",
-	    "COM2 - 2F8",
-	    "COM3 - 3E8",
-	    "COM4 - 2E8",
+		"COM1 - 3F8",
+		"COM2 - 2F8",
+		"COM3 - 3E8",
+		"COM4 - 2E8",
 	};
 
-	static char custom_port[10 + MODEM_NAME_MAX] = {"CUSTOM - ????"};
+	static char custom_port[10 + MODEM_NAME_MAX] = { "CUSTOM - ????" };
 
 #ifndef WIN32 // No IRQ dialog in Win version
-	static char *irqname[5] = {"2 / 9", "3 - [COM2 & 4]", "4 - [COM1 & 3]", "5", "CUSTOM - ??"};
+	static char *irqname[5] = { "2 / 9", "3 - [COM2 & 4]", "4 - [COM1 & 3]", "5", "CUSTOM - ??" };
 
-	static int _irqidx[4] = {2, 1, 2, 1};
+	static int _irqidx[4] = { 2, 1, 2, 1 };
 
 #endif // WIN32
 
 #ifdef WIN32
 	static char *baudname[5] = {
-	    "14400", "19200", "28800", "38400", "57600",
+		"14400", "19200", "28800", "38400", "57600",
 	};
 
 	static char modemnames[10][MODEM_NAME_MAX];
 
-#else  // WIN32
-	static char *baudname[5] = {"9600", "14400", "19200", "28800", "38400"};
+#else // WIN32
+	static char *baudname[5] = { "9600", "14400", "19200", "28800", "38400" };
 #endif // WIN32
 	/*
 	** Dialog variables
 	*/
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 	char *item; // general-purpose string
 	char *temp; // general-purpose string
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
-	char portbuf[PORTBUF_MAX] = {0};	 // buffer for port
-	char irqbuf[IRQBUF_MAX] = {0};		 // buffer for irq
-	char baudbuf[BAUDBUF_MAX] = {0};	 // buffer for baud
-	char initstrbuf[INITSTRBUF_MAX] = {0};	 // buffer for init string
-	char cwaitstrbuf[CWAITSTRBUF_MAX] = {0}; // buffer for call waiting string
+	char portbuf[PORTBUF_MAX] = { 0 }; // buffer for port
+	char irqbuf[IRQBUF_MAX] = { 0 }; // buffer for irq
+	char baudbuf[BAUDBUF_MAX] = { 0 }; // buffer for baud
+	char initstrbuf[INITSTRBUF_MAX] = { 0 }; // buffer for init string
+	char cwaitstrbuf[CWAITSTRBUF_MAX] = { 0 }; // buffer for call waiting string
 
-	int port_index = 1;		       // index of currently-selected port (default = com2)
-	int port_custom_index = 4;	       // index of custom entry in port list
-	int irq_index = 1;		       // index of currently-selected irq (default = 3)
-	int baud_index = 1;		       // index of currently-selected baud (default = 19200)
-	int initstr_index = 0;		       // index of currently-selected modem init (default = "ATZ")
+	int port_index = 1; // index of currently-selected port (default = com2)
+	int port_custom_index = 4; // index of custom entry in port list
+	int irq_index = 1; // index of currently-selected irq (default = 3)
+	int baud_index = 1; // index of currently-selected baud (default = 19200)
+	int initstr_index = 0; // index of currently-selected modem init (default = "ATZ")
 	int cwaitstr_index = CALL_WAIT_CUSTOM; // index of currently-selected call waiting (default = "")
-	int rc = 0;			       // -1 = user cancelled, 1 = New
-	int i;				       // loop counter
+	int rc = 0; // -1 = user cancelled, 1 = New
+	int i; // loop counter
 	int pos;
 	int len;
 	bool firsttime = true;
@@ -1808,43 +1831,80 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 	*/
 	GadgetClass *commands; // button list
 
-	EditClass port_edt(BUTTON_PORT, portbuf, PORTBUF_MAX, TPF_TEXT, d_port_x, d_port_y, d_port_w, d_port_h,
-			   EditClass::ALPHANUMERIC);
+	EditClass port_edt(BUTTON_PORT, portbuf, PORTBUF_MAX, TPF_TEXT, d_port_x, d_port_y, d_port_w, d_port_h, EditClass::ALPHANUMERIC);
 
-	ListClass portlist(BUTTON_PORTLIST, d_portlist_x, d_portlist_y, d_portlist_w, d_portlist_h, TPF_TEXT,
-			   MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass portlist(BUTTON_PORTLIST,
+			   d_portlist_x,
+			   d_portlist_y,
+			   d_portlist_w,
+			   d_portlist_h,
+			   TPF_TEXT,
+			   MFCD::Retrieve("BTN-UP.SHP"),
+			   MFCD::Retrieve("BTN-DN.SHP"));
 #ifndef WIN32
-	EditClass irq_edt(BUTTON_IRQ, irqbuf, IRQBUF_MAX, TPF_TEXT, d_irq_x, d_irq_y, d_irq_w, d_irq_h,
-			  EditClass::NUMERIC);
+	EditClass irq_edt(BUTTON_IRQ, irqbuf, IRQBUF_MAX, TPF_TEXT, d_irq_x, d_irq_y, d_irq_w, d_irq_h, EditClass::NUMERIC);
 
-	ListClass irqlist(BUTTON_IRQLIST, d_irqlist_x, d_irqlist_y, d_irqlist_w, d_irqlist_h, TPF_TEXT,
-			  MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass irqlist(BUTTON_IRQLIST,
+			  d_irqlist_x,
+			  d_irqlist_y,
+			  d_irqlist_w,
+			  d_irqlist_h,
+			  TPF_TEXT,
+			  MFCD::Retrieve("BTN-UP.SHP"),
+			  MFCD::Retrieve("BTN-DN.SHP"));
 #endif // WIN32
 
-	EditClass baud_edt(BUTTON_BAUD, baudbuf, BAUDBUF_MAX, TPF_TEXT, d_baud_x, d_baud_y, d_baud_w, d_baud_h,
-			   EditClass::NUMERIC);
-	ListClass baudlist(BUTTON_BAUDLIST, d_baudlist_x, d_baudlist_y, d_baudlist_w, d_baudlist_h, TPF_TEXT,
-			   MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
-	EditClass initstr_edt(BUTTON_INITSTR, initstrbuf, INITSTRBUF_MAX, TPF_TEXT, d_initstr_x, d_initstr_y,
-			      d_initstr_w, d_initstr_h, EditClass::ALPHANUMERIC);
-	ListClass initstrlist(BUTTON_INITSTRLIST, d_initstrlist_x, d_initstrlist_y, d_initstrlist_w, d_initstrlist_h,
-			      TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	EditClass baud_edt(BUTTON_BAUD, baudbuf, BAUDBUF_MAX, TPF_TEXT, d_baud_x, d_baud_y, d_baud_w, d_baud_h, EditClass::NUMERIC);
+	ListClass baudlist(BUTTON_BAUDLIST,
+			   d_baudlist_x,
+			   d_baudlist_y,
+			   d_baudlist_w,
+			   d_baudlist_h,
+			   TPF_TEXT,
+			   MFCD::Retrieve("BTN-UP.SHP"),
+			   MFCD::Retrieve("BTN-DN.SHP"));
+	EditClass initstr_edt(BUTTON_INITSTR,
+			      initstrbuf,
+			      INITSTRBUF_MAX,
+			      TPF_TEXT,
+			      d_initstr_x,
+			      d_initstr_y,
+			      d_initstr_w,
+			      d_initstr_h,
+			      EditClass::ALPHANUMERIC);
+	ListClass initstrlist(BUTTON_INITSTRLIST,
+			      d_initstrlist_x,
+			      d_initstrlist_y,
+			      d_initstrlist_w,
+			      d_initstrlist_h,
+			      TPF_TEXT,
+			      MFCD::Retrieve("BTN-UP.SHP"),
+			      MFCD::Retrieve("BTN-DN.SHP"));
 	TextButtonClass addbtn(BUTTON_ADD, TXT_ADD, TPF_BUTTON, d_add_x, d_add_y, d_add_w, d_add_h);
-	TextButtonClass deletebtn(BUTTON_DELETE, TXT_DELETE_BUTTON, TPF_BUTTON, d_delete_x, d_delete_y, d_delete_w,
-				  d_delete_h);
-	EditClass cwaitstr_edt(BUTTON_CWAITSTR, cwaitstrbuf, CWAITSTRBUF_MAX, TPF_TEXT, d_cwaitstr_x, d_cwaitstr_y,
-			       d_cwaitstr_w, d_cwaitstr_h, EditClass::ALPHANUMERIC);
-	ListClass cwaitstrlist(BUTTON_CWAITSTRLIST, d_cwaitstrlist_x, d_cwaitstrlist_y, d_cwaitstrlist_w,
-			       d_cwaitstrlist_h, TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	TextButtonClass deletebtn(BUTTON_DELETE, TXT_DELETE_BUTTON, TPF_BUTTON, d_delete_x, d_delete_y, d_delete_w, d_delete_h);
+	EditClass cwaitstr_edt(BUTTON_CWAITSTR,
+			       cwaitstrbuf,
+			       CWAITSTRBUF_MAX,
+			       TPF_TEXT,
+			       d_cwaitstr_x,
+			       d_cwaitstr_y,
+			       d_cwaitstr_w,
+			       d_cwaitstr_h,
+			       EditClass::ALPHANUMERIC);
+	ListClass cwaitstrlist(BUTTON_CWAITSTRLIST,
+			       d_cwaitstrlist_x,
+			       d_cwaitstrlist_y,
+			       d_cwaitstrlist_w,
+			       d_cwaitstrlist_h,
+			       TPF_TEXT,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"));
 	TextButtonClass tonebtn(BUTTON_TONE, TXT_TONE_BUTTON, TPF_BUTTON, d_tone_x, d_tone_y, d_tone_w, d_tone_h);
-	TextButtonClass pulsebtn(BUTTON_PULSE, TXT_PULSE_BUTTON, TPF_BUTTON, d_pulse_x, d_pulse_y, d_pulse_w,
-				 d_pulse_h);
+	TextButtonClass pulsebtn(BUTTON_PULSE, TXT_PULSE_BUTTON, TPF_BUTTON, d_pulse_x, d_pulse_y, d_pulse_w, d_pulse_h);
 	TextButtonClass savebtn(BUTTON_SAVE, TXT_SAVE_BUTTON, TPF_BUTTON, d_save_x, d_save_y, d_save_w, d_save_h);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 #ifdef WIN32
-	TextButtonClass advancedbutton(BUTTON_ADVANCED, TXT_ADVANCED, TPF_BUTTON, d_advanced_x, d_advanced_y,
-				       d_advanced_w, d_advanced_h);
+	TextButtonClass advancedbutton(BUTTON_ADVANCED, TXT_ADVANCED, TPF_BUTTON, d_advanced_x, d_advanced_y, d_advanced_w, d_advanced_h);
 #endif // WIN32
 	/*
 	** Various Inits
@@ -1862,7 +1922,7 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 	if (tempsettings.Baud == -1) {
 #ifdef WIN32
 		tempsettings.Baud = 19200;
-#else  // WIN32
+#else // WIN32
 		tempsettings.Baud = 9600;
 #endif // WIN32
 	}
@@ -1918,7 +1978,7 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 	} else {
 		baud_index = 4;
 	}
-#else  // WIN32
+#else // WIN32
 	if (tempsettings.Baud == 9600) {
 		baud_index = 0;
 	} else if (tempsettings.Baud == 14400) {
@@ -2169,20 +2229,30 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 				*/
 				Draw_Caption(TXT_SETTINGS, d_dialog_x, d_dialog_y, d_dialog_w);
 
-				Fancy_Text_Print(TXT_PORT_COLON, d_port_x - 3 * RESFACTOR, d_port_y + 1 * RESFACTOR,
-						 scheme, TBLACK, TPF_RIGHT | TPF_TEXT);
+				Fancy_Text_Print(TXT_PORT_COLON,
+						 d_port_x - 3 * RESFACTOR,
+						 d_port_y + 1 * RESFACTOR,
+						 scheme,
+						 TBLACK,
+						 TPF_RIGHT | TPF_TEXT);
 #ifndef WIN32
-				Fancy_Text_Print(TXT_IRQ_COLON, d_irq_x - 3 * RESFACTOR, d_irq_y + 1 * RESFACTOR,
-						 scheme, TBLACK, TPF_RIGHT | TPF_TEXT);
+				Fancy_Text_Print(TXT_IRQ_COLON,
+						 d_irq_x - 3 * RESFACTOR,
+						 d_irq_y + 1 * RESFACTOR,
+						 scheme,
+						 TBLACK,
+						 TPF_RIGHT | TPF_TEXT);
 #endif // WIN32
-				Fancy_Text_Print(TXT_BAUD_COLON, d_baud_x - 3 * RESFACTOR, d_baud_y + 1 * RESFACTOR,
-						 scheme, TBLACK, TPF_RIGHT | TPF_TEXT);
+				Fancy_Text_Print(TXT_BAUD_COLON,
+						 d_baud_x - 3 * RESFACTOR,
+						 d_baud_y + 1 * RESFACTOR,
+						 scheme,
+						 TBLACK,
+						 TPF_RIGHT | TPF_TEXT);
 
-				Fancy_Text_Print(TXT_INIT_STRING, d_initstr_x, d_initstr_y - d_txt6_h - 3 * RESFACTOR,
-						 scheme, TBLACK, TPF_TEXT);
+				Fancy_Text_Print(TXT_INIT_STRING, d_initstr_x, d_initstr_y - d_txt6_h - 3 * RESFACTOR, scheme, TBLACK, TPF_TEXT);
 
-				Fancy_Text_Print(TXT_CWAIT_STRING, d_cwaitstr_x,
-						 d_cwaitstr_y - d_txt6_h - 3 * RESFACTOR, scheme, TBLACK, TPF_TEXT);
+				Fancy_Text_Print(TXT_CWAIT_STRING, d_cwaitstr_x, d_cwaitstr_y - d_txt6_h - 3 * RESFACTOR, scheme, TBLACK, TPF_TEXT);
 			}
 
 			/*
@@ -2232,7 +2302,6 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 		** Process input
 		*/
 		switch (input) {
-
 #ifdef WIN32
 		case (BUTTON_ADVANCED | KN_BUTTON):
 			Advanced_Modem_Settings(&tempsettings);
@@ -2632,7 +2701,7 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 #ifdef WIN32
 					strncpy(tempsettings.ModemName, portbuf, MODEM_NAME_MAX);
 					tempsettings.Port = 1;
-#else  // WIN32
+#else // WIN32
 					sscanf(portbuf, "%x", &tempsettings.Port);
 					tempsettings.ModemName[0] = 0;
 #endif // WIN32
@@ -2694,7 +2763,7 @@ static int Com_Settings_Dialog(SerialSettingsType *settings) {
 			} else if (dpstatus == PORT_INVALID) {
 #ifdef WIN32
 				WWMessageBox().Process(TXT_UNABLE_TO_OPEN_PORT);
-#else  // WIN32
+#else // WIN32
 				WWMessageBox().Process(TXT_INVALID_SETTINGS);
 #endif // WIN32
 				firsttime = true;
@@ -2828,7 +2897,9 @@ static void Build_Init_String_Listbox(ListClass *list, EditClass *edit, char *bu
  * HISTORY:                                                                *
  *   06/08/1995 DRD : Created.                                             *
  *=========================================================================*/
-static int Init_String_Compare(const void *p1, const void *p2) { return (strcmp(*((char **)p1), *((char **)p2))); }
+static int Init_String_Compare(const void *p1, const void *p2) {
+	return (strcmp(*((char **)p1), *((char **)p2)));
+}
 
 /***********************************************************************************************
  * Com_Scenario_Dialog -- Serial game scenario selection dialog
@@ -2851,15 +2922,15 @@ int Com_Scenario_Dialog(bool skirmish) {
 	/*........................................................................
 	Dialog & button dimensions
 	........................................................................*/
-	int d_dialog_w = 320 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 200 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 320 * RESFACTOR; // dialog width
+	int d_dialog_h = 200 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // dialog y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 6 * RESFACTOR + 1; // ht of 6-pt text
-	int d_margin1 = 5 * RESFACTOR;	  // margin width/height
-	int d_margin2 = 7 * RESFACTOR;	  // margin width/height
+	int d_margin1 = 5 * RESFACTOR; // margin width/height
+	int d_margin2 = 7 * RESFACTOR; // margin width/height
 
 	int d_name_w = 70 * RESFACTOR;
 	int d_name_h = 9 * RESFACTOR;
@@ -3002,23 +3073,23 @@ int Com_Scenario_Dialog(bool skirmish) {
 	Dialog variables
 	........................................................................*/
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 
-	int playertabs[] = {77 * RESFACTOR};  // tabs for player list box
-	int optiontabs[] = {8};		      // tabs for player list box
-	char namebuf[MPLAYER_NAME_MAX] = {0}; // buffer for player's name
-	bool transmit;			      // 1 = re-transmit new game options
-	int cbox_x[] = {d_color_x,
-			d_color_x + d_color_w,
-			d_color_x + (d_color_w * 2),
-			d_color_x + (d_color_w * 3),
-			d_color_x + (d_color_w * 4),
-			d_color_x + (d_color_w * 5),
-			d_color_x + (d_color_w * 6),
-			d_color_x + (d_color_w * 7)};
+	int playertabs[] = { 77 * RESFACTOR }; // tabs for player list box
+	int optiontabs[] = { 8 }; // tabs for player list box
+	char namebuf[MPLAYER_NAME_MAX] = { 0 }; // buffer for player's name
+	bool transmit; // 1 = re-transmit new game options
+	int cbox_x[] = { d_color_x,
+			 d_color_x + d_color_w,
+			 d_color_x + (d_color_w * 2),
+			 d_color_x + (d_color_w * 3),
+			 d_color_x + (d_color_w * 4),
+			 d_color_x + (d_color_w * 5),
+			 d_color_x + (d_color_w * 6),
+			 d_color_x + (d_color_w * 7) };
 	bool parms_received = false; // 1 = game options received
-	bool changed = false;	     // 1 = user has changed an option
+	bool changed = false; // 1 = user has changed an option
 
 	int rc;
 	int recsignedoff = false;
@@ -3034,20 +3105,20 @@ int Com_Scenario_Dialog(bool skirmish) {
 	static bool first_time = true;
 	bool oppscorescreen = false;
 	bool gameoptions = Session.Type == GAME_SKIRMISH;
-	EventClass *event;		  // event ptr
+	EventClass *event; // event ptr
 	unsigned long msg_timeout = 1200; // init to 20 seconds
 
 	CCFileClass loadfile("SAVEGAME.NET");
 	bool load_game = false; // 1 = load a saved game
-	NodeNameType *who;	// node to add to Players
-	char *item;		// for filling in lists
+	NodeNameType *who; // node to add to Players
+	char *item; // for filling in lists
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 	bool messages_have_focus = true; // Gadget focus starts on the message system
 
 	Set_Logic_Page(SeenBuff);
 
 	CDTimerClass<SystemTimerClass> kludge_timer; // Timer to allow a wait after client joins
-						     // game before game can start
+		// game before game can start
 	bool ok_button_added = false;
 
 	/*........................................................................
@@ -3055,8 +3126,7 @@ int Com_Scenario_Dialog(bool skirmish) {
 	........................................................................*/
 	GadgetClass *commands; // button list
 
-	EditClass name_edt(BUTTON_NAME, namebuf, MPLAYER_NAME_MAX, TPF_TEXT, d_name_x, d_name_y, d_name_w, d_name_h,
-			   EditClass::ALPHANUMERIC);
+	EditClass name_edt(BUTTON_NAME, namebuf, MPLAYER_NAME_MAX, TPF_TEXT, d_name_x, d_name_y, d_name_w, d_name_h, EditClass::ALPHANUMERIC);
 
 #ifdef OLDWAY
 	TextButtonClass gdibtn(BUTTON_GDI, TXT_ALLIES, TPF_BUTTON, d_gdi_x, d_gdi_y, d_gdi_w, d_gdi_h);
@@ -3064,13 +3134,33 @@ int Com_Scenario_Dialog(bool skirmish) {
 #else
 	char housetext[25] = "";
 	Fancy_Text_Print("", 0, 0, 0, 0, TPF_TEXT);
-	DropListClass housebtn(BUTTON_HOUSE, housetext, sizeof(housetext), TPF_TEXT, d_house_x, d_house_y, d_house_w,
-			       d_house_h, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	DropListClass housebtn(BUTTON_HOUSE,
+			       housetext,
+			       sizeof(housetext),
+			       TPF_TEXT,
+			       d_house_x,
+			       d_house_y,
+			       d_house_w,
+			       d_house_h,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"));
 #endif
-	ColorListClass playerlist(BUTTON_PLAYERLIST, d_playerlist_x, d_playerlist_y, d_playerlist_w, d_playerlist_h,
-				  TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
-	ListClass scenariolist(BUTTON_SCENARIOLIST, d_scenariolist_x, d_scenariolist_y, d_scenariolist_w,
-			       d_scenariolist_h, TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ColorListClass playerlist(BUTTON_PLAYERLIST,
+				  d_playerlist_x,
+				  d_playerlist_y,
+				  d_playerlist_w,
+				  d_playerlist_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass scenariolist(BUTTON_SCENARIOLIST,
+			       d_scenariolist_x,
+			       d_scenariolist_y,
+			       d_scenariolist_w,
+			       d_scenariolist_h,
+			       TPF_TEXT,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"));
 	GaugeClass countgauge(BUTTON_COUNT, d_count_x, d_count_y, d_count_w, d_count_h);
 
 	char staticcountbuff[35];
@@ -3084,23 +3174,31 @@ int Com_Scenario_Dialog(bool skirmish) {
 	GaugeClass creditsgauge(BUTTON_CREDITS, d_credits_x, d_credits_y, d_credits_w, d_credits_h);
 
 	char staticcreditsbuff[35];
-	StaticButtonClass staticcredits(0, "         ", TPF_TEXT, d_credits_x + d_credits_w + 3 * RESFACTOR,
-					d_credits_y);
+	StaticButtonClass staticcredits(0, "         ", TPF_TEXT, d_credits_x + d_credits_w + 3 * RESFACTOR, d_credits_y);
 
 	GaugeClass aiplayersgauge(BUTTON_AIPLAYERS, d_aiplayers_x, d_aiplayers_y, d_aiplayers_w, d_aiplayers_h);
 
 	char staticaibuff[35];
 	StaticButtonClass staticai(0, "     ", TPF_TEXT, d_aiplayers_x + d_aiplayers_w + 3 * RESFACTOR, d_aiplayers_y);
 
-	CheckListClass optionlist(BUTTON_OPTIONS, d_options_x, d_options_y, d_options_w, d_options_h, TPF_TEXT,
-				  MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	CheckListClass optionlist(BUTTON_OPTIONS,
+				  d_options_x,
+				  d_options_y,
+				  d_options_w,
+				  d_options_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
 	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_BUTTON, d_ok_x, d_ok_y, d_ok_w, d_ok_h);
 	TextButtonClass loadbtn(BUTTON_LOAD, TXT_LOAD_BUTTON, TPF_BUTTON, d_load_x, d_load_y, d_load_w, d_load_h);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 
-	SliderClass difficulty(BUTTON_DIFFICULTY, d_name_x, optionlist.Y + optionlist.Height + d_margin1 + d_margin1,
-			       d_dialog_w - (d_name_x - d_dialog_x) * 2, 8 * RESFACTOR, true);
+	SliderClass difficulty(BUTTON_DIFFICULTY,
+			       d_name_x,
+			       optionlist.Y + optionlist.Height + d_margin1 + d_margin1,
+			       d_dialog_w - (d_name_x - d_dialog_x) * 2,
+			       8 * RESFACTOR,
+			       true);
 	if (Rule.IsFineDifficulty) {
 		difficulty.Set_Maximum(5);
 		difficulty.Set_Value(2);
@@ -3154,10 +3252,9 @@ int Com_Scenario_Dialog(bool skirmish) {
 	Init player name & house
 	........................................................................*/
 	Session.ColorIdx = Session.PrefColor; // init my preferred color
-	strcpy(namebuf, Session.Handle);      // set my name
+	strcpy(namebuf, Session.Handle); // set my name
 	name_edt.Set_Text(namebuf, MPLAYER_NAME_MAX);
-	name_edt.Set_Color(
-	    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx]);
+	name_edt.Set_Color(&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx]);
 
 #ifdef OLDWAY
 	if (Session.House == HOUSE_GOOD) {
@@ -3179,13 +3276,12 @@ int Com_Scenario_Dialog(bool skirmish) {
 	Special.IsCaptureTheFlag = Rule.IsMPCaptureTheFlag;
 	if (first_time) {
 		Session.Options.Credits = Rule.MPDefaultMoney; // init credits & credit buffer
-		Session.Options.Bases = Rule.IsMPBasesOn;      // init scenario parameters
+		Session.Options.Bases = Rule.IsMPBasesOn; // init scenario parameters
 		Session.Options.Tiberium = Rule.IsMPTiberiumGrow;
 		Session.Options.Goodies = Rule.IsMPCrates;
 		Session.Options.AIPlayers = 0;
 		Special.IsShadowGrow = Rule.IsMPShadowGrow;
-		Session.Options.UnitCount =
-		    (SessionClass::CountMax[Session.Options.Bases] + SessionClass::CountMin[Session.Options.Bases]) / 2;
+		Session.Options.UnitCount = (SessionClass::CountMax[Session.Options.Bases] + SessionClass::CountMin[Session.Options.Bases]) / 2;
 		first_time = false;
 	}
 
@@ -3214,8 +3310,7 @@ int Com_Scenario_Dialog(bool skirmish) {
 		optionlist.Check_Item(4, Special.IsCaptureTheFlag);
 	}
 
-	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
-			       SessionClass::CountMin[Session.Options.Bases]);
+	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] - SessionClass::CountMin[Session.Options.Bases]);
 	countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 
 	levelgauge.Set_Maximum(MPLAYER_BUILD_LEVEL_MAX - 1);
@@ -3244,10 +3339,10 @@ int Com_Scenario_Dialog(bool skirmish) {
 	/*........................................................................
 	Init other scenario parameters
 	........................................................................*/
-	Special.IsTGrowth =	// Session.Options.Tiberium;
-	    Rule.IsTGrowth =	// Session.Options.Tiberium;
-	    Special.IsTSpread = // Session.Options.Tiberium;
-	    Rule.IsTSpread = Session.Options.Tiberium;
+	Special.IsTGrowth = // Session.Options.Tiberium;
+		Rule.IsTGrowth = // Session.Options.Tiberium;
+		Special.IsTSpread = // Session.Options.Tiberium;
+		Rule.IsTSpread = Session.Options.Tiberium;
 	transmit = true;
 
 	/*........................................................................
@@ -3261,12 +3356,10 @@ int Com_Scenario_Dialog(bool skirmish) {
 	for (i = 0; i < Session.Scenarios.Count(); i++) {
 		for (int j = 0; EngMisStr[j] != NULL; j++) {
 			if (!strcmp(Session.Scenarios[i]->Description(), EngMisStr[j])) {
-#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed).
-		  //	Add mission if it's available to us.
-				if (!((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) &&
-				       !Is_Counterstrike_Installed()) ||
-				      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) &&
-				       !Is_Aftermath_Installed())))
+#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed).                                                                  \
+	//	Add mission if it's available to us.
+				if (!((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Counterstrike_Installed()) ||
+				      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Aftermath_Installed())))
 #endif
 #if defined(GERMAN) || defined(FRENCH)
 					scenariolist.Add_Item(EngMisStr[j + 1]);
@@ -3277,13 +3370,11 @@ int Com_Scenario_Dialog(bool skirmish) {
 			}
 		}
 		if (EngMisStr[j] == NULL) {
-#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed). Added officialness check.
-		  //	Add mission if it's available to us.
+#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed). Added officialness check.                                        \
+	//	Add mission if it's available to us.
 			if (!Session.Scenarios[i]->Get_Official() ||
-			    !((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) &&
-			       !Is_Counterstrike_Installed()) ||
-			      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) &&
-			       !Is_Aftermath_Installed())))
+			    !((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Counterstrike_Installed()) ||
+			      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Aftermath_Installed())))
 #endif
 				scenariolist.Add_Item(Session.Scenarios[i]->Description());
 		}
@@ -3307,11 +3398,22 @@ int Com_Scenario_Dialog(bool skirmish) {
 	Init the message display system
 	........................................................................*/
 	if (!skirmish) {
-		Session.Messages.Init(d_message_x + 1, d_message_y + 1, 8, MAX_MESSAGE_LENGTH, d_txt6_h, d_send_x + 1,
-				      d_send_y + 1, 1, 20, MAX_MESSAGE_LENGTH - 5, d_message_w);
-		Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-										   : Session.ColorIdx,
-					  TPF_TEXT, NULL, '_', d_message_w);
+		Session.Messages.Init(d_message_x + 1,
+				      d_message_y + 1,
+				      8,
+				      MAX_MESSAGE_LENGTH,
+				      d_txt6_h,
+				      d_send_x + 1,
+				      d_send_y + 1,
+				      1,
+				      20,
+				      MAX_MESSAGE_LENGTH - 5,
+				      d_message_w);
+		Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+					  TPF_TEXT,
+					  NULL,
+					  '_',
+					  d_message_w);
 	}
 
 	/*........................................................................
@@ -3443,41 +3545,60 @@ oh_dear_its_a_label:
 				/*...............................................................
 				Dialog & Field labels
 				...............................................................*/
-				Fancy_Text_Print(TXT_YOUR_NAME, d_name_x + (d_name_w / 2), d_name_y - d_txt6_h, scheme,
-						 TBLACK, TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_YOUR_NAME, d_name_x + (d_name_w / 2), d_name_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 #ifdef OLDWAY
-				Fancy_Text_Print(TXT_SIDE_COLON, d_gdi_x + d_gdi_w, d_gdi_y - d_txt6_h, scheme, TBLACK,
-						 TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_SIDE_COLON, d_gdi_x + d_gdi_w, d_gdi_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 #else
-				Fancy_Text_Print(TXT_SIDE_COLON, d_house_x + (d_house_w / 2), d_house_y - d_txt6_h,
-						 scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_SIDE_COLON,
+						 d_house_x + (d_house_w / 2),
+						 d_house_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
 #endif
-				Fancy_Text_Print(TXT_COLOR_COLON, d_dialog_x + ((d_dialog_w / 4) * 3),
-						 d_color_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_COLOR_COLON,
+						 d_dialog_x + ((d_dialog_w / 4) * 3),
+						 d_color_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
 				if (!skirmish) {
-					Fancy_Text_Print(TXT_PLAYERS, d_playerlist_x + (d_playerlist_w / 2),
-							 d_playerlist_y - d_txt6_h, scheme, TBLACK,
+					Fancy_Text_Print(TXT_PLAYERS,
+							 d_playerlist_x + (d_playerlist_w / 2),
+							 d_playerlist_y - d_txt6_h,
+							 scheme,
+							 TBLACK,
 							 TPF_CENTER | TPF_TEXT);
 				} else {
-					Fancy_Text_Print(TXT_EASY, difficulty.X, difficulty.Y - 8 * RESFACTOR, scheme,
-							 TBLACK, TPF_TEXT);
-					Fancy_Text_Print(TXT_HARD, difficulty.X + difficulty.Width,
-							 difficulty.Y - 8 * RESFACTOR, scheme, TBLACK,
+					Fancy_Text_Print(TXT_EASY, difficulty.X, difficulty.Y - 8 * RESFACTOR, scheme, TBLACK, TPF_TEXT);
+					Fancy_Text_Print(TXT_HARD,
+							 difficulty.X + difficulty.Width,
+							 difficulty.Y - 8 * RESFACTOR,
+							 scheme,
+							 TBLACK,
 							 TPF_RIGHT | TPF_TEXT);
-					Fancy_Text_Print(TXT_NORMAL, difficulty.X + difficulty.Width / 2,
-							 difficulty.Y - 8 * RESFACTOR, scheme, TBLACK,
+					Fancy_Text_Print(TXT_NORMAL,
+							 difficulty.X + difficulty.Width / 2,
+							 difficulty.Y - 8 * RESFACTOR,
+							 scheme,
+							 TBLACK,
 							 TPF_CENTER | TPF_TEXT);
 				}
-				Fancy_Text_Print(TXT_SCENARIOS, d_scenariolist_x + (d_scenariolist_w / 2),
-						 d_scenariolist_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
-				Fancy_Text_Print(TXT_COUNT, d_count_x - 2, d_count_y, scheme, TBLACK,
+				Fancy_Text_Print(TXT_SCENARIOS,
+						 d_scenariolist_x + (d_scenariolist_w / 2),
+						 d_scenariolist_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_COUNT, d_count_x - 2, d_count_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2, d_level_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2, d_credits_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_AI_PLAYERS_COLON,
+						 d_aiplayers_x - 2 * RESFACTOR,
+						 d_aiplayers_y,
+						 scheme,
+						 TBLACK,
 						 TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2, d_level_y, scheme, TBLACK,
-						 TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2, d_credits_y, scheme, TBLACK,
-						 TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_AI_PLAYERS_COLON, d_aiplayers_x - 2 * RESFACTOR, d_aiplayers_y,
-						 scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
 			}
 
 			/*..................................................................
@@ -3485,18 +3606,18 @@ oh_dear_its_a_label:
 			..................................................................*/
 			if (display >= REDRAW_COLORS) {
 				for (i = 0; i < MAX_MPLAYER_COLORS; i++) {
-					LogicPage->Fill_Rect(cbox_x[i] + 1, d_color_y + 1,
+					LogicPage->Fill_Rect(cbox_x[i] + 1,
+							     d_color_y + 1,
 							     cbox_x[i] + 1 + d_color_w - 2,
-							     d_color_y + 1 + d_color_h - 2, ColorRemaps[i].Box);
+							     d_color_y + 1 + d_color_h - 2,
+							     ColorRemaps[i].Box);
 					//						(i == PCOLOR_DIALOG_BLUE) ?
 					// ColorRemaps[PCOLOR_REALLY_BLUE].Box : ColorRemaps[i].Box);
 
 					if (i == Session.ColorIdx) {
-						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_DOWN,
-							 false);
+						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_DOWN, false);
 					} else {
-						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_RAISED,
-							 false);
+						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_RAISED, false);
 					}
 				}
 			}
@@ -3514,7 +3635,6 @@ oh_dear_its_a_label:
 			// Update game parameter labels
 			//..................................................................
 			if (display >= REDRAW_PARMS) {
-
 				//				LogicPage->Fill_Rect(d_count_x + d_count_w + 2,
 				// d_count_y, d_count_x + d_count_w + 35 * RESFACTOR, d_aiplayers_y +
 				// d_aiplayers_h+RESFACTOR, BLACK);
@@ -3603,21 +3723,16 @@ oh_dear_its_a_label:
 		User clicks on a color button
 		------------------------------------------------------------------*/
 		case KN_LMOUSE:
-			if (Keyboard->MouseQX > cbox_x[0] &&
-			    Keyboard->MouseQX < (cbox_x[MAX_MPLAYER_COLORS - 1] + d_color_w) &&
+			if (Keyboard->MouseQX > cbox_x[0] && Keyboard->MouseQX < (cbox_x[MAX_MPLAYER_COLORS - 1] + d_color_w) &&
 			    Keyboard->MouseQY > d_color_y && Keyboard->MouseQY < (d_color_y + d_color_h)) {
-
 				Session.PrefColor = (PlayerColorType)((Keyboard->MouseQX - cbox_x[0]) / d_color_w);
 				Session.ColorIdx = Session.PrefColor;
 				if (display < REDRAW_COLORS)
 					display = REDRAW_COLORS;
 
-				name_edt.Set_Color(
-				    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-											  : Session.ColorIdx]);
+				name_edt.Set_Color(&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx]);
 				name_edt.Flag_To_Redraw();
-				Session.Messages.Set_Edit_Color(
-				    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx);
+				Session.Messages.Set_Edit_Color((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx);
 				strcpy(Session.Handle, namebuf);
 				transmit = true;
 				changed = true;
@@ -3685,11 +3800,11 @@ oh_dear_its_a_label:
 			}
 			break;
 
-#else		  //	FIXIT_VERSION_3		Whoever duplicated Netdlg into Nulldlg should be shot. Wasn't it enough?
+#else //	FIXIT_VERSION_3		Whoever duplicated Netdlg into Nulldlg should be shot. Wasn't it enough?
 
 		Abandon all hope ye who hit enter here.
 
-		    case (BUTTON_SCENARIOLIST | KN_BUTTON):
+			case (BUTTON_SCENARIOLIST | KN_BUTTON):
 			if (housebtn.IsDropped) {
 				housebtn.Collapse();
 				display = REDRAW_BACKGROUND;
@@ -3697,26 +3812,22 @@ oh_dear_its_a_label:
 			if (scenariolist.Current_Index() != Session.Options.ScenarioIndex) {
 #ifdef FIXIT_CSII //	checked - ajw
 				if (!skirmish &&
-				    (PlayingAgainstVersion != VERSION_RED_ALERT_107 &&
-				     PlayingAgainstVersion != VERSION_RED_ALERT_108 &&
+				    (PlayingAgainstVersion != VERSION_RED_ALERT_107 && PlayingAgainstVersion != VERSION_RED_ALERT_108 &&
 				     PlayingAgainstVersion < VERSION_AFTERMATH_CS) &&
 #else
 				if (!skirmish && PlayingAgainstVersion < VERSION_RED_ALERT_107 &&
 #endif
 				    Session.Scenarios[scenariolist.Current_Index()]->Get_Expansion()) {
 					scenariolist.Set_Selected_Index(Session.Options.ScenarioIndex);
-					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS),
-								     PCOLOR_BROWN, TPF_TEXT, 1200);
+					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS), PCOLOR_BROWN, TPF_TEXT, 1200);
 					Sound_Effect(VOC_SYS_ERROR);
 					if (display < REDRAW_MESSAGE)
 						display = REDRAW_MESSAGE;
 #ifdef FIXIT_CSII //	checked - ajw
 				} else if (!skirmish && PlayingAgainstVersion < VERSION_AFTERMATH_CS &&
-					   Is_Mission_126x126((char *)Session.Scenarios[scenariolist.Current_Index()]
-								  ->Get_Filename())) {
+					   Is_Mission_126x126((char *)Session.Scenarios[scenariolist.Current_Index()]->Get_Filename())) {
 					scenariolist.Set_Selected_Index(Session.Options.ScenarioIndex);
-					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS),
-								     PCOLOR_BROWN, TPF_TEXT, 1200);
+					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS), PCOLOR_BROWN, TPF_TEXT, 1200);
 					Sound_Effect(VOC_SYS_ERROR);
 					if (display < REDRAW_MESSAGE)
 						display = REDRAW_MESSAGE;
@@ -3736,8 +3847,7 @@ oh_dear_its_a_label:
 		User adjusts max # units
 		------------------------------------------------------------------*/
 		case (BUTTON_COUNT | KN_BUTTON):
-			Session.Options.UnitCount =
-			    countgauge.Get_Value() + SessionClass::CountMin[Session.Options.Bases];
+			Session.Options.UnitCount = countgauge.Get_Value() + SessionClass::CountMin[Session.Options.Bases];
 			if (display < REDRAW_PARMS)
 				display = REDRAW_PARMS;
 			if (housebtn.IsDropped) {
@@ -3786,10 +3896,10 @@ oh_dear_its_a_label:
 			int humans = 2; // Two humans.
 			if (skirmish) {
 				Session.Options.AIPlayers += 1; // Always one forced AI player.
-				humans = 1;			// One human.
-								//						if (Session.Options.AIPlayers ==
-					    //0) { 							Session.Options.AIPlayers = 1; 							aiplayersgauge.Set_Value(0);
-					    //						}
+				humans = 1; // One human.
+					//						if (Session.Options.AIPlayers ==
+				//0) { 							Session.Options.AIPlayers = 1; 							aiplayersgauge.Set_Value(0);
+				//						}
 			}
 			if (Session.Options.AIPlayers + humans >= Rule.MaxPlayers) { // if it's pegged, max it out
 				Session.Options.AIPlayers = Rule.MaxPlayers - humans;
@@ -3815,35 +3925,28 @@ oh_dear_its_a_label:
 		// in SpecialClass.
 		//------------------------------------------------------------------
 		case (BUTTON_OPTIONS | KN_BUTTON):
-			if (!skirmish && Special.IsCaptureTheFlag != optionlist.Is_Checked(4) &&
-			    !Special.IsCaptureTheFlag) {
+			if (!skirmish && Special.IsCaptureTheFlag != optionlist.Is_Checked(4) && !Special.IsCaptureTheFlag) {
 				optionlist.Check_Item(0, true);
 			}
 			if (Session.Options.Bases != optionlist.Is_Checked(0)) {
 				Session.Options.Bases = optionlist.Is_Checked(0);
 				if (Session.Options.Bases) {
 					Session.Options.UnitCount =
-					    Fixed_To_Cardinal(
-						SessionClass::CountMax[1] - SessionClass::CountMin[1],
-						Cardinal_To_Fixed(SessionClass::CountMax[0] - SessionClass::CountMin[0],
-								  Session.Options.UnitCount -
-								      SessionClass::CountMin[0])) +
-					    SessionClass::CountMin[1];
+						Fixed_To_Cardinal(SessionClass::CountMax[1] - SessionClass::CountMin[1],
+								  Cardinal_To_Fixed(SessionClass::CountMax[0] - SessionClass::CountMin[0],
+										    Session.Options.UnitCount - SessionClass::CountMin[0])) +
+						SessionClass::CountMin[1];
 				} else {
 					if (!skirmish)
 						optionlist.Check_Item(4, false);
 					Session.Options.UnitCount =
-					    Fixed_To_Cardinal(
-						SessionClass::CountMax[0] - SessionClass::CountMin[0],
-						Cardinal_To_Fixed(SessionClass::CountMax[1] - SessionClass::CountMin[1],
-								  Session.Options.UnitCount -
-								      SessionClass::CountMin[1])) +
-					    SessionClass::CountMin[0];
+						Fixed_To_Cardinal(SessionClass::CountMax[0] - SessionClass::CountMin[0],
+								  Cardinal_To_Fixed(SessionClass::CountMax[1] - SessionClass::CountMin[1],
+										    Session.Options.UnitCount - SessionClass::CountMin[1])) +
+						SessionClass::CountMin[0];
 				}
-				countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
-						       SessionClass::CountMin[Session.Options.Bases]);
-				countgauge.Set_Value(Session.Options.UnitCount -
-						     SessionClass::CountMin[Session.Options.Bases]);
+				countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] - SessionClass::CountMin[Session.Options.Bases]);
+				countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 			}
 			Session.Options.Tiberium = optionlist.Is_Checked(1);
 			Special.IsTGrowth = Session.Options.Tiberium;
@@ -3966,15 +4069,17 @@ oh_dear_its_a_label:
 					/*..................................................................
 					Add the message to our own screen
 					..................................................................*/
-					Session.Messages.Add_Message(
-					    SendPacket.Name, SendPacket.ID, SendPacket.Message.Message,
-					    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-										     : Session.ColorIdx,
-					    TPF_TEXT, -1);
-					Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE)
-								      ? PCOLOR_REALLY_BLUE
-								      : Session.ColorIdx,
-								  TPF_TEXT, NULL, '_', d_message_w);
+					Session.Messages.Add_Message(SendPacket.Name,
+								     SendPacket.ID,
+								     SendPacket.Message.Message,
+								     (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+								     TPF_TEXT,
+								     -1);
+					Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+								  TPF_TEXT,
+								  NULL,
+								  '_',
+								  d_message_w);
 
 					if (display < REDRAW_MESSAGE)
 						display = REDRAW_MESSAGE;
@@ -4027,15 +4132,13 @@ oh_dear_its_a_label:
 			** Set up the scenario info so the remote player can match the scenario on his machine
 			** or request a download if it doesnt exist
 			*/
-			strcpy(SendPacket.ScenarioInfo.Scenario,
-			       Session.Scenarios[Session.Options.ScenarioIndex]->Description());
+			strcpy(SendPacket.ScenarioInfo.Scenario, Session.Scenarios[Session.Options.ScenarioIndex]->Description());
 			CCFileClass file(Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
 
 			SendPacket.ScenarioInfo.FileLength = file.Size();
 
 #ifdef WOLAPI_INTEGRATION
-			strcpy(SendPacket.ScenarioInfo.ShortFileName,
-			       Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
+			strcpy(SendPacket.ScenarioInfo.ShortFileName, Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
 #else
 			strncpy(SendPacket.ScenarioInfo.ShortFileName,
 				Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename(),
@@ -4044,8 +4147,7 @@ oh_dear_its_a_label:
 			strncpy((char *)SendPacket.ScenarioInfo.FileDigest,
 				Session.Scenarios[Session.Options.ScenarioIndex]->Get_Digest(),
 				sizeof SendPacket.ScenarioInfo.FileDigest);
-			SendPacket.ScenarioInfo.OfficialScenario =
-			    Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
+			SendPacket.ScenarioInfo.OfficialScenario = Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
 			NullModem.Send_Message(&SendPacket, sizeof(SendPacket), 1);
 
 			transmittime = TickCount;
@@ -4062,13 +4164,10 @@ oh_dear_its_a_label:
 				} else {
 					sprintf(item, "%s\t%s", namebuf, Text_String(TXT_SOVIET));
 				}
-#else  // OLDWAY
-				sprintf(item, "%s\t%s", namebuf,
-					Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
+#else // OLDWAY
+				sprintf(item, "%s\t%s", namebuf, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-				playerlist.Colors[0] =
-				    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-											  : Session.ColorIdx];
+				playerlist.Colors[0] = &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx];
 				playerlist.Flag_To_Redraw();
 			}
 
@@ -4095,16 +4194,14 @@ oh_dear_its_a_label:
 		Check for an incoming message
 		---------------------------------------------------------------------*/
 		if (!skirmish && NullModem.Get_Message(&ReceivePacket, &packetlen) > 0) {
-
 			lastmsgtime = TickCount;
 			msg_timeout = 600; // reset timeout value to 10 seconds
-					   // (only the 1st time through is 20 seconds)
+				// (only the 1st time through is 20 seconds)
 
 			// are we getting our own packets back??
 
 			if (ReceivePacket.Command >= SERIAL_CONNECT && ReceivePacket.Command < SERIAL_LAST_COMMAND &&
 			    ReceivePacket.Command != SERIAL_MESSAGE && ReceivePacket.ID == Session.ModemType) {
-
 				WWMessageBox().Process(TXT_SYSTEM_NOT_RESPONDING);
 
 				// to skip the other system not responding msg
@@ -4169,8 +4266,7 @@ oh_dear_its_a_label:
 					//.........................................................
 					// "Clip" the other system's version range to our own
 					// ........................................................
-					version = VerNum.Clip_Version(ReceivePacket.ScenarioInfo.MinVersion,
-								      ReceivePacket.ScenarioInfo.MaxVersion);
+					version = VerNum.Clip_Version(ReceivePacket.ScenarioInfo.MinVersion, ReceivePacket.ScenarioInfo.MaxVersion);
 					// ........................................................
 					// If the greatest-common-version comes back 0, the other
 					// system's range is too low for ours
@@ -4196,7 +4292,6 @@ oh_dear_its_a_label:
 						process = false;
 						rc = false;
 					} else {
-
 						if (ReceivePacket.ScenarioInfo.CheatCheck != RuleINI.Get_Unique_ID()) {
 							WWMessageBox().Process(TXT_MISMATCH);
 
@@ -4207,7 +4302,6 @@ oh_dear_its_a_label:
 							rc = false;
 
 						} else {
-
 							// ........................................................
 							// Otherwise, 'version' is the highest version we have in
 							// common; look up the protocol that goes with this version.
@@ -4226,11 +4320,9 @@ oh_dear_its_a_label:
 						//......................................................
 						// Add two strings to the player list
 						//......................................................
-						item = new char[MPLAYER_NAME_MAX +
-								64]; // Need room to display country name
+						item = new char[MPLAYER_NAME_MAX + 64]; // Need room to display country name
 						playerlist.Add_Item(item, &ColorRemaps[Session.ColorIdx]);
-						item = new char[MPLAYER_NAME_MAX +
-								64]; // Need room to display country name
+						item = new char[MPLAYER_NAME_MAX + 64]; // Need room to display country name
 						playerlist.Add_Item(item, &ColorRemaps[TheirColor]);
 					}
 
@@ -4246,13 +4338,11 @@ oh_dear_its_a_label:
 					} else {
 						sprintf(item, "%s\t%s", namebuf, Text_String(TXT_SOVIET));
 					}
-#else  // OLDWAY
-					sprintf(item, "%s\t%s", namebuf,
-						Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
+#else // OLDWAY
+					sprintf(item, "%s\t%s", namebuf, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
 					playerlist.Colors[0] =
-					    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												  : Session.ColorIdx];
+						&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx];
 
 					item = (char *)playerlist.Get_Item(1);
 #ifdef OLDWAY
@@ -4261,13 +4351,10 @@ oh_dear_its_a_label:
 					} else {
 						sprintf(item, "%s\t%s", TheirName, Text_String(TXT_SOVIET));
 					}
-#else  // OLDWAY
-					sprintf(item, "%s\t%s", TheirName,
-						Text_String(HouseTypeClass::As_Reference(TheirHouse).Full_Name()));
+#else // OLDWAY
+					sprintf(item, "%s\t%s", TheirName, Text_String(HouseTypeClass::As_Reference(TheirHouse).Full_Name()));
 #endif // OLDWAY
-					playerlist.Colors[1] =
-					    &ColorRemaps[(TheirColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-											    : TheirColor];
+					playerlist.Colors[1] = &ColorRemaps[(TheirColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : TheirColor];
 
 					playerlist.Flag_To_Redraw();
 
@@ -4285,15 +4372,14 @@ oh_dear_its_a_label:
 					oppscorescreen = false;
 
 					Session.Messages.Add_Message(
-					    ReceivePacket.Name,
-					    ((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE)
-						? PCOLOR_REALLY_BLUE
-						: (PlayerColorType)ReceivePacket.ID,
-					    ReceivePacket.Message.Message,
-					    ((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE)
-						? PCOLOR_REALLY_BLUE
-						: (PlayerColorType)ReceivePacket.ID,
-					    TPF_TEXT, -1);
+						ReceivePacket.Name,
+						((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+													    (PlayerColorType)ReceivePacket.ID,
+						ReceivePacket.Message.Message,
+						((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+													    (PlayerColorType)ReceivePacket.ID,
+						TPF_TEXT,
+						-1);
 
 					Sound_Effect(VOC_INCOMING_MESSAGE);
 					if (display < REDRAW_MESSAGE)
@@ -4309,7 +4395,6 @@ oh_dear_its_a_label:
 					theirresponsetime = ReceivePacket.ScenarioInfo.ResponseTime;
 
 					if (!gameoptions) {
-
 						// retransmit of game options packet again
 						transmit = true;
 					}
@@ -4456,10 +4541,9 @@ oh_dear_its_a_label:
 		if (!skirmish) {
 			if (Session.CommProtocol == COMM_PROTOCOL_MULTI_E_COMP) {
 				Session.MaxAhead =
-				    max(((((SendPacket.ScenarioInfo.ResponseTime / 8) + (Session.FrameSendRate - 1)) /
-					  Session.FrameSendRate) *
-					 Session.FrameSendRate),
-					(Session.FrameSendRate * 2));
+					max(((((SendPacket.ScenarioInfo.ResponseTime / 8) + (Session.FrameSendRate - 1)) / Session.FrameSendRate) *
+					     Session.FrameSendRate),
+					    (Session.FrameSendRate * 2));
 			} else {
 				Session.MaxAhead = max((SendPacket.ScenarioInfo.ResponseTime / 8), MODEM_MIN_MAX_AHEAD);
 			}
@@ -4469,8 +4553,7 @@ oh_dear_its_a_label:
 		if (!skirmish) {
 			NullModem.Send_Message(&SendPacket, sizeof(SendPacket), 1);
 			starttime = TickCount;
-			while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) ||
-			       ((TickCount - starttime) < 60)) {
+			while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) || ((TickCount - starttime) < 60)) {
 #if (SHOW_MONO)
 				NullModem.Mono_Debug_Print(0);
 #endif
@@ -4490,7 +4573,6 @@ oh_dear_its_a_label:
 				NullModem.Service();
 
 				if (NullModem.Get_Message(&ReceivePacket, &packetlen) > 0) {
-
 #ifdef FIXIT_VERSION_3
 					if (ReceivePacket.Command == SERIAL_READY_TO_GO) {
 						if (Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official()) {
@@ -4560,12 +4642,9 @@ oh_dear_its_a_label:
 #endif
 
 					if (NullModem.Get_Message(&ReceivePacket, &packetlen) > 0) {
-
 						// are we getting our own packets back??
 
-						if (ReceivePacket.Command == SERIAL_SIGN_OFF &&
-						    ReceivePacket.ID == Session.ModemType) {
-
+						if (ReceivePacket.Command == SERIAL_SIGN_OFF && ReceivePacket.ID == Session.ModemType) {
 							// exit while
 							break;
 						}
@@ -4661,7 +4740,6 @@ bool Find_Local_Scenario(char *description, char *filename, unsigned int length,
 	** Scan through the scenario list looking for scenarios with matching descriptions.
 	*/
 	for (int index = 0; index < Session.Scenarios.Count(); index++) {
-
 		// debugprint( "Checking against scenario: %s\n", Session.Scenarios[index]->Description());
 		if (!strcmp(Session.Scenarios[index]->Description(), description)) {
 			// debugprint("found matching description.\n");
@@ -4687,8 +4765,7 @@ bool Find_Local_Scenario(char *description, char *filename, unsigned int length,
 						*/
 						INIClass ini;
 						ini.Load(file);
-						ini.Get_String("Digest", "1", "No digest here mate. Nope.",
-							       digest_buffer, sizeof(digest_buffer));
+						ini.Get_String("Digest", "1", "No digest here mate. Nope.", digest_buffer, sizeof(digest_buffer));
 					}
 // debugprint("digest = %s, digest_buffer = %s.\n", digest, digest_buffer);
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98. But don't know why this happens. Because of autodownload?
@@ -4763,15 +4840,15 @@ int Com_Show_Scenario_Dialog(void) {
 	/*........................................................................
 	Dialog & button dimensions
 	........................................................................*/
-	int d_dialog_w = 320 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 200 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 320 * RESFACTOR; // dialog width
+	int d_dialog_h = 200 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // dialog y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 6 * RESFACTOR + 1; // ht of 6-pt text
-	int d_margin1 = 5 * RESFACTOR;	  // margin width/height
-	int d_margin2 = 2 * RESFACTOR;	  // margin width/height
+	int d_margin1 = 5 * RESFACTOR; // margin width/height
+	int d_margin2 = 2 * RESFACTOR; // margin width/height
 
 	int d_name_w = 70 * RESFACTOR;
 	int d_name_h = 9 * RESFACTOR;
@@ -4843,7 +4920,7 @@ int Com_Show_Scenario_Dialog(void) {
 
 	int d_message_w = d_dialog_w - (d_margin1 * 2) - 20 * RESFACTOR;
 	int d_message_h = (7 * d_txt6_h) + 3 * RESFACTOR; // 7 rows high
-	int d_message_x = d_gamelist_x;			  // d_dialog_x + d_margin1 + 10*RESFACTOR;
+	int d_message_x = d_gamelist_x; // d_dialog_x + d_margin1 + 10*RESFACTOR;
 	int d_message_y = d_options_y + d_options_h + d_margin2 /*KO + d_margin1*/;
 
 	int d_send_w = d_message_w;
@@ -4864,7 +4941,7 @@ int Com_Show_Scenario_Dialog(void) {
 #ifdef OLDWAY
 		BUTTON_GDI,
 		BUTTON_NOD,
-#else  // OLDWAY
+#else // OLDWAY
 		BUTTON_HOUSE,
 #endif // OLDWAY
 		BUTTON_GAMELIST,
@@ -4894,24 +4971,23 @@ int Com_Show_Scenario_Dialog(void) {
 	Dialog variables
 	........................................................................*/
 	RedrawType display = REDRAW_ALL; // redraw level
-	int cbox_x[] = {d_color_x,
-			d_color_x + d_color_w,
-			d_color_x + (d_color_w * 2),
-			d_color_x + (d_color_w * 3),
-			d_color_x + (d_color_w * 4),
-			d_color_x + (d_color_w * 5),
-			d_color_x + (d_color_w * 6),
-			d_color_x + (d_color_w * 7)};
+	int cbox_x[] = { d_color_x,
+			 d_color_x + d_color_w,
+			 d_color_x + (d_color_w * 2),
+			 d_color_x + (d_color_w * 3),
+			 d_color_x + (d_color_w * 4),
+			 d_color_x + (d_color_w * 5),
+			 d_color_x + (d_color_w * 6),
+			 d_color_x + (d_color_w * 7) };
 
-	char namebuf[MPLAYER_NAME_MAX] = {
-	    0};				     // buffer for player's name
-					     // BG	int playertabs[] = {77};				// tabs for player list box
-	int playertabs[] = {71 * RESFACTOR}; // tabs for player list box
-	int optiontabs[] = {8};		     // tabs for options list box
-	bool transmit;			     // 1 = re-transmit new game options
-	bool first;			     // 1 = no packets received yet
-	bool parms_received = false;	     // 1 = game options received
-	bool changed = false;		     // 1 = user has changed an option
+	char namebuf[MPLAYER_NAME_MAX] = { 0 }; // buffer for player's name
+		// BG	int playertabs[] = {77};				// tabs for player list box
+	int playertabs[] = { 71 * RESFACTOR }; // tabs for player list box
+	int optiontabs[] = { 8 }; // tabs for options list box
+	bool transmit; // 1 = re-transmit new game options
+	bool first; // 1 = no packets received yet
+	bool parms_received = false; // 1 = game options received
+	bool changed = false; // 1 = user has changed an option
 
 	int rc;
 	int recsignedoff = 0;
@@ -4926,11 +5002,11 @@ int Com_Show_Scenario_Dialog(void) {
 	int packetlen;
 	bool oppscorescreen = false;
 	bool gameoptions = false;
-	EventClass *event;		  // event ptr
+	EventClass *event; // event ptr
 	unsigned long msg_timeout = 1200; // init to 20 seconds
-	bool load_game = false;		  // 1 = load saved game
-	NodeNameType *who;		  // node to add to Players
-	char *item;			  // for filling in lists
+	bool load_game = false; // 1 = load saved game
+	NodeNameType *who; // node to add to Players
+	char *item; // for filling in lists
 	char *p;
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 	Session.Options.ScenarioDescription[0] = 0; // Flag that we dont know the scenario name yet
@@ -4942,22 +5018,41 @@ int Com_Show_Scenario_Dialog(void) {
 	........................................................................*/
 	GadgetClass *commands; // button list
 
-	EditClass name_edt(BUTTON_NAME, namebuf, MPLAYER_NAME_MAX, TPF_TEXT, d_name_x, d_name_y, d_name_w, d_name_h,
-			   EditClass::ALPHANUMERIC);
+	EditClass name_edt(BUTTON_NAME, namebuf, MPLAYER_NAME_MAX, TPF_TEXT, d_name_x, d_name_y, d_name_w, d_name_h, EditClass::ALPHANUMERIC);
 #ifdef OLDWAY
 	TextButtonClass gdibtn(BUTTON_GDI, TXT_ALLIES, TPF_BUTTON, d_gdi_x, d_gdi_y, d_gdi_w, d_gdi_h);
 	TextButtonClass nodbtn(BUTTON_NOD, TXT_SOVIET, TPF_BUTTON, d_nod_x, d_nod_y, d_nod_w, d_nod_h);
-#else  // OLDWAY
+#else // OLDWAY
 	char housetext[25] = "";
 	Fancy_Text_Print("", 0, 0, 0, 0, TPF_TEXT);
-	DropListClass housebtn(BUTTON_HOUSE, housetext, sizeof(housetext), TPF_TEXT, d_house_x, d_house_y, d_house_w,
-			       d_house_h, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	DropListClass housebtn(BUTTON_HOUSE,
+			       housetext,
+			       sizeof(housetext),
+			       TPF_TEXT,
+			       d_house_x,
+			       d_house_y,
+			       d_house_w,
+			       d_house_h,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"));
 #endif // OLDWAY
 	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w);
-	ListClass gamelist(BUTTON_GAMELIST, d_gamelist_x, d_gamelist_y, d_gamelist_w, d_gamelist_h, TPF_TEXT,
-			   MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
-	ColorListClass playerlist(BUTTON_PLAYERLIST, d_playerlist_x, d_playerlist_y, d_playerlist_w, d_playerlist_h,
-				  TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass gamelist(BUTTON_GAMELIST,
+			   d_gamelist_x,
+			   d_gamelist_y,
+			   d_gamelist_w,
+			   d_gamelist_h,
+			   TPF_TEXT,
+			   MFCD::Retrieve("BTN-UP.SHP"),
+			   MFCD::Retrieve("BTN-DN.SHP"));
+	ColorListClass playerlist(BUTTON_PLAYERLIST,
+				  d_playerlist_x,
+				  d_playerlist_y,
+				  d_playerlist_w,
+				  d_playerlist_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
 
 	GaugeClass countgauge(BUTTON_COUNT, d_count_x, d_count_y, d_count_w, d_count_h);
 	char staticcountbuff[35];
@@ -4969,15 +5064,20 @@ int Com_Show_Scenario_Dialog(void) {
 
 	GaugeClass creditsgauge(BUTTON_CREDITS, d_credits_x, d_credits_y, d_credits_w, d_credits_h);
 	char staticcreditsbuff[35];
-	StaticButtonClass staticcredits(0, "         ", TPF_TEXT, d_credits_x + d_credits_w + 3 * RESFACTOR,
-					d_credits_y);
+	StaticButtonClass staticcredits(0, "         ", TPF_TEXT, d_credits_x + d_credits_w + 3 * RESFACTOR, d_credits_y);
 
 	GaugeClass aiplayersgauge(BUTTON_AI_PLAYERS, d_aiplayers_x, d_aiplayers_y, d_aiplayers_w, d_aiplayers_h);
 	char staticaibuff[35];
 	StaticButtonClass staticai(0, "     ", TPF_TEXT, d_aiplayers_x + d_aiplayers_w + 3 * RESFACTOR, d_aiplayers_y);
 
-	CheckListClass optionlist(BUTTON_OPTIONS, d_options_x, d_options_y, d_options_w, d_options_h, TPF_TEXT,
-				  MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	CheckListClass optionlist(BUTTON_OPTIONS,
+				  d_options_x,
+				  d_options_y,
+				  d_options_w,
+				  d_options_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
 
 	/*
 	------------------------- Build the button list --------------------------
@@ -4998,7 +5098,7 @@ int Com_Show_Scenario_Dialog(void) {
 #ifdef OLDWAY
 	gdibtn.Add_Tail(*commands);
 	nodbtn.Add_Tail(*commands);
-#else  // OLDWAY
+#else // OLDWAY
 	housebtn.Add_Tail(*commands);
 #endif // OLDWAY
 
@@ -5009,10 +5109,9 @@ int Com_Show_Scenario_Dialog(void) {
 	// Name & Color
 	//........................................................................
 	Session.ColorIdx = Session.PrefColor; // init my preferred color
-	strcpy(namebuf, Session.Handle);      // set my name
+	strcpy(namebuf, Session.Handle); // set my name
 	name_edt.Set_Text(namebuf, MPLAYER_NAME_MAX);
-	name_edt.Set_Color(
-	    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx]);
+	name_edt.Set_Color(&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx]);
 
 	//........................................................................
 	// List boxes
@@ -5044,7 +5143,7 @@ int Com_Show_Scenario_Dialog(void) {
 	} else {
 		nodbtn.Turn_On();
 	}
-#else  // OLDWAY
+#else // OLDWAY
 	for (HousesType house = HOUSE_USSR; house <= HOUSE_FRANCE; house++) {
 		housebtn.Add_Item(Text_String(HouseTypeClass::As_Reference(house).Full_Name()));
 	}
@@ -5056,8 +5155,7 @@ int Com_Show_Scenario_Dialog(void) {
 	// Option gauges
 	//........................................................................
 	countgauge.Use_Thumb(0);
-	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
-			       SessionClass::CountMin[Session.Options.Bases]);
+	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] - SessionClass::CountMin[Session.Options.Bases]);
 	countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 
 	levelgauge.Use_Thumb(0);
@@ -5085,11 +5183,18 @@ int Com_Show_Scenario_Dialog(void) {
 	/*........................................................................
 	Init the message display system
 	........................................................................*/
-	Session.Messages.Init(d_message_x + 1, d_message_y + 1, 7, MAX_MESSAGE_LENGTH, d_txt6_h,
-			      d_send_x + 1 * RESFACTOR, d_send_y + 1 * RESFACTOR, 1, 20, MAX_MESSAGE_LENGTH - 5,
+	Session.Messages.Init(d_message_x + 1,
+			      d_message_y + 1,
+			      7,
+			      MAX_MESSAGE_LENGTH,
+			      d_txt6_h,
+			      d_send_x + 1 * RESFACTOR,
+			      d_send_y + 1 * RESFACTOR,
+			      1,
+			      20,
+			      MAX_MESSAGE_LENGTH - 5,
 			      d_message_w);
-	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
-				  TPF_TEXT, NULL, '_', d_message_w);
+	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx, TPF_TEXT, NULL, '_', d_message_w);
 	Session.WWChat = 0;
 
 	/*........................................................................
@@ -5182,29 +5287,44 @@ int Com_Show_Scenario_Dialog(void) {
 				/*...............................................................
 				Dialog & Field labels
 				...............................................................*/
-				Fancy_Text_Print(TXT_CHANNEL_GAMES, d_gamelist_x + (d_gamelist_w / 2),
-						 d_gamelist_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
-				Fancy_Text_Print(TXT_PLAYERS, d_playerlist_x + (d_playerlist_w / 2),
-						 d_playerlist_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
-				Fancy_Text_Print(TXT_YOUR_NAME, d_name_x + (d_name_w / 2), d_name_y - d_txt6_h, scheme,
-						 TBLACK, TPF_CENTER | TPF_TEXT);
-#ifdef OLDWAY
-				Fancy_Text_Print(TXT_SIDE_COLON, d_gdi_x + d_gdi_w, d_gdi_y - d_txt6_h, scheme, TBLACK,
+				Fancy_Text_Print(TXT_CHANNEL_GAMES,
+						 d_gamelist_x + (d_gamelist_w / 2),
+						 d_gamelist_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
 						 TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_PLAYERS,
+						 d_playerlist_x + (d_playerlist_w / 2),
+						 d_playerlist_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_YOUR_NAME, d_name_x + (d_name_w / 2), d_name_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+#ifdef OLDWAY
+				Fancy_Text_Print(TXT_SIDE_COLON, d_gdi_x + d_gdi_w, d_gdi_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 #else
-				Fancy_Text_Print(TXT_SIDE_COLON, d_house_x + (d_house_w / 2), d_house_y - d_txt6_h,
-						 scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_SIDE_COLON,
+						 d_house_x + (d_house_w / 2),
+						 d_house_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
 #endif
-				Fancy_Text_Print(TXT_COLOR_COLON, d_dialog_x + ((d_dialog_w / 4) * 3),
-						 d_color_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
-				Fancy_Text_Print(TXT_COUNT, d_count_x - 2 * RESFACTOR, d_count_y, scheme, TBLACK,
+				Fancy_Text_Print(TXT_COLOR_COLON,
+						 d_dialog_x + ((d_dialog_w / 4) * 3),
+						 d_color_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_COUNT, d_count_x - 2 * RESFACTOR, d_count_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2 * RESFACTOR, d_level_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2 * RESFACTOR, d_credits_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_AI_PLAYERS_COLON,
+						 d_aiplayers_x - 2 * RESFACTOR,
+						 d_aiplayers_y,
+						 scheme,
+						 TBLACK,
 						 TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2 * RESFACTOR, d_level_y, scheme, TBLACK,
-						 TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2 * RESFACTOR, d_credits_y, scheme,
-						 TBLACK, TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_AI_PLAYERS_COLON, d_aiplayers_x - 2 * RESFACTOR, d_aiplayers_y,
-						 scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
 			}
 
 			/*..................................................................
@@ -5212,7 +5332,8 @@ int Com_Show_Scenario_Dialog(void) {
 			..................................................................*/
 			if (display >= REDRAW_COLORS) {
 				for (i = 0; i < MAX_MPLAYER_COLORS; i++) {
-					LogicPage->Fill_Rect(cbox_x[i] + 1 * RESFACTOR, d_color_y + 1 * RESFACTOR,
+					LogicPage->Fill_Rect(cbox_x[i] + 1 * RESFACTOR,
+							     d_color_y + 1 * RESFACTOR,
 							     cbox_x[i] + 1 * RESFACTOR + d_color_w - 2 * RESFACTOR,
 							     d_color_y + 1 * RESFACTOR + d_color_h - 2 * RESFACTOR,
 							     ColorRemaps[i].Box);
@@ -5220,11 +5341,9 @@ int Com_Show_Scenario_Dialog(void) {
 					// ColorRemaps[PCOLOR_REALLY_BLUE].Box : ColorRemaps[i].Box);
 
 					if (i == Session.ColorIdx) {
-						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_DOWN,
-							 false);
+						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_DOWN, false);
 					} else {
-						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_RAISED,
-							 false);
+						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_RAISED, false);
 					}
 				}
 			}
@@ -5246,8 +5365,7 @@ int Com_Show_Scenario_Dialog(void) {
 
 						int txtwidth = String_Pixel_Width(txt);
 
-						Fancy_Text_Print(txt, d_dialog_cx, d_scenario_y, scheme, TBLACK,
-								 TPF_CENTER | TPF_TEXT);
+						Fancy_Text_Print(txt, d_dialog_cx, d_scenario_y, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 					} else {
 						/*............................................................
 						Scenario description
@@ -5265,29 +5383,28 @@ int Com_Show_Scenario_Dialog(void) {
 
 							// EW - Scenario language translation goes here!!!!!!!! VG
 							for (i = 0; EngMisStr[i] != NULL; i++) {
-								if (!strcmp(Session.Options.ScenarioDescription,
-									    EngMisStr[i])) {
+								if (!strcmp(Session.Options.ScenarioDescription, EngMisStr[i])) {
 #if defined(GERMAN) || defined(FRENCH)
 									sprintf(txt, "%s %s", p, EngMisStr[i + 1]);
 #else
-									sprintf(txt, "%s %s", p,
-										Session.Options.ScenarioDescription);
+									sprintf(txt, "%s %s", p, Session.Options.ScenarioDescription);
 #endif
 									break;
 								}
 							}
 							if (EngMisStr[i] == NULL) {
-								sprintf(txt, "%s %s", p,
-									Session.Options.ScenarioDescription);
+								sprintf(txt, "%s %s", p, Session.Options.ScenarioDescription);
 							}
-							Fancy_Text_Print(txt, d_dialog_cx, d_scenario_y, scheme, TBLACK,
-									 TPF_TEXT | TPF_CENTER);
+							Fancy_Text_Print(txt, d_dialog_cx, d_scenario_y, scheme, TBLACK, TPF_TEXT | TPF_CENTER);
 
 						} else {
 							sprintf(txt, "%s %s", p, Text_String(TXT_NOT_FOUND));
 
-							Fancy_Text_Print(txt, d_dialog_cx, d_scenario_y,
-									 &ColorRemaps[PCOLOR_RED], TBLACK,
+							Fancy_Text_Print(txt,
+									 d_dialog_cx,
+									 d_scenario_y,
+									 &ColorRemaps[PCOLOR_RED],
+									 TBLACK,
 									 TPF_TEXT | TPF_CENTER);
 						}
 
@@ -5365,8 +5482,7 @@ int Com_Show_Scenario_Dialog(void) {
 		User clicks on a color button
 		------------------------------------------------------------------*/
 		case KN_LMOUSE:
-			if (Keyboard->MouseQX > cbox_x[0] &&
-			    Keyboard->MouseQX < (cbox_x[MAX_MPLAYER_COLORS - 1] + d_color_w) &&
+			if (Keyboard->MouseQX > cbox_x[0] && Keyboard->MouseQX < (cbox_x[MAX_MPLAYER_COLORS - 1] + d_color_w) &&
 			    Keyboard->MouseQY > d_color_y && Keyboard->MouseQY < (d_color_y + d_color_h)) {
 				/*.........................................................
 				Compute my preferred color as the one I clicked on.
@@ -5384,12 +5500,9 @@ int Com_Show_Scenario_Dialog(void) {
 				}
 				Session.ColorIdx = Session.PrefColor;
 
-				name_edt.Set_Color(
-				    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-											  : Session.ColorIdx]);
+				name_edt.Set_Color(&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx]);
 				name_edt.Flag_To_Redraw();
-				Session.Messages.Set_Edit_Color(
-				    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx);
+				Session.Messages.Set_Edit_Color((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx);
 				if (display < REDRAW_COLORS)
 					display = REDRAW_COLORS;
 				strcpy(Session.Handle, namebuf);
@@ -5398,12 +5511,11 @@ int Com_Show_Scenario_Dialog(void) {
 					housebtn.Collapse();
 					display = REDRAW_BACKGROUND;
 				}
-			} else if ((Get_Mouse_X() >= d_count_x && Get_Mouse_X() <= d_count_x + d_count_w &&
-				    Get_Mouse_Y() >= d_count_y && Get_Mouse_Y() <= d_aiplayers_y + d_aiplayers_h) ||
-				   (Get_Mouse_X() >= d_options_x && Get_Mouse_X() <= d_options_x + d_options_w &&
-				    Get_Mouse_Y() >= d_options_y && Get_Mouse_Y() <= d_options_y + d_options_h)) {
-				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_ONLY_HOST_CAN_MODIFY),
-							     PCOLOR_BROWN, TPF_TEXT, 1200);
+			} else if ((Get_Mouse_X() >= d_count_x && Get_Mouse_X() <= d_count_x + d_count_w && Get_Mouse_Y() >= d_count_y &&
+				    Get_Mouse_Y() <= d_aiplayers_y + d_aiplayers_h) ||
+				   (Get_Mouse_X() >= d_options_x && Get_Mouse_X() <= d_options_x + d_options_w && Get_Mouse_Y() >= d_options_y &&
+				    Get_Mouse_Y() <= d_options_y + d_options_h)) {
+				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_ONLY_HOST_CAN_MODIFY), PCOLOR_BROWN, TPF_TEXT, 1200);
 				Sound_Effect(VOC_SYS_ERROR);
 				if (display < REDRAW_MESSAGE)
 					display = REDRAW_MESSAGE;
@@ -5434,7 +5546,7 @@ int Com_Show_Scenario_Dialog(void) {
 			strcpy(Session.Handle, namebuf);
 			transmit = true;
 			break;
-#else  // OLDWAY
+#else // OLDWAY
 		case (BUTTON_HOUSE | KN_BUTTON):
 			Session.House = HousesType(housebtn.Current_Index() + HOUSE_USSR);
 			strcpy(Session.Handle, namebuf);
@@ -5522,13 +5634,17 @@ int Com_Show_Scenario_Dialog(void) {
 				/*..................................................................
 				Add the message to our own screen
 				..................................................................*/
-				Session.Messages.Add_Message(
-				    SendPacket.Name, SendPacket.ID, SendPacket.Message.Message,
-				    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
-				    TPF_TEXT, -1);
-				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												   : Session.ColorIdx,
-							  TPF_TEXT, NULL, '_', d_message_w);
+				Session.Messages.Add_Message(SendPacket.Name,
+							     SendPacket.ID,
+							     SendPacket.Message.Message,
+							     (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							     TPF_TEXT,
+							     -1);
+				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							  TPF_TEXT,
+							  NULL,
+							  '_',
+							  d_message_w);
 				if (display < REDRAW_MESSAGE)
 					display = REDRAW_MESSAGE;
 			}
@@ -5574,13 +5690,10 @@ int Com_Show_Scenario_Dialog(void) {
 				} else {
 					sprintf(item, "%s\t%s", namebuf, Text_String(TXT_SOVIET));
 				}
-#else  // OLDWAY
-				sprintf(item, "%s\t%s", namebuf,
-					Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
+#else // OLDWAY
+				sprintf(item, "%s\t%s", namebuf, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-				playerlist.Colors[0] =
-				    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-											  : Session.ColorIdx];
+				playerlist.Colors[0] = &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx];
 				playerlist.Flag_To_Redraw();
 			}
 
@@ -5607,7 +5720,6 @@ int Com_Show_Scenario_Dialog(void) {
 		Check for an incoming message
 		---------------------------------------------------------------------*/
 		if (NullModem.Get_Message(&ReceivePacket, &packetlen) > 0) {
-
 			lastmsgtime = TickCount;
 
 			msg_timeout = 600;
@@ -5616,7 +5728,6 @@ int Com_Show_Scenario_Dialog(void) {
 
 			if (ReceivePacket.Command >= SERIAL_CONNECT && ReceivePacket.Command < SERIAL_LAST_COMMAND &&
 			    ReceivePacket.Command != SERIAL_MESSAGE && ReceivePacket.ID == Session.ModemType) {
-
 				WWMessageBox().Process(TXT_SYSTEM_NOT_RESPONDING);
 
 				// to skip the other system not responding msg
@@ -5677,7 +5788,6 @@ int Com_Show_Scenario_Dialog(void) {
 					Make sure I don't have the same color as the other guy.
 					...............................................................*/
 					if (Session.ColorIdx == TheirColor) {
-
 						// force transmitting of game options packet
 
 						transmit = true;
@@ -5687,9 +5797,8 @@ int Com_Show_Scenario_Dialog(void) {
 						if (Session.ColorIdx >= 6) {
 							Session.ColorIdx = PCOLOR_FIRST;
 						}
-						name_edt.Set_Color(&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE)
-										    ? PCOLOR_REALLY_BLUE
-										    : Session.ColorIdx]);
+						name_edt.Set_Color(&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+															   Session.ColorIdx]);
 						name_edt.Flag_To_Redraw();
 						if (display < REDRAW_COLORS)
 							display = REDRAW_COLORS;
@@ -5730,8 +5839,7 @@ int Com_Show_Scenario_Dialog(void) {
 					//.........................................................
 					countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
 							       SessionClass::CountMin[Session.Options.Bases]);
-					countgauge.Set_Value(Session.Options.UnitCount -
-							     SessionClass::CountMin[Session.Options.Bases]);
+					countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 					levelgauge.Set_Value(BuildLevel - 1);
 					creditsgauge.Set_Value(Session.Options.Credits);
 					aiplayersgauge.Set_Value(Session.Options.AIPlayers);
@@ -5749,8 +5857,7 @@ int Com_Show_Scenario_Dialog(void) {
 					/*
 					** If the scenario name changed then we need to redraw the whole lot.
 					*/
-					if (strcmp(Session.Options.ScenarioDescription,
-						   ReceivePacket.ScenarioInfo.Scenario)) {
+					if (strcmp(Session.Options.ScenarioDescription, ReceivePacket.ScenarioInfo.Scenario)) {
 						if (display < REDRAW_BACKGROUND)
 							display = REDRAW_BACKGROUND;
 					}
@@ -5760,11 +5867,11 @@ int Com_Show_Scenario_Dialog(void) {
 					play so ee can request this scenario from the host if we don't
 					have it locally.
 					...............................................................*/
-					strcpy(Session.Options.ScenarioDescription,
-					       ReceivePacket.ScenarioInfo.Scenario);
+					strcpy(Session.Options.ScenarioDescription, ReceivePacket.ScenarioInfo.Scenario);
 					strcpy(Session.ScenarioFileName, ReceivePacket.ScenarioInfo.ShortFileName);
 #ifdef WOLAPI_INTEGRATION
-					strncpy(Session.ScenarioDigest, (char *)ReceivePacket.ScenarioInfo.FileDigest,
+					strncpy(Session.ScenarioDigest,
+						(char *)ReceivePacket.ScenarioInfo.FileDigest,
 						sizeof(ReceivePacket.ScenarioInfo.FileDigest));
 #else
 					strcpy(Session.ScenarioDigest, (char *)ReceivePacket.ScenarioInfo.FileDigest);
@@ -5775,8 +5882,7 @@ int Com_Show_Scenario_Dialog(void) {
 					//.........................................................
 					// "Clip" the other system's version range to our own
 					// ........................................................
-					version = VerNum.Clip_Version(ReceivePacket.ScenarioInfo.MinVersion,
-								      ReceivePacket.ScenarioInfo.MaxVersion);
+					version = VerNum.Clip_Version(ReceivePacket.ScenarioInfo.MinVersion, ReceivePacket.ScenarioInfo.MaxVersion);
 					// ........................................................
 					// If the greatest-common-version comes back 0, the other
 					// system's range is too low for ours
@@ -5807,7 +5913,6 @@ int Com_Show_Scenario_Dialog(void) {
 					// common; look up the protocol that goes with this version.
 					// ........................................................
 					else {
-
 						if (ReceivePacket.ScenarioInfo.CheatCheck != RuleINI.Get_Unique_ID()) {
 							WWMessageBox().Process(TXT_MISMATCH);
 
@@ -5817,7 +5922,6 @@ int Com_Show_Scenario_Dialog(void) {
 							process = false;
 							rc = false;
 						} else {
-
 							Session.CommProtocol = VerNum.Version_Protocol(version);
 #ifndef FIXIT_VERSION_3
 							PlayingAgainstVersion = version;
@@ -5837,18 +5941,14 @@ int Com_Show_Scenario_Dialog(void) {
 						//......................................................
 						item = new char[MPLAYER_NAME_MAX + 64];
 						gamelist.Add_Item(item);
-						item = new char[MPLAYER_NAME_MAX +
-								64]; // Need room to display country name
+						item = new char[MPLAYER_NAME_MAX + 64]; // Need room to display country name
+						playerlist.Add_Item(item,
+								    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+															    Session.ColorIdx]);
+						item = new char[MPLAYER_NAME_MAX + 64]; // Need room to display country name
 						playerlist.Add_Item(
-						    item, &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE)
-									   ? PCOLOR_REALLY_BLUE
-									   : Session.ColorIdx]);
-						item = new char[MPLAYER_NAME_MAX +
-								64]; // Need room to display country name
-						playerlist.Add_Item(
-						    item,
-						    &ColorRemaps[(TheirColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												    : TheirColor]);
+							item,
+							&ColorRemaps[(TheirColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : TheirColor]);
 
 						first = false;
 						transmit = true;
@@ -5870,13 +5970,11 @@ int Com_Show_Scenario_Dialog(void) {
 						sprintf(item, "%s\t%s", namebuf, Text_String(TXT_SOVIET));
 					}
 #else // OLDWAY
-					sprintf(item, "%s\t%s", namebuf,
-						Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
+					sprintf(item, "%s\t%s", namebuf, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 
 #endif // OLDWAY
 					playerlist.Colors[0] =
-					    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												  : Session.ColorIdx];
+						&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx];
 
 					item = (char *)playerlist.Get_Item(1);
 #ifdef OLDWAY
@@ -5885,13 +5983,10 @@ int Com_Show_Scenario_Dialog(void) {
 					} else {
 						sprintf(item, "%s\t%s", TheirName, Text_String(TXT_SOVIET));
 					}
-#else  // OLDWAY
-					sprintf(item, "%s\t%s", TheirName,
-						Text_String(HouseTypeClass::As_Reference(TheirHouse).Full_Name()));
+#else // OLDWAY
+					sprintf(item, "%s\t%s", TheirName, Text_String(HouseTypeClass::As_Reference(TheirHouse).Full_Name()));
 #endif // OLDWAY
-					playerlist.Colors[1] =
-					    &ColorRemaps[(TheirColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-											    : TheirColor];
+					playerlist.Colors[1] = &ColorRemaps[(TheirColor == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : TheirColor];
 
 					gamelist.Flag_To_Redraw();
 					playerlist.Flag_To_Redraw();
@@ -5929,23 +6024,19 @@ int Com_Show_Scenario_Dialog(void) {
 
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 						if (Session.ScenarioIsOfficial &&
-						    ((Expansion_CS_Present() &&
-						      Is_Mission_Counterstrike(Session.ScenarioFileName)) ||
-						     (Expansion_AM_Present() &&
-						      Is_Mission_Aftermath(Session.ScenarioFileName)))) {
+						    ((Expansion_CS_Present() && Is_Mission_Counterstrike(Session.ScenarioFileName)) ||
+						     (Expansion_AM_Present() && Is_Mission_Aftermath(Session.ScenarioFileName)))) {
 #else
 						if (Expansion_CS_Present() && Session.ScenarioIsOfficial) {
 #endif
 
 							CCFileClass check_file(Session.ScenarioFileName);
 							if (!check_file.Is_Available()) {
-
 								int current_drive = CCFileClass::Get_CD_Drive();
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 								int index = Get_CD_Index(current_drive, 1 * 60);
 								bool needcd = false;
-								if (Is_Mission_Counterstrike(
-									Session.ScenarioFileName)) {
+								if (Is_Mission_Counterstrike(Session.ScenarioFileName)) {
 									if (index != 2 && index != 3) {
 										RequiredCD = 2;
 										needcd = true;
@@ -5972,16 +6063,13 @@ int Com_Show_Scenario_Dialog(void) {
 									*disk is in.
 									** Tell the host that I am ready to go anyway.
 									*/
-									memset((void *)&SendPacket, 0,
-									       sizeof(SendPacket));
+									memset((void *)&SendPacket, 0, sizeof(SendPacket));
 									SendPacket.Command = SERIAL_READY_TO_GO;
-									NullModem.Send_Message(&SendPacket,
-											       sizeof(SendPacket), 1);
+									NullModem.Send_Message(&SendPacket, sizeof(SendPacket), 1);
 
 									starttime = TickCount;
 									while ((NullModem.Num_Send() &&
-										((TickCount - starttime) <
-										 PACKET_SENDING_TIMEOUT)) ||
+										((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) ||
 									       ((TickCount - starttime) < 60)) {
 										NullModem.Service();
 									}
@@ -6013,24 +6101,21 @@ int Com_Show_Scenario_Dialog(void) {
 						*locally then *	we need to fix up the file name so we load the right
 						*one.
 						*/
-						if (Find_Local_Scenario(
-							Session.Options.ScenarioDescription, Session.ScenarioFileName,
-							Session.ScenarioFileLength, Session.ScenarioDigest,
-							Session.ScenarioIsOfficial)) {
-
+						if (Find_Local_Scenario(Session.Options.ScenarioDescription,
+									Session.ScenarioFileName,
+									Session.ScenarioFileLength,
+									Session.ScenarioDigest,
+									Session.ScenarioIsOfficial)) {
 							/*
 							** We have the scenario. Tell the host that I am ready to go.
 							*/
 							if (!ready_packet_was_sent) {
 								memset((void *)&SendPacket, 0, sizeof(SendPacket));
 								SendPacket.Command = SERIAL_READY_TO_GO;
-								NullModem.Send_Message(&SendPacket, sizeof(SendPacket),
-										       1);
+								NullModem.Send_Message(&SendPacket, sizeof(SendPacket), 1);
 								starttime = TickCount;
 
-								while ((NullModem.Num_Send() &&
-									((TickCount - starttime) <
-									 PACKET_SENDING_TIMEOUT)) ||
+								while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) ||
 								       ((TickCount - starttime) < 60)) {
 									NullModem.Service();
 								}
@@ -6057,8 +6142,7 @@ int Com_Show_Scenario_Dialog(void) {
 								*/
 								memset((void *)&SendPacket, 0, sizeof(SendPacket));
 								SendPacket.Command = SERIAL_NO_SCENARIO;
-								NullModem.Send_Message(&SendPacket, sizeof(SendPacket),
-										       1);
+								NullModem.Send_Message(&SendPacket, sizeof(SendPacket), 1);
 								NullModem.Service();
 								WWMessageBox().Process(TXT_UNABLE_PLAY_WAAUGH);
 								display = REDRAW_ALL;
@@ -6067,12 +6151,10 @@ int Com_Show_Scenario_Dialog(void) {
 							} else {
 #endif
 #ifdef FIXIT_VERSION_3
-								if (bSpecialAftermathScenario(
-									Session.Options.ScenarioDescription))
+								if (bSpecialAftermathScenario(Session.Options.ScenarioDescription))
 									break;
 #endif
-								if (!Get_Scenario_File_From_Host(
-									Session.ScenarioFileName, 0)) {
+								if (!Get_Scenario_File_From_Host(Session.ScenarioFileName, 0)) {
 									rc = false;
 									break;
 								} else {
@@ -6095,8 +6177,7 @@ int Com_Show_Scenario_Dialog(void) {
 						NullModem.Send_Message(&SendPacket, sizeof(SendPacket), 1);
 						starttime = TickCount;
 
-						while ((NullModem.Num_Send() &&
-							((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) ||
+						while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) ||
 						       ((TickCount - starttime) < 60)) {
 							NullModem.Service();
 						}
@@ -6112,14 +6193,12 @@ int Com_Show_Scenario_Dialog(void) {
 					//
 					if (Session.CommProtocol == COMM_PROTOCOL_MULTI_E_COMP) {
 						Session.MaxAhead =
-						    max(((((ReceivePacket.ScenarioInfo.ResponseTime / 8) +
-							   (Session.FrameSendRate - 1)) /
-							  Session.FrameSendRate) *
-							 Session.FrameSendRate),
-							(Session.FrameSendRate * 2));
+							max(((((ReceivePacket.ScenarioInfo.ResponseTime / 8) + (Session.FrameSendRate - 1)) /
+							      Session.FrameSendRate) *
+							     Session.FrameSendRate),
+							    (Session.FrameSendRate * 2));
 					} else {
-						Session.MaxAhead = max((ReceivePacket.ScenarioInfo.ResponseTime / 8),
-								       MODEM_MIN_MAX_AHEAD);
+						Session.MaxAhead = max((ReceivePacket.ScenarioInfo.ResponseTime / 8), MODEM_MIN_MAX_AHEAD);
 					}
 
 					process = false;
@@ -6135,15 +6214,14 @@ int Com_Show_Scenario_Dialog(void) {
 					oppscorescreen = false;
 
 					Session.Messages.Add_Message(
-					    ReceivePacket.Name,
-					    ((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE)
-						? PCOLOR_REALLY_BLUE
-						: (PlayerColorType)ReceivePacket.ID,
-					    ReceivePacket.Message.Message,
-					    ((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE)
-						? PCOLOR_REALLY_BLUE
-						: (PlayerColorType)ReceivePacket.ID,
-					    TPF_TEXT, -1);
+						ReceivePacket.Name,
+						((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+													    (PlayerColorType)ReceivePacket.ID,
+						ReceivePacket.Message.Message,
+						((PlayerColorType)ReceivePacket.ID == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+													    (PlayerColorType)ReceivePacket.ID,
+						TPF_TEXT,
+						-1);
 
 					Sound_Effect(VOC_INCOMING_MESSAGE);
 					if (display < REDRAW_MESSAGE)
@@ -6230,8 +6308,7 @@ int Com_Show_Scenario_Dialog(void) {
 		Session.Players.Add(who);
 
 		starttime = TickCount;
-		while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) ||
-		       ((TickCount - starttime) < 60)) {
+		while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_SENDING_TIMEOUT)) || ((TickCount - starttime) < 60)) {
 #if (SHOW_MONO)
 			NullModem.Mono_Debug_Print(0);
 #endif
@@ -6254,19 +6331,15 @@ int Com_Show_Scenario_Dialog(void) {
 			NullModem.Send_Message(&SendPacket, sizeof(SendPacket), 1);
 
 			starttime = TickCount;
-			while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_CANCEL_TIMEOUT)) ||
-			       ((TickCount - starttime) < 60)) {
+			while ((NullModem.Num_Send() && ((TickCount - starttime) < PACKET_CANCEL_TIMEOUT)) || ((TickCount - starttime) < 60)) {
 #if (SHOW_MONO)
 				NullModem.Mono_Debug_Print(0);
 #endif
 
 				if (NullModem.Get_Message(&ReceivePacket, &packetlen) > 0) {
-
 					// are we getting our own packets back??
 
-					if (ReceivePacket.Command == SERIAL_SIGN_OFF &&
-					    ReceivePacket.ID == Session.ModemType) {
-
+					if (ReceivePacket.Command == SERIAL_SIGN_OFF && ReceivePacket.ID == Session.ModemType) {
 						// exit while
 						break;
 					}
@@ -6356,11 +6429,11 @@ static int Phone_Dialog(void) {
 	/*........................................................................
 	Dialog & button dimensions
 	........................................................................*/
-	int d_dialog_w = 280 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 160 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 280 * RESFACTOR; // dialog width
+	int d_dialog_h = 160 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // dialog y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 7 * RESFACTOR; // ht of 6-pt text
 	int d_margin = 7 * RESFACTOR; // margin width/height
@@ -6422,16 +6495,16 @@ static int Phone_Dialog(void) {
 	Dialog variables
 	........................................................................*/
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 
-	char phone_num[PhoneEntryClass::PHONE_MAX_NUM] = {0}; // buffer for editing phone #
+	char phone_num[PhoneEntryClass::PHONE_MAX_NUM] = { 0 }; // buffer for editing phone #
 	int rc;
 	int i;
-	int tabs[] = {123 * RESFACTOR, 207 * RESFACTOR}; // tabs for list box
-	char *item;					 // for removing items from list box
-	PhoneEntryClass *p_entry;			 // for creating / editing phonebook entries
-	bool changed = false;				 // 1 = save changes to INI file
+	int tabs[] = { 123 * RESFACTOR, 207 * RESFACTOR }; // tabs for list box
+	char *item; // for removing items from list box
+	PhoneEntryClass *p_entry; // for creating / editing phonebook entries
+	bool changed = false; // 1 = save changes to INI file
 	bool firsttime = false;
 
 	/*........................................................................
@@ -6439,17 +6512,28 @@ static int Phone_Dialog(void) {
 	........................................................................*/
 	GadgetClass *commands; // button list
 
-	ListClass phonelist(BUTTON_PHONELIST, d_phonelist_x, d_phonelist_y, d_phonelist_w, d_phonelist_h, TPF_TEXT,
-			    MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass phonelist(BUTTON_PHONELIST,
+			    d_phonelist_x,
+			    d_phonelist_y,
+			    d_phonelist_w,
+			    d_phonelist_h,
+			    TPF_TEXT,
+			    MFCD::Retrieve("BTN-UP.SHP"),
+			    MFCD::Retrieve("BTN-DN.SHP"));
 	TextButtonClass addbtn(BUTTON_ADD, TXT_ADD, TPF_BUTTON, d_add_x, d_add_y, d_add_w, d_add_h);
 	TextButtonClass editbtn(BUTTON_EDIT, TXT_EDIT, TPF_BUTTON, d_edit_x, d_edit_y, d_edit_w, d_edit_h);
-	TextButtonClass deletebtn(BUTTON_DELETE, TXT_DELETE_BUTTON, TPF_BUTTON, d_delete_x, d_delete_y, d_delete_w,
-				  d_delete_h);
+	TextButtonClass deletebtn(BUTTON_DELETE, TXT_DELETE_BUTTON, TPF_BUTTON, d_delete_x, d_delete_y, d_delete_w, d_delete_h);
 	TextButtonClass dialbtn(BUTTON_DIAL, TXT_DIAL, TPF_BUTTON, d_dial_x, d_dial_y, d_dial_w, d_dial_h);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
-	EditClass numedit(BUTTON_NUMEDIT, phone_num, PhoneEntryClass::PHONE_MAX_NUM, TPF_TEXT, d_numedit_x, d_numedit_y,
-			  d_numedit_w, d_numedit_h, EditClass::ALPHANUMERIC);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
+	EditClass numedit(BUTTON_NUMEDIT,
+			  phone_num,
+			  PhoneEntryClass::PHONE_MAX_NUM,
+			  TPF_TEXT,
+			  d_numedit_x,
+			  d_numedit_y,
+			  d_numedit_w,
+			  d_numedit_h,
+			  EditClass::ALPHANUMERIC);
 
 	/*
 	------------------------- Build the button list --------------------------
@@ -6611,7 +6695,6 @@ the edit box buffer.
 				}
 				changed = true;
 			} else {
-
 				/*...............................................................
 				If the user clicked Cancel, delete the entry & keep looping.
 				...............................................................*/
@@ -6703,9 +6786,7 @@ the edit box buffer.
 			- Copy the phone number into it
 			- Set settings to defaults
 			...............................................................*/
-			if (Session.CurPhoneIdx == -1 ||
-			    strcmp(Session.PhoneBook[Session.CurPhoneIdx]->Number, phone_num)) {
-
+			if (Session.CurPhoneIdx == -1 || strcmp(Session.PhoneBook[Session.CurPhoneIdx]->Number, phone_num)) {
 				if (strlen(phone_num) == 0) { // do not dial
 					dialbtn.IsPressed = true;
 					dialbtn.Flag_To_Redraw();
@@ -6813,8 +6894,7 @@ static void Build_Phone_Listbox(ListClass *list, EditClass *edit, char *buf) {
 	/*
 	** Now sort the phone list by name then number
 	*/
-	qsort((void *)(&Session.PhoneBook[0]), Session.PhoneBook.Count(), sizeof(class PhoneEntryClass *),
-	      Phone_Compare);
+	qsort((void *)(&Session.PhoneBook[0]), Session.PhoneBook.Count(), sizeof(class PhoneEntryClass *), Phone_Compare);
 
 	/*........................................................................
 	Build the list
@@ -6928,11 +7008,11 @@ static int Edit_Phone_Dialog(PhoneEntryClass *phone) {
 	/*........................................................................
 	Dialog & button dimensions
 	........................................................................*/
-	int d_dialog_w = 230 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 110 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 230 * RESFACTOR; // dialog width
+	int d_dialog_h = 110 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((136 * RESFACTOR - d_dialog_h) / 2); // dialog y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 7 * RESFACTOR; // ht of 6-pt text
 	int d_margin = 7 * RESFACTOR; // margin width/height
@@ -6989,8 +7069,8 @@ static int Edit_Phone_Dialog(PhoneEntryClass *phone) {
 	........................................................................*/
 	RedrawType display = REDRAW_ALL; // redraw level
 
-	char namebuf[PhoneEntryClass::PHONE_MAX_NAME] = {0}; // buffer for editing name
-	char numbuf[PhoneEntryClass::PHONE_MAX_NUM] = {0};   // buffer for editing phone #
+	char namebuf[PhoneEntryClass::PHONE_MAX_NAME] = { 0 }; // buffer for editing name
+	char numbuf[PhoneEntryClass::PHONE_MAX_NUM] = { 0 }; // buffer for editing phone #
 	int rc;
 	SerialSettingsType settings;
 	bool custom = false;
@@ -7002,17 +7082,28 @@ static int Edit_Phone_Dialog(PhoneEntryClass *phone) {
 	........................................................................*/
 	GadgetClass *commands; // button list
 
-	EditClass nameedit(BUTTON_NAME, namebuf, PhoneEntryClass::PHONE_MAX_NAME, TPF_TEXT, d_name_x, d_name_y,
-			   d_name_w, d_name_h, EditClass::ALPHANUMERIC);
-	EditClass numedit(BUTTON_NUMBER, numbuf, PhoneEntryClass::PHONE_MAX_NUM, TPF_TEXT, d_number_x, d_number_y,
-			  d_number_w, d_number_h, EditClass::ALPHANUMERIC);
-	TextButtonClass defaultbtn(BUTTON_DEFAULT, TXT_DEFAULT_SETTINGS, TPF_BUTTON, d_default_x, d_default_y,
-				   d_default_w, d_default_h);
-	TextButtonClass custombtn(BUTTON_CUSTOM, TXT_CUSTOM_SETTINGS, TPF_BUTTON, d_custom_x, d_custom_y, d_custom_w,
-				  d_custom_h);
+	EditClass nameedit(BUTTON_NAME,
+			   namebuf,
+			   PhoneEntryClass::PHONE_MAX_NAME,
+			   TPF_TEXT,
+			   d_name_x,
+			   d_name_y,
+			   d_name_w,
+			   d_name_h,
+			   EditClass::ALPHANUMERIC);
+	EditClass numedit(BUTTON_NUMBER,
+			  numbuf,
+			  PhoneEntryClass::PHONE_MAX_NUM,
+			  TPF_TEXT,
+			  d_number_x,
+			  d_number_y,
+			  d_number_w,
+			  d_number_h,
+			  EditClass::ALPHANUMERIC);
+	TextButtonClass defaultbtn(BUTTON_DEFAULT, TXT_DEFAULT_SETTINGS, TPF_BUTTON, d_default_x, d_default_y, d_default_w, d_default_h);
+	TextButtonClass custombtn(BUTTON_CUSTOM, TXT_CUSTOM_SETTINGS, TPF_BUTTON, d_custom_x, d_custom_y, d_custom_w, d_custom_h);
 	TextButtonClass savebtn(BUTTON_SAVE, TXT_SAVE_BUTTON, TPF_BUTTON, d_save_x, d_save_y, d_save_w, d_save_h);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 
 	/*
 	------------------------- Build the button list --------------------------
@@ -7086,10 +7177,18 @@ static int Edit_Phone_Dialog(PhoneEntryClass *phone) {
 				/*...............................................................
 				Dialog & Field labels
 				...............................................................*/
-				Fancy_Text_Print(TXT_NAME_COLON, d_name_x - 5 * RESFACTOR, d_name_y + 1 * RESFACTOR,
-						 scheme, TBLACK, TPF_RIGHT | TPF_TEXT);
-				Fancy_Text_Print(TXT_NUMBER_COLON, d_number_x - 5 * RESFACTOR,
-						 d_number_y + 1 * RESFACTOR, scheme, TBLACK, TPF_RIGHT | TPF_TEXT);
+				Fancy_Text_Print(TXT_NAME_COLON,
+						 d_name_x - 5 * RESFACTOR,
+						 d_name_y + 1 * RESFACTOR,
+						 scheme,
+						 TBLACK,
+						 TPF_RIGHT | TPF_TEXT);
+				Fancy_Text_Print(TXT_NUMBER_COLON,
+						 d_number_x - 5 * RESFACTOR,
+						 d_number_y + 1 * RESFACTOR,
+						 scheme,
+						 TBLACK,
+						 TPF_RIGHT | TPF_TEXT);
 			}
 			/*
 			.......................... Redraw buttons ..........................
@@ -7595,7 +7694,6 @@ void Hex_Dump_Data(char *buffer, int length) {
 		Smart_Printf("%05lX  ", offset);
 
 		for (i = 0; i < 16; i++) {
-
 			c = ptr[i];
 			itoh(c, buff);
 
@@ -7648,7 +7746,6 @@ void Hex_Dump_Data(char *buffer, int length) {
 		Smart_Printf("  ");
 
 		for (i = 0; i < length; i++) {
-
 			c = ptr[i];
 
 			if (c && ((c < 7) || (c > 11)) && (c != 13)) {
@@ -7664,7 +7761,6 @@ void Hex_Dump_Data(char *buffer, int length) {
 } /* end of Hex_Dump_Data */
 
 void itoh(int i, char *s) {
-
 	int nibble, loop;
 
 	//	*s++ = '0';

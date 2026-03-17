@@ -29,8 +29,8 @@
  * Functions:                                                              *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "wwstd.h"
 #include <timer.h>
+#include "wwstd.h"
 
 void Delay(int duration) {
 	unsigned long count;
@@ -50,6 +50,8 @@ void Delay(int duration) {
 }
 
 #if (FALSE)
-void Vsync() { Wait_Vert_Blank(VertBlank); }
+void Vsync() {
+	Wait_Vert_Blank(VertBlank);
+}
 #endif
 

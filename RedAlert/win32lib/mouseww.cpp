@@ -30,8 +30,8 @@
  *   WWMouseClass::WWMouseClass -- Constructor for the Mouse Class                                 *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "mouse.h"
 #include <mmsystem.h>
+#include "mouse.h"
 
 static WWMouseClass *_Mouse = NULL;
 void CALLBACK Process_Mouse(UINT event_id, UINT res1, DWORD user, DWORD res2, DWORD res3);
@@ -213,8 +213,7 @@ void WWMouseClass::Process_Mouse(void) {
 			// Verify that the mouse has not gone into a conditional hiden area
 			// If it has, mark it as being in one.
 			//
-			if (MCFlags & CONDHIDE && pt.x >= MouseCXLeft && pt.x <= MouseCXRight && pt.y >= MouseCYUpper &&
-			    pt.y <= MouseCYLower) {
+			if (MCFlags & CONDHIDE && pt.x >= MouseCXLeft && pt.x <= MouseCXRight && pt.y >= MouseCYUpper && pt.y <= MouseCYLower) {
 				MCFlags |= CONDHIDDEN;
 			}
 
@@ -291,8 +290,7 @@ void WWMouseClass::Low_Hide_Mouse() {
 	if (!State) {
 		if (MouseBuffX != -1 || MouseBuffY != -1) {
 			if (Screen->Lock()) {
-				Mouse_Shadow_Buffer(this, Screen, MouseBuffer, MouseBuffX, MouseBuffY, MouseXHot,
-						    MouseYHot, 0);
+				Mouse_Shadow_Buffer(this, Screen, MouseBuffer, MouseBuffX, MouseBuffY, MouseXHot, MouseYHot, 0);
 				Screen->Unlock();
 			}
 		}
@@ -409,8 +407,7 @@ void WWMouseClass::Conditional_Hide_Mouse(int x1, int y1, int x2, int y2) {
 	//
 	if (!(MCFlags & CONDHIDDEN)) {
 		GetCursorPos(&pt);
-		if (MouseBuffX >= MouseCXLeft && MouseBuffX <= MouseCXRight && MouseBuffY >= MouseCYUpper &&
-		    MouseBuffY <= MouseCYLower) {
+		if (MouseBuffX >= MouseCXLeft && MouseBuffX <= MouseCXRight && MouseBuffY >= MouseCYUpper && MouseBuffY <= MouseCYLower) {
 			Low_Hide_Mouse();
 			MCFlags |= CONDHIDDEN;
 		}
@@ -461,8 +458,7 @@ void WWMouseClass::Draw_Mouse(GraphicViewPortClass *scr) {
 	//	Get the position that the mouse is currently located at
 	//
 	GetCursorPos(&pt);
-	if (MCFlags & CONDHIDE && pt.x >= MouseCXLeft && pt.x <= MouseCXRight && pt.y >= MouseCYUpper &&
-	    pt.y <= MouseCYLower) {
+	if (MCFlags & CONDHIDE && pt.x >= MouseCXLeft && pt.x <= MouseCXRight && pt.y >= MouseCYUpper && pt.y <= MouseCYLower) {
 		Hide_Mouse();
 		MCFlags |= CONDHIDDEN;
 	} else {
@@ -550,8 +546,7 @@ void WWMouseClass::Erase_Mouse(GraphicViewPortClass *scr, int forced) {
 		//
 		if (EraseBuffX != -1 || EraseBuffY != -1) {
 			if (scr->Lock()) {
-				Mouse_Shadow_Buffer(this, scr, EraseBuffer, EraseBuffX, EraseBuffY, EraseBuffHotX,
-						    EraseBuffHotY, 0);
+				Mouse_Shadow_Buffer(this, scr, EraseBuffer, EraseBuffX, EraseBuffY, EraseBuffHotX, EraseBuffHotY, 0);
 				scr->Unlock();
 			}
 			EraseBuffX = -1;
@@ -563,7 +558,9 @@ void WWMouseClass::Erase_Mouse(GraphicViewPortClass *scr, int forced) {
 #endif
 }
 
-int WWMouseClass::Get_Mouse_State(void) { return (State); }
+int WWMouseClass::Get_Mouse_State(void) {
+	return (State);
+}
 /***********************************************************************************************
  * WWKeyboardClass::Get_Mouse_X -- Returns the mouses current x position in pixels             *
  *                                                                                             *

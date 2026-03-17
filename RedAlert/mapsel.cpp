@@ -43,40 +43,40 @@ extern int ControlQ;
 int Mouse_Over_Spot(int house, int scenario);
 void Set_Mouse(MouseType shape, int &start, int &count, int &delay, int &xspot, int &yspot);
 // VG for ant mission progression
-const char *antmission[] = {NULL, "SCA01EA.INI", "SCA02EA.INI", "SCA03EA.INI", "SCA04EA.INI"};
+const char *antmission[] = { NULL, "SCA01EA.INI", "SCA02EA.INI", "SCA03EA.INI", "SCA04EA.INI" };
 
 struct point {
 	int x;
 	int y;
-} const MapCoords[2][14][3] = {{{{185, 123}, {-1, -1}, {-1, -1}},
-				{{173, 112}, {-1, -1}, {-1, -1}},
-				{{196, 100}, {200, 112}, {-1, -1}},
-				{{175, 113}, {-1, -1}, {-1, -1}},
-				{{187, 91}, {202, 93}, {206, 105}},
-				{{207, 161}, {212, 172}, {-1, -1}},
-				{{172, 92}, {-1, -1}, {-1, -1}},
-				{{132, 119}, {146, 125}, {-1, -1}},
-				{{199, 73}, {205, 86}, {-1, -1}},
-				{{236, 114}, {-1, -1}, {-1, -1}},
-				{{219, 64}, {225, 76}, {-1, -1}},
-				{{256, 69}, {-1, -1}, {-1, -1}},
-				{{262, 77}, {-1, -1}, {-1, -1}},
-				{{249, 97}, {-1, -1}, {-1, -1}}},
-			       // Soviet coords
-			       {{{178, 105}, {-1, -1}, {-1, -1}},
-				{{163, 101}, {163, 113}, {-1, -1}},
-				{{160, 89}, {-1, -1}, {-1, -1}},
-				{{142, 101}, {142, 117}, {-1, -1}},
-				{{212, 163}, {-1, -1}, {-1, -1}},
-				{{155, 133}, {171, 144}, {-1, -1}},
-				{{216, 103}, {-1, -1}, {-1, -1}},
-				{{132, 145}, {154, 154}, {-1, -1}},
-				{{122, 117}, {-1, -1}, {-1, -1}},
-				{{117, 130}, {-1, -1}, {-1, -1}},
-				{{99, 107}, {109, 146}, {-1, -1}},
-				{{134, 125}, {-1, -1}, {-1, -1}},
-				{{32, 156}, {46, 171}, {-1, -1}},
-				{{108, 97}, {-1, -1}, {-1, -1}}}};
+} const MapCoords[2][14][3] = { { { { 185, 123 }, { -1, -1 }, { -1, -1 } },
+				  { { 173, 112 }, { -1, -1 }, { -1, -1 } },
+				  { { 196, 100 }, { 200, 112 }, { -1, -1 } },
+				  { { 175, 113 }, { -1, -1 }, { -1, -1 } },
+				  { { 187, 91 }, { 202, 93 }, { 206, 105 } },
+				  { { 207, 161 }, { 212, 172 }, { -1, -1 } },
+				  { { 172, 92 }, { -1, -1 }, { -1, -1 } },
+				  { { 132, 119 }, { 146, 125 }, { -1, -1 } },
+				  { { 199, 73 }, { 205, 86 }, { -1, -1 } },
+				  { { 236, 114 }, { -1, -1 }, { -1, -1 } },
+				  { { 219, 64 }, { 225, 76 }, { -1, -1 } },
+				  { { 256, 69 }, { -1, -1 }, { -1, -1 } },
+				  { { 262, 77 }, { -1, -1 }, { -1, -1 } },
+				  { { 249, 97 }, { -1, -1 }, { -1, -1 } } },
+				// Soviet coords
+				{ { { 178, 105 }, { -1, -1 }, { -1, -1 } },
+				  { { 163, 101 }, { 163, 113 }, { -1, -1 } },
+				  { { 160, 89 }, { -1, -1 }, { -1, -1 } },
+				  { { 142, 101 }, { 142, 117 }, { -1, -1 } },
+				  { { 212, 163 }, { -1, -1 }, { -1, -1 } },
+				  { { 155, 133 }, { 171, 144 }, { -1, -1 } },
+				  { { 216, 103 }, { -1, -1 }, { -1, -1 } },
+				  { { 132, 145 }, { 154, 154 }, { -1, -1 } },
+				  { { 122, 117 }, { -1, -1 }, { -1, -1 } },
+				  { { 117, 130 }, { -1, -1 }, { -1, -1 } },
+				  { { 99, 107 }, { 109, 146 }, { -1, -1 } },
+				  { { 134, 125 }, { -1, -1 }, { -1, -1 } },
+				  { { 32, 156 }, { 46, 171 }, { -1, -1 } },
+				  { { 108, 97 }, { -1, -1 }, { -1, -1 } } } };
 
 #ifndef WIN32
 extern short StreamLowImpact;
@@ -147,8 +147,7 @@ char const *Map_Selection(void) {
 	//	Options.Set_Score_Volume(fixed(4, 10));
 	Theme.Queue_Song(THEME_MAP);
 
-	void *anim =
-	    Open_Animation(_filename, NULL, 0L, (WSAOpenType)(WSA_OPEN_FROM_MEM | WSA_OPEN_TO_PAGE), mappalette);
+	void *anim = Open_Animation(_filename, NULL, 0L, (WSAOpenType)(WSA_OPEN_FROM_MEM | WSA_OPEN_TO_PAGE), mappalette);
 
 	Keyboard->Clear();
 	SeenPage.Clear();
@@ -284,7 +283,11 @@ char const *Map_Selection(void) {
 	//	BlackPalette.Set(FADE_PALETTE_SLOW, Call_Back);
 	//	SeenPage.Clear();
 
-	Fancy_Text_Print(TXT_STAND_BY, 160 * RESFACTOR, 190 * RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK,
+	Fancy_Text_Print(TXT_STAND_BY,
+			 160 * RESFACTOR,
+			 190 * RESFACTOR,
+			 GadgetClass::Get_Color_Scheme(),
+			 TBLACK,
 			 TPF_CENTER | TPF_6PT_GRAD | TPF_DROPSHADOW);
 
 	/*
@@ -320,11 +323,8 @@ int Mouse_Over_Spot(int house, int scenario) {
 	for (int selection = 0; selection < 3 && MapCoords[house][scenario][selection].x != -1; selection++) {
 		int mousex = Get_Mouse_X() / RESFACTOR;
 		int mousey = Get_Mouse_Y() / RESFACTOR;
-		if (mousex >= MapCoords[house][scenario][selection].x &&
-		    mousey >= MapCoords[house][scenario][selection].y &&
-		    mousex <= MapCoords[house][scenario][selection].x + 11 &&
-		    mousey <= MapCoords[house][scenario][selection].y + 9) {
-
+		if (mousex >= MapCoords[house][scenario][selection].x && mousey >= MapCoords[house][scenario][selection].y &&
+		    mousex <= MapCoords[house][scenario][selection].x + 11 && mousey <= MapCoords[house][scenario][selection].y + 9) {
 			retval = selection;
 			break;
 		}

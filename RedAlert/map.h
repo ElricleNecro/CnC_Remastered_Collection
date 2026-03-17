@@ -46,11 +46,11 @@ public:
 	/*
 	** Initialization
 	*/
-	virtual void One_Time(void);	// Theater-specific inits
-	virtual void Init_Clear(void);	// Clears all to known state
+	virtual void One_Time(void); // Theater-specific inits
+	virtual void Init_Clear(void); // Clears all to known state
 	virtual void Alloc_Cells(void); // Allocates buffers
-	virtual void Free_Cells(void);	// Frees buffers
-	virtual void Init_Cells(void);	// Frees buffers
+	virtual void Free_Cells(void); // Frees buffers
+	virtual void Init_Cells(void); // Frees buffers
 
 	/*--------------------------------------------------------
 	** Main functions that deal with groupings of cells within the map or deals with the cell
@@ -59,8 +59,12 @@ public:
 	CELL Pick_Random_Location(void) const;
 	int Intact_Bridge_Count(void) const;
 	bool Base_Region(CELL cell, HousesType &house, ZoneType &zone) const;
-	CELL Nearby_Location(CELL cell, SpeedType speed, int zone = -1, MZoneType check = MZONE_NORMAL,
-			     bool checkflagged = false, int locationmod = 0) const;
+	CELL Nearby_Location(CELL cell,
+			     SpeedType speed,
+			     int zone = -1,
+			     MZoneType check = MZONE_NORMAL,
+			     bool checkflagged = false,
+			     int locationmod = 0) const;
 	ObjectClass *Close_Object(COORDINATE coord) const;
 	virtual void Detach(ObjectClass *) {};
 	int Cell_Region(CELL cell);
@@ -116,12 +120,24 @@ public:
 	*/
 	long TotalValue;
 
-	CellClass &operator[](COORDINATE coord) { return (Array[Coord_Cell(coord)]); };
-	CellClass &operator[](CELL cell) { return (Array[cell]); };
-	CellClass const &operator[](COORDINATE coord) const { return (Array[Coord_Cell(coord)]); };
-	CellClass const &operator[](CELL cell) const { return (Array[cell]); };
-	int ID(CellClass const *ptr) { return (Array.ID(ptr)); };
-	int ID(CellClass const &ptr) { return (Array.ID(ptr)); };
+	CellClass &operator[](COORDINATE coord) {
+		return (Array[Coord_Cell(coord)]);
+	};
+	CellClass &operator[](CELL cell) {
+		return (Array[cell]);
+	};
+	CellClass const &operator[](COORDINATE coord) const {
+		return (Array[Coord_Cell(coord)]);
+	};
+	CellClass const &operator[](CELL cell) const {
+		return (Array[cell]);
+	};
+	int ID(CellClass const *ptr) {
+		return (Array.ID(ptr));
+	};
+	int ID(CellClass const &ptr) {
+		return (Array.ID(ptr));
+	};
 
 protected:
 	/*

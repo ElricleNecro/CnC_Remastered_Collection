@@ -52,15 +52,15 @@ extern "C" void __cdecl Set_Shape_Buffer(void const *buffer, int size) {
 
 #if (0)
 global C ShapeBuffer : dword global C ShapeBufferSize : dword global C _ShapeBuffer : dword global C _ShapeBufferSize
-    : dword global C Set_Shape_Buffer : near
+	: dword global C Set_Shape_Buffer : near
 
-					    DATASEG label ShapeBuffer dword _ShapeBuffer dd 0
+						    DATASEG label ShapeBuffer dword _ShapeBuffer dd 0
 
-					label ShapeBufferSize dword _ShapeBufferSize dd 0
+					    label ShapeBufferSize dword _ShapeBufferSize dd 0
 
-					CODESEG
+					    CODESEG
 
-					;
+					    ;
 ***************************************************************************;
 *SET_SHAPE_BUFFER-- Sets the shape buffer to the given pointer *;
 **;
@@ -81,18 +81,18 @@ global C ShapeBuffer : dword global C ShapeBufferSize : dword global C _ShapeBuf
 *= == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
    *GLOBAL C Set_Shape_Buffer : NEAR
 
-				    PROC Set_Shape_Buffer C near USES eax
+					PROC Set_Shape_Buffer C near USES eax
 
-					ARG buff : DWORD ARG size : DWORD
+						ARG buff : DWORD ARG size : DWORD
 
-									mov eax,
-    [size] mov[_ShapeBufferSize],
-    eax
+										    mov eax,
+	[size] mov[_ShapeBufferSize],
+	eax
 
-	mov eax,
-    [buff] mov[_ShapeBuffer],
-    eax ret
+		mov eax,
+	[buff] mov[_ShapeBuffer],
+	eax ret
 
-	ENDP Set_Shape_Buffer END
+		ENDP Set_Shape_Buffer END
 
 #endif

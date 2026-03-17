@@ -42,15 +42,22 @@
 class WarheadTypeClass {
 public:
 	WarheadTypeClass(char const *name);
-	WarheadTypeClass(NoInitClass const &) {}
+	WarheadTypeClass(NoInitClass const &) {
+	}
 
 	void *operator new(size_t);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	void operator delete(void *pointer);
 
-	void Code_Pointers(void) {}
-	void Decode_Pointers(void) {}
-	char const *Name(void) const { return (IniName); }
+	void Code_Pointers(void) {
+	}
+	void Decode_Pointers(void) {
+	}
+	char const *Name(void) const {
+		return (IniName);
+	}
 	bool Read_INI(CCINIClass &ini);
 	static WarheadTypeClass *As_Pointer(WarheadType weapon);
 

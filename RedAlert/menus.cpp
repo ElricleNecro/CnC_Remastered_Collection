@@ -74,13 +74,13 @@ PRIVATE int Select_To_Entry(int select, unsigned long bitfield, int index) {
 	int placement;
 
 	if (bitfield == 0xFFFFFFFFL) /* if all bits are set	*/
-		return (select);     /*		then it as is		*/
+		return (select); /*		then it as is		*/
 
-	placement = 0;					    /* current pos zero		*/
-	while (select) {				    /* while still ones		*/
+	placement = 0; /* current pos zero		*/
+	while (select) { /* while still ones		*/
 		if (bitfield & (1L << (placement + index))) /* if this flagged then	*/
-			select--;			    /* decrement counter		*/
-		placement++;				    /* and we moved a place	*/
+			select--; /* decrement counter		*/
+		placement++; /* and we moved a place	*/
 	}
 	while (!(bitfield & (1L << (placement + index)))) {
 		placement++;
@@ -154,12 +154,12 @@ PRIVATE int Coordinates_In_Region(int x, int y, int inx1, int iny1, int inx2, in
 int Find_Menu_Items(int maxitems, unsigned long field, char index) {
 	int loop, ctr;
 
-	if (field == 0xFFFFFFFFL)  /* if all bits are set	*/
+	if (field == 0xFFFFFFFFL) /* if all bits are set	*/
 		return (maxitems); /* then maxitems set		*/
 
 	for (loop = ctr = 0; loop < maxitems; loop++) { /* loop through items	*/
-		if (field & (1L << (loop + index))) {	/* if the bit is set		*/
-			ctr++;				/*		count the item		*/
+		if (field & (1L << (loop + index))) { /* if the bit is set		*/
+			ctr++; /*		count the item		*/
 		}
 	}
 	return (ctr);
@@ -182,8 +182,8 @@ void Setup_Menu(int menu, char const *text[], unsigned long field, int index, in
 	int *menuptr, lp;
 	int menuy, menux, idx, item, num, drawy;
 
-	menuptr = &MenuList[menu][0];	 /* get pointer to menu	*/
-	menuy = WinY + menuptr[MENUY];	 /* get the absolute 		*/
+	menuptr = &MenuList[menu][0]; /* get pointer to menu	*/
+	menuy = WinY + menuptr[MENUY]; /* get the absolute 		*/
 	menux = (WinX + menuptr[MENUX]); /*		coords of menu		*/
 	item = Select_To_Entry(menuptr[MSELECTED], field, index);
 	num = menuptr[ITEMSHIGH];
@@ -193,8 +193,12 @@ void Setup_Menu(int menu, char const *text[], unsigned long field, int index, in
 	for (lp = 0; lp < num; lp++) {
 		idx = Select_To_Entry(lp, field, index);
 		drawy = menuy + (lp * FontHeight) + (lp * skip);
-		Plain_Text_Print(text[idx], menux, drawy, menuptr[((idx == item) && (MenuUpdate)) ? HILITE : NORMCOL],
-				 TBLACK, TPF_8POINT | TPF_DROPSHADOW);
+		Plain_Text_Print(text[idx],
+				 menux,
+				 drawy,
+				 menuptr[((idx == item) && (MenuUpdate)) ? HILITE : NORMCOL],
+				 TBLACK,
+				 TPF_8POINT | TPF_DROPSHADOW);
 		//		if ((idx==item) && (MenuUpdate ))
 		//			Text_Print(text[idx], menux, drawy, menuptr[HILITE], TBLACK);
 	}
@@ -224,14 +228,14 @@ int Check_Menu(int menu, char const *text[], char *, long field, int index) {
 	// selection++;												/* get
 	// rid of warning	*/
 
-	menuptr = &MenuList[menu][0];			     /* get pointer to menu	*/
-	maxitem = menuptr[ITEMSHIGH] - 1;		     /* find max items			*/
+	menuptr = &MenuList[menu][0]; /* get pointer to menu	*/
+	maxitem = menuptr[ITEMSHIGH] - 1; /* find max items			*/
 	newitem = item = menuptr[MSELECTED] % (maxitem + 1); /* find selected 			*/
-	select = -1;					     /* no selection made		*/
-	menuskip = FontHeight + MenuSkip;		     /* calc new font height	*/
-	halfskip = MenuSkip >> 1;			     /* adjustment for menus	*/
+	select = -1; /* no selection made		*/
+	menuskip = FontHeight + MenuSkip; /* calc new font height	*/
+	halfskip = MenuSkip >> 1; /* adjustment for menus	*/
 
-	menuy = WinY + menuptr[MENUY];	 /* get the absolute 		*/
+	menuy = WinY + menuptr[MENUY]; /* get the absolute 		*/
 	menux = (WinX + menuptr[MENUX]); /*		coords of menu		*/
 	normcol = menuptr[NORMCOL];
 	litcol = menuptr[HILITE];
@@ -245,8 +249,7 @@ int Check_Menu(int menu, char const *text[], char *, long field, int index) {
 	UnknownKey = 0;
 	if (Keyboard->Check()) {
 #ifdef WIN32
-		key = (Keyboard->Get() &
-		       ~(WWKEY_SHIFT_BIT | WWKEY_ALT_BIT | WWKEY_CTRL_BIT)); /* mask off all but release bit	*/
+		key = (Keyboard->Get() & ~(WWKEY_SHIFT_BIT | WWKEY_ALT_BIT | WWKEY_CTRL_BIT)); /* mask off all but release bit	*/
 #else
 		key = (Keyboard->Get() & 0x08FF); /* mask off all but release bit	*/
 #endif
@@ -258,10 +261,10 @@ int Check_Menu(int menu, char const *text[], char *, long field, int index) {
 	**	the heck outta here. If we are somewhere on the menu, then figure
 	**	out the new selected item, and continue forward.
 	*/
-	mx1 = (WinX) + (menuptr[MENUX] * FontWidth);	  /* get menu coords		*/
-	my1 = (WinY) + (menuptr[MENUY]) - halfskip;	  /*		from the menu		*/
+	mx1 = (WinX) + (menuptr[MENUX] * FontWidth); /* get menu coords		*/
+	my1 = (WinY) + (menuptr[MENUY]) - halfskip; /*		from the menu		*/
 	mx2 = mx1 + (menuptr[ITEMWIDTH] * FontWidth) - 1; /*		structure as		*/
-	my2 = my1 + (menuptr[ITEMSHIGH] * menuskip) - 1;  /*		necessary			*/
+	my2 = my1 + (menuptr[ITEMSHIGH] * menuskip) - 1; /*		necessary			*/
 
 	tempy = Get_Mouse_Y();
 	if (Coordinates_In_Region(Get_Mouse_X(), tempy, mx1, my1, mx2, my2) && MenuUpdate) {
@@ -269,23 +272,22 @@ int Check_Menu(int menu, char const *text[], char *, long field, int index) {
 	}
 
 	switch (key) {
-
-	case KN_UP:			   /* if the key moves up	*/
-		newitem--;		   /* 	new item up one	*/
-		if (newitem < 0)	   /* if invalid new item	*/
+	case KN_UP: /* if the key moves up	*/
+		newitem--; /* 	new item up one	*/
+		if (newitem < 0) /* if invalid new item	*/
 			newitem = maxitem; /* put at list bottom	*/
 		break;
-	case KN_DOWN:		       /* if key moves down		*/
-		newitem++;	       /*		new item down one	*/
+	case KN_DOWN: /* if key moves down		*/
+		newitem++; /*		new item down one	*/
 		if (newitem > maxitem) /* if new item past 		*/
-			newitem = 0;   /*		list end, clear	*/
+			newitem = 0; /*		list end, clear	*/
 		break;
-	case KN_HOME:	     /* if top of list key 	*/
-	case KN_PGUP:	     /*		is selected then	*/
+	case KN_HOME: /* if top of list key 	*/
+	case KN_PGUP: /*		is selected then	*/
 		newitem = 0; /*		new item = top		*/
 		break;
-	case KN_END:		   /* if bottom of list is	*/
-	case KN_PGDN:		   /*		selected then		*/
+	case KN_END: /* if bottom of list is	*/
+	case KN_PGDN: /*		selected then		*/
 		newitem = maxitem; /*		new item = bottom	*/
 		break;
 
@@ -307,7 +309,7 @@ int Check_Menu(int menu, char const *text[], char *, long field, int index) {
 	**	selection number.
 	*/
 	case KN_RETURN: /* if a selection is 	*/
-	case KN_SPACE:	/*		made with key		*/
+	case KN_SPACE: /*		made with key		*/
 	case KN_CENTER:
 		select = newitem; /*		flag it made.		*/
 		break;
@@ -324,8 +326,7 @@ int Check_Menu(int menu, char const *text[], char *, long field, int index) {
 	*/
 	default:
 		for (idx = 0; idx < menuptr[ITEMSHIGH]; idx++) {
-			if (toupper(*(text[Select_To_Entry(idx, field, index)])) ==
-			    toupper(Keyboard->To_ASCII((KeyNumType)(key & 0x0FF)))) {
+			if (toupper(*(text[Select_To_Entry(idx, field, index)])) == toupper(Keyboard->To_ASCII((KeyNumType)(key & 0x0FF)))) {
 				newitem = select = idx;
 				break;
 			}
@@ -383,10 +384,10 @@ int Check_Menu(int menu, char const *text[], char *, long field, int index) {
  *   05/16/1994 JLB : Created.                                             *
  *=========================================================================*/
 int Do_Menu(char const **strings, bool) {
-	int count;	  // Number of entries in this menu.
-	int length;	  // The width of the menu (in pixels).
+	int count; // Number of entries in this menu.
+	int length; // The width of the menu (in pixels).
 	char const **ptr; // Working menu text pointer.
-	int selection;	  // Selection from user.
+	int selection; // Selection from user.
 
 	if (!strings)
 		return (-1);
@@ -497,7 +498,7 @@ int Main_Menu(unsigned long) {
 	int d_start_w = 118 * RESFACTOR;
 	int d_start_h = 9 * RESFACTOR;
 	int d_start_x = 102 * RESFACTOR;
-#ifndef FIXIT_VERSION_3			     //	Removed button from main menu.
+#ifndef FIXIT_VERSION_3 //	Removed button from main menu.
 #if defined(WIN32) && !defined(INTERNET_OFF) // Denzil 5/1/98 - no internet play
 	int d_internet_w = 118 * RESFACTOR;
 	int d_internet_h = 9 * RESFACTOR;
@@ -553,13 +554,13 @@ int Main_Menu(unsigned long) {
 		BUTTON_INTRO,
 		BUTTON_EXIT,
 	};
-#else					     //	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 	enum {
 		BUTTON_EXPAND = 100,
 		BUTTON_START,
 #if defined(WIN32) && !defined(INTERNET_OFF) // Denzil 5/1/98 - No internet play
 		BUTTON_INTERNET,
-#endif					     // WIN32
+#endif // WIN32
 		// #if defined(MPEGMOVIE) // Denzil 6/26/98 Video settings
 		//		BUTTON_MOVIE,
 		// #endif
@@ -568,7 +569,7 @@ int Main_Menu(unsigned long) {
 		BUTTON_INTRO,
 		BUTTON_EXIT,
 	};
-#endif					     //	FIXIT_VERSION_3
+#endif //	FIXIT_VERSION_3
 
 	/*
 	**	Dialog variables:
@@ -584,7 +585,7 @@ int Main_Menu(unsigned long) {
 #endif
 #endif
 	KeyNumType input; // input from user
-	int retval;	  // return value
+	int retval; // return value
 	int curbutton;
 	TextButtonClass *buttons[7];
 	unsigned long starttime;
@@ -604,12 +605,10 @@ int Main_Menu(unsigned long) {
 	} else if (bExpansionAM)
 		ystep = 13 * RESFACTOR;
 
-	TextButtonClass expandbtnCS(BUTTON_EXPAND, TXT_WOL_CS_MISSIONS, TPF_BUTTON, d_start_x, starty, d_start_w,
-				    d_start_h);
+	TextButtonClass expandbtnCS(BUTTON_EXPAND, TXT_WOL_CS_MISSIONS, TPF_BUTTON, d_start_x, starty, d_start_w, d_start_h);
 	if (bExpansionCS)
 		starty += ystep;
-	TextButtonClass expandbtnAM(BUTTON_EXPAND_AM, TXT_WOL_AM_MISSIONS, TPF_BUTTON, d_start_x, starty, d_start_w,
-				    d_start_h);
+	TextButtonClass expandbtnAM(BUTTON_EXPAND_AM, TXT_WOL_AM_MISSIONS, TPF_BUTTON, d_start_x, starty, d_start_w, d_start_h);
 	if (bExpansionAM)
 		starty += ystep;
 #else
@@ -626,8 +625,7 @@ int Main_Menu(unsigned long) {
 	starty += ystep;
 #ifndef FIXIT_VERSION_3
 #if defined(WIN32) && !defined(INTERNET_OFF) // Denzil 5/1/98 - no internet play
-	TextButtonClass internetbutton(BUTTON_INTERNET, TXT_INTERNET, TPF_BUTTON, d_internet_x, starty, d_internet_w,
-				       d_internet_h);
+	TextButtonClass internetbutton(BUTTON_INTERNET, TXT_INTERNET, TPF_BUTTON, d_internet_x, starty, d_internet_w, d_internet_h);
 	starty += ystep;
 #endif // WIN32
 #endif
@@ -639,8 +637,7 @@ int Main_Menu(unsigned long) {
 	TextButtonClass loadbtn(BUTTON_LOAD, TXT_LOAD_MISSION, TPF_BUTTON, d_load_x, starty, d_load_w, d_load_h);
 	starty += ystep;
 
-	TextButtonClass multibtn(BUTTON_MULTI, TXT_MULTIPLAYER_GAME, TPF_BUTTON, d_multi_x, starty, d_multi_w,
-				 d_multi_h);
+	TextButtonClass multibtn(BUTTON_MULTI, TXT_MULTIPLAYER_GAME, TPF_BUTTON, d_multi_x, starty, d_multi_w, d_multi_h);
 	starty += ystep;
 
 	TextButtonClass introbtn(BUTTON_INTRO, TXT_INTRO, TPF_BUTTON, d_intro_x, starty, d_intro_w, d_intro_h);
@@ -675,7 +672,7 @@ int Main_Menu(unsigned long) {
 	}
 #if defined(WIN32) && !defined(INTERNET_OFF) // Denzil 5/1/98 - No internet play
 	internetbutton.Add_Tail(*commands);
-#endif					     // WIN32
+#endif // WIN32
 #endif
 	// #if defined(MPEGMOVIE) // Denzil 6/26/98 Video settings
 	//	moviebutton.Add_Tail(*commands);
@@ -718,8 +715,7 @@ int Main_Menu(unsigned long) {
 
 	Keyboard->Clear();
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
-			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	fixed oldvolume = Options.ScoreVolume;
 	if (oldvolume == 0) {
@@ -733,7 +729,6 @@ int Main_Menu(unsigned long) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 #ifdef WIN32
 		/*
 		** If we have just received input focus again after running in the background then
@@ -762,7 +757,6 @@ int Main_Menu(unsigned long) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			/*
 			**	Load the background picture.
 			*/
@@ -778,20 +772,32 @@ int Main_Menu(unsigned long) {
 			commands->Draw_All();
 #ifdef FIXIT_VERSION_3
 #if (0) // PG
-			Fancy_Text_Print("V%s", d_dialog_x + d_dialog_w - (18 * RESFACTOR),
-					 d_dialog_y + d_dialog_h - (5 * RESFACTOR), GadgetClass::Get_Color_Scheme(),
-					 TBLACK, TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT, Version_Name());
+			Fancy_Text_Print("V%s",
+					 d_dialog_x + d_dialog_w - (18 * RESFACTOR),
+					 d_dialog_y + d_dialog_h - (5 * RESFACTOR),
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT,
+					 Version_Name());
 #endif
 #else
 #ifndef WIN32
-			Fancy_Text_Print("V%s", d_dialog_x + d_dialog_w - (18 * RESFACTOR),
-					 d_dialog_y + d_dialog_h - (8 * RESFACTOR), GadgetClass::Get_Color_Scheme(),
-					 TBLACK, TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT, Version_Name());
+			Fancy_Text_Print("V%s",
+					 d_dialog_x + d_dialog_w - (18 * RESFACTOR),
+					 d_dialog_y + d_dialog_h - (8 * RESFACTOR),
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT,
+					 Version_Name());
 
 #else
-			Fancy_Text_Print("V%s", d_dialog_x + d_dialog_w - (18 * RESFACTOR),
-					 d_dialog_y + d_dialog_h - (11 * RESFACTOR), GadgetClass::Get_Color_Scheme(),
-					 TBLACK, TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT, Version_Name());
+			Fancy_Text_Print("V%s",
+					 d_dialog_x + d_dialog_w - (18 * RESFACTOR),
+					 d_dialog_y + d_dialog_h - (11 * RESFACTOR),
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT,
+					 Version_Name());
 
 #endif
 #endif
@@ -982,9 +988,13 @@ int Main_Menu(unsigned long) {
 
 		case KN_LMOUSE:
 #if (0) // PG
-			if (Coordinates_In_Region(Keyboard->MouseQX, Keyboard->MouseQY,
+			if (Coordinates_In_Region(Keyboard->MouseQX,
+						  Keyboard->MouseQY,
 
-						  9 * RESFACTOR, 10 * RESFACTOR, 79 * RESFACTOR, 24 * RESFACTOR)) {
+						  9 * RESFACTOR,
+						  10 * RESFACTOR,
+						  79 * RESFACTOR,
+						  24 * RESFACTOR)) {
 				Show_Who_Was_Responsible();
 				display = true;
 				Theme.Play_Song(THEME_INTRO);
@@ -997,8 +1007,7 @@ int Main_Menu(unsigned long) {
 			if (Is_Counterstrike_Installed() == true) {
 #endif
 				if ((Keyboard->Down(KN_LSHIFT) || Keyboard->Down(KN_RSHIFT)) &&
-				    Coordinates_In_Region(Keyboard->MouseQX, Keyboard->MouseQY, 260 * RESFACTOR, 0,
-							  320 * RESFACTOR, 50 * RESFACTOR)) {
+				    Coordinates_In_Region(Keyboard->MouseQX, Keyboard->MouseQY, 260 * RESFACTOR, 0, 320 * RESFACTOR, 50 * RESFACTOR)) {
 					AntsEnabled = true;
 					process = false;
 #ifdef FIXIT_VERSION_3

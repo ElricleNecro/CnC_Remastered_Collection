@@ -72,11 +72,9 @@
  *   12/23/1994 JLB : Fixed scatter algorithm for non-homing projectiles.                      *
  *   12/31/1994 JLB : Removed range parameter (not needed).                                    *
  *=============================================================================================*/
-BulletClass::BulletClass(BulletType id, TARGET target, TechnoClass *payback, int strength, WarheadType warhead,
-			 int speed)
-    : ObjectClass(RTTI_BULLET, Bullets.ID(this)), Class(BulletTypes.Ptr((int)id)), Payback(payback),
-      PrimaryFacing(DIR_N), IsInaccurate(false), IsToAnimate(false), IsLocked(true), TarCom(target), MaxSpeed(speed),
-      Warhead(warhead) {
+BulletClass::BulletClass(BulletType id, TARGET target, TechnoClass *payback, int strength, WarheadType warhead, int speed)
+	: ObjectClass(RTTI_BULLET, Bullets.ID(this)), Class(BulletTypes.Ptr((int)id)), Payback(payback), PrimaryFacing(DIR_N), IsInaccurate(false),
+	  IsToAnimate(false), IsLocked(true), TarCom(target), MaxSpeed(speed), Warhead(warhead) {
 	Strength = strength;
 	Height = FLIGHT_LEVEL;
 }
@@ -99,16 +97,13 @@ BulletClass::BulletClass(BulletType id, TARGET target, TechnoClass *payback, int
  *=============================================================================================*/
 BulletClass::~BulletClass(void) {
 	if (GameActive) {
-
 		/*
 		**	SPECIAL CASE:
 		**	The dog is attached to the dog bullet in a limbo state. When the bullet is
 		**	destroyed, the dog must come back out of limbo at the closest location possible to
 		**	the bullet.
 		*/
-		if (Payback != NULL && Payback->What_Am_I() == RTTI_INFANTRY &&
-		    ((InfantryClass *)Payback)->Class->IsDog) {
-
+		if (Payback != NULL && Payback->What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)Payback)->Class->IsDog) {
 			InfantryClass *dog = (InfantryClass *)Payback;
 			if (dog) {
 				bool unlimbo = false;
@@ -234,25 +229,25 @@ short const *BulletClass::Occupy_List(bool) const {
 	**	Super-gigundo units use the >= 64 coord spillage list logic.
 	*/
 	if (Class->IsGigundo) {
-		static short _list[] = {-1,
-					0,
-					1,
-					MAP_CELL_W * 1 - 1,
-					MAP_CELL_W * 1,
-					MAP_CELL_W * 1 + 1,
-					-MAP_CELL_W * 1 - 1,
-					-MAP_CELL_W * 1,
-					-MAP_CELL_W * 1 + 1,
-					MAP_CELL_W * 2 - 1,
-					MAP_CELL_W * 2,
-					MAP_CELL_W * 2 + 1,
-					-MAP_CELL_W * 2 - 1,
-					-MAP_CELL_W * 2,
-					-MAP_CELL_W * 2 + 1,
-					-MAP_CELL_W * 3 - 1,
-					-MAP_CELL_W * 3,
-					-MAP_CELL_W * 3 + 1,
-					REFRESH_EOL};
+		static short _list[] = { -1,
+					 0,
+					 1,
+					 MAP_CELL_W * 1 - 1,
+					 MAP_CELL_W * 1,
+					 MAP_CELL_W * 1 + 1,
+					 -MAP_CELL_W * 1 - 1,
+					 -MAP_CELL_W * 1,
+					 -MAP_CELL_W * 1 + 1,
+					 MAP_CELL_W * 2 - 1,
+					 MAP_CELL_W * 2,
+					 MAP_CELL_W * 2 + 1,
+					 -MAP_CELL_W * 2 - 1,
+					 -MAP_CELL_W * 2,
+					 -MAP_CELL_W * 2 + 1,
+					 -MAP_CELL_W * 3 - 1,
+					 -MAP_CELL_W * 3,
+					 -MAP_CELL_W * 3 + 1,
+					 REFRESH_EOL };
 		return (_list);
 		//		return(Coord_Spillage_List(Coord, 64));
 	}
@@ -391,7 +386,6 @@ void BulletClass::AI(void) {
 	case IMPACT_EDGE:
 		Mark();
 		if (Payback != NULL && Class->Type == BULLET_GPS_SATELLITE) {
-
 			bool reveal = false;
 			if (Session.Type != GAME_GLYPHX_MULTIPLAYER) {
 				if (Payback->House == PlayerPtr) {
@@ -422,8 +416,8 @@ void BulletClass::AI(void) {
 		** tech level 15 or so.
 		*/
 		if (Payback != NULL && Class->Type == BULLET_NUKE_UP && Payback->House->Control.TechLevel <= 10) {
-			BulletClass *bullet = new BulletClass(BULLET_NUKE_DOWN, ::As_Target(Payback->House->NukeDest),
-							      Payback, 200, WARHEAD_NUKE, MPH_VERY_FAST);
+			BulletClass *bullet =
+				new BulletClass(BULLET_NUKE_DOWN, ::As_Target(Payback->House->NukeDest), Payback, 200, WARHEAD_NUKE, MPH_VERY_FAST);
 			if (bullet) {
 				int celly = Cell_Y(Payback->House->NukeDest);
 				celly -= 15;
@@ -568,17 +562,27 @@ void BulletClass::Draw_It(int x, int y, WindowNumberType window) const {
 	**	render position.
 	*/
 	if (Height > 0 && Class->IsShadow) {
-
 		if (Class->IsParachuted) {
 			// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-			CC_Draw_Shape(this, AnimTypeClass::As_Reference(ANIM_PARA_BOMB).Get_Image_Data(), 1,
-				      x + Lepton_To_Pixel(Height / 2), y + 10, window,
-				      SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING, NULL,
+			CC_Draw_Shape(this,
+				      AnimTypeClass::As_Reference(ANIM_PARA_BOMB).Get_Image_Data(),
+				      1,
+				      x + Lepton_To_Pixel(Height / 2),
+				      y + 10,
+				      window,
+				      SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING,
+				      NULL,
 				      DisplayClass::UnitShadow);
 		} else {
 			// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-			CC_Draw_Shape(this, shapeptr, shapenum, x, y, window,
-				      SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING, NULL,
+			CC_Draw_Shape(this,
+				      shapeptr,
+				      shapenum,
+				      x,
+				      y,
+				      window,
+				      SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING,
+				      NULL,
 				      DisplayClass::UnitShadow);
 		}
 		y -= Lepton_To_Pixel(Height);
@@ -593,13 +597,18 @@ void BulletClass::Draw_It(int x, int y, WindowNumberType window) const {
 	}
 	if (Class->IsSubSurface) {
 		// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-		CC_Draw_Shape(this, shapeptr, shapenum, x, y, window,
-			      flags | SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING, NULL,
+		CC_Draw_Shape(this,
+			      shapeptr,
+			      shapenum,
+			      x,
+			      y,
+			      window,
+			      flags | SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING,
+			      NULL,
 			      DisplayClass::FadingShade);
 	} else {
 		// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-		CC_Draw_Shape(this, shapeptr, shapenum, x, y, window, flags | SHAPE_CENTER | SHAPE_WIN_REL, NULL,
-			      DisplayClass::UnitShadow);
+		CC_Draw_Shape(this, shapeptr, shapenum, x, y, window, flags | SHAPE_CENTER | SHAPE_WIN_REL, NULL, DisplayClass::UnitShadow);
 	}
 }
 
@@ -619,7 +628,9 @@ void BulletClass::Draw_It(int x, int y, WindowNumberType window) const {
  * HISTORY:                                                                                    *
  *   08/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BulletClass::Init(void) { Bullets.Free_All(); }
+void BulletClass::Init(void) {
+	Bullets.Free_All();
+}
 
 /***********************************************************************************************
  * BulletClass::Detach -- Removes specified target from this bullet's targeting system.        *
@@ -646,7 +657,6 @@ void BulletClass::Detach(TARGET target, bool all) {
 
 	ObjectClass *obj = As_Object(target);
 	if (Payback != NULL && obj == Payback) {
-
 		/*
 		** If we're being called as a result of the dog that fired us being put
 		** in limbo, then don't detach.  If for any other reason, detach.
@@ -711,9 +721,7 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir) {
 		**	fire is inherently inaccurate.
 		*/
 		if (IsInaccurate || Class->IsInaccurate ||
-		    ((Is_Target_Cell(TarCom) || Is_Target_Infantry(TarCom)) &&
-		     (Warhead == WARHEAD_AP || Class->IsFueled))) {
-
+		    ((Is_Target_Cell(TarCom) || Is_Target_Infantry(TarCom)) && (Warhead == WARHEAD_AP || Class->IsFueled))) {
 			/*
 			**	Inaccuracy for low velocity or homing projectiles manifests itself as a standard
 			**	Circular Error of Probability (CEP) algorithm. High speed projectiles usually
@@ -907,8 +915,7 @@ bool BulletClass::Is_Forced_To_Explode(COORDINATE &coord) const {
 	/*
 	**	Check for impact on a wall or other high obstacle.
 	*/
-	if (!Class->IsHigh && cellptr->Overlay != OVERLAY_NONE &&
-	    OverlayTypeClass::As_Reference(cellptr->Overlay).IsHigh) {
+	if (!Class->IsHigh && cellptr->Overlay != OVERLAY_NONE && OverlayTypeClass::As_Reference(cellptr->Overlay).IsHigh) {
 		coord = Cell_Coord(Coord_Cell(coord));
 		return (true);
 	}
@@ -921,7 +928,6 @@ bool BulletClass::Is_Forced_To_Explode(COORDINATE &coord) const {
 		int d = ::Distance(Coord_Fraction(coord), XY_Coord(CELL_LEPTON_W / 2, CELL_LEPTON_W / 2));
 		if (cellptr->Land_Type() != LAND_WATER ||
 		    (d < CELL_LEPTON_W / 3 && cellptr->Cell_Techno() != NULL && cellptr->Cell_Techno() != Payback)) {
-
 			/*
 			**	Force explosion to be at center of techno object if one is present.
 			*/
@@ -992,7 +998,6 @@ void BulletClass::Bullet_Explodes(bool forced) {
 			return;
 
 	} else {
-
 		/*
 		**	Special damage apply for SAM missiles. This is the only way that missile
 		**	damage affects the aircraft target.
@@ -1070,7 +1075,6 @@ void BulletClass::Bullet_Explodes(bool forced) {
 	//				if (Payback && Payback->House == PlayerPtr && stricmp(Class->Name(),
 	//"GPSSATELLITE") == 0) {
 	if (Payback && Class->Type == BULLET_GPS_SATELLITE) {
-
 		bool reveal = false;
 		if (Session.Type != GAME_GLYPHX_MULTIPLAYER) {
 			if (Payback->House == PlayerPtr) {

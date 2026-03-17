@@ -109,7 +109,6 @@ ResultType TerrainClass::Take_Damage(int &damage, int distance, WarheadType warh
 	**	Small arms can never destroy a terrain element.
 	*/
 	if ((!IsOnFire || warhead == WARHEAD_FIRE) && warhead != WARHEAD_SA && !Class->IsImmune) {
-
 		res = ObjectClass::Take_Damage(damage, distance, warhead, source, forced);
 
 		if (damage && warhead == WARHEAD_FIRE) {
@@ -121,7 +120,6 @@ ResultType TerrainClass::Take_Damage(int &damage, int distance, WarheadType warh
 		**	currently isn't on fire and isn't in the process of crumbling.
 		*/
 		if (res == RESULT_DESTROYED) {
-
 			/*
 			**	Remove this terrain object from the targeting computers of all other
 			**	game objects. No use beating a dead horse.
@@ -129,7 +127,6 @@ ResultType TerrainClass::Take_Damage(int &damage, int distance, WarheadType warh
 			Detach_All();
 
 			if (IsOnFire) {
-
 				/*
 				**	Attached flame animation should be shortened as much as possible so that
 				**	crumbling can begin soon.
@@ -207,8 +204,7 @@ void TerrainClass::operator delete(void *ptr) {
  *   05/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 TerrainClass::TerrainClass(TerrainType type, CELL cell)
-    : ObjectClass(RTTI_TERRAIN, Terrains.ID(this)), Class(TerrainTypes.Ptr((int)type)), IsOnFire(false),
-      IsCrumbling(false) {
+	: ObjectClass(RTTI_TERRAIN, Terrains.ID(this)), Class(TerrainTypes.Ptr((int)type)), IsOnFire(false), IsCrumbling(false) {
 	Strength = Class->MaxStrength;
 	if (cell != -1) {
 		if (!Unlimbo(Cell_Coord(cell))) {
@@ -312,8 +308,7 @@ void TerrainClass::Draw_It(int x, int y, WindowNumberType window) const {
 		*/
 		IsTheaterShape = true;
 		// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-		CC_Draw_Shape(this, shapedata, shapenum, x, y, window, flags | SHAPE_WIN_REL | SHAPE_GHOST,
-			      Map.FadingLight, Map.UnitShadow);
+		CC_Draw_Shape(this, shapedata, shapenum, x, y, window, flags | SHAPE_WIN_REL | SHAPE_GHOST, Map.FadingLight, Map.UnitShadow);
 		IsTheaterShape = false;
 	}
 }
@@ -333,7 +328,9 @@ void TerrainClass::Draw_It(int x, int y, WindowNumberType window) const {
  * HISTORY:                                                                                    *
  *   09/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TerrainClass::Init(void) { Terrains.Free_All(); }
+void TerrainClass::Init(void) {
+	Terrains.Free_All();
+}
 
 /***********************************************************************************************
  * TerrainClass::Can_Enter_Cell -- Determines if the terrain object can exist in the cell.     *
@@ -635,8 +632,8 @@ unsigned char *TerrainClass::Radar_Icon(CELL cell) {
 	assert(IsActive);
 
 	unsigned char *icon = (unsigned char *)Class->Get_Radar_Data(); // get a pointer to radar icons
-	int width = *icon++;						// extract the width from data
-	int height = *icon++;						// extract the width from data
+	int width = *icon++; // extract the width from data
+	int height = *icon++; // extract the width from data
 
 	/*
 	** Icon number that we need can be found by converting the cell and base
@@ -670,7 +667,9 @@ unsigned char *TerrainClass::Radar_Icon(CELL cell) {
  * HISTORY:                                                                                    *
  *   02/07/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-COORDINATE TerrainClass::Target_Coord(void) const { return (Coord_Add(XY_Coord(0, -Height), Sort_Y())); }
+COORDINATE TerrainClass::Target_Coord(void) const {
+	return (Coord_Add(XY_Coord(0, -Height), Sort_Y()));
+}
 
 /***********************************************************************************************
  * TerrainClass::Read_INI -- Reads terrain objects from INI file.                              *

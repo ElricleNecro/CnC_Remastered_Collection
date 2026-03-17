@@ -54,7 +54,9 @@ public:
 	**	Constructors and destructors.
 	*/
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 	OverlayClass(OverlayType type, CELL pos = -1, HousesType = HOUSE_NONE);
 	OverlayClass(NoInitClass const &x) : ObjectClass(x), Class(x) {};
@@ -63,7 +65,9 @@ public:
 			OverlayClass::Limbo();
 		Class = 0;
 	};
-	operator OverlayType(void) const { return Class->Type; };
+	operator OverlayType(void) const {
+		return Class->Type;
+	};
 
 	static void Init(void);
 
@@ -72,7 +76,9 @@ public:
 	*/
 	static void Read_INI(CCINIClass &ini);
 	static void Write_INI(CCINIClass &ini);
-	static char *INI_Name(void) { return "OVERLAY"; };
+	static char *INI_Name(void) {
+		return "OVERLAY";
+	};
 	bool Load(Straw &file);
 	bool Save(Pipe &file) const;
 
@@ -80,7 +86,9 @@ public:
 	**	Virtual support functionality.
 	*/
 	virtual bool Mark(MarkType);
-	virtual ObjectTypeClass const &Class_Of(void) const { return *Class; };
+	virtual ObjectTypeClass const &Class_Of(void) const {
+		return *Class;
+	};
 	virtual void Draw_It(int, int, WindowNumberType) const {};
 
 private:

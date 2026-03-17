@@ -69,9 +69,9 @@
  *=============================================================================================*/
 UnitTrackerClass::UnitTrackerClass(int unit_count) {
 	UnitTotals = new long[unit_count]; // Allocate memory for the unit totals
-	UnitCount = unit_count;		   // Keep a record of how many unit entries there are
-	InNetworkFormat = 0;		   // The unit entries are in host format
-	Clear_Unit_Total();		   // Clear each entry
+	UnitCount = unit_count; // Keep a record of how many unit entries there are
+	InNetworkFormat = 0; // The unit entries are in host format
+	Clear_Unit_Total(); // Clear each entry
 }
 
 /***********************************************************************************************
@@ -88,7 +88,9 @@ UnitTrackerClass::UnitTrackerClass(int unit_count) {
  * HISTORY:                                                                                    *
  *    6/7/96 0:10AM ST : Created                                                               *
  *=============================================================================================*/
-UnitTrackerClass::~UnitTrackerClass(void) { delete UnitTotals; }
+UnitTrackerClass::~UnitTrackerClass(void) {
+	delete UnitTotals;
+}
 
 /***********************************************************************************************
  * UTC::Increment_Unit_Total -- Increment the total for the specefied unit                     *
@@ -104,7 +106,9 @@ UnitTrackerClass::~UnitTrackerClass(void) { delete UnitTotals; }
  * HISTORY:                                                                                    *
  *    6/7/96 0:12AM ST : Created                                                               *
  *=============================================================================================*/
-void UnitTrackerClass::Increment_Unit_Total(int unit_type) { UnitTotals[unit_type]++; }
+void UnitTrackerClass::Increment_Unit_Total(int unit_type) {
+	UnitTotals[unit_type]++;
+}
 
 /***********************************************************************************************
  * UTC::Decrement_Unit_Total -- Decrement the total for the specefied unit                     *
@@ -120,7 +124,9 @@ void UnitTrackerClass::Increment_Unit_Total(int unit_type) { UnitTotals[unit_typ
  * HISTORY:                                                                                    *
  *    6/7/96 0:13AM ST : Created                                                               *
  *=============================================================================================*/
-void UnitTrackerClass::Decrement_Unit_Total(int unit_type) { UnitTotals[unit_type]--; }
+void UnitTrackerClass::Decrement_Unit_Total(int unit_type) {
+	UnitTotals[unit_type]--;
+}
 
 /***********************************************************************************************
  * UTC::Get_All_Totals -- Returns a pointer to the start of the unit totals list               *
@@ -136,7 +142,9 @@ void UnitTrackerClass::Decrement_Unit_Total(int unit_type) { UnitTotals[unit_typ
  * HISTORY:                                                                                    *
  *    6/7/96 0:13AM ST : Created                                                               *
  *=============================================================================================*/
-long *UnitTrackerClass::Get_All_Totals(void) { return (UnitTotals); }
+long *UnitTrackerClass::Get_All_Totals(void) {
+	return (UnitTotals);
+}
 
 /***********************************************************************************************
  * UTC::Clear_Unit_Total -- Clear out all the unit totals                                      *
@@ -152,7 +160,9 @@ long *UnitTrackerClass::Get_All_Totals(void) { return (UnitTotals); }
  * HISTORY:                                                                                    *
  *    6/7/96 0:14AM ST : Created                                                               *
  *=============================================================================================*/
-void UnitTrackerClass::Clear_Unit_Total(void) { memset(UnitTotals, 0, UnitCount * sizeof(long)); }
+void UnitTrackerClass::Clear_Unit_Total(void) {
+	memset(UnitTotals, 0, UnitCount * sizeof(long));
+}
 
 /***********************************************************************************************
  * UTC::To_Network_Format -- Changes all unit totals to network format for the internet        *

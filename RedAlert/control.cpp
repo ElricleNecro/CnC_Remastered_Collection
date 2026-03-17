@@ -68,7 +68,8 @@
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
 ControlClass::ControlClass(unsigned id, int x, int y, int w, int h, unsigned flags, int sticky)
-    : GadgetClass(x, y, w, h, flags, sticky), ID(id), Peer(0) {}
+	: GadgetClass(x, y, w, h, flags, sticky), ID(id), Peer(0) {
+}
 
 /***********************************************************************************************
  * ControlClass::ControlClass -- Copy constructor for control gadget.                          *
@@ -85,7 +86,8 @@ ControlClass::ControlClass(unsigned id, int x, int y, int w, int h, unsigned fla
  * HISTORY:                                                                                    *
  *   12/05/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ControlClass::ControlClass(ControlClass const &control) : GadgetClass(control), ID(control.ID), Peer(control.Peer) {}
+ControlClass::ControlClass(ControlClass const &control) : GadgetClass(control), ID(control.ID), Peer(control.Peer) {
+}
 
 /***********************************************************************************************
  * ControlClass::Action -- Normal action for control gadget objects.                           *
@@ -109,7 +111,6 @@ ControlClass::ControlClass(ControlClass const &control) : GadgetClass(control), 
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
 int ControlClass::Action(unsigned flags, KeyNumType &key) {
-
 	/*
 	**	Only if the flags indicate that a recognized action has occurred, do the
 	**	normal processing of this gadget and set return value to the gadget ID.
@@ -150,7 +151,9 @@ int ControlClass::Action(unsigned flags, KeyNumType &key) {
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void ControlClass::Make_Peer(GadgetClass &gadget) { Peer = &gadget; }
+void ControlClass::Make_Peer(GadgetClass &gadget) {
+	Peer = &gadget;
+}
 
 /***********************************************************************************************
  * ControlClass::Get_ID -- Gets the ID number for this gadget.                                 *
@@ -169,7 +172,9 @@ void ControlClass::Make_Peer(GadgetClass &gadget) { Peer = &gadget; }
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-unsigned ControlClass::Get_ID(void) const { return (ID); }
+unsigned ControlClass::Get_ID(void) const {
+	return (ID);
+}
 
 /***********************************************************************************************
  * ControlClass::Draw_Me -- Draw logic for the control class object.                           *

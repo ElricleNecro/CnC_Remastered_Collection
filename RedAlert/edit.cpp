@@ -77,7 +77,7 @@
  *   01/21/1995 JLB : Modified.                                                                *
  *=============================================================================================*/
 EditClass::EditClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w, int h, EditStyle style)
-    : ControlClass(id, x, y, w, h, LEFTPRESS), String(text) {
+	: ControlClass(id, x, y, w, h, LEFTPRESS), String(text) {
 	TextFlags = flags & ~(TPF_CENTER);
 	EditFlags = style;
 	Set_Text(text, max_len);
@@ -230,13 +230,11 @@ int EditClass::Action(unsigned flags, KeyNumType &key) {
 	**	function.
 	*/
 	if ((flags & KEYBOARD) && Has_Focus()) {
-
 		/*
 		**	Process the keyboard character. If indicated, consume this keyboard event
 		**	so that the edit gadget ID number is not returned.
 		*/
 		if (key == KN_ESC) {
-
 			Clear_Focus();
 			flags = 0;
 
@@ -249,7 +247,6 @@ int EditClass::Action(unsigned flags, KeyNumType &key) {
 			** Allow numeric keypad presses to map to ascii numbers
 			*/
 			if ((key & WWKEY_VK_BIT) && ascii >= '0' && ascii <= '9') {
-
 				key = (KeyNumType)(key & ~WWKEY_VK_BIT);
 				if ((!(flags & LEFTRELEASE)) && (!(flags & RIGHTRELEASE))) {
 					if (Handle_Key(ascii)) {
@@ -261,9 +258,7 @@ int EditClass::Action(unsigned flags, KeyNumType &key) {
 				/*
 				** Filter out all special keys except return and backspace
 				*/
-				if ((!(key & WWKEY_VK_BIT) && ascii >= ' ' && ascii <= 255) || key == KN_RETURN ||
-				    key == KN_BACKSPACE) {
-
+				if ((!(key & WWKEY_VK_BIT) && ascii >= ' ' && ascii <= 255) || key == KN_RETURN || key == KN_BACKSPACE) {
 					if ((!(flags & LEFTRELEASE)) && (!(flags & RIGHTRELEASE))) {
 						if (Handle_Key(Keyboard->To_ASCII(key))) {
 							flags &= ~KEYBOARD;
@@ -277,7 +272,7 @@ int EditClass::Action(unsigned flags, KeyNumType &key) {
 			}
 		}
 
-#else  // WIN32
+#else // WIN32
 			if (Handle_Key(Keyboard->To_ASCII(key))) {
 				flags &= ~KEYBOARD;
 				key = KN_NONE;
@@ -304,7 +299,9 @@ int EditClass::Action(unsigned flags, KeyNumType &key) {
  * HISTORY:                                                                                    *
  *   01/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void EditClass::Draw_Background(void) { Draw_Box(X, Y, Width, Height, BOXSTYLE_BOX, true); }
+void EditClass::Draw_Background(void) {
+	Draw_Box(X, Y, Width, Height, BOXSTYLE_BOX, true);
+}
 
 /***********************************************************************************************
  * EditClass::Draw_Text -- Draws the edit gadget text.                                         *
@@ -333,8 +330,7 @@ void EditClass::Draw_Text(char const *text) {
 
 	Conquer_Clip_Text_Print(text, X + 1, Y + 1, Color, TBLACK, TextFlags | flags, Width - 2);
 
-	if (Has_Focus() && (int)strlen(text) < MaxLength &&
-	    ((int)String_Pixel_Width(text) + (int)String_Pixel_Width("_") < Width - 2)) {
+	if (Has_Focus() && (int)strlen(text) < MaxLength && ((int)String_Pixel_Width(text) + (int)String_Pixel_Width("_") < Width - 2)) {
 		Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(text), Y + 1, Color, TBLACK, TextFlags | flags);
 	}
 }

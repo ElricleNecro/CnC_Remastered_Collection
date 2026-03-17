@@ -81,11 +81,17 @@ public:
 	virtual long Size(void) = 0;
 	virtual long Write(void const *buffer, long size) = 0;
 	virtual void Close(void) = 0;
-	virtual unsigned long Get_Date_Time(void) { return (0); }
-	virtual bool Set_Date_Time(unsigned long) { return (false); }
+	virtual unsigned long Get_Date_Time(void) {
+		return (0);
+	}
+	virtual bool Set_Date_Time(unsigned long) {
+		return (false);
+	}
 	virtual void Error(int error, int canretry = false, char const *filename = NULL) = 0;
 
-	operator char const *() { return File_Name(); };
+	operator char const *() {
+		return File_Name();
+	};
 };
 
 #endif

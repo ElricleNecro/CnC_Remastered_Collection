@@ -55,7 +55,7 @@
 /*
 **	These are the Open_File, Read_File, and Seek_File constants.
 */
-#define READ 1	// Read access.
+#define READ 1 // Read access.
 #define WRITE 2 // Write access.
 
 #ifndef SEEK_SET
@@ -74,16 +74,7 @@ extern WORD Hard_Error_Occured;
 /*
 **	This is the menu control structures.
 */
-typedef enum MenuIndexType {
-	MENUX,
-	MENUY,
-	ITEMWIDTH,
-	ITEMSHIGH,
-	MSELECTED,
-	NORMCOL,
-	HILITE,
-	MENUPADDING = 0x1000
-} MenuIndexType;
+typedef enum MenuIndexType { MENUX, MENUY, ITEMWIDTH, ITEMSHIGH, MSELECTED, NORMCOL, HILITE, MENUPADDING = 0x1000 } MenuIndexType;
 
 #ifdef NEVER
 #define BITSPERBYTE 8
@@ -131,21 +122,21 @@ typedef enum MenuIndexType {
 class IconsetClass;
 #ifndef WIN32
 typedef struct {
-	short Width;	 // Width of icons (pixels).
-	short Height;	 // Height of icons (pixels).
-	short Count;	 // Number of (logical) icons in this set.
+	short Width; // Width of icons (pixels).
+	short Height; // Height of icons (pixels).
+	short Count; // Number of (logical) icons in this set.
 	short Allocated; // Was this iconset allocated?
-	short MapWidth;	 // Width of map (in icons).
+	short MapWidth; // Width of map (in icons).
 	short MapHeight; // Height of map (in icons).
-	long Size;	 // Size of entire iconset memory block.
-	long Icons;	 // Offset from buffer start to icon data.
-			 //	unsigned char * Icons;	// Offset from buffer start to icon data.
-	long Palettes;	 // Offset from buffer start to palette data.
-	long Remaps;	 // Offset from buffer start to remap index data.
-	long TransFlag;	 // Offset for transparency flag table.
-	long ColorMap;	 // Offset for color control value table.
-	long Map;	 // Icon map offset (if present).
-			 //	unsigned char * Map;				// Icon map offset (if present).
+	long Size; // Size of entire iconset memory block.
+	long Icons; // Offset from buffer start to icon data.
+		//	unsigned char * Icons;	// Offset from buffer start to icon data.
+	long Palettes; // Offset from buffer start to palette data.
+	long Remaps; // Offset from buffer start to remap index data.
+	long TransFlag; // Offset for transparency flag table.
+	long ColorMap; // Offset for color control value table.
+	long Map; // Icon map offset (if present).
+		//	unsigned char * Map;				// Icon map offset (if present).
 } IControl_Type;
 #endif
 
@@ -175,24 +166,60 @@ public:
 	/*
 	**	Query functions.
 	*/
-	int Map_Width(void) const { return (MapWidth); };
-	int Map_Height(void) const { return (MapHeight); };
-	unsigned char *Control_Map(void) { return ((unsigned char *)this + ColorMap); };
-	unsigned char const *Control_Map(void) const { return ((unsigned char const *)this + ColorMap); };
-	int Icon_Count(void) const { return (Count); };
-	int Pixel_Width(void) const { return (Width); };
-	int Pixel_Height(void) const { return (Height); };
-	int Total_Size(void) const { return (Size); };
-	unsigned char const *Palette_Data(void) const { return ((unsigned char const *)this + Palettes); };
-	unsigned char *Palette_Data(void) { return ((unsigned char *)this + Palettes); };
-	unsigned char const *Icon_Data(void) const { return ((unsigned char const *)this + Icons); };
-	unsigned char *Icon_Data(void) { return ((unsigned char *)this + Icons); };
-	unsigned char const *Map_Data(void) const { return ((unsigned char const *)this + Map); };
-	unsigned char *Map_Data(void) { return ((unsigned char *)this + Map); };
-	unsigned char const *Remap_Data(void) const { return ((unsigned char const *)this + Remaps); };
-	unsigned char *Remap_Data(void) { return ((unsigned char *)this + Remaps); };
-	unsigned char const *Trans_Data(void) const { return ((unsigned char const *)this + TransFlag); };
-	unsigned char *Trans_Data(void) { return ((unsigned char *)this + TransFlag); };
+	int Map_Width(void) const {
+		return (MapWidth);
+	};
+	int Map_Height(void) const {
+		return (MapHeight);
+	};
+	unsigned char *Control_Map(void) {
+		return ((unsigned char *)this + ColorMap);
+	};
+	unsigned char const *Control_Map(void) const {
+		return ((unsigned char const *)this + ColorMap);
+	};
+	int Icon_Count(void) const {
+		return (Count);
+	};
+	int Pixel_Width(void) const {
+		return (Width);
+	};
+	int Pixel_Height(void) const {
+		return (Height);
+	};
+	int Total_Size(void) const {
+		return (Size);
+	};
+	unsigned char const *Palette_Data(void) const {
+		return ((unsigned char const *)this + Palettes);
+	};
+	unsigned char *Palette_Data(void) {
+		return ((unsigned char *)this + Palettes);
+	};
+	unsigned char const *Icon_Data(void) const {
+		return ((unsigned char const *)this + Icons);
+	};
+	unsigned char *Icon_Data(void) {
+		return ((unsigned char *)this + Icons);
+	};
+	unsigned char const *Map_Data(void) const {
+		return ((unsigned char const *)this + Map);
+	};
+	unsigned char *Map_Data(void) {
+		return ((unsigned char *)this + Map);
+	};
+	unsigned char const *Remap_Data(void) const {
+		return ((unsigned char const *)this + Remaps);
+	};
+	unsigned char *Remap_Data(void) {
+		return ((unsigned char *)this + Remaps);
+	};
+	unsigned char const *Trans_Data(void) const {
+		return ((unsigned char const *)this + TransFlag);
+	};
+	unsigned char *Trans_Data(void) {
+		return ((unsigned char *)this + TransFlag);
+	};
 
 	/*
 	**	Disallow these operations with an IconsetClass object.

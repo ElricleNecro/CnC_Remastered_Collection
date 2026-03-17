@@ -51,7 +51,7 @@
 **	data segment. It will be filled in by the Set_Text() function.
 */
 // short const HelpClass::OverlapList[60] = {  // Can't be const - it's expected to be written to. ST - 2/7/2019 5:16PM
-short HelpClass::OverlapList[60] = {REFRESH_EOL};
+short HelpClass::OverlapList[60] = { REFRESH_EOL };
 
 char const *HelpClass::HelpText;
 
@@ -72,8 +72,9 @@ char const *HelpClass::HelpText;
  *   11/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 HelpClass::HelpClass(void)
-    : HelpX(0), HelpY(0), HelpWidth(0), IsRight(false), Cost(0), X(0), Y(0), DrawX(0), DrawY(0), Width(0),
-      Text(TXT_NONE), Color(LTGREY), CountDownTimer(0) {}
+	: HelpX(0), HelpY(0), HelpWidth(0), IsRight(false), Cost(0), X(0), Y(0), DrawX(0), DrawY(0), Width(0), Text(TXT_NONE), Color(LTGREY),
+	  CountDownTimer(0) {
+}
 
 /***********************************************************************************************
  * HelpClass::Init_Clear -- Sets help system to a known state.                                 *
@@ -147,7 +148,6 @@ void HelpClass::AI(KeyNumType &key, int x, int y) {
 	**	a real help text message to display.
 	*/
 	if (CountDownTimer && !HelpText && Text != TXT_NONE) {
-
 		/*
 		**	If the mouse has moved, then reset the timer since a moving mouse is not
 		**	supposed to bring up the help text.
@@ -158,7 +158,6 @@ void HelpClass::AI(KeyNumType &key, int x, int y) {
 			CountDownTimer = HELP_DELAY;
 			Help_Text(TXT_NONE);
 		} else {
-
 			/*
 			**	If the delay has expired, then the text must be drawn. Build the help text
 			**	overlay list at this time. Better to do it now, when we KNOW it is needed, then
@@ -188,7 +187,6 @@ void HelpClass::AI(KeyNumType &key, int x, int y) {
  *=============================================================================================*/
 void HelpClass::Help_Text(int text, int x, int y, int color, bool quick) {
 	if (text != Text) {
-
 		/*
 		**	If there is an existing text message, then flag the map to redraw the underlying
 		**	icons so that the text message is erased.
@@ -247,7 +245,6 @@ void HelpClass::Draw_It(bool forced) {
 
 	forced = false; // TCTCTCTC
 	if (Text != TXT_NONE && (forced || !CountDownTimer)) {
-
 		if (LogicPage->Lock()) {
 			Plain_Text_Print(Text, DrawX, DrawY, Color, BLACK, TPF_MAP | TPF_NOSHADOW);
 			LogicPage->Draw_Rect(DrawX - 1, DrawY - 1, DrawX + Width + 1, DrawY + FontHeight, Color);
@@ -257,12 +254,9 @@ void HelpClass::Draw_It(bool forced) {
 				sprintf(buffer, "$%d", Cost);
 				int width = String_Pixel_Width(buffer);
 
-				Plain_Text_Print(buffer, DrawX, DrawY + FontHeight, Color, BLACK,
-						 TPF_MAP | TPF_NOSHADOW);
-				LogicPage->Draw_Rect(DrawX - 1, DrawY + FontHeight, DrawX + width + 1,
-						     DrawY + FontHeight + FontHeight - 1, Color);
-				LogicPage->Draw_Line(DrawX, DrawY + FontHeight, DrawX + min(width + 1, Width) - 1,
-						     DrawY + FontHeight, BLACK);
+				Plain_Text_Print(buffer, DrawX, DrawY + FontHeight, Color, BLACK, TPF_MAP | TPF_NOSHADOW);
+				LogicPage->Draw_Rect(DrawX - 1, DrawY + FontHeight, DrawX + width + 1, DrawY + FontHeight + FontHeight - 1, Color);
+				LogicPage->Draw_Line(DrawX, DrawY + FontHeight, DrawX + min(width + 1, Width) - 1, DrawY + FontHeight, BLACK);
 			}
 			LogicPage->Unlock();
 		}
@@ -310,8 +304,7 @@ void HelpClass::Set_Text(int text) {
 			if (DrawY < TacPixelY + 1)
 				DrawY = TacPixelY + 1;
 		}
-		memcpy((void *)OverlapList, Text_Overlap_List(Text_String(Text), DrawX - 1, DrawY),
-		       sizeof(OverlapList));
+		memcpy((void *)OverlapList, Text_Overlap_List(Text_String(Text), DrawX - 1, DrawY), sizeof(OverlapList));
 		*(short *)&OverlapList[ARRAY_SIZE(OverlapList) - 1] = REFRESH_EOL;
 	}
 }
@@ -360,7 +353,9 @@ bool HelpClass::Scroll_Map(DirType facing, int &distance, bool really) {
  * HISTORY:                                                                                    *
  *   01/09/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void HelpClass::Set_Cost(int cost) { Cost = cost; }
+void HelpClass::Set_Cost(int cost) {
+	Cost = cost;
+}
 
 /***********************************************************************************************
  * HelpClass::Set_Tactical_Position -- Sets the position of the tactical map.                  *

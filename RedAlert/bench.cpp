@@ -55,7 +55,8 @@
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Benchmark::Benchmark(void) : Average(0), Counter(0), TotalCount(0) {}
+Benchmark::Benchmark(void) : Average(0), Counter(0), TotalCount(0) {
+}
 
 /***********************************************************************************************
  * Benchmark::Reset -- Clear out the benchmark statistics.                                     *

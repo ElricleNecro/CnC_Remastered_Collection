@@ -46,24 +46,24 @@ extern void outportb(int port, unsigned char data);
 #pragma aux outportb parm[edx][al] = "out	dx,al"
 
 extern void outport(int port, unsigned short data);
-#pragma aux outport parm[edx][ax] = "out	dx,al"                                                                        \
-				    "inc	dx"                                                                           \
-				    "mov	al,ah"                                                                        \
+#pragma aux outport parm[edx][ax] = "out	dx,al"                                                                                                      \
+				    "inc	dx"                                                                                                         \
+				    "mov	al,ah"                                                                                                      \
 				    "out	dx,al"
 #endif
 
 extern void outrgb(unsigned char red, unsigned char green, unsigned char blue);
-#pragma aux outrgb parm[al][bl][cl] modify[dx al] = "mov	dx,03C9h"                                                     \
-						    "out	dx,al"                                                        \
-						    "jmp	e1"                                                           \
-						    "e1:"                                                              \
-						    "mov	al,bl"                                                        \
-						    "out	dx,al"                                                        \
-						    "jmp	e2"                                                           \
-						    "e2:"                                                              \
-						    "mov	al,cl"                                                        \
-						    "out	dx,al"                                                        \
-						    "jmp	e3"                                                           \
+#pragma aux outrgb parm[al][bl][cl] modify[dx al] = "mov	dx,03C9h"                                                                                   \
+						    "out	dx,al"                                                                                      \
+						    "jmp	e1"                                                                                         \
+						    "e1:"                                                                                            \
+						    "mov	al,bl"                                                                                      \
+						    "out	dx,al"                                                                                      \
+						    "jmp	e2"                                                                                         \
+						    "e2:"                                                                                            \
+						    "mov	al,cl"                                                                                      \
+						    "out	dx,al"                                                                                      \
+						    "jmp	e3"                                                                                         \
 						    "e3:"
 
 #endif
@@ -79,7 +79,7 @@ class RGBClass {
 public:
 	RGBClass(void) : Red(0), Green(0), Blue(0) {};
 	RGBClass(unsigned char red, unsigned char green, unsigned char blue)
-	    : Red((unsigned char)(red >> 2)), Green((unsigned char)(green >> 2)), Blue((unsigned char)(blue >> 2)) {};
+		: Red((unsigned char)(red >> 2)), Green((unsigned char)(green >> 2)), Blue((unsigned char)(blue >> 2)) {};
 	operator HSVClass(void) const;
 	RGBClass &operator=(RGBClass const &rgb) {
 		if (this == &rgb)
@@ -96,9 +96,15 @@ public:
 	void Adjust(int ratio, RGBClass const &rgb);
 	//		void Adjust(int ratio, RGBClass const & rgb = BlackColor);
 	int Difference(RGBClass const &rgb) const;
-	int Red_Component(void) const { return ((Red << 2) | (Red >> 6)); };
-	int Green_Component(void) const { return ((Green << 2) | (Green >> 6)); };
-	int Blue_Component(void) const { return ((Blue << 2) | (Blue >> 6)); };
+	int Red_Component(void) const {
+		return ((Red << 2) | (Red >> 6));
+	};
+	int Green_Component(void) const {
+		return ((Green << 2) | (Green >> 6));
+	};
+	int Blue_Component(void) const {
+		return ((Blue << 2) | (Blue >> 6));
+	};
 	void Set(int color) const;
 
 private:

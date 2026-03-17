@@ -225,7 +225,6 @@ void ChronalVortexClass::Show(void) {
 	** Dont do anything if vortx is dying.
 	*/
 	if (!StartShutdown) {
-
 		/*
 		** If the vortex is hidden then show it again.
 		*/
@@ -343,14 +342,12 @@ void ChronalVortexClass::Save(Pipe &file) {
  *    8/29/96 4:34PM ST : Created                                                              *
  *=============================================================================================*/
 void ChronalVortexClass::AI(void) {
-
 	int chance;
 
 	/*
 	** No AI if vortex isnt active
 	*/
 	if (Active) {
-
 		/*
 		** Do the movement AI
 		*/
@@ -370,9 +367,7 @@ void ChronalVortexClass::AI(void) {
 				Show();
 			}
 		} else {
-
 			if (Animate == 0) {
-
 				/*
 				** Its time to animate the vortex.
 				*/
@@ -385,7 +380,6 @@ void ChronalVortexClass::AI(void) {
 					AnimateFrame = 1;
 
 					if (StartShutdown) {
-
 						/*
 						** Vortex is in the process of dying.
 						*/
@@ -398,7 +392,6 @@ void ChronalVortexClass::AI(void) {
 							State = STATE_SHRINK;
 						}
 					} else {
-
 						if (StartHiding) {
 							/*
 							** Vortex wants to hide.
@@ -422,7 +415,6 @@ void ChronalVortexClass::AI(void) {
 								State = STATE_SHRINK;
 							}
 						} else {
-
 							Attack();
 							if (State == STATE_GROW) {
 								State = STATE_ROTATE;
@@ -598,7 +590,6 @@ void ChronalVortexClass::Attack(void) {
 		ObjectClass *obj = Map.Layer[LAYER_GROUND][i];
 
 		if (obj->Is_Techno() && obj->Strength > 0) {
-
 			distance = Distance(obj->Center_Coord(), here);
 
 			if (distance <= CELL_LEPTON_W * 2) {
@@ -628,7 +619,6 @@ void ChronalVortexClass::Attack(void) {
 		ObjectClass *obj = Map.Layer[LAYER_GROUND][i];
 
 		if (obj && obj->Is_Techno()) {
-
 			distance = Distance(obj->Center_Coord(), Position);
 
 			if (distance < CELL_LEPTON_W * Range) {
@@ -659,7 +649,6 @@ void ChronalVortexClass::Attack(void) {
 #define ZAP_COUNT 1
 void ChronalVortexClass::Zap_Target(void) {
 	if (!Hidden && Target_Legal(TargetObject) && ZapFrame < ZAP_COUNT) {
-
 		/*
 		** Get the center of the vortex.
 		*/
@@ -731,8 +720,7 @@ void ChronalVortexClass::Zap_Target(void) {
  * HISTORY:                                                                                    *
  *    8/29/96 4:48PM ST : Created                                                              *
  *=============================================================================================*/
-void ChronalVortexClass::Coordinate_Remap(GraphicViewPortClass *inbuffer, int x, int y, int width, int height,
-					  unsigned char *remap_table) {
+void ChronalVortexClass::Coordinate_Remap(GraphicViewPortClass *inbuffer, int x, int y, int width, int height, unsigned char *remap_table) {
 	unsigned char getx, gety, remap_color, pixel_color;
 
 	BufferClass destbuf(width * height);
@@ -746,14 +734,12 @@ void ChronalVortexClass::Coordinate_Remap(GraphicViewPortClass *inbuffer, int x,
 	int dest_height = height;
 
 	if (inbuffer->Lock()) {
-
 		/*
 		** Get a pointer to the section of buffer we are going to work on.
 		*/
 		unsigned char *bufptr = (unsigned char *)inbuffer->Get_Offset() + destx
 #ifdef WIN32
-					+
-					desty * (inbuffer->Get_Width() + inbuffer->Get_XAdd() + inbuffer->Get_Pitch());
+					+ desty * (inbuffer->Get_Width() + inbuffer->Get_XAdd() + inbuffer->Get_Pitch());
 #else
 					+ desty * (inbuffer->Get_Width() + inbuffer->Get_XAdd());
 #endif
@@ -831,7 +817,6 @@ void ChronalVortexClass::Render(void) {
 
 		void const *lut_ptr = MFCD::Retrieve(fname);
 		if (lut_ptr) {
-
 			/*
 			** Build a representation of the area of the screen where the vortex will be
 			** in an off-screen buffer.
@@ -873,18 +858,15 @@ void ChronalVortexClass::Render(void) {
 			*/
 			for (int y = 0; y < 4; y++) {
 				for (int x = 0; x < 4; x++) {
-
 					cell = XY_Cell(xc + x, yc + y);
 					if (cell != -1) {
-
 						// cellptr = &Map[ Coord_Whole (Cell_Coord(cell)) ];
 						cellptr = &Map[cell];
 
 						/*
 						**	Fetch a pointer to the template type associated with this cell.
 						*/
-						if (cellptr->TType != TEMPLATE_NONE &&
-						    cellptr->TType != TEMPLATE_CLEAR1 && cellptr->TType != 255) {
+						if (cellptr->TType != TEMPLATE_NONE && cellptr->TType != TEMPLATE_CLEAR1 && cellptr->TType != 255) {
 							ttype = &TemplateTypeClass::As_Reference(cellptr->TType);
 							icon = cellptr->TIcon;
 						} else {
@@ -896,9 +878,12 @@ void ChronalVortexClass::Render(void) {
 						** Draw the template
 						*/
 						if (ttype->Get_Image_Data()) {
-							RenderBuffer->Draw_Stamp(ttype->Get_Image_Data(), icon,
-										 x * CELL_PIXEL_W, y * CELL_PIXEL_H,
-										 NULL, WINDOW_MAIN);
+							RenderBuffer->Draw_Stamp(ttype->Get_Image_Data(),
+										 icon,
+										 x * CELL_PIXEL_W,
+										 y * CELL_PIXEL_H,
+										 NULL,
+										 WINDOW_MAIN);
 						}
 
 						/*
@@ -906,24 +891,23 @@ void ChronalVortexClass::Render(void) {
 						*/
 						if (cellptr->Smudge != SMUDGE_NONE) {
 							SmudgeTypeClass::As_Reference(cellptr->Smudge)
-							    .Draw_It(x * CELL_PIXEL_W, y * CELL_PIXEL_H,
-								     cellptr->SmudgeData);
+								.Draw_It(x * CELL_PIXEL_W, y * CELL_PIXEL_H, cellptr->SmudgeData);
 						}
 
 						/*
 						**	Draw the overlay object.
 						*/
 						if (cellptr->Overlay != OVERLAY_NONE) {
-							OverlayTypeClass const &otype =
-							    OverlayTypeClass::As_Reference(cellptr->Overlay);
-							IsTheaterShape =
-							    (bool)otype.IsTheater; // Tell Build_Frame if this overlay
-										   // is theater specific
-							CC_Draw_Shape(otype.Get_Image_Data(), cellptr->OverlayData,
+							OverlayTypeClass const &otype = OverlayTypeClass::As_Reference(cellptr->Overlay);
+							IsTheaterShape = (bool)otype.IsTheater; // Tell Build_Frame if this overlay
+								// is theater specific
+							CC_Draw_Shape(otype.Get_Image_Data(),
+								      cellptr->OverlayData,
 								      x * CELL_PIXEL_W + (CELL_PIXEL_W >> 1),
 								      y * CELL_PIXEL_H + (CELL_PIXEL_H >> 1),
 								      WINDOW_TACTICAL,
-								      SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_GHOST, NULL,
+								      SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_GHOST,
+								      NULL,
 								      DisplayClass::UnitShadow);
 
 							IsTheaterShape = false;
@@ -933,13 +917,16 @@ void ChronalVortexClass::Render(void) {
 						**	Draw the flag if there is one located at this cell.
 						*/
 						if (cellptr->IsFlagged) {
-							void const *flag_remap = HouseClass::As_Pointer(cellptr->Owner)
-										     ->Remap_Table(false, REMAP_NORMAL);
-							CC_Draw_Shape(MFCD::Retrieve("FLAGFLY.SHP"), Frame % 14,
-								      x + (ICON_PIXEL_W / 2), y + (ICON_PIXEL_H / 2),
+							void const *flag_remap =
+								HouseClass::As_Pointer(cellptr->Owner)->Remap_Table(false, REMAP_NORMAL);
+							CC_Draw_Shape(MFCD::Retrieve("FLAGFLY.SHP"),
+								      Frame % 14,
+								      x + (ICON_PIXEL_W / 2),
+								      y + (ICON_PIXEL_H / 2),
 								      WINDOW_TACTICAL,
 								      SHAPE_CENTER | SHAPE_GHOST | SHAPE_FADING,
-								      flag_remap, DisplayClass::UnitShadow);
+								      flag_remap,
+								      DisplayClass::UnitShadow);
 						}
 					}
 				}
@@ -958,16 +945,18 @@ void ChronalVortexClass::Render(void) {
 			/*
 			** Render the vortex over the cells we just rendered to our buffer
 			*/
-			Coordinate_Remap(RenderBuffer, Lepton_To_Pixel(Coord_X(Coord_Fraction(Position))),
-					 Lepton_To_Pixel(Coord_Y(Coord_Fraction(Position))), 64, 64,
+			Coordinate_Remap(RenderBuffer,
+					 Lepton_To_Pixel(Coord_X(Coord_Fraction(Position))),
+					 Lepton_To_Pixel(Coord_Y(Coord_Fraction(Position))),
+					 64,
+					 64,
 					 (unsigned char *)lut_ptr);
 
 			/*
 			** Calculate the pixel position of our fresh block of cells on the tactical map so
 			**	we can blit it to the hid page.
 			*/
-			COORDINATE render_pos =
-			    XY_Coord(xc * CELL_LEPTON_W, yc * CELL_LEPTON_H); // Coord_Whole(Position);
+			COORDINATE render_pos = XY_Coord(xc * CELL_LEPTON_W, yc * CELL_LEPTON_H); // Coord_Whole(Position);
 
 			int x, y;
 			Map.Coord_To_Pixel(render_pos, x, y);
@@ -975,7 +964,9 @@ void ChronalVortexClass::Render(void) {
 			/*
 			** Create a view port to blit to
 			*/
-			GraphicViewPortClass target(LogicPage->Get_Graphic_Buffer(), 0, LogicPage->Get_YPos(),
+			GraphicViewPortClass target(LogicPage->Get_Graphic_Buffer(),
+						    0,
+						    LogicPage->Get_YPos(),
 						    Lepton_To_Pixel(Map.TacLeptonWidth),
 						    Lepton_To_Pixel(Map.TacLeptonHeight));
 
@@ -1024,8 +1015,7 @@ void ChronalVortexClass::Render(void) {
 			** Blit our freshly draw cells and vortex into their correct position on the hidpage
 			*/
 			if (dest_width > 0 && dest_height > 0) {
-				RenderBuffer->Blit(target, source_x, source_y, dest_x, dest_y, dest_width, dest_height,
-						   false);
+				RenderBuffer->Blit(target, source_x, source_y, dest_x, dest_y, dest_width, dest_height, false);
 			}
 		}
 	}
@@ -1046,9 +1036,7 @@ void ChronalVortexClass::Render(void) {
  *    8/29/96 4:50PM ST : Created                                                              *
  *=============================================================================================*/
 void ChronalVortexClass::Set_Redraw(void) {
-
 	if (Active) {
-
 		CELL xc = Coord_XCell(Position);
 		CELL yc = Coord_YCell(Position);
 
@@ -1083,7 +1071,7 @@ void ChronalVortexClass::Setup_Remap_Tables(TheaterType theater) {
 	/*
 	** The names of the remap files for each theater
 	*/
-	static char _remaps[3][13] = {"TEMP_VTX.PAL", "SNOW_VTX.PAL", "INTR_VTX.PAL"};
+	static char _remaps[3][13] = { "TEMP_VTX.PAL", "SNOW_VTX.PAL", "INTR_VTX.PAL" };
 
 	int i;
 
@@ -1092,7 +1080,6 @@ void ChronalVortexClass::Setup_Remap_Tables(TheaterType theater) {
 	** them if they dont.
 	*/
 	if (theater != Theater) {
-
 		Theater = theater;
 
 		CCFileClass file(_remaps[(int)Theater]);
@@ -1100,10 +1087,8 @@ void ChronalVortexClass::Setup_Remap_Tables(TheaterType theater) {
 		if (file.Is_Available()) {
 			file.Read(VortexRemapTables, MAX_REMAP_SHADES * 256);
 		} else {
-
 			for (i = 0; i < MAX_REMAP_SHADES; i++) {
-				Build_Fading_Table(GamePalette, &VortexRemapTables[i][0], 0,
-						   240 - ((i * 256) / MAX_REMAP_SHADES));
+				Build_Fading_Table(GamePalette, &VortexRemapTables[i][0], 0, 240 - ((i * 256) / MAX_REMAP_SHADES));
 			}
 
 			file.Write(VortexRemapTables, MAX_REMAP_SHADES * 256);
@@ -1153,17 +1138,14 @@ void ChronalVortexClass::Build_Fading_Table(PaletteClass const &palette, void *d
 		**	loop.
 		*/
 		for (int index = 0; index < PaletteClass::COLOR_COUNT; index++) {
-
 			/*
 			**	If this color should not be remapped, then it will be stored as a remap
 			**	to itself. This is effectively no remap.
 			*/
-			if (index == 0 ||
-			    (index >= CYCLE_COLOR_START && index < (CYCLE_COLOR_START + CYCLE_COLOR_COUNT)) ||
+			if (index == 0 || (index >= CYCLE_COLOR_START && index < (CYCLE_COLOR_START + CYCLE_COLOR_COUNT)) ||
 			    index == CC_PULSE_COLOR || index == CC_EMBER_COLOR) {
 				*ptr++ = index;
 			} else {
-
 				/*
 				**	Find the color that, ideally, the working color should be remapped
 				**	to in the special remap range.
@@ -1178,11 +1160,8 @@ void ChronalVortexClass::Build_Fading_Table(PaletteClass const &palette, void *d
 				int best = -1;
 				int bvalue = 0;
 				for (int id = 0; id < PaletteClass::COLOR_COUNT; id++) {
-
-					if (id != 0 &&
-					    (id < CYCLE_COLOR_START || id >= (CYCLE_COLOR_START + CYCLE_COLOR_COUNT)) &&
+					if (id != 0 && (id < CYCLE_COLOR_START || id >= (CYCLE_COLOR_START + CYCLE_COLOR_COUNT)) &&
 					    id != CC_PULSE_COLOR && id != CC_EMBER_COLOR) {
-
 						int diff = palette[id].Difference(trycolor);
 						if (best == -1 || diff < bvalue) {
 							best = id;

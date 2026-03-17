@@ -142,7 +142,7 @@ GameType Select_MPlayer_Game(void) {
 	//------------------------------------------------------------------------
 	typedef enum {
 		REDRAW_NONE = 0,
-		REDRAW_BUTTONS,	   // includes map interior & coord values
+		REDRAW_BUTTONS, // includes map interior & coord values
 		REDRAW_BACKGROUND, // includes box, map bord, key, coord labels, btns
 		REDRAW_ALL = REDRAW_BACKGROUND
 	} RedrawType;
@@ -150,10 +150,10 @@ GameType Select_MPlayer_Game(void) {
 	//------------------------------------------------------------------------
 	//	Dialog variables:
 	//------------------------------------------------------------------------
-	KeyNumType input;   // input from user
-	bool process;	    // loop while true
+	KeyNumType input; // input from user
+	bool process; // loop while true
 	RedrawType display; // true = re-draw everything
-	GameType retval;    // return value
+	GameType retval; // return value
 	int selection;
 	bool pressed;
 	int curbutton;
@@ -171,11 +171,10 @@ GameType Select_MPlayer_Game(void) {
 	//		return( Select_Serial_Dialog() );
 	//	}
 
-	TextButtonClass modemserialbtn(BUTTON_MODEMSERIAL, TXT_MODEM_SERIAL, TPF_BUTTON, d_modemserial_x,
-				       d_modemserial_y, d_modemserial_w, d_modemserial_h);
+	TextButtonClass
+		modemserialbtn(BUTTON_MODEMSERIAL, TXT_MODEM_SERIAL, TPF_BUTTON, d_modemserial_x, d_modemserial_y, d_modemserial_w, d_modemserial_h);
 
-	TextButtonClass skirmishbtn(BUTTON_SKIRMISH, TXT_SKIRMISH, TPF_BUTTON, d_skirmish_x, d_skirmish_y, d_skirmish_w,
-				    d_skirmish_h);
+	TextButtonClass skirmishbtn(BUTTON_SKIRMISH, TXT_SKIRMISH, TPF_BUTTON, d_skirmish_x, d_skirmish_y, d_skirmish_w, d_skirmish_h);
 
 	TextButtonClass ipxbtn(BUTTON_IPX, TXT_NETWORK, TPF_BUTTON, d_ipx_x, d_ipx_y, d_ipx_w, d_ipx_h);
 
@@ -189,8 +188,7 @@ GameType Select_MPlayer_Game(void) {
 		d_dialog_h -= d_cancel_h;
 	}
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 
 	//------------------------------------------------------------------------
 	//	Initialize
@@ -270,7 +268,6 @@ GameType Select_MPlayer_Game(void) {
 		if (display) {
 			Hide_Mouse();
 			if (display >= REDRAW_BACKGROUND) {
-
 				//...............................................................
 				//	Refresh the backdrop
 				//...............................................................
@@ -361,7 +358,6 @@ GameType Select_MPlayer_Game(void) {
 		}
 
 		if (pressed) {
-
 			//..................................................................
 			// to make sure the selection is correct in case they used the mouse
 			//..................................................................
@@ -399,8 +395,7 @@ GameType Select_MPlayer_Game(void) {
 #ifdef FIXIT_VERSION_3
 					bAftermathMultiplayer = Is_Aftermath_Installed();
 					//	ajw I'll bet this was needed before also...
-					Session.ScenarioIsOfficial =
-					    Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
+					Session.ScenarioIsOfficial = Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
 #endif
 				} else {
 					buttons[curbutton]->IsPressed = false;
@@ -543,7 +538,6 @@ void Computer_Message(void) {
 		// messages back.
 		//.....................................................................
 		if (Percent_Chance(25)) {
-
 			//..................................................................
 			//	Now we have a 1/3 chance of garbling the human message.
 			//..................................................................
@@ -555,14 +549,20 @@ void Computer_Message(void) {
 			//	Only add the message if there is one to add.
 			//..................................................................
 			if (strlen(Session.LastMessage)) {
-				Session.Messages.Add_Message(Text_String(TXT_COMPUTER), 0, Session.LastMessage, color,
+				Session.Messages.Add_Message(Text_String(TXT_COMPUTER),
+							     0,
+							     Session.LastMessage,
+							     color,
 							     TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW,
 							     Rule.MessageDelay * TICKS_PER_MINUTE);
 			}
 		} else {
-			Session.Messages.Add_Message(
-			    Text_String(TXT_COMPUTER), 0, Text_String(TXT_COMP_MSG1 + Random_Pick(0, 12)), color,
-			    TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW, Rule.MessageDelay * TICKS_PER_MINUTE);
+			Session.Messages.Add_Message(Text_String(TXT_COMPUTER),
+						     0,
+						     Text_String(TXT_COMP_MSG1 + Random_Pick(0, 12)),
+						     color,
+						     TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW,
+						     Rule.MessageDelay * TICKS_PER_MINUTE);
 		}
 
 		return;
@@ -588,9 +588,9 @@ void Computer_Message(void) {
  *=========================================================================*/
 static void Garble_Message(char *buf) {
 	char txt[80];
-	char punct[20];	 // for punctuation
-	char *p;	 // working ptr
-	int numwords;	 // # words in the phrase
+	char punct[20]; // for punctuation
+	char *p; // working ptr
+	int numwords; // # words in the phrase
 	char *words[40]; // ptrs to various words in the phrase
 	int i, j;
 
@@ -672,7 +672,9 @@ static void Garble_Message(char *buf) {
  *   07/05/1995 BRR : Created.                                             *
  *=========================================================================*/
 #ifdef FIXIT_VERSION_3 //	Stalemate games.
-int Surrender_Dialog(int text) { return Surrender_Dialog(Text_String(text)); }
+int Surrender_Dialog(int text) {
+	return Surrender_Dialog(Text_String(text));
+}
 #endif
 
 #ifdef FIXIT_VERSION_3 //	Stalemate games.
@@ -685,24 +687,24 @@ int Surrender_Dialog(int text)
 	//	Dialog & button dimensions
 	//------------------------------------------------------------------------
 	enum {
-		D_DIALOG_W = 240 * RESFACTOR,			   // dialog width
-		D_DIALOG_H = 63 * RESFACTOR,			   // dialog height
+		D_DIALOG_W = 240 * RESFACTOR, // dialog width
+		D_DIALOG_H = 63 * RESFACTOR, // dialog height
 		D_DIALOG_X = ((320 * RESFACTOR - D_DIALOG_W) / 2), // centered x-coord
 		D_DIALOG_Y = ((200 * RESFACTOR - D_DIALOG_H) / 2), // centered y-coord
-		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),	   // coord of x-center
+		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2), // coord of x-center
 
-		D_TXT6_H = 7 * RESFACTOR,     // ht of 6-pt text
-		D_MARGIN = 5 * RESFACTOR,     // margin width/height
+		D_TXT6_H = 7 * RESFACTOR, // ht of 6-pt text
+		D_MARGIN = 5 * RESFACTOR, // margin width/height
 		D_TOPMARGIN = 20 * RESFACTOR, // top margin
 
-		D_OK_W = 45 * RESFACTOR,				  // OK width
-		D_OK_H = 9 * RESFACTOR,					  // OK height
-		D_OK_X = D_DIALOG_CX - D_OK_W - 5 * RESFACTOR,		  // OK x
+		D_OK_W = 45 * RESFACTOR, // OK width
+		D_OK_H = 9 * RESFACTOR, // OK height
+		D_OK_X = D_DIALOG_CX - D_OK_W - 5 * RESFACTOR, // OK x
 		D_OK_Y = D_DIALOG_Y + D_DIALOG_H - D_OK_H - D_MARGIN * 2, // OK y
 
-		D_CANCEL_W = 45 * RESFACTOR,					  // Cancel width
-		D_CANCEL_H = 9 * RESFACTOR,					  // Cancel height
-		D_CANCEL_X = D_DIALOG_CX + 5 * RESFACTOR,			  // Cancel x
+		D_CANCEL_W = 45 * RESFACTOR, // Cancel width
+		D_CANCEL_H = 9 * RESFACTOR, // Cancel height
+		D_CANCEL_X = D_DIALOG_CX + 5 * RESFACTOR, // Cancel x
 		D_CANCEL_Y = D_DIALOG_Y + D_DIALOG_H - D_CANCEL_H - D_MARGIN * 2, // Cancel y
 	};
 
@@ -721,8 +723,7 @@ int Surrender_Dialog(int text)
 
 	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_BUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W,
-				  D_CANCEL_H);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
 
 	int curbutton;
 	TextButtonClass *buttons[2];
@@ -750,7 +751,6 @@ int Surrender_Dialog(int text)
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		//.....................................................................
 		//	Invoke game callback
 		//.....................................................................
@@ -778,11 +778,14 @@ int Surrender_Dialog(int text)
 			//	Draw the captions
 			//...............................................................
 #ifdef FIXIT_VERSION_3 //	Stalemate games.
-			Fancy_Text_Print(text, D_DIALOG_CX, D_DIALOG_Y + D_TOPMARGIN, GadgetClass::Get_Color_Scheme(),
-					 TBLACK, TPF_CENTER | TPF_TEXT);
+			Fancy_Text_Print(text, D_DIALOG_CX, D_DIALOG_Y + D_TOPMARGIN, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_TEXT);
 #else
-			Fancy_Text_Print(Text_String(text), D_DIALOG_CX, D_DIALOG_Y + D_TOPMARGIN,
-					 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_TEXT);
+			Fancy_Text_Print(Text_String(text),
+					 D_DIALOG_CX,
+					 D_DIALOG_Y + D_TOPMARGIN,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_CENTER | TPF_TEXT);
 #endif
 
 			//..................................................................
@@ -878,24 +881,24 @@ int Abort_Dialog(void) {
 	//	Dialog & button dimensions
 	//------------------------------------------------------------------------
 	enum {
-		D_DIALOG_W = 170 * RESFACTOR,			   // dialog width
-		D_DIALOG_H = 63 * RESFACTOR,			   // dialog height
+		D_DIALOG_W = 170 * RESFACTOR, // dialog width
+		D_DIALOG_H = 63 * RESFACTOR, // dialog height
 		D_DIALOG_X = ((320 * RESFACTOR - D_DIALOG_W) / 2), // centered x-coord
 		D_DIALOG_Y = ((200 * RESFACTOR - D_DIALOG_H) / 2), // centered y-coord
-		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),	   // coord of x-center
+		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2), // coord of x-center
 
-		D_TXT6_H = 7 * RESFACTOR,     // ht of 6-pt text
-		D_MARGIN = 5 * RESFACTOR,     // margin width/height
+		D_TXT6_H = 7 * RESFACTOR, // ht of 6-pt text
+		D_MARGIN = 5 * RESFACTOR, // margin width/height
 		D_TOPMARGIN = 20 * RESFACTOR, // top margin
 
-		D_YES_W = 45 * RESFACTOR,				    // YES width
-		D_YES_H = 9 * RESFACTOR,				    // YES height
-		D_YES_X = D_DIALOG_CX - D_YES_W - 5 * RESFACTOR,	    // YES x
+		D_YES_W = 45 * RESFACTOR, // YES width
+		D_YES_H = 9 * RESFACTOR, // YES height
+		D_YES_X = D_DIALOG_CX - D_YES_W - 5 * RESFACTOR, // YES x
 		D_YES_Y = D_DIALOG_Y + D_DIALOG_H - D_YES_H - D_MARGIN * 2, // YES y
 
-		D_NO_W = 45 * RESFACTOR,				  // Cancel width
-		D_NO_H = 9 * RESFACTOR,					  // Cancel height
-		D_NO_X = D_DIALOG_CX + 5 * RESFACTOR,			  // Cancel x
+		D_NO_W = 45 * RESFACTOR, // Cancel width
+		D_NO_H = 9 * RESFACTOR, // Cancel height
+		D_NO_X = D_DIALOG_CX + 5 * RESFACTOR, // Cancel x
 		D_NO_Y = D_DIALOG_Y + D_DIALOG_H - D_NO_H - D_MARGIN * 2, // Cancel y
 	};
 
@@ -942,7 +945,6 @@ int Abort_Dialog(void) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		//.....................................................................
 		//	Invoke game callback
 		//.....................................................................
@@ -969,8 +971,12 @@ int Abort_Dialog(void) {
 			//...............................................................
 			//	Draw the captions
 			//...............................................................
-			Fancy_Text_Print(Text_String(TXT_CONFIRM_EXIT), D_DIALOG_CX, D_DIALOG_Y + D_TOPMARGIN,
-					 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_TEXT);
+			Fancy_Text_Print(Text_String(TXT_CONFIRM_EXIT),
+					 D_DIALOG_CX,
+					 D_DIALOG_Y + D_TOPMARGIN,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_CENTER | TPF_TEXT);
 
 			//..................................................................
 			//	Redraw the buttons
@@ -1106,8 +1112,7 @@ int Read_TEN_Game_Options(void) {
 	/*
 	** Read the scenario name from the .INI and try to match it with a scenario file in our list.
 	*/
-	ini.Get_String("Options", "Scenario", "Black Acres", Session.Options.ScenarioDescription,
-		       sizeof(Session.Options.ScenarioDescription));
+	ini.Get_String("Options", "Scenario", "Black Acres", Session.Options.ScenarioDescription, sizeof(Session.Options.ScenarioDescription));
 
 	Session.Options.ScenarioIndex = -1;
 	for (int i = 0; i < Session.Scenarios.Count(); i++) {
@@ -1192,8 +1197,7 @@ int Read_MPATH_Game_Options(void) {
 	/*
 	** Read the scenario name from the .INI and try to match it with a scenario file in our list.
 	*/
-	ini.Get_String("Options", "Scenario", "Black Acres", Session.Options.ScenarioDescription,
-		       sizeof(Session.Options.ScenarioDescription));
+	ini.Get_String("Options", "Scenario", "Black Acres", Session.Options.ScenarioDescription, sizeof(Session.Options.ScenarioDescription));
 
 	Session.Options.ScenarioIndex = -1;
 	for (int i = 0; i < Session.Scenarios.Count(); i++) {

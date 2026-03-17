@@ -425,89 +425,92 @@ int MapEditClass::Load_Scenario(void) {
 	 *   10/21/1994 BR : Created.                                              *
 	 *   09/04/1996 JLB : Simplified                                           *
 	 *=========================================================================*/
-	int MapEditClass::Pick_Scenario(char const *caption, int &scen_nump, ScenarioPlayerType &playerp,
-					ScenarioDirType &dirp, ScenarioVarType &varp) {
+	int MapEditClass::Pick_Scenario(char const *caption,
+					int &scen_nump,
+					ScenarioPlayerType &playerp,
+					ScenarioDirType &dirp,
+					ScenarioVarType &varp) {
 		/*
 		**	Dialog & button dimensions
 		*/
 		enum {
-			D_DIALOG_W = 200,			     // dialog width
-			D_DIALOG_H = 164,			     // dialog height
-			D_DIALOG_X = ((320 - D_DIALOG_W) / 2),	     // centered x-coord
-			D_DIALOG_Y = ((200 - D_DIALOG_H) / 2),	     // centered y-coord
+			D_DIALOG_W = 200, // dialog width
+			D_DIALOG_H = 164, // dialog height
+			D_DIALOG_X = ((320 - D_DIALOG_W) / 2), // centered x-coord
+			D_DIALOG_Y = ((200 - D_DIALOG_H) / 2), // centered y-coord
 			D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2), // coord of x-center
 
 			D_TXT8_H = 11, // ht of 8-pt text
-			D_MARGIN = 7,  // margin width/height
+			D_MARGIN = 7, // margin width/height
 
-			D_SCEN_W = 45,						// Scenario # width
-			D_SCEN_H = 9,						// Scenario # height
-			D_SCEN_X = D_DIALOG_CX + 5,				// Scenario # x
+			D_SCEN_W = 45, // Scenario # width
+			D_SCEN_H = 9, // Scenario # height
+			D_SCEN_X = D_DIALOG_CX + 5, // Scenario # x
 			D_SCEN_Y = D_DIALOG_Y + D_MARGIN + D_TXT8_H + D_MARGIN, // Scenario # y
 
-			D_VARA_W = 13,				     // Version A width
-			D_VARA_H = 9,				     // Version A height
+			D_VARA_W = 13, // Version A width
+			D_VARA_H = 9, // Version A height
 			D_VARA_X = D_DIALOG_CX - (D_VARA_W * 5) / 2, // Version A x
-			D_VARA_Y = D_SCEN_Y + D_SCEN_H + D_MARGIN,   // Version A y
+			D_VARA_Y = D_SCEN_Y + D_SCEN_H + D_MARGIN, // Version A y
 
-			D_VARB_W = 13,				   // Version B width
-			D_VARB_H = 9,				   // Version B height
-			D_VARB_X = D_VARA_X + D_VARA_W,		   // Version B x
+			D_VARB_W = 13, // Version B width
+			D_VARB_H = 9, // Version B height
+			D_VARB_X = D_VARA_X + D_VARA_W, // Version B x
 			D_VARB_Y = D_SCEN_Y + D_SCEN_H + D_MARGIN, // Version B y
 
-			D_VARC_W = 13,				   // Version C width
-			D_VARC_H = 9,				   // Version C height
-			D_VARC_X = D_VARB_X + D_VARB_W,		   // Version C x
+			D_VARC_W = 13, // Version C width
+			D_VARC_H = 9, // Version C height
+			D_VARC_X = D_VARB_X + D_VARB_W, // Version C x
 			D_VARC_Y = D_SCEN_Y + D_SCEN_H + D_MARGIN, // Version C y
 
-			D_VARD_W = 13,				   // Version D width
-			D_VARD_H = 9,				   // Version D height
-			D_VARD_X = D_VARC_X + D_VARC_W,		   // Version D x
+			D_VARD_W = 13, // Version D width
+			D_VARD_H = 9, // Version D height
+			D_VARD_X = D_VARC_X + D_VARC_W, // Version D x
 			D_VARD_Y = D_SCEN_Y + D_SCEN_H + D_MARGIN, // Version D y
 
-			D_VARLOSE_W = 13,			      // Version Lose width
-			D_VARLOSE_H = 9,			      // Version Lose height
-			D_VARLOSE_X = D_VARD_X + D_VARD_W,	      // Version Lose x
+			D_VARLOSE_W = 13, // Version Lose width
+			D_VARLOSE_H = 9, // Version Lose height
+			D_VARLOSE_X = D_VARD_X + D_VARD_W, // Version Lose x
 			D_VARLOSE_Y = D_SCEN_Y + D_SCEN_H + D_MARGIN, // Version Lose y
 
-			D_EAST_W = 50,					 // EAST width
-			D_EAST_H = 9,					 // EAST height
-			D_EAST_X = D_DIALOG_CX - D_EAST_W - 5,		 // EAST x
+			D_EAST_W = 50, // EAST width
+			D_EAST_H = 9, // EAST height
+			D_EAST_X = D_DIALOG_CX - D_EAST_W - 5, // EAST x
 			D_EAST_Y = D_VARLOSE_Y + D_VARLOSE_H + D_MARGIN, // EAST y
 
-			D_WEST_W = 50,					 // WEST width
-			D_WEST_H = 9,					 // WEST height
-			D_WEST_X = D_DIALOG_CX + 5,			 // WEST x
+			D_WEST_W = 50, // WEST width
+			D_WEST_H = 9, // WEST height
+			D_WEST_X = D_DIALOG_CX + 5, // WEST x
 			D_WEST_Y = D_VARLOSE_Y + D_VARLOSE_H + D_MARGIN, // EAST y
 
-			D_GDI_W = 90,				  // GDI width
-			D_GDI_H = 9,				  // GDI height
-			D_GDI_X = D_DIALOG_CX - (D_GDI_W / 2),	  // GDI x
+			D_GDI_W = 90, // GDI width
+			D_GDI_H = 9, // GDI height
+			D_GDI_X = D_DIALOG_CX - (D_GDI_W / 2), // GDI x
 			D_GDI_Y = D_EAST_Y + D_EAST_H + D_MARGIN, // GDI y
 
-			D_NOD_W = 90,			       // NOD width
-			D_NOD_H = 9,			       // NOD height
+			D_NOD_W = 90, // NOD width
+			D_NOD_H = 9, // NOD height
 			D_NOD_X = D_DIALOG_CX - (D_NOD_W / 2), // NOD x
-			D_NOD_Y = D_GDI_Y + D_GDI_H,	       // NOD y
+			D_NOD_Y = D_GDI_Y + D_GDI_H, // NOD y
 
-			D_NEU_W = 90,			       // Neutral width
-			D_NEU_H = 9,			       // Neutral height
+			D_NEU_W = 90, // Neutral width
+			D_NEU_H = 9, // Neutral height
 			D_NEU_X = D_DIALOG_CX - (D_NOD_W / 2), // Neutral x
-			D_NEU_Y = D_NOD_Y + D_NOD_H,	       // Neutral y
+			D_NEU_Y = D_NOD_Y + D_NOD_H, // Neutral y
 
-			D_MPLAYER_W = 90,			       // Multi-Player width
-			D_MPLAYER_H = 9,			       // Multi-Player height
+			D_MPLAYER_W = 90, // Multi-Player width
+			D_MPLAYER_H = 9, // Multi-Player height
 			D_MPLAYER_X = D_DIALOG_CX - (D_MPLAYER_W / 2), // Multi-Player x
-			D_MPLAYER_Y = D_NEU_Y + D_NEU_H,	       // Multi-Player y
+			D_MPLAYER_Y = D_NEU_Y + D_NEU_H, // Multi-Player y
 
-			D_OK_W = 45,						     // OK width
-			D_OK_H = 9,						     // OK height
-			D_OK_X = D_DIALOG_CX - D_OK_W - 5,			     // OK x
+			D_OK_W = 45, // OK width
+			D_OK_H = 9, // OK height
+			D_OK_X = D_DIALOG_CX - D_OK_W - 5, // OK x
 			D_OK_Y = D_DIALOG_Y + D_DIALOG_H - D_OK_H - (D_MARGIN + 15), // OK y
 
-			D_CANCEL_W = 45,						     // Cancel width
-			D_CANCEL_H = 9,							     // Cancel height
-			D_CANCEL_X = D_DIALOG_CX + 5,					     // Cancel x
+			D_CANCEL_W = 45, // Cancel width
+			D_CANCEL_H = 9, // Cancel height
+			D_CANCEL_X = D_DIALOG_CX + 5, // Cancel x
 			D_CANCEL_Y = D_DIALOG_Y + D_DIALOG_H - D_CANCEL_H - (D_MARGIN + 15), // Cancel y
 
 		};
@@ -539,18 +542,24 @@ int MapEditClass::Load_Scenario(void) {
 		/*
 		**	Other Variables
 		*/
-		char scen_buf[10] = {0}; // buffer for editing scenario #
+		char scen_buf[10] = { 0 }; // buffer for editing scenario #
 
 		/*
 		**	Buttons
 		*/
 		ControlClass *commands = NULL; // the button list
-#ifdef FIXIT_CSII			       //	checked - ajw 9/28/98
-		EditClass editbtn(BUTTON_SCENARIO, scen_buf, 5, TPF_EFNT | TPF_NOSHADOW, D_SCEN_X, D_SCEN_Y, D_SCEN_W,
-				  D_SCEN_H, EditClass::ALPHANUMERIC);
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+		EditClass editbtn(BUTTON_SCENARIO,
+				  scen_buf,
+				  5,
+				  TPF_EFNT | TPF_NOSHADOW,
+				  D_SCEN_X,
+				  D_SCEN_Y,
+				  D_SCEN_W,
+				  D_SCEN_H,
+				  EditClass::ALPHANUMERIC);
 #else
-	EditClass editbtn(BUTTON_SCENARIO, scen_buf, 5, TPF_EFNT | TPF_NOSHADOW, D_SCEN_X, D_SCEN_Y, D_SCEN_W, D_SCEN_H,
-			  EditClass::NUMERIC);
+	EditClass editbtn(BUTTON_SCENARIO, scen_buf, 5, TPF_EFNT | TPF_NOSHADOW, D_SCEN_X, D_SCEN_Y, D_SCEN_W, D_SCEN_H, EditClass::NUMERIC);
 #endif
 
 		TextButtonClass varabtn(BUTTON_VAR_A, "A", TPF_EBUTTON, D_VARA_X, D_VARA_Y, D_VARA_W, D_VARA_H);
@@ -559,15 +568,13 @@ int MapEditClass::Load_Scenario(void) {
 		TextButtonClass vardbtn(BUTTON_VAR_D, "D", TPF_EBUTTON, D_VARD_X, D_VARD_Y, D_VARD_W, D_VARD_H);
 		TextButtonClass gdibtn(BUTTON_GDI, "North (Spain)", TPF_EBUTTON, D_GDI_X, D_GDI_Y, D_GDI_W, D_GDI_H);
 		TextButtonClass nodbtn(BUTTON_NOD, "South (Greece)", TPF_EBUTTON, D_NOD_X, D_NOD_Y, D_NOD_W, D_NOD_H);
-		TextButtonClass neubtn(BUTTON_NEUTRAL, HouseTypeClass::As_Reference(HOUSE_USSR).IniName, TPF_EBUTTON,
-				       D_NEU_X, D_NEU_Y, D_NEU_W, D_NEU_H);
-		TextButtonClass playermbtn(BUTTON_MPLAYER, "Multiplayer", TPF_EBUTTON, D_MPLAYER_X, D_MPLAYER_Y,
-					   D_MPLAYER_W, D_MPLAYER_H);
+		TextButtonClass
+			neubtn(BUTTON_NEUTRAL, HouseTypeClass::As_Reference(HOUSE_USSR).IniName, TPF_EBUTTON, D_NEU_X, D_NEU_Y, D_NEU_W, D_NEU_H);
+		TextButtonClass playermbtn(BUTTON_MPLAYER, "Multiplayer", TPF_EBUTTON, D_MPLAYER_X, D_MPLAYER_Y, D_MPLAYER_W, D_MPLAYER_H);
 		TextButtonClass eastbtn(BUTTON_EAST, "East", TPF_EBUTTON, D_EAST_X, D_EAST_Y, D_EAST_W, D_EAST_H);
 		TextButtonClass westbtn(BUTTON_WEST, "West", TPF_EBUTTON, D_WEST_X, D_WEST_Y, D_WEST_W, D_WEST_H);
 		TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
-		TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W,
-					  D_CANCEL_H);
+		TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
 
 		/*
 		**	Initialize
@@ -691,7 +698,6 @@ int MapEditClass::Load_Scenario(void) {
 		bool display = true;
 		bool process = true;
 		while (process) {
-
 			/*
 			**	Invoke game callback
 			*/
@@ -704,8 +710,12 @@ int MapEditClass::Load_Scenario(void) {
 				Hide_Mouse();
 				Dialog_Box(D_DIALOG_X, D_DIALOG_Y, D_DIALOG_W, D_DIALOG_H);
 				Draw_Caption(caption, D_DIALOG_X, D_DIALOG_Y, D_DIALOG_W);
-				Fancy_Text_Print("Scenario", D_DIALOG_CX - 5, D_SCEN_Y, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_RIGHT | TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Scenario",
+						 D_DIALOG_CX - 5,
+						 D_SCEN_Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_RIGHT | TPF_EFNT | TPF_NOSHADOW);
 				commands->Draw_All();
 				Show_Mouse();
 
@@ -721,7 +731,6 @@ int MapEditClass::Load_Scenario(void) {
 			**	Process input
 			*/
 			switch (input) {
-
 			/*
 			**	Handle a click on one of the scenario variation group buttons.
 			*/
@@ -934,13 +943,13 @@ int MapEditClass::Load_Scenario(void) {
 		enum {
 			D_DIALOG_W = 350, // dialog width
 			D_DIALOG_H = 225, // dialog height
-			D_DIALOG_X = 0,	  // centered x-coord
-			D_DIALOG_Y = 0,	  // centered y-coord
-					  //		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),		// coord
-					  //of x-center
+			D_DIALOG_X = 0, // centered x-coord
+			D_DIALOG_Y = 0, // centered y-coord
+			//		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),		// coord
+			//of x-center
 
 			D_TXT8_H = 11, // ht of 8-pt text
-			D_MARGIN = 7,  // margin width/height
+			D_MARGIN = 7, // margin width/height
 
 			D_BORD_X1 = D_DIALOG_X + 45,
 			//		D_BORD_X1 = D_DIALOG_X + (D_DIALOG_W / 2 - MAP_CELL_W) / 2,
@@ -948,14 +957,14 @@ int MapEditClass::Load_Scenario(void) {
 			D_BORD_X2 = D_BORD_X1 + MAP_CELL_W + 1,
 			D_BORD_Y2 = D_BORD_Y1 + MAP_CELL_H + 1,
 
-			D_OK_W = 45,						     // OK width
-			D_OK_H = 9,						     // OK height
-			D_OK_X = D_DIALOG_X + 45,				     // OK x
+			D_OK_W = 45, // OK width
+			D_OK_H = 9, // OK height
+			D_OK_X = D_DIALOG_X + 45, // OK x
 			D_OK_Y = D_DIALOG_Y + D_DIALOG_H - D_OK_H - (D_MARGIN + 10), // OK y
 
-			D_CANCEL_W = 45,						     // Cancel width
-			D_CANCEL_H = 9,							     // Cancel height
-			D_CANCEL_X = D_DIALOG_X + D_DIALOG_W - (35 + D_CANCEL_W),	     // Cancel x
+			D_CANCEL_W = 45, // Cancel width
+			D_CANCEL_H = 9, // Cancel height
+			D_CANCEL_X = D_DIALOG_X + D_DIALOG_W - (35 + D_CANCEL_W), // Cancel x
 			D_CANCEL_Y = D_DIALOG_Y + D_DIALOG_H - D_CANCEL_H - (D_MARGIN + 10), // Cancel y
 		};
 
@@ -972,7 +981,7 @@ int MapEditClass::Load_Scenario(void) {
 		*/
 		typedef enum {
 			REDRAW_NONE = 0,
-			REDRAW_MAP,	   // includes map interior & coord values
+			REDRAW_MAP, // includes map interior & coord values
 			REDRAW_BACKGROUND, // includes box, map board, key, coord labels, btns
 			REDRAW_ALL = REDRAW_BACKGROUND
 		} RedrawType;
@@ -980,22 +989,22 @@ int MapEditClass::Load_Scenario(void) {
 		/*
 		**	Dialog variables:
 		*/
-		RedrawType display;  // requested redraw level
+		RedrawType display; // requested redraw level
 		bool cancel = false; // true = user cancels
-		KeyNumType input;    // user input
-		int grabbed = 0;     // 1=TLeft,2=TRight,3=BRight,4=BLeft
-		int map_x1;	     // map coords x1, pixel coords
-		int map_x2;	     // map coords x2, pixel coords
-		int map_y1;	     // map coords y1, pixel coords
-		int map_y2;	     // map coords y2, pixel coords
-		int delta1, delta2;  // mouse-click proximity
-		int mx, my;	     // last-saved mouse coords
-				     //	char txt[40];
-		int txt_x, txt_y;    // for displaying text
-				     //	unsigned index;								// for
-				  //drawing map symbology
-		CELL cell;	       // for drawing map symbology
-		int color;	       // for drawing map symbology
+		KeyNumType input; // user input
+		int grabbed = 0; // 1=TLeft,2=TRight,3=BRight,4=BLeft
+		int map_x1; // map coords x1, pixel coords
+		int map_x2; // map coords x2, pixel coords
+		int map_y1; // map coords y1, pixel coords
+		int map_y2; // map coords y2, pixel coords
+		int delta1, delta2; // mouse-click proximity
+		int mx, my; // last-saved mouse coords
+			//	char txt[40];
+		int txt_x, txt_y; // for displaying text
+			//	unsigned index;								// for
+		//drawing map symbology
+		CELL cell; // for drawing map symbology
+		int color; // for drawing map symbology
 		ObjectClass *occupier; // cell's occupier
 		RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
@@ -1006,8 +1015,7 @@ int MapEditClass::Load_Scenario(void) {
 
 		TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
 
-		TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W,
-					  D_CANCEL_H);
+		TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
 
 		/*
 		**	Initialize
@@ -1044,7 +1052,6 @@ int MapEditClass::Load_Scenario(void) {
 		display = REDRAW_ALL;
 		bool process = true;
 		while (process) {
-
 			/*
 			**	Invoke game callback
 			*/
@@ -1060,7 +1067,6 @@ int MapEditClass::Load_Scenario(void) {
 				**	Redraw the background, map border, key, and coord labels
 				*/
 				if (display >= REDRAW_BACKGROUND) {
-
 					/*
 					**	Background
 					*/
@@ -1071,8 +1077,7 @@ int MapEditClass::Load_Scenario(void) {
 					**	Draw the map border
 					*/
 					if (LogicPage->Lock()) {
-						LogicPage->Draw_Rect(D_BORD_X1, D_BORD_Y1, D_BORD_X2, D_BORD_Y2,
-								     scheme->Shadow);
+						LogicPage->Draw_Rect(D_BORD_X1, D_BORD_Y1, D_BORD_X2, D_BORD_Y2, scheme->Shadow);
 						//					for (index = D_BORD_X1; index <
 						// D_BORD_X2; 						index +=
 						// (320/ICON_PIXEL_W)) {
@@ -1091,29 +1096,31 @@ int MapEditClass::Load_Scenario(void) {
 						*/
 						txt_x = D_BORD_X2 + 15;
 						txt_y = D_BORD_Y1;
-						Plain_Text_Print("Clear Terrain", txt_x, txt_y, GroundColor[LAND_CLEAR],
-								 TBLACK, TPF_DROPSHADOW | TPF_EFNT);
-						txt_y += 8;
-						Plain_Text_Print("Water", txt_x, txt_y, GroundColor[LAND_WATER], TBLACK,
+						Plain_Text_Print("Clear Terrain",
+								 txt_x,
+								 txt_y,
+								 GroundColor[LAND_CLEAR],
+								 TBLACK,
 								 TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("Tiberium", txt_x, txt_y, GroundColor[LAND_TIBERIUM],
-								 TBLACK, TPF_DROPSHADOW | TPF_EFNT);
+						Plain_Text_Print("Water", txt_x, txt_y, GroundColor[LAND_WATER], TBLACK, TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("Rock", txt_x, txt_y, GroundColor[LAND_ROCK], TBLACK,
+						Plain_Text_Print("Tiberium",
+								 txt_x,
+								 txt_y,
+								 GroundColor[LAND_TIBERIUM],
+								 TBLACK,
 								 TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("Wall", txt_x, txt_y, GroundColor[LAND_WALL], TBLACK,
-								 TPF_DROPSHADOW | TPF_EFNT);
+						Plain_Text_Print("Rock", txt_x, txt_y, GroundColor[LAND_ROCK], TBLACK, TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("Beach", txt_x, txt_y, GroundColor[LAND_BEACH], TBLACK,
-								 TPF_DROPSHADOW | TPF_EFNT);
+						Plain_Text_Print("Wall", txt_x, txt_y, GroundColor[LAND_WALL], TBLACK, TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("Rough", txt_x, txt_y, GroundColor[LAND_ROUGH], TBLACK,
-								 TPF_DROPSHADOW | TPF_EFNT);
+						Plain_Text_Print("Beach", txt_x, txt_y, GroundColor[LAND_BEACH], TBLACK, TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("River", txt_x, txt_y, GroundColor[LAND_RIVER], TBLACK,
-								 TPF_DROPSHADOW | TPF_EFNT);
+						Plain_Text_Print("Rough", txt_x, txt_y, GroundColor[LAND_ROUGH], TBLACK, TPF_DROPSHADOW | TPF_EFNT);
+						txt_y += 8;
+						Plain_Text_Print("River", txt_x, txt_y, GroundColor[LAND_RIVER], TBLACK, TPF_DROPSHADOW | TPF_EFNT);
 						//					txt_y += 8;
 						//					Plain_Text_Print("GDI Unit",
 						// txt_x, txt_y, YELLOW, TBLACK, TPF_DROPSHADOW | TPF_EFNT);
@@ -1122,32 +1129,44 @@ int MapEditClass::Load_Scenario(void) {
 						// 8; 					Plain_Text_Print("Neutral Unit", txt_x, txt_y, PURPLE, TBLACK,
 						// TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("Terrain Object", txt_x, txt_y, DKGREEN, TBLACK,
-								 TPF_DROPSHADOW | TPF_EFNT);
+						Plain_Text_Print("Terrain Object", txt_x, txt_y, DKGREEN, TBLACK, TPF_DROPSHADOW | TPF_EFNT);
 						txt_y += 8;
-						Plain_Text_Print("Starting Cell", txt_x, txt_y, WHITE, TBLACK,
-								 TPF_DROPSHADOW | TPF_EFNT);
+						Plain_Text_Print("Starting Cell", txt_x, txt_y, WHITE, TBLACK, TPF_DROPSHADOW | TPF_EFNT);
 
 						/*
 						**	Draw the coordinate labels
 						*/
 						txt_x = D_DIALOG_X + D_DIALOG_W / 8;
 						txt_y = D_DIALOG_Y + D_DIALOG_H - D_OK_H - 43;
-						Fancy_Text_Print("  X", txt_x, txt_y, GadgetClass::Get_Color_Scheme(),
-								 TBLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
-
-						txt_x += (D_DIALOG_W - 20) / 4;
-						Fancy_Text_Print("  Y", txt_x, txt_y, GadgetClass::Get_Color_Scheme(),
-								 TBLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
-
-						txt_x += (D_DIALOG_W - 20) / 4;
-						Fancy_Text_Print(" Width", txt_x, txt_y,
-								 GadgetClass::Get_Color_Scheme(), TBLACK,
+						Fancy_Text_Print("  X",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 TBLACK,
 								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
 
 						txt_x += (D_DIALOG_W - 20) / 4;
-						Fancy_Text_Print(" Height", txt_x, txt_y,
-								 GadgetClass::Get_Color_Scheme(), TBLACK,
+						Fancy_Text_Print("  Y",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 TBLACK,
+								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
+
+						txt_x += (D_DIALOG_W - 20) / 4;
+						Fancy_Text_Print(" Width",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 TBLACK,
+								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
+
+						txt_x += (D_DIALOG_W - 20) / 4;
+						Fancy_Text_Print(" Height",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 TBLACK,
 								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
 
 						LogicPage->Unlock();
@@ -1163,14 +1182,11 @@ int MapEditClass::Load_Scenario(void) {
 				**	Redraw the map symbology & location
 				*/
 				if (display >= REDRAW_MAP) {
-
 					if (LogicPage->Lock()) {
-
 						/*
 						**	Erase the map interior
 						*/
-						LogicPage->Fill_Rect(D_BORD_X1 + 1, D_BORD_Y1 + 1, D_BORD_X2 - 1,
-								     D_BORD_Y2 - 1, BLACK);
+						LogicPage->Fill_Rect(D_BORD_X1 + 1, D_BORD_Y1 + 1, D_BORD_X2 - 1, D_BORD_Y2 - 1, BLACK);
 
 						/*
 						**	Draw Land map symbols (use color according to Ground[] array).
@@ -1228,10 +1244,8 @@ int MapEditClass::Load_Scenario(void) {
 							if (occupier) {
 								color = DKGREEN;
 								if (occupier && occupier->Owner() != HOUSE_NONE) {
-									color = ColorRemaps[HouseClass::As_Pointer(
-												occupier->Owner())
-												->RemapColor]
-										    .Color;
+									color = ColorRemaps[HouseClass::As_Pointer(occupier->Owner())->RemapColor]
+											.Color;
 								}
 								LogicPage->Put_Pixel(D_BORD_X1 + Cell_X(cell) + 1,
 										     D_BORD_Y1 + Cell_Y(cell) + 1,
@@ -1260,23 +1274,39 @@ int MapEditClass::Load_Scenario(void) {
 						*/
 						txt_x = D_DIALOG_X + D_DIALOG_W / 8;
 						txt_y = D_DIALOG_Y + D_DIALOG_H - D_OK_H - 32;
-						Fancy_Text_Print("%5d", txt_x, txt_y, GadgetClass::Get_Color_Scheme(),
-								 BLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
+						Fancy_Text_Print("%5d",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 BLACK,
+								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
 								 map_x1 - D_BORD_X1 - 1);
 
 						txt_x += (D_DIALOG_W - 20) / 4;
-						Fancy_Text_Print("%5d", txt_x, txt_y, GadgetClass::Get_Color_Scheme(),
-								 BLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
+						Fancy_Text_Print("%5d",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 BLACK,
+								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
 								 map_y1 - D_BORD_Y1 - 1);
 
 						txt_x += (D_DIALOG_W - 20) / 4;
-						Fancy_Text_Print("%5d", txt_x, txt_y, GadgetClass::Get_Color_Scheme(),
-								 BLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
+						Fancy_Text_Print("%5d",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 BLACK,
+								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
 								 map_x2 - map_x1 + 1);
 
 						txt_x += (D_DIALOG_W - 20) / 4;
-						Fancy_Text_Print("%5d", txt_x, txt_y, GadgetClass::Get_Color_Scheme(),
-								 BLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
+						Fancy_Text_Print("%5d",
+								 txt_x,
+								 txt_y,
+								 GadgetClass::Get_Color_Scheme(),
+								 BLACK,
+								 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW,
 								 map_y2 - map_y1 + 1);
 
 						LogicPage->Unlock();
@@ -1380,7 +1410,6 @@ int MapEditClass::Load_Scenario(void) {
 					break;
 				}
 			} else {
-
 				/*
 				**	Mouse motion processing: This is done while the left mouse button IS
 				**	being held down.
@@ -1510,14 +1539,12 @@ int MapEditClass::Load_Scenario(void) {
 					**	Move whole map
 					*/
 					if (grabbed == 5) {
-						if (map_x1 + delta1 > D_BORD_X1 + 1 &&
-						    map_x2 + delta1 < D_BORD_X2 - 1) {
+						if (map_x1 + delta1 > D_BORD_X1 + 1 && map_x2 + delta1 < D_BORD_X2 - 1) {
 							map_x1 += delta1;
 							map_x2 += delta1;
 						}
 
-						if (map_y1 + delta2 > D_BORD_Y1 + 1 &&
-						    map_y2 + delta2 < D_BORD_Y2 - 1) {
+						if (map_y1 + delta2 > D_BORD_Y1 + 1 && map_y2 + delta2 < D_BORD_Y2 - 1) {
 							map_y1 += delta2;
 							map_y2 += delta2;
 						}
@@ -1560,8 +1587,7 @@ int MapEditClass::Load_Scenario(void) {
 		}
 
 		if (Cell_X(Scen.Waypoint[WAYPT_HOME]) > MapCellX + MapCellWidth - 1) {
-			Scen.Waypoint[WAYPT_HOME] =
-			    XY_Cell(MapCellX + MapCellWidth - 1, Cell_Y(Scen.Waypoint[WAYPT_HOME]));
+			Scen.Waypoint[WAYPT_HOME] = XY_Cell(MapCellX + MapCellWidth - 1, Cell_Y(Scen.Waypoint[WAYPT_HOME]));
 		}
 
 		if (Cell_Y(Scen.Waypoint[WAYPT_HOME]) < MapCellY) {
@@ -1569,8 +1595,7 @@ int MapEditClass::Load_Scenario(void) {
 		}
 
 		if (Cell_Y(Scen.Waypoint[WAYPT_HOME]) > MapCellY + MapCellHeight - 1) {
-			Scen.Waypoint[WAYPT_HOME] =
-			    XY_Cell(Cell_X(Scen.Waypoint[WAYPT_HOME]), MapCellY + MapCellHeight - 1);
+			Scen.Waypoint[WAYPT_HOME] = XY_Cell(Cell_X(Scen.Waypoint[WAYPT_HOME]), MapCellY + MapCellHeight - 1);
 		}
 
 		return (0);
@@ -1678,9 +1703,16 @@ int MapEditClass::Load_Scenario(void) {
 		**	Theater choice drop down list.
 		*/
 		char theatertext[45] = "";
-		DropListClass theaterbtn(LIST_THEATER, theatertext, sizeof(theatertext) - 1, TPF_EFNT | TPF_NOSHADOW,
-					 D_DIALOG_X + 15 * RESFACTOR, D_DIALOG_Y + 30, 65, 8 * 5,
-					 MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+		DropListClass theaterbtn(LIST_THEATER,
+					 theatertext,
+					 sizeof(theatertext) - 1,
+					 TPF_EFNT | TPF_NOSHADOW,
+					 D_DIALOG_X + 15 * RESFACTOR,
+					 D_DIALOG_Y + 30,
+					 65,
+					 8 * 5,
+					 MFCD::Retrieve("EBTN-UP.SHP"),
+					 MFCD::Retrieve("EBTN-DN.SHP"));
 		for (TheaterType t = THEATER_FIRST; t < THEATER_COUNT; t++) {
 			theaterbtn.Add_Item(Theaters[t].Name);
 		}
@@ -1688,8 +1720,13 @@ int MapEditClass::Load_Scenario(void) {
 
 		char description[DESCRIP_MAX] = "";
 		strcpy(description, Scen.Description);
-		EditClass desc(BUTTON_DESCRIPTION, description, sizeof(description), TPF_EFNT | TPF_NOSHADOW,
-			       theaterbtn.X + theaterbtn.Width + 15, theaterbtn.Y, 160);
+		EditClass desc(BUTTON_DESCRIPTION,
+			       description,
+			       sizeof(description),
+			       TPF_EFNT | TPF_NOSHADOW,
+			       theaterbtn.X + theaterbtn.Width + 15,
+			       theaterbtn.Y,
+			       160);
 
 		/*
 		**	Button that tells if this scenario should inherit buildings from the previous.
@@ -1806,8 +1843,15 @@ int MapEditClass::Load_Scenario(void) {
 		**	Intro movie name.
 		*/
 		char introtext[_MAX_FNAME + _MAX_EXT];
-		DropListClass intro(BUTTON_INTRO, introtext, sizeof(introtext), TPF_EFNT | TPF_NOSHADOW, theaterbtn.X,
-				    theaterbtn.Y + theaterbtn.Height + 24, 50, 7 * 10, MFCD::Retrieve("EBTN-UP.SHP"),
+		DropListClass intro(BUTTON_INTRO,
+				    introtext,
+				    sizeof(introtext),
+				    TPF_EFNT | TPF_NOSHADOW,
+				    theaterbtn.X,
+				    theaterbtn.Y + theaterbtn.Height + 24,
+				    50,
+				    7 * 10,
+				    MFCD::Retrieve("EBTN-UP.SHP"),
 				    MFCD::Retrieve("EBTN-DN.SHP"));
 		intro.Add_Item("<none>");
 		for (VQType v = VQ_FIRST; v < VQ_COUNT; v++) {
@@ -1819,8 +1863,15 @@ int MapEditClass::Load_Scenario(void) {
 		**	Briefing movie name.
 		*/
 		char brieftext[_MAX_FNAME + _MAX_EXT];
-		DropListClass briefing(BUTTON_BRIEFING, brieftext, sizeof(brieftext), TPF_EFNT | TPF_NOSHADOW,
-				       intro.X + intro.Width + 10, intro.Y, 50, 7 * 10, MFCD::Retrieve("EBTN-UP.SHP"),
+		DropListClass briefing(BUTTON_BRIEFING,
+				       brieftext,
+				       sizeof(brieftext),
+				       TPF_EFNT | TPF_NOSHADOW,
+				       intro.X + intro.Width + 10,
+				       intro.Y,
+				       50,
+				       7 * 10,
+				       MFCD::Retrieve("EBTN-UP.SHP"),
 				       MFCD::Retrieve("EBTN-DN.SHP"));
 		briefing.Add_Item("<none>");
 		for (v = VQ_FIRST; v < VQ_COUNT; v++) {
@@ -1829,9 +1880,16 @@ int MapEditClass::Load_Scenario(void) {
 		briefing.Set_Selected_Index((int)Scen.BriefMovie + 1);
 
 		char actiontext[_MAX_FNAME + _MAX_EXT];
-		DropListClass action(BUTTON_ACTION, actiontext, sizeof(actiontext), TPF_EFNT | TPF_NOSHADOW,
-				     briefing.X + briefing.Width + 10, briefing.Y, 50, 7 * 10,
-				     MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+		DropListClass action(BUTTON_ACTION,
+				     actiontext,
+				     sizeof(actiontext),
+				     TPF_EFNT | TPF_NOSHADOW,
+				     briefing.X + briefing.Width + 10,
+				     briefing.Y,
+				     50,
+				     7 * 10,
+				     MFCD::Retrieve("EBTN-UP.SHP"),
+				     MFCD::Retrieve("EBTN-DN.SHP"));
 		action.Add_Item("<none>");
 		for (v = VQ_FIRST; v < VQ_COUNT; v++) {
 			action.Add_Item(VQName[v]);
@@ -1839,8 +1897,15 @@ int MapEditClass::Load_Scenario(void) {
 		action.Set_Selected_Index((int)Scen.ActionMovie + 1);
 
 		char wintext[_MAX_FNAME + _MAX_EXT];
-		DropListClass win(BUTTON_WIN, wintext, sizeof(wintext), TPF_EFNT | TPF_NOSHADOW,
-				  action.X + action.Width + 10, action.Y, 50, 7 * 10, MFCD::Retrieve("EBTN-UP.SHP"),
+		DropListClass win(BUTTON_WIN,
+				  wintext,
+				  sizeof(wintext),
+				  TPF_EFNT | TPF_NOSHADOW,
+				  action.X + action.Width + 10,
+				  action.Y,
+				  50,
+				  7 * 10,
+				  MFCD::Retrieve("EBTN-UP.SHP"),
 				  MFCD::Retrieve("EBTN-DN.SHP"));
 		win.Add_Item("<none>");
 		for (v = VQ_FIRST; v < VQ_COUNT; v++) {
@@ -1849,8 +1914,15 @@ int MapEditClass::Load_Scenario(void) {
 		win.Set_Selected_Index((int)Scen.WinMovie + 1);
 
 		char losetext[_MAX_FNAME + _MAX_EXT];
-		DropListClass lose(BUTTON_LOSE, losetext, sizeof(losetext), TPF_EFNT | TPF_NOSHADOW,
-				   win.X + win.Width + 10, win.Y, 50, 7 * 10, MFCD::Retrieve("EBTN-UP.SHP"),
+		DropListClass lose(BUTTON_LOSE,
+				   losetext,
+				   sizeof(losetext),
+				   TPF_EFNT | TPF_NOSHADOW,
+				   win.X + win.Width + 10,
+				   win.Y,
+				   50,
+				   7 * 10,
+				   MFCD::Retrieve("EBTN-UP.SHP"),
 				   MFCD::Retrieve("EBTN-DN.SHP"));
 		lose.Add_Item("<none>");
 		for (v = VQ_FIRST; v < VQ_COUNT; v++) {
@@ -1861,8 +1933,13 @@ int MapEditClass::Load_Scenario(void) {
 		/*
 		**	House choice list.
 		*/
-		ListClass housebtn(BUTTON_HOUSE, D_DIALOG_X + 15 * RESFACTOR, D_DIALOG_Y + 105, 55, 7 * 10,
-				   TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+		ListClass housebtn(BUTTON_HOUSE,
+				   D_DIALOG_X + 15 * RESFACTOR,
+				   D_DIALOG_Y + 105,
+				   55,
+				   7 * 10,
+				   TPF_EFNT | TPF_NOSHADOW,
+				   MFCD::Retrieve("EBTN-UP.SHP"),
 				   MFCD::Retrieve("EBTN-DN.SHP"));
 		for (h = HOUSE_FIRST; h < HOUSE_COUNT; h++) {
 			housebtn.Add_Item(HouseTypeClass::As_Reference(h).IniName);
@@ -1873,9 +1950,16 @@ int MapEditClass::Load_Scenario(void) {
 		**	Base house choice drop down list.
 		*/
 		char basetext[35];
-		DropListClass basebtn(BUTTON_BASE, basetext, sizeof(basetext), TPF_EFNT | TPF_NOSHADOW,
-				      D_DIALOG_X + 15 * RESFACTOR, D_DIALOG_Y + 80, 65, 7 * 10,
-				      MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+		DropListClass basebtn(BUTTON_BASE,
+				      basetext,
+				      sizeof(basetext),
+				      TPF_EFNT | TPF_NOSHADOW,
+				      D_DIALOG_X + 15 * RESFACTOR,
+				      D_DIALOG_Y + 80,
+				      65,
+				      7 * 10,
+				      MFCD::Retrieve("EBTN-UP.SHP"),
+				      MFCD::Retrieve("EBTN-DN.SHP"));
 		for (h = HOUSE_FIRST; h < HOUSE_COUNT; h++) {
 			basebtn.Add_Item(HouseTypeClass::As_Reference(h).IniName);
 		}
@@ -1887,9 +1971,16 @@ int MapEditClass::Load_Scenario(void) {
 		**	Opening scenario theme.
 		*/
 		char themetext[65];
-		DropListClass themebtn(BUTTON_THEME, themetext, sizeof(themetext), TPF_EFNT | TPF_NOSHADOW,
-				       basebtn.X + basebtn.Width + 15 * RESFACTOR, basebtn.Y, 85, 7 * 10,
-				       MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+		DropListClass themebtn(BUTTON_THEME,
+				       themetext,
+				       sizeof(themetext),
+				       TPF_EFNT | TPF_NOSHADOW,
+				       basebtn.X + basebtn.Width + 15 * RESFACTOR,
+				       basebtn.Y,
+				       85,
+				       7 * 10,
+				       MFCD::Retrieve("EBTN-UP.SHP"),
+				       MFCD::Retrieve("EBTN-DN.SHP"));
 		themebtn.Add_Item("<none>");
 		for (ThemeType th = THEME_FIRST; th < THEME_COUNT; th++) {
 			themebtn.Add_Item(Theme.Full_Name(th));
@@ -1907,8 +1998,7 @@ int MapEditClass::Load_Scenario(void) {
 		techlevel.Set_Maximum(16);
 
 		char statictechbuff[15];
-		StaticButtonClass techstatic(0, "999", TPF_EFNT | TPF_NOSHADOW, techlevel.X + techlevel.Width - 20,
-					     techlevel.Y - 7);
+		StaticButtonClass techstatic(0, "999", TPF_EFNT | TPF_NOSHADOW, techlevel.X + techlevel.Width - 20, techlevel.Y - 7);
 
 		/*
 		**	Starting credits.
@@ -1917,8 +2007,7 @@ int MapEditClass::Load_Scenario(void) {
 		creditbtn.Set_Maximum(201);
 
 		char staticcreditbuff[15];
-		StaticButtonClass creditstatic(0, "999999999", TPF_EFNT | TPF_NOSHADOW,
-					       creditbtn.X + creditbtn.Width - 50, creditbtn.Y - 7);
+		StaticButtonClass creditstatic(0, "999999999", TPF_EFNT | TPF_NOSHADOW, creditbtn.X + creditbtn.Width - 50, creditbtn.Y - 7);
 
 		/*
 		**	Maximum unit/infantry slider.
@@ -1927,15 +2016,19 @@ int MapEditClass::Load_Scenario(void) {
 		maxunit.Set_Maximum(501);
 
 		char staticmaxunitbuff[15];
-		StaticButtonClass maxunitstatic(0, "999999", TPF_EFNT | TPF_NOSHADOW, maxunit.X + maxunit.Width - 30,
-						maxunit.Y - 7);
+		StaticButtonClass maxunitstatic(0, "999999", TPF_EFNT | TPF_NOSHADOW, maxunit.X + maxunit.Width - 30, maxunit.Y - 7);
 
 		/*
 		**	Source of ground delivery reinforcements.
 		*/
 		char sourcetext[25] = "";
-		ListClass sourcebtn(BUTTON_SOURCE, housebtn.X + housebtn.Width + 15, maxunit.Y + 20, 100, 7 * 4,
-				    TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+		ListClass sourcebtn(BUTTON_SOURCE,
+				    housebtn.X + housebtn.Width + 15,
+				    maxunit.Y + 20,
+				    100,
+				    7 * 4,
+				    TPF_EFNT | TPF_NOSHADOW,
+				    MFCD::Retrieve("EBTN-UP.SHP"),
 				    MFCD::Retrieve("EBTN-DN.SHP"));
 		for (SourceType source = SOURCE_FIRST; source <= SOURCE_WEST; source++) {
 			sourcebtn.Add_Item(SourceName[source]);
@@ -1948,14 +2041,18 @@ int MapEditClass::Load_Scenario(void) {
 		smarties.Set_Maximum(Rule.MaxIQ + 1);
 
 		char staticsmartiesbuff[15];
-		StaticButtonClass smartiesstatic(0, "9999", TPF_EFNT | TPF_NOSHADOW, smarties.X + smarties.Width - 20,
-						 smarties.Y - 7);
+		StaticButtonClass smartiesstatic(0, "9999", TPF_EFNT | TPF_NOSHADOW, smarties.X + smarties.Width - 20, smarties.Y - 7);
 
 		/*
 		**	List box of who is allied with whom.
 		*/
-		CheckListClass allies(BUTTON_ALLIES, techlevel.X + techlevel.Width + 5, housebtn.Y, 65, 7 * 10,
-				      TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+		CheckListClass allies(BUTTON_ALLIES,
+				      techlevel.X + techlevel.Width + 5,
+				      housebtn.Y,
+				      65,
+				      7 * 10,
+				      TPF_EFNT | TPF_NOSHADOW,
+				      MFCD::Retrieve("EBTN-UP.SHP"),
 				      MFCD::Retrieve("EBTN-DN.SHP"));
 		for (h = HOUSE_FIRST; h < HOUSE_COUNT; h++) {
 			allies.Add_Item(HouseTypeClass::As_Reference(h).IniName);
@@ -1968,8 +2065,13 @@ int MapEditClass::Load_Scenario(void) {
 		/*
 		**	List box of who the player can control.
 		*/
-		CheckListClass control(BUTTON_CONTROL, allies.X + allies.Width + 10, housebtn.Y, 65, 7 * 10,
-				       TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+		CheckListClass control(BUTTON_CONTROL,
+				       allies.X + allies.Width + 10,
+				       housebtn.Y,
+				       65,
+				       7 * 10,
+				       TPF_EFNT | TPF_NOSHADOW,
+				       MFCD::Retrieve("EBTN-UP.SHP"),
 				       MFCD::Retrieve("EBTN-DN.SHP"));
 		for (h = HOUSE_FIRST; h < HOUSE_COUNT; h++) {
 			control.Add_Item(HouseTypeClass::As_Reference(h).IniName);
@@ -1983,8 +2085,7 @@ int MapEditClass::Load_Scenario(void) {
 		**	Create the ubiquitous "ok" and "cancel" buttons.
 		*/
 		TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
-		TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W,
-					  D_CANCEL_H);
+		TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
 
 		/*
 		**	Create the list
@@ -2031,11 +2132,10 @@ int MapEditClass::Load_Scenario(void) {
 		bool display = true;
 		bool process = true;
 		bool cancel = false; // true = user cancels
-		bool dotext = true;  // display the text.
-		bool fetch = false;  // Fetch data from dialog into tracking structure.
+		bool dotext = true; // display the text.
+		bool fetch = false; // Fetch data from dialog into tracking structure.
 		// Set_Logic_Page(SeenBuff);
 		while (process) {
-
 			/*
 			**	Invoke game callback
 			*/
@@ -2077,64 +2177,144 @@ int MapEditClass::Load_Scenario(void) {
 				**	Display the text that doesn't need drawing except when the entire dialog
 				**	needs to be redrawn.
 				*/
-				Fancy_Text_Print("Tech Level =", techlevel.X, techlevel.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Credits =", creditbtn.X, creditbtn.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Unit Max =", maxunit.X, maxunit.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("IQ =", smarties.X, smarties.Y - 7, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Prebuild Base:", basebtn.X, basebtn.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Theater:", theaterbtn.X, theaterbtn.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Scenario Name:", desc.X, desc.Y - 7, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Country:", housebtn.X, housebtn.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Home Edge:", sourcebtn.X, sourcebtn.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Allies:", allies.X, allies.Y - 7, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Plyr Control:", control.X, control.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Theme:", themebtn.X, themebtn.Y - 7, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Intro:", intro.X, intro.Y - 7, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Briefing:", briefing.X, briefing.Y - 7,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Action:", action.X, action.Y - 7, GadgetClass::Get_Color_Scheme(),
-						 TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Win:", win.X, win.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK,
+				Fancy_Text_Print("Tech Level =",
+						 techlevel.X,
+						 techlevel.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
 						 TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Lose:", lose.X, lose.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK,
+				Fancy_Text_Print("Credits =",
+						 creditbtn.X,
+						 creditbtn.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
 						 TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Store scenario?", record.X + 10, record.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Inherit stored scenario?", inherit.X + 10, inherit.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Auto evac. Tanya (civilian)?", tanya.X + 10, tanya.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Last mission of game?", endofgame.X + 10, endofgame.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Inherit mission timer from last scenario?", timercarry.X + 10,
-						 timercarry.Y, GadgetClass::Get_Color_Scheme(), TBLACK,
+				Fancy_Text_Print("Unit Max =",
+						 maxunit.X,
+						 maxunit.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
 						 TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Disable spy plane?", nospyplane.X + 10, nospyplane.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Skip the score screen?", skipscore.X + 10, skipscore.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("No map selection (force var 'B')?", nomapsel.X + 10, nomapsel.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Return to main menu after scenario finishes?", onetime.X + 10,
-						 onetime.Y, GadgetClass::Get_Color_Scheme(), TBLACK,
+				Fancy_Text_Print("IQ =", smarties.X, smarties.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Prebuild Base:",
+						 basebtn.X,
+						 basebtn.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
 						 TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Truck carries wood crate?", truckcrate.X + 10, truckcrate.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
-				Fancy_Text_Print("Initial money is transferred to silos?", moneytib.X + 10, moneytib.Y,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Theater:",
+						 theaterbtn.X,
+						 theaterbtn.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Scenario Name:",
+						 desc.X,
+						 desc.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Country:",
+						 housebtn.X,
+						 housebtn.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Home Edge:",
+						 sourcebtn.X,
+						 sourcebtn.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Allies:", allies.X, allies.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Plyr Control:",
+						 control.X,
+						 control.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Theme:",
+						 themebtn.X,
+						 themebtn.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Intro:", intro.X, intro.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Briefing:",
+						 briefing.X,
+						 briefing.Y - 7,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Action:", action.X, action.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Win:", win.X, win.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Lose:", lose.X, lose.Y - 7, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Store scenario?",
+						 record.X + 10,
+						 record.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Inherit stored scenario?",
+						 inherit.X + 10,
+						 inherit.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Auto evac. Tanya (civilian)?",
+						 tanya.X + 10,
+						 tanya.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Last mission of game?",
+						 endofgame.X + 10,
+						 endofgame.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Inherit mission timer from last scenario?",
+						 timercarry.X + 10,
+						 timercarry.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Disable spy plane?",
+						 nospyplane.X + 10,
+						 nospyplane.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Skip the score screen?",
+						 skipscore.X + 10,
+						 skipscore.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("No map selection (force var 'B')?",
+						 nomapsel.X + 10,
+						 nomapsel.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Return to main menu after scenario finishes?",
+						 onetime.X + 10,
+						 onetime.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Truck carries wood crate?",
+						 truckcrate.X + 10,
+						 truckcrate.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
+				Fancy_Text_Print("Initial money is transferred to silos?",
+						 moneytib.X + 10,
+						 moneytib.Y,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_EFNT | TPF_NOSHADOW);
 
 				theaterbtn.Collapse();
 				themebtn.Collapse();
@@ -2343,15 +2523,13 @@ int MapEditClass::Load_Scenario(void) {
 		*/
 		TheaterType theater = TheaterType(theaterbtn.Current_Index());
 		if (theater != orig_theater) {
-
 			unsigned char theater_mask; // template/terrain mask
-			TerrainClass *terrain;	    // cell's terrain pointer
+			TerrainClass *terrain; // cell's terrain pointer
 
 			/*
 			**	Loop through all cells
 			*/
 			for (CELL i = 0; i < MAP_CELL_TOTAL; i++) {
-
 				/*
 				**	If this cell has a template icon & that template isn't compatible
 				**	with this theater, set the icon to NONE
@@ -2438,7 +2616,6 @@ int MapEditClass::Load_Scenario(void) {
 		**	- Keep looping until 'OK'
 		*/
 		while (1) {
-
 			/*
 			**	Select trigger
 			*/
@@ -2466,13 +2643,11 @@ int MapEditClass::Load_Scenario(void) {
 			**	'New'
 			*/
 			if (rc == 2) {
-
 				/*
 				**	Create a new trigger
 				*/
 				CurTrigger = new TriggerTypeClass();
 				if (CurTrigger) {
-
 					/*
 					**	delete it if user cancels
 					*/
@@ -2487,7 +2662,6 @@ int MapEditClass::Load_Scenario(void) {
 					Render();
 
 				} else {
-
 					/*
 					**	Unable to create; issue warning
 					*/
@@ -2614,23 +2788,27 @@ int MapEditClass::Load_Scenario(void) {
 		**	Dialog variables:
 		*/
 		bool edit_trig = false; // true = user wants to edit
-		bool new_trig = false;	// true = user wants to new
-		bool del_trig = false;	// true = user wants to new
-		int i;			// loop counter
+		bool new_trig = false; // true = user wants to new
+		bool del_trig = false; // true = user wants to new
+		int i; // loop counter
 
 		/*
 		**	Buttons
 		*/
 		ControlClass *commands = NULL; // the button list
 
-		TListClass<CCPtr<TriggerTypeClass>> triggerlist(TRIGGER_LIST, D_LIST_X, D_LIST_Y, D_LIST_W, D_LIST_H,
-								TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+		TListClass<CCPtr<TriggerTypeClass>> triggerlist(TRIGGER_LIST,
+								D_LIST_X,
+								D_LIST_Y,
+								D_LIST_W,
+								D_LIST_H,
+								TPF_EFNT | TPF_NOSHADOW,
+								MFCD::Retrieve("EBTN-UP.SHP"),
 								MFCD::Retrieve("EBTN-DN.SHP"));
 
 		TextButtonClass editbtn(BUTTON_EDIT, "Edit", TPF_EBUTTON, D_EDIT_X, D_EDIT_Y, D_EDIT_W, D_EDIT_H);
 		TextButtonClass newbtn(BUTTON_NEW, "New", TPF_EBUTTON, D_NEW_X, D_NEW_Y, D_NEW_W, D_NEW_H);
-		TextButtonClass deletebtn(BUTTON_DELETE, "Delete", TPF_EBUTTON, D_DELETE_X, D_DELETE_Y, D_DELETE_W,
-					  D_DELETE_H);
+		TextButtonClass deletebtn(BUTTON_DELETE, "Delete", TPF_EBUTTON, D_DELETE_X, D_DELETE_Y, D_DELETE_W, D_DELETE_H);
 		TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
 
 		/*

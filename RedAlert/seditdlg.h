@@ -22,12 +22,16 @@
 
 class SimpleEditDlgClass {
 public:
-	SimpleEditDlgClass(int iDialogWidth, const char *szTitle, const char *szPrompt, int iEditCharsAccept,
-			   const char *szPrompt2 = NULL, int iEditCharsAccept2 = 0);
+	SimpleEditDlgClass(int iDialogWidth,
+			   const char *szTitle,
+			   const char *szPrompt,
+			   int iEditCharsAccept,
+			   const char *szPrompt2 = NULL,
+			   int iEditCharsAccept2 = 0);
 	virtual ~SimpleEditDlgClass();
 
 	const char *Show(); //	Shows dialog, returns text of button pressed.
-			    //	Unless SetButtons() is used, value will be TXT_OK or TXT_CANCEL string values.
+		//	Unless SetButtons() is used, value will be TXT_OK or TXT_CANCEL string values.
 
 	void SetButtons(const char *szOk, const char *szCancel, const char *szMiddle = NULL);
 
@@ -36,15 +40,15 @@ public:
 
 protected:
 	int iDialogWidth; //	X pixels width of entire dialog.
-	char *szTitle;	  //	Title of dialog, or NULL for no title.
+	char *szTitle; //	Title of dialog, or NULL for no title.
 
-	char *szPrompt;	      //	Text appearing to the left of edit box.
+	char *szPrompt; //	Text appearing to the left of edit box.
 	int iEditCharsAccept; //	Max length of string allowed in edit, includes null-terminator.
 
 	char *szPrompt2;
 	int iEditCharsAccept2;
 
-	const char *szOkButton;	    //	Text of button that acts like an Ok button. Appears on left.
+	const char *szOkButton; //	Text of button that acts like an Ok button. Appears on left.
 	const char *szCancelButton; //	Text of button that acts like an Cancel button. Appears on right.
 	const char *szMiddleButton; //	Optional middle button text. Null = no middle button.
 };

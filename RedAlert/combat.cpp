@@ -159,12 +159,12 @@ int Modify_Damage(int damage, WarheadType warhead, ArmorType armor, int distance
  *   06/18/1996 JLB : Strength could be negative for healing effects.                          *
  *=============================================================================================*/
 void Explosion_Damage(COORDINATE coord, int strength, TechnoClass *source, WarheadType warhead) {
-	CELL cell;		  // Cell number under explosion.
-	ObjectClass *object;	  // Working object pointer.
+	CELL cell; // Cell number under explosion.
+	ObjectClass *object; // Working object pointer.
 	ObjectClass *objects[32]; // Maximum number of objects that can be damaged.
-	int distance;		  // Distance to unit.
-	int range;		  // Damage effect radius.
-	int count;		  // Number of vehicle IDs in list.
+	int distance; // Distance to unit.
+	int range; // Damage effect radius.
+	int count; // Number of vehicle IDs in list.
 
 	if (!strength || Special.IsInert || warhead == WARHEAD_NONE)
 		return;
@@ -262,14 +262,11 @@ void Explosion_Damage(COORDINATE coord, int strength, TechnoClass *source, Warhe
 	**	If there is a bridge at this location, then it may be destroyed by the
 	**	combat damage.
 	*/
-	if (cellptr->TType == TEMPLATE_BRIDGE1 || cellptr->TType == TEMPLATE_BRIDGE2 ||
-	    cellptr->TType == TEMPLATE_BRIDGE1H || cellptr->TType == TEMPLATE_BRIDGE2H ||
-	    cellptr->TType == TEMPLATE_BRIDGE_1A || cellptr->TType == TEMPLATE_BRIDGE_1B ||
-	    cellptr->TType == TEMPLATE_BRIDGE_2A || cellptr->TType == TEMPLATE_BRIDGE_2B ||
-	    cellptr->TType == TEMPLATE_BRIDGE_3A || cellptr->TType == TEMPLATE_BRIDGE_3B) {
-
-		if (((warhead == WARHEAD_AP || warhead == WARHEAD_HE) &&
-		     Random_Pick(1, Rule.BridgeStrength) < strength)) {
+	if (cellptr->TType == TEMPLATE_BRIDGE1 || cellptr->TType == TEMPLATE_BRIDGE2 || cellptr->TType == TEMPLATE_BRIDGE1H ||
+	    cellptr->TType == TEMPLATE_BRIDGE2H || cellptr->TType == TEMPLATE_BRIDGE_1A || cellptr->TType == TEMPLATE_BRIDGE_1B ||
+	    cellptr->TType == TEMPLATE_BRIDGE_2A || cellptr->TType == TEMPLATE_BRIDGE_2B || cellptr->TType == TEMPLATE_BRIDGE_3A ||
+	    cellptr->TType == TEMPLATE_BRIDGE_3B) {
+		if (((warhead == WARHEAD_AP || warhead == WARHEAD_HE) && Random_Pick(1, Rule.BridgeStrength) < strength)) {
 			Map.Destroy_Bridge_At(cell);
 		}
 	}
@@ -306,29 +303,29 @@ AnimType Combat_Anim(int damage, WarheadType warhead, LandType land) {
 	}
 
 	static AnimType _aplist[] = {
-	    ANIM_VEH_HIT3, // Small fragment throwing explosion -- burn/exp mix.
-	    ANIM_VEH_HIT2, //	Small fragment throwing explosion -- pop & sparkles.
-	    ANIM_FRAG1,	   // Medium fragment throwing explosion -- short decay.
-	    ANIM_FBALL1,   // Large fireball explosion (bulges rightward).
+		ANIM_VEH_HIT3, // Small fragment throwing explosion -- burn/exp mix.
+		ANIM_VEH_HIT2, //	Small fragment throwing explosion -- pop & sparkles.
+		ANIM_FRAG1, // Medium fragment throwing explosion -- short decay.
+		ANIM_FBALL1, // Large fireball explosion (bulges rightward).
 	};
 
 	static AnimType _helist[] = {
-	    ANIM_VEH_HIT1, //	Small fireball explosion (bulges rightward).
-	    ANIM_VEH_HIT2, //	Small fragment throwing explosion -- pop & sparkles.
-	    ANIM_ART_EXP1, // Large fragment throwing explosion -- many sparkles.
-	    ANIM_FBALL1,   // Large fireball explosion (bulges rightward).
+		ANIM_VEH_HIT1, //	Small fireball explosion (bulges rightward).
+		ANIM_VEH_HIT2, //	Small fragment throwing explosion -- pop & sparkles.
+		ANIM_ART_EXP1, // Large fragment throwing explosion -- many sparkles.
+		ANIM_FBALL1, // Large fireball explosion (bulges rightward).
 	};
 
 	static AnimType _firelist[] = {
-	    ANIM_NAPALM1, // Small napalm burn.
-	    ANIM_NAPALM2, // Medium napalm burn.
-	    ANIM_NAPALM3, // Large napalm burn.
+		ANIM_NAPALM1, // Small napalm burn.
+		ANIM_NAPALM2, // Medium napalm burn.
+		ANIM_NAPALM3, // Large napalm burn.
 	};
 
 	static AnimType _waterlist[] = {
-	    ANIM_WATER_EXP3,
-	    ANIM_WATER_EXP2,
-	    ANIM_WATER_EXP1,
+		ANIM_WATER_EXP3,
+		ANIM_WATER_EXP2,
+		ANIM_WATER_EXP1,
 	};
 
 	WarheadTypeClass const *wptr = WarheadTypeClass::As_Pointer(warhead);
@@ -422,8 +419,7 @@ void Wide_Area_Damage(COORDINATE coord, LEPTON radius, int rawdamage, TechnoClas
 			if (!Map.In_Radar(tcell))
 				continue;
 
-			int dist_from_center =
-			    Distance(XY_Coord(x + cell_radius, y + cell_radius), XY_Coord(cell_radius, cell_radius));
+			int dist_from_center = Distance(XY_Coord(x + cell_radius, y + cell_radius), XY_Coord(cell_radius, cell_radius));
 			int damage = rawdamage * Inverse(fixed(cell_radius, dist_from_center));
 			Explosion_Damage(Cell_Coord(tcell), damage, source, warhead);
 			if (warhead == WARHEAD_FIRE && damage > 100) {

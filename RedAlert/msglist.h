@@ -114,10 +114,18 @@ public:
 	// Initialization
 	//.....................................................................
 	void Reset(void);
-	void Init(int x, int y, int max_msg, int maxchars, int height, int edit_x, int edit_y, int overflow_on,
-		  int over_start, int over_end, int width = 640);
-	TextLabelClass *Add_Message(char const *name, int id, char const *txt, PlayerColorType color,
-				    TextPrintType style, int timeout);
+	void Init(int x,
+		  int y,
+		  int max_msg,
+		  int maxchars,
+		  int height,
+		  int edit_x,
+		  int edit_y,
+		  int overflow_on,
+		  int over_start,
+		  int over_end,
+		  int width = 640);
+	TextLabelClass *Add_Message(char const *name, int id, char const *txt, PlayerColorType color, TextPrintType style, int timeout);
 	int Concat_Message(char const *name, int id, char const *txt, int timeout);
 
 	//.....................................................................
@@ -129,13 +137,18 @@ public:
 	//.....................................................................
 	// Message-editing support routines
 	//.....................................................................
-	TextLabelClass *Add_Edit(PlayerColorType color, TextPrintType style, char *to, char cursor = 0,
-				 int width = 640);
+	TextLabelClass *Add_Edit(PlayerColorType color, TextPrintType style, char *to, char cursor = 0, int width = 640);
 	void Remove_Edit(void);
 	char *Get_Edit_Buf(void);
-	char *Get_Overflow_Buf(void) { return (OverflowBuf); }
-	void Clear_Overflow_Buf(void) { OverflowBuf[0] = 0; }
-	int Is_Edit(void) { return (IsEdit); }
+	char *Get_Overflow_Buf(void) {
+		return (OverflowBuf);
+	}
+	void Clear_Overflow_Buf(void) {
+		OverflowBuf[0] = 0;
+	}
+	int Is_Edit(void) {
+		return (IsEdit);
+	}
 	void Set_Edit_Color(PlayerColorType color);
 
 	//.....................................................................
@@ -164,31 +177,31 @@ private:
 	// Private Data
 	//.....................................................................
 	TextLabelClass *MessageList; // list of messages
-	int MessageX;		     // x-coord of upper-left
-	int MessageY;		     // y-coord of upper-left
-	int MaxMessages;	     // max messages allowed
-	int MaxChars;		     // max allowed chars per message
-	int Height;		     // height in pixels
+	int MessageX; // x-coord of upper-left
+	int MessageY; // y-coord of upper-left
+	int MaxMessages; // max messages allowed
+	int MaxChars; // max allowed chars per message
+	int Height; // height in pixels
 
 	//.....................................................................
 	// Data for the edit field: the edit field will either appear at
 	// exact coordinates specified by the application, or it will appear
 	// vertically above the other messages.
 	//.....................................................................
-	unsigned EnableOverflow : 1;		   // 1 = enable overflow feature
-	unsigned IsEdit : 1;			   // 1 = there's an edit field
-	unsigned AdjustEdit : 1;		   // 1 = edit field appears over msgs
-	int EditX;				   // x-coord of edit field
-	int EditY;				   // y-coord of edit field
-	TextLabelClass *EditLabel;		   // ptr to current edit label
-	char EditBuf[MAX_MESSAGE_LENGTH + 30];	   // buffer for editable message
+	unsigned EnableOverflow : 1; // 1 = enable overflow feature
+	unsigned IsEdit : 1; // 1 = there's an edit field
+	unsigned AdjustEdit : 1; // 1 = edit field appears over msgs
+	int EditX; // x-coord of edit field
+	int EditY; // y-coord of edit field
+	TextLabelClass *EditLabel; // ptr to current edit label
+	char EditBuf[MAX_MESSAGE_LENGTH + 30]; // buffer for editable message
 	char OverflowBuf[MAX_MESSAGE_LENGTH + 30]; // overflow area
-	int EditCurPos;				   // current edit position
-	int EditInitPos;			   // initial edit position
-	char CursorChar;			   // character to use a cursor
-	int OverflowStart;			   // 1st index for overflow trimming
-	int OverflowEnd;			   // last index for overflow trimming
-	int Width;				   // Maximum width in pixels of editable string
+	int EditCurPos; // current edit position
+	int EditInitPos; // initial edit position
+	char CursorChar; // character to use a cursor
+	int OverflowStart; // 1st index for overflow trimming
+	int OverflowEnd; // last index for overflow trimming
+	int Width; // Maximum width in pixels of editable string
 
 	//.....................................................................
 	// Buffers provided for messages.  They must be long enough for

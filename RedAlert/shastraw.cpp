@@ -83,4 +83,6 @@ int SHAStraw::Get(void *source, int slen) {
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int SHAStraw::Result(void *result) const { return (SHA.Result(result)); }
+int SHAStraw::Result(void *result) const {
+	return (SHA.Result(result));
+}

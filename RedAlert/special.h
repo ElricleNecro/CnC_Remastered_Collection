@@ -120,7 +120,7 @@ public:
 	//
 	// unsigned char SaveLoadPadding[124]; // Trying 124 like we did with TD - Failed
 	unsigned char SaveLoadPadding[128]; // Works with With last weeks saves (7/16/2020) and newest saves; Skyler
-					    // says go with this.
+		// says go with this.
 };
 
 #endif

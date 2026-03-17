@@ -16,13 +16,13 @@
 #include "mpmgrd.h"
 
 extern "C" {
-#include "rtq.h"
-#include "services.h"
-#include "types.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "rtq.h"
+#include "services.h"
+#include "types.h"
 }
 #include "mplib.h"
 #include "mplpc.h"
@@ -185,7 +185,9 @@ int MPlayerManClass::Get_Global_Message(void *buf, int *buflen, int *address) {
 	return STATUS_OK;
 }
 
-int MPlayerManClass::Service(void) { return STATUS_OK; }
+int MPlayerManClass::Service(void) {
+	return STATUS_OK;
+}
 
 int MPlayerManClass::Create_Connection(int id, char *name, int address) {
 	_Connections[_nConnections] = address;
@@ -228,9 +230,13 @@ int MPlayerManClass::Connection_Address(int id) {
 	return _Connections[idx];
 }
 
-int MPlayerManClass::Num_Connections(void) { return _nConnections; }
+int MPlayerManClass::Num_Connections(void) {
+	return _nConnections;
+}
 
-int MPlayerManClass::Connection_ID(int index) { return _ID[index]; }
+int MPlayerManClass::Connection_ID(int index) {
+	return _ID[index];
+}
 
 int MPlayerManClass::Connection_Index(int id) {
 	int i;
@@ -244,13 +250,21 @@ int MPlayerManClass::Connection_Index(int id) {
 	return -1;
 }
 
-int MPlayerManClass::Global_Num_Send(void) { return 0; }
+int MPlayerManClass::Global_Num_Send(void) {
+	return 0;
+}
 
-int MPlayerManClass::Global_Num_Receive(void) { return MGenGetQueueCtr(GDOSPENDINGQUEUE); }
+int MPlayerManClass::Global_Num_Receive(void) {
+	return MGenGetQueueCtr(GDOSPENDINGQUEUE);
+}
 
-int MPlayerManClass::Private_Num_Send(int /*id*/) { return 0; }
+int MPlayerManClass::Private_Num_Send(int /*id*/) {
+	return 0;
+}
 
-int MPlayerManClass::Private_Num_Receive(int /*id*/) { return MGenGetQueueCtr(DOSPENDINGQUEUE); }
+int MPlayerManClass::Private_Num_Receive(int /*id*/) {
+	return MGenGetQueueCtr(DOSPENDINGQUEUE);
+}
 
 void MPlayerManClass::Reset_Response_Time(void) {
 	// unsupported
@@ -260,13 +274,11 @@ unsigned long MPlayerManClass::Response_Time(void) {
 	return (160 * 60) / 1000; // 160 microseconds one way (9 ticks)
 }
 
-void MPlayerManClass::Set_Timing(unsigned long /*retrydelta*/, unsigned long /*maxretries*/,
-				 unsigned long /*timeout*/) {
+void MPlayerManClass::Set_Timing(unsigned long /*retrydelta*/, unsigned long /*maxretries*/, unsigned long /*timeout*/) {
 	// unsupported
 }
 
-void MPlayerManClass::Configure_Debug(int /*index*/, int /*type_offset*/, int /*type_size*/, char ** /*names*/,
-				      int /*namestart*/, int /*namecount*/) {
+void MPlayerManClass::Configure_Debug(int /*index*/, int /*type_offset*/, int /*type_size*/, char ** /*names*/, int /*namestart*/, int /*namecount*/) {
 	// unsupported
 }
 
@@ -274,7 +286,9 @@ void MPlayerManClass::Mono_Debug_Print(int /*index*/, int /*refresh*/) {
 	// unsupported
 }
 
-int MPlayerManClass::Init(void) { return STATUS_OK; }
+int MPlayerManClass::Init(void) {
+	return STATUS_OK;
+}
 
 int MPlayerManClass::Find_Num_Connections(void) {
 	TGAMEDEF game_def;

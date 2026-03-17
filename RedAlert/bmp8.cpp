@@ -45,8 +45,8 @@ bool BMP8::Init(const char *szFile, HWND hWnd) {
 	this->hWnd = hWnd;
 
 	//	Retrieve a handle identifying the file.
-	HANDLE hFile = ::CreateFile(szFile, GENERIC_READ, FILE_SHARE_READ, (LPSECURITY_ATTRIBUTES)NULL, OPEN_EXISTING,
-				    FILE_ATTRIBUTE_READONLY, (HANDLE)NULL);
+	HANDLE hFile =
+		::CreateFile(szFile, GENERIC_READ, FILE_SHARE_READ, (LPSECURITY_ATTRIBUTES)NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, (HANDLE)NULL);
 
 	if (!hFile)
 		return false;
@@ -58,8 +58,7 @@ bool BMP8::Init(const char *szFile, HWND hWnd) {
 	::ReadFile(hFile, &bitmapInfoHeader, sizeof(BITMAPINFOHEADER), &dwRead, (LPOVERLAPPED)NULL);
 
 	// Allocate memory for the BITMAPINFO structure.
-	HGLOBAL infoHeaderMem =
-	    ::GlobalAlloc(GHND, sizeof(BITMAPINFOHEADER) + ((1 << bitmapInfoHeader.biBitCount) * sizeof(RGBQUAD)));
+	HGLOBAL infoHeaderMem = ::GlobalAlloc(GHND, sizeof(BITMAPINFOHEADER) + ((1 << bitmapInfoHeader.biBitCount) * sizeof(RGBQUAD)));
 
 	LPBITMAPINFO lpHeaderMem = (LPBITMAPINFO)::GlobalLock(infoHeaderMem);
 
@@ -78,8 +77,7 @@ bool BMP8::Init(const char *szFile, HWND hWnd) {
 
 	// Retrieve the color table.
 	// 1 << bitmapInfoHeader.biBitCount == 2 ^ bitmapInfoHeader.biBitCount
-	::ReadFile(hFile, lpHeaderMem->bmiColors, ((1 << bitmapInfoHeader.biBitCount) * sizeof(RGBQUAD)), &dwRead,
-		   (LPOVERLAPPED)NULL);
+	::ReadFile(hFile, lpHeaderMem->bmiColors, ((1 << bitmapInfoHeader.biBitCount) * sizeof(RGBQUAD)), &dwRead, (LPOVERLAPPED)NULL);
 
 	lpLogPalette = (LPLOGPALETTE) new char[(sizeof(LOGPALETTE) + sizeof(PALETTEENTRY) * 256)];
 	lpLogPalette->palVersion = 0x300;
@@ -135,7 +133,7 @@ bit8 BMP8::drawBmp(void) {
 	char string[128];
 
 	InvalidateRect(WindowHandle_, NULL, FALSE); // keep windows from screwing up the
-						    //  redrawing (as much).
+		//  redrawing (as much).
 	hdc = BeginPaint(WindowHandle_, &ps);
 
 	// Do palette stuff

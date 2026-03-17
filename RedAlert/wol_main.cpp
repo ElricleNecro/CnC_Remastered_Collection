@@ -182,8 +182,7 @@ bool ReregisterWolapiDLL() {
 	char szInstallPath[_MAX_PATH];
 	if (::RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Westwood\\WOLAPI", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
 		DWORD dwBufSize = _MAX_PATH;
-		if (::RegQueryValueEx(hKey, "InstallPath", 0, NULL, (LPBYTE)szInstallPath, &dwBufSize) ==
-		    ERROR_SUCCESS) {
+		if (::RegQueryValueEx(hKey, "InstallPath", 0, NULL, (LPBYTE)szInstallPath, &dwBufSize) == ERROR_SUCCESS) {
 			WIN32_FIND_DATA wfd;
 			HANDLE handle = FindFirstFile(szInstallPath, &wfd);
 			if (handle == INVALID_HANDLE_VALUE) {

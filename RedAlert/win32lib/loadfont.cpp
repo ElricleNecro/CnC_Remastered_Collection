@@ -32,10 +32,10 @@
  *   Load_Font -- Loads a font from disk.                                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "font.h"
 #include <file.h>
 #include <wwmem.h>
 #include <wwstd.h>
+#include "font.h"
 
 #if (IBM)
 #include <fcntl.h>
@@ -78,9 +78,9 @@ char *FontWidthBlockPtr = NULL;
  *=========================================================================*/
 void *__cdecl Load_Font(char const *name) {
 	char valid;
-	int fh;		     // DOS file handle for font file.
+	int fh; // DOS file handle for font file.
 	unsigned short size; // Size of the data in the file (-2);
-	char *ptr = NULL;    // Pointer to newly loaded font.
+	char *ptr = NULL; // Pointer to newly loaded font.
 
 	fh = Open_File(name, READ);
 	if (fh >= 0) {
@@ -115,7 +115,7 @@ void *__cdecl Load_Font(char const *name) {
 	//
 
 	valid = FALSE;
-	if (*(ptr + 2) == 0) {	       // no compression
+	if (*(ptr + 2) == 0) { // no compression
 		if (*(ptr + 3) == 5) { // currently only 5 data blocks are used.
 			valid = TRUE;
 		}

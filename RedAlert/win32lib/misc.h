@@ -35,7 +35,7 @@
 #define MISC_H
 
 #define WIN32_LEAN_AND_MEAN // eliminates unecessary definitions in windows.h
-#ifndef _WIN32		    // Denzil 6/2/98 Watcom 11.0 complains without this check
+#ifndef _WIN32 // Denzil 6/2/98 Watcom 11.0 complains without this check
 #define _WIN32
 #endif // _WIN32
 #include <ddraw.h>
@@ -99,7 +99,6 @@ extern void (*Misc_Focus_Restore_Function)(void);
 #define MAX_SURFACES 20
 
 class SurfaceMonitorClass {
-
 public:
 	SurfaceMonitorClass();
 
@@ -154,10 +153,8 @@ BYTE __cdecl Find_Argv(BYTE const *str);
 /*=========================================================================*/
 char *Find_Argv(char const *str);
 void Mono_Mem_Dump(void const *databuf, int bytes, int y);
-void Convert_RGB_To_HSV(unsigned int r, unsigned int g, unsigned int b, unsigned int *h, unsigned int *s,
-			unsigned int *v);
-void Convert_HSV_To_RGB(unsigned int h, unsigned int s, unsigned int v, unsigned int *r, unsigned int *g,
-			unsigned int *b);
+void Convert_RGB_To_HSV(unsigned int r, unsigned int g, unsigned int b, unsigned int *h, unsigned int *s, unsigned int *v);
+void Convert_HSV_To_RGB(unsigned int h, unsigned int s, unsigned int v, unsigned int *r, unsigned int *g, unsigned int *b);
 
 /*=========================================================================*/
 /* The following prototypes are for the file: VERSION.CPP						*/

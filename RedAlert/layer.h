@@ -46,7 +46,9 @@ public:
 	bool Submit(ObjectClass const *object, bool sort = false);
 	int Sorted_Add(ObjectClass const *const object);
 
-	virtual void Init(void) { Clear(); };
+	virtual void Init(void) {
+		Clear();
+	};
 	virtual void One_Time(void) {};
 
 	/*

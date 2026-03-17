@@ -45,11 +45,11 @@
 #ifdef NEVER
 Map(screen) class heirarchy.
 
-    MapeditClass(most derived class)-- scenario editor
+	MapeditClass(most derived class)-- scenario editor
         ³ MouseClass-- handles mouse animation and display control
         ³ ScrollClass-- map scroll handler
         ³ HelpClass-- pop
-    - up help text handler
+	- up help text handler
         ³ TabClass-- file folder tab screen mode control dispatcher
         ³ SidebarClass-- displays and controls construction list sidebar
         ³ PowerClass-- display power production / consumption bargraph
@@ -58,13 +58,13 @@ Map(screen) class heirarchy.
         ³ MapClass-- general tactical map data handler
         ³ GScreenClass(pure virtual base class)-- generic screen control
 
-	  AbstractClass
+		  AbstractClass
                                   ³
                                   ³
                                   ³
                                   ³ ObjectClass
                                   ³ ÚÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄ¿
-	  AnimClass  ³ TemplateClass    ³ ÃÄ FuseClass     ³ TerrainClass
+		  AnimClass  ³ TemplateClass    ³ ÃÄ FuseClass     ³ TerrainClass
               ³                   ³ ÃÄ FlyClass      ³
               ³                   ³ BulletClass            ³ OverlayClass MissionClass SmudgeClass
                                   ³ RadioClass
@@ -76,7 +76,7 @@ Map(screen) class heirarchy.
        ³ VesselClass
        ³ UnitClass
 
-	  AbstractTypeClass
+		  AbstractTypeClass
                                     ³ ObjectTypeClass
                                     ³ ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÅÄÄÄÄÄÄÄÄÄÄÄÄÂÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
              ³                      ³            ³                 ³ TechnoTypeClass              ³            ³                 ³
@@ -108,8 +108,8 @@ Map(screen) class heirarchy.
 #ifndef __BORLANDC__
 #ifndef TRUE_FALSE_DEFINED
 #define TRUE_FALSE_DEFINED
-	  enum { false = 0,
-		 true = 1 };
+		  enum { false = 0,
+			 true = 1 };
 typedef int bool;
 #endif
 #endif
@@ -212,11 +212,11 @@ typedef struct {
 extern bool GameActive;
 extern long LParam;
 
+#include <assert.h>
 #include "ccfile.h"
 #include "conquer.h"
 #include "heap.h"
 #include "vector.h"
-#include <assert.h>
 // #include	"debug.h"
 #include "ccini.h"
 #include "ccptr.h"
@@ -232,10 +232,10 @@ extern long Frame;
 CELL Coord_Cell(COORDINATE coord);
 
 #include "aircraft.h" // Aircraft objects.
-#include "anim.h"     // Animation objects.
-#include "bullet.h"   // Bullet objects.
-#include "credits.h"  // Credit counter class.
-#include "factory.h"  // Production manager class.
+#include "anim.h" // Animation objects.
+#include "bullet.h" // Bullet objects.
+#include "credits.h" // Credit counter class.
+#include "factory.h" // Production manager class.
 #include "house.h"
 #include "infantry.h" // Infantry objects.
 #include "language.h"
@@ -248,15 +248,15 @@ CELL Coord_Cell(COORDINATE coord);
 #endif
 #include "palettec.h" //ST 5/13/2019
 #include "rgb.h"
-#include "score.h"   // Scoring system class.
+#include "score.h" // Scoring system class.
 #include "session.h" // Multiplayer session class
-#include "smudge.h"  // Stains on the terrain objects.
+#include "smudge.h" // Stains on the terrain objects.
 #include "taction.h"
 #include "target.h"
-#include "team.h"     // Team objects.
+#include "team.h" // Team objects.
 #include "teamtype.h" // Team type objects.
 #include "template.h" // Icon template objects.
-#include "terrain.h"  // Terrain objects.
+#include "terrain.h" // Terrain objects.
 #include "tevent.h"
 #include "trigger.h" // Trigger event objects.
 #include "trigtype.h"
@@ -317,8 +317,7 @@ extern void Free_Interpolated_Palettes(void);
 extern int Load_Interpolated_Palettes(char const *filename, BOOL add = FALSE);
 extern void Rebuild_Interpolated_Palette(unsigned char *interpal);
 extern void Interpolate_2X_Scale(GraphicBufferClass *source, GraphicViewPortClass *dest, char const *palette_file_name);
-void Increase_Palette_Luminance(unsigned char *palette, int red_percentage, int green_percentage, int blue_percentage,
-				int cap);
+void Increase_Palette_Luminance(unsigned char *palette, int red_percentage, int green_percentage, int blue_percentage, int cap);
 #endif
 
 /*
@@ -343,8 +342,7 @@ AnimType Anim_From_Name(char const *name);
 VocType Voc_From_Name(char const *name);
 char const *Speech_Name(VoxType speech);
 char const *Voc_Name(VocType voc);
-int Sound_Effect(VocType voc, fixed volume = 1, int variation = 1, signed short panvalue = 0,
-		 HousesType house = HOUSE_NONE);
+int Sound_Effect(VocType voc, fixed volume = 1, int variation = 1, signed short panvalue = 0, HousesType house = HOUSE_NONE);
 // void Speak(VoxType voice); // MBL 02.06.2020
 void Speak(VoxType voice, HouseClass *house = NULL, COORDINATE coord = 0);
 void Speak_AI(void);
@@ -416,22 +414,54 @@ void const *Get_Radar_Icon(void const *shapefile, int shapenum, int frames, int 
 // void CC_Draw_Shape(ObjectClass *object, void const * shapefile, int shapenum, int x, int y, WindowNumberType window,
 // ShapeFlags_Type flags, void const * fadingdata=0, void const * ghostdata=0, DirType rotation=DIR_N, long
 // scale=0x0100);
-void CC_Draw_Shape(void const *shapefile, int shapenum, int x, int y, WindowNumberType window, ShapeFlags_Type flags,
-		   void const *fadingdata = 0, void const *ghostdata = 0, DirType rotation = DIR_N);
+void CC_Draw_Shape(void const *shapefile,
+		   int shapenum,
+		   int x,
+		   int y,
+		   WindowNumberType window,
+		   ShapeFlags_Type flags,
+		   void const *fadingdata = 0,
+		   void const *ghostdata = 0,
+		   DirType rotation = DIR_N);
 
 // Added for draw intercept. ST - 1/17/2019 12:31PM
-void CC_Draw_Shape(const ObjectClass *object, void const *shapefile, int shapenum, int x, int y,
-		   WindowNumberType window, ShapeFlags_Type flags, void const *fadingdata = 0,
-		   void const *ghostdata = 0, DirType rotation = DIR_N, long virtualscale = 0x0100, int width = 0,
+void CC_Draw_Shape(const ObjectClass *object,
+		   void const *shapefile,
+		   int shapenum,
+		   int x,
+		   int y,
+		   WindowNumberType window,
+		   ShapeFlags_Type flags,
+		   void const *fadingdata = 0,
+		   void const *ghostdata = 0,
+		   DirType rotation = DIR_N,
+		   long virtualscale = 0x0100,
+		   int width = 0,
 		   int height = 0);
-void CC_Draw_Shape(const ObjectClass *object, const char *shape_file_name, void const *shapefile, int shapenum, int x,
-		   int y, WindowNumberType window, ShapeFlags_Type flags, void const *fadingdata = 0,
-		   void const *ghostdata = 0, DirType rotation = DIR_N, long virtualscale = 0x0100,
+void CC_Draw_Shape(const ObjectClass *object,
+		   const char *shape_file_name,
+		   void const *shapefile,
+		   int shapenum,
+		   int x,
+		   int y,
+		   WindowNumberType window,
+		   ShapeFlags_Type flags,
+		   void const *fadingdata = 0,
+		   void const *ghostdata = 0,
+		   DirType rotation = DIR_N,
+		   long virtualscale = 0x0100,
 		   char override_owner = HOUSE_NONE);
 
 // Added for pip draw intercept - SKY
-void CC_Draw_Pip(const ObjectClass *object, void const *shapefile, int shapenum, int x, int y, WindowNumberType window,
-		 ShapeFlags_Type flags, void const *fadingdata = 0, void const *ghostdata = 0,
+void CC_Draw_Pip(const ObjectClass *object,
+		 void const *shapefile,
+		 int shapenum,
+		 int x,
+		 int y,
+		 WindowNumberType window,
+		 ShapeFlags_Type flags,
+		 void const *fadingdata = 0,
+		 void const *ghostdata = 0,
 		 DirType rotation = DIR_N);
 
 void Go_Editor(bool flag);
@@ -475,17 +505,20 @@ void Draw_Caption(int text, int x, int y, int w);
 void Draw_Caption(char const *text, int x, int y, int w);
 int Format_Window_String(char *string, int maxlinelen, int &width, int &height);
 extern void Dialog_Box(int x, int y, int w, int h);
-void Conquer_Clip_Text_Print(char const *, unsigned x, unsigned y, RemapControlType *fore,
-			     unsigned back = (unsigned)TBLACK, TextPrintType flag = TPF_8POINT | TPF_DROPSHADOW,
-			     int width = -1, int const *tabs = 0);
+void Conquer_Clip_Text_Print(char const *,
+			     unsigned x,
+			     unsigned y,
+			     RemapControlType *fore,
+			     unsigned back = (unsigned)TBLACK,
+			     TextPrintType flag = TPF_8POINT | TPF_DROPSHADOW,
+			     int width = -1,
+			     int const *tabs = 0);
 void Draw_Box(int x, int y, int w, int h, BoxStyleEnum up, bool filled);
 int cdecl Dialog_Message(char *errormsg, ...);
 void Window_Box(WindowNumberType window, BoxStyleEnum style);
-void Fancy_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back,
-		      TextPrintType flag, ...);
+void Fancy_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back, TextPrintType flag, ...);
 void Fancy_Text_Print(int text, unsigned x, unsigned y, RemapControlType *fore, unsigned back, TextPrintType flag, ...);
-void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back,
-		       TextPrintType flag);
+void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back, TextPrintType flag);
 void Plain_Text_Print(int text, unsigned x, unsigned y, unsigned fore, unsigned back, TextPrintType flag, ...);
 void Plain_Text_Print(char const *text, unsigned x, unsigned y, unsigned fore, unsigned back, TextPrintType flag, ...);
 
@@ -568,8 +601,7 @@ extern BOOL InterpolationPaletteChanged;
 extern void Interpolate_2X_Scale(GraphicBufferClass *source, GraphicViewPortClass *dest, char const *palette_file_name);
 void Read_Interpolation_Palette(char const *palette_file_name);
 void Write_Interpolation_Palette(char const *palette_file_name);
-void Increase_Palette_Luminance(unsigned char *InterpolationPalette, int RedPercentage, int GreenPercentage,
-				int BluePercentage, int cap);
+void Increase_Palette_Luminance(unsigned char *InterpolationPalette, int RedPercentage, int GreenPercentage, int BluePercentage, int cap);
 extern "C" {
 extern unsigned char PaletteInterpolationTable[SIZE_OF_PALETTE][SIZE_OF_PALETTE];
 extern unsigned char *InterpolationPalette;
@@ -579,8 +611,7 @@ void __cdecl Asm_Create_Palette_Interpolation_Table(void);
 /*
 ** JSHELL.CPP
 */
-int Load_Picture(char const *filename, BufferClass &scratchbuf, BufferClass &destbuf, unsigned char *palette,
-		 PicturePlaneType format);
+int Load_Picture(char const *filename, BufferClass &scratchbuf, BufferClass &destbuf, unsigned char *palette, PicturePlaneType format);
 void *Conquer_Build_Fading_Table(PaletteClass const &palette, void *dest, int color, int frac);
 void *Small_Icon(void const *iconptr, int iconnum);
 void Set_Window(int window, int x, int y, int w, int h);
@@ -715,8 +746,7 @@ void Log_End_Nest_Time(char *string);
 int WWGetPrivateProfileInt(char const *section, char const *entry, int def, char *profile);
 bool WWWritePrivateProfileInt(char const *section, char const *entry, int value, char *profile);
 bool WWWritePrivateProfileString(char const *section, char const *entry, char const *string, char *profile);
-char *WWGetPrivateProfileString(char const *section, char const *entry, char const *def, char *retbuffer, int retlen,
-				char const *profile);
+char *WWGetPrivateProfileString(char const *section, char const *entry, char const *def, char *retbuffer, int retlen, char const *profile);
 unsigned WWGetPrivateProfileHex(char const *section, char const *entry, char *profile);
 
 char *Read_Bin_Buffer(void);
@@ -742,8 +772,7 @@ bool Queue_Target(TargetClass whom, TARGET target);
 bool Queue_Destination(TargetClass whom, TARGET target);
 bool Queue_Mission(TargetClass whom, MissionType mission);
 bool Queue_Mission(TargetClass whom, MissionType mission, TARGET target, TARGET destination);
-bool Queue_Mission(TargetClass whom, MissionType mission, TARGET target, TARGET destination, SpeedType speed,
-		   MPHType maxspeed);
+bool Queue_Mission(TargetClass whom, MissionType mission, TARGET target, TARGET destination, SpeedType speed, MPHType maxspeed);
 bool Queue_Options(void);
 bool Queue_Exit(void);
 void Queue_AI(void);
@@ -757,10 +786,18 @@ void Add_CRC(unsigned long *crc, unsigned long val);
 **	REINF.CPP
 */
 bool Do_Reinforcements(TeamTypeClass const *team);
-bool Create_Special_Reinforcement(HouseClass *house, TechnoTypeClass const *type, TechnoTypeClass const *another,
-				  TeamMissionType mission = TMISSION_NONE, int argument = 0);
-int Create_Air_Reinforcement(HouseClass *house, AircraftType air, int number, MissionType mission, TARGET tarcom,
-			     TARGET navcom, InfantryType passenger = INFANTRY_NONE);
+bool Create_Special_Reinforcement(HouseClass *house,
+				  TechnoTypeClass const *type,
+				  TechnoTypeClass const *another,
+				  TeamMissionType mission = TMISSION_NONE,
+				  int argument = 0);
+int Create_Air_Reinforcement(HouseClass *house,
+			     AircraftType air,
+			     int number,
+			     MissionType mission,
+			     TARGET tarcom,
+			     TARGET navcom,
+			     InfantryType passenger = INFANTRY_NONE);
 
 /*
 **	ROTBMP.CPP
@@ -795,8 +832,7 @@ void Dump(void);
 /*
 ** SCENARIO.CPP
 */
-void Disect_Scenario_Name(char const *name, int &scenario, ScenarioPlayerType &player, ScenarioDirType &dir,
-			  ScenarioVarType &var);
+void Disect_Scenario_Name(char const *name, int &scenario, ScenarioPlayerType &player, ScenarioDirType &dir, ScenarioVarType &var);
 void Post_Load_Game(int load_net);
 bool End_Game(void);
 bool Read_Scenario(char *root);
@@ -816,8 +852,7 @@ int BGMessageBox(char const *text, int button1, int button2);
 **	SCORE.CPP
 */
 char const *Map_Selection(void);
-void Bit_It_In(int x, int y, int w, int h, GraphicBufferClass *src, GraphicBufferClass *dest, int delay = 0,
-	       int dagger = 0);
+void Bit_It_In(int x, int y, int w, int h, GraphicBufferClass *src, GraphicBufferClass *dest, int delay = 0, int dagger = 0);
 void Call_Back_Delay(int time);
 int Alloc_Object(ScoreAnimClass *obj);
 
@@ -948,17 +983,23 @@ extern CCPtr<TemplateTypeClass> y24;
 extern CCPtr<TerrainTypeClass> y25;
 extern CCPtr<OverlayTypeClass> y26;
 extern CCPtr<SmudgeTypeClass> y27;
-template <> class DynamicVectorClass<CCPtr<TeamTypeClass>>;
+template <>
+class DynamicVectorClass<CCPtr<TeamTypeClass>>;
 extern DynamicVectorClass<CCPtr<TeamTypeClass>> y002;
-template <> class DynamicVectorClass<CCPtr<TriggerTypeClass>>;
+template <>
+class DynamicVectorClass<CCPtr<TriggerTypeClass>>;
 extern DynamicVectorClass<CCPtr<TriggerTypeClass>> y001;
-template <> class DynamicVectorClass<TeamMissionClass *>;
+template <>
+class DynamicVectorClass<TeamMissionClass *>;
 extern DynamicVectorClass<TeamMissionClass *> xxx1;
-template <> class DynamicVectorClass<EventChoiceClass *>;
+template <>
+class DynamicVectorClass<EventChoiceClass *>;
 extern DynamicVectorClass<EventChoiceClass *> xxx2;
-template <> class DynamicVectorClass<ActionChoiceClass *>;
+template <>
+class DynamicVectorClass<ActionChoiceClass *>;
 extern DynamicVectorClass<ActionChoiceClass *> xxx3;
-template <> class DynamicVectorClass<EgoClass *>;
+template <>
+class DynamicVectorClass<EgoClass *>;
 extern DynamicVectorClass<EgoClass *> whatever;
 
 /*

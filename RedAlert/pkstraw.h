@@ -47,7 +47,9 @@ public:
 	PKStraw(CryptControl control, RandomStraw &rnd);
 
 	virtual void Get_From(Straw *straw);
-	virtual void Get_From(Straw &straw) { Get_From(&straw); }
+	virtual void Get_From(Straw &straw) {
+		Get_From(&straw);
+	}
 
 	virtual int Get(void *source, int slen);
 

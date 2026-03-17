@@ -43,14 +43,11 @@
 
 BOOL InterpolationPaletteChanged = FALSE;
 extern "C" {
-extern void __cdecl Asm_Interpolate(unsigned char *src_ptr, unsigned char *dest_ptr, int lines, int src_width,
-				    int dest_width);
+extern void __cdecl Asm_Interpolate(unsigned char *src_ptr, unsigned char *dest_ptr, int lines, int src_width, int dest_width);
 
-extern void __cdecl Asm_Interpolate_Line_Double(unsigned char *src_ptr, unsigned char *dest_ptr, int lines,
-						int src_width, int dest_width);
+extern void __cdecl Asm_Interpolate_Line_Double(unsigned char *src_ptr, unsigned char *dest_ptr, int lines, int src_width, int dest_width);
 
-extern void __cdecl Asm_Interpolate_Line_Interpolate(unsigned char *src_ptr, unsigned char *dest_ptr, int lines,
-						     int src_width, int dest_width);
+extern void __cdecl Asm_Interpolate_Line_Interpolate(unsigned char *src_ptr, unsigned char *dest_ptr, int lines, int src_width, int dest_width);
 }
 
 #define SIZE_OF_PALETTE 256
@@ -123,7 +120,6 @@ void Write_Interpolation_Palette(char const *palette_file_name) {
  *   12/06/1995  MG : Created.                                             *
  *=========================================================================*/
 void Create_Palette_Interpolation_Table(void) {
-
 	//	Asm_Create_Palette_Interpolation_Table();
 
 #if (1)
@@ -155,7 +151,6 @@ void Create_Palette_Interpolation_Table(void) {
 	//
 	first_palette_ptr = (unsigned char *)InterpolationPalette;
 	for (i = 0; i < SIZE_OF_PALETTE; i++) {
-
 		//
 		// Get the first palette entry's RGB.
 		//
@@ -236,14 +231,11 @@ void Create_Palette_Interpolation_Table(void) {
  *    12/12/95 12:16PM ST : Created                                                            *
  *=============================================================================================*/
 
-void Increase_Palette_Luminance(unsigned char *palette, int red_percentage, int green_percentage, int blue_percentage,
-				int cap) {
-
+void Increase_Palette_Luminance(unsigned char *palette, int red_percentage, int green_percentage, int blue_percentage, int cap) {
 	unsigned int red;
 	unsigned int green;
 	unsigned int blue;
 	for (int i = 0; i < SIZE_OF_PALETTE * 3; i += 3) {
-
 		red = (unsigned)*(palette + i);
 		green = (unsigned)*(palette + i + 1);
 		blue = (unsigned)*(palette + i + 2);
@@ -385,7 +377,6 @@ void Interpolate_2X_Scale(GraphicBufferClass *source, GraphicViewPortClass *dest
 	//
 	width_counter = 0;
 	while (src_ptr < end_of_source) {
-
 		//
 		// Blend this pixel with the one to the left and place this new color in the dest buffer.
 		//

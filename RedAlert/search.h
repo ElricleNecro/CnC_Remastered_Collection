@@ -80,7 +80,8 @@ typedef int bool;
 **	objects and doesn't use them until after the copy constructor is used to initialize them.
 */
 
-template <class T> class IndexClass {
+template <class T>
+class IndexClass {
 public:
 	IndexClass(void);
 	~IndexClass(void);
@@ -220,7 +221,10 @@ IndexClass<T>::IndexClass(void) : IndexTable(0), IndexCount(0), IndexSize(0), Is
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> IndexClass<T>::~IndexClass(void) { Clear(); }
+template <class T>
+IndexClass<T>::~IndexClass(void) {
+	Clear();
+}
 
 /***********************************************************************************************
  * IndexClass<T>::Clear -- Clear index handler to empty state.                                 *
@@ -237,7 +241,8 @@ template <class T> IndexClass<T>::~IndexClass(void) { Clear(); }
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> void IndexClass<T>::Clear(void) {
+template <class T>
+void IndexClass<T>::Clear(void) {
 	delete[] IndexTable;
 	IndexTable = 0;
 	IndexCount = 0;
@@ -262,7 +267,8 @@ template <class T> void IndexClass<T>::Clear(void) {
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> bool IndexClass<T>::Increase_Table_Size(int amount) {
+template <class T>
+bool IndexClass<T>::Increase_Table_Size(int amount) {
 	/*
 	**	Check size increase parameter for legality.
 	*/
@@ -271,7 +277,6 @@ template <class T> bool IndexClass<T>::Increase_Table_Size(int amount) {
 
 	NodeElement *table = new NodeElement[IndexSize + amount];
 	if (table != NULL) {
-
 		/*
 		**	Copy all valid nodes into the new table.
 		*/
@@ -315,7 +320,10 @@ template <class T> bool IndexClass<T>::Increase_Table_Size(int amount) {
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int IndexClass<T>::Count(void) const { return (IndexCount); }
+template <class T>
+int IndexClass<T>::Count(void) const {
+	return (IndexCount);
+}
 
 /***********************************************************************************************
  * IndexClass<T>::Is_Present -- Checks for presense of index entry.                            *
@@ -332,7 +340,8 @@ template <class T> int IndexClass<T>::Count(void) const { return (IndexCount); }
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> bool IndexClass<T>::Is_Present(int id) const {
+template <class T>
+bool IndexClass<T>::Is_Present(int id) const {
 	/*
 	**	If there are no data elements in the index table, then it can
 	**	never find the specified index. Check for and return failure
@@ -387,9 +396,9 @@ template <class T> bool IndexClass<T>::Is_Present(int id) const {
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> T IndexClass<T>::Fetch_Index(int id) const {
+template <class T>
+T IndexClass<T>::Fetch_Index(int id) const {
 	if (Is_Present(id)) {
-
 		/*
 		**	Count on the fact that the archive pointer is always valid after a call to Is_Present
 		**	that returns "true".
@@ -414,7 +423,8 @@ template <class T> T IndexClass<T>::Fetch_Index(int id) const {
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> bool IndexClass<T>::Is_Archive_Same(int id) const {
+template <class T>
+bool IndexClass<T>::Is_Archive_Same(int id) const {
 	if (Archive != 0 && Archive->ID == id) {
 		return (true);
 	}
@@ -437,7 +447,10 @@ template <class T> bool IndexClass<T>::Is_Archive_Same(int id) const {
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> void IndexClass<T>::Invalidate_Archive(void) { Archive = 0; }
+template <class T>
+void IndexClass<T>::Invalidate_Archive(void) {
+	Archive = 0;
+}
 
 /***********************************************************************************************
  * IndexClass<T>::Set_Archive -- Records the node pointer into the archive.                    *
@@ -454,7 +467,10 @@ template <class T> void IndexClass<T>::Invalidate_Archive(void) { Archive = 0; }
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> void IndexClass<T>::Set_Archive(NodeElement const *node) { Archive = node; }
+template <class T>
+void IndexClass<T>::Set_Archive(NodeElement const *node) {
+	Archive = node;
+}
 
 /***********************************************************************************************
  * IndexClass<T>::Add_Index -- Add element to index tracking system.                           *
@@ -476,14 +492,14 @@ template <class T> void IndexClass<T>::Set_Archive(NodeElement const *node) { Ar
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> bool IndexClass<T>::Add_Index(int id, T data) {
+template <class T>
+bool IndexClass<T>::Add_Index(int id, T data) {
 	/*
 	**	Ensure that there is enough room to add this index. If not, then increase the
 	**	capacity of the internal index table.
 	*/
 	if (IndexCount + 1 > IndexSize) {
 		if (!Increase_Table_Size(IndexSize == 0 ? 10 : IndexSize)) {
-
 			/*
 			**	Failure to increase the size of the index table means failure to add
 			**	the index element.
@@ -518,7 +534,8 @@ template <class T> bool IndexClass<T>::Add_Index(int id, T data) {
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> bool IndexClass<T>::Remove_Index(int id) {
+template <class T>
+bool IndexClass<T>::Remove_Index(int id) {
 	/*
 	**	Find the array index into the table that matches the specified id value.
 	*/
@@ -537,7 +554,6 @@ template <class T> bool IndexClass<T>::Remove_Index(int id) {
 	**	with this, so that is what we use.
 	*/
 	if (found_index != -1) {
-
 		for (int index = found_index + 1; index < IndexCount; index++) {
 			IndexTable[index - 1] = IndexTable[index];
 		}
@@ -572,7 +588,8 @@ template <class T> bool IndexClass<T>::Remove_Index(int id) {
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> int _USERENTRY IndexClass<T>::search_compfunc(void const *ptr1, void const *ptr2) {
+template <class T>
+int _USERENTRY IndexClass<T>::search_compfunc(void const *ptr1, void const *ptr2) {
 	if (*(int const *)ptr1 == *(int const *)ptr2) {
 		return (0);
 	}
@@ -598,7 +615,8 @@ template <class T> int _USERENTRY IndexClass<T>::search_compfunc(void const *ptr
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> typename IndexClass<T>::NodeElement const *IndexClass<T>::Search_For_Node(int id) const {
+template <class T>
+typename IndexClass<T>::NodeElement const *IndexClass<T>::Search_For_Node(int id) const {
 	/*
 	**	If there are no elements in the list, then it certainly can't find any matches.
 	*/
@@ -621,8 +639,7 @@ template <class T> typename IndexClass<T>::NodeElement const *IndexClass<T>::Sea
 	*/
 	NodeElement node;
 	node.ID = id;
-	return (
-	    (NodeElement const *)bsearch(&node, &IndexTable[0], IndexCount, sizeof(IndexTable[0]), search_compfunc));
+	return ((NodeElement const *)bsearch(&node, &IndexTable[0], IndexCount, sizeof(IndexTable[0]), search_compfunc));
 }
 
 #endif

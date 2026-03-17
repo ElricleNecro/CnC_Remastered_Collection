@@ -43,7 +43,7 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 
 	if (pWO->bLoggedIn()) {
 		pWO->bReturningAfterGame = true; //	Set trigger for chat dialog.
-		return 1;			 //	We are already logged in, and have just come back from a game.
+		return 1; //	We are already logged in, and have just come back from a game.
 	}
 
 	/*
@@ -60,7 +60,7 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // coord of x-center
 
 	int d_txt8_h = 11 * RESFACTOR; // ht of 8-pt text
-	int d_margin = 7 * RESFACTOR;  // margin width/height
+	int d_margin = 7 * RESFACTOR; // margin width/height
 	int x_margin = 16 * RESFACTOR; // margin width/height
 
 	int top_margin = 0;
@@ -138,8 +138,8 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 	/*
 	**	Other Variables
 	*/
-	char szNameBuffer[WOL_NAME_LEN_MAX] = {0}; //	User name.
-	char szPassBuffer[WOL_PASSWORD_LEN] = {0}; //	User password.
+	char szNameBuffer[WOL_NAME_LEN_MAX] = { 0 }; //	User name.
+	char szPassBuffer[WOL_PASSWORD_LEN] = { 0 }; //	User password.
 
 	/*
 	**	Buttons
@@ -149,20 +149,43 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 	TextButtonClass ConnectBtn(BUTTON_CONNECT, TXT_WOL_CONNECT, TPF_BUTTON, d_connect_x, d_connect_y, d_connect_w);
 	TextButtonClass CancelBtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w);
 
-	IconListClass NickList(LISTBOX_NICKS, d_list_x, d_list_y, d_list_w, d_list_h, TPF_6PT_GRAD | TPF_NOSHADOW,
-			       MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"), true, 1, 0);
+	IconListClass NickList(LISTBOX_NICKS,
+			       d_list_x,
+			       d_list_y,
+			       d_list_w,
+			       d_list_h,
+			       TPF_6PT_GRAD | TPF_NOSHADOW,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"),
+			       true,
+			       1,
+			       0);
 
-	WOLEditClass NameEdit(EDITBOX_NAME, szNameBuffer, sizeof(szNameBuffer), TPF_6PT_GRAD | TPF_NOSHADOW, d_name_x,
-			      d_name_y, d_name_w, -1, EditClass::ALPHANUMERIC);
+	WOLEditClass NameEdit(EDITBOX_NAME,
+			      szNameBuffer,
+			      sizeof(szNameBuffer),
+			      TPF_6PT_GRAD | TPF_NOSHADOW,
+			      d_name_x,
+			      d_name_y,
+			      d_name_w,
+			      -1,
+			      EditClass::ALPHANUMERIC);
 
-	PassEditClass PassEdit(EDITBOX_PASS, szPassBuffer, sizeof(szPassBuffer), TPF_6PT_GRAD | TPF_NOSHADOW, d_pass_x,
-			       d_pass_y, d_pass_w, -1, EditClass::ALPHANUMERIC);
+	PassEditClass PassEdit(EDITBOX_PASS,
+			       szPassBuffer,
+			       sizeof(szPassBuffer),
+			       TPF_6PT_GRAD | TPF_NOSHADOW,
+			       d_pass_x,
+			       d_pass_y,
+			       d_pass_w,
+			       -1,
+			       EditClass::ALPHANUMERIC);
 
 	//	Just making sure globals are set right before String_Pixel_Width() call... sigh
 	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD | TPF_NOSHADOW);
 	int iSaveTextWidth = String_Pixel_Width(TXT_WOL_SAVELOGIN) + BIGCHECK_OFFSETX;
-	BigCheckBoxClass SaveCheckBox(BUTTON_SAVECHECK, d_save_x, d_save_y, iSaveTextWidth, d_save_h, TXT_WOL_SAVELOGIN,
-				      TPF_6PT_GRAD | TPF_NOSHADOW, true);
+	BigCheckBoxClass
+		SaveCheckBox(BUTTON_SAVECHECK, d_save_x, d_save_y, iSaveTextWidth, d_save_h, TXT_WOL_SAVELOGIN, TPF_6PT_GRAD | TPF_NOSHADOW, true);
 
 	TextButtonClass DeleteBtn(BUTTON_DELETE, TXT_DELETE_BUTTON, TPF_BUTTON, d_delete_x, d_delete_y, d_delete_w);
 
@@ -206,7 +229,6 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -227,7 +249,6 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			//------------------------------------------------------------------------
 			//	Clear screen
 			//------------------------------------------------------------------------
@@ -248,10 +269,18 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 			**	Redraw the buttons.
 			*/
 			if (display) {
-				Fancy_Text_Print(TXT_WOL_NAME, d_name_x + (d_name_w / 2), d_name_y - 14,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT | TPF_CENTER);
-				Fancy_Text_Print(TXT_WOL_PASSWORD, d_pass_x + (d_pass_w / 2), d_pass_y - 14,
-						 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT | TPF_CENTER);
+				Fancy_Text_Print(TXT_WOL_NAME,
+						 d_name_x + (d_name_w / 2),
+						 d_name_y - 14,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_TEXT | TPF_CENTER);
+				Fancy_Text_Print(TXT_WOL_PASSWORD,
+						 d_pass_x + (d_pass_w / 2),
+						 d_pass_y - 14,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_TEXT | TPF_CENTER);
 				commands->Flag_List_To_Redraw();
 			}
 			Show_Mouse();
@@ -389,8 +418,7 @@ int WOL_Login_Dialog(WolapiObject *pWO) {
 			//	RequestConnection()...
 			HRESULT hRes = pWO->AttemptLogin(szNameBuffer, szPassBuffer, PassEdit.bClearOnNextSetFocus);
 			if (hRes == S_OK) {
-				if (SaveCheckBox.IsOn &&
-				    !bSaveNick(pWO, szNameBuffer, szPassBuffer, PassEdit.bClearOnNextSetFocus)) {
+				if (SaveCheckBox.IsOn && !bSaveNick(pWO, szNameBuffer, szPassBuffer, PassEdit.bClearOnNextSetFocus)) {
 					//	Nick/pass save failed.
 					WWMessageBox().Process(TXT_WOL_CANTSAVENICK);
 				}

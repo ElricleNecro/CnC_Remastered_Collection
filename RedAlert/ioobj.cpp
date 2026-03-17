@@ -498,7 +498,8 @@ void LayerClass::Decode_Pointers(void) {
  * HISTORY:                                                                                    *
  *   01/02/1995 BR : Created.                                                                  *
  *=============================================================================================*/
-void HouseClass::Code_Pointers(void) {}
+void HouseClass::Code_Pointers(void) {
+}
 
 /***********************************************************************************************
  * HouseClass::Decode_Pointers -- decodes pointers for load/save                               *
@@ -543,7 +544,9 @@ void HouseClass::Decode_Pointers(void) {
  * HISTORY:                                                                                    *
  *   01/02/1995 BR : Created.                                                                  *
  *=============================================================================================*/
-void ScoreClass::Code_Pointers(void) { RealTime.Stop(); }
+void ScoreClass::Code_Pointers(void) {
+	RealTime.Stop();
+}
 
 /***********************************************************************************************
  * ScoreClass::Decode_Pointers -- decodes pointers for load/save                               *
@@ -560,7 +563,9 @@ void ScoreClass::Code_Pointers(void) { RealTime.Stop(); }
  * HISTORY:                                                                                    *
  *   01/02/1995 BR : Created.                                                                  *
  *=============================================================================================*/
-void ScoreClass::Decode_Pointers(void) { RealTime.Start(); }
+void ScoreClass::Decode_Pointers(void) {
+	RealTime.Start();
+}
 
 /***********************************************************************************************
  * FootClass::Code_Pointers -- codes class's pointers for load/save                            *

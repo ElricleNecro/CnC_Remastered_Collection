@@ -25,10 +25,8 @@ bool SaveSurfaceRect(int xRect, int yRect, int wRect, int hRect, char *pBits, Wi
 bool RestoreSurfaceRect(int xRect, int yRect, int wRect, int hRect, const char *pBits, WindowNumberType window);
 
 //***********************************************************************************************
-ToolTipClass::ToolTipClass(GadgetClass *pGadget, const char *szText, int xShow, int yShow,
-			   bool bRightAlign /* = false */, bool bIconList /*= false */)
-    : pGadget(pGadget), xShow(xShow), yShow(yShow), next(NULL), bShowing(false), bIconList(bIconList),
-      bRightAlign(bRightAlign)
+ToolTipClass::ToolTipClass(GadgetClass *pGadget, const char *szText, int xShow, int yShow, bool bRightAlign /* = false */, bool bIconList /*= false */)
+	: pGadget(pGadget), xShow(xShow), yShow(yShow), next(NULL), bShowing(false), bIconList(bIconList), bRightAlign(bRightAlign)
 
 {
 	if (szText) {
@@ -74,8 +72,7 @@ bool ToolTipClass::bGadgetHit() {
 	//	Returns true if the mouse is currently over the gadget to which *this is bound.
 	int x = Get_Mouse_X();
 	int y = Get_Mouse_Y();
-	return (x > pGadget->X && x < pGadget->X + pGadget->Width && y > pGadget->Y &&
-		y < pGadget->Y + pGadget->Height);
+	return (x > pGadget->X && x < pGadget->X + pGadget->Width && y > pGadget->Y && y < pGadget->Y + pGadget->Height);
 }
 
 //***********************************************************************************************
@@ -210,11 +207,10 @@ bool SaveSurfaceRect(int xRect, int yRect, int wRect, int hRect, char *pBits, Wi
 	GraphicViewPortClass draw_window(LogicPage->Get_Graphic_Buffer(),
 					 WindowList[window][WINDOWX] + LogicPage->Get_XPos(),
 					 WindowList[window][WINDOWY] + LogicPage->Get_YPos(),
-					 WindowList[window][WINDOWWIDTH], WindowList[window][WINDOWHEIGHT]);
+					 WindowList[window][WINDOWWIDTH],
+					 WindowList[window][WINDOWHEIGHT]);
 	if (draw_window.Lock()) {
-		int iPitchSurf =
-		    draw_window.Get_Pitch() +
-		    draw_window.Get_Width(); //	Meaning of "Pitch" in this class seems to mean the eol skip.
+		int iPitchSurf = draw_window.Get_Pitch() + draw_window.Get_Width(); //	Meaning of "Pitch" in this class seems to mean the eol skip.
 		const char *pLineSurf = (char *)draw_window.Get_Offset() + xRect + yRect * iPitchSurf;
 		char *pLineSave = pBits;
 
@@ -242,11 +238,10 @@ bool RestoreSurfaceRect(int xRect, int yRect, int wRect, int hRect, const char *
 	GraphicViewPortClass draw_window(LogicPage->Get_Graphic_Buffer(),
 					 WindowList[window][WINDOWX] + LogicPage->Get_XPos(),
 					 WindowList[window][WINDOWY] + LogicPage->Get_YPos(),
-					 WindowList[window][WINDOWWIDTH], WindowList[window][WINDOWHEIGHT]);
+					 WindowList[window][WINDOWWIDTH],
+					 WindowList[window][WINDOWHEIGHT]);
 	if (draw_window.Lock()) {
-		int iPitchSurf =
-		    draw_window.Get_Pitch() +
-		    draw_window.Get_Width(); //	Meaning of "Pitch" in this class seems to mean the eol skip.
+		int iPitchSurf = draw_window.Get_Pitch() + draw_window.Get_Width(); //	Meaning of "Pitch" in this class seems to mean the eol skip.
 		char *pLineSurf = (char *)draw_window.Get_Offset() + xRect + yRect * iPitchSurf;
 		const char *pLineSave = pBits;
 

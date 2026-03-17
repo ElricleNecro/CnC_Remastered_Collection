@@ -50,7 +50,7 @@
 // #define WS_RECEIVE_BUFFER_LEN	32768		// Length of our temporary receive buffer. Needs to be more that
 // the max packet size which is about 550 bytes. #define SOCKET_BUFFER_SIZE		32768		// Length of
 // winsocks internal buffer.
-#define WS_RECEIVE_BUFFER_LEN 1024    // Length of our temporary receive buffer.
+#define WS_RECEIVE_BUFFER_LEN 1024 // Length of our temporary receive buffer.
 #define SOCKET_BUFFER_SIZE 1024 * 128 // Length of winsocks internal buffer.
 
 #define PLANET_WESTWOOD_HANDLE_MAX 20 // Max length of a WChat handle
@@ -74,7 +74,6 @@ typedef enum tProtocolEnum { PROTOCOL_NONE, PROTOCOL_IPX, PROTOCOL_UDP } Protoco
 **
 */
 class WinsockInterfaceClass {
-
 public:
 	WinsockInterfaceClass(void);
 	virtual ~WinsockInterfaceClass(void);
@@ -94,13 +93,21 @@ public:
 	virtual bool Set_Socket_Options(void);
 	virtual void Set_Broadcast_Address(void *) {};
 
-	virtual ProtocolEnum Get_Protocol(void) { return (PROTOCOL_NONE); };
+	virtual ProtocolEnum Get_Protocol(void) {
+		return (PROTOCOL_NONE);
+	};
 
-	virtual int Protocol_Event_Message(void) { return (0); };
+	virtual int Protocol_Event_Message(void) {
+		return (0);
+	};
 
-	virtual bool Open_Socket(SOCKET) { return (false); };
+	virtual bool Open_Socket(SOCKET) {
+		return (false);
+	};
 
-	virtual long Message_Handler(HWND, UINT, UINT, LONG) { return (1); }
+	virtual long Message_Handler(HWND, UINT, UINT, LONG) {
+		return (1);
+	}
 
 	typedef enum ConnectStatusEnum {
 		CONNECTED_OK = 0,
@@ -115,7 +122,9 @@ public:
 		CONNECTION_LOST
 	} ConnectStatusEnum;
 
-	inline ConnectStatusEnum Get_Connection_Status(void) { return (ConnectStatus); }
+	inline ConnectStatusEnum Get_Connection_Status(void) {
+		return (ConnectStatus);
+	}
 
 protected:
 	/*
@@ -123,9 +132,9 @@ protected:
 	** It acts as a temporary control for these packets.
 	*/
 	typedef struct tWinsockBufferType {
-		unsigned char Address[64];  // Address. IN_ADDR, IPXAddressClass etc.
-		int BufferLen;		    // Length of data in buffer
-		bool IsBroadcast;	    // Flag to broadcast this packet
+		unsigned char Address[64]; // Address. IN_ADDR, IPXAddressClass etc.
+		int BufferLen; // Length of data in buffer
+		bool IsBroadcast; // Flag to broadcast this packet
 		unsigned char Buffer[1024]; // Buffer to store packet in.
 	} WinsockBufferType;
 

@@ -33,9 +33,9 @@
  *   Base64Straw::Get -- Fetch data and convert it to/from base 64 encoding.                   *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <string.h>
 #include "b64straw.h"
 #include "base64.h"
-#include <string.h>
 
 /***********************************************************************************************
  * Base64Straw::Get -- Fetch data and convert it to/from base 64 encoding.                     *
@@ -81,7 +81,6 @@ int Base64Straw::Get(void *source, int slen) {
 	**	no more source bytes available or the request has been fulfilled.
 	*/
 	while (slen > 0) {
-
 		/*
 		**	Transfer any processed bytes available to the request buffer.
 		*/

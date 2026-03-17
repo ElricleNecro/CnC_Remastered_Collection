@@ -146,7 +146,9 @@ void PKey::Decode_Modulus(void *buffer) {
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PKey::Decode_Exponent(void *buffer) { Exponent.DERDecode((unsigned char *)buffer); }
+void PKey::Decode_Exponent(void *buffer) {
+	Exponent.DERDecode((unsigned char *)buffer);
+}
 
 /***********************************************************************************************
  * PKey::Generate -- Generate a public and private key.                                        *
@@ -271,7 +273,6 @@ int PKey::Encrypt(void const *source, int slen, void *dest) const {
 	**	copied to the destination buffer.
 	*/
 	while (slen >= Plain_Block_Size()) {
-
 		/*
 		**	Perform the encryption of the block.
 		*/
@@ -321,7 +322,6 @@ int PKey::Decrypt(void const *source, int slen, void *dest) const {
 	**	Decrypt the source data in full blocks. Partial blocks are not processed in any way.
 	*/
 	while (slen >= Crypt_Block_Size()) {
-
 		/*
 		**	Perform the encryption.
 		*/

@@ -60,7 +60,8 @@
  * HISTORY:                                                                                    *
  *   08/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-TurretClass::~TurretClass(void) {}
+TurretClass::~TurretClass(void) {
+}
 
 /***********************************************************************************************
  * TurretClass::TurretClass -- The default constructor for turret class objects.               *
@@ -76,7 +77,8 @@ TurretClass::~TurretClass(void) {}
  * HISTORY:                                                                                    *
  *   08/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-TurretClass::TurretClass(void) {}
+TurretClass::TurretClass(void) {
+}
 
 /***********************************************************************************************
  * TurretClass::TurretClass -- Normal constructor for the turret class.                        *
@@ -95,4 +97,5 @@ TurretClass::TurretClass(void) {}
  * HISTORY:                                                                                    *
  *   02/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-TurretClass::TurretClass(UnitType classid, HousesType house) : DriveClass(classid, house) {}
+TurretClass::TurretClass(UnitType classid, HousesType house) : DriveClass(classid, house) {
+}

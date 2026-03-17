@@ -84,13 +84,11 @@ int WOLEditClass::Action(unsigned flags, KeyNumType &key) {
 	//	function.
 	//
 	if ((flags & KEYBOARD) && Has_Focus()) {
-
 		//
 		//	Process the keyboard character. If indicated, consume this keyboard event
 		//	so that the edit gadget ID number is not returned.
 		//
 		if (key == KN_ESC) {
-
 			Clear_Focus();
 			flags = 0;
 
@@ -103,7 +101,6 @@ int WOLEditClass::Action(unsigned flags, KeyNumType &key) {
 			// Allow numeric keypad presses to map to ascii numbers
 			//
 			if ((key & WWKEY_VK_BIT) && ascii >= '0' && ascii <= '9') {
-
 				key = (KeyNumType)(key & ~WWKEY_VK_BIT);
 				if ((!(flags & LEFTRELEASE)) && (!(flags & RIGHTRELEASE))) {
 					if (Handle_Key(ascii)) {
@@ -115,9 +112,7 @@ int WOLEditClass::Action(unsigned flags, KeyNumType &key) {
 				//
 				// Filter out all special keys except return and backspace
 				//
-				if ((!(key & WWKEY_VK_BIT) && ascii >= ' ' && ascii <= 255) || key == KN_RETURN ||
-				    key == KN_BACKSPACE) {
-
+				if ((!(key & WWKEY_VK_BIT) && ascii >= ' ' && ascii <= 255) || key == KN_RETURN || key == KN_BACKSPACE) {
 					if ((!(flags & LEFTRELEASE)) && (!(flags & RIGHTRELEASE))) {
 						if (Handle_Key(Keyboard->To_ASCII(key))) {
 							flags &= ~KEYBOARD;
@@ -134,7 +129,7 @@ int WOLEditClass::Action(unsigned flags, KeyNumType &key) {
 			}
 		}
 
-#else  // WIN32
+#else // WIN32
 			if (Handle_Key(Keyboard->To_ASCII(key))) {
 				flags &= ~KEYBOARD;
 				key = KN_NONE;

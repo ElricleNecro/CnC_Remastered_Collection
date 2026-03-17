@@ -102,7 +102,9 @@ TcpipManagerClass::TcpipManagerClass(void) {
  *    3/20/96 2:52PM ST : Created                                                              *
  *=============================================================================================*/
 
-TcpipManagerClass::~TcpipManagerClass(void) { Close(); }
+TcpipManagerClass::~TcpipManagerClass(void) {
+	Close();
+}
 
 /***********************************************************************************************
  * TMC::Close -- restores any currently in use Winsock resources                               *
@@ -290,8 +292,7 @@ int TcpipManagerClass::Read(void *buffer, int buffer_len) {
 	** Copy any outstanding incoming data to the buffer provided
 	*/
 	if (ReceiveBuffers[RXBufferTail].InUse) {
-		memcpy(buffer, ReceiveBuffers[RXBufferTail].Buffer,
-		       MIN(ReceiveBuffers[RXBufferTail].DataLength, buffer_len));
+		memcpy(buffer, ReceiveBuffers[RXBufferTail].Buffer, MIN(ReceiveBuffers[RXBufferTail].DataLength, buffer_len));
 		ReceiveBuffers[RXBufferTail].InUse = false;
 
 		bytes_copied = MIN(ReceiveBuffers[RXBufferTail++].DataLength, buffer_len);
@@ -393,8 +394,7 @@ BOOL TcpipManagerClass::Add_Client(void) {
 	** Initiate an asynchronous host lookup by address. Our window will receive notification
 	** when this is complete or when it times out.
 	*/
-	Async = WSAAsyncGetHostByAddr(MainWindow, WM_HOSTBYADDRESS, (char const *)&addr.sin_addr, 4, PF_INET,
-				      &HostBuff[0], MAXGETHOSTSTRUCT);
+	Async = WSAAsyncGetHostByAddr(MainWindow, WM_HOSTBYADDRESS, (char const *)&addr.sin_addr, 4, PF_INET, &HostBuff[0], MAXGETHOSTSTRUCT);
 
 	/*
 	** Enable asynchronous events on this socket
@@ -468,7 +468,6 @@ void TcpipManagerClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 	int addr_len;
 
 	switch (message) {
-
 	/*
 	** Handle the GetHostByAddress result
 	*/
@@ -544,7 +543,6 @@ void TcpipManagerClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 	case WM_UDPASYNCEVENT:
 		event = WSAGETSELECTEVENT(lParam);
 		switch (event) {
-
 		case FD_READ:
 			rc = WSAGETSELECTERROR(lParam);
 			if (rc != 0) {
@@ -580,8 +578,11 @@ void TcpipManagerClass::Message_Handler(HWND, UINT message, UINT, LONG lParam) {
 				**  available for another write.
 				*/
 				while (TransmitBuffers[TXBufferTail].InUse) {
-					rc = sendto(UDPSocket, TransmitBuffers[TXBufferTail].Buffer,
-						    TransmitBuffers[TXBufferTail].DataLength, 0, (LPSOCKADDR)&addr,
+					rc = sendto(UDPSocket,
+						    TransmitBuffers[TXBufferTail].Buffer,
+						    TransmitBuffers[TXBufferTail].DataLength,
+						    0,
+						    (LPSOCKADDR)&addr,
 						    sizeof(addr));
 
 					if (rc == SOCKET_ERROR) {
@@ -676,7 +677,9 @@ void TcpipManagerClass::Copy_To_In_Buffer(int bytes) {
  * HISTORY:                                                                                    *
  *    3/20/96 3:19PM ST : Created                                                              *
  *=============================================================================================*/
-void TcpipManagerClass::Set_Host_Address(char *address) { strcpy(HostAddress, address); }
+void TcpipManagerClass::Set_Host_Address(char *address) {
+	strcpy(HostAddress, address);
+}
 
 /***********************************************************************************************
  * TMC::Start_Client -- Start trying to connect to a game host                                 *
@@ -799,13 +802,15 @@ void TcpipManagerClass::Start_Client(void) {
 void TcpipManagerClass::Close_Socket(SOCKET s) {
 	LINGER ling;
 
-	ling.l_onoff = 0;  // linger off
+	ling.l_onoff = 0; // linger off
 	ling.l_linger = 0; // timeout in seconds (ie close now)
 	setsockopt(s, SOL_SOCKET, SO_LINGER, (LPSTR)&ling, sizeof(ling));
 	closesocket(s);
 }
 
-void TcpipManagerClass::Set_Protocol_UDP(BOOL state) { UseUDP = state; }
+void TcpipManagerClass::Set_Protocol_UDP(BOOL state) {
+	UseUDP = state;
+}
 
 void TcpipManagerClass::Clear_Socket_Error(SOCKET socket) {
 	unsigned long error_code;

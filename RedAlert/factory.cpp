@@ -67,8 +67,8 @@
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 FactoryClass::FactoryClass(void)
-    : RTTI(RTTI_FACTORY), ID(Factories.ID(this)), IsSuspended(false), IsDifferent(false), IsBlocked(false), Balance(0),
-      OriginalBalance(0), Object(0), SpecialItem(SPC_NONE), House(0) {
+	: RTTI(RTTI_FACTORY), ID(Factories.ID(this)), IsSuspended(false), IsDifferent(false), IsBlocked(false), Balance(0), OriginalBalance(0),
+	  Object(0), SpecialItem(SPC_NONE), House(0) {
 	Set_Rate(0);
 	Set_Stage(0);
 }
@@ -110,7 +110,9 @@ FactoryClass::~FactoryClass(void) {
  * HISTORY:                                                                                    *
  *   08/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FactoryClass::Init(void) { Factories.Free_All(); }
+void FactoryClass::Init(void) {
+	Factories.Free_All();
+}
 
 /***********************************************************************************************
  * FactoryClass::operator new -- Allocates a factory object from the free factory pool.        *
@@ -446,7 +448,6 @@ bool FactoryClass::Abandon(void) {
 	assert(Factories.ID(this) == ID);
 
 	if (Object) {
-
 		if (Object) {
 			/*
 			**	Refund all money expended so far, back to the owner of the object under construction.

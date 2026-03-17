@@ -67,7 +67,8 @@ template class CCPtr<VesselTypeClass>;
 template class CCPtr<WarheadTypeClass>;
 template class CCPtr<WeaponTypeClass>;
 
-template <class T> FixedIHeapClass *CCPtr<T>::Heap = NULL;
+template <class T>
+FixedIHeapClass *CCPtr<T>::Heap = NULL;
 
 /*
 **	These member functions for the CCPtr class cannot be declared inside the
@@ -75,7 +76,8 @@ template <class T> FixedIHeapClass *CCPtr<T>::Heap = NULL;
 **	contain CCPtr objects. The recursive nature of this type of declaration
 **	is not handled by Watcom, hence the body declaration is dislocated here.
 */
-template <class T> CCPtr<T>::CCPtr(T *ptr) : ID(-1) {
+template <class T>
+CCPtr<T>::CCPtr(T *ptr) : ID(-1) {
 	if (ptr != NULL) {
 		ID = ptr->ID;
 	}
@@ -96,6 +98,7 @@ template <class T> CCPtr<T>::CCPtr(T *ptr) : ID(-1) {
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template <class T> bool CCPtr<T>::operator>(CCPtr<T> const &rvalue) const {
+template <class T>
+bool CCPtr<T>::operator>(CCPtr<T> const &rvalue) const {
 	return (stricmp((*this)->Name(), rvalue->Name()) > 0);
 }

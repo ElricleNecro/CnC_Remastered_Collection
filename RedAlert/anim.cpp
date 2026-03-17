@@ -307,8 +307,19 @@ void AnimClass::Draw_It(int x, int y, WindowNumberType window) const {
 			*/
 			if ((window == WINDOW_VIRTUAL) || (Fetch_Stage() < Class->Stages)) {
 				// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-				CC_Draw_Shape(this, shapefile, shapenum, x, y, window, flags, remap, transtable, DIR_N,
-					      Class->VirtualScale, width, height);
+				CC_Draw_Shape(this,
+					      shapefile,
+					      shapenum,
+					      x,
+					      y,
+					      window,
+					      flags,
+					      remap,
+					      transtable,
+					      DIR_N,
+					      Class->VirtualScale,
+					      width,
+					      height);
 			}
 		}
 		IsTheaterShape = false;
@@ -372,16 +383,14 @@ short const *AnimClass::Overlap_List(void) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
-	static short const OverlapAtom[] = {
-	    (-MAP_CELL_W * 2) - 1, (-MAP_CELL_W * 2),	  (-MAP_CELL_W * 2) + 1, (-MAP_CELL_W * 1) - 1,
-	    (-MAP_CELL_W * 1),	   (-MAP_CELL_W * 1) + 1, (-MAP_CELL_W * 0) - 1, (-MAP_CELL_W * 0),
-	    (-MAP_CELL_W * 0) + 1, (MAP_CELL_W * 1) - 1,  (MAP_CELL_W * 1),	 (MAP_CELL_W * 1) + 1,
-	    (MAP_CELL_W * 2) - 1,  (MAP_CELL_W * 2),	  (MAP_CELL_W * 2) + 1,	 REFRESH_EOL};
-	static short const OverlapFlag[] = {0,		1, -MAP_CELL_W, -(MAP_CELL_W - 1), MAP_CELL_W, MAP_CELL_W + 1,
-					    REFRESH_EOL};
+	static short const OverlapAtom[] = { (-MAP_CELL_W * 2) - 1, (-MAP_CELL_W * 2),	   (-MAP_CELL_W * 2) + 1, (-MAP_CELL_W * 1) - 1,
+					     (-MAP_CELL_W * 1),	    (-MAP_CELL_W * 1) + 1, (-MAP_CELL_W * 0) - 1, (-MAP_CELL_W * 0),
+					     (-MAP_CELL_W * 0) + 1, (MAP_CELL_W * 1) - 1,  (MAP_CELL_W * 1),	  (MAP_CELL_W * 1) + 1,
+					     (MAP_CELL_W * 2) - 1,  (MAP_CELL_W * 2),	   (MAP_CELL_W * 2) + 1,  REFRESH_EOL };
+	static short const OverlapFlag[] = { 0, 1, -MAP_CELL_W, -(MAP_CELL_W - 1), MAP_CELL_W, MAP_CELL_W + 1, REFRESH_EOL };
 
 	if (IsToDelete) {
-		static short const _list[] = {REFRESH_EOL};
+		static short const _list[] = { REFRESH_EOL };
 		return (_list);
 	}
 
@@ -435,7 +444,7 @@ short const *AnimClass::Occupy_List(bool) const {
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 
-	static short _simple[] = {REFRESH_EOL};
+	static short _simple[] = { REFRESH_EOL };
 
 #endif
 	return (_simple);
@@ -456,7 +465,9 @@ short const *AnimClass::Occupy_List(bool) const {
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::Init(void) { Anims.Free_All(); }
+void AnimClass::Init(void) {
+	Anims.Free_All();
+}
 
 /***********************************************************************************************
  * AnimClass::new -- Allocates an anim object from the pool.                                   *
@@ -528,9 +539,9 @@ void AnimClass::operator delete(void *ptr) {
  *   08/03/1994 JLB : Added a delayed affect parameter.                                        *
  *=============================================================================================*/
 AnimClass::AnimClass(AnimType animnum, COORDINATE coord, unsigned char timedelay, char loop)
-    : ObjectClass(RTTI_ANIM, Anims.ID(this)), Class(AnimTypes.Ptr((int)animnum)), xObject(TARGET_NONE),
-      SortTarget(TARGET_NONE), OwnerHouse(HOUSE_NONE), Loops(1), IsToDelete(false), IsBrandNew(true),
-      IsInvisible(false), Delay(timedelay), Accum(0), AttachLayer(LAYER_NONE), KillTime(0ULL) {
+	: ObjectClass(RTTI_ANIM, Anims.ID(this)), Class(AnimTypes.Ptr((int)animnum)), xObject(TARGET_NONE), SortTarget(TARGET_NONE),
+	  OwnerHouse(HOUSE_NONE), Loops(1), IsToDelete(false), IsBrandNew(true), IsInvisible(false), Delay(timedelay), Accum(0),
+	  AttachLayer(LAYER_NONE), KillTime(0ULL) {
 #ifdef VIC
 	if (Class->Stages == -1) {
 		IsTheaterShape = Class->IsTheater;
@@ -615,7 +626,6 @@ AnimClass::~AnimClass(void) {
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 	if (GameActive) {
-
 		/*
 		**	If this anim is attached to another object
 		**	then check to see if this is the last anim attached to it. If this
@@ -723,8 +733,7 @@ void AnimClass::AI(void) {
 		FILETIME ft;
 		GetSystemTimeAsFileTime(&ft);
 
-		unsigned long long now =
-		    (unsigned long long)ft.dwLowDateTime + ((unsigned long long)ft.dwHighDateTime << 32ULL);
+		unsigned long long now = (unsigned long long)ft.dwLowDateTime + ((unsigned long long)ft.dwHighDateTime << 32ULL);
 		if (now >= KillTime) {
 			IsToDelete = true;
 		}
@@ -766,7 +775,6 @@ void AnimClass::AI(void) {
 			Start();
 		}
 	} else {
-
 #ifdef FIXIT_MULTI_SAVE
 		if (Class->Stages == -1) {
 			IsTheaterShape = Class->IsTheater;
@@ -798,15 +806,13 @@ void AnimClass::AI(void) {
 				Accum += Class->Damage;
 
 				if (Accum >= 1) {
-
 					/*
 					**	Administer the damage. If the object was destroyed by this anim,
 					**	then the attached damaging anim is also destroyed.
 					*/
 					int damage = Accum;
 					Accum -= damage;
-					if (As_Object(xObject)->Take_Damage(damage, 0, WARHEAD_FIRE) ==
-					    RESULT_DESTROYED) {
+					if (As_Object(xObject)->Take_Damage(damage, 0, WARHEAD_FIRE) == RESULT_DESTROYED) {
 						if (Target_Legal(VirtualAnimTarget)) {
 							delete As_Animation(VirtualAnimTarget);
 						}
@@ -829,9 +835,7 @@ void AnimClass::AI(void) {
 			**	Check to see if the last frame has been displayed. If so, then the
 			**	animation either ends or loops.
 			*/
-			if ((Loops <= 1 && stage >= Class->Stages) ||
-			    (Loops > 1 && stage >= Class->LoopEnd - Class->Start)) {
-
+			if ((Loops <= 1 && stage >= Class->Stages) || (Loops > 1 && stage >= Class->LoopEnd - Class->Start)) {
 				/*
 				**	Determine if this animation should loop another time. If so, then start the loop
 				**	but if not, then proceed into the animation termination handler.
@@ -841,7 +845,6 @@ void AnimClass::AI(void) {
 				if (Loops != 0) {
 					Set_Stage(Class->LoopStart);
 				} else {
-
 					if (Class->VirtualAnim != ANIM_NONE) {
 						Make_Invisible();
 						if (!Target_Legal(VirtualAnimTarget)) {
@@ -1048,7 +1051,6 @@ void AnimClass::Middle(void) {
 	**	Craters always remove the Tiberium where they occur.
 	*/
 	if (Class->IsCraterForming) {
-
 		/*
 		**	Craters reduce the level of Tiberium in the cell.
 		*/
@@ -1072,16 +1074,12 @@ void AnimClass::Middle(void) {
 	case ANIM_NAPALM1:
 	case ANIM_NAPALM2:
 	case ANIM_NAPALM3:
-		new AnimClass(ANIM_FIRE_SMALL, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0040), true), 0,
-			      Random_Pick(1, 2));
+		new AnimClass(ANIM_FIRE_SMALL, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0040), true), 0, Random_Pick(1, 2));
 		if (Percent_Chance(50)) {
-			new AnimClass(ANIM_FIRE_SMALL,
-				      Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x00A0), true), 0,
-				      Random_Pick(1, 2));
+			new AnimClass(ANIM_FIRE_SMALL, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x00A0), true), 0, Random_Pick(1, 2));
 		}
 		if (Percent_Chance(50)) {
-			new AnimClass(ANIM_FIRE_MED, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0070), true),
-				      0, Random_Pick(1, 2));
+			new AnimClass(ANIM_FIRE_MED, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0070), true), 0, Random_Pick(1, 2));
 		}
 		break;
 
@@ -1107,7 +1105,6 @@ void AnimClass::Chain(void) {
 	**	new form.
 	*/
 	if (Class->ChainTo != ANIM_NONE) {
-
 		Class = (AnimTypeClass *)&AnimTypeClass::As_Reference(Class->ChainTo);
 
 		if (Class->Stages == -1) {

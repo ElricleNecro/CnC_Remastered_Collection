@@ -65,8 +65,7 @@ public:
 	/*.....................................................................
 	Constructor/destructor.
 	.....................................................................*/
-	IPXConnClass(int numsend, int numrecieve, int maxlen, unsigned short magicnum, IPXAddressClass *address, int id,
-		     char *name, int extralen = 0);
+	IPXConnClass(int numsend, int numrecieve, int maxlen, unsigned short magicnum, IPXAddressClass *address, int id, char *name, int extralen = 0);
 	virtual ~IPXConnClass() {};
 
 	/*.....................................................................
@@ -79,9 +78,16 @@ public:
 	It's static because it doesn't apply to any specific connection, but
 	all of them.
 	.....................................................................*/
-	static void Configure(unsigned short socket, int conn_num, ECBType *listen_ecb, ECBType *send_ecb,
-			      IPXHeaderType *listen_header, IPXHeaderType *send_header, char *listen_buf,
-			      char *send_buf, long handler_rm_ptr, int maxpacketlen);
+	static void Configure(unsigned short socket,
+			      int conn_num,
+			      ECBType *listen_ecb,
+			      ECBType *send_ecb,
+			      IPXHeaderType *listen_header,
+			      IPXHeaderType *send_header,
+			      char *listen_buf,
+			      char *send_buf,
+			      long handler_rm_ptr,
+			      int maxpacketlen);
 
 	/*.....................................................................
 	These routines tell IPX to start listening for packets, and to stop

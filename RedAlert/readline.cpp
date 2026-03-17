@@ -13,19 +13,18 @@
 // GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
+#include <ctype.h>
+#include <string.h>
 #include "readline.h"
 #include "function.h"
 #include "wwfile.h"
 #include "xstraw.h"
-#include <ctype.h>
-#include <string.h>
 
 // Disable the "temporary object used to initialize a non-constant reference" warning.
 // #pragma warning 665 9
 
 void strtrimcpp(char *buffer) {
 	if (buffer) {
-
 		/*
 		**	Strip leading white space from the string.
 		*/

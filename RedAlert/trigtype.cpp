@@ -67,8 +67,9 @@
  *   06/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 TriggerTypeClass::TriggerTypeClass(void)
-    : AbstractTypeClass(RTTI_TRIGGERTYPE, TriggerTypes.ID(this), TXT_NONE, "x"), IsPersistant(VOLATILE),
-      EventControl(MULTI_ONLY), ActionControl(MULTI_ONLY), House(HOUSE_SPAIN) {}
+	: AbstractTypeClass(RTTI_TRIGGERTYPE, TriggerTypes.ID(this), TXT_NONE, "x"), IsPersistant(VOLATILE), EventControl(MULTI_ONLY),
+	  ActionControl(MULTI_ONLY), House(HOUSE_SPAIN) {
+}
 
 /***********************************************************************************************
  * TriggerTypeClass::~TriggerTypeClass -- Deleting a trigger type deletes associated triggers. *
@@ -85,7 +86,8 @@ TriggerTypeClass::TriggerTypeClass(void)
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-TriggerTypeClass::~TriggerTypeClass(void) {}
+TriggerTypeClass::~TriggerTypeClass(void) {
+}
 
 /***********************************************************************************************
  * TriggerTypeClass::operator new -- Allocates a trigger type class object.                    *
@@ -149,7 +151,9 @@ void TriggerTypeClass::operator delete(void *ptr) {
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-TARGET TriggerTypeClass::As_Target(void) const { return (Build_Target(RTTI_TRIGGERTYPE, ID)); }
+TARGET TriggerTypeClass::As_Target(void) const {
+	return (Build_Target(RTTI_TRIGGERTYPE, ID));
+}
 
 /***********************************************************************************************
  * TriggerTypeClass::Detach -- Removes attachments to the target object specified.             *
@@ -240,72 +244,72 @@ bool TriggerTypeClass::Edit(void) {
 		**	Misc control values.
 		*/
 		GENERAL_SIZE = 10, // Text length for general data entry fields.
-		ENTRY_SIZE = 35,   // Maximum size of event or action description text.
+		ENTRY_SIZE = 35, // Maximum size of event or action description text.
 		WAYPOINT_SIZE = 3, // Text length maximum for waypoint entry.
-		TEAM_SIZE = 10,	   // Team name text entry field length.
-		DESC_SIZE = 35	   // Maximum length of object full name description.
+		TEAM_SIZE = 10, // Team name text entry field length.
+		DESC_SIZE = 35 // Maximum length of object full name description.
 	};
 
 	/*
 	**	Button enumerations:
 	*/
 	enum {
-		EVENT_LIST = 100,   // Primary event list.
-		EVENT_LIST2,	    // Secondary event list.
-		ACTION_LIST,	    // Primary action list.
-		ACTION_LIST2,	    // Secondary action list.
-		NAME_EDIT,	    // Trigger name edit field.
-		DATA_SPEECH1,	    // Primary action speech.
-		DATA_SPEECH2,	    // Secondary action speech.
-		DATA_THEME1,	    // Primary action theme.
-		DATA_THEME2,	    // Secondary action theme.
-		DATA_MOVIE1,	    // Primary action movie.
-		DATA_MOVIE2,	    // Secondary action movie.
-		DATA_SOUND1,	    // Primary action sound effect.
-		DATA_SOUND2,	    // Secondary action sound effect.
-		DATA_SPECIAL1,	    // Primary action special weapon.
-		DATA_SPECIAL2,	    // Secondary action special weapon.
-		DATA_EDIT,	    // Primary event waypoint data field.
-		DATA_EDIT2,	    // Secondary event waypoint data field.
-		DATA_EDIT3,	    // Primary action waypoint data field.
-		DATA_EDIT4,	    // Secondary action waypoint data field.
-		DATA_HTYPE1,	    // Primary event house choice list.
-		DATA_HTYPE2,	    // Secondary event house choice list.
-		DATA_HTYPE3,	    // Primary action house choice list.
-		DATA_HTYPE4,	    // Secondary action house choice list.
-		DATA_BOOLTYPE1,	    // Primary action boolean data list.
-		DATA_BOOLTYPE2,	    // Secondary action boolean data list.
-		DATA_GENERAL1,	    // Primary event general data field.
-		DATA_GENERAL2,	    // Secondary event general data field.
-		DATA_GENERAL3,	    // Primary action general data field.
-		DATA_GENERAL4,	    // Secondary action general data field.
-		DATA_BTYPE1,	    // Primary event building type list.
-		DATA_BTYPE2,	    // Secondary event building type list.
-		DATA_ITYPE1,	    // Primary event infantry type list.
-		DATA_ITYPE2,	    // Secondary event infantry type list.
-		DATA_ATYPE1,	    // Primary event aircraft type list.
-		DATA_ATYPE2,	    // Secondary event aircraft type list.
-		DATA_UTYPE1,	    // Primary event unit type list.
-		DATA_UTYPE2,	    // Secondary event unit type list.
-		DATA_TTYPE1,	    // Primary event team type entry list.
-		DATA_TTYPE2,	    // Secondary event team type entry list.
-		DATA_TTYPE3,	    // Primary action team type entry list.
-		DATA_TTYPE4,	    // Secondary action team type entry list.
-		DATA_TRTYPE1,	    // Primary action trigger list.
-		DATA_TRTYPE2,	    // Secondary action trigger list.
-		BUTTON_HOUSE,	    // House ownership for this trigger.
+		EVENT_LIST = 100, // Primary event list.
+		EVENT_LIST2, // Secondary event list.
+		ACTION_LIST, // Primary action list.
+		ACTION_LIST2, // Secondary action list.
+		NAME_EDIT, // Trigger name edit field.
+		DATA_SPEECH1, // Primary action speech.
+		DATA_SPEECH2, // Secondary action speech.
+		DATA_THEME1, // Primary action theme.
+		DATA_THEME2, // Secondary action theme.
+		DATA_MOVIE1, // Primary action movie.
+		DATA_MOVIE2, // Secondary action movie.
+		DATA_SOUND1, // Primary action sound effect.
+		DATA_SOUND2, // Secondary action sound effect.
+		DATA_SPECIAL1, // Primary action special weapon.
+		DATA_SPECIAL2, // Secondary action special weapon.
+		DATA_EDIT, // Primary event waypoint data field.
+		DATA_EDIT2, // Secondary event waypoint data field.
+		DATA_EDIT3, // Primary action waypoint data field.
+		DATA_EDIT4, // Secondary action waypoint data field.
+		DATA_HTYPE1, // Primary event house choice list.
+		DATA_HTYPE2, // Secondary event house choice list.
+		DATA_HTYPE3, // Primary action house choice list.
+		DATA_HTYPE4, // Secondary action house choice list.
+		DATA_BOOLTYPE1, // Primary action boolean data list.
+		DATA_BOOLTYPE2, // Secondary action boolean data list.
+		DATA_GENERAL1, // Primary event general data field.
+		DATA_GENERAL2, // Secondary event general data field.
+		DATA_GENERAL3, // Primary action general data field.
+		DATA_GENERAL4, // Secondary action general data field.
+		DATA_BTYPE1, // Primary event building type list.
+		DATA_BTYPE2, // Secondary event building type list.
+		DATA_ITYPE1, // Primary event infantry type list.
+		DATA_ITYPE2, // Secondary event infantry type list.
+		DATA_ATYPE1, // Primary event aircraft type list.
+		DATA_ATYPE2, // Secondary event aircraft type list.
+		DATA_UTYPE1, // Primary event unit type list.
+		DATA_UTYPE2, // Secondary event unit type list.
+		DATA_TTYPE1, // Primary event team type entry list.
+		DATA_TTYPE2, // Secondary event team type entry list.
+		DATA_TTYPE3, // Primary action team type entry list.
+		DATA_TTYPE4, // Secondary action team type entry list.
+		DATA_TRTYPE1, // Primary action trigger list.
+		DATA_TRTYPE2, // Secondary action trigger list.
+		BUTTON_HOUSE, // House ownership for this trigger.
 		BUTTON_PERSISTANCE, // Persistence of this trigger.
-		BUTTON_OK,	    // Ok button - save and exit.
-		BUTTON_CANCEL,	    // Cancel button - just exit.
-		BUTTON_ACTION,	    // Multiple action control button.
-		BUTTON_EVENT,	    // Multiple event control button.
+		BUTTON_OK, // Ok button - save and exit.
+		BUTTON_CANCEL, // Cancel button - just exit.
+		BUTTON_ACTION, // Multiple action control button.
+		BUTTON_EVENT, // Multiple event control button.
 	};
 
 	/*
 	**	Dialog variables:
 	*/
 	bool cancel = false; // true = user cancels
-	int i;		     // loop counter
+	int i; // loop counter
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
@@ -317,13 +321,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	List of events allowed.
 	*/
 	char eventtext[ENTRY_SIZE] = "";
-	TDropListClass<EventChoiceClass *> event1list(EVENT_LIST, eventtext, sizeof(eventtext), TPF_EFNT | TPF_NOSHADOW,
-						      E1_X, E1_Y, E_WIDTH, E_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"),
+	TDropListClass<EventChoiceClass *> event1list(EVENT_LIST,
+						      eventtext,
+						      sizeof(eventtext),
+						      TPF_EFNT | TPF_NOSHADOW,
+						      E1_X,
+						      E1_Y,
+						      E_WIDTH,
+						      E_HEIGHT,
+						      MFCD::Retrieve("EBTN-UP.SHP"),
 						      MFCD::Retrieve("EBTN-DN.SHP"));
 	char event2text[ENTRY_SIZE] = "";
-	TDropListClass<EventChoiceClass *> event2list(EVENT_LIST2, event2text, sizeof(event2text),
-						      TPF_EFNT | TPF_NOSHADOW, E2_X, E2_Y, E_WIDTH, E_HEIGHT,
-						      MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	TDropListClass<EventChoiceClass *> event2list(EVENT_LIST2,
+						      event2text,
+						      sizeof(event2text),
+						      TPF_EFNT | TPF_NOSHADOW,
+						      E2_X,
+						      E2_Y,
+						      E_WIDTH,
+						      E_HEIGHT,
+						      MFCD::Retrieve("EBTN-UP.SHP"),
+						      MFCD::Retrieve("EBTN-DN.SHP"));
 	for (TEventType event = TEVENT_FIRST; event < TEVENT_COUNT; event++) {
 		event1list.Add_Item(&EventChoices[event]);
 		event2list.Add_Item(&EventChoices[event]);
@@ -343,13 +361,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	List of actions allowed.
 	*/
 	char actiontext[ENTRY_SIZE] = "";
-	TDropListClass<ActionChoiceClass *> action1list(ACTION_LIST, actiontext, sizeof(actiontext),
-							TPF_EFNT | TPF_NOSHADOW, A1_X, A1_Y, E_WIDTH, E_HEIGHT,
-							MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	TDropListClass<ActionChoiceClass *> action1list(ACTION_LIST,
+							actiontext,
+							sizeof(actiontext),
+							TPF_EFNT | TPF_NOSHADOW,
+							A1_X,
+							A1_Y,
+							E_WIDTH,
+							E_HEIGHT,
+							MFCD::Retrieve("EBTN-UP.SHP"),
+							MFCD::Retrieve("EBTN-DN.SHP"));
 	char action2text[ENTRY_SIZE] = "";
-	TDropListClass<ActionChoiceClass *> action2list(ACTION_LIST2, action2text, sizeof(action2text),
-							TPF_EFNT | TPF_NOSHADOW, A2_X, A2_Y, E_WIDTH, E_HEIGHT,
-							MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	TDropListClass<ActionChoiceClass *> action2list(ACTION_LIST2,
+							action2text,
+							sizeof(action2text),
+							TPF_EFNT | TPF_NOSHADOW,
+							A2_X,
+							A2_Y,
+							E_WIDTH,
+							E_HEIGHT,
+							MFCD::Retrieve("EBTN-UP.SHP"),
+							MFCD::Retrieve("EBTN-DN.SHP"));
 	for (TActionType action = TACTION_FIRST; action < TACTION_COUNT; action++) {
 		action1list.Add_Item(&ActionChoices[action]);
 		action2list.Add_Item(&ActionChoices[action]);
@@ -369,50 +401,42 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional waypoint entry field.
 	*/
 	char way1[WAYPOINT_SIZE] = "A";
-	EditClass way1data(DATA_EDIT, way1, sizeof(way1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH, 9,
-			   EditClass::ALPHA);
+	EditClass way1data(DATA_EDIT, way1, sizeof(way1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH, 9, EditClass::ALPHA);
 	if (Event_Needs(Event1.Event) == NEED_WAYPOINT) {
 		if (Event1.Data.Value < 26) {
 			sprintf(way1data.Get_Text(), "%c", Event1.Data.Value + 'A');
 		} else {
-			sprintf(way1data.Get_Text(), "%c%c", (Event1.Data.Value / 26) + 'A' - 1,
-				(Event1.Data.Value % 26) + 'A');
+			sprintf(way1data.Get_Text(), "%c%c", (Event1.Data.Value / 26) + 'A' - 1, (Event1.Data.Value % 26) + 'A');
 		}
 	}
 
 	char way2[WAYPOINT_SIZE] = "A";
-	EditClass way2data(DATA_EDIT2, way2, sizeof(way2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH, 9,
-			   EditClass::ALPHA);
+	EditClass way2data(DATA_EDIT2, way2, sizeof(way2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH, 9, EditClass::ALPHA);
 	if (Event_Needs(Event2.Event) == NEED_WAYPOINT) {
 		if (Event2.Data.Value < 26) {
 			sprintf(way2data.Get_Text(), "%c", Event2.Data.Value + 'A');
 		} else {
-			sprintf(way2data.Get_Text(), "%c%c", (Event2.Data.Value / 26) + 'A' - 1,
-				(Event2.Data.Value % 26) + 'A');
+			sprintf(way2data.Get_Text(), "%c%c", (Event2.Data.Value / 26) + 'A' - 1, (Event2.Data.Value % 26) + 'A');
 		}
 	}
 
 	char way3[WAYPOINT_SIZE] = "A";
-	EditClass way3data(DATA_EDIT3, way3, sizeof(way3), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y, ED_WIDTH, 9,
-			   EditClass::ALPHA);
+	EditClass way3data(DATA_EDIT3, way3, sizeof(way3), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y, ED_WIDTH, 9, EditClass::ALPHA);
 	if (Action_Needs(Action1.Action) == NEED_WAYPOINT) {
 		if (Action1.Data.Value < 26) {
 			sprintf(way3data.Get_Text(), "%c", Action1.Data.Value + 'A');
 		} else {
-			sprintf(way3data.Get_Text(), "%c%c", (Action1.Data.Value / 26) + 'A' - 1,
-				(Action1.Data.Value % 26) + 'A');
+			sprintf(way3data.Get_Text(), "%c%c", (Action1.Data.Value / 26) + 'A' - 1, (Action1.Data.Value % 26) + 'A');
 		}
 	}
 
 	char way4[WAYPOINT_SIZE] = "A";
-	EditClass way4data(DATA_EDIT4, way4, sizeof(way4), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y, ED_WIDTH, 9,
-			   EditClass::ALPHA);
+	EditClass way4data(DATA_EDIT4, way4, sizeof(way4), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y, ED_WIDTH, 9, EditClass::ALPHA);
 	if (Action_Needs(Action2.Action) == NEED_WAYPOINT) {
 		if (Action2.Data.Value < 26) {
 			sprintf(way4data.Get_Text(), "%c", Action2.Data.Value + 'A');
 		} else {
-			sprintf(way4data.Get_Text(), "%c%c", (Action2.Data.Value / 26) + 'A' - 1,
-				(Action2.Data.Value % 26) + 'A');
+			sprintf(way4data.Get_Text(), "%c%c", (Action2.Data.Value / 26) + 'A' - 1, (Action2.Data.Value % 26) + 'A');
 		}
 	}
 
@@ -420,8 +444,7 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional event data entry field.
 	*/
 	char databuf1[GENERAL_SIZE] = "";
-	EditClass event1data(DATA_GENERAL1, databuf1, sizeof(databuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH,
-			     9, EditClass::NUMERIC);
+	EditClass event1data(DATA_GENERAL1, databuf1, sizeof(databuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH, 9, EditClass::NUMERIC);
 	switch (Event_Needs(Event1.Event)) {
 	case NEED_TIME:
 	case NEED_NUMBER:
@@ -430,8 +453,7 @@ bool TriggerTypeClass::Edit(void) {
 	}
 
 	char databuf2[GENERAL_SIZE] = "";
-	EditClass event2data(DATA_GENERAL2, databuf2, sizeof(databuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH,
-			     9, EditClass::NUMERIC);
+	EditClass event2data(DATA_GENERAL2, databuf2, sizeof(databuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH, 9, EditClass::NUMERIC);
 	switch (Event_Needs(Event2.Event)) {
 	case NEED_TIME:
 	case NEED_NUMBER:
@@ -440,8 +462,7 @@ bool TriggerTypeClass::Edit(void) {
 	}
 
 	char actionbuf1[GENERAL_SIZE] = "";
-	EditClass action1data(DATA_GENERAL3, actionbuf1, sizeof(actionbuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y,
-			      ED_WIDTH, 9, EditClass::NUMERIC);
+	EditClass action1data(DATA_GENERAL3, actionbuf1, sizeof(actionbuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y, ED_WIDTH, 9, EditClass::NUMERIC);
 	switch (Action_Needs(Action1.Action)) {
 	case NEED_NUMBER:
 		sprintf(action1data.Get_Text(), "%d", Action1.Data.Value);
@@ -449,8 +470,7 @@ bool TriggerTypeClass::Edit(void) {
 	}
 
 	char actionbuf2[GENERAL_SIZE] = "";
-	EditClass action2data(DATA_GENERAL4, actionbuf2, sizeof(actionbuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y,
-			      ED_WIDTH, 9, EditClass::NUMERIC);
+	EditClass action2data(DATA_GENERAL4, actionbuf2, sizeof(actionbuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y, ED_WIDTH, 9, EditClass::NUMERIC);
 	switch (Action_Needs(Action2.Action)) {
 	case NEED_NUMBER:
 		sprintf(action2data.Get_Text(), "%d", Action2.Data.Value);
@@ -461,17 +481,49 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional team entry list.
 	*/
 	char tbuf1[TEAM_SIZE] = "";
-	DropListClass ttype1list(DATA_TTYPE1, tbuf1, sizeof(tbuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass ttype1list(DATA_TTYPE1,
+				 tbuf1,
+				 sizeof(tbuf1),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED1_X,
+				 ED1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char tbuf2[TEAM_SIZE] = "";
-	DropListClass ttype2list(DATA_TTYPE2, tbuf2, sizeof(tbuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass ttype2list(DATA_TTYPE2,
+				 tbuf2,
+				 sizeof(tbuf2),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED2_X,
+				 ED2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char tbuf3[TEAM_SIZE] = "";
-	DropListClass ttype3list(DATA_TTYPE3, tbuf3, sizeof(tbuf3), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass ttype3list(DATA_TTYPE3,
+				 tbuf3,
+				 sizeof(tbuf3),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 AD1_X,
+				 AD1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char tbuf4[TEAM_SIZE] = "";
-	DropListClass ttype4list(DATA_TTYPE4, tbuf4, sizeof(tbuf4), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass ttype4list(DATA_TTYPE4,
+				 tbuf4,
+				 sizeof(tbuf4),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 AD2_X,
+				 AD2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (int index = 0; index < TeamTypes.Count(); index++) {
 		ttype1list.Add_Item(TeamTypes.Ptr(index)->IniName);
@@ -505,11 +557,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional trigger entry list.
 	*/
 	char trbuf1[TEAM_SIZE] = "";
-	DropListClass trtype1list(DATA_TRTYPE1, trbuf1, sizeof(trbuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y, ED_WIDTH,
-				  ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass trtype1list(DATA_TRTYPE1,
+				  trbuf1,
+				  sizeof(trbuf1),
+				  TPF_EFNT | TPF_NOSHADOW,
+				  AD1_X,
+				  AD1_Y,
+				  ED_WIDTH,
+				  ED_HEIGHT,
+				  MFCD::Retrieve("EBTN-UP.SHP"),
+				  MFCD::Retrieve("EBTN-DN.SHP"));
 	char trbuf2[TEAM_SIZE] = "";
-	DropListClass trtype2list(DATA_TRTYPE2, trbuf2, sizeof(trbuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y, ED_WIDTH,
-				  ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass trtype2list(DATA_TRTYPE2,
+				  trbuf2,
+				  sizeof(trbuf2),
+				  TPF_EFNT | TPF_NOSHADOW,
+				  AD2_X,
+				  AD2_Y,
+				  ED_WIDTH,
+				  ED_HEIGHT,
+				  MFCD::Retrieve("EBTN-UP.SHP"),
+				  MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (index = 0; index < TriggerTypes.Count(); index++) {
 		trtype1list.Add_Item(TriggerTypes.Ptr(index)->IniName);
@@ -531,11 +599,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional boolean value list.
 	*/
 	char boolbuf1[TEAM_SIZE] = "";
-	DropListClass booltype1list(DATA_BOOLTYPE1, boolbuf1, sizeof(boolbuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y,
-				    ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass booltype1list(DATA_BOOLTYPE1,
+				    boolbuf1,
+				    sizeof(boolbuf1),
+				    TPF_EFNT | TPF_NOSHADOW,
+				    AD1_X,
+				    AD1_Y,
+				    ED_WIDTH,
+				    ED_HEIGHT,
+				    MFCD::Retrieve("EBTN-UP.SHP"),
+				    MFCD::Retrieve("EBTN-DN.SHP"));
 	char boolbuf2[TEAM_SIZE] = "";
-	DropListClass booltype2list(DATA_BOOLTYPE2, boolbuf2, sizeof(boolbuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y,
-				    ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass booltype2list(DATA_BOOLTYPE2,
+				    boolbuf2,
+				    sizeof(boolbuf2),
+				    TPF_EFNT | TPF_NOSHADOW,
+				    AD2_X,
+				    AD2_Y,
+				    ED_WIDTH,
+				    ED_HEIGHT,
+				    MFCD::Retrieve("EBTN-UP.SHP"),
+				    MFCD::Retrieve("EBTN-DN.SHP"));
 
 	booltype1list.Add_Item("OFF");
 	booltype1list.Add_Item("ON");
@@ -549,11 +633,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional musical theme choice list.
 	*/
 	char themebuf1[DESC_SIZE] = "";
-	DropListClass themetype1list(DATA_THEME1, themebuf1, sizeof(themebuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y,
-				     ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass themetype1list(DATA_THEME1,
+				     themebuf1,
+				     sizeof(themebuf1),
+				     TPF_EFNT | TPF_NOSHADOW,
+				     AD1_X,
+				     AD1_Y,
+				     ED_WIDTH,
+				     ED_HEIGHT,
+				     MFCD::Retrieve("EBTN-UP.SHP"),
+				     MFCD::Retrieve("EBTN-DN.SHP"));
 	char themebuf2[DESC_SIZE] = "";
-	DropListClass themetype2list(DATA_THEME2, themebuf2, sizeof(themebuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y,
-				     ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass themetype2list(DATA_THEME2,
+				     themebuf2,
+				     sizeof(themebuf2),
+				     TPF_EFNT | TPF_NOSHADOW,
+				     AD2_X,
+				     AD2_Y,
+				     ED_WIDTH,
+				     ED_HEIGHT,
+				     MFCD::Retrieve("EBTN-UP.SHP"),
+				     MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (ThemeType theme = THEME_FIRST; theme < THEME_COUNT; theme++) {
 		themetype1list.Add_Item(Theme.Full_Name(theme));
@@ -575,11 +675,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional movie list.
 	*/
 	char moviebuf1[DESC_SIZE] = "";
-	DropListClass movietype1list(DATA_MOVIE1, moviebuf1, sizeof(moviebuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y,
-				     ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass movietype1list(DATA_MOVIE1,
+				     moviebuf1,
+				     sizeof(moviebuf1),
+				     TPF_EFNT | TPF_NOSHADOW,
+				     AD1_X,
+				     AD1_Y,
+				     ED_WIDTH,
+				     ED_HEIGHT,
+				     MFCD::Retrieve("EBTN-UP.SHP"),
+				     MFCD::Retrieve("EBTN-DN.SHP"));
 	char moviebuf2[DESC_SIZE] = "";
-	DropListClass movietype2list(DATA_MOVIE2, moviebuf2, sizeof(moviebuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y,
-				     ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass movietype2list(DATA_MOVIE2,
+				     moviebuf2,
+				     sizeof(moviebuf2),
+				     TPF_EFNT | TPF_NOSHADOW,
+				     AD2_X,
+				     AD2_Y,
+				     ED_WIDTH,
+				     ED_HEIGHT,
+				     MFCD::Retrieve("EBTN-UP.SHP"),
+				     MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (VQType movie = VQ_FIRST; movie < VQ_COUNT; movie++) {
 		movietype1list.Add_Item(VQName[movie]);
@@ -601,11 +717,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional sound effect list.
 	*/
 	char soundbuf1[DESC_SIZE] = "";
-	DropListClass soundtype1list(DATA_SOUND1, soundbuf1, sizeof(soundbuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y,
-				     ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass soundtype1list(DATA_SOUND1,
+				     soundbuf1,
+				     sizeof(soundbuf1),
+				     TPF_EFNT | TPF_NOSHADOW,
+				     AD1_X,
+				     AD1_Y,
+				     ED_WIDTH,
+				     ED_HEIGHT,
+				     MFCD::Retrieve("EBTN-UP.SHP"),
+				     MFCD::Retrieve("EBTN-DN.SHP"));
 	char soundbuf2[DESC_SIZE] = "";
-	DropListClass soundtype2list(DATA_SOUND2, soundbuf2, sizeof(soundbuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y,
-				     ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass soundtype2list(DATA_SOUND2,
+				     soundbuf2,
+				     sizeof(soundbuf2),
+				     TPF_EFNT | TPF_NOSHADOW,
+				     AD2_X,
+				     AD2_Y,
+				     ED_WIDTH,
+				     ED_HEIGHT,
+				     MFCD::Retrieve("EBTN-UP.SHP"),
+				     MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (VocType sound = VOC_FIRST; sound < VOC_COUNT; sound++) {
 		soundtype1list.Add_Item(Voc_Name(sound));
@@ -627,12 +759,26 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional speech effect list.
 	*/
 	char speechbuf1[DESC_SIZE] = "";
-	DropListClass speechtype1list(DATA_SPEECH1, speechbuf1, sizeof(speechbuf1), TPF_EFNT | TPF_NOSHADOW, AD1_X,
-				      AD1_Y, ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"),
+	DropListClass speechtype1list(DATA_SPEECH1,
+				      speechbuf1,
+				      sizeof(speechbuf1),
+				      TPF_EFNT | TPF_NOSHADOW,
+				      AD1_X,
+				      AD1_Y,
+				      ED_WIDTH,
+				      ED_HEIGHT,
+				      MFCD::Retrieve("EBTN-UP.SHP"),
 				      MFCD::Retrieve("EBTN-DN.SHP"));
 	char speechbuf2[DESC_SIZE] = "";
-	DropListClass speechtype2list(DATA_SPEECH2, speechbuf2, sizeof(speechbuf2), TPF_EFNT | TPF_NOSHADOW, AD2_X,
-				      AD2_Y, ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"),
+	DropListClass speechtype2list(DATA_SPEECH2,
+				      speechbuf2,
+				      sizeof(speechbuf2),
+				      TPF_EFNT | TPF_NOSHADOW,
+				      AD2_X,
+				      AD2_Y,
+				      ED_WIDTH,
+				      ED_HEIGHT,
+				      MFCD::Retrieve("EBTN-UP.SHP"),
 				      MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (VoxType speech = VOX_FIRST; speech < VOX_COUNT; speech++) {
@@ -655,11 +801,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional building type entry list.
 	*/
 	char bbuf1[DESC_SIZE] = "";
-	DropListClass btype1list(DATA_BTYPE1, bbuf1, sizeof(bbuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass btype1list(DATA_BTYPE1,
+				 bbuf1,
+				 sizeof(bbuf1),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED1_X,
+				 ED1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char bbuf2[DESC_SIZE] = "";
-	DropListClass btype2list(DATA_BTYPE2, bbuf2, sizeof(bbuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass btype2list(DATA_BTYPE2,
+				 bbuf2,
+				 sizeof(bbuf2),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED2_X,
+				 ED2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (StructType ss = STRUCT_FIRST; ss < STRUCT_COUNT; ss++) {
 		btype1list.Add_Item(Text_String(BuildingTypeClass::As_Reference(ss).Full_Name()));
@@ -681,11 +843,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional infantry type entry list.
 	*/
 	char ibuf1[DESC_SIZE] = "";
-	DropListClass itype1list(DATA_ITYPE1, ibuf1, sizeof(ibuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass itype1list(DATA_ITYPE1,
+				 ibuf1,
+				 sizeof(ibuf1),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED1_X,
+				 ED1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char ibuf2[DESC_SIZE] = "";
-	DropListClass itype2list(DATA_ITYPE2, ibuf2, sizeof(ibuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass itype2list(DATA_ITYPE2,
+				 ibuf2,
+				 sizeof(ibuf2),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED2_X,
+				 ED2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (InfantryType ii = INFANTRY_FIRST; ii < INFANTRY_COUNT; ii++) {
 		itype1list.Add_Item(Text_String(InfantryTypeClass::As_Reference(ii).Full_Name()));
@@ -707,11 +885,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional aircraft type entry list.
 	*/
 	char abuf1[DESC_SIZE] = "";
-	DropListClass atype1list(DATA_ATYPE1, abuf1, sizeof(abuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass atype1list(DATA_ATYPE1,
+				 abuf1,
+				 sizeof(abuf1),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED1_X,
+				 ED1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char abuf2[DESC_SIZE] = "";
-	DropListClass atype2list(DATA_ATYPE2, abuf2, sizeof(abuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass atype2list(DATA_ATYPE2,
+				 abuf2,
+				 sizeof(abuf2),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED2_X,
+				 ED2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (AircraftType aa = AIRCRAFT_FIRST; aa < AIRCRAFT_COUNT; aa++) {
 		atype1list.Add_Item(Text_String(AircraftTypeClass::As_Reference(aa).Full_Name()));
@@ -733,11 +927,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional unit type entry list.
 	*/
 	char ubuf1[DESC_SIZE] = "";
-	DropListClass utype1list(DATA_UTYPE1, ubuf1, sizeof(ubuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass utype1list(DATA_UTYPE1,
+				 ubuf1,
+				 sizeof(ubuf1),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED1_X,
+				 ED1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char ubuf2[DESC_SIZE] = "";
-	DropListClass utype2list(DATA_UTYPE2, ubuf2, sizeof(ubuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y, ED_WIDTH,
-				 ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass utype2list(DATA_UTYPE2,
+				 ubuf2,
+				 sizeof(ubuf2),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED2_X,
+				 ED2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (UnitType uu = UNIT_FIRST; uu < UNIT_COUNT; uu++) {
 		utype1list.Add_Item(Text_String(UnitTypeClass::As_Reference(uu).Full_Name()));
@@ -759,17 +969,49 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional house type entry list.
 	*/
 	char housebuf1[DESC_SIZE] = "";
-	DropListClass htype1list(DATA_HTYPE1, housebuf1, sizeof(housebuf1), TPF_EFNT | TPF_NOSHADOW, ED1_X, ED1_Y,
-				 ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass htype1list(DATA_HTYPE1,
+				 housebuf1,
+				 sizeof(housebuf1),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED1_X,
+				 ED1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char housebuf2[DESC_SIZE] = "";
-	DropListClass htype2list(DATA_HTYPE2, housebuf2, sizeof(housebuf2), TPF_EFNT | TPF_NOSHADOW, ED2_X, ED2_Y,
-				 ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass htype2list(DATA_HTYPE2,
+				 housebuf2,
+				 sizeof(housebuf2),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 ED2_X,
+				 ED2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char housebuf3[DESC_SIZE] = "";
-	DropListClass htype3list(DATA_HTYPE3, housebuf3, sizeof(housebuf3), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y,
-				 ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass htype3list(DATA_HTYPE3,
+				 housebuf3,
+				 sizeof(housebuf3),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 AD1_X,
+				 AD1_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	char housebuf4[DESC_SIZE] = "";
-	DropListClass htype4list(DATA_HTYPE4, housebuf4, sizeof(housebuf4), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y,
-				 ED_WIDTH, ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass htype4list(DATA_HTYPE4,
+				 housebuf4,
+				 sizeof(housebuf4),
+				 TPF_EFNT | TPF_NOSHADOW,
+				 AD2_X,
+				 AD2_Y,
+				 ED_WIDTH,
+				 ED_HEIGHT,
+				 MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 
 	for (HousesType hh = HOUSE_FIRST; hh < HOUSE_COUNT; hh++) {
 		htype1list.Add_Item(HouseTypeClass::As_Reference(hh).IniName);
@@ -803,11 +1045,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional special weapon list.
 	*/
 	char special1[DESC_SIZE] = "";
-	DropListClass spc1(DATA_SPECIAL1, special1, sizeof(special1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y, ED_WIDTH,
-			   ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass spc1(DATA_SPECIAL1,
+			   special1,
+			   sizeof(special1),
+			   TPF_EFNT | TPF_NOSHADOW,
+			   AD1_X,
+			   AD1_Y,
+			   ED_WIDTH,
+			   ED_HEIGHT,
+			   MFCD::Retrieve("EBTN-UP.SHP"),
+			   MFCD::Retrieve("EBTN-DN.SHP"));
 	char special2[DESC_SIZE] = "";
-	DropListClass spc2(DATA_SPECIAL2, special2, sizeof(special2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y, ED_WIDTH,
-			   ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass spc2(DATA_SPECIAL2,
+			   special2,
+			   sizeof(special2),
+			   TPF_EFNT | TPF_NOSHADOW,
+			   AD2_X,
+			   AD2_Y,
+			   ED_WIDTH,
+			   ED_HEIGHT,
+			   MFCD::Retrieve("EBTN-UP.SHP"),
+			   MFCD::Retrieve("EBTN-DN.SHP"));
 	for (SpecialWeaponType spec = SPC_FIRST; spec < SPC_COUNT; spec++) {
 		spc1.Add_Item(SpecialWeaponName[spec]);
 		spc2.Add_Item(SpecialWeaponName[spec]);
@@ -827,11 +1085,27 @@ bool TriggerTypeClass::Edit(void) {
 	**	Optional quarry type.
 	*/
 	char quarry1[DESC_SIZE] = "";
-	DropListClass qlist1(DATA_SPECIAL1, quarry1, sizeof(quarry1), TPF_EFNT | TPF_NOSHADOW, AD1_X, AD1_Y, ED_WIDTH,
-			     ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass qlist1(DATA_SPECIAL1,
+			     quarry1,
+			     sizeof(quarry1),
+			     TPF_EFNT | TPF_NOSHADOW,
+			     AD1_X,
+			     AD1_Y,
+			     ED_WIDTH,
+			     ED_HEIGHT,
+			     MFCD::Retrieve("EBTN-UP.SHP"),
+			     MFCD::Retrieve("EBTN-DN.SHP"));
 	char quarry2[DESC_SIZE] = "";
-	DropListClass qlist2(DATA_SPECIAL2, quarry2, sizeof(quarry2), TPF_EFNT | TPF_NOSHADOW, AD2_X, AD2_Y, ED_WIDTH,
-			     ED_HEIGHT, MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass qlist2(DATA_SPECIAL2,
+			     quarry2,
+			     sizeof(quarry2),
+			     TPF_EFNT | TPF_NOSHADOW,
+			     AD2_X,
+			     AD2_Y,
+			     ED_WIDTH,
+			     ED_HEIGHT,
+			     MFCD::Retrieve("EBTN-UP.SHP"),
+			     MFCD::Retrieve("EBTN-DN.SHP"));
 	for (QuarryType q = QUARRY_FIRST; q < QUARRY_COUNT; q++) {
 		qlist1.Add_Item(QuarryName[q]);
 		qlist2.Add_Item(QuarryName[q]);
@@ -851,16 +1125,30 @@ bool TriggerTypeClass::Edit(void) {
 	**	Name of this trigger text edit field.
 	*/
 	char namebuf[5] = "";
-	EditClass name_edt(NAME_EDIT, namebuf, sizeof(namebuf), TPF_EFNT | TPF_NOSHADOW, D_DIALOG_X + 40,
-			   D_DIALOG_Y + 30, 40, 9, EditClass::ALPHANUMERIC);
+	EditClass name_edt(NAME_EDIT,
+			   namebuf,
+			   sizeof(namebuf),
+			   TPF_EFNT | TPF_NOSHADOW,
+			   D_DIALOG_X + 40,
+			   D_DIALOG_Y + 30,
+			   40,
+			   9,
+			   EditClass::ALPHANUMERIC);
 	strcpy(namebuf, IniName); // Name
 
 	/*
 	**	Create the list of house's allowed for trigger.
 	*/
 	char housetext[DESC_SIZE] = "";
-	DropListClass housebtn(BUTTON_HOUSE, housetext, sizeof(housetext), TPF_EFNT | TPF_NOSHADOW,
-			       name_edt.X + name_edt.Width + 20, name_edt.Y, 95, 8 * 5, MFCD::Retrieve("EBTN-UP.SHP"),
+	DropListClass housebtn(BUTTON_HOUSE,
+			       housetext,
+			       sizeof(housetext),
+			       TPF_EFNT | TPF_NOSHADOW,
+			       name_edt.X + name_edt.Width + 20,
+			       name_edt.Y,
+			       95,
+			       8 * 5,
+			       MFCD::Retrieve("EBTN-UP.SHP"),
 			       MFCD::Retrieve("EBTN-DN.SHP"));
 	for (HousesType house = HOUSE_FIRST; house < HOUSE_COUNT; house++) {
 		housebtn.Add_Item(HouseTypeClass::As_Reference(house).IniName);
@@ -874,9 +1162,16 @@ bool TriggerTypeClass::Edit(void) {
 	**	TriggerTypeClass definition.
 	*/
 	char perstext[DESC_SIZE] = "";
-	static char *_perstext[3] = {"Volatile", "Semi-persistent", "Persistent"};
-	DropListClass persbtn(BUTTON_PERSISTANCE, perstext, sizeof(perstext), TPF_EFNT | TPF_NOSHADOW,
-			      housebtn.X + housebtn.Width + 20, housebtn.Y, 105, 8 * 5, MFCD::Retrieve("EBTN-UP.SHP"),
+	static char *_perstext[3] = { "Volatile", "Semi-persistent", "Persistent" };
+	DropListClass persbtn(BUTTON_PERSISTANCE,
+			      perstext,
+			      sizeof(perstext),
+			      TPF_EFNT | TPF_NOSHADOW,
+			      housebtn.X + housebtn.Width + 20,
+			      housebtn.Y,
+			      105,
+			      8 * 5,
+			      MFCD::Retrieve("EBTN-UP.SHP"),
 			      MFCD::Retrieve("EBTN-DN.SHP"));
 	for (i = 0; i < sizeof(_perstext) / sizeof(_perstext[0]); i++) {
 		persbtn.Add_Item(_perstext[i]);
@@ -888,22 +1183,19 @@ bool TriggerTypeClass::Edit(void) {
 	**	event.
 	*/
 	int eventflag = EventControl;
-	TextButtonClass eventbtn(BUTTON_EVENT, TXT_TRIGGER_JUST_EVENT, TPF_EBUTTON, event1list.X, event1list.Y + 11,
-				 100, 9);
+	TextButtonClass eventbtn(BUTTON_EVENT, TXT_TRIGGER_JUST_EVENT, TPF_EBUTTON, event1list.X, event1list.Y + 11, 100, 9);
 
 	/*
 	**	This button controls the existence of a secondary action.
 	*/
 	bool actionflag = ActionControl;
-	TextButtonClass actionbtn(BUTTON_ACTION, TXT_TRIGGER_JUST_ACTION, TPF_EBUTTON, action1list.X,
-				  action1list.Y + 11, 100, 9);
+	TextButtonClass actionbtn(BUTTON_ACTION, TXT_TRIGGER_JUST_ACTION, TPF_EBUTTON, action1list.X, action1list.Y + 11, 100, 9);
 
 	/*
 	**	Create the ubiquitous OK and Cancel buttons.
 	*/
 	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_EBUTTON, D_DIALOG_X + 35, D_DIALOG_Y + D_DIALOG_H - 30, 45, 9);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_DIALOG_X + D_DIALOG_W - 80,
-				  D_DIALOG_Y + D_DIALOG_H - 30, 45, 9);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_DIALOG_X + D_DIALOG_W - 80, D_DIALOG_Y + D_DIALOG_H - 30, 45, 9);
 
 	/*
 	**	Initialize
@@ -929,7 +1221,6 @@ bool TriggerTypeClass::Edit(void) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback
 		*/
@@ -939,7 +1230,6 @@ bool TriggerTypeClass::Edit(void) {
 		**	Refresh display if needed
 		*/
 		if (display /*&& LogicPage->Lock()*/) {
-
 			/*
 			**	Display the dialog box
 			*/
@@ -950,29 +1240,28 @@ bool TriggerTypeClass::Edit(void) {
 			/*
 			**	Draw the captions
 			*/
-			Fancy_Text_Print("Trigger Event:", event1list.X, event1list.Y - 7, scheme, TBLACK,
-					 TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Action to Perform:", action1list.X, action1list.Y - 7, scheme, TBLACK,
-					 TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Trigger Event:", event1list.X, event1list.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Action to Perform:", action1list.X, action1list.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
 			Fancy_Text_Print("House:", housebtn.X, housebtn.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
 			Fancy_Text_Print("Name:", name_edt.X, name_edt.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Persistence:", persbtn.X, persbtn.Y - 7, scheme, TBLACK,
-					 TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Persistence:", persbtn.X, persbtn.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
 
 			if (eventflag == 3) {
-				LogicPage->Draw_Line(event1list.X - 1, event1list.Y + 3, event1list.X - 2 * RESFACTOR,
-						     event1list.Y + 3, WHITE);
-				LogicPage->Draw_Line(event1list.X - 2 * RESFACTOR, event1list.Y + 3,
-						     action1list.X - 2 * RESFACTOR, action1list.Y + 3, WHITE);
-				LogicPage->Draw_Line(action1list.X - 1, action1list.Y + 3,
-						     action1list.X - 2 * RESFACTOR, action1list.Y + 3, WHITE);
+				LogicPage->Draw_Line(event1list.X - 1, event1list.Y + 3, event1list.X - 2 * RESFACTOR, event1list.Y + 3, WHITE);
+				LogicPage->Draw_Line(event1list.X - 2 * RESFACTOR,
+						     event1list.Y + 3,
+						     action1list.X - 2 * RESFACTOR,
+						     action1list.Y + 3,
+						     WHITE);
+				LogicPage->Draw_Line(action1list.X - 1, action1list.Y + 3, action1list.X - 2 * RESFACTOR, action1list.Y + 3, WHITE);
 
-				LogicPage->Draw_Line(event2list.X - 1, event2list.Y + 3, event2list.X - 5 * RESFACTOR,
-						     event2list.Y + 3, WHITE);
-				LogicPage->Draw_Line(event2list.X - 5 * RESFACTOR, event2list.Y + 3,
-						     action2list.X - 5 * RESFACTOR, action2list.Y + 3, WHITE);
-				LogicPage->Draw_Line(action2list.X - 1, action2list.Y + 3,
-						     action2list.X - 5 * RESFACTOR, action2list.Y + 3, WHITE);
+				LogicPage->Draw_Line(event2list.X - 1, event2list.Y + 3, event2list.X - 5 * RESFACTOR, event2list.Y + 3, WHITE);
+				LogicPage->Draw_Line(event2list.X - 5 * RESFACTOR,
+						     event2list.Y + 3,
+						     action2list.X - 5 * RESFACTOR,
+						     action2list.Y + 3,
+						     WHITE);
+				LogicPage->Draw_Line(action2list.X - 1, action2list.Y + 3, action2list.X - 5 * RESFACTOR, action2list.Y + 3, WHITE);
 			}
 
 			/*
@@ -1666,8 +1955,15 @@ char const *TriggerTypeClass::Description(void) const {
 	if (IsPersistant == PERSISTANT)
 		pers = 'P';
 
-	sprintf(_buffer, "%4.4s\t %s %c%c%c  %s%s", IniName, HouseTypeClass::As_Reference(House).Suffix, pers, special,
-		special2, Name_From_Event(Event1.Event), added);
+	sprintf(_buffer,
+		"%4.4s\t %s %c%c%c  %s%s",
+		IniName,
+		HouseTypeClass::As_Reference(House).Suffix,
+		pers,
+		special,
+		special2,
+		Name_From_Event(Event1.Event),
+		added);
 	return (_buffer);
 }
 
@@ -1924,9 +2220,8 @@ void TriggerTypeClass::Build_INI_Entry(char *buffer) const {
  *=============================================================================================*/
 void TriggerTypeClass::Draw_It(int, int x, int y, int width, int height, bool selected, TextPrintType flags) const {
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
-	static int _tabs[] = {13, 40};
+	static int _tabs[] = { 13, 40 };
 	if ((flags & 0x0F) == TPF_6PT_GRAD || (flags & 0x0F) == TPF_EFNT) {
-
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
 			LogicPage->Fill_Rect(x, y, x + width - 1, y + height - 1, scheme->Shadow);
@@ -1938,9 +2233,14 @@ void TriggerTypeClass::Draw_It(int, int x, int y, int width, int height, bool se
 
 		Conquer_Clip_Text_Print(Description(), x, y, scheme, TBLACK, flags, width, _tabs);
 	} else {
-		Conquer_Clip_Text_Print(Description(), x, y,
+		Conquer_Clip_Text_Print(Description(),
+					x,
+					y,
 					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
-					TBLACK, flags, width, _tabs);
+					TBLACK,
+					flags,
+					width,
+					_tabs);
 	}
 }
 #endif
@@ -1960,7 +2260,9 @@ void TriggerTypeClass::Draw_It(int, int x, int y, int width, int height, bool se
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TriggerTypeClass::Init(void) { TriggerTypes.Free_All(); }
+void TriggerTypeClass::Init(void) {
+	TriggerTypes.Free_All();
+}
 
 /***********************************************************************************************
  * TriggerTypeClass::From_Name -- Convert an ASCII name into a trigger type pointer.           *

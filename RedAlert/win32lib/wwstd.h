@@ -116,7 +116,10 @@
 #ifdef ABS
 #undef ABS
 #endif
-template <class T> T ABS(T a) { return (a < 0) ? -a : a; }
+template <class T>
+T ABS(T a) {
+	return (a < 0) ? -a : a;
+}
 // int ABS(int);
 // long ABS(long);
 
@@ -124,7 +127,10 @@ template <class T> T ABS(T a) { return (a < 0) ? -a : a; }
 #ifdef MIN
 #undef MIN
 #endif
-template <class T> T MIN(T a, T b) { return (b < a) ? b : a; };
+template <class T>
+T MIN(T a, T b) {
+	return (b < a) ? b : a;
+};
 // PG
 // short MIN(short, short);
 // int MIN(int, int);
@@ -134,7 +140,10 @@ template <class T> T MIN(T a, T b) { return (b < a) ? b : a; };
 #ifdef MAX
 #undef MAX
 #endif
-template <class T> T MAX(T a, T b) { return (b > a) ? b : a; };
+template <class T>
+T MAX(T a, T b) {
+	return (b > a) ? b : a;
+};
 // short MAX(short, short);
 // int MAX(int, int);
 // long MAX(long, long);
@@ -157,14 +166,14 @@ template <class T> T MAX(T a, T b) { return (b > a) ? b : a; };
 #undef AssembleTo
 #endif
 
-#define AssembleTo(dest, fmt)                                                                                          \
-	{                                                                                                              \
-		va_list argptr;                                                                                        \
-		if (fmt != (dest)) {                                                                                   \
-			va_start(argptr, fmt);                                                                         \
-			vsprintf((dest), fmt, argptr);                                                                 \
-			va_end(argptr);                                                                                \
-		}                                                                                                      \
+#define AssembleTo(dest, fmt)                                                                                                                        \
+	{                                                                                                                                            \
+		va_list argptr;                                                                                                                      \
+		if (fmt != (dest)) {                                                                                                                 \
+			va_start(argptr, fmt);                                                                                                       \
+			vsprintf((dest), fmt, argptr);                                                                                               \
+			va_end(argptr);                                                                                                              \
+		}                                                                                                                                    \
 	}
 
 #if (0) // PG
@@ -246,18 +255,29 @@ typedef int bool;
 // by classes when they havce over loaded > and <.
 //
 #ifdef __cplusplus
-template <class T> T Min(T a, T b) { return (a < b ? a : b); }
+template <class T>
+T Min(T a, T b) {
+	return (a < b ? a : b);
+}
 
-template <class T> inline T Max(T a, T b) { return (a > b ? a : b); }
+template <class T>
+inline T Max(T a, T b) {
+	return (a > b ? a : b);
+}
 
-template <class T> T Abs(T a) { return ((a < 0) ? -(a) : a); }
+template <class T>
+T Abs(T a) {
+	return ((a < 0) ? -(a) : a);
+}
 
-template <class T> VOID minimize(T &a, T b) {
+template <class T>
+VOID minimize(T &a, T b) {
 	if (b < a)
 		a = b;
 }
 
-template <class T> VOID maximize(T &a, T b) {
+template <class T>
+VOID maximize(T &a, T b) {
 	if (b > a)
 		a = b;
 }
@@ -273,13 +293,25 @@ template <class T> VOID maximize(T &a, T b) {
 
 // Template replacements for the user defines above
 #ifdef __cplusplus
-template <class T> VOID BitFlagsOn(T &a, T b) { a |= (b); }
+template <class T>
+VOID BitFlagsOn(T &a, T b) {
+	a |= (b);
+}
 
-template <class T> VOID BitFlagsOff(T &a, T b) { a &= (~(b)); }
+template <class T>
+VOID BitFlagsOff(T &a, T b) {
+	a &= (~(b));
+}
 
-template <class T> T BitFlagsValue(T a, T b) { return (a & (b)); }
+template <class T>
+T BitFlagsValue(T a, T b) {
+	return (a & (b));
+}
 
-template <class T> VOID BitFlagsFlip(T &a, T b) { a ^= (b); }
+template <class T>
+VOID BitFlagsFlip(T &a, T b) {
+	a ^= (b);
+}
 #endif
 
 typedef enum : unsigned short {

@@ -39,7 +39,6 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 class EgoClass {
-
 public:
 	EgoClass(int x, int y, char *text, TextPrintType flags);
 	~EgoClass();

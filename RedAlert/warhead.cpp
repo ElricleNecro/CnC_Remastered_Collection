@@ -61,8 +61,8 @@ TFixedIHeapClass<WarheadTypeClass> Warheads;
  *   07/19/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 WarheadTypeClass::WarheadTypeClass(char const *name)
-    : ID(Warheads.ID(this)), IniName(name), SpreadFactor(1), IsWallDestroyer(false), IsWoodDestroyer(false),
-      IsTiberiumDestroyer(false), IsOrganic(false), ExplosionSet(0), InfantryDeath(0) {
+	: ID(Warheads.ID(this)), IniName(name), SpreadFactor(1), IsWallDestroyer(false), IsWoodDestroyer(false), IsTiberiumDestroyer(false),
+	  IsOrganic(false), ExplosionSet(0), InfantryDeath(0) {
 	for (ArmorType armor = ARMOR_FIRST; armor < ARMOR_COUNT; armor++) {
 		Modifier[armor] = 1;
 	}
@@ -84,7 +84,9 @@ WarheadTypeClass::WarheadTypeClass(char const *name)
  * HISTORY:                                                                                    *
  *   07/19/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void *WarheadTypeClass::operator new(size_t) { return (Warheads.Alloc()); }
+void *WarheadTypeClass::operator new(size_t) {
+	return (Warheads.Alloc());
+}
 
 /***********************************************************************************************
  * WarheadTypeClass::operator delete -- Returns warhead object back to special memory pool.    *
@@ -100,7 +102,9 @@ void *WarheadTypeClass::operator new(size_t) { return (Warheads.Alloc()); }
  * HISTORY:                                                                                    *
  *   07/19/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void WarheadTypeClass::operator delete(void *pointer) { Warheads.Free((WarheadTypeClass *)pointer); }
+void WarheadTypeClass::operator delete(void *pointer) {
+	Warheads.Free((WarheadTypeClass *)pointer);
+}
 
 /***********************************************************************************************
  * WarheadTypeClass::As_Pointer -- Convert a warhead type number into a pointer.               *

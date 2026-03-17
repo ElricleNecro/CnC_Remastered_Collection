@@ -53,13 +53,21 @@ private:
 		CodeType ParentCode;
 		char CharValue;
 
-		CodeClass(void) {}
-		CodeClass(CodeType code, CodeType parent, char c) : CodeValue(code), ParentCode(parent), CharValue(c) {}
+		CodeClass(void) {
+		}
+		CodeClass(CodeType code, CodeType parent, char c) : CodeValue(code), ParentCode(parent), CharValue(c) {
+		}
 
 		enum { UNUSED = -1 };
-		void Make_Unused(void) { CodeValue = UNUSED; }
-		bool Is_Unused(void) const { return (CodeValue == UNUSED); }
-		bool Is_Matching(CodeType code, char c) const { return (ParentCode == code && CharValue == c); }
+		void Make_Unused(void) {
+			CodeValue = UNUSED;
+		}
+		bool Is_Unused(void) const {
+			return (CodeValue == UNUSED);
+		}
+		bool Is_Matching(CodeType code, char c) const {
+			return (ParentCode == code && CharValue == c);
+		}
 	};
 
 	enum { BITS = 12, MAX_CODE = ((1 << BITS) - 1), FIRST_CODE = 257, END_OF_STREAM = 256, TABLE_SIZE = 5021 };

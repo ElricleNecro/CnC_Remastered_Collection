@@ -119,7 +119,7 @@ extern long RandNumb;
 }
 #ifndef WIN32
 static int UsePageFaultHandler = 1; // 1 = install PFH
-#endif				    // WIN32
+#endif // WIN32
 
 // extern int SimRandIndex;
 void Init_Random(void);
@@ -382,8 +382,12 @@ bool Init_Game(int, char *[]) {
 		Load_Title_Page(true);
 
 		Hide_Mouse();
-		Fancy_Text_Print(TXT_STAND_BY, 160 * RESFACTOR, 120 * RESFACTOR, &ColorRemaps[PCOLOR_DIALOG_BLUE],
-				 TBLACK, TPF_CENTER | TPF_TEXT | TPF_DROPSHADOW);
+		Fancy_Text_Print(TXT_STAND_BY,
+				 160 * RESFACTOR,
+				 120 * RESFACTOR,
+				 &ColorRemaps[PCOLOR_DIALOG_BLUE],
+				 TBLACK,
+				 TPF_CENTER | TPF_TEXT | TPF_DROPSHADOW);
 		Show_Mouse();
 
 		CCPalette.Set(FADE_PALETTE_SLOW);
@@ -469,40 +473,40 @@ bool Select_Game(bool fade) {
 	//	Enums in Select_Game() must match order of buttons in Main_Menu().
 #ifdef FIXIT_VERSION_3
 	enum {
-		SEL_TIMEOUT = -1,     // main menu timeout--go into attract mode
-		SEL_NEW_SCENARIO_CS,  // Expansion scenario to play.
-		SEL_NEW_SCENARIO_AM,  // Expansion scenario to play.
-		SEL_START_NEW_GAME,   // start a new game
-		SEL_LOAD_MISSION,     // load a saved game
+		SEL_TIMEOUT = -1, // main menu timeout--go into attract mode
+		SEL_NEW_SCENARIO_CS, // Expansion scenario to play.
+		SEL_NEW_SCENARIO_AM, // Expansion scenario to play.
+		SEL_START_NEW_GAME, // start a new game
+		SEL_LOAD_MISSION, // load a saved game
 		SEL_MULTIPLAYER_GAME, // play modem/null-modem/network game
-		SEL_INTRO,	      // couch-potato mode
-		SEL_EXIT,	      // exit to DOS
-		SEL_FAME,	      // view the hall o' fame
-		SEL_NONE,	      // placeholder default value
+		SEL_INTRO, // couch-potato mode
+		SEL_EXIT, // exit to DOS
+		SEL_FAME, // view the hall o' fame
+		SEL_NONE, // placeholder default value
 	};
-#else					     //	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 	enum {
-		SEL_TIMEOUT = -1,   // main menu timeout--go into attract mode
-		SEL_NEW_SCENARIO,   // Expansion scenario to play.
+		SEL_TIMEOUT = -1, // main menu timeout--go into attract mode
+		SEL_NEW_SCENARIO, // Expansion scenario to play.
 		SEL_START_NEW_GAME, // start a new game
 #if defined(WIN32) && !defined(INTERNET_OFF) // Denzil 5/1/98 - Internet play
 		SEL_INTERNET,
-#endif					     // WIN32
+#endif // WIN32
 		// #if defined(MPEGMOVIE) // Denzil 6/25/98
 		//		SEL_MOVIESETTINGS,
 		// #endif
-		SEL_LOAD_MISSION,     // load a saved game
+		SEL_LOAD_MISSION, // load a saved game
 		SEL_MULTIPLAYER_GAME, // play modem/null-modem/network game
-		SEL_INTRO,	      // couch-potato mode
-		SEL_EXIT,	      // exit to DOS
-		SEL_FAME,	      // view the hall o' fame
-		SEL_NONE,	      // placeholder default value
+		SEL_INTRO, // couch-potato mode
+		SEL_EXIT, // exit to DOS
+		SEL_FAME, // view the hall o' fame
+		SEL_NONE, // placeholder default value
 	};
-#endif					     //	FIXIT_VERSION_3
+#endif //	FIXIT_VERSION_3
 
 	bool gameloaded = false; // Has the game been loaded from the menu?
-	int selection;		 // the default selection
-	bool process = true;	 // false = break out of while loop
+	int selection; // the default selection
+	bool process = true; // false = break out of while loop
 	bool display = true;
 
 #ifdef DONGLE
@@ -529,7 +533,7 @@ bool Select_Game(bool fade) {
 
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	NewUnitsEnabled = SecretUnitsEnabled =
-	    0; // Assume new units disabled, unless specifically .INI enabled or multiplayer negotiations enable it.
+		0; // Assume new units disabled, unless specifically .INI enabled or multiplayer negotiations enable it.
 #endif
 
 #ifndef WOLAPI_INTEGRATION
@@ -614,7 +618,6 @@ bool Select_Game(bool fade) {
 	**	Main menu processing; only do this if we're not in editor mode.
 	*/
 	if (!Debug_Map) {
-
 		/*
 		**	Menu selection processing loop
 		*/
@@ -650,7 +653,6 @@ bool Select_Game(bool fade) {
 #endif
 
 		while (process) {
-
 			/*
 			**	Redraw the title page if needed
 			*/
@@ -732,14 +734,13 @@ bool Select_Game(bool fade) {
 			Call_Back();
 
 			switch (selection) {
-
 				/*
 				**	Pick an expansion scenario.
 				*/
 #ifdef FIXIT_VERSION_3
 			case SEL_NEW_SCENARIO_CS:
 			case SEL_NEW_SCENARIO_AM:
-#else  //	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 			case SEL_NEW_SCENARIO:
 #endif //	FIXIT_VERSION_3
 				Scen.CarryOverMoney = 0;
@@ -766,7 +767,7 @@ bool Select_Game(bool fade) {
 						break;
 					}
 				}
-#else		  //	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 				if (cs) {
 					cdcheck = 2;
@@ -878,8 +879,7 @@ bool Select_Game(bool fade) {
 					} else {
 #endif
 #ifdef FIXIT_VERSION_3
-						switch (WWMessageBox().Process(TXT_CHOOSE, TXT_ALLIES, TXT_CANCEL,
-									       TXT_SOVIET)) {
+						switch (WWMessageBox().Process(TXT_CHOOSE, TXT_ALLIES, TXT_CANCEL, TXT_SOVIET)) {
 						case 2:
 							Scen.Set_Scenario_Name("SCU01EA.INI");
 							break;
@@ -922,7 +922,7 @@ bool Select_Game(bool fade) {
 				process = false;
 				break;
 
-#ifndef FIXIT_VERSION_3			     //	Removed button from main menu.
+#ifndef FIXIT_VERSION_3 //	Removed button from main menu.
 #if defined(WIN32) && !defined(INTERNET_OFF) // Denzil 5/1/98 - Internet play
 			/*
 			** Internet game is requested
@@ -982,7 +982,6 @@ bool Select_Game(bool fade) {
 				if (!pWolapi) {
 #endif
 					switch (Session.Type) {
-
 					/*
 					**	If 'Session.Type' isn't already set up for a multiplayer game,
 					**	we must prompt the user for which type of multiplayer game
@@ -1011,12 +1010,9 @@ bool Select_Game(bool fade) {
 							//	If mission is Counterstrike, CS CD will be required. But
 							// aftermath units require AM CD.
 							bAftermathMultiplayer =
-							    Is_Aftermath_Installed() &&
-							    !Is_Mission_Counterstrike(Scen.ScenarioName);
+								Is_Aftermath_Installed() && !Is_Mission_Counterstrike(Scen.ScenarioName);
 							//	ajw I'll bet this was needed before also...
-							Session.ScenarioIsOfficial =
-							    Session.Scenarios[Session.Options.ScenarioIndex]
-								->Get_Official();
+							Session.ScenarioIsOfficial = Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
 #endif
 						}
 #endif // PG
@@ -1028,15 +1024,11 @@ bool Select_Game(bool fade) {
 						if (Session.Type != GAME_SKIRMISH && NullModem.Num_Connections()) {
 							NullModem.Init_Send_Queue();
 
-							if ((Session.Type == GAME_NULL_MODEM &&
-							     Session.ModemType == MODEM_NULL_HOST) ||
-							    (Session.Type == GAME_MODEM &&
-							     Session.ModemType == MODEM_DIALER)) {
-
+							if ((Session.Type == GAME_NULL_MODEM && Session.ModemType == MODEM_NULL_HOST) ||
+							    (Session.Type == GAME_MODEM && Session.ModemType == MODEM_DIALER)) {
 								if (!Com_Scenario_Dialog()) {
 									Session.Type = Select_Serial_Dialog();
-									if (Session.Type ==
-									    GAME_NORMAL) { // user hit Cancel
+									if (Session.Type == GAME_NORMAL) { // user hit Cancel
 										display = true;
 										selection = SEL_NONE;
 									}
@@ -1044,8 +1036,7 @@ bool Select_Game(bool fade) {
 							} else {
 								if (!Com_Show_Scenario_Dialog()) {
 									Session.Type = Select_Serial_Dialog();
-									if (Session.Type ==
-									    GAME_NORMAL) { // user hit Cancel
+									if (Session.Type == GAME_NORMAL) { // user hit Cancel
 										display = true;
 										selection = SEL_NONE;
 									}
@@ -1082,8 +1073,7 @@ bool Select_Game(bool fade) {
 							assert(PacketTransport != NULL);
 
 							if (PacketTransport->Init()) {
-								WWDebugString(
-								    "RA95 - About to read multiplayer settings.\n");
+								WWDebugString("RA95 - About to read multiplayer settings.\n");
 								Session.Read_MultiPlayer_Settings();
 
 								WWDebugString("RA95 - About to call Start_Server or "
@@ -1109,12 +1099,11 @@ bool Select_Game(bool fade) {
 							WWDebugString("RA95 - About to call Init_Network.\n");
 							Init_Network();
 
-#else  // WINSOCK_IPX
+#else // WINSOCK_IPX
 
 							WWDebugString("RA95 - About to initialise Winsock.\n");
 							if (Winsock.Init()) {
-								WWDebugString(
-								    "RA95 - About to read multiplayer settings.\n");
+								WWDebugString("RA95 - About to read multiplayer settings.\n");
 								Session.Read_MultiPlayer_Settings();
 								Server = PlanetWestwoodIsHost;
 
@@ -1136,13 +1125,11 @@ bool Select_Game(bool fade) {
 								WWDebugString("RA95 - Allocating scrap memory.\n");
 								char *temp_buffer = new char[1024];
 
-								WWDebugString(
-								    "RA95 - Creating timer class instance.\n");
+								WWDebugString("RA95 - Creating timer class instance.\n");
 								CountDownTimerClass ptimer;
 
 								WWDebugString("RA95 - Entering read loop.\n");
 								while (Winsock.Read(temp_buffer, 1024)) {
-
 									WWDebugString("RA95 - Discarding a packet.\n");
 									ptimer.Set(30, true);
 									while (ptimer.Time()) {
@@ -1165,8 +1152,7 @@ bool Select_Game(bool fade) {
 							Init_Network();
 
 							if (DDEServer.Get_MPlayer_Game_Info()) {
-								WWDebugString(
-								    "RA95 - About to call Read_Game_Options.\n");
+								WWDebugString("RA95 - About to call Read_Game_Options.\n");
 								Read_Game_Options(NULL);
 							} else {
 								Read_Game_Options("C&CSPAWN.INI");
@@ -1176,9 +1162,7 @@ bool Select_Game(bool fade) {
 							PacketTransport->Set_Broadcast_Address(PlanetWestwoodIPAddress);
 #endif // WINSOCK_IPX
 							if (PlanetWestwoodIsHost) {
-
-								WWDebugString(
-								    "RA95 - About to call Server_Remote_Connect.\n");
+								WWDebugString("RA95 - About to call Server_Remote_Connect.\n");
 								if (Server_Remote_Connect()) {
 									WWDebugString("RA95 - Server_Remote_Connect "
 										      "returned success.\n");
@@ -1190,22 +1174,20 @@ bool Select_Game(bool fade) {
 #ifdef WINSOCK_IPX
 									delete PacketTransport;
 									PacketTransport = NULL;
-#else  // WINSOCK_IPX
+#else // WINSOCK_IPX
 									Winsock.Close();
 #endif // WINSOCK_IPX
 									Session.Type = GAME_NORMAL;
 									selection = SEL_NONE;
-									DDEServer
-									    .Delete_MPlayer_Game_Info(); // Make sure we
-													 // dont go
-													 // round in an
-													 // infinite
-													 // loop
+									DDEServer.Delete_MPlayer_Game_Info(); // Make sure we
+										// dont go
+										// round in an
+										// infinite
+										// loop
 									break;
 								}
 							} else {
-								WWDebugString(
-								    "RA95 - About to call Client_Remote_Connect.\n");
+								WWDebugString("RA95 - About to call Client_Remote_Connect.\n");
 								if (Client_Remote_Connect()) {
 									WWDebugString("RA95 - Client_Remote_Connect "
 										      "returned success.\n");
@@ -1217,17 +1199,16 @@ bool Select_Game(bool fade) {
 #ifdef WINSOCK_IPX
 									delete PacketTransport;
 									PacketTransport = NULL;
-#else  // WINSOCK_IPX
+#else // WINSOCK_IPX
 									Winsock.Close();
 #endif // WINSOCK_IPX
 									Session.Type = GAME_NORMAL;
 									selection = SEL_NONE;
-									DDEServer
-									    .Delete_MPlayer_Game_Info(); // Make sure we
-													 // dont go
-													 // round in an
-													 // infinite
-													 // loop
+									DDEServer.Delete_MPlayer_Game_Info(); // Make sure we
+										// dont go
+										// round in an
+										// infinite
+										// loop
 									break;
 								}
 							}
@@ -1466,7 +1447,6 @@ bool Select_Game(bool fade) {
 			}
 		}
 	} else {
-
 		/*
 		** For Debug_Map (editor) mode to load scenario
 		*/
@@ -1571,19 +1551,20 @@ bool Select_Game(bool fade) {
 	**	Do this after loading the scenario, so the map's upper-left corner is
 	**	properly set.
 	*/
-	Session.Messages.Init(
-	    Map.TacPixelX, Map.TacPixelY, // x,y for messages
-	    6,				  // max # msgs
-	    MAX_MESSAGE_LENGTH - 14,	  // max msg length
-	    7 * RESFACTOR,		  // font height in pixels
-	    -1, -1,			  // x,y for edit line (appears above msgs)
-	    0,				  // BG		1,							// enable edit overflow
-	    20,				  // min,
-	    MAX_MESSAGE_LENGTH - 14,	  //    max for trimming overflow
+	Session.Messages.Init(Map.TacPixelX,
+			      Map.TacPixelY, // x,y for messages
+			      6, // max # msgs
+			      MAX_MESSAGE_LENGTH - 14, // max msg length
+			      7 * RESFACTOR, // font height in pixels
+			      -1,
+			      -1, // x,y for edit line (appears above msgs)
+			      0, // BG		1,							// enable edit overflow
+			      20, // min,
+			      MAX_MESSAGE_LENGTH - 14, //    max for trimming overflow
 #ifdef WIN32
-	    Lepton_To_Pixel(Map.TacLeptonWidth)); // Width in pixels of buffer
+			      Lepton_To_Pixel(Map.TacLeptonWidth)); // Width in pixels of buffer
 #else
-	    (320 - SIDEBAR_WID)); // Width in pixels of buffer
+			      (320 - SIDEBAR_WID)); // Width in pixels of buffer
 #endif
 
 	if (Session.Type != GAME_NORMAL && Session.Type != GAME_SKIRMISH && !Session.Play) {
@@ -1853,8 +1834,7 @@ bool Parse_Command_Line(int argc, char *argv[]) {
 		/*
 		**	Print usage text only if requested.
 		*/
-		if (stricmp("/?", string) == 0 || stricmp("-?", string) == 0 || stricmp("-h", string) == 0 ||
-		    stricmp("/h", string) == 0) {
+		if (stricmp("/?", string) == 0 || stricmp("-?", string) == 0 || stricmp("-h", string) == 0 || stricmp("/h", string) == 0) {
 			/*
 			**	Unrecognized command line parameter... Display usage
 			**	and then exit.
@@ -1906,7 +1886,6 @@ bool Parse_Command_Line(int argc, char *argv[]) {
 		}
 
 		switch (ob) {
-
 #ifdef VIRGIN_CHEAT_KEYS
 		case PARM_PLAYTEST:
 			Debug_Playtest = true;
@@ -2092,7 +2071,6 @@ bool Parse_Command_Line(int argc, char *argv[]) {
 		**	Enable TEN
 		*/
 		if (strstr(string, "TEN")) {
-
 #ifdef CHEAT_KEYS
 			Debug_Flag = true;
 			MonoClass::Enable();
@@ -2127,7 +2105,6 @@ bool Parse_Command_Line(int argc, char *argv[]) {
 		**	Enable MPATH
 		*/
 		if (strstr(string, "MPATH")) {
-
 #ifdef CHEAT_KEYS
 			Debug_Flag = true;
 			MonoClass::Enable();
@@ -2191,7 +2168,6 @@ bool Parse_Command_Line(int argc, char *argv[]) {
 			while (*string) {
 				char code = *string++;
 				switch (toupper(code)) {
-
 #ifdef CHEAT_KEYS
 				/*
 				**	Monochrome debug screen enable.
@@ -2380,8 +2356,8 @@ long Obfuscate(char const *string) {
 	**	unconventional attacks, the loss is limited to less than 10%.
 	*/
 	for (index = 0; index < length; index++) {
-		static unsigned char _lossbits[] = {0x00, 0x08, 0x00, 0x20, 0x00, 0x04, 0x10, 0x00};
-		static unsigned char _addbits[] = {0x10, 0x00, 0x00, 0x80, 0x40, 0x00, 0x00, 0x04};
+		static unsigned char _lossbits[] = { 0x00, 0x08, 0x00, 0x20, 0x00, 0x04, 0x10, 0x00 };
+		static unsigned char _addbits[] = { 0x10, 0x00, 0x00, 0x80, 0x40, 0x00, 0x00, 0x04 };
 
 		buffer[index] |= _addbits[index % (sizeof(_addbits) / sizeof(_addbits[0]))];
 		buffer[index] &= ~_lossbits[index % (sizeof(_lossbits) / sizeof(_lossbits[0]))];
@@ -2462,7 +2438,9 @@ long Obfuscate(char const *string) {
  *   03/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 extern "C" {
-long Calculate_CRC(void *buffer, long len) { return (CRCEngine()(buffer, len)); }
+long Calculate_CRC(void *buffer, long len) {
+	return (CRCEngine()(buffer, len));
+}
 }
 
 /***************************************************************************
@@ -2558,7 +2536,6 @@ void Init_Random(void) {
 	** back a recording, init the Seed to a random value.
 	*/
 	if (Session.Type == GAME_NORMAL || Session.Type == GAME_SKIRMISH && !Session.Play) {
-
 		/*
 		** Set the optional user-specified seed
 		*/
@@ -2641,7 +2618,6 @@ static void Init_Color_Remaps(void) {
 	Load_Picture("PALETTE.CPS", HidPage, HidPage, NULL, BM_DEFAULT);
 #endif
 	for (PlayerColorType pcolor = PCOLOR_FIRST; pcolor < PCOLOR_COUNT; pcolor++) {
-
 		unsigned char *ptr = ColorRemaps[pcolor].RemapTable;
 
 		for (int color = 0; color < 256; color++) {
@@ -2819,7 +2795,6 @@ static void Init_Expansion_Files(void) {
 	char scan_path[_MAX_PATH];
 
 	for (int p = 0; p < 100; p++) {
-
 		strcpy(search_path, path);
 		if (search_path[strlen(search_path) - 1] != '\\') {
 			strcat(search_path, "\\");
@@ -2988,7 +2963,6 @@ static void Init_CDROM_Access(void) {
 	**	Always try to look at the CD-ROM for data files.
 	*/
 	if (!CCFileClass::Is_There_Search_Drives()) {
-
 		/*
 		**	This call is needed because of a side effect of this function. It will examine the
 		**	CD-ROMs attached to this computer and set the appropriate status values. Without this
@@ -3038,7 +3012,6 @@ static void Init_CDROM_Access(void) {
 
 		RequiredCD = -1;
 	} else {
-
 		/*
 		** If there are search drives specified then all files are to be
 		** considered local.
@@ -3190,7 +3163,7 @@ static void Init_Secondary_Mixfiles(void) {
 	**	Inform the file system of the various MIX files.
 	*/
 	ConquerMix = new MFCD("CONQUER.MIX", &FastKey); // Cached.
-							//	new MFCD("TRANSIT.MIX", &FastKey);
+		//	new MFCD("TRANSIT.MIX", &FastKey);
 
 	if (GeneralMix == NULL)
 		GeneralMix = new MFCD("GENERAL.MIX", &FastKey); // Never cached.
@@ -3213,10 +3186,10 @@ static void Init_Secondary_Mixfiles(void) {
 	**	These are sound card specific, but the install program would have
 	**	copied the correct versions to the hard drive.
 	*/
-	new MFCD("SPEECH.MIX", &FastKey);  // Never cached.
-	new MFCD("SOUNDS.MIX", &FastKey);  // Cached.
+	new MFCD("SPEECH.MIX", &FastKey); // Never cached.
+	new MFCD("SOUNDS.MIX", &FastKey); // Cached.
 	new MFCD("RUSSIAN.MIX", &FastKey); // Cached.
-	new MFCD("ALLIES.MIX", &FastKey);  // Cached.
+	new MFCD("ALLIES.MIX", &FastKey); // Cached.
 }
 
 /***********************************************************************************************
@@ -3296,8 +3269,7 @@ static void Bootstrap(void) {
 #ifdef WIN32
 	Keyboard->Clear();
 #else
-	Keyboard_Attributes_Off(BREAKON | SCROLLLOCKON | TRACKEXT | PAUSEON | CTRLSON | CTRLCON | FILTERONLY |
-				TASKSWITCHABLE);
+	Keyboard_Attributes_Off(BREAKON | SCROLLLOCKON | TRACKEXT | PAUSEON | CTRLSON | CTRLCON | FILTERONLY | TASKSWITCHABLE);
 	Keyboard_Attributes_On(PASSBREAKS);
 	Keyboard->Clear();
 #endif
@@ -3423,7 +3395,7 @@ static void Init_Authorization(void) {
 	Load_Title_Page();
 #ifdef WIN32
 	Wait_Vert_Blank();
-#else  // WIN32
+#else // WIN32
 	Init_Delay();
 	Wait_Vert_Blank(VertBlank);
 #endif // WIN32
@@ -3726,7 +3698,9 @@ bool Determine_If_Using_DVD() {
 }
 
 //***********************************************************************************************
-bool Using_DVD() { return bUsingDVD; }
+bool Using_DVD() {
+	return bUsingDVD;
+}
 
 #endif
 

@@ -57,7 +57,9 @@
  * HISTORY:                                                                                    *
  *   05/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TemplateClass::Init(void) { Templates.Free_All(); }
+void TemplateClass::Init(void) {
+	Templates.Free_All();
+}
 
 /***********************************************************************************************
  * TemplateClass::Mark -- Lifts or drops a template object.                                    *
@@ -83,7 +85,6 @@ bool TemplateClass::Mark(MarkType mark) {
 	static bool noup = false;
 	void const *iset = Get_Image_Data();
 	if (iset && ObjectClass::Mark(mark)) {
-
 		void *map = Get_Icon_Set_Map(iset);
 
 		for (int y = 0; y < Class->Height; y++) {
@@ -217,8 +218,7 @@ void TemplateClass::operator delete(void *ptr) {
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-TemplateClass::TemplateClass(TemplateType type, CELL pos)
-    : ObjectClass(RTTI_TEMPLATE, Templates.ID(this)), Class(TemplateTypes.Ptr((int)type)) {
+TemplateClass::TemplateClass(TemplateType type, CELL pos) : ObjectClass(RTTI_TEMPLATE, Templates.ID(this)), Class(TemplateTypes.Ptr((int)type)) {
 	if (pos != -1) {
 		Unlimbo(Cell_Coord(pos));
 	}

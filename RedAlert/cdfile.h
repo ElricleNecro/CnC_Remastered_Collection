@@ -60,19 +60,29 @@ public:
 	virtual int Open(char const *filename, int rights = READ);
 	virtual int Open(int rights = READ);
 
-	void Searching(int on) { IsDisabled = !on; };
+	void Searching(int on) {
+		IsDisabled = !on;
+	};
 
-	static bool Is_There_Search_Drives(void) { return (First != NULL); };
+	static bool Is_There_Search_Drives(void) {
+		return (First != NULL);
+	};
 	static int Set_Search_Drives(char *pathlist);
 	static void Add_Search_Drive(char *path);
 	static void Clear_Search_Drives(void);
 	static void Refresh_Search_Drives(void);
 	static void Set_CD_Drive(int drive);
-	static int Get_CD_Drive(void) { return (CurrentCDDrive); };
-	static int Get_Last_CD_Drive(void) { return (LastCDDrive); };
+	static int Get_CD_Drive(void) {
+		return (CurrentCDDrive);
+	};
+	static int Get_Last_CD_Drive(void) {
+		return (LastCDDrive);
+	};
 
 	// RawPath will overflow if we keep setting the path. ST - 1/23/2019 11:12AM
-	static void Reset_Raw_Path(void) { RawPath[0] = 0; }
+	static void Reset_Raw_Path(void) {
+		RawPath[0] = 0;
+	}
 
 	// Need to access the paths. ST - 3/15/2019 2:14PM
 	static const char *Get_Search_Path(int index);
@@ -88,7 +98,7 @@ private:
 	**	path. There can be many such search paths available.
 	*/
 	typedef struct {
-		void *Next;	  // Pointer to next search record.
+		void *Next; // Pointer to next search record.
 		char const *Path; // Pointer to path string.
 	} SearchDriveType;
 

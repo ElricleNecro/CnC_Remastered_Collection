@@ -48,10 +48,12 @@
 */
 class Surface {
 public:
-	Surface(void) : Width(0), Height(0), Pitch(0) {}
+	Surface(void) : Width(0), Height(0), Pitch(0) {
+	}
 	Surface(int w, int h, Buffer const *buffer = NULL, int pitch = 0);
 	Surface(Surface const &surface, int x, int y, int w, int h);
-	virtual ~Surface(void) {}
+	virtual ~Surface(void) {
+	}
 
 	/*
 	**	Basic manipulation routines for copying entire surfaces or
@@ -72,14 +74,26 @@ public:
 	**	Basic query functions. Support routines that will manipulate the underlying
 	**	image data will require access to this information.
 	*/
-	void *Get_Buffer(void) const { return (SurfaceData.Get_Buffer()); }
-	int Get_Size(void) const { return (Bytes_Per_Line() * Height); }
-	int Get_Width(void) const { return (Width); }
-	int Get_Height(void) const { return (Height); }
-	int Get_Pitch(void) const { return (Pitch); }
+	void *Get_Buffer(void) const {
+		return (SurfaceData.Get_Buffer());
+	}
+	int Get_Size(void) const {
+		return (Bytes_Per_Line() * Height);
+	}
+	int Get_Width(void) const {
+		return (Width);
+	}
+	int Get_Height(void) const {
+		return (Height);
+	}
+	int Get_Pitch(void) const {
+		return (Pitch);
+	}
 
 protected:
-	int Bytes_Per_Line(void) const { return (Width + Pitch); }
+	int Bytes_Per_Line(void) const {
+		return (Width + Pitch);
+	}
 
 	/*
 	**	This is the pointer to the surface memory. Sometimes this could be allocated memory

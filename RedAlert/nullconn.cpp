@@ -67,17 +67,20 @@
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
 NullModemConnClass::NullModemConnClass(int numsend, int numreceive, int maxlen, unsigned short magicnum)
-    : ConnectionClass(numsend, numreceive, maxlen, magicnum,
-		      60,   // Retry Delta Time
-		      -1,   // Max Retries (-1 means ignore this timeout parameter)
-		      1200) // Timeout: 20 seconds
+	: ConnectionClass(numsend,
+			  numreceive,
+			  maxlen,
+			  magicnum,
+			  60, // Retry Delta Time
+			  -1, // Max Retries (-1 means ignore this timeout parameter)
+			  1200) // Timeout: 20 seconds
 {
 	/*------------------------------------------------------------------------
 	Pre-set the port value to NULL, so Send won't send until we've been Init'd
 	------------------------------------------------------------------------*/
 #ifdef WIN32
 	PortHandle = NULL;
-#else  // WIN32
+#else // WIN32
 	Port = NULL;
 #endif // WIN32
 	/*------------------------------------------------------------------------
@@ -104,7 +107,9 @@ NullModemConnClass::NullModemConnClass(int numsend, int numreceive, int maxlen, 
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-NullModemConnClass::~NullModemConnClass() { delete[] SendBuf; } /* end of ~NullModemConnClass */
+NullModemConnClass::~NullModemConnClass() {
+	delete[] SendBuf;
+} /* end of ~NullModemConnClass */
 
 /***************************************************************************
  * NullModemConnClass::Init -- hardware-dependent initialization				*
@@ -129,7 +134,7 @@ void NullModemConnClass::Init(HANDLE port_handle) {
 	ConnectionClass::Init();
 	PortHandle = port_handle;
 }
-#else  // WIN32
+#else // WIN32
 void NullModemConnClass::Init(PORT *port) {
 	ConnectionClass::Init();
 	Port = port;
@@ -171,7 +176,7 @@ int NullModemConnClass::Send(char *buf, int buflen, void *, int) {
 	if (PortHandle == NULL)
 		return (false);
 
-#else  // WIN32
+#else // WIN32
 	int status;
 	if (Port == NULL) {
 		return (0);
@@ -203,7 +208,7 @@ int NullModemConnClass::Send(char *buf, int buflen, void *, int) {
 	SerialPort->Write_To_Serial_Port((unsigned char *)SendBuf, (int)sendlen);
 	return (true);
 
-#else  // WIN32
+#else // WIN32
 	status = WriteBuffer(Port, SendBuf, sendlen);
 	if (status == ASSUCCESS) {
 		return (1);

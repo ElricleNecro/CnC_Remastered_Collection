@@ -34,9 +34,9 @@
  *   BlowStraw::Key -- Submit a key to the Blowfish straw.                                     *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "blwstraw.h"
 #include <assert.h>
 #include <string.h>
+#include "blwstraw.h"
 
 /***********************************************************************************************
  * BlowStraw::Get -- Fetch a block of data from the straw.                                     *
@@ -77,7 +77,6 @@ int BlowStraw::Get(void *source, int slen) {
 	int total = 0;
 
 	while (slen > 0) {
-
 		/*
 		**	If there are any left over bytes in the buffer, pass them
 		**	through first.

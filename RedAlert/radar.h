@@ -59,14 +59,15 @@ public:
 	/*
 	** Initialization
 	*/
-	virtual void One_Time(void);   // One-time inits
+	virtual void One_Time(void); // One-time inits
 	virtual void Init_Clear(void); // Clears all to known state
 
 	virtual void Flag_Cell(CELL cell);
-	virtual bool
-	Map_Cell(CELL cell, HouseClass *house, bool check_radar_spied = true,
-		 bool and_for_allies = true); // Added check_radar_spied parameter to prevent recursion. ST - 8/6/2019
-					      // 10:16AM. Added and_for_allies ST - 10/31/2019 1:18PM
+	virtual bool Map_Cell(CELL cell,
+			      HouseClass *house,
+			      bool check_radar_spied = true,
+			      bool and_for_allies = true); // Added check_radar_spied parameter to prevent recursion. ST - 8/6/2019
+		// 10:16AM. Added and_for_allies ST - 10/31/2019 1:18PM
 	virtual bool Jam_Cell(CELL cell, HouseClass *house);
 	virtual bool UnJam_Cell(CELL cell, HouseClass *house);
 	virtual CELL Click_Cell_Calc(int x, int y) const;
@@ -102,11 +103,17 @@ public:
 	** Toggles player names on & off
 	*/
 	void Player_Names(bool on);
-	int Is_Player_Names(void) { return IsPlayerNames; }
-	bool Spying_On_House(void) { return IsHouseSpy; }
+	int Is_Player_Names(void) {
+		return IsPlayerNames;
+	}
+	bool Spying_On_House(void) {
+		return IsHouseSpy;
+	}
 	void Draw_Names(void);
 	bool Draw_House_Info(void);
-	int Is_Zoomed(void) { return IsZoomed; }
+	int Is_Zoomed(void) {
+		return IsZoomed;
+	}
 	bool Get_Jammed(HousesType house) const;
 	bool Get_Jammed(HouseClass *player) const;
 	void Set_Jammed(HousesType house, bool jam);
@@ -166,8 +173,7 @@ protected:
 	*/
 	class RTacticalClass : public GadgetClass {
 	public:
-		RTacticalClass(void)
-		    : GadgetClass(0, 0, 0, 0, LEFTPRESS | LEFTRELEASE | LEFTHELD | LEFTUP | RIGHTPRESS, true) {};
+		RTacticalClass(void) : GadgetClass(0, 0, 0, 0, LEFTPRESS | LEFTRELEASE | LEFTHELD | LEFTUP | RIGHTPRESS, true) {};
 
 	protected:
 		virtual int Action(unsigned flags, KeyNumType &key);

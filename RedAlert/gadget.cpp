@@ -77,7 +77,7 @@ GadgetClass *GadgetClass::Focused = 0;
 /*
 ** This points to the current color scheme for drawing all gadgets.
 */
-static RemapControlType _GreyScheme = {15};
+static RemapControlType _GreyScheme = { 15 };
 RemapControlType *GadgetClass::ColorScheme = &_GreyScheme;
 
 /***********************************************************************************************
@@ -103,7 +103,7 @@ RemapControlType *GadgetClass::ColorScheme = &_GreyScheme;
  *   01/03/1995 MML : Created.                                                                 *
  *=============================================================================================*/
 GadgetClass::GadgetClass(int x, int y, int w, int h, unsigned flags, int sticky)
-    : X(x), Y(y), Width(w), Height(h), IsToRepaint(false), IsSticky(sticky), IsDisabled(false), Flags(flags) {
+	: X(x), Y(y), Width(w), Height(h), IsToRepaint(false), IsSticky(sticky), IsDisabled(false), Flags(flags) {
 	if (IsSticky) {
 		Flags |= LEFTPRESS | LEFTRELEASE;
 	}
@@ -125,8 +125,9 @@ GadgetClass::GadgetClass(int x, int y, int w, int h, unsigned flags, int sticky)
  *   08/01/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 GadgetClass::GadgetClass(GadgetClass const &gadget)
-    : X(gadget.X), Y(gadget.Y), Width(gadget.Width), Height(gadget.Height), IsToRepaint(gadget.IsToRepaint),
-      IsSticky(gadget.IsSticky), IsDisabled(gadget.IsDisabled), Flags(gadget.Flags) {}
+	: X(gadget.X), Y(gadget.Y), Width(gadget.Width), Height(gadget.Height), IsToRepaint(gadget.IsToRepaint), IsSticky(gadget.IsSticky),
+	  IsDisabled(gadget.IsDisabled), Flags(gadget.Flags) {
+}
 
 /***********************************************************************************************
  * GadgetClass::~GadgetClass -- Destructor for gadget object.                                  *
@@ -190,7 +191,6 @@ int GadgetClass::Clicked_On(KeyNumType &key, unsigned flags, int mousex, int mou
 	**	buttons.
 	*/
 	if (this == StuckOn || (flags & KEYBOARD) || (flags && (mousex - X) < Width && (mousey - Y) < Height)) {
-
 		return (Action(flags, key));
 	}
 	return (false);
@@ -273,7 +273,9 @@ GadgetClass *GadgetClass::Remove(void) {
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-GadgetClass *GadgetClass::Get_Next(void) const { return (GadgetClass *)LinkClass::Get_Next(); }
+GadgetClass *GadgetClass::Get_Next(void) const {
+	return (GadgetClass *)LinkClass::Get_Next();
+}
 
 /***********************************************************************************************
  * GadgetClass::Get_Prev -- Fetches a pointer to the previous gadget.                          *
@@ -290,7 +292,9 @@ GadgetClass *GadgetClass::Get_Next(void) const { return (GadgetClass *)LinkClass
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-GadgetClass *GadgetClass::Get_Prev(void) const { return (GadgetClass *)LinkClass::Get_Prev(); }
+GadgetClass *GadgetClass::Get_Prev(void) const {
+	return (GadgetClass *)LinkClass::Get_Prev();
+}
 
 /***********************************************************************************************
  * GadgetClass::Delete_List -- Deletes all gadget objects in list.                             *
@@ -456,8 +460,7 @@ KeyNumType GadgetClass::Input(void) {
 		** time to create a screen shot using the PCX code (if it works)
 		*/
 		if (!Debug_MotionCapture) {
-			GraphicBufferClass temp_page(SeenBuff.Get_Width(), SeenBuff.Get_Height(), NULL,
-						     SeenBuff.Get_Width() * SeenBuff.Get_Height());
+			GraphicBufferClass temp_page(SeenBuff.Get_Width(), SeenBuff.Get_Height(), NULL, SeenBuff.Get_Width() * SeenBuff.Get_Height());
 			CDFileClass file;
 			char filename[30];
 
@@ -527,7 +530,6 @@ KeyNumType GadgetClass::Input(void) {
 	**	gadget that is flagged for LEFTUP or RIGHTUP.
 	*/
 	if (!key) {
-
 		/*
 		**	Check for the mouse being held down. We can't use the normal input system
 		**	for this, so we must examine the actual current state of the mouse
@@ -560,7 +562,6 @@ KeyNumType GadgetClass::Input(void) {
 			oldstuck->Draw_Me(false);
 		}
 	} else {
-
 		/*
 		**	If there is a gadget that has the keyboard focus, then route all keyboard
 		**	events to it.
@@ -572,7 +573,6 @@ KeyNumType GadgetClass::Input(void) {
 				Focused->Draw_Me(false);
 			}
 		} else {
-
 			/*
 			**	Sweep through all the buttons in the chain and pass the current button state
 			**	and keyboard input data to them. These routines will detect whether they should
@@ -582,20 +582,17 @@ KeyNumType GadgetClass::Input(void) {
 			*/
 			GadgetClass *next_button = this;
 			while (next_button != NULL) {
-
 				/*
 				**	Maybe redraw the button if it needs to or is being forced to redraw.
 				*/
 				next_button->Draw_Me(forced);
 
 				if (!next_button->IsDisabled) {
-
 					/*
 					**	Process this button. If the button was recognized and action was
 					**	performed, then bail from further processing (speed reasons?).
 					*/
 					if (next_button->Clicked_On(key, flags, mousex, mousey)) {
-
 						/*
 						**	Some buttons will require repainting when they perform some
 						*action. *	Do so at this time.
@@ -662,7 +659,9 @@ ControlClass *GadgetClass::Extract_Gadget(unsigned id) {
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GadgetClass::Flag_To_Redraw(void) { IsToRepaint = true; }
+void GadgetClass::Flag_To_Redraw(void) {
+	IsToRepaint = true;
+}
 
 /***********************************************************************************************
  * GadgetClass::Sticky_Process -- Handles the sticky flag processing.                          *
@@ -753,7 +752,9 @@ void GadgetClass::Clear_Focus(void) {
  * HISTORY:                                                                                    *
  *   01/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool GadgetClass::Has_Focus(void) { return (this == Focused); }
+bool GadgetClass::Has_Focus(void) {
+	return (this == Focused);
+}
 
 /***********************************************************************************************
  * GadgetClass::Is_List_To_Redraw -- tells if any gadget in the list needs redrawing           *

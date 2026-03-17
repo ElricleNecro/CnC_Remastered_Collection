@@ -63,8 +63,8 @@
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 PKStraw::PKStraw(CryptControl control, RandomStraw &rnd)
-    : IsGettingKey(true), Rand(rnd), BF((control == ENCRYPT) ? BlowStraw::ENCRYPT : BlowStraw::DECRYPT),
-      Control(control), CipherKey(NULL), Counter(0), BytesLeft(0) {
+	: IsGettingKey(true), Rand(rnd), BF((control == ENCRYPT) ? BlowStraw::ENCRYPT : BlowStraw::DECRYPT), Control(control), CipherKey(NULL),
+	  Counter(0), BytesLeft(0) {
 	Straw::Get_From(BF);
 }
 
@@ -168,9 +168,7 @@ int PKStraw::Get(void *source, int length) {
 	**	modification (the blowfish straw will process the data).
 	*/
 	if (IsGettingKey) {
-
 		if (Control == DECRYPT) {
-
 			/*
 			**	Retrieve the pk encrypted blowfish key block.
 			*/
@@ -192,7 +190,6 @@ int PKStraw::Get(void *source, int length) {
 			BF.Key(Buffer, BLOWFISH_KEY_SIZE);
 
 		} else {
-
 			/*
 			**	Generate the blowfish key by using random numbers.
 			*/

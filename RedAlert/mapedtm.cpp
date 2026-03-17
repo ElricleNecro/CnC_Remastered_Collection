@@ -68,7 +68,6 @@ void MapEditClass::Handle_Teams(char const *caption) {
 	**	- Keep looping until 'OK'
 	*/
 	for (;;) {
-
 		/*
 		**	Select team
 		*/
@@ -80,7 +79,6 @@ void MapEditClass::Handle_Teams(char const *caption) {
 		if (rc == 0) {
 			break;
 		} else {
-
 			/*
 			**	'Edit'
 			*/
@@ -92,12 +90,10 @@ void MapEditClass::Handle_Teams(char const *caption) {
 				Flag_To_Redraw(true);
 				Render();
 			} else {
-
 				/*
 				**	'New'
 				*/
 				if (rc == 2) {
-
 					/*
 					**	Create a new team
 					*/
@@ -116,7 +112,6 @@ void MapEditClass::Handle_Teams(char const *caption) {
 						Flag_To_Redraw(true);
 						Render();
 					} else {
-
 						/*
 						**	Unable to create; issue warning
 						*/
@@ -126,7 +121,6 @@ void MapEditClass::Handle_Teams(char const *caption) {
 						Render();
 					}
 				} else {
-
 					/*
 					**	'Delete'
 					*/
@@ -184,10 +178,9 @@ int MapEditClass::Select_Team(char const *) {
 	enum {
 		D_DIALOG_W = 400, // dialog width
 		D_DIALOG_H = 250, // dialog height
-		D_DIALOG_X = 0,	  // centered x-coord
-		D_DIALOG_Y =
-		    0, // centered y-coord
-		       //		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),		// coord of x-center
+		D_DIALOG_X = 0, // centered x-coord
+		D_DIALOG_Y = 0, // centered y-coord
+		//		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),		// coord of x-center
 
 		D_TXT8_H = 11, // ht of 8-pt text
 		D_MARGIN = 25, // margin width/height
@@ -237,10 +230,10 @@ int MapEditClass::Select_Team(char const *) {
 	/*
 	**	Dialog variables
 	*/
-	bool edit_team = false;		       // true = user wants to edit
-	bool new_team = false;		       // true = user wants to new
-	bool del_team = false;		       // true = user wants to new
-	static int tabs[] = {35, 60, 80, 100}; // list box tab stops
+	bool edit_team = false; // true = user wants to edit
+	bool new_team = false; // true = user wants to new
+	bool del_team = false; // true = user wants to new
+	static int tabs[] = { 35, 60, 80, 100 }; // list box tab stops
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
@@ -248,8 +241,13 @@ int MapEditClass::Select_Team(char const *) {
 	*/
 	GadgetClass *commands = NULL; // the button list
 
-	TListClass<CCPtr<TeamTypeClass>> teamlist(TEAM_LIST, D_LIST_X, D_LIST_Y, D_LIST_W, D_LIST_H,
-						  TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+	TListClass<CCPtr<TeamTypeClass>> teamlist(TEAM_LIST,
+						  D_LIST_X,
+						  D_LIST_Y,
+						  D_LIST_W,
+						  D_LIST_H,
+						  TPF_EFNT | TPF_NOSHADOW,
+						  MFCD::Retrieve("EBTN-UP.SHP"),
 						  MFCD::Retrieve("EBTN-DN.SHP"));
 
 	TextButtonClass editbtn(BUTTON_EDIT, "Edit", TPF_EBUTTON, D_EDIT_X, D_EDIT_Y, D_EDIT_W);
@@ -304,7 +302,6 @@ int MapEditClass::Select_Team(char const *) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback
 		*/
@@ -470,12 +467,12 @@ int MapEditClass::Team_Members(HousesType house) {
 	*/
 	typedef enum { REDRAW_NONE = 0, REDRAW_BUTTONS, REDRAW_BACKGROUND, REDRAW_ALL = REDRAW_BACKGROUND } RedrawType;
 	RedrawType display; // requested redraw level
-	bool process;	    // loop while true
+	bool process; // loop while true
 
 	/*
 	**	Dialog variables
 	*/
-	KeyNumType input;    // user input
+	KeyNumType input; // user input
 	bool cancel = false; // true = user cancels
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
@@ -483,9 +480,9 @@ int MapEditClass::Team_Members(HousesType house) {
 	**	Team display variables
 	*/
 	const TechnoTypeClass **teamclass; // array of team classes
-	int *teamcount;			   // array of class counts
-	int numcols;			   // # units displayed horizontally
-	int numrows;			   // # units displayed vertically
+	int *teamcount; // array of class counts
+	int numcols; // # units displayed horizontally
+	int numrows; // # units displayed vertically
 
 	/*
 	**	Dialog dimensions.
@@ -495,9 +492,9 @@ int MapEditClass::Team_Members(HousesType house) {
 	int msg_y; // y-coord for object names
 
 	int curclass = -1; // current index into 'teamclass'; can be invalid!
-			   // (is based on current mouse position)
-	int numclasses;	   // current # classes in the team (limited to <=5)
-	int maxclasses;	   // max # classes available
+		// (is based on current mouse position)
+	int numclasses; // current # classes in the team (limited to <=5)
+	int maxclasses; // max # classes available
 	int i, j;
 
 	/*
@@ -505,7 +502,7 @@ int MapEditClass::Team_Members(HousesType house) {
 	*/
 	int lheld = 0;
 	int rheld = 0;
-	long tdelay[3] = {5, 20, 0};
+	long tdelay[3] = { 5, 20, 0 };
 	int tindex = 0;
 	long heldtime;
 
@@ -515,8 +512,7 @@ int MapEditClass::Team_Members(HousesType house) {
 	ControlClass *commands;
 
 	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW, D_CANCEL_X,
-				  D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
 
 	/*
 	**	Set up the team data arrays (ObjectTypeClass pointers & count)
@@ -572,12 +568,10 @@ int MapEditClass::Team_Members(HousesType house) {
 	**	Loop through all classes in the team.
 	*/
 	for (i = 0; i < CurTeam->ClassCount; i++) {
-
 		/*
 		**	Find this class in our array.
 		*/
 		for (j = 0; j < maxclasses; j++) {
-
 			/*
 			**	Set the count; detect a match between the team's class & the
 			**	'teamclass' array entry by comparing the actual pointers; typeid
@@ -638,7 +632,6 @@ int MapEditClass::Team_Members(HousesType house) {
 	display = REDRAW_ALL;
 	process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -648,13 +641,11 @@ int MapEditClass::Team_Members(HousesType house) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			/*
 			**	Display the dialog box.
 			*/
 			Hide_Mouse();
 			if (display >= REDRAW_BACKGROUND) {
-
 				/*
 				**	Display the constant background of this dialog.
 				*/
@@ -665,7 +656,6 @@ int MapEditClass::Team_Members(HousesType house) {
 				**	Draw the objects.
 				*/
 				for (i = 0; i < maxclasses; i++) {
-
 					/*
 					**	Display the object along with any count value for it.
 					*/
@@ -673,8 +663,11 @@ int MapEditClass::Team_Members(HousesType house) {
 				}
 
 				if ((unsigned)curclass < maxclasses) {
-					Fancy_Text_Print(teamclass[curclass]->Full_Name(), D_DIALOG_X + D_DIALOG_W / 2,
-							 msg_y, &ColorRemaps[PCOLOR_BROWN], TBLACK,
+					Fancy_Text_Print(teamclass[curclass]->Full_Name(),
+							 D_DIALOG_X + D_DIALOG_W / 2,
+							 msg_y,
+							 &ColorRemaps[PCOLOR_BROWN],
+							 TBLACK,
 							 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
 				}
 			}
@@ -698,7 +691,6 @@ int MapEditClass::Team_Members(HousesType house) {
 		**	Process input.
 		*/
 		switch (input) {
-
 		/*
 		**	Mouse buttons set or clear 'held' values
 		*/
@@ -745,26 +737,27 @@ int MapEditClass::Team_Members(HousesType house) {
 			/*
 			**	Compute new 'curclass' based on mouse position.
 			*/
-			i = (Get_Mouse_X() - 32 - D_DIALOG_X) / D_PICTURE_W +
-			    ((Get_Mouse_Y() - (dlg_y + 8 + 11)) / D_ROW_H) * numcols;
+			i = (Get_Mouse_X() - 32 - D_DIALOG_X) / D_PICTURE_W + ((Get_Mouse_Y() - (dlg_y + 8 + 11)) / D_ROW_H) * numcols;
 
 			/*
 			**	If it's changed, update class label.
 			*/
 			if (i != curclass) {
-
 				curclass = i;
 
 				/*
 				**	Clear out the previously printed name of the item.
 				*/
 				Hide_Mouse();
-				LogicPage->Fill_Rect(D_DIALOG_X + 32, msg_y, D_DIALOG_X + D_DIALOG_W - 64,
-						     msg_y + D_TXT6_H, BLACK);
+				LogicPage->Fill_Rect(D_DIALOG_X + 32, msg_y, D_DIALOG_X + D_DIALOG_W - 64, msg_y + D_TXT6_H, BLACK);
 
 				if ((unsigned)curclass < maxclasses) {
-					Fancy_Text_Print(teamclass[curclass]->Full_Name(), D_DIALOG_X + D_DIALOG_W / 2,
-							 msg_y, scheme, TBLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
+					Fancy_Text_Print(teamclass[curclass]->Full_Name(),
+							 D_DIALOG_X + D_DIALOG_W / 2,
+							 msg_y,
+							 scheme,
+							 TBLACK,
+							 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
 				}
 
 				/*
@@ -783,7 +776,6 @@ int MapEditClass::Team_Members(HousesType house) {
 		**	current class.
 		*/
 		if (lheld) {
-
 			/*
 			**	The first time in, TickCount - heldtime will be larger than
 			**	tdelay[2], so we increment the count immediately; then, we decrement
@@ -800,7 +792,6 @@ int MapEditClass::Team_Members(HousesType house) {
 				**	Detect addition of a new class.
 				*/
 				if (teamcount[curclass] == 0) {
-
 					/*
 					**	Don't allow more classes than we can handle.
 					*/
@@ -818,9 +809,7 @@ int MapEditClass::Team_Members(HousesType house) {
 			}
 
 		} else {
-
 			if (rheld) {
-
 				/*
 				**	The first time in, TickCount - heldtime will be larger than
 				**	tdelay[2], so we increment the count immediately; then, we decrement

@@ -48,7 +48,8 @@ class TriggerTypeClass;
 */
 class CCINIClass : public INIClass {
 public:
-	CCINIClass(void) : IsDigestPresent(false) {}
+	CCINIClass(void) : IsDigestPresent(false) {
+	}
 
 	bool Load(FileClass &file, bool withdigest);
 	int Load(Straw &file, bool withdigest);

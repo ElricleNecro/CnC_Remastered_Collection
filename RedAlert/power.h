@@ -61,8 +61,7 @@ protected:
 	*/
 	class PowerButtonClass : public GadgetClass {
 	public:
-		PowerButtonClass(void)
-		    : GadgetClass(0, 0, 0, 0, LEFTPRESS | LEFTRELEASE | LEFTHELD | LEFTUP | RIGHTPRESS, true) {};
+		PowerButtonClass(void) : GadgetClass(0, 0, 0, 0, LEFTPRESS | LEFTRELEASE | LEFTHELD | LEFTUP | RIGHTPRESS, true) {};
 
 	protected:
 		virtual int Action(unsigned flags, KeyNumType &key);

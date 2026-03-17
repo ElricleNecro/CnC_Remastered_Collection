@@ -250,14 +250,14 @@ void MPGSettings::Dialog(void) {
 	//	Redraw values: in order from "top" to "bottom" layer of the dialog
 	typedef enum {
 		REDRAW_NONE = 0,
-		REDRAW_BUTTONS,	   // includes map interior & coord values
+		REDRAW_BUTTONS, // includes map interior & coord values
 		REDRAW_BACKGROUND, // includes box, map bord, key, coord labels, btns
 		REDRAW_ALL = REDRAW_BACKGROUND
 	} RedrawType;
 
 	//	Dialog variables:
-	KeyNumType input;   // input from user
-	bool process;	    // loop while true
+	KeyNumType input; // input from user
+	bool process; // loop while true
 	RedrawType display; // true = re-draw everything
 	int selection;
 	bool pressed;
@@ -273,11 +273,16 @@ void MPGSettings::Dialog(void) {
 
 	TextButtonClass testbtn(BUTTON_TEST, "Test", TPF_BUTTON, d_test_x, d_test_y, d_test_w, d_test_h);
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w,
-				  d_cancel_h);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 
-	ListClass method(BUTTON_METHOD, d_method_x, d_method_y, d_method_w, d_method_h, TPF_TEXT,
-			 MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass method(BUTTON_METHOD,
+			 d_method_x,
+			 d_method_y,
+			 d_method_w,
+			 d_method_h,
+			 TPF_TEXT,
+			 MFCD::Retrieve("BTN-UP.SHP"),
+			 MFCD::Retrieve("BTN-DN.SHP"));
 
 	//	Initialize
 	Set_Logic_Page(SeenBuff);

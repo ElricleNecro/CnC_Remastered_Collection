@@ -114,7 +114,7 @@ NullModemClass::NullModemClass(int numsend, int numreceive, int maxlen, unsigned
 	------------------------------------------------------------------------*/
 #ifdef WIN32
 	PortHandle = NULL;
-#else  // WIN32
+#else // WIN32
 	Port = NULL;
 #endif // WIN32
 
@@ -133,14 +133,14 @@ NullModemClass::NullModemClass(int numsend, int numreceive, int maxlen, unsigned
 
 	OldIRQPri = -1;
 
-	ModemVerboseOn = false;	  // default true
-	ModemEchoOn = false;	  // default true
+	ModemVerboseOn = false; // default true
+	ModemEchoOn = false; // default true
 	ModemWaitCarrier = 50000; // default 50 * 1000ms = 50 secs
 	ModemCarrierDetect = 600; // default 6  * 100ms  = .6 secs
-	ModemCarrierLoss = 1400;  // default 14 * 100ms  = 1.4 secs
+	ModemCarrierLoss = 1400; // default 14 * 100ms  = 1.4 secs
 	ModemHangupDelay = 20000; // default 20 * 1000ms = 20 secs
-	ModemGuardTime = 1000;	  // default 50 * 20ms   = 1 sec
-	ModemEscapeCode = '+';	  // default ASCII 43
+	ModemGuardTime = 1000; // default 50 * 20ms   = 1 sec
+	ModemEscapeCode = '+'; // default ASCII 43
 
 	SendOverflows = 0;
 	ReceiveOverflows = 0;
@@ -153,7 +153,7 @@ NullModemClass::NullModemClass(int numsend, int numreceive, int maxlen, unsigned
 	------------------------------------------------------------------------*/
 	RetryDelta = 60; // 60 ticks between retries
 	MaxRetries = -1; // disregard # retries
-	Timeout = 1200;	 // report bad connection after 20 seconds
+	Timeout = 1200; // report bad connection after 20 seconds
 
 } /* end of NullModemClass */
 
@@ -175,7 +175,9 @@ NullModemClass::NullModemClass(int numsend, int numreceive, int maxlen, unsigned
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-NullModemClass::~NullModemClass() { Delete_Connection(); } /* end of ~NullModemClass */
+NullModemClass::~NullModemClass() {
+	Delete_Connection();
+} /* end of ~NullModemClass */
 
 /***************************************************************************
  * NullModemClass::Init -- initialization *
@@ -202,8 +204,7 @@ NullModemClass::~NullModemClass() { Delete_Connection(); } /* end of ~NullModemC
  *   12/20/1994 BR : Created.                                              *
  *   10/9/1996  ST : Modified to take device name in win32                 *
  *=========================================================================*/
-int NullModemClass::Init(int port, int irq, char *dev_name, int baud, char parity, int wordlen, int stopbits,
-			 int flowcontrol) {
+int NullModemClass::Init(int port, int irq, char *dev_name, int baud, char parity, int wordlen, int stopbits, int flowcontrol) {
 	int com;
 
 #ifdef WIN32
@@ -222,7 +223,6 @@ int NullModemClass::Init(int port, int irq, char *dev_name, int baud, char parit
 	}
 
 	if (!Connection) {
-
 #else // WIN32
 
 	int irqnum;
@@ -308,12 +308,11 @@ int NullModemClass::Init(int port, int irq, char *dev_name, int baud, char parit
 	//	if (baud == 14400) baud = 19200;
 	//	if (baud == 28800) baud = 38400;
 
-	static char com_ids[9][5] = {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9"};
+	static char com_ids[9][5] = { "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9" };
 
 	char *device;
 
 	switch (port) {
-
 	case 0x3f8:
 		device = com_ids[0];
 		break;
@@ -377,7 +376,6 @@ int NullModemClass::Init(int port, int irq, char *dev_name, int baud, char parit
 	status = FastGetPortHardware(com, &irqnum, &address);
 	if (status == ASSUCCESS) {
 		if (port != address || irq != irqnum) {
-
 			status = FastSetPortHardware(com, irq, port);
 
 			if (status < ASSUCCESS) {
@@ -438,7 +436,9 @@ int NullModemClass::Init(int port, int irq, char *dev_name, int baud, char parit
  * HISTORY:                                                                                    *
  *    8/2/96 11:44AM ST : Documented / Win32 support                                           *
  *=============================================================================================*/
-int NullModemClass::Num_Connections(void) { return (NumConnections); }
+int NullModemClass::Num_Connections(void) {
+	return (NumConnections);
+}
 
 /***********************************************************************************************
  * NMC::Delete_Connection -- removes the connection                                            *
@@ -495,7 +495,6 @@ int NullModemClass::Delete_Connection(void) {
  *    8/2/96 11:46AM ST : Documented / Win32 support                                           *
  *=============================================================================================*/
 int NullModemClass::Init_Send_Queue(void) {
-
 	/*------------------------------------------------------------------------
 	Init the send queue
 	------------------------------------------------------------------------*/
@@ -522,10 +521,9 @@ int NullModemClass::Init_Send_Queue(void) {
  *    8/2/96 11:47AM ST : Documented / Win32 support                                           *
  *=============================================================================================*/
 DetectPortType NullModemClass::Detect_Port(SerialSettingsType *settings) {
-
 #ifdef WIN32
 
-	static char com_ids[9][5] = {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9"};
+	static char com_ids[9][5] = { "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9" };
 
 	int i;
 
@@ -551,7 +549,6 @@ DetectPortType NullModemClass::Detect_Port(SerialSettingsType *settings) {
 	char *device;
 
 	switch (settings->Port) {
-
 	case 0x3f8:
 		device = com_ids[0];
 		break;
@@ -614,7 +611,7 @@ DetectPortType NullModemClass::Detect_Port(SerialSettingsType *settings) {
 	SerialPort->Serial_Port_Close();
 	return (PORT_VALID);
 
-#else  // WIN32
+#else // WIN32
 
 	union REGS regs;
 	int com;
@@ -654,10 +651,10 @@ DetectPortType NullModemClass::Detect_Port(SerialSettingsType *settings) {
 		}
 	}
 
-	if (settings->IRQ < 2	       // 0 timer, 1 keyboard
-	    || settings->IRQ == 6      // floppy disk
-	    || settings->IRQ == 8      // CMOS real-time clock
-	    || settings->IRQ == 0xd    // math coprocessor error
+	if (settings->IRQ < 2 // 0 timer, 1 keyboard
+	    || settings->IRQ == 6 // floppy disk
+	    || settings->IRQ == 8 // CMOS real-time clock
+	    || settings->IRQ == 0xd // math coprocessor error
 	    || settings->IRQ == 0xe) { // hard disk
 		return (PORT_IRQ_INUSE);
 	}
@@ -733,7 +730,6 @@ DetectPortType NullModemClass::Detect_Port(SerialSettingsType *settings) {
  *    8/2/96 11:43AM ST : Documented / Win32 support                                           *
  *=============================================================================================*/
 void NullModemClass::Shutdown(void) {
-
 #ifdef WIN32
 
 	if (PortHandle && SerialPort) {
@@ -885,10 +881,10 @@ int NullModemClass::Get_Message(void *buf, int *buflen) {
  *=========================================================================*/
 int NullModemClass::Service(void) {
 	int pos; // current position in RXBuf
-	int i;	 // loop counter
+	int i; // loop counter
 	unsigned short length;
 	SerialHeaderType *header; // decoded packet start, length
-	SerialCRCType *crc;	  // decoded packet CRC
+	SerialCRCType *crc; // decoded packet CRC
 	char moredata = 0;
 
 	if (NumConnections == 0) {
@@ -1036,7 +1032,6 @@ int NullModemClass::Service(void) {
 	to the front of the buffer & return.
 	------------------------------------------------------------------------*/
 	if ((pos + length + PACKET_SERIAL_OVERHEAD_SIZE) > RXCount) {
-
 		if (moredata) {
 			// Smart_Printf( "waiting for more data %d, pos = %d \n", ((length +
 			// PACKET_SERIAL_OVERHEAD_SIZE) - (RXCount - pos)), pos );
@@ -1057,7 +1052,6 @@ int NullModemClass::Service(void) {
 	------------------------------------------------------------------------*/
 	crc = (SerialCRCType *)(RXBuf + pos + sizeof(SerialHeaderType) + length);
 	if (NullModemConnClass::Compute_CRC(RXBuf + pos + sizeof(SerialHeaderType), length) != crc->SerialCRC) {
-
 		CRCErrors++;
 
 #if (CONN_DEBUG)
@@ -1090,7 +1084,6 @@ int NullModemClass::Service(void) {
 		ReceiveOverflows++;
 		// Smart_Printf( "Received overflows %d \n", ReceiveOverflows );
 	}
-
 #if (0)
 	else {
 		// Mono_Printf( "added packet \n", sendlen );
@@ -1392,8 +1385,7 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 	Draw_Caption(TXT_NONE, x, y, width);
 
 	if (lines == 1) {
-		Fancy_Text_Print(buffer, x + width / 2, y + 25, GadgetClass::Get_Color_Scheme(), TBLACK,
-				 TPF_TEXT | TPF_CENTER);
+		Fancy_Text_Print(buffer, x + width / 2, y + 25, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT | TPF_CENTER);
 	} else {
 		Fancy_Text_Print(buffer, x + 20 * RESFACTOR, y + 25, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT);
 	}
@@ -1463,7 +1455,6 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 		*/
 		tokenptr = strtok(istr, "|");
 		while (tokenptr) {
-
 			status = Send_Modem_Command(tokenptr, '\r', buffer, 81, 3000, 1);
 			/*
 			** Handle error case.
@@ -1489,7 +1480,7 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 		/*
 		** Send the init strings from the registry if available
 		*/
-		char send_string[256] = {"AT"};
+		char send_string[256] = { "AT" };
 
 		/*
 		** Send the init string for hardware flow control
@@ -1499,8 +1490,7 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 				strcpy(&send_string[2], ModemRegistry->Get_Modem_Hardware_Flow_Control());
 				status = Send_Modem_Command(send_string, '\r', buffer, 81, 300, 1);
 				if (status != MODEM_CMD_OK && status != MODEM_CMD_0) {
-					if (WWMessageBox().Process(TXT_NO_FLOW_CONTROL_RESPONSE, TXT_IGNORE,
-								   TXT_CANCEL))
+					if (WWMessageBox().Process(TXT_NO_FLOW_CONTROL_RESPONSE, TXT_IGNORE, TXT_CANCEL))
 						return (false);
 				}
 			}
@@ -1512,8 +1502,7 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 				strcpy(&send_string[2], ModemRegistry->Get_Modem_No_Flow_Control());
 				status = Send_Modem_Command(send_string, '\r', buffer, 81, DEFAULT_TIMEOUT, 1);
 				if (status != MODEM_CMD_OK && status != MODEM_CMD_0) {
-					if (WWMessageBox().Process(TXT_NO_FLOW_CONTROL_RESPONSE, TXT_IGNORE,
-								   TXT_CANCEL))
+					if (WWMessageBox().Process(TXT_NO_FLOW_CONTROL_RESPONSE, TXT_IGNORE, TXT_CANCEL))
 						return (false);
 				}
 			}
@@ -1523,7 +1512,6 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 		** Send the string for data compresseion
 		*/
 		if (settings->Compression) {
-
 			if (ModemRegistry->Get_Modem_Compression_Enable()) {
 				strcpy(&send_string[2], ModemRegistry->Get_Modem_Compression_Enable());
 				Send_Modem_Command(send_string, '\r', buffer, 81, DEFAULT_TIMEOUT, 1);
@@ -1533,7 +1521,6 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 				}
 			}
 		} else {
-
 			if (ModemRegistry->Get_Modem_Compression_Disable()) {
 				strcpy(&send_string[2], ModemRegistry->Get_Modem_Compression_Disable());
 				Send_Modem_Command(send_string, '\r', buffer, 81, DEFAULT_TIMEOUT, 1);
@@ -1548,13 +1535,11 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 		** Send the string for error correction
 		*/
 		if (settings->ErrorCorrection) {
-
 			if (ModemRegistry->Get_Modem_Error_Correction_Enable()) {
 				strcpy(&send_string[2], ModemRegistry->Get_Modem_Error_Correction_Enable());
 				Send_Modem_Command(send_string, '\r', buffer, 81, DEFAULT_TIMEOUT, 1);
 				if (status != MODEM_CMD_OK && status != MODEM_CMD_0) {
-					if (WWMessageBox().Process(TXT_NO_ERROR_CORRECTION_RESPONSE, TXT_IGNORE,
-								   TXT_CANCEL))
+					if (WWMessageBox().Process(TXT_NO_ERROR_CORRECTION_RESPONSE, TXT_IGNORE, TXT_CANCEL))
 						return (false);
 				}
 			}
@@ -1563,8 +1548,7 @@ int NullModemClass::Detect_Modem(SerialSettingsType *settings, bool reconnect) {
 				strcpy(&send_string[2], ModemRegistry->Get_Modem_Error_Correction_Disable());
 				Send_Modem_Command(send_string, '\r', buffer, 81, DEFAULT_TIMEOUT, 1);
 				if (status != MODEM_CMD_OK && status != MODEM_CMD_0) {
-					if (WWMessageBox().Process(TXT_NO_ERROR_CORRECTION_RESPONSE, TXT_IGNORE,
-								   TXT_CANCEL))
+					if (WWMessageBox().Process(TXT_NO_ERROR_CORRECTION_RESPONSE, TXT_IGNORE, TXT_CANCEL))
 						return (false);
 				}
 			}
@@ -1659,7 +1643,9 @@ DialStatusType NullModemClass::Dial_Modem(char *string, DialMethodType method, b
 	x = (SeenBuff.Get_Width() - width) / 2;
 	y = (SeenBuff.Get_Height() - height) / 2;
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
+				  TPF_BUTTON,
 				  x + ((width - (String_Pixel_Width(Text_String(TXT_CANCEL)) + 8 * RESFACTOR)) >> 1),
 				  y + height - (FontHeight + FontYSpacing + 2 * RESFACTOR) - 10 * RESFACTOR);
 
@@ -1686,8 +1672,7 @@ DialStatusType NullModemClass::Dial_Modem(char *string, DialMethodType method, b
 	Dialog_Box(x, y, width, height);
 	Draw_Caption(TXT_NONE, x, y, width);
 
-	Fancy_Text_Print(buffer, SeenBuff.Get_Width() / 2 - text_width / 2, y + 25 * RESFACTOR,
-			 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT);
+	Fancy_Text_Print(buffer, SeenBuff.Get_Width() / 2 - text_width / 2, y + 25 * RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT);
 
 	Commands->Draw_All();
 	Show_Mouse();
@@ -1735,7 +1720,7 @@ DialStatusType NullModemClass::Dial_Modem(char *string, DialMethodType method, b
 		}
 
 		delay = SerialPort->Get_Modem_Result(delay, buffer, 81);
-#else  // WIN32
+#else // WIN32
 		delay = HMInputLine(Port, delay, buffer, 81);
 #endif // WIN32
 
@@ -1825,7 +1810,7 @@ DialStatusType NullModemClass::Answer_Modem(bool reconnect) {
 	Dialog variables
 	------------------------------------------------------------------------*/
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 #ifndef WIN32
 	int status;
 #endif // WIN32
@@ -1859,7 +1844,9 @@ DialStatusType NullModemClass::Answer_Modem(bool reconnect) {
 	x = (SeenBuff.Get_Width() - width) / 2;
 	y = (SeenBuff.Get_Height() - height) / 2;
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
+				  TPF_BUTTON,
 				  x + ((width - (String_Pixel_Width(Text_String(TXT_CANCEL)) + 8 * RESFACTOR)) >> 1),
 				  y + height - (FontHeight + FontYSpacing + 2 * RESFACTOR) - 10 * RESFACTOR);
 
@@ -1924,8 +1911,12 @@ DialStatusType NullModemClass::Answer_Modem(bool reconnect) {
 				...............................................................*/
 				Draw_Caption(TXT_NONE, x, y, width);
 
-				Fancy_Text_Print(text_buffer, SeenBuff.Get_Width() / 2 - text_width / 2,
-						 y + 25 * RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_TEXT);
+				Fancy_Text_Print(text_buffer,
+						 SeenBuff.Get_Width() / 2 - text_width / 2,
+						 y + 25 * RESFACTOR,
+						 GadgetClass::Get_Color_Scheme(),
+						 TBLACK,
+						 TPF_TEXT);
 
 				Commands->Draw_All();
 			}
@@ -1935,7 +1926,7 @@ DialStatusType NullModemClass::Answer_Modem(bool reconnect) {
 
 #ifdef WIN32
 		delay = SerialPort->Get_Modem_Result(delay, comm_buffer, 81);
-#else  // WIN32
+#else // WIN32
 		delay = HMInputLine(Port, delay, comm_buffer, 81);
 #endif // WIN32
 
@@ -1957,7 +1948,6 @@ DialStatusType NullModemClass::Answer_Modem(bool reconnect) {
 
 		if (process) {
 			if (strncmp(comm_buffer, "RING", 4) == 0) {
-
 				strcpy(text_buffer, Text_String(TXT_ANSWERING));
 
 				Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TPF_TEXT);
@@ -1973,7 +1963,7 @@ DialStatusType NullModemClass::Answer_Modem(bool reconnect) {
 
 #ifdef WIN32
 				SerialPort->Write_To_Serial_Port((unsigned char *)"ATA\r", strlen("ATA\r"));
-#else  // WIN32
+#else // WIN32
 				PortKillTime(Port, 100);
 				HMWaitForOK(0, NULL);
 				status = HMAnswer(Port);
@@ -2016,7 +2006,7 @@ DialStatusType NullModemClass::Answer_Modem(bool reconnect) {
 				delay = 60000;
 			}
 		}
-#else  // WIN32
+#else // WIN32
 
 		if (delay <= 0) {
 			if (ring) {
@@ -2078,7 +2068,7 @@ bool NullModemClass::Hangup_Modem(void) {
 	SerialPort->Set_Serial_DTR(FALSE);
 	Delay(3200 / 60);
 	SerialPort->Set_Serial_DTR(TRUE);
-#else  // WIN32
+#else // WIN32
 
 	SetDtr(Port, 0);
 	PortKillTime(Port, 3200);
@@ -2096,7 +2086,7 @@ bool NullModemClass::Hangup_Modem(void) {
 	while (delay > 0) {
 #ifdef WIN32
 		delay = SerialPort->Get_Modem_Result(delay, buffer, 81);
-#else  // WIN32
+#else // WIN32
 		delay = HMInputLine(Port, delay, buffer, 81);
 #endif // WIN32
 	}
@@ -2111,7 +2101,7 @@ bool NullModemClass::Hangup_Modem(void) {
 
 #ifdef WIN32
 	SerialPort->Write_To_Serial_Port((unsigned char *)escape, 3);
-#else  // WIN32
+#else // WIN32
 	status = HMSendStringNoWait(Port, escape, -1);
 #endif // WIN32
 
@@ -2119,7 +2109,7 @@ bool NullModemClass::Hangup_Modem(void) {
 	while (delay > 0) {
 #ifdef WIN32
 		delay = SerialPort->Get_Modem_Result(delay, buffer, 81);
-#else  // WIN32
+#else // WIN32
 		delay = HMInputLine(Port, delay, buffer, 81);
 #endif // WIN32
 
@@ -2171,7 +2161,7 @@ bool NullModemClass::Hangup_Modem(void) {
 void NullModemClass::Setup_Modem_Echo(void (*func)(char c)) {
 #ifdef WIN32
 	SerialPort->Set_Echo_Function(func);
-#else  // WIN32
+#else // WIN32
 	HMSetUpEchoRoutine(func);
 #endif // WIN32
 
@@ -2300,12 +2290,11 @@ int NullModemClass::Abort_Modem(PORT *) {
  *    8/2/96 2:59PM ST : Documented / Win32 support added                                      *
  *=============================================================================================*/
 void NullModemClass::Setup_Abort_Modem(void) {
-
 #ifdef WIN32
 
 	SerialPort->Set_Abort_Function((int (*)(void))Abort_Modem);
 
-#else  // WIN32
+#else // WIN32
 	/*
 	** save off original abort modem function to later restore
 	*/
@@ -2331,11 +2320,10 @@ void NullModemClass::Setup_Abort_Modem(void) {
  *    8/2/96 3:01PM ST : Documented / Win32 support added                                      *
  *=============================================================================================*/
 void NullModemClass::Remove_Abort_Modem(void) {
-
 #ifdef WIN32
 	SerialPort->Set_Abort_Function(NULL);
 
-#else  // WIN32
+#else // WIN32
 
 	HMSetUpAbortKey(NOKEY);
 
@@ -2402,7 +2390,7 @@ int NullModemClass::Get_Modem_Status(void) {
 
 #ifdef WIN32
 	modemstatus = SerialPort->Get_Modem_Status();
-#else  // WIN32
+#else // WIN32
 	modemstatus = GetModemStatus(Port);
 #endif // WIN32
 
@@ -2435,9 +2423,7 @@ int NullModemClass::Get_Modem_Status(void) {
  * HISTORY:                                                                                    *
  *    8/2/96 3:09PM ST : Documented / Win32 support added                                      *
  *=============================================================================================*/
-int NullModemClass::Send_Modem_Command(char *command, char terminator, char *buffer, int buflen, int delay,
-				       int retries) {
-
+int NullModemClass::Send_Modem_Command(char *command, char terminator, char *buffer, int buflen, int delay, int retries) {
 #ifdef WIN32
 	return (SerialPort->Send_Command_To_Modem(command, terminator, buffer, buflen, delay, retries));
 #else // WIN32
@@ -2448,7 +2434,6 @@ int NullModemClass::Send_Modem_Command(char *command, char terminator, char *buf
 	*buffer = 0;
 
 	for (retry = 0; retry < retries; retry++) {
-
 		PortKillTime(Port, 100);
 
 		status = HMSendStringNoWait(Port, command, terminator);
@@ -2459,7 +2444,6 @@ int NullModemClass::Send_Modem_Command(char *command, char terminator, char *buf
 
 		tmpdelay = delay;
 		while (tmpdelay > 0) {
-
 			tmpdelay = HMInputLine(Port, tmpdelay, tempbuf, 81);
 
 			if (strcmp(tempbuf, "OK") == 0) {

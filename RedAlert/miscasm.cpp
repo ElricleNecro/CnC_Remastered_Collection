@@ -93,13 +93,13 @@ ok:
 */
 
 long __cdecl Desired_Facing16(long x1, long y1, long x2, long y2) {
-	static const char _new_facing16[] = {3, 2, 4, -1, 1, 2, 0, -1, 13, 14, 12, -1, 15, 14, 0, -1,
-					     5, 6, 4, -1, 7, 6, 8, -1, 11, 10, 12, -1, 9,  10, 8, -1};
+	static const char _new_facing16[] = { 3, 2, 4, -1, 1, 2, 0, -1, 13, 14, 12, -1, 15, 14, 0, -1,
+					      5, 6, 4, -1, 7, 6, 8, -1, 11, 10, 12, -1, 9,  10, 8, -1 };
 
 	__asm {		  
 		xor	ebx,ebx //; Index byte (built).
 
-		//; Determine Y axis difference.
+			//; Determine Y axis difference.
 		mov	edx,[y1]
 		mov	ecx,[y2]
 		sub	edx,ecx //; DX = Y axis (signed).
@@ -108,7 +108,7 @@ long __cdecl Desired_Facing16(long x1, long y1, long x2, long y2) {
 		neg	edx //; ABS(y)
 absy:
 
-	    //; Determine X axis difference.
+		//; Determine X axis difference.
 		shl	ebx,1
 		mov	eax,[x1]
 		mov	ecx,[x2]
@@ -118,14 +118,14 @@ absy:
 		neg	ecx //; ABS(x)
 absx:
 
-	    //; Determine the greater axis.
+		//; Determine the greater axis.
 		cmp	ecx,edx
 		jb	short dxisbig
 		xchg	ecx,edx
 dxisbig:
 		rcl	ebx,1 //; Y > X flag bit.
 
-	     //; Determine the closeness or farness of lesser axis.
+		 //; Determine the closeness or farness of lesser axis.
 		mov	eax,edx
 		inc	eax //; Round up.
 		shr	eax,1
@@ -142,10 +142,10 @@ dxisbig:
 		xor	eax,eax
 		mov	al,[_new_facing16+ebx]
 
-	     //; Normalize to 0..FF range.
+		 //; Normalize to 0..FF range.
 		shl	eax,4
 
-	    //		ret
+		//		ret
 	}
 }
 
@@ -173,11 +173,10 @@ dxisbig:
 ;*=========================================================================*/
 
 int __cdecl Desired_Facing256(LONG srcx, LONG srcy, LONG dstx, LONG dsty) {
-
 	__asm {
 			xor	ebx,ebx //; Facing number.
 
-		////; Determine absolute X delta and left/right direction.
+			////; Determine absolute X delta and left/right direction.
 			mov	ecx,[dstx]
 			sub	ecx,[srcx]
 			jge	short xnotneg
@@ -185,7 +184,7 @@ int __cdecl Desired_Facing256(LONG srcx, LONG srcy, LONG dstx, LONG dsty) {
 			mov	ebx,11000000b //; Set bit 7 and 6 for leftward.
 xnotneg:
 
-	    //; Determine absolute Y delta and top/bottom direction.
+		//; Determine absolute Y delta and top/bottom direction.
 			mov	eax,[srcy]
 			sub	eax,[dsty]
 			jge	short ynotneg
@@ -193,29 +192,29 @@ xnotneg:
 			neg	eax
 ynotneg:
 
-	    //; Set DX=64 for quadrants 0 and 2.
+		//; Set DX=64 for quadrants 0 and 2.
 			mov	edx,ebx
 			and	edx,01000000b
 			xor	edx,01000000b
 
-	    //; Determine if the direction is closer to the Y axis and make sure that
-	    //; CX holds the larger of the two deltas.  This is in preparation for the
-	    //; divide.
+		//; Determine if the direction is closer to the Y axis and make sure that
+		//; CX holds the larger of the two deltas.  This is in preparation for the
+		//; divide.
 			cmp	eax,ecx
 			jb	short gotaxis
 			xchg	eax,ecx
 			xor	edx,01000000b //; Closer to Y axis so make DX=64 for quad 0 and 2.
 gotaxis:
 
-	    //; If closer to the X axis then add 64 for quadrants 0 and 2.  If
-	    //; closer to the Y axis then add 64 for quadrants 1 and 3.  Determined
-	    //; add value is in DX and save on stack.
+		//; If closer to the X axis then add 64 for quadrants 0 and 2.  If
+		//; closer to the Y axis then add 64 for quadrants 1 and 3.  Determined
+		//; add value is in DX and save on stack.
 			push	edx
 
-		//; Make sure that the division won't overflow.  Reduce precision until
-		//; the larger number is less than 256 if it appears that an overflow
-		//; will occur.  If the high byte of the divisor is not zero, then this
-		//; guarantees no overflow, so just abort shift operation.
+			//; Make sure that the division won't overflow.  Reduce precision until
+			//; the larger number is less than 256 if it appears that an overflow
+			//; will occur.  If the high byte of the divisor is not zero, then this
+			//; guarantees no overflow, so just abort shift operation.
 			test	eax,0FFFFFF00h
 			jnz	short nooverflow
 again:
@@ -226,15 +225,15 @@ again:
 			jmp	short again
 nooverflow:
 
-	    //; Make sure that the division won't underflow (divide by zero).  If
-	    //; this would occur, then set the quotient to $FF and skip divide.
+		//; Make sure that the division won't underflow (divide by zero).  If
+		//; this would occur, then set the quotient to $FF and skip divide.
 			or	ecx,ecx
 			jnz	short nounderflow
 			mov	eax,0FFFFFFFFh
 			jmp	short divcomplete
 
-		//; Derive a pseudo angle number for the octant.  The angle is based
-		//; on $00 = angle matches long axis, $00 = angle matches $FF degrees.
+			//; Derive a pseudo angle number for the octant.  The angle is based
+			//; on $00 = angle matches long axis, $00 = angle matches $FF degrees.
 nounderflow:
 			xor	edx,edx
 			shld	edx,eax,8 //; shift high byte of eax into dl
@@ -242,9 +241,9 @@ nounderflow:
 			div	ecx
 divcomplete:
 
-	    //; Integrate the 5 most significant bits into the angle index.  If DX
-	    //; is not zero, then it is 64.  This means that the dividend must be negated
-	    //; before it is added into the final angle value.
+		//; Integrate the 5 most significant bits into the angle index.  If DX
+		//; is not zero, then it is 64.  This means that the dividend must be negated
+		//; before it is added into the final angle value.
 			shr	eax,3
 			pop	edx
 			or	edx,edx
@@ -255,7 +254,7 @@ noneg:
 			add	eax,edx
 			add	eax,ebx
 			and	eax,0FFH
-	    //			ret
+		//			ret
 	}
 }
 
@@ -328,14 +327,13 @@ GLOBAL	 C Desired_Facing8	:NEAR
 ;*=========================================================================*
 */
 int __cdecl Desired_Facing8(long x1, long y1, long x2, long y2) {
-
-	static const char _new_facing8[] = {1, 2, 1, 0, 7, 6, 7, 0, 3, 2, 3, 4, 5, 6, 5, 4};
+	static const char _new_facing8[] = { 1, 2, 1, 0, 7, 6, 7, 0, 3, 2, 3, 4, 5, 6, 5, 4 };
 
 	__asm {
 		
 		xor	ebx,ebx //; Index byte (built).
 
-		//; Determine Y axis difference.
+			//; Determine Y axis difference.
 		mov	edx,[y1]
 		mov	ecx,[y2]
 		sub	edx,ecx //; DX = Y axis (signed).
@@ -344,7 +342,7 @@ int __cdecl Desired_Facing8(long x1, long y1, long x2, long y2) {
 		neg	edx //; ABS(y)
 absy:
 
-	    //; Determine X axis difference.
+		//; Determine X axis difference.
 		shl	ebx,1
 		mov	eax,[x1]
 		mov	ecx,[x2]
@@ -354,14 +352,14 @@ absy:
 		neg	ecx //; ABS(x)
 absx:
 
-	    //; Determine the greater axis.
+		//; Determine the greater axis.
 		cmp	ecx,edx
 		jb	short dxisbig
 		xchg	ecx,edx
 dxisbig:
 		rcl	ebx,1 //; Y > X flag bit.
 
-	     //; Determine the closeness or farness of lesser axis.
+		 //; Determine the closeness or farness of lesser axis.
 		mov	eax,edx
 		inc	eax //; Round up.
 		shr	eax,1
@@ -372,10 +370,10 @@ dxisbig:
 		xor	eax,eax
 		mov	al,[_new_facing8+ebx]
 
-	     //; Normalize to 0..FF range.
+		 //; Normalize to 0..FF range.
 		shl	eax,5
 
-	    //		ret
+		//		ret
 
 	}
 }
@@ -449,7 +447,6 @@ NewFacing16	DB	 3, 2, 4,-1, 1, 2,0,-1
 ;*=========================================================================*
 */
 long __cdecl Desired_Facing16(long x1, long y1, long x2, long y2) {
-
 	__asm {
 			xor	ebx,ebx			; Index byte (built).
 
@@ -505,16 +502,16 @@ dxisbig:
 
 #if (0)
 PROC Desired_Facing16 C near USES ebx, ecx,
-    edx
+	edx
 
-	    ARG x1 : DWORD ARG y1 : DWORD ARG x2 : DWORD ARG y2 : DWORD
+			ARG x1 : DWORD ARG y1 : DWORD ARG x2 : DWORD ARG y2 : DWORD
 
-								  xor
-								  ebx,
-    ebx;
+									      xor
+									      ebx,
+	ebx;
 Index byte(built).
 
-    ;
+	;
 Determine Y axis difference.mov edx, [y1] mov ecx, [y2] sub edx, ecx;
 DX = Y axis(signed).jns short ? ? absy inc ebx;
 Set the signed bit.neg edx;
@@ -532,35 +529,35 @@ ABS(x)
 Determine the greater axis.cmp ecx, edx jb short ? ? dxisbig xchg ecx, edx ? ? dxisbig : rcl ebx, 1;
 Y > X flag bit.
 
-    ;
+	;
 Determine the closeness or farness of lesser axis.mov eax, edx inc eax;
 Round up.shr eax, 1 inc eax;
 Round up.shr eax, 1;
 1 / 4 of greater axis.
 
-    cmp ecx,
-    eax rcl ebx, 1;
+	cmp ecx,
+	eax rcl ebx, 1;
 Very close to major axis bit.
 
-    sub edx,
-    eax cmp edx, ecx rcl ebx, 1;
+	sub edx,
+	eax cmp edx, ecx rcl ebx, 1;
 Very far from major axis bit.
 
-    xor eax,
-    eax mov al, [NewFacing16 + ebx]
+	xor eax,
+	eax mov al, [NewFacing16 + ebx]
 
-    ;
+	;
 Normalize to 0..FF range.shl eax, 4
 
-    ret
+	ret
 
-	ENDP Desired_Facing16
+		ENDP Desired_Facing16
 
-	    END
+			END
 #endif
 #endif
 
-    /*
+	/*
     ;***********************************************************************************************
     ;* Cardinal_To_Fixed -- Converts cardinal numbers into a fixed point number.                   *
     ;*                                                                                             *
@@ -586,7 +583,7 @@ Normalize to 0..FF range.shl eax, 4
     ;*   02/17/1995 BWG : Created.                                                                 *
     ;*=============================================================================================*/
 
-    unsigned int __cdecl Cardinal_To_Fixed(unsigned base, unsigned cardinal) {
+	unsigned int __cdecl Cardinal_To_Fixed(unsigned base, unsigned cardinal) {
 	__asm {
 		
 				mov	eax, 0FFFFFFFFh //; establish default return value
@@ -601,29 +598,29 @@ Normalize to 0..FF range.shl eax, 4
 				div	ebx
 
 retneg1:
-			   // ret
+		// ret
 
 	}
 }
 
 #if (0)
 PROC Cardinal_To_Fixed C near USES ebx,
-    edx
+	edx
 
-	ARG base : DWORD ARG cardinal : DWORD
+		ARG base : DWORD ARG cardinal : DWORD
 
-					    mov eax,
-					0FFFFh;
+							mov eax,
+						0FFFFh;
 establish default return value
 
-    mov ebx,
-    [base] or ebx, ebx jz near ? ? retneg1;
+	mov ebx,
+	[base] or ebx, ebx jz near ? ? retneg1;
 if base
 	== 0,
-	    return 65535
+		return 65535
 
-	    mov eax,
-	    [cardinal];
+		mov eax,
+		[cardinal];
 otherwise, return (cardinal * 256) / base shl eax, 8 xor edx,
     edx div ebx
 
@@ -664,7 +661,7 @@ otherwise, return (cardinal * 256) / base shl eax, 8 xor edx,
 		add	eax,08000h //; eax = (base * fixed) + 0x8000
 
 		shr	eax,16 //; return eax/65536
-	       // ret
+		// ret
 	}
 
 #if (0)
@@ -679,9 +676,9 @@ otherwise, return (cardinal * 256) / base shl eax, 8 xor edx,
 		, return eax / 256 ret ? ? rneg1 : mov eax, 0FFFFh;
 	establish default return value ret
 
-	    ENDP Fixed_To_Cardinal
+		ENDP Fixed_To_Cardinal
 
-	    END
+		END
 #endif
 }
 
@@ -801,7 +798,7 @@ void __cdecl Shake_Screen(int shakes) {
 #if (0)
 GLOBAL C Shake_Screen : NEAR
 
-			    CODESEG
+				CODESEG
 
 			;
 ***********************************************************;
@@ -815,14 +812,14 @@ This routine shakes the screen the number of times indicated.;
 Bounds Checking : None;
 ;
 *PROC Shake_Screen C near USES ecx,
-    edx
+	edx
 
-	ARG shakes : DWORD ret
+		ARG shakes : DWORD ret
 
-			 mov ecx,
-		     [shakes]
+				     mov ecx,
+			     [shakes]
 
-    ;
+	;
 ;
 ;
 push es;
@@ -856,12 +853,12 @@ video status port
 dx = 3B4H or 3D4H
 
      mov ah,
-    01;
+	01;
 top word of start address mov al, 0Ch out dx, al xchg ah, al inc dx out dx, al xchg ah,
-    al dec dx
+	al dec dx
 
-	mov ah,
-    040h;
+		mov ah,
+	040h;
 bottom word = 40(140h)inc al out dx, al xchg ah, al inc dx out dx, al xchg ah,
        al
 
@@ -910,7 +907,6 @@ dx = 3B4H or 3D4H
 ***********************************************************
 
 							  END
-
 #endif
 
 							  /*
@@ -976,14 +972,14 @@ ALLOWED_START	EQU	256-ALLOWED_COUNT
 #define ALLOWED_COUNT 16
 #define ALLOWED_START 256 - ALLOWED_COUNT
 
-	int matchvalue = 0;	       //: DWORD	; Last recorded match value.
-	unsigned char targetred = 0;   // BYTE		; Target gun red.
+	int matchvalue = 0; //: DWORD	; Last recorded match value.
+	unsigned char targetred = 0; // BYTE		; Target gun red.
 	unsigned char targetgreen = 0; // BYTE		; Target gun green.
-	unsigned char targetblue = 0;  // BYTE		; Target gun blue.
-	unsigned char idealred = 0;    // BYTE
-	unsigned char idealgreen = 0;  // BYTE
-	unsigned char idealblue = 0;   // BYTE
-	unsigned char matchcolor = 0;  //: BYTE		; Tentative match color.
+	unsigned char targetblue = 0; // BYTE		; Target gun blue.
+	unsigned char idealred = 0; // BYTE
+	unsigned char idealgreen = 0; // BYTE
+	unsigned char idealblue = 0; // BYTE
+	unsigned char matchcolor = 0; //: BYTE		; Tentative match color.
 
 	__asm {
 	

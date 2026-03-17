@@ -74,19 +74,19 @@ public:
 	*/
 	unsigned int GameSpeed;
 
-	int ScrollRate;	   // Distance to scroll.
-	fixed Volume;	   // Volume for sound effects.
+	int ScrollRate; // Distance to scroll.
+	fixed Volume; // Volume for sound effects.
 	fixed ScoreVolume; // Volume for scores.
 #ifdef FIXIT_VERSION_3
 	fixed MultiScoreVolume; //	Volume for scores during multiplayer games.
 #endif
-	fixed Brightness;	      // Brightness.
-	fixed Tint;		      // Hue
-	fixed Saturation;	      // Saturation
-	fixed Contrast;		      // Value
-	unsigned AutoScroll : 1;      // Does map autoscroll?
-	unsigned IsScoreRepeat : 1;   // Score should repeat?
-	unsigned IsScoreShuffle : 1;  // Score list should shuffle?
+	fixed Brightness; // Brightness.
+	fixed Tint; // Hue
+	fixed Saturation; // Saturation
+	fixed Contrast; // Value
+	unsigned AutoScroll : 1; // Does map autoscroll?
+	unsigned IsScoreRepeat : 1; // Score should repeat?
+	unsigned IsScoreShuffle : 1; // Score list should shuffle?
 	unsigned IsPaletteScroll : 1; // Allow palette scrolling?
 
 	/*
@@ -142,8 +142,7 @@ public:
 	KeyNumType KeyTeam9;
 	KeyNumType KeyTeam10;
 
-	void Adjust_Palette(PaletteClass const &oldpal, PaletteClass &newpal, fixed brightness, fixed color, fixed tint,
-			    fixed contrast) const;
+	void Adjust_Palette(PaletteClass const &oldpal, PaletteClass &newpal, fixed brightness, fixed color, fixed tint, fixed contrast) const;
 
 protected:
 private:

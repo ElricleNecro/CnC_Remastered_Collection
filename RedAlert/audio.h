@@ -38,10 +38,10 @@
 #include "memory.h"
 
 class AudioClass {
-	char const *Name;    // Name of audio asset.
-	void const *Data;    // Loaded audio data.
-	int Handle;	     // Handle of asset (as it is playing).
-	MemoryClass *Mem;    // Pointer to memory handler class.
+	char const *Name; // Name of audio asset.
+	void const *Data; // Loaded audio data.
+	int Handle; // Handle of asset (as it is playing).
+	MemoryClass *Mem; // Pointer to memory handler class.
 	unsigned IsMIDI : 1; // Is this a midi file?
 
 public:

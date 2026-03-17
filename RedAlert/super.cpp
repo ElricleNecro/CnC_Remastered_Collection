@@ -65,8 +65,9 @@
  *   07/28/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
 SuperClass::SuperClass(int recharge, bool powered, VoxType charging, VoxType ready, VoxType impatient, VoxType suspend)
-    : IsPowered(powered), IsPresent(false), IsOneTime(false), IsReady(false), Control(0), OldStage(-1),
-      VoxRecharge(ready), VoxCharging(charging), VoxImpatient(impatient), VoxSuspend(suspend), RechargeTime(recharge) {}
+	: IsPowered(powered), IsPresent(false), IsOneTime(false), IsReady(false), Control(0), OldStage(-1), VoxRecharge(ready), VoxCharging(charging),
+	  VoxImpatient(impatient), VoxSuspend(suspend), RechargeTime(recharge) {
+}
 
 /***********************************************************************************************
  * SuperClass::Suspend -- Suspend the charging of the super weapon.                            *

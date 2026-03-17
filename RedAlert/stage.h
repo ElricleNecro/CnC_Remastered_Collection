@@ -36,7 +36,6 @@
 #define STAGE_H
 
 class StageClass {
-
 	/*
 	**	This handles the animation stage of the object. This includes smoke, walking,
 	**	flapping, and rocket flames.
@@ -60,15 +59,23 @@ public:
 	StageClass(void) : Stage(0), Timer(0), Rate(0) {};
 	StageClass(NoInitClass const &x) : Timer(x) {};
 
-	int Fetch_Stage(void) const { return (Stage); };
-	int Fetch_Rate(void) const { return (Rate); };
-	void Set_Stage(int stage) { Stage = stage; };
+	int Fetch_Stage(void) const {
+		return (Stage);
+	};
+	int Fetch_Rate(void) const {
+		return (Rate);
+	};
+	void Set_Stage(int stage) {
+		Stage = stage;
+	};
 	void Set_Rate(int rate) {
 		Timer = rate;
 		Rate = rate;
 	};
 	void AI(void) {};
-	bool About_To_Change(void) const { return (Timer == 0 && Rate != 0); }
+	bool About_To_Change(void) const {
+		return (Timer == 0 && Rate != 0);
+	}
 	bool Graphic_Logic(void) {
 		if (About_To_Change()) {
 			Stage++;

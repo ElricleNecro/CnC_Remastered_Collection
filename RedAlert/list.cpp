@@ -76,8 +76,8 @@
  * HISTORY:          01/05/1995 MML : Created.                             *
  *=========================================================================*/
 ListClass::ListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down)
-    : ControlClass(id, x, y, w, h, LEFTPRESS | LEFTRELEASE | KEYBOARD, false), UpGadget(0, up, x + w, y),
-      DownGadget(0, down, x + w, y + h), ScrollGadget(0, x + w, y, 0, h, true) {
+	: ControlClass(id, x, y, w, h, LEFTPRESS | LEFTRELEASE | KEYBOARD, false), UpGadget(0, up, x + w, y), DownGadget(0, down, x + w, y + h),
+	  ScrollGadget(0, x + w, y, 0, h, true) {
 	/*
 	**	Set preliminary values for the slider related gadgets. They don't automatically
 	**	appear at this time, but there are some values that can be pre-filled in.
@@ -105,10 +105,9 @@ ListClass::ListClass(int id, int x, int y, int w, int h, TextPrintType flags, vo
 }
 
 ListClass::ListClass(ListClass const &list)
-    : ControlClass(list), TextFlags(list.TextFlags), Tabs(list.Tabs), List(list.List), LineHeight(list.LineHeight),
-      LineCount(list.LineCount), IsScrollActive(list.IsScrollActive), UpGadget(list.UpGadget),
-      DownGadget(list.DownGadget), ScrollGadget(list.ScrollGadget), SelectedIndex(list.SelectedIndex),
-      CurrentTopIndex(list.CurrentTopIndex) {
+	: ControlClass(list), TextFlags(list.TextFlags), Tabs(list.Tabs), List(list.List), LineHeight(list.LineHeight), LineCount(list.LineCount),
+	  IsScrollActive(list.IsScrollActive), UpGadget(list.UpGadget), DownGadget(list.DownGadget), ScrollGadget(list.ScrollGadget),
+	  SelectedIndex(list.SelectedIndex), CurrentTopIndex(list.CurrentTopIndex) {
 	UpGadget.Make_Peer(*this);
 	DownGadget.Make_Peer(*this);
 	ScrollGadget.Make_Peer(*this);
@@ -136,7 +135,9 @@ void ListClass::Set_Position(int x, int y) {
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/16/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-ListClass::~ListClass(void) { Remove_Scroll_Bar(); }
+ListClass::~ListClass(void) {
+	Remove_Scroll_Bar();
+}
 
 /***********************************************************************************************
  * ListClass::Add_Item -- Adds an item to the list box.                                        *
@@ -274,12 +275,10 @@ int ListClass::Action(unsigned flags, KeyNumType &key) {
 		ControlClass::Action(flags, key);
 		return (true);
 	} else {
-
 		/*
 		** Handle keyboard events here.
 		*/
 		if (flags & KEYBOARD) {
-
 			/*
 			**	Process the keyboard character. If indicated, consume this keyboard event
 			**	so that the edit gadget ID number is not returned.
@@ -295,7 +294,6 @@ int ListClass::Action(unsigned flags, KeyNumType &key) {
 			}
 
 		} else {
-
 			int index = Get_Mouse_Y() - (Y + 1);
 			index = index / LineHeight;
 			SelectedIndex = CurrentTopIndex + index;
@@ -325,7 +323,6 @@ int ListClass::Action(unsigned flags, KeyNumType &key) {
  *=============================================================================================*/
 int ListClass::Draw_Me(int forced) {
 	if (GadgetClass::Draw_Me(forced)) {
-
 		/*
 		**	Turn off the mouse.
 		*/
@@ -343,12 +340,10 @@ int ListClass::Draw_Me(int forced) {
 				int line = CurrentTopIndex + index;
 
 				if (List.Count() > line) {
-
 					/*
 					**	Prints the text and handles right edge clipping and tabs.
 					*/
-					Draw_Entry(line, X + 1, Y + (LineHeight * index) + 1, Width - 2,
-						   (line == SelectedIndex));
+					Draw_Entry(line, X + 1, Y + (LineHeight * index) + 1, Width - 2, (line == SelectedIndex));
 				}
 			}
 		}
@@ -470,7 +465,9 @@ char const *ListClass::Current_Item(void) const {
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int ListClass::Current_Index(void) const { return (SelectedIndex); }
+int ListClass::Current_Index(void) const {
+	return (SelectedIndex);
+}
 
 /***********************************************************************************************
  * ListClass::Peer_To_Peer -- A peer gadget was touched -- make adjustments.                   *
@@ -651,7 +648,9 @@ int ListClass::Remove_Scroll_Bar(void) {
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void ListClass::Set_Tabs(int const *tabs) { Tabs = tabs; }
+void ListClass::Set_Tabs(int const *tabs) {
+	Tabs = tabs;
+}
 
 /***********************************************************************************************
  * ListClass::Draw_Entry -- Draws a list box text line as indicated.                           *

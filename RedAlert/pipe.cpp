@@ -36,9 +36,9 @@
  *   Pipe::~Pipe -- Destructor for pipe class object.                                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "pipe.h"
 #include <stddef.h>
 #include <string.h>
+#include "pipe.h"
 
 /***********************************************************************************************
  * Pipe::~Pipe -- Destructor for pipe class object.                                            *

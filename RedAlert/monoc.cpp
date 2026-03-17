@@ -85,20 +85,22 @@ MonoClass *MonoClass::PageUsage[MonoClass::MAX_MONO_PAGES];
 **	These are the IBM linedraw characters.
 */
 MonoClass::BoxDataType const MonoClass::CharData[MonoClass::COUNT] = {
-    {0xDA, 0xC4, 0xBF, 0xB3, 0xD9, 0xC4, 0xC0, 0xB3}, // Single line
-    {0xD5, 0xCD, 0xB8, 0xB3, 0xBE, 0xCD, 0xD4, 0xB3}, // Double horz.
-    {0xD6, 0xC4, 0xB7, 0xBA, 0xBD, 0xC4, 0xD3, 0xBA}, // Double vert.
-    {0xC9, 0xCD, 0xBB, 0xBA, 0xBC, 0xCD, 0xC8, 0xBA}  // Double horz and vert.
+	{ 0xDA, 0xC4, 0xBF, 0xB3, 0xD9, 0xC4, 0xC0, 0xB3 }, // Single line
+	{ 0xD5, 0xCD, 0xB8, 0xB3, 0xBE, 0xCD, 0xD4, 0xB3 }, // Double horz.
+	{ 0xD6, 0xC4, 0xB7, 0xBA, 0xBD, 0xC4, 0xD3, 0xBA }, // Double vert.
+	{ 0xC9, 0xCD, 0xBB, 0xBA, 0xBC, 0xCD, 0xC8, 0xBA } // Double horz and vert.
 };
 
 #ifdef NEVER
-template <class T> T min(T a, T b) {
+template <class T>
+T min(T a, T b) {
 	if (a < b)
 		return (a);
 	return (b);
 }
 
-template <class T> T max(T a, T b) {
+template <class T>
+T max(T a, T b) {
 	if (a > b)
 		return (a);
 	return (b);
@@ -152,7 +154,9 @@ MonoClass::MonoClass(void) : X(0), Y(0), Attrib(NORMAL), Page(0), SubX(0), SubY(
  * HISTORY:                                                                                    *
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-MonoClass::~MonoClass(void) { PageUsage[Page] = 0; }
+MonoClass::~MonoClass(void) {
+	PageUsage[Page] = 0;
+}
 
 /***********************************************************************************************
  * MonoClass::Pan -- Scroll the window right or left.                                          *
@@ -185,16 +189,14 @@ void MonoClass::Pan(int cols) {
 
 	if (cols > 0) {
 		for (int index = SubY; index < SubY + SubH; index++) {
-			memmove(&Page_Ptr()->Data[index][SubX], &Page_Ptr()->Data[index][SubX + cols],
-				sizeof(CellType) * (SubW - cols));
+			memmove(&Page_Ptr()->Data[index][SubX], &Page_Ptr()->Data[index][SubX + cols], sizeof(CellType) * (SubW - cols));
 			for (int cc = SubX + SubW - cols; cc < SubX + SubW; cc++) {
 				Page_Ptr()->Data[index][cc] = cell;
 			}
 		}
 	} else {
 		for (int index = SubY; index < SubY + SubH; index++) {
-			memmove(&Page_Ptr()->Data[index][SubX - cols], &Page_Ptr()->Data[index][SubX],
-				sizeof(CellType) * (SubW + cols));
+			memmove(&Page_Ptr()->Data[index][SubX - cols], &Page_Ptr()->Data[index][SubX], sizeof(CellType) * (SubW + cols));
 			for (int cc = SubX; cc < SubX - cols; cc++) {
 				Page_Ptr()->Data[index][cc] = cell;
 			}
@@ -478,8 +480,7 @@ void MonoClass::Scroll(int lines) {
 
 	if (lines > 0) {
 		for (int row = 0; row < SubH - lines; row++) {
-			memmove(&Page_Ptr()->Data[SubY + row][SubX], &Page_Ptr()->Data[SubY + row + 1][SubX],
-				SubW * sizeof(CellType));
+			memmove(&Page_Ptr()->Data[SubY + row][SubX], &Page_Ptr()->Data[SubY + row + 1][SubX], SubW * sizeof(CellType));
 		}
 		for (int frow = SubH - lines; frow < SubH; frow++) {
 			for (int cc = 0; cc < SubW; cc++) {
@@ -488,8 +489,7 @@ void MonoClass::Scroll(int lines) {
 		}
 	} else {
 		for (int row = SubH - 1; row >= -lines; row--) {
-			memmove(&Page_Ptr()->Data[SubY + row][SubX], &Page_Ptr()->Data[SubY + row - 1][SubX],
-				SubW * sizeof(CellType));
+			memmove(&Page_Ptr()->Data[SubY + row][SubX], &Page_Ptr()->Data[SubY + row - 1][SubX], SubW * sizeof(CellType));
 		}
 		for (int frow = 0; frow < -lines; frow++) {
 			for (int cc = 0; cc < SubW; cc++) {
@@ -604,7 +604,6 @@ void MonoClass::Print(char const *ptr) {
 	text = ptr;
 	cell.Attribute = Attrib;
 	while (*text) {
-
 		cell.Character = *text;
 
 		/*
@@ -612,7 +611,6 @@ void MonoClass::Print(char const *ptr) {
 		**	of plain text output. Check for this case.
 		*/
 		switch (cell.Character) {
-
 		/*
 		**	The "return" code behaves as it did in the old C library
 		**	mono system. That is, it returns the cursor position to
@@ -745,7 +743,9 @@ void MonoClass::Text_Print(int text, int x, int y, MonoAttribute attrib) {
  * HISTORY:                                                                                    *
  *   06/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void MonoClass::Print(int text) { Print(Text_String(text)); }
+void MonoClass::Print(int text) {
+	Print(Text_String(text));
+}
 
 /***********************************************************************************************
  * MonoClass::operator = -- Handles making one mono object have the same imagery as another.   *
@@ -807,7 +807,6 @@ void MonoClass::View(void) {
 		displace->Page = Page;
 
 	} else {
-
 		/*
 		**	Just copy the new page over since the display page is not assigned
 		**	to a real monochrome page object.
@@ -1043,11 +1042,14 @@ int Mono_Y(void) {
 	return (0);
 }
 
-void Mono_Put_Char(char, int) {}
+void Mono_Put_Char(char, int) {
+}
 
-void Mono_Scroll(int) {}
+void Mono_Scroll(int) {
+}
 
-void Mono_View_Page(int) {}
+void Mono_View_Page(int) {
+}
 
 int Mono_Printf(int string, ...) {
 	va_list va;

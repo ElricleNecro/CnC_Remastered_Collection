@@ -58,51 +58,50 @@
 ** events.  This table must be kept current with the EventType enum.
 */
 unsigned char EventClass::EventLength[EventClass::LAST_EVENT] = {
-    0,					       // EMPTY
-    size_of(EventClass, Data.General),	       // ALLY
-    size_of(EventClass, Data.MegaMission),     // MEGAMISSION
-    size_of(EventClass, Data.MegaMission_F),   // MEGAMISSION_F
-    size_of(EventClass, Data.Target),	       // IDLE
-    size_of(EventClass, Data.Target),	       // SCATTER
-    0,					       // DESTRUCT
-    0,					       // DEPLOY
-    size_of(EventClass, Data.Place),	       // PLACE
-    0,					       // OPTIONS
-    size_of(EventClass, Data.General),	       // GAMESPEED
-    size_of(EventClass, Data.Specific),	       // PRODUCE
-    size_of(EventClass, Data.Specific.Type),   // SUSPEND
-    size_of(EventClass, Data.Specific.Type),   // ABANDON
-    size_of(EventClass, Data.Target),	       // PRIMARY
-    size_of(EventClass, Data.Special),	       // SPECIAL_PLACE
-    0,					       // EXIT
-    size_of(EventClass, Data.Anim),	       // ANIMATION
-    size_of(EventClass, Data.Target),	       // REPAIR
-    size_of(EventClass, Data.Target),	       // SELL
-    size_of(EventClass, Data.SellCell),	       // SELLCELL
-    size_of(EventClass, Data.Options),	       // SPECIAL
-    0,					       // FRAMESYNC
-    0,					       //	MESSAGE
-    size_of(EventClass, Data.FrameInfo.Delay), // RESPONSE_TIME
-    size_of(EventClass, Data.FrameInfo),       // FRAMEINFO
-    0,					       //	SAVEGAME
-    size_of(EventClass, Data.NavCom),	       // ARCHIVE
-    size_of(EventClass, Data.Variable.Size),   // ADDPLAYER
-    size_of(EventClass, Data.Timing),	       // TIMING
-    size_of(EventClass, Data.ProcessTime),     // PROCESS_TIME
-#ifdef FIXIT_VERSION_3			       //	Stalemate games.
-    0,					       //	PROPOSE_DRAW
-    0,					       //	RETRACT_DRAW
+	0, // EMPTY
+	size_of(EventClass, Data.General), // ALLY
+	size_of(EventClass, Data.MegaMission), // MEGAMISSION
+	size_of(EventClass, Data.MegaMission_F), // MEGAMISSION_F
+	size_of(EventClass, Data.Target), // IDLE
+	size_of(EventClass, Data.Target), // SCATTER
+	0, // DESTRUCT
+	0, // DEPLOY
+	size_of(EventClass, Data.Place), // PLACE
+	0, // OPTIONS
+	size_of(EventClass, Data.General), // GAMESPEED
+	size_of(EventClass, Data.Specific), // PRODUCE
+	size_of(EventClass, Data.Specific.Type), // SUSPEND
+	size_of(EventClass, Data.Specific.Type), // ABANDON
+	size_of(EventClass, Data.Target), // PRIMARY
+	size_of(EventClass, Data.Special), // SPECIAL_PLACE
+	0, // EXIT
+	size_of(EventClass, Data.Anim), // ANIMATION
+	size_of(EventClass, Data.Target), // REPAIR
+	size_of(EventClass, Data.Target), // SELL
+	size_of(EventClass, Data.SellCell), // SELLCELL
+	size_of(EventClass, Data.Options), // SPECIAL
+	0, // FRAMESYNC
+	0, //	MESSAGE
+	size_of(EventClass, Data.FrameInfo.Delay), // RESPONSE_TIME
+	size_of(EventClass, Data.FrameInfo), // FRAMEINFO
+	0, //	SAVEGAME
+	size_of(EventClass, Data.NavCom), // ARCHIVE
+	size_of(EventClass, Data.Variable.Size), // ADDPLAYER
+	size_of(EventClass, Data.Timing), // TIMING
+	size_of(EventClass, Data.ProcessTime), // PROCESS_TIME
+#ifdef FIXIT_VERSION_3 //	Stalemate games.
+	0, //	PROPOSE_DRAW
+	0, //	RETRACT_DRAW
 #endif
 };
 
 char *EventClass::EventNames[EventClass::LAST_EVENT] = {
-    "EMPTY",	    "ALLY",	     "MEGAMISSION",  "MEGAMISSION_F", "IDLE",	   "SCATTER",  "DESTRUCT",
-    "DEPLOY",	    "PLACE",	     "OPTIONS",	     "GAMESPEED",     "PRODUCE",   "SUSPEND",  "ABANDON",
-    "PRIMARY",	    "SPECIAL_PLACE", "EXIT",	     "ANIMATION",     "REPAIR",	   "SELL",     "SELLCELL",
-    "SPECIAL",	    "FRAMESYNC",     "MESSAGE",	     "RESPONSE_TIME", "FRAMEINFO", "SAVEGAME", "ARCHIVE",
-    "ADDPLAYER",    "TIMING",	     "PROCESS_TIME",
+	"EMPTY",	 "ALLY",	 "MEGAMISSION", "MEGAMISSION_F", "IDLE",      "SCATTER", "DESTRUCT",	 "DEPLOY",
+	"PLACE",	 "OPTIONS",	 "GAMESPEED",	"PRODUCE",	 "SUSPEND",   "ABANDON", "PRIMARY",	 "SPECIAL_PLACE",
+	"EXIT",		 "ANIMATION",	 "REPAIR",	"SELL",		 "SELLCELL",  "SPECIAL", "FRAMESYNC",	 "MESSAGE",
+	"RESPONSE_TIME", "FRAMEINFO",	 "SAVEGAME",	"ARCHIVE",	 "ADDPLAYER", "TIMING",	 "PROCESS_TIME",
 #ifdef FIXIT_VERSION_3 //	Stalemate games.
-    "PROPOSE_DRAW", "RETRACT_DRAW",
+	"PROPOSE_DRAW",	 "RETRACT_DRAW",
 #endif
 };
 
@@ -308,8 +307,7 @@ EventClass::EventClass(TargetClass src, MissionType mission, TargetClass target,
  * HISTORY:                                                                                    *
  *   05/18/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-EventClass::EventClass(TargetClass src, MissionType mission, TargetClass target, TargetClass destination,
-		       SpeedType speed, MPHType maxspeed) {
+EventClass::EventClass(TargetClass src, MissionType mission, TargetClass target, TargetClass destination, SpeedType speed, MPHType maxspeed) {
 	ID = PlayerPtr->ID;
 	Type = MEGAMISSION_F;
 	Frame = ::Frame;
@@ -457,7 +455,6 @@ void EventClass::Execute(void) {
 	}
 
 	switch (Type) {
-
 	/*
 	**	Update the archive target for this building.
 	*/
@@ -498,8 +495,7 @@ void EventClass::Execute(void) {
 
 		// sprintf(txt, Text_String(TXT_SPECIAL_WARNING), house->Name);	// Should be IniName? ST - 5/8/2019
 		sprintf(txt, Text_String(TXT_SPECIAL_WARNING), house->IniName);
-		Session.Messages.Add_Message(NULL, 0, txt, house->RemapColor,
-					     TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW, 1200);
+		Session.Messages.Add_Message(NULL, 0, txt, house->RemapColor, TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW, 1200);
 		Map.Flag_To_Redraw(false);
 	} break;
 
@@ -556,9 +552,8 @@ void EventClass::Execute(void) {
 				FILETIME ft;
 				GetSystemTimeAsFileTime(&ft);
 
-				unsigned long long kill_time = ((unsigned long long)ft.dwLowDateTime +
-								((unsigned long long)ft.dwHighDateTime << 32ULL)) +
-							       300000000ULL;
+				unsigned long long kill_time =
+					((unsigned long long)ft.dwLowDateTime + ((unsigned long long)ft.dwHighDateTime << 32ULL)) + 300000000ULL;
 				anim->Kill_At(kill_time);
 			}
 		}
@@ -629,12 +624,13 @@ void EventClass::Execute(void) {
 
 	case MEGAMISSION:
 		if (Debug_Print_Events) {
-			printf("Whom:%x Tgt:%x Dest:%x ", Data.MegaMission.Whom.As_TARGET(),
-			       Data.MegaMission.Target.As_TARGET(), Data.MegaMission.Destination.As_TARGET());
+			printf("Whom:%x Tgt:%x Dest:%x ",
+			       Data.MegaMission.Whom.As_TARGET(),
+			       Data.MegaMission.Target.As_TARGET(),
+			       Data.MegaMission.Destination.As_TARGET());
 		}
 		techno = Data.MegaMission.Whom.As_Techno();
 		if (techno != NULL && techno->IsActive && techno->Strength > 0 && !techno->IsInLimbo) {
-
 			/*
 			**	Fetch a pointer to the object of the mission. If there is an error with
 			**	this object, such as it is dead, then bail.
@@ -642,8 +638,7 @@ void EventClass::Execute(void) {
 			ObjectClass *object = NULL;
 			if (Data.MegaMission.Target.Is_Valid()) {
 				object = Data.MegaMission.Target.As_Object();
-				if (object != NULL &&
-				    (!object->IsActive || object->Strength == 0 || object->IsInLimbo)) {
+				if (object != NULL && (!object->IsActive || object->Strength == 0 || object->IsInLimbo)) {
 					break;
 					//						object = NULL;
 					//						Data.MegaMission.Target.Invalidate();
@@ -656,8 +651,7 @@ void EventClass::Execute(void) {
 			*/
 			if (Data.MegaMission.Destination.Is_Valid()) {
 				object = Data.MegaMission.Destination.As_Object();
-				if (object != NULL &&
-				    (!object->IsActive || object->Strength == 0 || object->IsInLimbo)) {
+				if (object != NULL && (!object->IsActive || object->Strength == 0 || object->IsInLimbo)) {
 					break;
 					//						object = NULL;
 					//						Data.MegaMission.Destination.Invalidate();
@@ -679,7 +673,6 @@ void EventClass::Execute(void) {
 			}
 
 			if (object != NULL) {
-
 				// 2019/09/20 JAS - Added record of who clicked on the object
 				HouseClass *house = Houses.Raw_Ptr(ID);
 				bool is_allied = house != nullptr && house->Is_Ally(techno);
@@ -712,15 +705,13 @@ void EventClass::Execute(void) {
 				techno->Assign_Target(TARGET_NONE);
 				techno->Assign_Destination(Data.MegaMission.Target.As_TARGET());
 				techno->ArchiveTarget = Data.MegaMission.Target.As_TARGET();
-			} else if (Data.MegaMission.Mission == MISSION_ENTER && object != NULL &&
-				   object->What_Am_I() == RTTI_BUILDING &&
+			} else if (Data.MegaMission.Mission == MISSION_ENTER && object != NULL && object->What_Am_I() == RTTI_BUILDING &&
 				   *((BuildingClass *)object) == STRUCT_REFINERY) {
 				techno->Transmit_Message(RADIO_HELLO, (BuildingClass *)object);
 				techno->Assign_Destination(TARGET_NONE);
 			} else {
 				if (q && techno->Is_Foot()) {
-					((FootClass *)techno)
-					    ->Queue_Navigation_List(Data.MegaMission.Destination.As_TARGET());
+					((FootClass *)techno)->Queue_Navigation_List(Data.MegaMission.Destination.As_TARGET());
 				} else {
 					if (techno->Is_Foot()) {
 						((FootClass *)techno)->Clear_Navigation_List();
@@ -742,8 +733,7 @@ void EventClass::Execute(void) {
 				VesselClass *ship = (VesselClass *)techno;
 				if (Data.MegaMission.Mission == MISSION_MOVE) {
 					if (object != NULL) {
-						if (object->What_Am_I() == RTTI_BUILDING &&
-						    ((BuildingClass *)object)->House->Is_Ally(techno) &&
+						if (object->What_Am_I() == RTTI_BUILDING && ((BuildingClass *)object)->House->Is_Ally(techno) &&
 						    //							if
 						    //((RTTIType)Data.MegaMission.Destination == RTTI_BUILDING &&
 						    (((BuildingClass *)object)->Class->Type == STRUCT_SHIP_YARD ||
@@ -766,7 +756,6 @@ void EventClass::Execute(void) {
 #ifdef NEVER
 			if ((techno->What_Am_I() == RTTI_UNIT || techno->What_Am_I() == RTTI_INFANTRY) &&
 			    Data.MegaMission.Mission == MISSION_GUARD_AREA) {
-
 				((FootClass *)techno)->ArchiveTarget = Data.MegaMission.Destination;
 			}
 #endif
@@ -778,8 +767,7 @@ void EventClass::Execute(void) {
 	*/
 	case IDLE:
 		techno = Data.Target.Whom.As_Techno();
-		if (techno != NULL && techno->IsActive && !techno->IsInLimbo && !techno->IsTethered &&
-		    techno->What_Am_I() != RTTI_BUILDING) {
+		if (techno != NULL && techno->IsActive && !techno->IsInLimbo && !techno->IsTethered && techno->What_Am_I() != RTTI_BUILDING) {
 			techno->Transmit_Message(RADIO_OVER_OUT);
 			techno->Assign_Destination(TARGET_NONE);
 			techno->Assign_Target(TARGET_NONE);
@@ -795,8 +783,7 @@ void EventClass::Execute(void) {
 	*/
 	case SCATTER:
 		techno = Data.Target.Whom.As_Techno();
-		if (techno != NULL && techno->Is_Foot() && techno->IsActive && !techno->IsInLimbo &&
-		    !techno->IsTethered) {
+		if (techno != NULL && techno->Is_Foot() && techno->IsActive && !techno->IsInLimbo && !techno->IsTethered) {
 			((FootClass *)techno)->IsScattering = true;
 			techno->Scatter(0, true, false);
 		}
@@ -973,7 +960,10 @@ void EventClass::Execute(void) {
 				}
 			}
 			Scen.bOtherProposesDraw = true;
-			Session.Messages.Add_Message(NULL, 0, szMessage, PCOLOR_GOLD,
+			Session.Messages.Add_Message(NULL,
+						     0,
+						     szMessage,
+						     PCOLOR_GOLD,
 						     TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW,
 						     Rule.MessageDelay * TICKS_PER_MINUTE);
 		}
@@ -995,7 +985,10 @@ void EventClass::Execute(void) {
 				}
 			}
 			Scen.bOtherProposesDraw = false;
-			Session.Messages.Add_Message(NULL, 0, szMessage, PCOLOR_GOLD,
+			Session.Messages.Add_Message(NULL,
+						     0,
+						     szMessage,
+						     PCOLOR_GOLD,
 						     TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_FULLSHADOW,
 						     Rule.MessageDelay * TICKS_PER_MINUTE);
 		}

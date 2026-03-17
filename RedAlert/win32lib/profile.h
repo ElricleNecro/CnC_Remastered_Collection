@@ -75,7 +75,7 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 #define MAX_PROFILE_TIME 60 * 1 // 1 minute(s) @ 14.4 Mb per hour
-#define PROFILE_RATE 1000	// samples per sec (max 1000)
+#define PROFILE_RATE 1000 // samples per sec (max 1000)
 
 /*
  * Defines for choosing between the old and new profiler system

@@ -52,8 +52,8 @@
  * HISTORY:                                                                                    *
  *   03/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-CreditClass::CreditClass(void)
-    : Credits(0), Current(0), IsToRedraw(false), IsUp(false), IsAudible(false), Countdown(0) {}
+CreditClass::CreditClass(void) : Credits(0), Current(0), IsToRedraw(false), IsUp(false), IsAudible(false), Countdown(0) {
+}
 
 /***********************************************************************************************
  * CreditClass::Graphic_Logic -- Handles the credit redraw logic.                              *
@@ -107,8 +107,13 @@ void CreditClass::Graphic_Logic(bool forced) {
 		// PG Fancy_Text_Print("%ld", xx, 0, &MetalScheme, TBLACK, TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL,
 		// Current);
 #else
-		Fancy_Text_Print("%ld", xx, 0, &ColorRemaps[PCOLOR_GREY], TBLACK,
-				 TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR, Current);
+		Fancy_Text_Print("%ld",
+				 xx,
+				 0,
+				 &ColorRemaps[PCOLOR_GREY],
+				 TBLACK,
+				 TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR,
+				 Current);
 #endif // WIN32
 
 		if (Scen.MissionTimer.Is_Active()) {
@@ -148,21 +153,45 @@ void CreditClass::Graphic_Logic(bool forced) {
 #ifdef WIN32
 #if (0) // PG
 			if (hours) {
-				Fancy_Text_Print(TXT_TIME_FORMAT_HOURS, 200 * RESFACTOR, 0, &MetalScheme, TBLACK,
-						 TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL, hours, mins, secs);
+				Fancy_Text_Print(TXT_TIME_FORMAT_HOURS,
+						 200 * RESFACTOR,
+						 0,
+						 &MetalScheme,
+						 TBLACK,
+						 TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL,
+						 hours,
+						 mins,
+						 secs);
 			} else {
-				Fancy_Text_Print(TXT_TIME_FORMAT_NO_HOURS, 200 * RESFACTOR, 0, &MetalScheme, TBLACK,
-						 TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL, mins, secs);
+				Fancy_Text_Print(TXT_TIME_FORMAT_NO_HOURS,
+						 200 * RESFACTOR,
+						 0,
+						 &MetalScheme,
+						 TBLACK,
+						 TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL,
+						 mins,
+						 secs);
 			}
 #endif
 #else
 			if (hours) {
-				Fancy_Text_Print("%02d:%02d:%02d", 120 * RESFACTOR, 0, &ColorRemaps[PCOLOR_GREY],
-						 TBLACK, TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR,
-						 hours, mins, secs);
+				Fancy_Text_Print("%02d:%02d:%02d",
+						 120 * RESFACTOR,
+						 0,
+						 &ColorRemaps[PCOLOR_GREY],
+						 TBLACK,
+						 TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR,
+						 hours,
+						 mins,
+						 secs);
 			} else {
-				Fancy_Text_Print("%02d:%02d", 120 * RESFACTOR, 0, &ColorRemaps[PCOLOR_GREY], TBLACK,
-						 TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR, mins,
+				Fancy_Text_Print("%02d:%02d",
+						 120 * RESFACTOR,
+						 0,
+						 &ColorRemaps[PCOLOR_GREY],
+						 TBLACK,
+						 TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR,
+						 mins,
 						 secs);
 			}
 #endif // WIN32
@@ -227,7 +256,6 @@ void CreditClass::AI(bool forced, HouseClass *player_ptr, bool logic_only) {
 		IsAudible = false;
 		Current = Credits;
 	} else {
-
 		if (Countdown)
 			Countdown--;
 		if (Countdown)

@@ -130,8 +130,7 @@ public:
 	/*.....................................................................
 	Debugging
 	.....................................................................*/
-	virtual void Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart,
-				     int namecount) = 0;
+	virtual void Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart, int namecount) = 0;
 #ifdef CHEAT_KEYS
 	virtual void Mono_Debug_Print(int index, int refresh) = 0;
 #endif

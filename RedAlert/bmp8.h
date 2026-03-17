@@ -23,7 +23,8 @@
 
 class BMP8 {
 public:
-	BMP8() : hBMP(NULL), hPal(NULL), hWnd(NULL) {}
+	BMP8() : hBMP(NULL), hPal(NULL), hWnd(NULL) {
+	}
 	~BMP8();
 
 	bool Init(const char *szFile, HWND hWnd);

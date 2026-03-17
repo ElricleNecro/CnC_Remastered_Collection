@@ -91,7 +91,9 @@ WinsockInterfaceClass::WinsockInterfaceClass(void) {
  * HISTORY:                                                                                    *
  *    3/20/96 2:52PM ST : Created                                                              *
  *=============================================================================================*/
-WinsockInterfaceClass::~WinsockInterfaceClass(void) { Close(); }
+WinsockInterfaceClass::~WinsockInterfaceClass(void) {
+	Close();
+}
 
 /***********************************************************************************************
  * WIC::Close -- Releases any currently in use Winsock resources.                              *
@@ -305,8 +307,7 @@ bool WinsockInterfaceClass::Init(void) {
 	/*
 	** Check the Winsock version number
 	*/
-	if ((winsock_info->wVersion & 0x00ff) != (version & 0x00ff) ||
-	    (winsock_info->wVersion >> 8) != (version >> 8)) {
+	if ((winsock_info->wVersion & 0x00ff) != (version & 0x00ff) || (winsock_info->wVersion >> 8) != (version >> 8)) {
 		OutputDebugString("TS: Winsock version is less than 1.1\n");
 		delete[] buffer;
 		return (false);
@@ -444,7 +445,6 @@ void WinsockInterfaceClass::WriteTo(void *buffer, int buffer_len, void *address)
  *    3/20/96 3:00PM ST : Created                                                              *
  *=============================================================================================*/
 void WinsockInterfaceClass::Broadcast(void *buffer, int buffer_len) {
-
 	/*
 	** Create a temporary holding area for the packet.
 	*/

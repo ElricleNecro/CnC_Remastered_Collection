@@ -68,9 +68,8 @@
  *                                                                                             *
  * HISTORY:  01/15/1995 JLB : Created.                                                         *
  *=============================================================================================*/
-TextButtonClass::TextButtonClass(unsigned id, char const *text, TextPrintType style, int x, int y, int w, int h,
-				 int blackborder)
-    : ToggleClass(id, x, y, w, h), String(text) {
+TextButtonClass::TextButtonClass(unsigned id, char const *text, TextPrintType style, int x, int y, int w, int h, int blackborder)
+	: ToggleClass(id, x, y, w, h), String(text) {
 	PrintFlags = style;
 	IsBlackBorder = blackborder;
 
@@ -131,9 +130,8 @@ TextButtonClass::TextButtonClass(void) : ToggleClass(0, 0, 0, 0, 0) {
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-TextButtonClass::TextButtonClass(unsigned id, int text, TextPrintType style, int x, int y, int w, int h,
-				 int blackborder)
-    : ToggleClass(id, x, y, w, h), String(0) {
+TextButtonClass::TextButtonClass(unsigned id, int text, TextPrintType style, int x, int y, int w, int h, int blackborder)
+	: ToggleClass(id, x, y, w, h), String(0) {
 	PrintFlags = style;
 	IsBlackBorder = blackborder;
 	Set_Text(text);

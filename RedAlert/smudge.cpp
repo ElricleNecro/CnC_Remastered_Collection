@@ -110,7 +110,7 @@ void SmudgeClass::operator delete(void *ptr) {
  *   09/01/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 SmudgeClass::SmudgeClass(SmudgeType type, COORDINATE pos, HousesType house)
-    : ObjectClass(RTTI_SMUDGE, Smudges.ID(this)), Class(SmudgeTypes.Ptr((int)type)) {
+	: ObjectClass(RTTI_SMUDGE, Smudges.ID(this)), Class(SmudgeTypes.Ptr((int)type)) {
 	if (pos != -1) {
 		ToOwn = house;
 		if (!Unlimbo(pos)) {
@@ -136,7 +136,9 @@ SmudgeClass::SmudgeClass(SmudgeType type, COORDINATE pos, HousesType house)
  * HISTORY:                                                                                    *
  *   09/01/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SmudgeClass::Init(void) { Smudges.Free_All(); }
+void SmudgeClass::Init(void) {
+	Smudges.Free_All();
+}
 
 /***********************************************************************************************
  * SmudgeClass::Mark -- Marks a smudge down on the map.                                        *
@@ -175,15 +177,12 @@ bool SmudgeClass::Mark(MarkType mark) {
 						} else {
 							if (cell->Is_Clear_To_Move(SPEED_TRACK, true, true)) {
 								if (Class->IsCrater && cell->Smudge != SMUDGE_NONE &&
-								    SmudgeTypeClass::As_Reference(cell->Smudge)
-									.IsCrater) {
+								    SmudgeTypeClass::As_Reference(cell->Smudge).IsCrater) {
 									cell->SmudgeData++;
-									cell->SmudgeData =
-									    (int)min((int)cell->SmudgeData, (int)4);
+									cell->SmudgeData = (int)min((int)cell->SmudgeData, (int)4);
 								}
 
 								if (cell->Smudge == SMUDGE_NONE) {
-
 									/*
 									**	Special selection of a crater that
 									*starts as close to the *	specified
@@ -191,9 +190,7 @@ bool SmudgeClass::Mark(MarkType mark) {
 									*/
 									if (Class->IsCrater) {
 										cell->Smudge =
-										    (SmudgeType)(SMUDGE_CRATER1 +
-												 CellClass::Spot_Index(
-												     Coord));
+											(SmudgeType)(SMUDGE_CRATER1 + CellClass::Spot_Index(Coord));
 									} else {
 										cell->Smudge = Class->Type;
 									}
@@ -251,8 +248,7 @@ void SmudgeClass::Disown(CELL cell) {
 			for (int h = 0; h < Class->Height; h++) {
 				CellClass &cellptr = Map[(CELL)(cell + w + (h * MAP_CELL_W))];
 
-				if (cellptr.Overlay == OVERLAY_NONE ||
-				    !OverlayTypeClass::As_Reference(cellptr.Overlay).IsWall) {
+				if (cellptr.Overlay == OVERLAY_NONE || !OverlayTypeClass::As_Reference(cellptr.Overlay).IsWall) {
 					cellptr.Smudge = SMUDGE_NONE;
 					cellptr.SmudgeData = 0;
 					if (!cellptr.IsFlagged) {

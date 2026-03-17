@@ -42,7 +42,9 @@
 #include "xpipe.h"
 #include "xstraw.h"
 
-LZWEngine::LZWEngine(void) { Reset(); }
+LZWEngine::LZWEngine(void) {
+	Reset();
+}
 
 void LZWEngine::Reset(void) {
 	for (int i = 0; i < TABLE_SIZE; i++) {
@@ -64,7 +66,6 @@ int LZWEngine::Compress(Buffer const &input, Buffer const &output) {
 	}
 
 	for (;;) {
-
 		/*
 		**	Fetch a character from the source data stream. If exhausted,
 		**	then break out of the process loop so that the final code
@@ -90,7 +91,6 @@ int LZWEngine::Compress(Buffer const &input, Buffer const &output) {
 		if (index != -1 && dict[index].CodeValue != -1) {
 			string_code = dict[index].CodeValue;
 		} else {
-
 			/*
 			**	Since no exact match was found, then create a new code
 			**	entry that represents the current code and character
@@ -204,7 +204,6 @@ int LZWEngine::Find_Child_Node(CodeType parent_code, char child_character) {
 	*/
 	int initial = hash_index;
 	while (!dict[hash_index].Is_Matching(parent_code, child_character)) {
-
 		/*
 		**	Stop searching if an unused index is found since this means that
 		**	a match doesn't exist in the table at all.
@@ -285,12 +284,20 @@ struct CodeClass {
 	CodeType ParentCode;
 	char CharValue;
 
-	CodeClass(void) {}
-	CodeClass(CodeType code, CodeType parent, char c) : CodeValue(code), ParentCode(parent), CharValue(c) {}
+	CodeClass(void) {
+	}
+	CodeClass(CodeType code, CodeType parent, char c) : CodeValue(code), ParentCode(parent), CharValue(c) {
+	}
 
-	void Make_Unused(void) { CodeValue = UNUSED; }
-	bool Is_Unused(void) const { return (CodeValue == UNUSED); }
-	bool Is_Matching(CodeType code, char c) const { return (ParentCode == code && CharValue == c); }
+	void Make_Unused(void) {
+		CodeValue = UNUSED;
+	}
+	bool Is_Unused(void) const {
+		return (CodeValue == UNUSED);
+	}
+	bool Is_Matching(CodeType code, char c) const {
+		return (ParentCode == code && CharValue == c);
+	}
 };
 CodeClass dict[TABLE_SIZE];
 
@@ -343,7 +350,6 @@ static int Find_Child_Node(CodeType parent_code, char child_character) {
 	*/
 	int initial = hash_index;
 	while (!dict[hash_index].Is_Matching(parent_code, child_character)) {
-
 		/*
 		**	Stop searching if an unused index is found since this means that
 		**	a match doesn't exist in the table at all.
@@ -425,7 +431,6 @@ int LZW_Compress(Buffer &inbuff, Buffer &outbuff) {
 			string_code = character;
 			outcount += output.Put(&string_code, sizeof(string_code));
 		} else {
-
 			if (dict[index].CodeValue != -1) {
 				string_code = dict[index].CodeValue;
 			} else {

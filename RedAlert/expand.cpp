@@ -86,120 +86,119 @@ bool Expansion_AM_Present(void) {
 }
 #endif
 
-const char *ExpandNames[] = {"SCG20EA", "SCG21EA", "SCG22EA", "SCG23EA", "SCG24EA", "SCG26EA", "SCG27EA", "SCG28EA",
-			     "SCU31EA", "SCU32EA", "SCU33EA", "SCU34EA", "SCU35EA", "SCU36EA", "SCU37EA", "SCU38EA",
-#ifdef FIXIT_CSII			//	checked - ajw 9/28/98
-			     "SCG43EA", // Harbor Reclamation
-			     "SCG41EA", // In the nick of time
-			     "SCG40EA", // Caught in the act
-			     "SCG42EA", // Production Disruption
-			     "SCG47EA", // Negotiations
-			     "SCG45EA", // Monster Tank Madness
-			     "SCG44EA", // Time Flies
-			     "SCG48EA", // Absolut MADness
-			     "SCG46EA", // Pawn
+const char *ExpandNames[] = { "SCG20EA", "SCG21EA", "SCG22EA", "SCG23EA", "SCG24EA", "SCG26EA", "SCG27EA", "SCG28EA",
+			      "SCU31EA", "SCU32EA", "SCU33EA", "SCU34EA", "SCU35EA", "SCU36EA", "SCU37EA", "SCU38EA",
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+			      "SCG43EA", // Harbor Reclamation
+			      "SCG41EA", // In the nick of time
+			      "SCG40EA", // Caught in the act
+			      "SCG42EA", // Production Disruption
+			      "SCG47EA", // Negotiations
+			      "SCG45EA", // Monster Tank Madness
+			      "SCG44EA", // Time Flies
+			      "SCG48EA", // Absolut MADness
+			      "SCG46EA", // Pawn
 
-			     "SCU43EA", // Testing Grounds
-			     "SCU40EA", // Shock Therapy
-			     "SCU42EA", // Let's Make a Steal
-			     "SCU41EA", // Test Drive
-			     "SCU45EA", // Don't Drink The Water
-			     "SCU44EA", // Situation Critical
-			     "SCU46EA", // Brothers in Arms
-			     "SCU47EA", // Deus Ex Machina
-			     "SCU48EA", // Grunyev Revolution
+			      "SCU43EA", // Testing Grounds
+			      "SCU40EA", // Shock Therapy
+			      "SCU42EA", // Let's Make a Steal
+			      "SCU41EA", // Test Drive
+			      "SCU45EA", // Don't Drink The Water
+			      "SCU44EA", // Situation Critical
+			      "SCU46EA", // Brothers in Arms
+			      "SCU47EA", // Deus Ex Machina
+			      "SCU48EA", // Grunyev Revolution
 #endif
-			     NULL};
+			      NULL };
 
-const char *TestNames2[] = {"SCG01EA", "SCG02EA", "SCG03EA", "SCG04EA", "SCG05EA", "SCG06EA",
-			    "SCG07EA", "SCG08EA", "SCU01EA", "SCU02EA", "SCU03EA", "SCU04EA",
-			    "SCU05EA", "SCU06EA", "SCU07EA", "SCU08EA", "SCU09EA", NULL};
+const char *TestNames2[] = { "SCG01EA", "SCG02EA", "SCG03EA", "SCG04EA", "SCG05EA", "SCG06EA", "SCG07EA", "SCG08EA", "SCU01EA",
+			     "SCU02EA", "SCU03EA", "SCU04EA", "SCU05EA", "SCU06EA", "SCU07EA", "SCU08EA", "SCU09EA", NULL };
 
 #ifdef GERMAN
-const char *XlatNames[] = {"Zusammenstoss",
-			   "Unter Tage",
-			   "Kontrollierte Verbrennung",
-			   "Griechenland 1 - Stavros",
-			   "Griechenland 2 - Evakuierung",
-			   "Sibirien 1 - Frische Spuren",
-			   "Sibirien 2 - In der Falle",
-			   "Sibirien 3 - Wildnis",
-			   "Das Feld der Ehre",
-			   "Belagerung",
-			   "Mausefalle",
-			   "Teslas Erbe",
-			   "Soldat Volkov",
-			   "Die Spitze der Welt",
-			   "Paradoxe Gleichung",
-			   "Nukleare Eskalation",
-#ifdef FIXIT_CSII					    //	checked - ajw 9/28/98
-			   "Ein sicherer Hafen",	    //	"SCG43EA",		// Harbor Reclamation
-			   "Zeitkritische Routine",	    //	"SCG41EA",		// In the nick of time
-			   "Auf frischer Tat ertappt",	    //	"SCG40EA",		// Caught in the act
-			   "Drastischer Baustopp",	    //	"SCG42EA",		// Production Disruption
-			   "Harte Verhandlungen",	    //	"SCG47EA",		// Negotiations
-			   "Ferngelenktes Kriegsspielzeug", //	"SCG45EA",		// Monster Tank Madness
-			   "Licht aus",			    //	"SCG44EA",		// Time Flies
-			   "Molekulare KriegsfÅhrung",	    //	"SCG48EA",		// Absolut MADness
-			   "Bauernopfer",		    //	"SCG46EA",		// Pawn
+const char *XlatNames[] = { "Zusammenstoss",
+			    "Unter Tage",
+			    "Kontrollierte Verbrennung",
+			    "Griechenland 1 - Stavros",
+			    "Griechenland 2 - Evakuierung",
+			    "Sibirien 1 - Frische Spuren",
+			    "Sibirien 2 - In der Falle",
+			    "Sibirien 3 - Wildnis",
+			    "Das Feld der Ehre",
+			    "Belagerung",
+			    "Mausefalle",
+			    "Teslas Erbe",
+			    "Soldat Volkov",
+			    "Die Spitze der Welt",
+			    "Paradoxe Gleichung",
+			    "Nukleare Eskalation",
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+			    "Ein sicherer Hafen", //	"SCG43EA",		// Harbor Reclamation
+			    "Zeitkritische Routine", //	"SCG41EA",		// In the nick of time
+			    "Auf frischer Tat ertappt", //	"SCG40EA",		// Caught in the act
+			    "Drastischer Baustopp", //	"SCG42EA",		// Production Disruption
+			    "Harte Verhandlungen", //	"SCG47EA",		// Negotiations
+			    "Ferngelenktes Kriegsspielzeug", //	"SCG45EA",		// Monster Tank Madness
+			    "Licht aus", //	"SCG44EA",		// Time Flies
+			    "Molekulare KriegsfÅhrung", //	"SCG48EA",		// Absolut MADness
+			    "Bauernopfer", //	"SCG46EA",		// Pawn
 
-			   "TestgelÑnde",		  //	"SCU43EA",		// Testing Grounds
-			   "Schocktherapie",		  //	"SCU40EA",		// Shock Therapy
-			   "Der Letzte seiner Art",	  //	"SCU42EA",		// Let's Make a Steal
-			   "Probefahrt",		  //	"SCU41EA",		// Test Drive
-			   "Schlaftrunk",		  //	"SCU45EA",		// Don't Drink The Water
-			   "Der jÅngste Tag",		  //	"SCU44EA",		// Situation Critical
-			   "WaffenbrÅder",		  //	"SCU46EA",		// Brothers in Arms
-			   "Deus Ex Machina",		  //	"SCU47EA",		// Deus Ex Machina
-			   "Die Replikanten von Grunyev", //	"SCU48EA",		// Grunyev Revolution
+			    "TestgelÑnde", //	"SCU43EA",		// Testing Grounds
+			    "Schocktherapie", //	"SCU40EA",		// Shock Therapy
+			    "Der Letzte seiner Art", //	"SCU42EA",		// Let's Make a Steal
+			    "Probefahrt", //	"SCU41EA",		// Test Drive
+			    "Schlaftrunk", //	"SCU45EA",		// Don't Drink The Water
+			    "Der jÅngste Tag", //	"SCU44EA",		// Situation Critical
+			    "WaffenbrÅder", //	"SCU46EA",		// Brothers in Arms
+			    "Deus Ex Machina", //	"SCU47EA",		// Deus Ex Machina
+			    "Die Replikanten von Grunyev", //	"SCU48EA",		// Grunyev Revolution
 
 #endif
-			   NULL};
+			    NULL };
 
 #endif
 
 #ifdef FRENCH
 const char *XlatNames[] = {
-    "Gaz Sarin 1: Ravitaillement Fatal",
-    "Gaz Sarin 2: En Sous-sol",
-    "Gaz Sarin 3: Attaque Chirurgicale",
-    "Gräce OccupÇe 1: Guerre PrivÇe",
-    "Gräce OccupÇe 2: Evacuation",
-    "Conflit SibÇrien 1: Traces Fraåches",
-    "Conflit SibÇrien 2: Pris au Piäge",
-    "Conflit SibÇrien 3: Terres de Glace",
-    "Mise Ö l'Epreuve",
-    "AssiÇgÇs",
-    "La Souriciäre",
-    "L'HÇritage de Tesla",
-    "Tandem de Choc",
-    "Jusqu'au Sommet du Monde",
-    "Effets Secondaires",
-    "Intensification nuclÇaire",
-#ifdef FIXIT_CSII	      //	checked - ajw 9/28/98
-    "Le vieux port",	      //	"SCG43EA",		// Harbor Reclamation
-    "Juste Ö temps",	      //	"SCG41EA",		// In the nick of time
-    "La main dans le sac",    //	"SCG40EA",		// Caught in the act
-    "Production interrompue", //	"SCG42EA",		// Production Disruption
-    "NÇgociations",	      //	"SCG47EA",		// Negotiations
-    "Tanks en folie!",	      //	"SCG45EA",		// Monster Tank Madness
-    "Le temps passe",	      //	"SCG44EA",		// Time Flies
-    "DÇmence absolue",	      //	"SCG48EA",		// Absolut MADness
-    "Le pion",		      //	"SCG46EA",		// Pawn
+	"Gaz Sarin 1: Ravitaillement Fatal",
+	"Gaz Sarin 2: En Sous-sol",
+	"Gaz Sarin 3: Attaque Chirurgicale",
+	"Gräce OccupÇe 1: Guerre PrivÇe",
+	"Gräce OccupÇe 2: Evacuation",
+	"Conflit SibÇrien 1: Traces Fraåches",
+	"Conflit SibÇrien 2: Pris au Piäge",
+	"Conflit SibÇrien 3: Terres de Glace",
+	"Mise Ö l'Epreuve",
+	"AssiÇgÇs",
+	"La Souriciäre",
+	"L'HÇritage de Tesla",
+	"Tandem de Choc",
+	"Jusqu'au Sommet du Monde",
+	"Effets Secondaires",
+	"Intensification nuclÇaire",
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+	"Le vieux port", //	"SCG43EA",		// Harbor Reclamation
+	"Juste Ö temps", //	"SCG41EA",		// In the nick of time
+	"La main dans le sac", //	"SCG40EA",		// Caught in the act
+	"Production interrompue", //	"SCG42EA",		// Production Disruption
+	"NÇgociations", //	"SCG47EA",		// Negotiations
+	"Tanks en folie!", //	"SCG45EA",		// Monster Tank Madness
+	"Le temps passe", //	"SCG44EA",		// Time Flies
+	"DÇmence absolue", //	"SCG48EA",		// Absolut MADness
+	"Le pion", //	"SCG46EA",		// Pawn
 
-    "Terrains d'essais",	//	"SCU43EA",		// Testing Grounds
-    "ThÇrapie de choc",		//	"SCU40EA",		// Shock Therapy
-    "Au voleur!",		//	"SCU42EA",		// Let's Make a Steal
-    "Essai de conduite",	//	"SCU41EA",		// Test Drive
-    "Ne buvez pas la tasse",	//	"SCU45EA",		// Don't Drink The Water
-    "Situation critique",	//	"SCU44EA",		// Situation Critical
-    "Fräres d'armes",		//	"SCU46EA",		// Brothers in Arms
-    "Deus Ex Machina",		//	"SCU47EA",		// Deus Ex Machina
-    "La RÇvolution de Grunyev", //	"SCU48EA",		// Grunyev Revolution
+	"Terrains d'essais", //	"SCU43EA",		// Testing Grounds
+	"ThÇrapie de choc", //	"SCU40EA",		// Shock Therapy
+	"Au voleur!", //	"SCU42EA",		// Let's Make a Steal
+	"Essai de conduite", //	"SCU41EA",		// Test Drive
+	"Ne buvez pas la tasse", //	"SCU45EA",		// Don't Drink The Water
+	"Situation critique", //	"SCU44EA",		// Situation Critical
+	"Fräres d'armes", //	"SCU46EA",		// Brothers in Arms
+	"Deus Ex Machina", //	"SCU47EA",		// Deus Ex Machina
+	"La RÇvolution de Grunyev", //	"SCU48EA",		// Grunyev Revolution
 
 #endif
 
-    NULL,
+	NULL,
 };
 
 #endif
@@ -243,20 +242,34 @@ struct EObjectClass {
 class EListClass : public ListClass {
 public:
 	EListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down)
-	    : ListClass(id, x, y, w, h, flags, up, down) {};
+		: ListClass(id, x, y, w, h, flags, up, down) {};
 
-	virtual int Add_Object(EObjectClass *obj) { return (ListClass::Add_Item((char const *)obj)); }
-	virtual EObjectClass *Get_Object(int index) const { return ((EObjectClass *)ListClass::Get_Item(index)); }
-	virtual EObjectClass *Current_Object(void) { return ((EObjectClass *)ListClass::Current_Item()); }
+	virtual int Add_Object(EObjectClass *obj) {
+		return (ListClass::Add_Item((char const *)obj));
+	}
+	virtual EObjectClass *Get_Object(int index) const {
+		return ((EObjectClass *)ListClass::Get_Item(index));
+	}
+	virtual EObjectClass *Current_Object(void) {
+		return ((EObjectClass *)ListClass::Current_Item());
+	}
 
 protected:
 	virtual void Draw_Entry(int index, int x, int y, int width, int selected);
 
 private:
-	virtual int Add_Item(char const *text) { return (ListClass::Add_Item(text)); };
-	virtual int Add_Item(int text) { return (ListClass::Add_Item(text)); };
-	virtual char const *Current_Item(void) const { return (ListClass::Current_Item()); };
-	virtual char const *Get_Item(int index) const { return (ListClass::Get_Item(index)); };
+	virtual int Add_Item(char const *text) {
+		return (ListClass::Add_Item(text));
+	};
+	virtual int Add_Item(int text) {
+		return (ListClass::Add_Item(text));
+	};
+	virtual char const *Current_Item(void) const {
+		return (ListClass::Current_Item());
+	};
+	virtual char const *Get_Item(int index) const {
+		return (ListClass::Get_Item(index));
+	};
 };
 
 /***********************************************************************************************
@@ -320,20 +333,30 @@ bool Expansion_Dialog(void)
 
 #ifndef WIN32
 	TextButtonClass ok(200, TXT_OK, TPF_BUTTON, OPTION_X + 40, OPTION_Y + OPTION_HEIGHT - 15);
-	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X + OPTION_WIDTH - 85,
-			       OPTION_Y + OPTION_HEIGHT - 15);
+	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X + OPTION_WIDTH - 85, OPTION_Y + OPTION_HEIGHT - 15);
 #else
 	TextButtonClass ok(200, TXT_OK, TPF_BUTTON, OPTION_X + 40, OPTION_Y + OPTION_HEIGHT - 50);
-	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X + OPTION_WIDTH - 85,
-			       OPTION_Y + OPTION_HEIGHT - 50);
+	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X + OPTION_WIDTH - 85, OPTION_Y + OPTION_HEIGHT - 50);
 #endif
 
 #ifndef WIN32
-	EListClass list(202, OPTION_X + 20, OPTION_Y + 20, OPTION_WIDTH - 40, OPTION_HEIGHT - 40, TPF_BUTTON,
-			MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	EListClass list(202,
+			OPTION_X + 20,
+			OPTION_Y + 20,
+			OPTION_WIDTH - 40,
+			OPTION_HEIGHT - 40,
+			TPF_BUTTON,
+			MFCD::Retrieve("BTN-UP.SHP"),
+			MFCD::Retrieve("BTN-DN.SHP"));
 #else
-	EListClass list(202, OPTION_X + 35, OPTION_Y + 30, OPTION_WIDTH - 70, OPTION_HEIGHT - 85, TPF_BUTTON,
-			MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	EListClass list(202,
+			OPTION_X + 35,
+			OPTION_Y + 30,
+			OPTION_WIDTH - 70,
+			OPTION_HEIGHT - 85,
+			TPF_BUTTON,
+			MFCD::Retrieve("BTN-UP.SHP"),
+			MFCD::Retrieve("BTN-DN.SHP"));
 
 #endif
 	buttons = &ok;
@@ -375,12 +398,11 @@ bool Expansion_Dialog(void)
 			bOk = !bCounterstrike;
 
 		if (bOk && file.Is_Available()) {
-#else  //	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 		if (file.Is_Available()) {
 #endif //	FIXIT_VERSION_3
 			EObjectClass *obj = new EObjectClass;
 			switch (buffer[2]) {
-
 			case 'G':
 			case 'g':
 				file.Read(sbuffer, 2000);
@@ -432,7 +454,6 @@ bool Expansion_Dialog(void)
 	bool okval = true;
 
 	while (process) {
-
 #ifdef WIN32
 		/*
 		** If we have just received input focus again after running in the background then

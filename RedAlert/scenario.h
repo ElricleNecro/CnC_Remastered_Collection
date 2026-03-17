@@ -45,8 +45,7 @@ class ScenarioClass {
 public:
 	// Constructor.
 	ScenarioClass(void);
-	void Set_Scenario_Name(int scenario, ScenarioPlayerType player, ScenarioDirType dir = SCEN_DIR_NONE,
-			       ScenarioVarType var = SCEN_VAR_NONE);
+	void Set_Scenario_Name(int scenario, ScenarioPlayerType player, ScenarioDirType dir = SCEN_DIR_NONE, ScenarioVarType var = SCEN_VAR_NONE);
 	void Set_Scenario_Name(char const *name);
 
 	bool Set_Global_To(int global, bool value);
@@ -62,7 +61,7 @@ public:
 	/*
 	**	This is the difficulty setting of the game.
 	*/
-	DiffType Difficulty;  // For human player.
+	DiffType Difficulty; // For human player.
 	DiffType CDifficulty; // For computer players.
 
 	/*
@@ -320,7 +319,7 @@ public:
 	CDTimerClass<FrameTimerClass> AutoSonarTimer;
 #endif
 
-#ifdef FIXIT_VERSION_3		 //	Stalemate games.
+#ifdef FIXIT_VERSION_3 //	Stalemate games.
 	bool bLocalProposesDraw; //	True if the local player in a 2-player game has a draw offer extended.
 	bool bOtherProposesDraw; //	True if the other player in a 2-player game has a draw offer extended.
 #endif

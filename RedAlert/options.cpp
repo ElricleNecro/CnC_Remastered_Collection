@@ -83,28 +83,27 @@ char const *const OptionsClass::HotkeyName = "DOSHotkeys";
  *   07/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 OptionsClass::OptionsClass(void)
-    : GameSpeed(3), ScrollRate(3),
+	: GameSpeed(3), ScrollRate(3),
 #ifdef WIN32
-      Volume(".40"), // was .295
-      ScoreVolume(".25"),
+	  Volume(".40"), // was .295
+	  ScoreVolume(".25"),
 #ifdef FIXIT_VERSION_3
-      MultiScoreVolume("0"),
+	  MultiScoreVolume("0"),
 #endif
 #else
-      Volume(".8"), ScoreVolume(".6"),
+	  Volume(".8"), ScoreVolume(".6"),
 #endif
-      Brightness(fixed::_1_2), Tint(fixed::_1_2), Saturation(fixed::_1_2), Contrast(fixed::_1_2), AutoScroll(true),
-      IsScoreRepeat(false), IsScoreShuffle(false), IsPaletteScroll(true),
+	  Brightness(fixed::_1_2), Tint(fixed::_1_2), Saturation(fixed::_1_2), Contrast(fixed::_1_2), AutoScroll(true), IsScoreRepeat(false),
+	  IsScoreShuffle(false), IsPaletteScroll(true),
 
-      KeyForceMove1(KN_LALT), KeyForceMove2(KN_RALT), KeyForceAttack1(KN_LCTRL), KeyForceAttack2(KN_RCTRL),
-      KeySelect1(KN_LSHIFT), KeySelect2(KN_RSHIFT), KeyScatter(KN_X), KeyStop(KN_S), KeyGuard(KN_G), KeyNext(KN_N),
-      KeyPrevious(KN_B), KeyFormation(KN_F), KeyHome1(KN_HOME), KeyHome2(KN_E_HOME), KeyBase(KN_H), KeyResign(KN_R),
-      KeyAlliance(KN_A), KeyBookmark1(KN_F9), KeyBookmark2(KN_F10), KeyBookmark3(KN_F11), KeyBookmark4(KN_F12),
-      KeySelectView(KN_E), KeyRepair(KN_T), KeyRepairOn(KN_NONE), KeyRepairOff(KN_NONE), KeySell(KN_Y),
-      KeySellOn(KN_NONE), KeySellOff(KN_NONE), KeyMap(KN_U), KeySidebarUp(KN_UP), KeySidebarDown(KN_DOWN),
-      KeyOption1(KN_ESC), KeyOption2(KN_SPACE), KeyScrollLeft(KN_NONE), KeyScrollRight(KN_NONE), KeyScrollUp(KN_NONE),
-      KeyScrollDown(KN_NONE), KeyQueueMove1(KN_Q), KeyQueueMove2(KN_Q), KeyTeam1(KN_1), KeyTeam2(KN_2), KeyTeam3(KN_3),
-      KeyTeam4(KN_4), KeyTeam5(KN_5), KeyTeam6(KN_6), KeyTeam7(KN_7), KeyTeam8(KN_8), KeyTeam9(KN_9), KeyTeam10(KN_0) {
+	  KeyForceMove1(KN_LALT), KeyForceMove2(KN_RALT), KeyForceAttack1(KN_LCTRL), KeyForceAttack2(KN_RCTRL), KeySelect1(KN_LSHIFT),
+	  KeySelect2(KN_RSHIFT), KeyScatter(KN_X), KeyStop(KN_S), KeyGuard(KN_G), KeyNext(KN_N), KeyPrevious(KN_B), KeyFormation(KN_F),
+	  KeyHome1(KN_HOME), KeyHome2(KN_E_HOME), KeyBase(KN_H), KeyResign(KN_R), KeyAlliance(KN_A), KeyBookmark1(KN_F9), KeyBookmark2(KN_F10),
+	  KeyBookmark3(KN_F11), KeyBookmark4(KN_F12), KeySelectView(KN_E), KeyRepair(KN_T), KeyRepairOn(KN_NONE), KeyRepairOff(KN_NONE),
+	  KeySell(KN_Y), KeySellOn(KN_NONE), KeySellOff(KN_NONE), KeyMap(KN_U), KeySidebarUp(KN_UP), KeySidebarDown(KN_DOWN), KeyOption1(KN_ESC),
+	  KeyOption2(KN_SPACE), KeyScrollLeft(KN_NONE), KeyScrollRight(KN_NONE), KeyScrollUp(KN_NONE), KeyScrollDown(KN_NONE), KeyQueueMove1(KN_Q),
+	  KeyQueueMove2(KN_Q), KeyTeam1(KN_1), KeyTeam2(KN_2), KeyTeam3(KN_3), KeyTeam4(KN_4), KeyTeam5(KN_5), KeyTeam6(KN_6), KeyTeam7(KN_7),
+	  KeyTeam8(KN_8), KeyTeam9(KN_9), KeyTeam10(KN_0) {
 }
 
 /***********************************************************************************************
@@ -123,7 +122,9 @@ OptionsClass::OptionsClass(void)
  * HISTORY:                                                                                    *
  *   07/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::One_Time(void) { Set_Score_Vol(ScoreVolume * 256); }
+void OptionsClass::One_Time(void) {
+	Set_Score_Vol(ScoreVolume * 256);
+}
 
 /***********************************************************************************************
  * OptionsClass::Process -- Handles all the options graphic interface.                         *
@@ -140,7 +141,8 @@ void OptionsClass::One_Time(void) { Set_Score_Vol(ScoreVolume * 256); }
  * HISTORY:                                                                                    *
  *   07/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Process(void) {}
+void OptionsClass::Process(void) {
+}
 
 /***********************************************************************************************
  * OptionsClass::Set_Shuffle -- Controls the play shuffle setting.                             *
@@ -157,7 +159,9 @@ void OptionsClass::Process(void) {}
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Shuffle(int on) { IsScoreShuffle = on; }
+void OptionsClass::Set_Shuffle(int on) {
+	IsScoreShuffle = on;
+}
 
 /***********************************************************************************************
  * OptionsClass::Set_Repeat -- Controls the score repeat option.                               *
@@ -174,7 +178,9 @@ void OptionsClass::Set_Shuffle(int on) { IsScoreShuffle = on; }
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Repeat(int on) { IsScoreRepeat = on; }
+void OptionsClass::Set_Repeat(int on) {
+	IsScoreRepeat = on;
+}
 
 /***********************************************************************************************
  * OptionsClass::Set_Score_Volume -- Sets the global score volume to that specified.           *
@@ -262,7 +268,9 @@ void OptionsClass::Set_Brightness(fixed brightness) {
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Brightness(void) const { return ((Brightness - fixed::_1_4) / fixed::_1_2); }
+fixed OptionsClass::Get_Brightness(void) const {
+	return ((Brightness - fixed::_1_4) / fixed::_1_2);
+}
 
 /***********************************************************************************************
  * OptionsClass::Set_Saturation -- Sets the color to the value specified.                      *
@@ -301,7 +309,9 @@ void OptionsClass::Set_Saturation(fixed color) {
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Saturation(void) const { return (Saturation); }
+fixed OptionsClass::Get_Saturation(void) const {
+	return (Saturation);
+}
 
 /***********************************************************************************************
  * OptionsClass::Set_Contrast -- Sets the contrast to the value specified.                     *
@@ -339,7 +349,9 @@ void OptionsClass::Set_Contrast(fixed contrast) {
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Contrast(void) const { return ((Contrast - fixed::_1_4) / fixed::_1_2); }
+fixed OptionsClass::Get_Contrast(void) const {
+	return ((Contrast - fixed::_1_4) / fixed::_1_2);
+}
 
 /***********************************************************************************************
  * OptionsClass::Set_Tint -- Sets the tint setting.                                            *
@@ -376,7 +388,9 @@ void OptionsClass::Set_Tint(fixed tint) {
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Tint(void) const { return (Tint); }
+fixed OptionsClass::Get_Tint(void) const {
+	return (Tint);
+}
 
 /***********************************************************************************************
  * OptionsClass::Adjust_Palette -- Adjusts the palette according to the settings specified.    *
@@ -404,8 +418,7 @@ fixed OptionsClass::Get_Tint(void) const { return (Tint); }
  *   07/21/1994 JLB : Created.                                                                 *
  *   12/02/1995 JLB : Uses palette class objects.                                              *
  *=============================================================================================*/
-void OptionsClass::Adjust_Palette(PaletteClass const &oldpal, PaletteClass &newpal, fixed brightness, fixed color,
-				  fixed tint, fixed contrast) const {
+void OptionsClass::Adjust_Palette(PaletteClass const &oldpal, PaletteClass &newpal, fixed brightness, fixed color, fixed tint, fixed contrast) const {
 	// if (!oldpal || !newpal) return;	Can't be NULL... ST - 5/9/2019
 
 	/*
@@ -756,8 +769,7 @@ void OptionsClass::Set(void) {
  *   06/30/1995 JLB : Handles low values in a more consistent manner.                          *
  *=============================================================================================*/
 int OptionsClass::Normalize_Delay(int delay) const {
-	static int _adjust[][8] = {
-	    {2, 2, 1, 1, 1, 1, 1, 1}, {3, 3, 3, 2, 2, 2, 1, 1}, {5, 4, 4, 3, 3, 2, 2, 1}, {7, 6, 5, 4, 4, 4, 3, 2}};
+	static int _adjust[][8] = { { 2, 2, 1, 1, 1, 1, 1, 1 }, { 3, 3, 3, 2, 2, 2, 1, 1 }, { 5, 4, 4, 3, 3, 2, 2, 1 }, { 7, 6, 5, 4, 4, 4, 3, 2 } };
 	if (delay) {
 		if (delay < 5) {
 			delay = _adjust[delay - 1][GameSpeed];
@@ -803,4 +815,6 @@ void OptionsClass::Fixup_Palette(void) const {
  * HISTORY:                                                                                    *
  *   09/22/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int OptionsClass::Normalize_Volume(int volume) const { return (volume * Volume); }
+int OptionsClass::Normalize_Volume(int volume) const {
+	return (volume * Volume);
+}

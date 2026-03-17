@@ -43,9 +43,9 @@
  *   CCFileClass::Write -- Writes data to the file (non mixfile files only).                   *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <errno.h>
 #include "ccfile.h"
 #include "function.h"
-#include <errno.h>
 
 /***********************************************************************************************
  * CCFileClass::CCFileClass -- Filename based constructor for C&C file.                        *
@@ -63,7 +63,9 @@
  * HISTORY:                                                                                    *
  *   03/20/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-CCFileClass::CCFileClass(char const *filename) : Position(0) { CCFileClass::Set_Name(filename); }
+CCFileClass::CCFileClass(char const *filename) : Position(0) {
+	CCFileClass::Set_Name(filename);
+}
 
 /***********************************************************************************************
  * CCFileClass::CCFileClass -- Default constructor for file object.                            *
@@ -79,7 +81,8 @@ CCFileClass::CCFileClass(char const *filename) : Position(0) { CCFileClass::Set_
  * HISTORY:                                                                                    *
  *   03/20/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-CCFileClass::CCFileClass(void) : Position(0) {}
+CCFileClass::CCFileClass(void) : Position(0) {
+}
 
 /***********************************************************************************************
  * CCFileClass::Error -- Handles displaying a file error message.                              *
@@ -416,7 +419,6 @@ int CCFileClass::Open(int rights) {
 	long length = 0;
 	long start = 0;
 	if (MFCD::Offset(File_Name(), &pointer, &mixfile, &start, &length)) {
-
 		assert(mixfile != NULL);
 
 		/*
@@ -424,7 +426,6 @@ int CCFileClass::Open(int rights) {
 		**	the mixfile, but think it is reading from a solitary file.
 		*/
 		if (pointer == NULL && mixfile != NULL) {
-
 			/*
 			**	This is a legitimate open to the file. All access to the file through this
 			**	file object will be appropriately adjusted for mixfile support however. Also
@@ -446,7 +447,6 @@ int CCFileClass::Open(int rights) {
 		}
 
 	} else {
-
 		/*
 		**	The file cannot be found in any mixfile, so it must reside as
 		** an individual file on the disk. Or else it is just plain missing.
@@ -568,9 +568,13 @@ int __cdecl Find_File(char const *file_name) {
 }
 
 #ifdef NEVER
-int __cdecl Delete_File(char const *file_name) { return (CCFileClass(file_name).Delete()); }
+int __cdecl Delete_File(char const *file_name) {
+	return (CCFileClass(file_name).Delete());
+}
 
-int __cdecl Create_File(char const *file_name) { return (CCFileClass(file_name).Create()); }
+int __cdecl Create_File(char const *file_name) {
+	return (CCFileClass(file_name).Create());
+}
 
 unsigned long __cdecl Load_Data(char const *name, void *ptr, unsigned long size) {
 	return (CCFileClass(name).Read(ptr, size));
@@ -609,11 +613,15 @@ bool __cdecl Multi_Drive_Search(bool on) {
 	return (on);
 }
 
-void __cdecl WWDOS_Init(void) {}
+void __cdecl WWDOS_Init(void) {
+}
 
-void __cdecl WWDOS_Shutdown(void) {}
+void __cdecl WWDOS_Shutdown(void) {
+}
 
-int __cdecl Find_Disk_Number(char const *) { return (0); }
+int __cdecl Find_Disk_Number(char const *) {
+	return (0);
+}
 #endif
 
 // unsigned long __cdecl Load_Uncompress(char const * file, BuffType uncomp_buff, BuffType dest_buff, void *
@@ -631,4 +639,5 @@ char CallingDOSInt;
 }
 #endif
 
-void Unfragment_File_Cache(void) {}
+void Unfragment_File_Cache(void) {
+}

@@ -60,7 +60,9 @@ public:
 	virtual int Add_Item(int text);
 	virtual int Add_Scroll_Bar(void);
 	virtual void Bump(int up);
-	virtual int Count(void) const { return List.Count(); };
+	virtual int Count(void) const {
+		return List.Count();
+	};
 	virtual int Current_Index(void) const;
 	virtual char const *Current_Item(void) const;
 	virtual int Draw_Me(int forced);
@@ -142,25 +144,34 @@ protected:
 	int CurrentTopIndex;
 };
 
-template <class T> class TListClass : public ControlClass {
+template <class T>
+class TListClass : public ControlClass {
 public:
 	TListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down);
 	TListClass(TListClass<T> const &list);
 	virtual ~TListClass(void);
-	T operator[](int index) const { return (List[index]); };
-	T &operator[](int index) { return (List[index]); };
+	T operator[](int index) const {
+		return (List[index]);
+	};
+	T &operator[](int index) {
+		return (List[index]);
+	};
 
 	virtual int Add_Item(T text);
 	virtual int Add_Scroll_Bar(void);
 	virtual void Insert_Item(T item);
 	virtual void Bump(int up);
-	virtual int Count(void) const { return List.Count(); };
+	virtual int Count(void) const {
+		return List.Count();
+	};
 	virtual int Current_Index(void) const;
 	virtual T Current_Item(void) const;
 	virtual int Draw_Me(int forced);
 	virtual int Step_Selected_Index(int forward);
 	virtual void Flag_To_Redraw(void);
-	virtual T Get_Item(int index) const { return (List[index]); };
+	virtual T Get_Item(int index) const {
+		return (List[index]);
+	};
 
 	virtual void Peer_To_Peer(unsigned flags, KeyNumType &key, ControlClass &whom);
 	virtual void Remove_Item(T);
@@ -236,9 +247,8 @@ protected:
 
 template <class T>
 TListClass<T>::TListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down)
-    : ControlClass(id, x, y, w, h, LEFTPRESS | LEFTRELEASE | KEYBOARD, false), UpGadget(0, up, x + w, y),
-      DownGadget(0, down, x + w, y + h), ScrollGadget(0, x + w, y, 0, h, true), TextFlags(flags), Tabs(0),
-      IsScrollActive(false), SelectedIndex(0), CurrentTopIndex(0) {
+	: ControlClass(id, x, y, w, h, LEFTPRESS | LEFTRELEASE | KEYBOARD, false), UpGadget(0, up, x + w, y), DownGadget(0, down, x + w, y + h),
+	  ScrollGadget(0, x + w, y, 0, h, true), TextFlags(flags), Tabs(0), IsScrollActive(false), SelectedIndex(0), CurrentTopIndex(0) {
 	/*
 	**	Set preliminary values for the slider related gadgets. They don't automatically
 	**	appear at this time, but there are some values that can be pre-filled in.
@@ -261,16 +271,16 @@ TListClass<T>::TListClass(int id, int x, int y, int w, int h, TextPrintType flag
 
 template <class T>
 TListClass<T>::TListClass(TListClass<T> const &list)
-    : ControlClass(list), TextFlags(list.TextFlags), Tabs(list.Tabs), List(list.List), LineHeight(list.LineHeight),
-      LineCount(list.LineCount), IsScrollActive(list.IsScrollActive), UpGadget(list.UpGadget),
-      DownGadget(list.DownGadget), ScrollGadget(list.ScrollGadget), SelectedIndex(list.SelectedIndex),
-      CurrentTopIndex(list.CurrentTopIndex) {
+	: ControlClass(list), TextFlags(list.TextFlags), Tabs(list.Tabs), List(list.List), LineHeight(list.LineHeight), LineCount(list.LineCount),
+	  IsScrollActive(list.IsScrollActive), UpGadget(list.UpGadget), DownGadget(list.DownGadget), ScrollGadget(list.ScrollGadget),
+	  SelectedIndex(list.SelectedIndex), CurrentTopIndex(list.CurrentTopIndex) {
 	UpGadget.Make_Peer(*this);
 	DownGadget.Make_Peer(*this);
 	ScrollGadget.Make_Peer(*this);
 }
 
-template <class T> void TListClass<T>::Set_Position(int x, int y) {
+template <class T>
+void TListClass<T>::Set_Position(int x, int y) {
 	UpGadget.X = x + Width - UpGadget.Width;
 	UpGadget.Y = y;
 	DownGadget.X = x + Width - DownGadget.Width;
@@ -281,9 +291,13 @@ template <class T> void TListClass<T>::Set_Position(int x, int y) {
 	ScrollGadget.Width = max(UpGadget.Width, DownGadget.Width);
 }
 
-template <class T> TListClass<T>::~TListClass(void) { Remove_Scroll_Bar(); }
+template <class T>
+TListClass<T>::~TListClass(void) {
+	Remove_Scroll_Bar();
+}
 
-template <class T> void TListClass<T>::Insert_Item(T item) {
+template <class T>
+void TListClass<T>::Insert_Item(T item) {
 	if (Current_Index() >= Count()) {
 		List.Add(item);
 	} else {
@@ -303,7 +317,8 @@ template <class T> void TListClass<T>::Insert_Item(T item) {
 	}
 }
 
-template <class T> int TListClass<T>::Add_Item(T text) {
+template <class T>
+int TListClass<T>::Add_Item(T text) {
 	//	if (text) {
 	List.Add(text);
 	Flag_To_Redraw();
@@ -326,7 +341,8 @@ template <class T> int TListClass<T>::Add_Item(T text) {
 	return (List.Count() - 1);
 }
 
-template <class T> void TListClass<T>::Remove_Index(int index) {
+template <class T>
+void TListClass<T>::Remove_Index(int index) {
 	if ((unsigned)index < List.Count()) {
 		List.Delete(index);
 
@@ -368,21 +384,23 @@ template <class T> void TListClass<T>::Remove_Index(int index) {
 	}
 }
 
-template <class T> void TListClass<T>::Remove_Item(T text) { Remove_Index(List.ID(text)); }
+template <class T>
+void TListClass<T>::Remove_Item(T text) {
+	Remove_Index(List.ID(text));
+}
 
-template <class T> int TListClass<T>::Action(unsigned flags, KeyNumType &key) {
+template <class T>
+int TListClass<T>::Action(unsigned flags, KeyNumType &key) {
 	if (flags & LEFTRELEASE) {
 		key = KN_NONE;
 		flags &= (~LEFTRELEASE);
 		ControlClass::Action(flags, key);
 		return (true);
 	} else {
-
 		/*
 		** Handle keyboard events here.
 		*/
 		if (flags & KEYBOARD) {
-
 			/*
 			**	Process the keyboard character. If indicated, consume this keyboard event
 			**	so that the edit gadget ID number is not returned.
@@ -398,7 +416,6 @@ template <class T> int TListClass<T>::Action(unsigned flags, KeyNumType &key) {
 			}
 
 		} else {
-
 			int index = Get_Mouse_Y() - (Y + 1);
 			index = index / LineHeight;
 			SelectedIndex = CurrentTopIndex + index;
@@ -408,9 +425,9 @@ template <class T> int TListClass<T>::Action(unsigned flags, KeyNumType &key) {
 	return (ControlClass::Action(flags, key));
 }
 
-template <class T> int TListClass<T>::Draw_Me(int forced) {
+template <class T>
+int TListClass<T>::Draw_Me(int forced) {
 	if (GadgetClass::Draw_Me(forced)) {
-
 		/*
 		**	Turn off the mouse.
 		*/
@@ -428,12 +445,16 @@ template <class T> int TListClass<T>::Draw_Me(int forced) {
 				int line = CurrentTopIndex + index;
 
 				if (List.Count() > line) {
-
 					/*
 					**	Prints the text and handles right edge clipping and tabs.
 					*/
-					List[line]->Draw_It(line, X + 1, Y + (LineHeight * index) + 1, Width - 2,
-							    LineHeight, (line == SelectedIndex), TextFlags);
+					List[line]->Draw_It(line,
+							    X + 1,
+							    Y + (LineHeight * index) + 1,
+							    Width - 2,
+							    LineHeight,
+							    (line == SelectedIndex),
+							    TextFlags);
 					//					List[index].Draw_It(line, X+1,
 					// Y+(LineHeight*index)+1, Width-2, LineHeight, (line == SelectedIndex),
 					// TextFlags); 					Draw_Entry(line, X+1,
@@ -453,7 +474,8 @@ template <class T> int TListClass<T>::Draw_Me(int forced) {
 	return (false);
 }
 
-template <class T> void TListClass<T>::Bump(int up) {
+template <class T>
+void TListClass<T>::Bump(int up) {
 	if (IsScrollActive) {
 		if (ScrollGadget.Step(up)) {
 			CurrentTopIndex = ScrollGadget.Get_Value();
@@ -462,7 +484,8 @@ template <class T> void TListClass<T>::Bump(int up) {
 	}
 }
 
-template <class T> void TListClass<T>::Step(int up) {
+template <class T>
+void TListClass<T>::Step(int up) {
 	if (IsScrollActive) {
 		if (ScrollGadget.Step(up)) {
 			CurrentTopIndex = ScrollGadget.Get_Value();
@@ -472,13 +495,15 @@ template <class T> void TListClass<T>::Step(int up) {
 }
 
 #ifdef NEVER
-template <class T> T TListClass<T>::Get_Item(int index) const {
+template <class T>
+T TListClass<T>::Get_Item(int index) const {
 	index = min(index, List.Count());
 	return (List[index]);
 }
 #endif
 
-template <class T> T TListClass<T>::Current_Item(void) const {
+template <class T>
+T TListClass<T>::Current_Item(void) const {
 	static T _temp;
 	if (List.Count() <= SelectedIndex) {
 		return (_temp);
@@ -486,9 +511,13 @@ template <class T> T TListClass<T>::Current_Item(void) const {
 	return (List[SelectedIndex]);
 }
 
-template <class T> int TListClass<T>::Current_Index(void) const { return (SelectedIndex); }
+template <class T>
+int TListClass<T>::Current_Index(void) const {
+	return (SelectedIndex);
+}
 
-template <class T> void TListClass<T>::Peer_To_Peer(unsigned flags, KeyNumType &, ControlClass &whom) {
+template <class T>
+void TListClass<T>::Peer_To_Peer(unsigned flags, KeyNumType &, ControlClass &whom) {
 	if (flags & LEFTRELEASE) {
 		if (&whom == &UpGadget) {
 			Step(true);
@@ -507,7 +536,8 @@ template <class T> void TListClass<T>::Peer_To_Peer(unsigned flags, KeyNumType &
 	}
 }
 
-template <class T> int TListClass<T>::Set_View_Index(int index) {
+template <class T>
+int TListClass<T>::Set_View_Index(int index) {
 	index = Bound(index, 0, List.Count() - LineCount);
 	if (index != CurrentTopIndex) {
 		CurrentTopIndex = index;
@@ -520,7 +550,8 @@ template <class T> int TListClass<T>::Set_View_Index(int index) {
 	return (false);
 }
 
-template <class T> int TListClass<T>::Add_Scroll_Bar(void) {
+template <class T>
+int TListClass<T>::Add_Scroll_Bar(void) {
 	if (!IsScrollActive) {
 		IsScrollActive = true;
 
@@ -571,7 +602,8 @@ template <class T> int TListClass<T>::Add_Scroll_Bar(void) {
 	return (false);
 }
 
-template <class T> int TListClass<T>::Remove_Scroll_Bar(void) {
+template <class T>
+int TListClass<T>::Remove_Scroll_Bar(void) {
 	if (IsScrollActive) {
 		IsScrollActive = false;
 		Width += ScrollGadget.Width;
@@ -584,10 +616,14 @@ template <class T> int TListClass<T>::Remove_Scroll_Bar(void) {
 	return (false);
 }
 
-template <class T> void TListClass<T>::Set_Tabs(int const *tabs) { Tabs = tabs; }
+template <class T>
+void TListClass<T>::Set_Tabs(int const *tabs) {
+	Tabs = tabs;
+}
 
 #ifdef NEVER
-template <class T> void TListClass<T>::Draw_Entry(int index, int x, int y, int width, int selected) {
+template <class T>
+void TListClass<T>::Draw_Entry(int index, int x, int y, int width, int selected) {
 	if (TextFlags & TPF_6PT_GRAD) {
 		TextPrintType flags = TextFlags;
 
@@ -608,7 +644,8 @@ template <class T> void TListClass<T>::Draw_Entry(int index, int x, int y, int w
 }
 #endif
 
-template <class T> LinkClass &TListClass<T>::Add(LinkClass &list) {
+template <class T>
+LinkClass &TListClass<T>::Add(LinkClass &list) {
 	/*
 	**	Add the scroll bar gadgets if they're active.
 	*/
@@ -624,7 +661,8 @@ template <class T> LinkClass &TListClass<T>::Add(LinkClass &list) {
 	return (ControlClass::Add(list));
 }
 
-template <class T> LinkClass &TListClass<T>::Add_Head(LinkClass &list) {
+template <class T>
+LinkClass &TListClass<T>::Add_Head(LinkClass &list) {
 	/*
 	**	Add the scroll bar gadgets if they're active.
 	*/
@@ -640,7 +678,8 @@ template <class T> LinkClass &TListClass<T>::Add_Head(LinkClass &list) {
 	return (ControlClass::Add_Head(list));
 }
 
-template <class T> LinkClass &TListClass<T>::Add_Tail(LinkClass &list) {
+template <class T>
+LinkClass &TListClass<T>::Add_Tail(LinkClass &list) {
 	/*
 	**	Add myself to the list.
 	*/
@@ -658,7 +697,8 @@ template <class T> LinkClass &TListClass<T>::Add_Tail(LinkClass &list) {
 	return (Head_Of_List());
 }
 
-template <class T> GadgetClass *TListClass<T>::Remove(void) {
+template <class T>
+GadgetClass *TListClass<T>::Remove(void) {
 	/*
 	**	Remove the scroll bar if it's active
 	*/
@@ -674,7 +714,8 @@ template <class T> GadgetClass *TListClass<T>::Remove(void) {
 	return (ControlClass::Remove());
 }
 
-template <class T> void TListClass<T>::Set_Selected_Index(int index) {
+template <class T>
+void TListClass<T>::Set_Selected_Index(int index) {
 	if ((unsigned)index < List.Count()) {
 		SelectedIndex = index;
 		Flag_To_Redraw();
@@ -687,14 +728,16 @@ template <class T> void TListClass<T>::Set_Selected_Index(int index) {
 	}
 }
 
-template <class T> int TListClass<T>::Step_Selected_Index(int step) {
+template <class T>
+int TListClass<T>::Step_Selected_Index(int step) {
 	int old = SelectedIndex;
 
 	Set_Selected_Index(old + step);
 	return (old);
 }
 
-template <class T> void TListClass<T>::Flag_To_Redraw(void) {
+template <class T>
+void TListClass<T>::Flag_To_Redraw(void) {
 	if (IsScrollActive) {
 		UpGadget.Flag_To_Redraw();
 		DownGadget.Flag_To_Redraw();
@@ -703,7 +746,8 @@ template <class T> void TListClass<T>::Flag_To_Redraw(void) {
 	ControlClass::Flag_To_Redraw();
 }
 
-template <class T> void TListClass<T>::Set_Selected_Index(T text) {
+template <class T>
+void TListClass<T>::Set_Selected_Index(T text) {
 	for (int index = 0; index < Count(); index++) {
 		if (text == Get_Item(index)) {
 			Set_Selected_Index(index);

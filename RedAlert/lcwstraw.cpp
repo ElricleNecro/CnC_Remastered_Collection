@@ -35,10 +35,10 @@
  *   LCWStraw::~LCWStraw -- Destructor for the LCW straw.                                      *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "lcwstraw.h"
-#include "lcw.h"
 #include <assert.h>
 #include <string.h>
+#include "lcwstraw.h"
+#include "lcw.h"
 
 /***********************************************************************************************
  * LCWStraw::LCWStraw -- Constructor for LCW straw object.                                     *
@@ -59,8 +59,7 @@
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LCWStraw::LCWStraw(CompControl control, int blocksize)
-    : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
+LCWStraw::LCWStraw(CompControl control, int blocksize) : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
 	SafetyMargin = BlockSize / 128 + 1;
 	Buffer = new char[BlockSize + SafetyMargin];
 	if (control == COMPRESS) {
@@ -124,7 +123,6 @@ int LCWStraw::Get(void *destbuf, int slen) {
 	}
 
 	while (slen > 0) {
-
 		/*
 		**	Copy as much data is requested and available into the desired
 		**	destination buffer.
@@ -134,8 +132,7 @@ int LCWStraw::Get(void *destbuf, int slen) {
 			if (Control == DECOMPRESS) {
 				memmove(destbuf, &Buffer[BlockHeader.UncompCount - Counter], len);
 			} else {
-				memmove(destbuf, &Buffer2[(BlockHeader.CompCount + sizeof(BlockHeader)) - Counter],
-					len);
+				memmove(destbuf, &Buffer2[(BlockHeader.CompCount + sizeof(BlockHeader)) - Counter], len);
 			}
 			destbuf = ((char *)destbuf) + len;
 			slen -= len;
@@ -161,8 +158,7 @@ int LCWStraw::Get(void *destbuf, int slen) {
 			BlockHeader.UncompCount = (unsigned short)Straw::Get(Buffer, BlockSize);
 			if (BlockHeader.UncompCount == 0)
 				break;
-			BlockHeader.CompCount =
-			    (unsigned short)LCW_Comp(Buffer, &Buffer2[sizeof(BlockHeader)], BlockHeader.UncompCount);
+			BlockHeader.CompCount = (unsigned short)LCW_Comp(Buffer, &Buffer2[sizeof(BlockHeader)], BlockHeader.UncompCount);
 			memmove(Buffer2, &BlockHeader, sizeof(BlockHeader));
 			Counter = BlockHeader.CompCount + sizeof(BlockHeader);
 		}

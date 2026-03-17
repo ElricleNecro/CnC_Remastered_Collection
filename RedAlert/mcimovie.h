@@ -19,11 +19,11 @@
 #include "function.h"
 
 #ifdef MCIMPEG
-#include "watcom.h"
 #include <digitalv.h>
 #include <mmsystem.h>
 #include <windows.h>
 #include <windowsx.h>
+#include "watcom.h"
 
 class MCIMovie {
 public:
@@ -35,13 +35,17 @@ public:
 	bool Pause(void);
 	bool Close(void);
 
-	LONG GetWidth(void) { return ((mDeviceID) ? mWidth : 0); }
+	LONG GetWidth(void) {
+		return ((mDeviceID) ? mWidth : 0);
+	}
 
-	LONG GetHeight(void) { return ((mDeviceID) ? mHeight : 0); }
+	LONG GetHeight(void) {
+		return ((mDeviceID) ? mHeight : 0);
+	}
 
 protected:
 	HWND mMainWindow; // Application window
-	HWND mMCIWindow;  // Callback window
+	HWND mMCIWindow; // Callback window
 	char *mName;
 	UINT mDeviceID;
 	MCI_OPEN_PARMS mOpenParm;

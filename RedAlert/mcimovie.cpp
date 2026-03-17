@@ -16,8 +16,8 @@
 #include "function.h"
 
 #ifdef MCIMPEG
-#include "mcimovie.h"
 #include <memory.h>
+#include "mcimovie.h"
 
 /****************************************************************************
  *
@@ -304,8 +304,7 @@ bool MCIMovie::AttachWindow(HWND window) {
 	winParm.hWnd = window;
 	winParm.nCmdShow = SW_SHOW;
 
-	rc = mciSendCommand(mDeviceID, MCI_WINDOW, MCI_WAIT | MCI_DGV_WINDOW_HWND | MCI_DGV_WINDOW_STATE,
-			    (DWORD)&winParm);
+	rc = mciSendCommand(mDeviceID, MCI_WINDOW, MCI_WAIT | MCI_DGV_WINDOW_HWND | MCI_DGV_WINDOW_STATE, (DWORD)&winParm);
 
 	if (rc) {
 		char buffer[512];

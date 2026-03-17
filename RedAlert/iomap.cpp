@@ -385,7 +385,6 @@ void DisplayClass::Code_Pointers(void) {
 	*/
 	memset(CursorShapeSave, 0, sizeof(CursorShapeSave));
 	if (CursorSize && CursorSize != CursorShapeSave) {
-
 		int save_buffer_element_size = sizeof(CursorShapeSave) / sizeof(CursorShapeSave[0]);
 
 		int index = 0;

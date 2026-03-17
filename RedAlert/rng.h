@@ -41,7 +41,8 @@
 */
 class RandomNumberGenerator {
 public:
-	virtual ~RandomNumberGenerator() {}
+	virtual ~RandomNumberGenerator() {
+	}
 
 	virtual void Get_Block(void *output, unsigned int size) = 0;
 };

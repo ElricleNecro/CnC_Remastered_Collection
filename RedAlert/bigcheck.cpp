@@ -50,8 +50,7 @@ int BigCheckBoxClass::Draw_Me(int forced) {
 		//			flags = flags | TPF_MEDIUM_COLOR;
 		//		}
 
-		Conquer_Clip_Text_Print(szCaption, X + BIGCHECK_OFFSETX, Y + BIGCHECK_OFFSETY, pScheme, TBLACK, flags,
-					Width, 0);
+		Conquer_Clip_Text_Print(szCaption, X + BIGCHECK_OFFSETX, Y + BIGCHECK_OFFSETY, pScheme, TBLACK, flags, Width, 0);
 
 		Show_Mouse();
 		return true;

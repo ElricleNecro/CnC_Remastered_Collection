@@ -129,17 +129,23 @@ public:
 	These are the possible values for the Code field of the CommHeaderType:
 	.....................................................................*/
 	enum ConnectionEnum {
-		PACKET_DATA_ACK,   // this is a data packet requiring an ACK
+		PACKET_DATA_ACK, // this is a data packet requiring an ACK
 		PACKET_DATA_NOACK, // this is a data packet not requiring an ACK
-		PACKET_ACK,	   // this is an ACK for a packet
-		PACKET_COUNT	   // for computational purposes
+		PACKET_ACK, // this is an ACK for a packet
+		PACKET_COUNT // for computational purposes
 	};
 
 	/*.....................................................................
 	Constructor/destructor.
 	.....................................................................*/
-	ConnectionClass(int numsend, int numrecieve, int maxlen, unsigned short magicnum, unsigned long retry_delta,
-			unsigned long max_retries, unsigned long timeout, int extralen = 0);
+	ConnectionClass(int numsend,
+			int numrecieve,
+			int maxlen,
+			unsigned short magicnum,
+			unsigned long retry_delta,
+			unsigned long max_retries,
+			unsigned long timeout,
+			int extralen = 0);
 	virtual ~ConnectionClass();
 
 	/*.....................................................................
@@ -169,14 +175,30 @@ public:
 	/*.....................................................................
 	Utility routines.
 	.....................................................................*/
-	unsigned short Magic_Num(void) { return (MagicNum); }
-	unsigned long Retry_Delta(void) { return (RetryDelta); }
-	void Set_Retry_Delta(unsigned long delta) { RetryDelta = delta; }
-	unsigned long Max_Retries(void) { return (MaxRetries); }
-	void Set_Max_Retries(unsigned long retries) { MaxRetries = retries; }
-	unsigned long Time_Out(void) { return (Timeout); }
-	void Set_TimeOut(unsigned long t) { Timeout = t; }
-	unsigned long Max_Packet_Len(void) { return (MaxPacketLen); }
+	unsigned short Magic_Num(void) {
+		return (MagicNum);
+	}
+	unsigned long Retry_Delta(void) {
+		return (RetryDelta);
+	}
+	void Set_Retry_Delta(unsigned long delta) {
+		RetryDelta = delta;
+	}
+	unsigned long Max_Retries(void) {
+		return (MaxRetries);
+	}
+	void Set_Max_Retries(unsigned long retries) {
+		MaxRetries = retries;
+	}
+	unsigned long Time_Out(void) {
+		return (Timeout);
+	}
+	void Set_TimeOut(unsigned long t) {
+		Timeout = t;
+	}
+	unsigned long Max_Packet_Len(void) {
+		return (MaxPacketLen);
+	}
 	static char *Command_Name(int command);
 
 	/*.....................................................................

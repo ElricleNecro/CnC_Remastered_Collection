@@ -83,7 +83,7 @@ private:
 	**	Each block has a header of this format.
 	*/
 	struct {
-		unsigned short CompCount;   // Size of data block (compressed).
+		unsigned short CompCount; // Size of data block (compressed).
 		unsigned short UncompCount; // Bytes of uncompressed data it represents.
 	} BlockHeader;
 

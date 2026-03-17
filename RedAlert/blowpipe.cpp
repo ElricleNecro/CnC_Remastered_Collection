@@ -35,9 +35,9 @@
  *   BlowPipe::Put -- Submit a block of data for encrypt/decrypt.                              *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include "blowpipe.h"
 #include <assert.h>
 #include <string.h>
+#include "blowpipe.h"
 
 /***********************************************************************************************
  * BlowPipe::Flush -- Flushes any pending data out the pipe.                                   *

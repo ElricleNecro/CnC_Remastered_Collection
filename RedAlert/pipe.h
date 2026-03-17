@@ -59,13 +59,18 @@ typedef int bool;
 */
 class Pipe {
 public:
-	Pipe(void) : ChainTo(0), ChainFrom(0) {}
+	Pipe(void) : ChainTo(0), ChainFrom(0) {
+	}
 	virtual ~Pipe(void);
 
 	virtual int Flush(void);
-	virtual int End(void) { return (Flush()); }
+	virtual int End(void) {
+		return (Flush());
+	}
 	virtual void Put_To(Pipe *pipe);
-	void Put_To(Pipe &pipe) { Put_To(&pipe); }
+	void Put_To(Pipe &pipe) {
+		Put_To(&pipe);
+	}
 	virtual int Put(void const *source, int slen);
 
 	/*

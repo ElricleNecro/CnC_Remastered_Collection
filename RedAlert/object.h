@@ -137,9 +137,15 @@ public:
 	*/
 	ObjectClass(RTTIType rtti, int id);
 	ObjectClass(NoInitClass const &x) : AbstractClass(x), Next(x), Trigger(x) {};
-	virtual ~ObjectClass(void) { Next = 0; };
-	int operator<(ObjectClass const &object) const { return Sort_Y() < object.Sort_Y(); };
-	int operator>(ObjectClass const &object) const { return Sort_Y() > object.Sort_Y(); };
+	virtual ~ObjectClass(void) {
+		Next = 0;
+	};
+	int operator<(ObjectClass const &object) const {
+		return Sort_Y() < object.Sort_Y();
+	};
+	int operator>(ObjectClass const &object) const {
+		return Sort_Y() > object.Sort_Y();
+	};
 
 	/*
 	**	Object selection control.
@@ -149,18 +155,21 @@ public:
 	/*
 	**	Query functions.
 	*/
-	virtual bool Is_Players_Army(void) const { return (false); }
+	virtual bool Is_Players_Army(void) const {
+		return (false);
+	}
 	virtual void const *Get_Image_Data(void) const;
 	virtual ActionType What_Action(ObjectClass const *) const;
 	virtual ActionType What_Action(CELL) const;
 	virtual LayerType In_Which_Layer(void) const;
-	bool Is_Infantry(void) const { return (RTTI == RTTI_INFANTRY); };
+	bool Is_Infantry(void) const {
+		return (RTTI == RTTI_INFANTRY);
+	};
 	bool Is_Foot(void) const {
 		return (RTTI == RTTI_INFANTRY || RTTI == RTTI_UNIT || RTTI == RTTI_VESSEL || RTTI == RTTI_AIRCRAFT);
 	};
 	bool Is_Techno(void) const {
-		return (RTTI == RTTI_BUILDING || RTTI == RTTI_UNIT || RTTI == RTTI_INFANTRY || RTTI == RTTI_VESSEL ||
-			RTTI == RTTI_AIRCRAFT);
+		return (RTTI == RTTI_BUILDING || RTTI == RTTI_UNIT || RTTI == RTTI_INFANTRY || RTTI == RTTI_VESSEL || RTTI == RTTI_AIRCRAFT);
 	};
 	virtual int Get_Ownable(void) const;
 	virtual ObjectTypeClass const &Class_Of(void) const = 0;
@@ -239,8 +248,7 @@ public:
 	*/
 	virtual bool In_Range(COORDINATE, int = 0) const;
 	virtual int Weapon_Range(int = 0) const;
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0, bool forced = false);
 	virtual void Scatter(COORDINATE, bool forced = false, bool nokidding = false);
 	virtual bool Catch_Fire(void);
 	virtual void Fire_Out(void);
@@ -250,7 +258,8 @@ public:
 	/*
 	**	AI.
 	*/
-	virtual void Per_Cell_Process(PCPType) {}
+	virtual void Per_Cell_Process(PCPType) {
+	}
 	virtual BuildingClass *Who_Can_Build_Me(bool intheory, bool legal) const;
 	virtual RadioMessageType Receive_Message(RadioClass *from, RadioMessageType message, long &param);
 	virtual bool Revealed(HouseClass *house);

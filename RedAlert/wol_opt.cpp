@@ -58,13 +58,13 @@ bool WOL_Options_Dialog(WolapiObject *pWO, bool bCalledFromGame) {
 #endif
 
 	int d_dialog_w = d_list_w + 40 * RESFACTOR; // dialog width
-	int d_dialog_h = 90 * RESFACTOR;	    // dialog height
+	int d_dialog_h = 90 * RESFACTOR; // dialog height
 	int d_dialog_x = (((320 * RESFACTOR) - d_dialog_w) / 2);
 	int d_dialog_y = (((200 * RESFACTOR) - d_dialog_h) / 2);
 	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // coord of x-center
 
 	int d_txt8_h = 11 * RESFACTOR; // ht of 8-pt text
-	int d_margin = 7 * RESFACTOR;  // margin width/height
+	int d_margin = 7 * RESFACTOR; // margin width/height
 	int x_margin = 16 * RESFACTOR; // margin width/height
 
 	int top_margin = 0;
@@ -102,16 +102,40 @@ bool WOL_Options_Dialog(WolapiObject *pWO, bool bCalledFromGame) {
 
 	TextButtonClass OkBtn(BUTTON_OK, TXT_OK, TPF_BUTTON, d_ok_x, d_ok_y, d_ok_w);
 
-	BigCheckBoxClass FindCheck(CHECK_FIND, d_list_x, d_list_y, d_list_w, d_list_h, TXT_WOL_OPTFIND,
-				   TPF_6PT_GRAD | TPF_NOSHADOW, pWO->bFindEnabled);
-	BigCheckBoxClass PageCheck(CHECK_PAGE, d_list_x, d_list_y + d_list_h + 2, d_list_w, d_list_h, TXT_WOL_OPTPAGE,
-				   TPF_6PT_GRAD | TPF_NOSHADOW, pWO->bPageEnabled);
-	BigCheckBoxClass LanguageCheck(CHECK_LANGUAGE, d_list_x, d_list_y + 2 * (d_list_h + 2), d_list_w, d_list_h,
-				       TXT_WOL_OPTLANGUAGE, TPF_6PT_GRAD | TPF_NOSHADOW, pWO->bLangFilter);
-	BigCheckBoxClass GamescopeCheck(CHECK_ALLGAMES, d_list_x, d_list_y + 3 * (d_list_h + 2), d_list_w, d_list_h,
-					TXT_WOL_OPTGAMESCOPE, TPF_6PT_GRAD | TPF_NOSHADOW, !pWO->bAllGamesShown);
-	BigCheckBoxClass RankAMCheck(CHECK_RANKAM, d_list_x, d_list_y + 4 * (d_list_h + 2), d_list_w, d_list_h,
-				     TXT_WOL_OPTRANKAM, TPF_6PT_GRAD | TPF_NOSHADOW, !pWO->bShowRankRA);
+	BigCheckBoxClass
+		FindCheck(CHECK_FIND, d_list_x, d_list_y, d_list_w, d_list_h, TXT_WOL_OPTFIND, TPF_6PT_GRAD | TPF_NOSHADOW, pWO->bFindEnabled);
+	BigCheckBoxClass PageCheck(CHECK_PAGE,
+				   d_list_x,
+				   d_list_y + d_list_h + 2,
+				   d_list_w,
+				   d_list_h,
+				   TXT_WOL_OPTPAGE,
+				   TPF_6PT_GRAD | TPF_NOSHADOW,
+				   pWO->bPageEnabled);
+	BigCheckBoxClass LanguageCheck(CHECK_LANGUAGE,
+				       d_list_x,
+				       d_list_y + 2 * (d_list_h + 2),
+				       d_list_w,
+				       d_list_h,
+				       TXT_WOL_OPTLANGUAGE,
+				       TPF_6PT_GRAD | TPF_NOSHADOW,
+				       pWO->bLangFilter);
+	BigCheckBoxClass GamescopeCheck(CHECK_ALLGAMES,
+					d_list_x,
+					d_list_y + 3 * (d_list_h + 2),
+					d_list_w,
+					d_list_h,
+					TXT_WOL_OPTGAMESCOPE,
+					TPF_6PT_GRAD | TPF_NOSHADOW,
+					!pWO->bAllGamesShown);
+	BigCheckBoxClass RankAMCheck(CHECK_RANKAM,
+				     d_list_x,
+				     d_list_y + 4 * (d_list_h + 2),
+				     d_list_w,
+				     d_list_h,
+				     TXT_WOL_OPTRANKAM,
+				     TPF_6PT_GRAD | TPF_NOSHADOW,
+				     !pWO->bShowRankRA);
 
 	/*
 	**	Initialize.
@@ -135,7 +159,6 @@ bool WOL_Options_Dialog(WolapiObject *pWO, bool bCalledFromGame) {
 	bool display = true;
 	bool process = true;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -164,7 +187,6 @@ bool WOL_Options_Dialog(WolapiObject *pWO, bool bCalledFromGame) {
 		**	Refresh display if needed.
 		*/
 		if (display) {
-
 			/*
 			**	Display the dialog box.
 			*/

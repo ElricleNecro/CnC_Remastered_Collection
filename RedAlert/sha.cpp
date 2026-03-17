@@ -153,8 +153,7 @@ void SHAEngine::Hash(void const *data, long length) {
 	Process_Partial(data, length);
 }
 
-#define Reverse_LONG(a)                                                                                                \
-	((a >> 24) & 0x000000FFL) | ((a >> 8) & 0x0000FF00L) | ((a << 8) & 0x00FF0000L) | ((a << 24) & 0xFF000000L)
+#define Reverse_LONG(a) ((a >> 24) & 0x000000FFL) | ((a >> 8) & 0x0000FF00L) | ((a << 8) & 0x00FF0000L) | ((a << 24) & 0xFF000000L)
 
 /***********************************************************************************************
  * SHAEngine::Result -- Fetch the current digest.                                              *
@@ -234,7 +233,10 @@ int SHAEngine::Result(void *result) const {
 **	is called even though they both have the same parameters and declaration attributes.
 */
 // #pragma warn -sig
-template <class T> T _rotl(T X, int n) { return (T)((X << n) | ((unsigned)X >> ((sizeof(T) * 8) - n))); }
+template <class T>
+T _rotl(T X, int n) {
+	return (T)((X << n) | ((unsigned)X >> ((sizeof(T) * 8) - n)));
+}
 // unsigned long _RTLENTRY _rotl(unsigned long X, int n)
 //{
 //	return(unsigned long)( (unsigned long)( (unsigned long)( (unsigned long)X ) << (int)n ) | (unsigned long)(
@@ -289,8 +291,8 @@ void SHAEngine::Process_Block(void const *source, SHADigest &acc) const {
 	*/
 	SHADigest alt = acc;
 	for (index = 0; index < PROC_BLOCK_SIZE / sizeof(long); index++) {
-		long temp = _rotl(alt.Long[0], 5) + Do_Function(index, alt.Long[1], alt.Long[2], alt.Long[3]) +
-			    alt.Long[4] + block[index] + Get_Constant(index);
+		long temp = _rotl(alt.Long[0], 5) + Do_Function(index, alt.Long[1], alt.Long[2], alt.Long[3]) + alt.Long[4] + block[index] +
+			    Get_Constant(index);
 		alt.Long[4] = alt.Long[3];
 		alt.Long[3] = alt.Long[2];
 		alt.Long[2] = _rotl(alt.Long[1], 30);

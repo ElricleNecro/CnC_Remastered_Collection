@@ -38,24 +38,29 @@
 class EditClass : public ControlClass {
 public:
 	typedef enum EditStyle {
-		ALPHA = 0x0001,	    // Edit accepts alphabetic characters.
-		NUMERIC = 0x0002,   // Edit accepts numbers.
-		MISC = 0x0004,	    // Edit accepts misc graphic characters.
+		ALPHA = 0x0001, // Edit accepts alphabetic characters.
+		NUMERIC = 0x0002, // Edit accepts numbers.
+		MISC = 0x0004, // Edit accepts misc graphic characters.
 		UPPERCASE = 0x0008, // Force to upper case.
 		ALPHANUMERIC = (int)ALPHA | (int)NUMERIC | (int)MISC
 	} EditStyle;
 
-	EditClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w = -1, int h = -1,
-		  EditStyle style = ALPHANUMERIC);
+	EditClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w = -1, int h = -1, EditStyle style = ALPHANUMERIC);
 	virtual ~EditClass(void);
 
 	virtual void Set_Focus(void);
 	virtual int Draw_Me(int forced);
 	virtual void Set_Text(char *text, int max_len);
-	virtual char *Get_Text(void) { return (String); };
-	void Set_Color(RemapControlType *color) { Color = color; }
+	virtual char *Get_Text(void) {
+		return (String);
+	};
+	void Set_Color(RemapControlType *color) {
+		Color = color;
+	}
 
-	void Set_Read_Only(int rdonly) { IsReadOnly = rdonly; }
+	void Set_Read_Only(int rdonly) {
+		IsReadOnly = rdonly;
+	}
 
 protected:
 	/*

@@ -67,24 +67,24 @@ bool RedrawOptionsMenu;
  *=============================================================================================*/
 void GameOptionsClass::Process(void) {
 	static struct {
-		int ID;		// Button ID to use.
-		int Text;	// Text number to use for this button.
+		int ID; // Button ID to use.
+		int Text; // Text number to use for this button.
 		bool Multiplay; // Allowed in multiplayer version?
 	} _constants[] = {
-	    {BUTTON_LOAD, TXT_LOAD_MISSION, false},
+		{ BUTTON_LOAD, TXT_LOAD_MISSION, false },
 #ifdef FIXIT_MULTI_SAVE
-	    {BUTTON_SAVE, TXT_SAVE_MISSION, true},
+		{ BUTTON_SAVE, TXT_SAVE_MISSION, true },
 #else
-	    {BUTTON_SAVE, TXT_SAVE_MISSION, false},
+		{ BUTTON_SAVE, TXT_SAVE_MISSION, false },
 #endif
-	    {BUTTON_DELETE, TXT_DELETE_MISSION, true},
-	    {BUTTON_GAME, TXT_GAME_CONTROLS, true},
-	    {BUTTON_QUIT, TXT_QUIT_MISSION, true},
+		{ BUTTON_DELETE, TXT_DELETE_MISSION, true },
+		{ BUTTON_GAME, TXT_GAME_CONTROLS, true },
+		{ BUTTON_QUIT, TXT_QUIT_MISSION, true },
 #ifdef FIXIT_VERSION_3 //	Stalemate games.
-	    {BUTTON_DRAW, TXT_OK, true},
+		{ BUTTON_DRAW, TXT_OK, true },
 #endif
-	    {BUTTON_RESUME, TXT_RESUME_MISSION, true},
-	    {BUTTON_RESTATE, TXT_RESTATE_MISSION, false},
+		{ BUTTON_RESUME, TXT_RESUME_MISSION, true },
+		{ BUTTON_RESTATE, TXT_RESTATE_MISSION, false },
 	};
 
 	/*
@@ -140,8 +140,7 @@ void GameOptionsClass::Process(void) {
 		}
 #else
 #ifdef FIXIT_MULTI_SAVE
-		if (Session.Type != GAME_NORMAL &&
-		    (num_players < 2 || PlayingAgainstVersion == VERSION_RED_ALERT_104) && text == TXT_SAVE_MISSION) {
+		if (Session.Type != GAME_NORMAL && (num_players < 2 || PlayingAgainstVersion == VERSION_RED_ALERT_104) && text == TXT_SAVE_MISSION) {
 			continue;
 		}
 #endif // FIXIT_MULTI_SAVE
@@ -168,21 +167,17 @@ void GameOptionsClass::Process(void) {
 #ifdef FIXIT_VERSION_3 //	Stalemate games.
 		TextButtonClass *g;
 		if (_constants[index].ID == BUTTON_DRAW) {
-			if (Session.Type != GAME_NORMAL && Session.Type != GAME_SKIRMISH &&
-			    Session.Players.Count() == 2) {
+			if (Session.Type != GAME_NORMAL && Session.Type != GAME_SKIRMISH && Session.Players.Count() == 2) {
 				if (Scen.bLocalProposesDraw) {
 					if (!Scen.bOtherProposesDraw)
-						g = new TextButtonClass(BUTTON_DRAW, TXT_WOL_RETRACT_DRAW, TPF_BUTTON,
-									0, y);
+						g = new TextButtonClass(BUTTON_DRAW, TXT_WOL_RETRACT_DRAW, TPF_BUTTON, 0, y);
 					else
 						continue; //	Game will end now anyway.
 				} else {
 					if (!Scen.bOtherProposesDraw)
-						g = new TextButtonClass(BUTTON_DRAW, TXT_WOL_PROPOSE_DRAW, TPF_BUTTON,
-									0, y);
+						g = new TextButtonClass(BUTTON_DRAW, TXT_WOL_PROPOSE_DRAW, TPF_BUTTON, 0, y);
 					else
-						g = new TextButtonClass(BUTTON_DRAW, TXT_WOL_ACCEPT_DRAW, TPF_BUTTON, 0,
-									y);
+						g = new TextButtonClass(BUTTON_DRAW, TXT_WOL_ACCEPT_DRAW, TPF_BUTTON, 0, y);
 				}
 			} else
 				continue;
@@ -232,8 +227,7 @@ void GameOptionsClass::Process(void) {
 
 	if (Session.Type == GAME_NORMAL) {
 		buttonsel[BUTTON_RESTATE - 1]->Width = 90 * RESFACTOR;
-		buttonsel[BUTTON_RESTATE - 1]->X =
-		    OptionX + OptionWidth - (buttonsel[BUTTON_RESTATE - 1]->Width + (17 * RESFACTOR));
+		buttonsel[BUTTON_RESTATE - 1]->X = OptionX + OptionWidth - (buttonsel[BUTTON_RESTATE - 1]->Width + (17 * RESFACTOR));
 	}
 
 	/*
@@ -246,9 +240,8 @@ void GameOptionsClass::Process(void) {
 	**	This cause a right click anywhere or a left click outside the dialog region
 	**	to be equivalent to clicking on the return to game button.
 	*/
-	(new ControlClass(BUTTON_RESUME, 0, 0, SeenBuff.Get_Width(), SeenBuff.Get_Height(),
-			  GadgetClass::LEFTPRESS | GadgetClass::RIGHTPRESS))
-	    ->Add_Tail(*buttons);
+	(new ControlClass(BUTTON_RESUME, 0, 0, SeenBuff.Get_Width(), SeenBuff.Get_Height(), GadgetClass::LEFTPRESS | GadgetClass::RIGHTPRESS))
+		->Add_Tail(*buttons);
 
 	Keyboard->Clear();
 
@@ -261,7 +254,6 @@ void GameOptionsClass::Process(void) {
 	bool process = true;
 	pressed = false;
 	while (process) {
-
 		/*
 		**	Invoke game callback.
 		*/
@@ -288,7 +280,6 @@ void GameOptionsClass::Process(void) {
 		**	Refresh display if needed.
 		*/
 		if (display || RedrawOptionsMenu) {
-
 			/*
 			**	Redraw the map.
 			*/
@@ -316,19 +307,25 @@ void GameOptionsClass::Process(void) {
 			**	Display the version number at the bottom of the dialog box.
 			*/
 #ifndef WIN32
-			Fancy_Text_Print("%s\rV%s", (OptionX + OptionWidth) - (17 * RESFACTOR),
-					 OptionY + OptionHeight -
-					     ((Session.Type == GAME_NORMAL) ? (32 * RESFACTOR) : (24 * RESFACTOR)),
-					 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT,
-					 Scen.ScenarioName, Version_Name());
+			Fancy_Text_Print("%s\rV%s",
+					 (OptionX + OptionWidth) - (17 * RESFACTOR),
+					 OptionY + OptionHeight - ((Session.Type == GAME_NORMAL) ? (32 * RESFACTOR) : (24 * RESFACTOR)),
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT,
+					 Scen.ScenarioName,
+					 Version_Name());
 
 #else
 #if (0) // PG
-			Fancy_Text_Print("%s\rV%s", (OptionX + OptionWidth) - (25 * RESFACTOR),
-					 OptionY + OptionHeight -
-					     ((Session.Type == GAME_NORMAL) ? (32 * RESFACTOR) : (24 * RESFACTOR)),
-					 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT,
-					 Scen.ScenarioName, Version_Name());
+			Fancy_Text_Print("%s\rV%s",
+					 (OptionX + OptionWidth) - (25 * RESFACTOR),
+					 OptionY + OptionHeight - ((Session.Type == GAME_NORMAL) ? (32 * RESFACTOR) : (24 * RESFACTOR)),
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW | TPF_RIGHT,
+					 Scen.ScenarioName,
+					 Version_Name());
 #endif
 #endif
 
@@ -430,7 +427,6 @@ void GameOptionsClass::Process(void) {
 		}
 
 		if (pressed) {
-
 			buttonsel[curbutton - 1]->Turn_Off();
 			buttonsel[curbutton - 1]->Flag_To_Redraw();
 			curbutton = selection;
@@ -440,8 +436,7 @@ void GameOptionsClass::Process(void) {
 			switch (selection) {
 			case BUTTON_RESTATE:
 				display = true;
-				if (!Restate_Mission(Scen.ScenarioName, TXT_VIDEO,
-						     TXT_RESUME_MISSION /*KOTXT_OPTIONS*/)) {
+				if (!Restate_Mission(Scen.ScenarioName, TXT_VIDEO, TXT_RESUME_MISSION /*KOTXT_OPTIONS*/)) {
 					BreakoutAllowed = true;
 					Play_Movie(Scen.BriefMovie);
 					BlackPalette.Adjust(0x08, WhitePalette);
@@ -496,8 +491,7 @@ void GameOptionsClass::Process(void) {
 
 			case (BUTTON_QUIT):
 				if (Session.Type == GAME_NORMAL) {
-					switch (WWMessageBox().Process(TXT_CONFIRM_EXIT, TXT_ABORT, TXT_CANCEL,
-								       TXT_RESTART)) {
+					switch (WWMessageBox().Process(TXT_CONFIRM_EXIT, TXT_ABORT, TXT_CANCEL, TXT_RESTART)) {
 					case 1:
 						display = true;
 						break;

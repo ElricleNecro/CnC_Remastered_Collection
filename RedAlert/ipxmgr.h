@@ -151,8 +151,7 @@ public:
 	/*.....................................................................
 	Constructor/destructor.
 	.....................................................................*/
-	IPXManagerClass(int glb_maxlen, int pvt_maxlen, int glb_num_packets, int pvt_num_packets, unsigned short socket,
-			unsigned short product_id);
+	IPXManagerClass(int glb_maxlen, int pvt_maxlen, int glb_num_packets, int pvt_num_packets, unsigned short socket, unsigned short product_id);
 	virtual ~IPXManagerClass(); // stop listening
 
 	/*.....................................................................
@@ -228,8 +227,7 @@ public:
 	/*.....................................................................
 	Debug routines
 	.....................................................................*/
-	virtual void Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart,
-				     int namecount);
+	virtual void Configure_Debug(int index, int type_offset, int type_size, char **names, int namestart, int namecount);
 	virtual void Mono_Debug_Print(int index, int refresh = 0);
 
 	/*
@@ -245,17 +243,17 @@ private:
 	/*.....................................................................
 	Misc variables
 	.....................................................................*/
-	unsigned int IPXStatus : 1;	// 0 = no IPX, 1 = IPX found
-	unsigned int Listening : 1;	// 1 = Listening is on
+	unsigned int IPXStatus : 1; // 0 = no IPX, 1 = IPX found
+	unsigned int Listening : 1; // 1 = Listening is on
 	unsigned int RealMemAllocd : 1; // 1 = Real-mode memory has been alloc'd
 
 	/*.....................................................................
 	Packet Sizes, used for allocating real-mode memory
 	.....................................................................*/
 	int Glb_MaxPacketLen; // Global Channel maximum packet size
-	int Glb_NumPackets;   // # Global send/receive packets
+	int Glb_NumPackets; // # Global send/receive packets
 	int Pvt_MaxPacketLen; // Private Channel maximum packet size
-	int Pvt_NumPackets;   // # Private send/receive packets
+	int Pvt_NumPackets; // # Private send/receive packets
 
 	/*.....................................................................
 	The ProductID is used in the Global Channel's packet header, and it's
@@ -267,14 +265,14 @@ private:
 	The Socket ID, and local Novell Connection Number
 	.....................................................................*/
 	unsigned short Socket; // Our socket ID for sending/receiving
-	int ConnectionNum;     // local connection #, 0=not logged in
+	int ConnectionNum; // local connection #, 0=not logged in
 
 	/*.....................................................................
 	Array of connection queues
 	.....................................................................*/
 	IPXConnClass *Connection[CONNECT_MAX]; // array of connection object ptrs
-	int NumConnections;		       // # connection objects in use
-	IPXGlobalConnClass *GlobalChannel;     // the Global Channel
+	int NumConnections; // # connection objects in use
+	IPXGlobalConnClass *GlobalChannel; // the Global Channel
 
 	/*.....................................................................
 	Current queue for polling for received packets
@@ -295,32 +293,32 @@ private:
 	This is a structure that mirrors data in real-mode memory:
 	.....................................................................*/
 	typedef struct {
-		short Marker1;		       // the byte ID marker
-		ECBType ListenECB;	       // the Listening ECB
-		short NumBufs;		       // # of buffers we're giving to the handler
-		char *BufferFlags;	       // array of buffer-avail flags
-		short PacketSize;	       // size of packet including IPX header
+		short Marker1; // the byte ID marker
+		ECBType ListenECB; // the Listening ECB
+		short NumBufs; // # of buffers we're giving to the handler
+		char *BufferFlags; // array of buffer-avail flags
+		short PacketSize; // size of packet including IPX header
 		IPXHeaderType *FirstPacketBuf; // ptr to 1st packet buffer
-		short CurIndex;		       // handler's current packet index
-		IPXHeaderType *CurPacketBuf;   // handler's current packet buf
-		short FuncOffset;	       // contains offset of code
-		char Semaphore;		       // prevents re-entrancy
-		short ReEntrantCount;	       // times we've been called re-entrantly
-		short StackPtr;		       // real-mode stack pointer
-		short StackSeg;		       // real-mode stack segment
-		short StackPtr_int;	       // internal stack pointer
-		short StackSeg_int;	       // internal stack segment
-		short StackCheck;	       // stack check value (0x1234)
-		short Stack[256];	       // actual stack space
-		short StackSpace;	       // label for top of stack
-		short Marker2;		       // the byte ID marker
+		short CurIndex; // handler's current packet index
+		IPXHeaderType *CurPacketBuf; // handler's current packet buf
+		short FuncOffset; // contains offset of code
+		char Semaphore; // prevents re-entrancy
+		short ReEntrantCount; // times we've been called re-entrantly
+		short StackPtr; // real-mode stack pointer
+		short StackSeg; // real-mode stack segment
+		short StackPtr_int; // internal stack pointer
+		short StackSeg_int; // internal stack segment
+		short StackCheck; // stack check value (0x1234)
+		short Stack[256]; // actual stack space
+		short StackSpace; // label for top of stack
+		short Marker2; // the byte ID marker
 	} RealModeDataType;
 
 	/*.....................................................................
 	The number & size of packet buffers in low memory
 	.....................................................................*/
-	int NumBufs;	   // # packet buffers allocated
-	int PacketLen;	   // size of packet without IPX header
+	int NumBufs; // # packet buffers allocated
+	int PacketLen; // size of packet without IPX header
 	int FullPacketLen; // size of packet including IPX header
 
 	/*.....................................................................
@@ -328,9 +326,9 @@ private:
 	Size of the allocation;
 	Ptr to the real-mode assembly data area
 	.....................................................................*/
-	unsigned short Selector;	// selector of DOS allocation pointer
-	unsigned short Segment;		// real-mode segment of DOS allocation
-	int RealMemSize;		// size of real mode memory allocated
+	unsigned short Selector; // selector of DOS allocation pointer
+	unsigned short Segment; // real-mode segment of DOS allocation
+	int RealMemSize; // size of real mode memory allocated
 	RealModeDataType *RealModeData; // assembly routine & its data
 
 	/*.....................................................................
@@ -349,21 +347,21 @@ private:
 	ptr to the 1st header & data buffers in the packet buffer array
 	.....................................................................*/
 	IPXHeaderType *FirstHeaderBuf; // array of packet headers & buffers
-	char *FirstDataBuf;	       // 1st data buffer area
+	char *FirstDataBuf; // 1st data buffer area
 
 	/*.....................................................................
 	Current packet index & ptrs for parsing packets
 	.....................................................................*/
-	int CurIndex;		     // Current packet index, for reading
+	int CurIndex; // Current packet index, for reading
 	IPXHeaderType *CurHeaderBuf; // Current packet ptr, for reading
-	char *CurDataBuf;	     // Current actual data ptr
+	char *CurDataBuf; // Current actual data ptr
 
 	/*.....................................................................
 	ECB, header, & buffer for sending
 	.....................................................................*/
-	ECBType *SendECB;	   // ECB for sending
+	ECBType *SendECB; // ECB for sending
 	IPXHeaderType *SendHeader; // Header for sending
-	char *SendBuf;		   // buffer for sending
+	char *SendBuf; // buffer for sending
 
 	/*.....................................................................
 	Flags indicating whether a buffer contains data or not (1 = full)

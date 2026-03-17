@@ -125,10 +125,10 @@ void const *ObjectTypeClass::PipShapes = 0;
  *   09/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 ObjectClass::ObjectClass(RTTIType rtti, int id)
-    : AbstractClass(rtti, id), IsDown(false), IsToDamage(false), IsToDisplay(false), IsInLimbo(true), IsSelected(false),
-      IsAnimAttached(false), IsFalling(false), Riser(0), Next(0), Trigger(NULL), Strength(255),
-      IsSelectedMask(0) // Mask showing who has selected this object
-{}
+	: AbstractClass(rtti, id), IsDown(false), IsToDamage(false), IsToDisplay(false), IsInLimbo(true), IsSelected(false), IsAnimAttached(false),
+	  IsFalling(false), Riser(0), Next(0), Trigger(NULL), Strength(255), IsSelectedMask(0) // Mask showing who has selected this object
+{
+}
 
 /***********************************************************************************************
  * ObjectClass::Get_Image_Data -- Fetches the image data to use for this object.               *
@@ -145,7 +145,9 @@ ObjectClass::ObjectClass(RTTIType rtti, int id)
  * HISTORY:                                                                                    *
  *   08/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void const *ObjectClass::Get_Image_Data(void) const { return (Class_Of().Get_Image_Data()); }
+void const *ObjectClass::Get_Image_Data(void) const {
+	return (Class_Of().Get_Image_Data());
+}
 
 /***********************************************************************************************
  * ObjectClass::Name -- Fetches the identification name of this object.                        *
@@ -162,7 +164,9 @@ void const *ObjectClass::Get_Image_Data(void) const { return (Class_Of().Get_Ima
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-char const *ObjectClass::Name(void) const { return (Class_Of().Name()); }
+char const *ObjectClass::Name(void) const {
+	return (Class_Of().Name());
+}
 
 /***********************************************************************************************
  * ObjectClass::Exit_Coord -- Return with the exit coordinate for this object.                 *
@@ -181,7 +185,9 @@ char const *ObjectClass::Name(void) const { return (Class_Of().Name()); }
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-COORDINATE ObjectClass::Exit_Coord(void) const { return (Center_Coord()); }
+COORDINATE ObjectClass::Exit_Coord(void) const {
+	return (Center_Coord());
+}
 
 /***********************************************************************************************
  * ObjectClass::AI -- Handles generic object AI processing.                                    *
@@ -582,7 +588,7 @@ FireDataType ObjectClass::Fire_Data(int which) const {
 	assert(this != 0);
 	assert(IsActive);
 
-	return {Fire_Coord(which), 0};
+	return { Fire_Coord(which), 0 };
 }
 
 COORDINATE ObjectClass::Fire_Coord(int) const {
@@ -1040,7 +1046,6 @@ void ObjectClass::Unselect(void) {
 	// if (IsSelected) {
 	//  Updated to function for multiplayer - 6/26/2019 JAS
 	if (Is_Selected_By_Player()) {
-
 		if (In_Which_Layer() == LAYER_GROUND)
 			Mark(MARK_OVERLAP_UP);
 
@@ -1233,7 +1238,6 @@ bool ObjectClass::Render(bool forced) const {
 		const_cast<ObjectClass *>(this)->IsToDisplay = false; // added const_cast ST - 5/9/2019
 
 		if (Map.Coord_To_Pixel(coord, x, y)) {
-
 			/*
 			**	Draw the object itself
 			*/
@@ -1245,8 +1249,12 @@ bool ObjectClass::Render(bool forced) const {
 			**	relative, so add the window's x-coord to 'x'.
 			*/
 			if (Debug_Map && Trigger.Is_Valid()) {
-				Fancy_Text_Print(Trigger->Class->IniName, x + (WinX), y, &ColorRemaps[PCOLOR_RED],
-						 TBLACK, TPF_CENTER | TPF_NOSHADOW | TPF_6POINT);
+				Fancy_Text_Print(Trigger->Class->IniName,
+						 x + (WinX),
+						 y,
+						 &ColorRemaps[PCOLOR_RED],
+						 TBLACK,
+						 TPF_CENTER | TPF_NOSHADOW | TPF_6POINT);
 			}
 #endif
 
@@ -1358,7 +1366,6 @@ bool ObjectClass::Limbo(void) {
 	assert(IsActive);
 
 	if (GameActive && !IsInLimbo) {
-
 		// Unselect();
 		//  Updated to function for multiplayer - 6/26/2019 JAS
 		Unselect_All_Players();
@@ -1416,7 +1423,6 @@ bool ObjectClass::Unlimbo(COORDINATE coord, DirType) {
 
 			if (Mark(MARK_DOWN)) {
 				if (IsActive) {
-
 					/*
 					**	Add the object to the appropriate map layer. This layer is used
 					**	for rendering purposes.
@@ -1527,7 +1533,6 @@ RadioMessageType ObjectClass::Receive_Message(RadioClass *, RadioMessageType mes
 	assert(IsActive);
 
 	switch (message) {
-
 	/*
 	**	This message serves as a rendering convenience. It lets the system
 	**	know that there might be a visual conflict and the unit in radio
@@ -1638,12 +1643,10 @@ ResultType ObjectClass::Take_Damage(int &damage, int distance, WarheadType warhe
 		**	half strength or if it is now down to one hit point.
 		*/
 		if (oldstrength > damage) {
-
 			if (oldstrength >= (maxstrength >> 1) && (oldstrength - damage) < (maxstrength >> 1)) {
 				result = RESULT_HALF;
 			}
 		} else {
-
 			/*
 			**	When an object is damaged to destruction, it will instead stop at one
 			**	damage point. This will prolong the damage state as well as
@@ -1727,7 +1730,6 @@ bool ObjectClass::Mark(MarkType mark) {
 	assert(IsActive);
 
 	if (!IsInLimbo && IsActive) {
-
 		/*
 		**	A mark for change is always successful UNLESS the object
 		**	is not placed down or has already been flagged as changed
@@ -1828,7 +1830,9 @@ bool ObjectClass::Mark(MarkType mark) {
  * HISTORY:                                                                                    *
  *   01/23/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void ObjectClass::Init(void) { CurrentObject.Clear_All(); }
+void ObjectClass::Init(void) {
+	CurrentObject.Clear_All();
+}
 
 /***********************************************************************************************
  * ObjectClass::Revealed -- Reveals this object to the house specified.                        *
@@ -2015,13 +2019,21 @@ bool ObjectClass::Attach_Trigger(TriggerClass *trigger) {
 }
 
 // These can't be made inline (for various reasons).
-short const *ObjectClass::Occupy_List(bool placement) const { return (Class_Of().Occupy_List(placement)); };
-short const *ObjectClass::Overlap_List(bool) const { return (Class_Of().Overlap_List()); };
+short const *ObjectClass::Occupy_List(bool placement) const {
+	return (Class_Of().Occupy_List(placement));
+};
+short const *ObjectClass::Overlap_List(bool) const {
+	return (Class_Of().Overlap_List());
+};
 BuildingClass *ObjectClass::Who_Can_Build_Me(bool intheory, bool legal) const {
 	return (Class_Of().Who_Can_Build_Me(intheory, legal, Owner()));
 };
-fixed ObjectClass::Health_Ratio(void) const { return (fixed(Strength, Class_Of().MaxStrength)); };
-int ObjectClass::Full_Name(void) const { return Class_Of().Full_Name(); };
+fixed ObjectClass::Health_Ratio(void) const {
+	return (fixed(Strength, Class_Of().MaxStrength));
+};
+int ObjectClass::Full_Name(void) const {
+	return Class_Of().Full_Name();
+};
 
 //**********************************************************************************************
 // MODULE SEPARATION -- ObjectTypeClass member functions follow.
@@ -2043,12 +2055,20 @@ int ObjectClass::Full_Name(void) const { return Class_Of().Full_Name(); };
  * HISTORY:                                                                                    *
  *   03/23/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ObjectTypeClass::ObjectTypeClass(RTTIType rtti, int id, bool is_sentient, bool is_stealthy, bool is_selectable,
-				 bool is_legal_target, bool is_insignificant, bool is_immune, bool is_footprint,
-				 int name, char const *ini)
-    : AbstractTypeClass(rtti, id, name, ini), IsCrushable(false), IsStealthy(is_stealthy), IsSelectable(is_selectable),
-      IsLegalTarget(is_legal_target), IsInsignificant(is_insignificant), IsImmune(is_immune), IsSentient(is_sentient),
-      IsFootprint(is_footprint), Armor(ARMOR_NONE), MaxStrength(0), ImageData(0), RadarIcon(0) {
+ObjectTypeClass::ObjectTypeClass(RTTIType rtti,
+				 int id,
+				 bool is_sentient,
+				 bool is_stealthy,
+				 bool is_selectable,
+				 bool is_legal_target,
+				 bool is_insignificant,
+				 bool is_immune,
+				 bool is_footprint,
+				 int name,
+				 char const *ini)
+	: AbstractTypeClass(rtti, id, name, ini), IsCrushable(false), IsStealthy(is_stealthy), IsSelectable(is_selectable),
+	  IsLegalTarget(is_legal_target), IsInsignificant(is_insignificant), IsImmune(is_immune), IsSentient(is_sentient), IsFootprint(is_footprint),
+	  Armor(ARMOR_NONE), MaxStrength(0), ImageData(0), RadarIcon(0) {
 	/*
 	** Init the DimensionData rect. Not sure how this was ever working before without being allocated. It was just
 	*trashing
@@ -2073,7 +2093,9 @@ ObjectTypeClass::ObjectTypeClass(RTTIType rtti, int id, bool is_sentient, bool i
  * HISTORY:                                                                                    *
  *   07/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int ObjectTypeClass::Max_Pips(void) const { return (0); }
+int ObjectTypeClass::Max_Pips(void) const {
+	return (0);
+}
 
 /***********************************************************************************************
  * ObjectTypeClass::Dimensions -- Gets the dimensions of the object in pixels.                 *
@@ -2114,7 +2136,9 @@ void ObjectTypeClass::Dimensions(int &width, int &height) const {
  * HISTORY:                                                                                    *
  *   07/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int ObjectTypeClass::Cost_Of(void) const { return (0); }
+int ObjectTypeClass::Cost_Of(void) const {
+	return (0);
+}
 
 /***********************************************************************************************
  * ObjectTypeClass::Time_To_Build -- Fetches the time to construct this object.                *
@@ -2131,7 +2155,9 @@ int ObjectTypeClass::Cost_Of(void) const { return (0); }
  * HISTORY:                                                                                    *
  *   07/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int ObjectTypeClass::Time_To_Build(HousesType) const { return (0); }
+int ObjectTypeClass::Time_To_Build(HousesType) const {
+	return (0);
+}
 
 /***********************************************************************************************
  * ObjectTypeClass::Get_Cameo_Data -- Fetches pointer to cameo data for this object type.      *
@@ -2149,7 +2175,9 @@ int ObjectTypeClass::Time_To_Build(HousesType) const { return (0); }
  * HISTORY:                                                                                    *
  *   07/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void const *ObjectTypeClass::Get_Cameo_Data(void) const { return (NULL); }
+void const *ObjectTypeClass::Get_Cameo_Data(void) const {
+	return (NULL);
+}
 
 /***********************************************************************************************
  * ObjectTypeClass::Occupy_List -- Returns with simple occupation list for object.             *
@@ -2169,7 +2197,7 @@ void const *ObjectTypeClass::Get_Cameo_Data(void) const { return (NULL); }
  *   05/28/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 short const *ObjectTypeClass::Occupy_List(bool) const {
-	static short const _list[] = {0, REFRESH_EOL};
+	static short const _list[] = { 0, REFRESH_EOL };
 	return (_list);
 }
 
@@ -2191,7 +2219,7 @@ short const *ObjectTypeClass::Occupy_List(bool) const {
  *   05/28/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
 short const *ObjectTypeClass::Overlap_List(void) const {
-	static short const _list[] = {REFRESH_EOL};
+	static short const _list[] = { REFRESH_EOL };
 	return (_list);
 }
 
@@ -2259,11 +2287,9 @@ BuildingClass *ObjectTypeClass::Who_Can_Build_Me(bool intheory, bool legal, Hous
 			BuildingClass *building = Buildings.Ptr(index);
 			assert(building != NULL);
 
-			if (!building->IsInLimbo && building->House->Class->House == house &&
-			    building->Class->ToBuild == RTTI && building->Mission != MISSION_DECONSTRUCTION &&
-			    building->MissionQueue != MISSION_DECONSTRUCTION &&
-			    ((1L << building->ActLike) & Get_Ownable()) &&
-			    (!legal || building->House->Can_Build(this, building->ActLike))) {
+			if (!building->IsInLimbo && building->House->Class->House == house && building->Class->ToBuild == RTTI &&
+			    building->Mission != MISSION_DECONSTRUCTION && building->MissionQueue != MISSION_DECONSTRUCTION &&
+			    ((1L << building->ActLike) & Get_Ownable()) && (!legal || building->House->Can_Build(this, building->ActLike))) {
 				num_builders++;
 			}
 		}
@@ -2271,8 +2297,7 @@ BuildingClass *ObjectTypeClass::Who_Can_Build_Me(bool intheory, bool legal, Hous
 			AircraftClass *aircraft = Aircraft.Ptr(index);
 			assert(aircraft != NULL);
 
-			if (!aircraft->IsInLimbo && aircraft->House->Class->House == house &&
-			    aircraft->Class->IsFixedWing) {
+			if (!aircraft->IsInLimbo && aircraft->House->Class->House == house && aircraft->Class->IsFixedWing) {
 				num_fixed_wings++;
 			}
 		}
@@ -2285,12 +2310,10 @@ BuildingClass *ObjectTypeClass::Who_Can_Build_Me(bool intheory, bool legal, Hous
 		BuildingClass *building = Buildings.Ptr(index);
 		assert(building != NULL);
 
-		if (!building->IsInLimbo && building->House->Class->House == house &&
-		    building->Class->ToBuild == RTTI && building->Mission != MISSION_DECONSTRUCTION &&
-		    building->MissionQueue != MISSION_DECONSTRUCTION && ((1L << building->ActLike) & Get_Ownable()) &&
-		    (!legal || building->House->Can_Build(this, building->ActLike)) &&
+		if (!building->IsInLimbo && building->House->Class->House == house && building->Class->ToBuild == RTTI &&
+		    building->Mission != MISSION_DECONSTRUCTION && building->MissionQueue != MISSION_DECONSTRUCTION &&
+		    ((1L << building->ActLike) & Get_Ownable()) && (!legal || building->House->Can_Build(this, building->ActLike)) &&
 		    (intheory || !building->In_Radio_Contact())) {
-
 			// BG: Hack so only kennels can build dogs, and no other, and barracks can
 			//     only build humans and no other.
 			if (What_Am_I() == RTTI_INFANTRYTYPE) {
@@ -2309,7 +2332,6 @@ BuildingClass *ObjectTypeClass::Who_Can_Build_Me(bool intheory, bool legal, Hous
 					}
 				}
 			} else {
-
 				/*
 				**	HACK ALERT: Helipads can build aircraft and airstrips can build
 				**	fixed wing craft only.

@@ -36,10 +36,10 @@
 #define CCFILE_H
 
 // #include	<wwlib32.h>
+#include <limits.h>
 #include "buff.h"
 #include "cdfile.h"
 #include "mixfile.h"
-#include <limits.h>
 
 /*
 **	This derived class for file access knows about mixfiles (packed files). It can handle opening
@@ -50,11 +50,15 @@ class CCFileClass : public CDFileClass {
 public:
 	CCFileClass(char const *filename);
 	CCFileClass(void);
-	virtual ~CCFileClass(void) { Position = 0; };
+	virtual ~CCFileClass(void) {
+		Position = 0;
+	};
 
 	// Delete should be overloaded here as well. Don't allow deletes of mixfiles.
 
-	bool Is_Resident(void) const { return (Data.Get_Buffer() != NULL); }
+	bool Is_Resident(void) const {
+		return (Data.Get_Buffer() != NULL);
+	}
 	virtual int Is_Available(int forced = false);
 	virtual int Is_Open(void) const;
 	virtual int Open(char const *filename, int rights = READ) {
@@ -99,6 +103,7 @@ private:
 	CCFileClass(CCFileClass const &);
 };
 
-template <> class MixFileClass<CDFileClass>;
+template <>
+class MixFileClass<CDFileClass>;
 
 #endif

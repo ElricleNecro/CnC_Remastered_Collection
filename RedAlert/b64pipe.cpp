@@ -34,9 +34,9 @@
  *   Base64Pipe::Flush -- Flushes the final pending data through the pipe.                     *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <string.h>
 #include "b64pipe.h"
 #include "base64.h"
-#include <string.h>
 
 /***********************************************************************************************
  * Base64Pipe::Put -- Processes a block of data through the pipe.                              *

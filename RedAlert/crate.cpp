@@ -118,8 +118,7 @@ bool CrateClass::Put_Crate(CELL &cell) {
 	if (Map.In_Radar(cell)) {
 		CellClass *cellptr = &Map[cell];
 
-		while (cellptr->Overlay != OVERLAY_NONE && !cellptr->Is_Clear_To_Build(SPEED_FLOAT) &&
-		       !cellptr->Is_Clear_To_Build(SPEED_FOOT)) {
+		while (cellptr->Overlay != OVERLAY_NONE && !cellptr->Is_Clear_To_Build(SPEED_FLOAT) && !cellptr->Is_Clear_To_Build(SPEED_FOOT)) {
 			cell = Map.Pick_Random_Location();
 
 			if (Percent_Chance(100 * Rule.WaterCrateChance)) {
@@ -161,9 +160,7 @@ bool CrateClass::Get_Crate(CELL cell) {
 	if (Map.In_Radar(cell)) {
 		CellClass *cellptr = &Map[cell];
 
-		if (cellptr->Overlay == OVERLAY_WOOD_CRATE || cellptr->Overlay == OVERLAY_STEEL_CRATE ||
-		    cellptr->Overlay == OVERLAY_WATER_CRATE) {
-
+		if (cellptr->Overlay == OVERLAY_WOOD_CRATE || cellptr->Overlay == OVERLAY_STEEL_CRATE || cellptr->Overlay == OVERLAY_WATER_CRATE) {
 			cellptr->Overlay = OVERLAY_NONE;
 			cellptr->OverlayData = 0;
 			cellptr->Redraw_Objects();

@@ -100,7 +100,7 @@ extern bool NewUnitsEnabled;
 extern bool SecretUnitsEnabled;
 extern int MTankDistance;
 extern bool OverrideNewUnitsEnabled; // ST - 12/13/2019 12:19PM
-#ifdef FIXIT_CARRIER		     //	checked - ajw 9/28/98
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
 extern int CarrierLaunchDelay;
 #endif
 #endif
@@ -270,9 +270,9 @@ extern fixed QuakeUnitDamage;
 extern fixed QuakeBuildingDamage;
 extern int QuakeInfantryDamage;
 extern int QuakeDelay;
-extern fixed ChronoTankDuration;   // chrono override for chrono tanks
-#ifdef FIXIT_ENGINEER		   //	checked - ajw 9/28/98
-extern fixed EngineerDamage;	   // Amount of damage an engineer does
+extern fixed ChronoTankDuration; // chrono override for chrono tanks
+#ifdef FIXIT_ENGINEER //	checked - ajw 9/28/98
+extern fixed EngineerDamage; // Amount of damage an engineer does
 extern fixed EngineerCaptureLevel; // Building damage level before engineer can capture
 #endif
 #endif
@@ -327,7 +327,7 @@ extern unsigned long ScenarioCRC;
 extern bool bAftermathMultiplayer; //	Is multiplayer game being played with Aftermath rules?
 #else
 extern unsigned long PlayingAgainstVersion; // Negotiated version number
-extern bool Version107InMix;		    // Is there a v1.07 in the game
+extern bool Version107InMix; // Is there a v1.07 in the game
 #endif
 
 #ifdef FIXIT_VERSION_3 //	For endgame auto-sonar pulse.
@@ -440,8 +440,8 @@ void Do_Vortex(int x, int y, int frame);
 ** Win32 specific externs
 */
 #ifdef WIN32
-extern int ReadyToQuit;		 // Are we about to exit cleanly
-extern bool InDebugger;		 // Are we being run from a debugger
+extern int ReadyToQuit; // Are we about to exit cleanly
+extern bool InDebugger; // Are we being run from a debugger
 void Memory_Error_Handler(void); // Memory error handler function
 void WWDebugString(char *string);
 #else
@@ -453,13 +453,13 @@ extern bool IsTheaterShape;
 */
 #ifdef WIN32
 
-extern char PlanetWestwoodHandle[];	   // Planet WW user name
-extern char PlanetWestwoodPassword[];	   // Planet WW password
-extern char PlanetWestwoodIPAddress[];	   // IP of server or other player
-extern long PlanetWestwoodPortNumber;	   // Port number to send to
-extern bool PlanetWestwoodIsHost;	   // Flag true if player has control of game options
+extern char PlanetWestwoodHandle[]; // Planet WW user name
+extern char PlanetWestwoodPassword[]; // Planet WW password
+extern char PlanetWestwoodIPAddress[]; // IP of server or other player
+extern long PlanetWestwoodPortNumber; // Port number to send to
+extern bool PlanetWestwoodIsHost; // Flag true if player has control of game options
 extern unsigned long PlanetWestwoodGameID; // Game ID
-extern HWND WChatHWND;			   // Handle to Wchat window.
+extern HWND WChatHWND; // Handle to Wchat window.
 extern bool GameStatisticsPacketSent;
 extern bool ConnectionLost;
 extern void *PacketLater;

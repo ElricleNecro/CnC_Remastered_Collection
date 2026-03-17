@@ -283,7 +283,9 @@ public:
 	**	Driver control support functions. These are used to control cell
 	**	occupation flags and driver instructions.
 	*/
-	COORDINATE Head_To_Coord(void) const { return (HeadToCoord); };
+	COORDINATE Head_To_Coord(void) const {
+		return (HeadToCoord);
+	};
 	virtual bool Start_Driver(COORDINATE &headto);
 	virtual bool Stop_Driver(void);
 	virtual void Assign_Destination(TARGET target);
@@ -306,8 +308,7 @@ public:
 	**	Combat related.
 	*/
 	virtual void Stun(void);
-	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0,
-				       bool forced = false);
+	virtual ResultType Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source = 0, bool forced = false);
 	virtual void Death_Announcement(TechnoClass const *source = 0) const;
 
 	/*
@@ -365,11 +366,17 @@ private:
 	PathType *Find_Path(CELL dest, FacingType *final_moves, int maxlen, MoveType threshhold);
 	void Debug_Draw_Map(char const *txt, CELL start, CELL dest, bool pause);
 	void Debug_Draw_Path(PathType *path);
-	bool Follow_Edge(CELL start, CELL target, PathType *path, FacingType search, FacingType olddir, int threat,
-			 int threat_stage, int max_cells, MoveType threshhold);
+	bool Follow_Edge(CELL start,
+			 CELL target,
+			 PathType *path,
+			 FacingType search,
+			 FacingType olddir,
+			 int threat,
+			 int threat_stage,
+			 int max_cells,
+			 MoveType threshhold);
 	bool Register_Cell(PathType *path, CELL cell, FacingType dir, int cost, MoveType threshhold);
-	bool Unravel_Loop(PathType *path, CELL &cell, FacingType &dir, int sx, int sy, int dx, int dy,
-			  MoveType threshhold);
+	bool Unravel_Loop(PathType *path, CELL &cell, FacingType &dir, int sx, int sy, int dx, int dy, MoveType threshhold);
 
 	/*
 	**	This is the coordinate that the unit is heading to

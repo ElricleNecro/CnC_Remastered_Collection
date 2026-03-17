@@ -36,11 +36,11 @@
  *   LZWPipe::~LZWPipe -- Deconstructor for the LZO pipe object.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include <assert.h>
+#include <string.h>
 #include "lzopipe.h"
 #include "buff.h"
 #include "lzo.h"
-#include <assert.h>
-#include <string.h>
 
 /***********************************************************************************************
  * LZOPipe::LZOPipe -- Constructor for the LZO processor pipe.                                 *
@@ -59,8 +59,7 @@
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LZOPipe::LZOPipe(CompControl control, int blocksize)
-    : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
+LZOPipe::LZOPipe(CompControl control, int blocksize) : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
 	SafetyMargin = BlockSize;
 	Buffer = new char[BlockSize + SafetyMargin];
 	Buffer2 = new char[BlockSize + SafetyMargin];
@@ -121,18 +120,14 @@ int LZOPipe::Put(void const *source, int slen) {
 	**	Copy as much as can fit into the buffer from the source data supplied.
 	*/
 	if (Control == DECOMPRESS) {
-
 		while (slen > 0) {
-
 			/*
 			**	First check to see if we are in the block header accumulation phase.
 			**	When a whole block header has been accumulated, only then will the regular
 			**	data processing begin for the block.
 			*/
 			if (BlockHeader.CompCount == 0xFFFF) {
-				int len = (slen < ((int)sizeof(BlockHeader) - Counter))
-					      ? slen
-					      : (sizeof(BlockHeader) - Counter);
+				int len = (slen < ((int)sizeof(BlockHeader) - Counter)) ? slen : (sizeof(BlockHeader) - Counter);
 				memmove(&Buffer[Counter], source, len);
 				source = ((char *)source) + len;
 				slen -= len;
@@ -152,9 +147,7 @@ int LZOPipe::Put(void const *source, int slen) {
 			**	data block.
 			*/
 			if (slen > 0) {
-				int len = (slen < (BlockHeader.CompCount - Counter))
-					      ? slen
-					      : (BlockHeader.CompCount - Counter);
+				int len = (slen < (BlockHeader.CompCount - Counter)) ? slen : (BlockHeader.CompCount - Counter);
 
 				memmove(&Buffer[Counter], source, len);
 				slen -= len;
@@ -167,8 +160,7 @@ int LZOPipe::Put(void const *source, int slen) {
 				*/
 				if (Counter == BlockHeader.CompCount) {
 					unsigned int length = sizeof(Buffer2);
-					lzo1x_decompress((unsigned char *)Buffer, BlockHeader.CompCount,
-							 (unsigned char *)Buffer2, &length, NULL);
+					lzo1x_decompress((unsigned char *)Buffer, BlockHeader.CompCount, (unsigned char *)Buffer2, &length, NULL);
 					total += Pipe::Put(Buffer2, BlockHeader.UncompCount);
 					Counter = 0;
 					BlockHeader.CompCount = 0xFFFF;
@@ -177,7 +169,6 @@ int LZOPipe::Put(void const *source, int slen) {
 		}
 
 	} else {
-
 		/*
 		**	If the buffer already contains some data, then any new data must be stored
 		**	into the staging buffer until a full set has been accumulated.
@@ -192,8 +183,7 @@ int LZOPipe::Put(void const *source, int slen) {
 			if (Counter == BlockSize) {
 				unsigned int len = sizeof(Buffer2);
 				char *dictionary = new char[64 * 1024];
-				lzo1x_1_compress((unsigned char *)Buffer, BlockSize, (unsigned char *)Buffer2, &len,
-						 dictionary);
+				lzo1x_1_compress((unsigned char *)Buffer, BlockSize, (unsigned char *)Buffer2, &len, dictionary);
 				delete[] dictionary;
 				BlockHeader.CompCount = (unsigned short)len;
 				BlockHeader.UncompCount = (unsigned short)BlockSize;
@@ -210,8 +200,7 @@ int LZOPipe::Put(void const *source, int slen) {
 		while (slen >= BlockSize) {
 			unsigned int len = sizeof(Buffer2);
 			char *dictionary = new char[64 * 1024];
-			lzo1x_1_compress((unsigned char *)source, BlockSize, (unsigned char *)Buffer2, &len,
-					 dictionary);
+			lzo1x_1_compress((unsigned char *)source, BlockSize, (unsigned char *)Buffer2, &len, dictionary);
 			delete[] dictionary;
 			source = ((char *)source) + BlockSize;
 			slen -= BlockSize;
@@ -264,7 +253,6 @@ int LZOPipe::Flush(void) {
 	*/
 	if (Counter > 0) {
 		if (Control == DECOMPRESS) {
-
 			/*
 			**	If the accumulated data is insufficient to make a block header, then
 			**	this means the data has been truncated. Just dump the data through
@@ -289,7 +277,6 @@ int LZOPipe::Flush(void) {
 			}
 
 		} else {
-
 			/*
 			**	A partial block in the compression process is a normal occurrence. Just
 			**	compress the partial block and output normally.

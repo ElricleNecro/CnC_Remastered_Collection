@@ -75,4 +75,6 @@ int SHAPipe::Put(void const *source, int slen) {
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int SHAPipe::Result(void *result) const { return (SHA.Result(result)); }
+int SHAPipe::Result(void *result) const {
+	return (SHA.Result(result));
+}

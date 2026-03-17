@@ -101,12 +101,23 @@
 #include "function.h"
 
 // PG Stubs
-void Destroy_Connection(int, int) {}
-bool Process_Global_Packet(GlobalPacketType *, IPXAddressClass *) { return false; }
-bool Client_Remote_Connect(void) { return false; }
-bool Server_Remote_Connect(void) { return false; }
-bool Init_Network(void) { return false; }
-bool Remote_Connect(void) { return false; }
+void Destroy_Connection(int, int) {
+}
+bool Process_Global_Packet(GlobalPacketType *, IPXAddressClass *) {
+	return false;
+}
+bool Client_Remote_Connect(void) {
+	return false;
+}
+bool Server_Remote_Connect(void) {
+	return false;
+}
+bool Init_Network(void) {
+	return false;
+}
+bool Remote_Connect(void) {
+	return false;
+}
 
 #if (0) // PG
 
@@ -158,11 +169,11 @@ extern WolapiObject *pWolapi;
 //	The possible states of the join-game dialog
 //---------------------------------------------------------------------------
 typedef enum {
-	JOIN_REJECTED = -1,   // we've been rejected
-	JOIN_NOTHING,	      // we're not trying to join a game
-	JOIN_WAIT_CONFIRM,    // we're asking to join, & waiting for confirmation
-	JOIN_CONFIRMED,	      // we've been confirmed
-	JOIN_GAME_START,      // the game we've joined is starting
+	JOIN_REJECTED = -1, // we've been rejected
+	JOIN_NOTHING, // we're not trying to join a game
+	JOIN_WAIT_CONFIRM, // we're asking to join, & waiting for confirmation
+	JOIN_CONFIRMED, // we've been confirmed
+	JOIN_GAME_START, // the game we've joined is starting
 	JOIN_GAME_START_LOAD, // the game we've joined is starting; load saved game
 } JoinStateType;
 
@@ -170,533 +181,1204 @@ typedef enum {
 //	The possible return codes from Get_Join_Responses()
 //---------------------------------------------------------------------------
 typedef enum {
-	EV_NONE,	   // nothing happened
-	EV_STATE_CHANGE,   // Join dialog is in a new state
-	EV_NEW_GAME,	   // a new game formed, or is now open
-	EV_NEW_PLAYER,	   // a new player was detected
+	EV_NONE, // nothing happened
+	EV_STATE_CHANGE, // Join dialog is in a new state
+	EV_NEW_GAME, // a new game formed, or is now open
+	EV_NEW_PLAYER, // a new player was detected
 	EV_PLAYER_SIGNOFF, // a player has signed off
-	EV_GAME_SIGNOFF,   // a gamed owner has signed off
-	EV_GAME_OPTIONS,   // a game options packet was received
-	EV_MESSAGE,	   // a message was received
+	EV_GAME_SIGNOFF, // a gamed owner has signed off
+	EV_GAME_OPTIONS, // a game options packet was received
+	EV_MESSAGE, // a message was received
 } JoinEventType;
 
 //---------------------------------------------------------------------------
 //	The possible reasons we're rejected from joining a game
 //---------------------------------------------------------------------------
 typedef enum {
-	REJECT_DUPLICATE_NAME,	// player's name is a duplicate
-	REJECT_GAME_FULL,	// game is full
+	REJECT_DUPLICATE_NAME, // player's name is a duplicate
+	REJECT_GAME_FULL, // game is full
 	REJECT_VERSION_TOO_OLD, // joiner's version is too old
 	REJECT_VERSION_TOO_NEW, // joiner's version is too new
-	REJECT_BY_OWNER,	// game owner clicked "reject"
-	REJECT_DISBANDED,	// game was disbanded
-	REJECT_MISMATCH,	// "rules.ini" file mismatch.
+	REJECT_BY_OWNER, // game owner clicked "reject"
+	REJECT_DISBANDED, // game was disbanded
+	REJECT_MISMATCH, // "rules.ini" file mismatch.
 } RejectType;
 
 #ifdef ENGLISH
-char const *EngMisStr[] = {"Coastal Influence (Med)",
-			   "Middle Mayhem (Sm)",
-			   "Equal Opportunity (Sm)",
-			   "Marooned II (Med)",
-			   "Keep off the Grass (Sm)",
-			   "Isle of Fury (Lg)",
-			   "Ivory Wastelands (Sm)",
-			   "Shallow Grave (Med)",
-			   "North By Northwest (Lg)",
-			   "First Come, First Serve (Sm)",
-			   "Island Hoppers (Sm)",
-			   "Raraku (Lg)",
-			   "Central Conflict (Lg)",
-			   "Combat Alley (Med)",
-			   "Island Wars (Lg)",
-			   "Desolation (Lg)",
-			   "No Escape (Med)",
-			   "No Man's Land (Med)",
-			   "Normandy (Med)",
-			   "Pond Skirmish (Med)",
-			   "Ridge War (Med)",
-			   "A Path Beyond (Lg)",
-			   "Dugout Isle (Med)",
-			   "Treasure Isle (Med)",
+char const *EngMisStr[] = { "Coastal Influence (Med)",
+			    "Middle Mayhem (Sm)",
+			    "Equal Opportunity (Sm)",
+			    "Marooned II (Med)",
+			    "Keep off the Grass (Sm)",
+			    "Isle of Fury (Lg)",
+			    "Ivory Wastelands (Sm)",
+			    "Shallow Grave (Med)",
+			    "North By Northwest (Lg)",
+			    "First Come, First Serve (Sm)",
+			    "Island Hoppers (Sm)",
+			    "Raraku (Lg)",
+			    "Central Conflict (Lg)",
+			    "Combat Alley (Med)",
+			    "Island Wars (Lg)",
+			    "Desolation (Lg)",
+			    "No Escape (Med)",
+			    "No Man's Land (Med)",
+			    "Normandy (Med)",
+			    "Pond Skirmish (Med)",
+			    "Ridge War (Med)",
+			    "A Path Beyond (Lg)",
+			    "Dugout Isle (Med)",
+			    "Treasure Isle (Med)",
 
-			   "Africa (Lg)",
-			   "Alaska Anarchy (Lg)",
-			   "All that Glitters... (Lg)",
-			   "Apre's Peace (Lg)",
-			   "Antartica (Lg)",
-			   "Armourgarden (Lg)",
-			   "Austraila (Med)",
-			   "Barrier to Entry (Lg)",
-			   "Bavarian Blast (Med)",
-			   "Be Shore (Med)",
-			   "Bearing Straits (Med)",
-			   "Blow Holes (Lg)",
-			   "Bonsai (Sm)",
-			   "Brother Stalin (Lg)",
-			   "Bullseye (Lg)",
-			   "C&C (Med)",
-			   "Camos Canyon (Med)",
-			   "Camos Coves (Lg)",
-			   "Camos Cross (Lg)",
-			   "Camos Crossing (Sm)",
-			   "Central Arena (Lg)",
-			   "Canyon River (Med)",
-			   "Crossroads (Sm)",
-			   "Czech Mate (Lg)",
-			   "Dday (Med)",
-			   "Disaster Central (Lg)",
-			   "Docklands (Med)",
-			   "East Coast (Med)",
-			   "Eastern Seaboard (Lg)",
-			   "Finger Lake (Lg)",
-			   "Fjords (Med)",
-			   "Floodlands (Lg)",
-			   "Forest under fire (Lg)",
-			   "Four Corners (Lg)",
-			   "Frostbit Fjords (Lg)",
-			   "Glenboig (Sm)",
-			   "Hell Frozen Over (Lg)",
-			   "India (Lg)",
-			   "Indirect Fire (Lg)",
-			   "Island Wars II (Lg)",
-			   "Italy (Lg)",
-			   "Kabalo (Lg)",
-			   "King of the Hills (Lg)",
-			   "Lake Divide (Med)",
-			   "Lakelands (Lg)",
-			   "Land Ladder (Lg)",
-			   "Lotsa Lakes (Lg)",
-			   "Lunar Battlefield (Lg Special)",
-			   "Malibu Fields (Med)",
-			   "Marshland (Med)",
-			   "MyLai Delta (Med)",
-			   "Natural Harbor (Med)",
-			   "No Way Out (Lg)",
-			   "Normandy Landing (Lg)",
-			   "Ore Wars (Med)",
-			   "Oz (Lg)",
-			   "Pilgrim Fathers II (Lg)",
-			   "Pip's Ice Tea (Med)",
-			   "Polar Panic (Lg)",
-			   "Ponds (Med)",
-			   "Putney (Lg)",
-			   "Return to Zion (Lg)",
-			   "Ring of Land (Lg)",
-			   "River Basin (Lg)",
-			   "River Delta (Med)",
-			   "River Islands (Med)",
-			   "River Maze (Sm)",
-			   "Rivers (Sm)",
-			   "Run the Gauntlet (Med)",
-			   "Scappa Flow (Lg)",
-			   "Siberian Slaughter (Lg)",
-			   "Sleepy Valley (Sm)",
-			   "Snake River (Lg)",
-			   "Snow Wars (Lg)",
-			   "Snowball fight (Lg)",
-			   "Snowy Island (Lg)",
-			   "So Near So Far (Sm)",
-			   "South America (Lg)",
-			   "Spring Line (Lg)",
-			   "Star (Lg)",
-			   "Straighter & Narrower (Sm)",
-			   "TerrainSpotting (Sm)",
-			   "The Bay (Lg)",
-			   "The Garden (Lg)",
-			   "The Great Lakes (Med)",
-			   "The Ice Arena (Lg)",
-			   "The Lake District (Lg)",
-			   "The Linked lands (Lg)",
-			   "The Mississippi (Med)",
-			   "The Sticky Bit (Lg)",
-			   "The Valley (Med)",
-			   "The Woods Today (Lg)",
-			   "Things to Come (Lg)",
-			   "Tiger Core (Sm)",
-			   "To the Core (Sm)",
-			   "Tournament Hills (Lg)",
-			   "Tropical Storm (Med)",
-			   "Tundra Trouble (Lg)",
-			   "Uk (Med)",
-			   "Undiscovered Country (Sm)",
-			   "United States (Med)",
-			   "Volcano (Sm)",
-			   "Wastelands (Lg)",
-			   "Water Works (Sm)",
-			   "World Map (Med)",
-			   "Zambezi (Lg)",
+			    "Africa (Lg)",
+			    "Alaska Anarchy (Lg)",
+			    "All that Glitters... (Lg)",
+			    "Apre's Peace (Lg)",
+			    "Antartica (Lg)",
+			    "Armourgarden (Lg)",
+			    "Austraila (Med)",
+			    "Barrier to Entry (Lg)",
+			    "Bavarian Blast (Med)",
+			    "Be Shore (Med)",
+			    "Bearing Straits (Med)",
+			    "Blow Holes (Lg)",
+			    "Bonsai (Sm)",
+			    "Brother Stalin (Lg)",
+			    "Bullseye (Lg)",
+			    "C&C (Med)",
+			    "Camos Canyon (Med)",
+			    "Camos Coves (Lg)",
+			    "Camos Cross (Lg)",
+			    "Camos Crossing (Sm)",
+			    "Central Arena (Lg)",
+			    "Canyon River (Med)",
+			    "Crossroads (Sm)",
+			    "Czech Mate (Lg)",
+			    "Dday (Med)",
+			    "Disaster Central (Lg)",
+			    "Docklands (Med)",
+			    "East Coast (Med)",
+			    "Eastern Seaboard (Lg)",
+			    "Finger Lake (Lg)",
+			    "Fjords (Med)",
+			    "Floodlands (Lg)",
+			    "Forest under fire (Lg)",
+			    "Four Corners (Lg)",
+			    "Frostbit Fjords (Lg)",
+			    "Glenboig (Sm)",
+			    "Hell Frozen Over (Lg)",
+			    "India (Lg)",
+			    "Indirect Fire (Lg)",
+			    "Island Wars II (Lg)",
+			    "Italy (Lg)",
+			    "Kabalo (Lg)",
+			    "King of the Hills (Lg)",
+			    "Lake Divide (Med)",
+			    "Lakelands (Lg)",
+			    "Land Ladder (Lg)",
+			    "Lotsa Lakes (Lg)",
+			    "Lunar Battlefield (Lg Special)",
+			    "Malibu Fields (Med)",
+			    "Marshland (Med)",
+			    "MyLai Delta (Med)",
+			    "Natural Harbor (Med)",
+			    "No Way Out (Lg)",
+			    "Normandy Landing (Lg)",
+			    "Ore Wars (Med)",
+			    "Oz (Lg)",
+			    "Pilgrim Fathers II (Lg)",
+			    "Pip's Ice Tea (Med)",
+			    "Polar Panic (Lg)",
+			    "Ponds (Med)",
+			    "Putney (Lg)",
+			    "Return to Zion (Lg)",
+			    "Ring of Land (Lg)",
+			    "River Basin (Lg)",
+			    "River Delta (Med)",
+			    "River Islands (Med)",
+			    "River Maze (Sm)",
+			    "Rivers (Sm)",
+			    "Run the Gauntlet (Med)",
+			    "Scappa Flow (Lg)",
+			    "Siberian Slaughter (Lg)",
+			    "Sleepy Valley (Sm)",
+			    "Snake River (Lg)",
+			    "Snow Wars (Lg)",
+			    "Snowball fight (Lg)",
+			    "Snowy Island (Lg)",
+			    "So Near So Far (Sm)",
+			    "South America (Lg)",
+			    "Spring Line (Lg)",
+			    "Star (Lg)",
+			    "Straighter & Narrower (Sm)",
+			    "TerrainSpotting (Sm)",
+			    "The Bay (Lg)",
+			    "The Garden (Lg)",
+			    "The Great Lakes (Med)",
+			    "The Ice Arena (Lg)",
+			    "The Lake District (Lg)",
+			    "The Linked lands (Lg)",
+			    "The Mississippi (Med)",
+			    "The Sticky Bit (Lg)",
+			    "The Valley (Med)",
+			    "The Woods Today (Lg)",
+			    "Things to Come (Lg)",
+			    "Tiger Core (Sm)",
+			    "To the Core (Sm)",
+			    "Tournament Hills (Lg)",
+			    "Tropical Storm (Med)",
+			    "Tundra Trouble (Lg)",
+			    "Uk (Med)",
+			    "Undiscovered Country (Sm)",
+			    "United States (Med)",
+			    "Volcano (Sm)",
+			    "Wastelands (Lg)",
+			    "Water Works (Sm)",
+			    "World Map (Med)",
+			    "Zambezi (Lg)",
 
-			   "A Pattern of Islands (Lg 8 players)",
-			   "Arena Valley Extreme (Mega 8 players)",
-			   "Around the Rim (Sm 4 players)",
-			   "Ashes to Ashes (Lg 6 players)",
-			   "Artic Wasteland (Mega 8 players)",
-			   "Badajoz (Med 4 players)",
-			   "Baptism of Fire (Lg 6 players)",
-			   "Big Fish, Small Pond (Lg 6 players)",
-			   "Blue Lakes (Lg 8 players)",
-			   "Booby Traps (Mega 8 players)",
-			   "Bridgehead (Lg 6 players)",
-			   "Butterfly Bay (Lg 6 players)",
-			   "Central Conflict Extreme (Mega 8 players)",
-			   "Circles of Death (Mega 8 players)",
-			   "Cold Front (Med 6 players)",
-			   "Cold Pass (Med 4 players)",
-			   "Combat Zones (Mega 8 players)",
-			   "Conflict Cove (Sm 4 players)",
-			   "Culloden Moor (Med 8 players)",
-			   "Damnation Alley (Mega 8 players)",
-			   "Death Valley (Mega 8 players)",
-			   "Deep Six (Mega 8 players)",
-			   "Destruction Derby (Mega 8 players)",
-			   "Diamonds Aren't Forever (Mega 8 players)",
-			   "Elysium (Sm 4 players)",
-			   "Equal Shares (Lg 4 players)",
-			   "Frost Bitten (Mega 8 players)",
-			   "Frozen Valley (Med 6 players)",
-			   "Gettysburg (Sm 4 players)",
-			   "Glacial Valley (Sm 4 players)",
-			   "Gold Coast (Med 6 players)",
-			   "Gold Rush (Lg 4 players)",
-			   "Habitat (Lg 4 players)",
-			   "Hades Frozen Over (Sm 4 players)",
-			   "Hamburger Hill (Mega 8 players)",
-			   "Hastings (Sm 4 players)",
-			   "Hell's Pass (Med 6 players)",
-			   "Holy Grounds (Mega 8 players)",
-			   "Ice Bergs (Med 6 players)",
-			   "Ice Station (Lg 6 players)",
-			   "Ice Queen (Lg 4 players)",
-			   "In the Sun (Med 6 players)",
-			   "Innocents? (Mega 8 players)",
-			   "Islands (Med 8 players)",
-			   "Island Plateau (Lg 4 players)",
-			   "Island Wars Extreme (Mega 8 players)",
-			   "Kananga (Med 6 players)",
-			   "King of the Hills Extreme (Mega 8 players)",
-			   "Lake Land (Lg 8 players)",
-			   "Land Locked (Lg 8 players)",
-			   "Lanes (Med 8 players)",
-			   "Leipzip (Sm 4 players)",
-			   "Meander (Lg 8 players)",
-			   "Mekong (Med 8 players)",
-			   "Middle Ground (Med 8 players)",
-			   "Naval Conquests (Mega 8 players)",
-			   "On your Marks (Med 4 players)",
-			   "Open Warfare (Mega 8 players)",
-			   "Ore Gardens (Lg 8 players)",
-			   "Potholes (Mega 8 players)",
-			   "Puddles (Med 4 players)",
-			   "Random Violence (Mega 8 players)",
-			   "Revenge (Med 8 players)",
-			   "Rias (Med 8 players)",
-			   "River Crossing (Sm 4 players)",
-			   "River Rampage (Mega 8 players)",
-			   "River Rapids (Lg 6 players)",
-			   "Rivers Wild (Mega 8 players)",
-			   "Rorkes Drift (Lg 4 players)",
-			   "Seaside (Med 4 players)",
-			   "Shades (Med 8 players)",
-			   "Smuggler's Cove (Lg 6 players)",
-			   "Snow Garden (Sm 2 players)",
-			   "Stalingrad (Sm 4 players)",
-			   "Sticks & Stones (Med 4 players)",
-			   "Strathearn Valley (Lg 6 players)",
-			   "Super Bridgehead (Mega 8 players)",
-			   "Super Mekong (Mega 8 players)",
-			   "Super Ore Gardens (Mega 8 players)",
-			   "Switch (Med 4 players)",
-			   "The Berg (Mega 8 players)",
-			   "The Boyne (Med 4 players)",
-			   "The Bulge (Sm 4 players)",
-			   "The Cauldron (Lg 6 players)",
-			   "The Finger (Lg 6 players)",
-			   "The Hills Have Eyes (Mega 8 players)",
-			   "The Keyes (Med 6 players)",
-			   "The Lakes (Med 8 players)",
-			   "The Neck (Med 6 players)",
-			   "The Web (Lg 6 players)",
-			   "To the Core (Lg 4 players)",
-			   "Trafalgar (Lg 4 players)",
-			   "Twin Rivers (Sm 4 players)",
-			   "Umtumbo Gorge (Lg 4 players)",
-			   "Watch Your Step Extreme (Mega 8 players)",
-			   "Waterfalls (Lg 8 players)",
-			   "Waterloo Revisited (Lg 6 players)",
-			   "Water Werks (Mega 8 players)",
-			   "Warlord's Lake (Sm 4 players)",
-			   "Zama (Sm 4 players)",
+			    "A Pattern of Islands (Lg 8 players)",
+			    "Arena Valley Extreme (Mega 8 players)",
+			    "Around the Rim (Sm 4 players)",
+			    "Ashes to Ashes (Lg 6 players)",
+			    "Artic Wasteland (Mega 8 players)",
+			    "Badajoz (Med 4 players)",
+			    "Baptism of Fire (Lg 6 players)",
+			    "Big Fish, Small Pond (Lg 6 players)",
+			    "Blue Lakes (Lg 8 players)",
+			    "Booby Traps (Mega 8 players)",
+			    "Bridgehead (Lg 6 players)",
+			    "Butterfly Bay (Lg 6 players)",
+			    "Central Conflict Extreme (Mega 8 players)",
+			    "Circles of Death (Mega 8 players)",
+			    "Cold Front (Med 6 players)",
+			    "Cold Pass (Med 4 players)",
+			    "Combat Zones (Mega 8 players)",
+			    "Conflict Cove (Sm 4 players)",
+			    "Culloden Moor (Med 8 players)",
+			    "Damnation Alley (Mega 8 players)",
+			    "Death Valley (Mega 8 players)",
+			    "Deep Six (Mega 8 players)",
+			    "Destruction Derby (Mega 8 players)",
+			    "Diamonds Aren't Forever (Mega 8 players)",
+			    "Elysium (Sm 4 players)",
+			    "Equal Shares (Lg 4 players)",
+			    "Frost Bitten (Mega 8 players)",
+			    "Frozen Valley (Med 6 players)",
+			    "Gettysburg (Sm 4 players)",
+			    "Glacial Valley (Sm 4 players)",
+			    "Gold Coast (Med 6 players)",
+			    "Gold Rush (Lg 4 players)",
+			    "Habitat (Lg 4 players)",
+			    "Hades Frozen Over (Sm 4 players)",
+			    "Hamburger Hill (Mega 8 players)",
+			    "Hastings (Sm 4 players)",
+			    "Hell's Pass (Med 6 players)",
+			    "Holy Grounds (Mega 8 players)",
+			    "Ice Bergs (Med 6 players)",
+			    "Ice Station (Lg 6 players)",
+			    "Ice Queen (Lg 4 players)",
+			    "In the Sun (Med 6 players)",
+			    "Innocents? (Mega 8 players)",
+			    "Islands (Med 8 players)",
+			    "Island Plateau (Lg 4 players)",
+			    "Island Wars Extreme (Mega 8 players)",
+			    "Kananga (Med 6 players)",
+			    "King of the Hills Extreme (Mega 8 players)",
+			    "Lake Land (Lg 8 players)",
+			    "Land Locked (Lg 8 players)",
+			    "Lanes (Med 8 players)",
+			    "Leipzip (Sm 4 players)",
+			    "Meander (Lg 8 players)",
+			    "Mekong (Med 8 players)",
+			    "Middle Ground (Med 8 players)",
+			    "Naval Conquests (Mega 8 players)",
+			    "On your Marks (Med 4 players)",
+			    "Open Warfare (Mega 8 players)",
+			    "Ore Gardens (Lg 8 players)",
+			    "Potholes (Mega 8 players)",
+			    "Puddles (Med 4 players)",
+			    "Random Violence (Mega 8 players)",
+			    "Revenge (Med 8 players)",
+			    "Rias (Med 8 players)",
+			    "River Crossing (Sm 4 players)",
+			    "River Rampage (Mega 8 players)",
+			    "River Rapids (Lg 6 players)",
+			    "Rivers Wild (Mega 8 players)",
+			    "Rorkes Drift (Lg 4 players)",
+			    "Seaside (Med 4 players)",
+			    "Shades (Med 8 players)",
+			    "Smuggler's Cove (Lg 6 players)",
+			    "Snow Garden (Sm 2 players)",
+			    "Stalingrad (Sm 4 players)",
+			    "Sticks & Stones (Med 4 players)",
+			    "Strathearn Valley (Lg 6 players)",
+			    "Super Bridgehead (Mega 8 players)",
+			    "Super Mekong (Mega 8 players)",
+			    "Super Ore Gardens (Mega 8 players)",
+			    "Switch (Med 4 players)",
+			    "The Berg (Mega 8 players)",
+			    "The Boyne (Med 4 players)",
+			    "The Bulge (Sm 4 players)",
+			    "The Cauldron (Lg 6 players)",
+			    "The Finger (Lg 6 players)",
+			    "The Hills Have Eyes (Mega 8 players)",
+			    "The Keyes (Med 6 players)",
+			    "The Lakes (Med 8 players)",
+			    "The Neck (Med 6 players)",
+			    "The Web (Lg 6 players)",
+			    "To the Core (Lg 4 players)",
+			    "Trafalgar (Lg 4 players)",
+			    "Twin Rivers (Sm 4 players)",
+			    "Umtumbo Gorge (Lg 4 players)",
+			    "Watch Your Step Extreme (Mega 8 players)",
+			    "Waterfalls (Lg 8 players)",
+			    "Waterloo Revisited (Lg 6 players)",
+			    "Water Werks (Mega 8 players)",
+			    "Warlord's Lake (Sm 4 players)",
+			    "Zama (Sm 4 players)",
 
-			   NULL};
+			    NULL };
 #endif
 
 #ifdef GERMAN
 char const *EngMisStr[] = {
 
-    "A Path Beyond (Lg)", "Weg ins Jenseits (Gr)", "Central Conflict (Lg)", "Der zentrale Konflikt (Gr)",
-    "Coastal Influence (Med)", "Sturm an der Kste (Mit)", "Combat Alley (Med)", "Boulevard der Schlachten (Mit)",
-    "Desolation (Lg)", "Verwstung (Gr)", "Dugout Isle (Med)", "Buddelschiff (Mit)", "Equal Opportunity (Sm)",
-    "Gleiche Chancen (Kl)", "First Come, First Serve (Sm)", "Wer zuerst kommt... (Kl)", "Island Hoppers (Sm)",
-    "Inselspringen (Kl)", "Island Wars (Lg)", "Der Krieg der Eilande (Gr)", "Isle of Fury (Lg)", "Insel des Zorns (Gr)",
-    "Ivory Wastelands (Sm)", "Elfenbeinwste (Kl)", "Keep off the Grass (Sm)", "Rasen betreten verboten (Kl)",
-    "Marooned II (Med)", "Gestrandet (Mit)", "Middle Mayhem (Sm)", "Mittelsmann (Kl)", "No Escape (Med)",
-    "Kein Entrinnen (Mit)", "No Man's Land (Med)", "Niemandsland (Mit)", "Normandy (Med)", "Normandie (Mit)",
-    "North By Northwest (Lg)", "Nord auf Nordwest (Gr)", "Pond Skirmish (Med)", "Teichgepl„nkel (Mit)", "Raraku (Lg)",
-    "Raraku (Gr)", "Ridge War (Med)", "Das Tal der Cyborgs (Mit)", "Shallow Grave (Med)", "Ein enges Grab (Mit)",
-    "Treasure Isle (Med)", "Die Schatzinsel (Mit)",
+	"A Path Beyond (Lg)",
+	"Weg ins Jenseits (Gr)",
+	"Central Conflict (Lg)",
+	"Der zentrale Konflikt (Gr)",
+	"Coastal Influence (Med)",
+	"Sturm an der Kste (Mit)",
+	"Combat Alley (Med)",
+	"Boulevard der Schlachten (Mit)",
+	"Desolation (Lg)",
+	"Verwstung (Gr)",
+	"Dugout Isle (Med)",
+	"Buddelschiff (Mit)",
+	"Equal Opportunity (Sm)",
+	"Gleiche Chancen (Kl)",
+	"First Come, First Serve (Sm)",
+	"Wer zuerst kommt... (Kl)",
+	"Island Hoppers (Sm)",
+	"Inselspringen (Kl)",
+	"Island Wars (Lg)",
+	"Der Krieg der Eilande (Gr)",
+	"Isle of Fury (Lg)",
+	"Insel des Zorns (Gr)",
+	"Ivory Wastelands (Sm)",
+	"Elfenbeinwste (Kl)",
+	"Keep off the Grass (Sm)",
+	"Rasen betreten verboten (Kl)",
+	"Marooned II (Med)",
+	"Gestrandet (Mit)",
+	"Middle Mayhem (Sm)",
+	"Mittelsmann (Kl)",
+	"No Escape (Med)",
+	"Kein Entrinnen (Mit)",
+	"No Man's Land (Med)",
+	"Niemandsland (Mit)",
+	"Normandy (Med)",
+	"Normandie (Mit)",
+	"North By Northwest (Lg)",
+	"Nord auf Nordwest (Gr)",
+	"Pond Skirmish (Med)",
+	"Teichgepl„nkel (Mit)",
+	"Raraku (Lg)",
+	"Raraku (Gr)",
+	"Ridge War (Med)",
+	"Das Tal der Cyborgs (Mit)",
+	"Shallow Grave (Med)",
+	"Ein enges Grab (Mit)",
+	"Treasure Isle (Med)",
+	"Die Schatzinsel (Mit)",
 
-    "Africa (Lg)", "Afrika (Gr)", "Alaska Anarchy (Lg)", "Anarchie in Alaska (Gr)", "All that Glitters... (Lg)",
-    "Alles was gl„nzt... (Gr)", "Apre's Peace (Lg)", "Apres Frieden (Gr)", "Antartica (Lg)", "Antarktica (Gr)",
-    "Armourgarden (Lg)", "Garten der Panzer (Gr)", "Austraila (Med)", "Koalaland (Mit)", "Barrier to Entry (Lg)",
-    "Zutritt verboten (Gr)", "Bavarian Blast (Med)", "Bayrische Blasmusik (Mit)", "Be Shore (Med)",
-    "Strandl„ufer (Mit)", "Bearing Straits (Med)", "Die Heringstrasse (Mit)", "Blow Holes (Lg)", "L”cheriger K„se (Gr)",
-    "Bonsai (Sm)", "Bonsai (Kl)", "Brother Stalin (Lg)", "Brderchen Stalin (Gr)", "Bullseye (Lg)", "Bullseye (Gr)",
-    "C&C (Med)", "C&C (Mit)", "Camos Canyon (Med)", "Camos-Canyon (Mit)", "Camos Coves (Lg)", "Camos-Grotte (Gr)",
-    "Camos Cross (Lg)", "Camos-Kreuz (Gr)", "Camos Crossing (Sm)", "Camos-Kreuzweg (Kl)", "Central Arena (Lg)",
-    "Spielplatz des Teufels (Gr)", "Canyon River (Med)", "Canyonfluss (Mit)", "Crossroads (Sm)", "Kreuzung (Kl)",
-    "Czech Mate (Lg)", "Tschechische Er”ffnung (Gr)", "Dday (Med)", "D-Day (Mit)", "Disaster Central (Lg)",
-    "Endstation Schweinebucht (Gr)", "Docklands (Med)", "Docklands (Mit)", "East Coast (Med)", "Ostkste (Mit)",
-    "Eastern Seaboard (Lg)", "Die Passage nach Osten (Gr)", "Finger Lake (Lg)", "Fingersee (Gr)", "Fjords (Med)",
-    "Fjorde (Mit)", "Floodlands (Lg)", "Land unter! (Gr)", "Forest under fire (Lg)", "Waldsterben im Feuer (Gr)",
-    "Four Corners (Lg)", "Viereck (Gr)", "Frostbit Fjords (Lg)", "Frostbeulenfjord (Gr)", "Glenboig (Sm)",
-    "Glenboig (Kl)", "Hell Frozen Over (Lg)", "Winter in der H”lle (Gr)", "India (Lg)", "Indien (Gr)",
-    "Indirect Fire (Lg)", "Indirekter Beschuss (Gr)", "Island Wars II (Lg)", "Krieg der Inseln (Gr)", "Italy (Lg)",
-    "Italien (Gr)", "Kabalo (Lg)", "Kabalo (Gr)", "King of the Hills (Lg)", "K”nig des Maulwurfshgels (Gr)",
-    "Lake Divide (Med)", "Wasserscheide (Mit)", "Lakelands (Lg)", "Seenplatte (Gr)", "Land Ladder (Lg)",
-    "Das Leiterspiel (Gr)", "Lotsa Lakes (Lg)", "Mehr Seen (Gr)", "Lunar Battlefield (Lg Special)",
-    "Schlachtfeld Mond (Gr Spezial)", "Malibu Fields (Med)", "Malibu (Mit)", "Marshland (Med)", "Schlammschlacht (Mit)",
-    "MyLai Delta (Med)", "Das Delta von My Lai (Mit)", "Natural Harbor (Med)", "Natrlicher Hafen (Mit)",
-    "No Way Out (Lg)", "Kein Entkommen (Gr)", "Normandy Landing (Lg)", "Landung in der Normandie (Gr)",
-    "Ore Wars (Med)", "Die Erz-Kriege (Mit)", "Oz (Lg)", "Das Land Oz (Gr)", "Pilgrim Fathers II (Lg)",
-    "Die Grnderv„ter (Gr)", "Pip's Ice Tea (Med)", "Pips Eistee (Mit)", "Polar Panic (Lg)", "Panik am Pol (Gr)",
-    "Ponds (Med)", "Tmpelspringer (Mit)", "Putney (Lg)", "Putney (Gr)", "Return to Zion (Lg)",
-    "Rckkehr nach Zion (Gr)", "Ring of Land (Lg)", "Der Landring (Gr)", "River Basin (Lg)", "Flusslauf (Gr)",
-    "River Delta (Med)", "Flussdelta (Mit)", "River Islands (Med)", "Flussinsel (Mit)", "River Maze (Sm)",
-    "Flussgewirr (Kl)", "Rivers (Sm)", "Flsse (Kl)", "Run the Gauntlet (Med)", "Spiessrutenlauf (Mit)",
-    "Scappa Flow (Lg)", "Scapa Flow (Gr)", "Siberian Slaughter (Lg)", "Sibirisches Gemetzel (Gr)", "Sleepy Valley (Sm)",
-    "Tal der Ahnungslosen (Kl)", "Snake River (Lg)", "Am Schlangenfluss (Gr)", "Snow Wars (Lg)",
-    "Krieg der Flocken (Gr)", "Snowball fight (Lg)", "Schneeballschlacht (Gr)", "Snowy Island (Lg)", "Schneeinsel (Gr)",
-    "So Near So Far (Sm)", "So nah und doch so fern (Kl)", "South America (Lg)", "Sdamerika (Gr)", "Spring Line (Lg)",
-    "Frhlingsgefhle (Gr)", "Star (Lg)", "Stern (Gr)", "Straighter & Narrower (Sm)", "Enger & schmaler (Kl)",
-    "TerrainSpotting (Sm)", "TerrainSpotting (Kl)", "The Bay (Lg)", "Die Bucht (Gr)", "The Garden (Lg)",
-    "Der Garten (Gr)", "The Great Lakes (Med)", "Die Grossen Seen (Mit)", "The Ice Arena (Lg)", "Eisarena (Gr)",
-    "The Lake District (Lg)", "Kalte Seenplatte (Gr)", "The Linked lands (Lg)", "Die verbundenen L„nder (Gr)",
-    "The Mississippi (Med)", "Grsse von Tom Sawyer (Mit)", "The Sticky Bit (Lg)", "Der klebrige Teil (Gr)",
-    "The Valley (Med)", "Das Tal (Mit)", "The Woods Today (Lg)", "Waldl„ufer (Gr)", "Things to Come (Lg)",
-    "Was die Zukunft bringt (Gr)", "Tiger Core (Sm)", "Das Herz des Tigers (Kl)", "To the Core (Sm)",
-    "Mitten ins Herz (Kl)", "Tournament Hills (Lg)", "Hgel der Entscheidung (Gr)", "Tropical Storm (Med)",
-    "Tropenstrme (Mit)", "Tundra Trouble (Lg)", "Tauziehen in der Tundra (Gr)", "Uk (Med)", "GB (Mit)",
-    "Undiscovered Country (Sm)", "Unentdecktes Land (Kl)", "United States (Med)", "US (Mit)", "Volcano (Sm)",
-    "Vulkan (Kl)", "Wastelands (Lg)", "Wstenei (Gr)", "Water Works (Sm)", "Wasserwerke (Kl)", "World Map (Med)",
-    "Weltkarte (Kl)", "Zambezi (Lg)", "Sambesi (Gr)",
+	"Africa (Lg)",
+	"Afrika (Gr)",
+	"Alaska Anarchy (Lg)",
+	"Anarchie in Alaska (Gr)",
+	"All that Glitters... (Lg)",
+	"Alles was gl„nzt... (Gr)",
+	"Apre's Peace (Lg)",
+	"Apres Frieden (Gr)",
+	"Antartica (Lg)",
+	"Antarktica (Gr)",
+	"Armourgarden (Lg)",
+	"Garten der Panzer (Gr)",
+	"Austraila (Med)",
+	"Koalaland (Mit)",
+	"Barrier to Entry (Lg)",
+	"Zutritt verboten (Gr)",
+	"Bavarian Blast (Med)",
+	"Bayrische Blasmusik (Mit)",
+	"Be Shore (Med)",
+	"Strandl„ufer (Mit)",
+	"Bearing Straits (Med)",
+	"Die Heringstrasse (Mit)",
+	"Blow Holes (Lg)",
+	"L”cheriger K„se (Gr)",
+	"Bonsai (Sm)",
+	"Bonsai (Kl)",
+	"Brother Stalin (Lg)",
+	"Brderchen Stalin (Gr)",
+	"Bullseye (Lg)",
+	"Bullseye (Gr)",
+	"C&C (Med)",
+	"C&C (Mit)",
+	"Camos Canyon (Med)",
+	"Camos-Canyon (Mit)",
+	"Camos Coves (Lg)",
+	"Camos-Grotte (Gr)",
+	"Camos Cross (Lg)",
+	"Camos-Kreuz (Gr)",
+	"Camos Crossing (Sm)",
+	"Camos-Kreuzweg (Kl)",
+	"Central Arena (Lg)",
+	"Spielplatz des Teufels (Gr)",
+	"Canyon River (Med)",
+	"Canyonfluss (Mit)",
+	"Crossroads (Sm)",
+	"Kreuzung (Kl)",
+	"Czech Mate (Lg)",
+	"Tschechische Er”ffnung (Gr)",
+	"Dday (Med)",
+	"D-Day (Mit)",
+	"Disaster Central (Lg)",
+	"Endstation Schweinebucht (Gr)",
+	"Docklands (Med)",
+	"Docklands (Mit)",
+	"East Coast (Med)",
+	"Ostkste (Mit)",
+	"Eastern Seaboard (Lg)",
+	"Die Passage nach Osten (Gr)",
+	"Finger Lake (Lg)",
+	"Fingersee (Gr)",
+	"Fjords (Med)",
+	"Fjorde (Mit)",
+	"Floodlands (Lg)",
+	"Land unter! (Gr)",
+	"Forest under fire (Lg)",
+	"Waldsterben im Feuer (Gr)",
+	"Four Corners (Lg)",
+	"Viereck (Gr)",
+	"Frostbit Fjords (Lg)",
+	"Frostbeulenfjord (Gr)",
+	"Glenboig (Sm)",
+	"Glenboig (Kl)",
+	"Hell Frozen Over (Lg)",
+	"Winter in der H”lle (Gr)",
+	"India (Lg)",
+	"Indien (Gr)",
+	"Indirect Fire (Lg)",
+	"Indirekter Beschuss (Gr)",
+	"Island Wars II (Lg)",
+	"Krieg der Inseln (Gr)",
+	"Italy (Lg)",
+	"Italien (Gr)",
+	"Kabalo (Lg)",
+	"Kabalo (Gr)",
+	"King of the Hills (Lg)",
+	"K”nig des Maulwurfshgels (Gr)",
+	"Lake Divide (Med)",
+	"Wasserscheide (Mit)",
+	"Lakelands (Lg)",
+	"Seenplatte (Gr)",
+	"Land Ladder (Lg)",
+	"Das Leiterspiel (Gr)",
+	"Lotsa Lakes (Lg)",
+	"Mehr Seen (Gr)",
+	"Lunar Battlefield (Lg Special)",
+	"Schlachtfeld Mond (Gr Spezial)",
+	"Malibu Fields (Med)",
+	"Malibu (Mit)",
+	"Marshland (Med)",
+	"Schlammschlacht (Mit)",
+	"MyLai Delta (Med)",
+	"Das Delta von My Lai (Mit)",
+	"Natural Harbor (Med)",
+	"Natrlicher Hafen (Mit)",
+	"No Way Out (Lg)",
+	"Kein Entkommen (Gr)",
+	"Normandy Landing (Lg)",
+	"Landung in der Normandie (Gr)",
+	"Ore Wars (Med)",
+	"Die Erz-Kriege (Mit)",
+	"Oz (Lg)",
+	"Das Land Oz (Gr)",
+	"Pilgrim Fathers II (Lg)",
+	"Die Grnderv„ter (Gr)",
+	"Pip's Ice Tea (Med)",
+	"Pips Eistee (Mit)",
+	"Polar Panic (Lg)",
+	"Panik am Pol (Gr)",
+	"Ponds (Med)",
+	"Tmpelspringer (Mit)",
+	"Putney (Lg)",
+	"Putney (Gr)",
+	"Return to Zion (Lg)",
+	"Rckkehr nach Zion (Gr)",
+	"Ring of Land (Lg)",
+	"Der Landring (Gr)",
+	"River Basin (Lg)",
+	"Flusslauf (Gr)",
+	"River Delta (Med)",
+	"Flussdelta (Mit)",
+	"River Islands (Med)",
+	"Flussinsel (Mit)",
+	"River Maze (Sm)",
+	"Flussgewirr (Kl)",
+	"Rivers (Sm)",
+	"Flsse (Kl)",
+	"Run the Gauntlet (Med)",
+	"Spiessrutenlauf (Mit)",
+	"Scappa Flow (Lg)",
+	"Scapa Flow (Gr)",
+	"Siberian Slaughter (Lg)",
+	"Sibirisches Gemetzel (Gr)",
+	"Sleepy Valley (Sm)",
+	"Tal der Ahnungslosen (Kl)",
+	"Snake River (Lg)",
+	"Am Schlangenfluss (Gr)",
+	"Snow Wars (Lg)",
+	"Krieg der Flocken (Gr)",
+	"Snowball fight (Lg)",
+	"Schneeballschlacht (Gr)",
+	"Snowy Island (Lg)",
+	"Schneeinsel (Gr)",
+	"So Near So Far (Sm)",
+	"So nah und doch so fern (Kl)",
+	"South America (Lg)",
+	"Sdamerika (Gr)",
+	"Spring Line (Lg)",
+	"Frhlingsgefhle (Gr)",
+	"Star (Lg)",
+	"Stern (Gr)",
+	"Straighter & Narrower (Sm)",
+	"Enger & schmaler (Kl)",
+	"TerrainSpotting (Sm)",
+	"TerrainSpotting (Kl)",
+	"The Bay (Lg)",
+	"Die Bucht (Gr)",
+	"The Garden (Lg)",
+	"Der Garten (Gr)",
+	"The Great Lakes (Med)",
+	"Die Grossen Seen (Mit)",
+	"The Ice Arena (Lg)",
+	"Eisarena (Gr)",
+	"The Lake District (Lg)",
+	"Kalte Seenplatte (Gr)",
+	"The Linked lands (Lg)",
+	"Die verbundenen L„nder (Gr)",
+	"The Mississippi (Med)",
+	"Grsse von Tom Sawyer (Mit)",
+	"The Sticky Bit (Lg)",
+	"Der klebrige Teil (Gr)",
+	"The Valley (Med)",
+	"Das Tal (Mit)",
+	"The Woods Today (Lg)",
+	"Waldl„ufer (Gr)",
+	"Things to Come (Lg)",
+	"Was die Zukunft bringt (Gr)",
+	"Tiger Core (Sm)",
+	"Das Herz des Tigers (Kl)",
+	"To the Core (Sm)",
+	"Mitten ins Herz (Kl)",
+	"Tournament Hills (Lg)",
+	"Hgel der Entscheidung (Gr)",
+	"Tropical Storm (Med)",
+	"Tropenstrme (Mit)",
+	"Tundra Trouble (Lg)",
+	"Tauziehen in der Tundra (Gr)",
+	"Uk (Med)",
+	"GB (Mit)",
+	"Undiscovered Country (Sm)",
+	"Unentdecktes Land (Kl)",
+	"United States (Med)",
+	"US (Mit)",
+	"Volcano (Sm)",
+	"Vulkan (Kl)",
+	"Wastelands (Lg)",
+	"Wstenei (Gr)",
+	"Water Works (Sm)",
+	"Wasserwerke (Kl)",
+	"World Map (Med)",
+	"Weltkarte (Kl)",
+	"Zambezi (Lg)",
+	"Sambesi (Gr)",
 
-    // #if 0
-    "A Pattern of Islands (Lg 8 players)", "Inselmuster (gross, 8 Spieler)", "Arena Valley Extreme (Mega 8 players)",
-    "Arenatal (sehr gross, 8 Spieler)", "Around the Rim (Sm 4 players)", "Um die Kante (klein, 4 Spieler)",
-    "Ashes to Ashes (Lg 6 players)", "Asche zu Asche (gross, 6 Spieler)", "Artic Wasteland (Mega 8 players)",
-    "Arktische Wste (sehr gross, 8 Spieler)", "Badajoz (Med 4 players)", "Badjoz (mittelgross, 4 Spieler)",
-    "Baptism of Fire (Lg 6 players)", "Feuertaufe (gross, 6 Spieler)", "Big Fish, Small Pond (Lg 6 players)",
-    "Grosser Fisch im kleinen Teich (gross, 6 Spieler)", "Blue Lakes (Lg 8 players)",
-    "Die blauen Seen (gross, 8 Spieler)", "Booby Traps (Mega 8 players)", "Vorsicht, Falle! (sehr gross, 8 Spieler)",
-    "Bridgehead (Lg 6 players)", "Brckenkopf im Niemandsland (gross, 6 Spieler)", "Butterfly Bay (Lg 6 players)",
-    "Schmetterlingsbucht (gross, 6 Spieler)", "Central Conflict Extreme (Mega 8 players)",
-    "Zentraler Konflikt fr K”nner (sehr gross, 8 Spieler)", "Circles of Death (Mega 8 players)",
-    "Todeskreise (sehr gross, 8 Spieler)", "Cold Front (Med 6 players)", "Kaltfront ( mittelgross, 6 Spieler)",
-    "Cold Pass (Med 4 players)", "Cooler Pass (mittelgross, 4 Spieler)", "Combat Zones (Mega 8 players)",
-    "Kampfgebiete (sehr gross, 8 Spieler)", "Conflict Cove (Sm 4 players)", "H”hlenkonflikt (klein, 4 Spieler)",
-    "Culloden Moor (Med 8 players)", "Culloden-Moor (mittelgross, 8 Spieler)", "Damnation Alley (Mega 8 players)",
-    "Strasse der Verdammten (sehr gross, 8 Spieler)", "Death Valley (Mega 8 players)",
-    "Tal des Todes (sehr gross, 8 Spieler)", "Deep Six (Mega 8 players)", "Tiefe Sechs (sehr gross, 8 Spieler)",
-    "Destruction Derby (Mega 8 players)", "Destruction Derby (sehr gross, 8 Spieler)",
-    "Diamonds Aren't Forever (Mega 8 players)", "Verg„ngliche Diamanten (sehr gross, 8 Spieler)",
-    "Elysium (Sm 4 players)", "Elysium (klein, 4 Spieler)", "Equal Shares (Lg 4 players)",
-    "Gleiche Anteile (gross, 4 Spieler)", "Frost Bitten (Mega 8 players)", "Frostbrand (sehr gross, 8 Spieler)",
-    "Frozen Valley (Med 6 players)", "Eisiges Tal (mittelgross, 6 Spieler)", "Gettysburg (Sm 4 players)",
-    "Gettysburg (klein, 4 Spieler)", "Glacial Valley (Sm 4 players)", "Gletschertal (klein, 4 Spieler)",
-    "Gold Coast (Med 6 players)", "Goldkste (mittelgross, 6 Spieler)", "Gold Rush (Lg 4 players)",
-    "Goldrausch (gross, 4 Spieler)", "Habitat (Lg 4 players)", "Habitat (gross, 4 Spieler)",
-    "Hades Frozen Over (Sm 4 players)", "Frostschutz fr die H”lle (klein, 4 Spieler)",
-    "Hamburger Hill (Mega 8 players)", "Hamburger Hill (sehr gross, 8 Spieler)", "Hastings (Sm 4 players)",
-    "Hastings (klein, 4 Spieler)", "Hell's Pass (Med 6 players)", "H”llenpass (mittelgross, 6 Spieler)",
-    "Holy Grounds (Mega 8 players)", "Heiliger Boden (sehr gross, 8 Spieler)", "Ice Bergs (Med 6 players)",
-    "Eisberge (mittelgross, 6 Spieler)", "Ice Station (Lg 6 players)", "Eisstation  (gross, 6 Spieler)",
-    "Ice Queen (Lg 4 players)", "Eisk”nigin (gross, 4 Spieler)", "In the Sun (Med 6 players)",
-    "Unter der Sonne (mittelgross, 6 Spieler)", "Innocents? (Mega 8 players)",
-    "Unschuldig? Wer? (sehr gross, 8 Spieler)", "Islands (Med 8 players)", "Inseln im Nebel (mittelgross, 8 Spieler)",
-    "Island Plateau (Lg 4 players)", "Inselplateau (gross, 4 Spieler)", "Island Wars Extreme (Mega 8 players)",
-    "Extremes Inselspringen (sehr gross, 8 Spieler)", "Kananga (Med 6 players)", "Kananga (mittelgross, 6 Spieler)",
-    "King of the Hills Extreme (Mega 8 players)", "K”nig des Maulwurfshgels (sehr gross, 8 Spieler)",
-    "Lake Land (Lg 8 players)", "Seenland (gross, 8 Spieler)", "Land Locked (Lg 8 players)",
-    "Das Verschlossene Land (gross, 8 Spieler)", "Lanes (Med 8 players)", "Gassenjungen (mittelgross, 8 Spieler)",
-    "Leipzip (Sm 4 players)", "Leipzig (klein, 4 Spieler)", "Meander (Lg 8 players)", "M„ander (gross, 8 Spieler)",
-    "Mekong (Med 8 players)", "Mekong (mittelgross, 8 Spieler)", "Middle Ground (Med 8 players)",
-    "Mittelsmann (mittelgross, 8 Spieler)", "Naval Conquests (Mega 8 players)",
-    "Kommt zur Marine, haben sie gesagt (sehr gross, 8 Spieler)", "On your Marks (Med 4 players)",
-    "Auf die Pl„tze (mittelgross, 4 Spieler)", "Open Warfare (Mega 8 players)",
-    "Offener Schlagabtausch (sehr gross, 8 Spieler)", "Ore Gardens (Lg 8 players)", "Erzparadies (gross, 8 Spieler)",
-    "Potholes (Mega 8 players)", "Schlagl”cher (sehr gross, 8 Spieler)", "Puddles (Med 4 players)",
-    "Pftzen (mittelgross, 4 Spieler)", "Random Violence (Mega 8 players)",
-    "Unberechenbare Gewalt (sehr gross, 8 Spieler)", "Revenge (Med 8 players)", "Rache (mittelgross, 8 Spieler)",
-    "Rias (Med 8 players)", "Kabul (mittelgross, 8 Spieler)", "River Crossing (Sm 4 players)",
-    "Die Furt (klein, 4 Spieler)", "River Rampage (Mega 8 players)", "Flussfahrt (sehr gross, 8 Spieler)",
-    "River Rapids (Lg 6 players)", "Stromschnellen (gross, 6 Spieler)", "Rivers Wild (Mega 8 players)",
-    "Wildwasser (sehr gross, 8 Spieler)", "Rorkes Drift (Lg 4 players)", "Rorkes Drift (gross, 4 Spieler)",
-    "Seaside (Med 4 players)", "Strandleben (mittelgross, 4 Spieler)", "Shades (Med 8 players)",
-    "Schattenreich (mittelgross, 8 Spieler)", "Smuggler's Cove (Lg 6 players)", "Schmugglerh”hle (gross, 6 Spieler)",
-    "Snow Garden (Sm 2 players)", "Schneegest”ber (klein, 2 Spieler)", "Stalingrad (Sm 4 players)",
-    "Stalingrad (klein, 4 Spieler)", "Sticks & Stones (Med 4 players)", "Holz und Steine (mittelgross, 4 Spieler)",
-    "Strathearn Valley (Lg 6 players)", "Das Tal von Strathearn (gross, 6 Spieler)",
-    "Super Bridgehead (Mega 8 players)", "Super-Brckenkopf (sehr gross, 8 Spieler)", "Super Mekong (Mega 8 players)",
-    "Super-Mekong (sehr gross, 8 Spieler)", "Super Ore Gardens (Mega 8 players)",
-    "Super-Erzparadies (sehr gross, 8 Spieler)", "Switch (Med 4 players)", "Schalter (mittelgross, 4 Spieler)",
-    "The Berg (Mega 8 players)", "Der Berg (sehr gross, 8 Spieler)", "The Boyne (Med 4 players)",
-    "Boyne (mittelgross, 4 Spieler)", "The Bulge (Sm 4 players)", "Die W”lbung (klein, 4 Spieler)",
-    "The Cauldron (Lg 6 players)", "Der Kessel (gross, 6 Spieler)", "The Finger (Lg 6 players)",
-    "Der Finger (gross, 6 Spieler)", "The Hills Have Eyes (Mega 8 players)",
-    "Die Hgel haben Augen (sehr gross, 8 Spieler)", "The Keyes (Med 6 players)", "Ein Sumpf (mittelgross, 6 Spieler)",
-    "The Lakes (Med 8 players)", "Die Seen (mittelgross, 8 Spieler)", "The Neck (Med 6 players)",
-    "Der Hals (mittelgross, 6 Spieler)", "The Web (Lg 6 players)", "Das Netz (gross, 6 Spieler)",
-    "To the Core (Lg 4 players)", "Mitten ins Herz (gross, 4 Spieler)", "Trafalgar (Lg 4 players)",
-    "Trafalgar (gross, 4 Spieler)", "Twin Rivers (Sm 4 players)", "Zwillingsstr”me (klein, 4 Spieler)",
-    "Umtumbo Gorge (Lg 4 players)", "Die Umtumbo-Schlucht (gross, 4 Spieler)",
-    "Watch Your Step Extreme (Mega 8 players)", "Vorsicht, Lebensgefahr (sehr gross, 8 Spieler)",
-    "Waterfalls (Lg 8 players)", "Wasserfall (gross, 8 Spieler)", "Waterloo Revisited (Lg 6 players)",
-    "Zu Besuch in Waterloo (gross, 6 Spieler)", "Water Werks (Mega 8 players)", "Wasserwerk (sehr gross, 8 Spieler)",
-    "Warlord's Lake (Sm 4 players)", "Der See des Kriegsgottes (klein, 4 Spieler)", "Zama (Sm 4 players)",
-    "Zama (klein, 4 Spieler)",
-    // #endif
-    NULL};
+	// #if 0
+	"A Pattern of Islands (Lg 8 players)",
+	"Inselmuster (gross, 8 Spieler)",
+	"Arena Valley Extreme (Mega 8 players)",
+	"Arenatal (sehr gross, 8 Spieler)",
+	"Around the Rim (Sm 4 players)",
+	"Um die Kante (klein, 4 Spieler)",
+	"Ashes to Ashes (Lg 6 players)",
+	"Asche zu Asche (gross, 6 Spieler)",
+	"Artic Wasteland (Mega 8 players)",
+	"Arktische Wste (sehr gross, 8 Spieler)",
+	"Badajoz (Med 4 players)",
+	"Badjoz (mittelgross, 4 Spieler)",
+	"Baptism of Fire (Lg 6 players)",
+	"Feuertaufe (gross, 6 Spieler)",
+	"Big Fish, Small Pond (Lg 6 players)",
+	"Grosser Fisch im kleinen Teich (gross, 6 Spieler)",
+	"Blue Lakes (Lg 8 players)",
+	"Die blauen Seen (gross, 8 Spieler)",
+	"Booby Traps (Mega 8 players)",
+	"Vorsicht, Falle! (sehr gross, 8 Spieler)",
+	"Bridgehead (Lg 6 players)",
+	"Brckenkopf im Niemandsland (gross, 6 Spieler)",
+	"Butterfly Bay (Lg 6 players)",
+	"Schmetterlingsbucht (gross, 6 Spieler)",
+	"Central Conflict Extreme (Mega 8 players)",
+	"Zentraler Konflikt fr K”nner (sehr gross, 8 Spieler)",
+	"Circles of Death (Mega 8 players)",
+	"Todeskreise (sehr gross, 8 Spieler)",
+	"Cold Front (Med 6 players)",
+	"Kaltfront ( mittelgross, 6 Spieler)",
+	"Cold Pass (Med 4 players)",
+	"Cooler Pass (mittelgross, 4 Spieler)",
+	"Combat Zones (Mega 8 players)",
+	"Kampfgebiete (sehr gross, 8 Spieler)",
+	"Conflict Cove (Sm 4 players)",
+	"H”hlenkonflikt (klein, 4 Spieler)",
+	"Culloden Moor (Med 8 players)",
+	"Culloden-Moor (mittelgross, 8 Spieler)",
+	"Damnation Alley (Mega 8 players)",
+	"Strasse der Verdammten (sehr gross, 8 Spieler)",
+	"Death Valley (Mega 8 players)",
+	"Tal des Todes (sehr gross, 8 Spieler)",
+	"Deep Six (Mega 8 players)",
+	"Tiefe Sechs (sehr gross, 8 Spieler)",
+	"Destruction Derby (Mega 8 players)",
+	"Destruction Derby (sehr gross, 8 Spieler)",
+	"Diamonds Aren't Forever (Mega 8 players)",
+	"Verg„ngliche Diamanten (sehr gross, 8 Spieler)",
+	"Elysium (Sm 4 players)",
+	"Elysium (klein, 4 Spieler)",
+	"Equal Shares (Lg 4 players)",
+	"Gleiche Anteile (gross, 4 Spieler)",
+	"Frost Bitten (Mega 8 players)",
+	"Frostbrand (sehr gross, 8 Spieler)",
+	"Frozen Valley (Med 6 players)",
+	"Eisiges Tal (mittelgross, 6 Spieler)",
+	"Gettysburg (Sm 4 players)",
+	"Gettysburg (klein, 4 Spieler)",
+	"Glacial Valley (Sm 4 players)",
+	"Gletschertal (klein, 4 Spieler)",
+	"Gold Coast (Med 6 players)",
+	"Goldkste (mittelgross, 6 Spieler)",
+	"Gold Rush (Lg 4 players)",
+	"Goldrausch (gross, 4 Spieler)",
+	"Habitat (Lg 4 players)",
+	"Habitat (gross, 4 Spieler)",
+	"Hades Frozen Over (Sm 4 players)",
+	"Frostschutz fr die H”lle (klein, 4 Spieler)",
+	"Hamburger Hill (Mega 8 players)",
+	"Hamburger Hill (sehr gross, 8 Spieler)",
+	"Hastings (Sm 4 players)",
+	"Hastings (klein, 4 Spieler)",
+	"Hell's Pass (Med 6 players)",
+	"H”llenpass (mittelgross, 6 Spieler)",
+	"Holy Grounds (Mega 8 players)",
+	"Heiliger Boden (sehr gross, 8 Spieler)",
+	"Ice Bergs (Med 6 players)",
+	"Eisberge (mittelgross, 6 Spieler)",
+	"Ice Station (Lg 6 players)",
+	"Eisstation  (gross, 6 Spieler)",
+	"Ice Queen (Lg 4 players)",
+	"Eisk”nigin (gross, 4 Spieler)",
+	"In the Sun (Med 6 players)",
+	"Unter der Sonne (mittelgross, 6 Spieler)",
+	"Innocents? (Mega 8 players)",
+	"Unschuldig? Wer? (sehr gross, 8 Spieler)",
+	"Islands (Med 8 players)",
+	"Inseln im Nebel (mittelgross, 8 Spieler)",
+	"Island Plateau (Lg 4 players)",
+	"Inselplateau (gross, 4 Spieler)",
+	"Island Wars Extreme (Mega 8 players)",
+	"Extremes Inselspringen (sehr gross, 8 Spieler)",
+	"Kananga (Med 6 players)",
+	"Kananga (mittelgross, 6 Spieler)",
+	"King of the Hills Extreme (Mega 8 players)",
+	"K”nig des Maulwurfshgels (sehr gross, 8 Spieler)",
+	"Lake Land (Lg 8 players)",
+	"Seenland (gross, 8 Spieler)",
+	"Land Locked (Lg 8 players)",
+	"Das Verschlossene Land (gross, 8 Spieler)",
+	"Lanes (Med 8 players)",
+	"Gassenjungen (mittelgross, 8 Spieler)",
+	"Leipzip (Sm 4 players)",
+	"Leipzig (klein, 4 Spieler)",
+	"Meander (Lg 8 players)",
+	"M„ander (gross, 8 Spieler)",
+	"Mekong (Med 8 players)",
+	"Mekong (mittelgross, 8 Spieler)",
+	"Middle Ground (Med 8 players)",
+	"Mittelsmann (mittelgross, 8 Spieler)",
+	"Naval Conquests (Mega 8 players)",
+	"Kommt zur Marine, haben sie gesagt (sehr gross, 8 Spieler)",
+	"On your Marks (Med 4 players)",
+	"Auf die Pl„tze (mittelgross, 4 Spieler)",
+	"Open Warfare (Mega 8 players)",
+	"Offener Schlagabtausch (sehr gross, 8 Spieler)",
+	"Ore Gardens (Lg 8 players)",
+	"Erzparadies (gross, 8 Spieler)",
+	"Potholes (Mega 8 players)",
+	"Schlagl”cher (sehr gross, 8 Spieler)",
+	"Puddles (Med 4 players)",
+	"Pftzen (mittelgross, 4 Spieler)",
+	"Random Violence (Mega 8 players)",
+	"Unberechenbare Gewalt (sehr gross, 8 Spieler)",
+	"Revenge (Med 8 players)",
+	"Rache (mittelgross, 8 Spieler)",
+	"Rias (Med 8 players)",
+	"Kabul (mittelgross, 8 Spieler)",
+	"River Crossing (Sm 4 players)",
+	"Die Furt (klein, 4 Spieler)",
+	"River Rampage (Mega 8 players)",
+	"Flussfahrt (sehr gross, 8 Spieler)",
+	"River Rapids (Lg 6 players)",
+	"Stromschnellen (gross, 6 Spieler)",
+	"Rivers Wild (Mega 8 players)",
+	"Wildwasser (sehr gross, 8 Spieler)",
+	"Rorkes Drift (Lg 4 players)",
+	"Rorkes Drift (gross, 4 Spieler)",
+	"Seaside (Med 4 players)",
+	"Strandleben (mittelgross, 4 Spieler)",
+	"Shades (Med 8 players)",
+	"Schattenreich (mittelgross, 8 Spieler)",
+	"Smuggler's Cove (Lg 6 players)",
+	"Schmugglerh”hle (gross, 6 Spieler)",
+	"Snow Garden (Sm 2 players)",
+	"Schneegest”ber (klein, 2 Spieler)",
+	"Stalingrad (Sm 4 players)",
+	"Stalingrad (klein, 4 Spieler)",
+	"Sticks & Stones (Med 4 players)",
+	"Holz und Steine (mittelgross, 4 Spieler)",
+	"Strathearn Valley (Lg 6 players)",
+	"Das Tal von Strathearn (gross, 6 Spieler)",
+	"Super Bridgehead (Mega 8 players)",
+	"Super-Brckenkopf (sehr gross, 8 Spieler)",
+	"Super Mekong (Mega 8 players)",
+	"Super-Mekong (sehr gross, 8 Spieler)",
+	"Super Ore Gardens (Mega 8 players)",
+	"Super-Erzparadies (sehr gross, 8 Spieler)",
+	"Switch (Med 4 players)",
+	"Schalter (mittelgross, 4 Spieler)",
+	"The Berg (Mega 8 players)",
+	"Der Berg (sehr gross, 8 Spieler)",
+	"The Boyne (Med 4 players)",
+	"Boyne (mittelgross, 4 Spieler)",
+	"The Bulge (Sm 4 players)",
+	"Die W”lbung (klein, 4 Spieler)",
+	"The Cauldron (Lg 6 players)",
+	"Der Kessel (gross, 6 Spieler)",
+	"The Finger (Lg 6 players)",
+	"Der Finger (gross, 6 Spieler)",
+	"The Hills Have Eyes (Mega 8 players)",
+	"Die Hgel haben Augen (sehr gross, 8 Spieler)",
+	"The Keyes (Med 6 players)",
+	"Ein Sumpf (mittelgross, 6 Spieler)",
+	"The Lakes (Med 8 players)",
+	"Die Seen (mittelgross, 8 Spieler)",
+	"The Neck (Med 6 players)",
+	"Der Hals (mittelgross, 6 Spieler)",
+	"The Web (Lg 6 players)",
+	"Das Netz (gross, 6 Spieler)",
+	"To the Core (Lg 4 players)",
+	"Mitten ins Herz (gross, 4 Spieler)",
+	"Trafalgar (Lg 4 players)",
+	"Trafalgar (gross, 4 Spieler)",
+	"Twin Rivers (Sm 4 players)",
+	"Zwillingsstr”me (klein, 4 Spieler)",
+	"Umtumbo Gorge (Lg 4 players)",
+	"Die Umtumbo-Schlucht (gross, 4 Spieler)",
+	"Watch Your Step Extreme (Mega 8 players)",
+	"Vorsicht, Lebensgefahr (sehr gross, 8 Spieler)",
+	"Waterfalls (Lg 8 players)",
+	"Wasserfall (gross, 8 Spieler)",
+	"Waterloo Revisited (Lg 6 players)",
+	"Zu Besuch in Waterloo (gross, 6 Spieler)",
+	"Water Werks (Mega 8 players)",
+	"Wasserwerk (sehr gross, 8 Spieler)",
+	"Warlord's Lake (Sm 4 players)",
+	"Der See des Kriegsgottes (klein, 4 Spieler)",
+	"Zama (Sm 4 players)",
+	"Zama (klein, 4 Spieler)",
+	// #endif
+	NULL
+};
 #endif
 #ifdef FRENCH
 char const *EngMisStr[] = {
 
-    "A Path Beyond (Lg)", "Le Passage (Max)", "Central Conflict (Lg)", "Conflit Central (Max)",
-    "Coastal Influence (Med)", "Le Chant des Canons (Moy)", "Combat Alley (Med)", "Aux Armes! (Moy)", "Desolation (Lg)",
-    "D‚solation (Max)", "Dugout Isle (Med)", "L'Ile Maudite (Moy)", "Equal Opportunity (Sm)", "A Chances Egales (Min)",
-    "First Come, First Serve (Sm)", "La Loi du Plus Fort (Min)", "Island Hoppers (Sm)", "D'une Ile … l'autre (Min)",
-    "Island Wars (Lg)", "Guerres Insulaires (Max)", "Isle of Fury (Lg)", "L'Ile de la Furie(Max)",
-    "Ivory Wastelands (Sm)", "Terres d'Ivoire (Min)", "Keep off the Grass (Sm)", "Hors de mon Chemin (Min)",
-    "Marooned II (Med)", "Isolement II (Moy)", "Middle Mayhem (Sm)", "Chaos Interne (Min)", "No Escape (Med)",
-    "Le PiŠge (Moy)", "No Man's Land (Med)", "No Man's Land (Moy)", "Normandy (Med)", "Normandie (Moy)",
-    "North By Northwest (Lg)", "Nord, Nord-Ouest (Max)", "Pond Skirmish (Med)", "Bain de Sang (Moy)", "Raraku (Lg)",
-    "Raraku (Max)", "Ridge War (Med)", "Guerre au Sommet (Moy)", "Shallow Grave (Med)", "La Saveur de la Mort (Moy)",
-    "Treasure Isle (Med)", "L'Ile au Tr‚sor (Moy)",
+	"A Path Beyond (Lg)",
+	"Le Passage (Max)",
+	"Central Conflict (Lg)",
+	"Conflit Central (Max)",
+	"Coastal Influence (Med)",
+	"Le Chant des Canons (Moy)",
+	"Combat Alley (Med)",
+	"Aux Armes! (Moy)",
+	"Desolation (Lg)",
+	"D‚solation (Max)",
+	"Dugout Isle (Med)",
+	"L'Ile Maudite (Moy)",
+	"Equal Opportunity (Sm)",
+	"A Chances Egales (Min)",
+	"First Come, First Serve (Sm)",
+	"La Loi du Plus Fort (Min)",
+	"Island Hoppers (Sm)",
+	"D'une Ile … l'autre (Min)",
+	"Island Wars (Lg)",
+	"Guerres Insulaires (Max)",
+	"Isle of Fury (Lg)",
+	"L'Ile de la Furie(Max)",
+	"Ivory Wastelands (Sm)",
+	"Terres d'Ivoire (Min)",
+	"Keep off the Grass (Sm)",
+	"Hors de mon Chemin (Min)",
+	"Marooned II (Med)",
+	"Isolement II (Moy)",
+	"Middle Mayhem (Sm)",
+	"Chaos Interne (Min)",
+	"No Escape (Med)",
+	"Le PiŠge (Moy)",
+	"No Man's Land (Med)",
+	"No Man's Land (Moy)",
+	"Normandy (Med)",
+	"Normandie (Moy)",
+	"North By Northwest (Lg)",
+	"Nord, Nord-Ouest (Max)",
+	"Pond Skirmish (Med)",
+	"Bain de Sang (Moy)",
+	"Raraku (Lg)",
+	"Raraku (Max)",
+	"Ridge War (Med)",
+	"Guerre au Sommet (Moy)",
+	"Shallow Grave (Med)",
+	"La Saveur de la Mort (Moy)",
+	"Treasure Isle (Med)",
+	"L'Ile au Tr‚sor (Moy)",
 
-    "Africa (Lg)", "Afrique (Max)", "Alaska Anarchy (Lg)", "Anarchie en Alaska (Max)", "All that Glitters... (Lg)",
-    "Tout ce qui brille... (Max)", "Apre's Peace (Lg)", "Une Paix Durement N‚goci‚e... (Max)", "Antartica (Lg)",
-    "Antarctique (Max)", "Armourgarden (Lg)", "La Guerre des Blind‚s (Max)", "Austraila (Med)", "Australie (Moy)",
-    "Barrier to Entry (Lg)", "BarriŠre … l'Entr‚e (Max)", "Bavarian Blast (Med)", "Tonnerre Bavarois (Moy)",
-    "Be Shore (Med)", "Plages Menac‚es (Moy)", "Bearing Straits (Med)", "Droit Devant ! (Moy)", "Blow Holes (Lg)",
-    "CratŠres (Max)", "Bonsai (Sm)", "Bonsa‹ (Min)", "Brother Stalin (Lg)", "FrŠre Staline (Max)", "Bullseye (Lg)",
-    "L'oeil du Taureau (Max)", "C&C (Med)", "C&C (Moy)", "Camos Canyon (Med)", "Le Canyon (Moy)", "Camos Coves (Lg)",
-    "Criques (Max)", "Camos Cross (Lg)", "La Croix de Guerre (Max)", "Camos Crossing (Sm)",
-    "La Crois‚e des Chemins (Min)", "Central Arena (Lg)", "L'ArŠne Diabolique (Max)", "Canyon River (Med)",
-    "Au Milieu Coule Une RiviŠre (Moy)", "Crossroads (Sm)", "Carrefours (Min)", "Czech Mate (Lg)",
-    "TchŠque et Mat (Max)", "Dday (Med)", "Le Jour J (Moy)", "Disaster Central (Lg)", "D‚sastre Central (Max)",
-    "Docklands (Med)", "L'Enfer des Docks (Moy)", "East Coast (Med)", "C“te Est (Moy)", "Eastern Seaboard (Lg)",
-    "Rivages de l'Est (Max)", "Finger Lake (Lg)", "Le Lac de tous les Dangers (Max)", "Fjords (Med)", "Fjords (Moy)",
-    "Floodlands (Lg)", "Campagne Lacustre (Max)", "Forest under fire (Lg)", "Forˆt en flammes (Max)",
-    "Four Corners (Lg)", "4 Coins (Max)", "Frostbit Fjords (Lg)", "Fjords Gel‚s (Max)", "Glenboig (Sm)",
-    "Glenboig (Min)", "Hell Frozen Over (Lg)", "Enfer de Glace Max)", "India (Lg)", "Inde (Max)", "Indirect Fire (Lg)",
-    "Attaque Indirecte (Max)", "Island Wars II (Lg)", "Guerres Insulaires II (Max)", "Italy (Lg)", "Italie (Max)",
-    "Kabalo (Lg)", "Kabalo (Max)", "King of the Hills (Lg)", "Le Roi des Montagnes (Max)", "Lake Divide (Med)",
-    "La Guerre du Lac (Moy)", "Lakelands (Lg)", "Terres Submerg‚es (Max)", "Land Ladder (Lg)", "Jusqu'au Sommet (Max)",
-    "Lotsa Lakes (Lg)", "Terres de Lacs (Max)", "Lunar Battlefield (Lg Special)", "Combat Lunaire (Max Sp‚cial)",
-    "Malibu Fields (Med)", "Les Champs de Malibu (Moy)", "Marshland (Med)", "Mar‚cages (Moy)", "MyLai Delta (Med)",
-    "Le Delta Mylai (Moy)", "Natural Harbor (Med)", "Port Naturel (Moy)", "No Way Out (Lg)", "Sans Issue (Max)",
-    "Normandy Landing (Lg)", "Le D‚barquement (Max)", "Ore Wars (Med)", "La Guerre du Minerai (Moy)", "Oz (Lg)",
-    "Oz (Max)", "Pilgrim Fathers II (Lg)", "Les PŠlerins 2 (Max)", "Pip's Ice Tea (Med)",
-    "Les Tranch‚es de Glace (Moy)", "Polar Panic (Lg)", "Panique Polaire (Max)", "Ponds (Med)", "Les Etangs (Moy)",
-    "Putney (Lg)", "La Meilleure D‚fense... (Max)", "Return to Zion (Lg)", "Retour … Sion (Max)", "Ring of Land (Lg)",
-    "Le Cycle Infernal (Max)", "River Basin (Lg)", "Confrontation Navale (Max)", "River Delta (Med)", "Le Delta (Moy)",
-    "River Islands (Med)", "C“tes … Surveiller de PrŠs (Moy)", "River Maze (Sm)", "Labyrinthe Fluvial (Min)",
-    "Rivers (Sm)", "RiviŠres (Min)", "Run the Gauntlet (Med)", "Relevons le D‚fi ! (Moy)", "Scappa Flow (Lg)",
-    "Combats Sanglants (Max)", "Siberian Slaughter (Lg)", "Carnage Sib‚rien (Max)", "Sleepy Valley (Sm)",
-    "La Vall‚e Endormie (Min)", "Snake River (Lg)", "La RiviŠre aux Serpents (Max)", "Snow Wars (Lg)",
-    "Guerres de Neige (Max)", "Snowball fight (Lg)", "Bataille de Boules de Neige (Max)", "Snowy Island (Lg)",
-    "L'Ile sous la Neige (Max)", "So Near So Far (Sm)", "Si Loin, Si Proche (Min)", "South America (Lg)",
-    "Am‚rique du Sud (Max)", "Spring Line (Lg)", "Ligne de Front (Max)", "Star (Lg)", "Etoile (Max)",
-    "Straighter & Narrower (Sm)", "L'Entonnoir (Min)", "TerrainSpotting (Sm)", "TerrainSpotting (Min)", "The Bay (Lg)",
-    "La Baie (Max)", "The Garden (Lg)", "Le Jardin (Max)", "The Great Lakes (Med)", "Les Grands Lacs (Moy)",
-    "The Ice Arena (Lg)", "L'ArŠne de Glace (Max)", "The Lake District (Lg)", "Un Lac Imprenable (Max)",
-    "The Linked lands (Lg)", "Passages … Gu‚ (Max)", "The Mississippi (Med)", "Mississippi (Moy)",
-    "The Sticky Bit (Lg)", "Marasme (Max)", "The Valley (Med)", "La Vall‚e (Moy)", "The Woods Today (Lg)",
-    "Aujoud'hui: la Mort ! (Max)", "Things to Come (Lg)", "D‚nouement Incertain (Max)", "Tiger Core (Sm)",
-    "Le Coeur du Tigre (Min)", "To the Core (Sm)", "Le Coeur du Conflit (Min)", "Tournament Hills (Lg)",
-    "Combat en Altitude (Max)", "Tropical Storm (Med)", "Ouragan Tropical (Moy)", "Tundra Trouble (Lg)",
-    "La Toundra (Max)", "Uk (Med)", "Royaume Uni (Moy)", "Undiscovered Country (Sm)", "Terre Inconnue (Min)",
-    "United States (Med)", "Etats Unis (Moy)", "Volcano (Sm)", "Le Volcan (Min)", "Wastelands (Lg)",
-    "Terres D‚sol‚es (Max)", "Water Works (Sm)", "Jeux d'Eau (Min)", "World Map (Med)", "Carte du Monde (Moy)",
-    "Zambezi (Lg)", "ZambŠze (Max)",
-    // #if 0
-    "A Pattern of Islands (Lg 8 players)", "Archipel (Max. 8 joueurs)", "Arena Valley Extreme (Mega 8 players)",
-    "La Vall‚e de l'arŠne (XL 8 joueurs)", "Around the Rim (Sm 4 players)", "Autour de la crˆte (Min. 4 joueurs)",
-    "Ashes to Ashes (Lg 6 players)", "R‚duit en cendres (Max. 6 joueurs)", "Artic Wasteland (Mega 8 players)",
-    "D‚solation arctique (XL 8 joueurs)", "Badajoz (Med 4 players)", "Badjoz (Moy. 4 joueurs)",
-    "Baptism of Fire (Lg 6 players)", "Baptˆme du feu (Max. 6 joueurs)", "Big Fish, Small Pond (Lg 6 players)",
-    "Gros poisson, Min. Mare (Max. 6 joueurs)", "Blue Lakes (Lg 8 players)", "Lacs bleus (Max. 8 joueurs)",
-    "Booby Traps (Mega 8 players)", "PiŠges (XL 8 joueurs)", "Bridgehead (Lg 6 players)",
-    "Tˆte de pont (Max. 6 joueurs)", "Butterfly Bay (Lg 6 players)", "La baie du papillon (Max. 6 joueurs)",
-    "Central Conflict Extreme (Mega 8 players)", "Conflit central extrˆme (XL 8 joueurs)",
-    "Circles of Death (Mega 8 players)", "Les cercles de la mort (XL 8 joueurs)", "Cold Front (Med 6 players)",
-    "Front froid ( Moy. 6 joueurs)", "Cold Pass (Med 4 players)", "La Passe Glac‚e (Moy. 4 joueurs)",
-    "Combat Zones (Mega 8 players)", "Zones de combat (XL 8 joueurs)", "Conflict Cove (Sm 4 players)",
-    "La Crique du conflit (Min. 4 joueurs)", "Culloden Moor (Med 8 players)", "La Lande de Culloden (Moy. 8 joueurs)",
-    "Damnation Alley (Mega 8 players)", "Le chemin de la damnation (XL 8 joueurs)", "Death Valley (Mega 8 players)",
-    "La vall‚e de la mort (XL 8 joueurs)", "Deep Six (Mega 8 players)", "Six de profondeur (XL 8 joueurs)",
-    "Destruction Derby (Mega 8 players)", "Stock car (XL 8 joueurs)", "Diamonds Aren't Forever (Mega 8 players)",
-    "Les diamants ne sont pas ‚ternels (XL 8 joueurs)", "Elysium (Sm 4 players)", "Elys‚e (Min. 4 joueurs)",
-    "Equal Shares (Lg 4 players)", "Parts ‚gales (Max. 4 joueurs)", "Frost Bitten (Mega 8 players)",
-    "Engelures (XL 8 joueurs)", "Frozen Valley (Med 6 players)", "La Vall‚e glac‚e (Moy. 6 joueurs)",
-    "Gettysburg (Sm 4 players)", "Gettysburg (Min. 4 joueurs)", "Glacial Valley (Sm 4 players)",
-    "Vall‚e de glace (Min. 4 joueurs)", "Gold Coast (Med 6 players)", "La c“te dor‚e (Moy. 6 joueurs)",
-    "Gold Rush (Lg 4 players)", "La ru‚e vers l'or (Max. 4 joueurs)", "Habitat (Lg 4 players)",
-    "Habitat (Max. 4 joueurs)", "Hades Frozen Over (Sm 4 players)", "Les enfers glac‚s (Min. 4 joueurs)",
-    "Hamburger Hill (Mega 8 players)", "Hamburger Hill (XL 8 joueurs)", "Hastings (Sm 4 players)",
-    "Hastings (Min. 4 joueurs)", "Hell's Pass (Med 6 players)", "La route de l'enfer (Moy. 6 joueurs)",
-    "Holy Grounds (Mega 8 players)", "Terres saintes (XL 8 joueurs)", "Ice Bergs (Med 6 players)",
-    "Icebergs (Moy. 6 joueurs)", "Ice Station (Lg 6 players)", "Station glac‚e (Max. 6 joueurs)",
-    "Ice Queen (Lg 4 players)", "Reine des glaces (Max. 4 joueurs)", "In the Sun (Med 6 players)",
-    "Sous le soleil (Moy. 6 joueurs)", "Innocents? (Mega 8 players)", "Innocents ? (XL 8 joueurs)",
-    "Islands (Med 8 players)", "Iles (Moy. 8 joueurs)", "Island Plateau (Lg 4 players)",
-    "Plateau des Œles (Max. 4 joueurs)", "Island Wars Extreme (Mega 8 players)",
-    "Guerres insulaires extrˆme (XL 8 joueurs)", "Kananga (Med 6 players)", "Kananga (Moy. 6 joueurs)",
-    "King of the Hills Extreme (Mega 8 players)", "Roi des collines extrˆme (XL 8 joueurs)", "Lake Land (Lg 8 players)",
-    "Paysage lacustre (Max. 8 joueurs)", "Land Locked (Lg 8 players)", "Enclave (Max. 8 joueurs)",
-    "Lanes (Med 8 players)", "Le parcours du combattant (Moy. 8 joueurs)", "Leipzip (Sm 4 players)",
-    "Leipzig (Min. 4 joueurs)", "Meander (Lg 8 players)", "M‚andre (Max. 8 joueurs)", "Mekong (Med 8 players)",
-    "M‚kong (Moy. 8 joueurs)", "Middle Ground (Med 8 players)", "Plateau m‚dian (Moy. 8 joueurs)",
-    "Naval Conquests (Mega 8 players)", "Conquˆtes navales (XL 8 joueurs)", "On your Marks (Med 4 players)",
-    "A vos marques (Moy. 4 joueurs)", "Open Warfare (Mega 8 players)", "Guerre ouverte (XL 8 joueurs)",
-    "Ore Gardens (Lg 8 players)", "Jardins de minerai (Max. 8 joueurs)", "Potholes (Mega 8 players)",
-    "Nids de poules (XL 8 joueurs)", "Puddles (Med 4 players)", "Flaques (Moy. 4 joueurs)",
-    "Random Violence (Mega 8 players)", "Violence al‚atoire (XL 8 joueurs)", "Revenge (Med 8 players)",
-    "Vengeance (Moy. 8 joueurs)", "Rias (Med 8 players)", "Rias (Moy. 8 joueurs)", "River Crossing (Sm 4 players)",
-    "Passage … gu‚ (Min. 4 joueurs)", "River Rampage (Mega 8 players)", "RiviŠre d‚chaŒn‚e (XL 8 joueurs)",
-    "River Rapids (Lg 6 players)", "Rapides (Max. 6 joueurs)", "Rivers Wild (Mega 8 players)",
-    "RiviŠres sauvages (XL 8 joueurs)", "Rorkes Drift (Lg 4 players)", "L'Exode de Rorkes (Max. 4 joueurs)",
-    "Seaside (Med 4 players)", "C“te (Moy. 4 joueurs)", "Shades (Med 8 players)", "Ombres (Moy. 8 joueurs)",
-    "Smuggler's Cove (Lg 6 players)", "La Crique du contrebandier (Max. 6 joueurs)", "Snow Garden (Sm 2 players)",
-    "Jardin de neige (Min. 2 joueurs)", "Stalingrad (Sm 4 players)", "Stalingrad (Min. 4 joueurs)",
-    "Sticks & Stones (Med 4 players)", "Bƒton & Roches (Moy. 4 joueurs)", "Strathearn Valley (Lg 6 players)",
-    "La Vall‚e de Strathearn (Max. 6 joueurs)", "Super Bridgehead (Mega 8 players)",
-    "Super tˆte de pont (XL 8 joueurs)", "Super Mekong (Mega 8 players)", "Super M‚kong (XL 8 joueurs)",
-    "Super Ore Gardens (Mega 8 players)", "Super jardin de minerai (XL 8 joueurs)", "Switch (Med 4 players)",
-    "Permutation (Moy. 4 joueurs)", "The Berg (Mega 8 players)", "Le Berg (XL 8 joueurs)", "The Boyne (Med 4 players)",
-    "Le Boyne (Moy. 4 joueurs)", "The Bulge (Sm 4 players)", "Le bombement (Min. 4 joueurs)",
-    "The Cauldron (Lg 6 players)", "Le chaudron (Max. 6 joueurs)", "The Finger (Lg 6 players)",
-    "Le doigt (Max. 6 joueurs)", "The Hills Have Eyes (Mega 8 players)", "Les collines ont des yeux (XL 8 joueurs)",
-    "The Keyes (Med 6 players)", "Les Keyes (Moy. 6 joueurs)", "The Lakes (Med 8 players)", "Les lacs (Moy. 8 joueurs)",
-    "The Neck (Med 6 players)", "Le goulot (Moy. 6 joueurs)", "The Web (Lg 6 players)", "La toile (Max. 6 joueurs)",
-    "To the Core (Lg 4 players)", "Jusqu'au cour (Max. 4 joueurs)", "Trafalgar (Lg 4 players)",
-    "Trafalgar (Max. 4 joueurs)", "Twin Rivers (Sm 4 players)", "Les deux riviŠres (Min. 4 joueurs)",
-    "Umtumbo Gorge (Lg 4 players)", "La Gorge de Umtumbo (Max. 4 joueurs)", "Watch Your Step Extreme (Mega 8 players)",
-    "Pas-…-pas extrˆme (XL 8 joueurs)", "Waterfalls (Lg 8 players)", "Chutes d'eau (Max. 8 joueurs)",
-    "Waterloo Revisited (Lg 6 players)", "Waterloo II (Max. 6 joueurs)", "Water Werks (Mega 8 players)",
-    "Jeux d'eau (XL 8 joueurs)", "Warlord's Lake (Sm 4 players)", "Le lac du guerrier (Min. 4 joueurs)",
-    "Zama (Sm 4 players)", "Zama (Min. 4 joueurs)",
-    // #endif
-    NULL};
+	"Africa (Lg)",
+	"Afrique (Max)",
+	"Alaska Anarchy (Lg)",
+	"Anarchie en Alaska (Max)",
+	"All that Glitters... (Lg)",
+	"Tout ce qui brille... (Max)",
+	"Apre's Peace (Lg)",
+	"Une Paix Durement N‚goci‚e... (Max)",
+	"Antartica (Lg)",
+	"Antarctique (Max)",
+	"Armourgarden (Lg)",
+	"La Guerre des Blind‚s (Max)",
+	"Austraila (Med)",
+	"Australie (Moy)",
+	"Barrier to Entry (Lg)",
+	"BarriŠre … l'Entr‚e (Max)",
+	"Bavarian Blast (Med)",
+	"Tonnerre Bavarois (Moy)",
+	"Be Shore (Med)",
+	"Plages Menac‚es (Moy)",
+	"Bearing Straits (Med)",
+	"Droit Devant ! (Moy)",
+	"Blow Holes (Lg)",
+	"CratŠres (Max)",
+	"Bonsai (Sm)",
+	"Bonsa‹ (Min)",
+	"Brother Stalin (Lg)",
+	"FrŠre Staline (Max)",
+	"Bullseye (Lg)",
+	"L'oeil du Taureau (Max)",
+	"C&C (Med)",
+	"C&C (Moy)",
+	"Camos Canyon (Med)",
+	"Le Canyon (Moy)",
+	"Camos Coves (Lg)",
+	"Criques (Max)",
+	"Camos Cross (Lg)",
+	"La Croix de Guerre (Max)",
+	"Camos Crossing (Sm)",
+	"La Crois‚e des Chemins (Min)",
+	"Central Arena (Lg)",
+	"L'ArŠne Diabolique (Max)",
+	"Canyon River (Med)",
+	"Au Milieu Coule Une RiviŠre (Moy)",
+	"Crossroads (Sm)",
+	"Carrefours (Min)",
+	"Czech Mate (Lg)",
+	"TchŠque et Mat (Max)",
+	"Dday (Med)",
+	"Le Jour J (Moy)",
+	"Disaster Central (Lg)",
+	"D‚sastre Central (Max)",
+	"Docklands (Med)",
+	"L'Enfer des Docks (Moy)",
+	"East Coast (Med)",
+	"C“te Est (Moy)",
+	"Eastern Seaboard (Lg)",
+	"Rivages de l'Est (Max)",
+	"Finger Lake (Lg)",
+	"Le Lac de tous les Dangers (Max)",
+	"Fjords (Med)",
+	"Fjords (Moy)",
+	"Floodlands (Lg)",
+	"Campagne Lacustre (Max)",
+	"Forest under fire (Lg)",
+	"Forˆt en flammes (Max)",
+	"Four Corners (Lg)",
+	"4 Coins (Max)",
+	"Frostbit Fjords (Lg)",
+	"Fjords Gel‚s (Max)",
+	"Glenboig (Sm)",
+	"Glenboig (Min)",
+	"Hell Frozen Over (Lg)",
+	"Enfer de Glace Max)",
+	"India (Lg)",
+	"Inde (Max)",
+	"Indirect Fire (Lg)",
+	"Attaque Indirecte (Max)",
+	"Island Wars II (Lg)",
+	"Guerres Insulaires II (Max)",
+	"Italy (Lg)",
+	"Italie (Max)",
+	"Kabalo (Lg)",
+	"Kabalo (Max)",
+	"King of the Hills (Lg)",
+	"Le Roi des Montagnes (Max)",
+	"Lake Divide (Med)",
+	"La Guerre du Lac (Moy)",
+	"Lakelands (Lg)",
+	"Terres Submerg‚es (Max)",
+	"Land Ladder (Lg)",
+	"Jusqu'au Sommet (Max)",
+	"Lotsa Lakes (Lg)",
+	"Terres de Lacs (Max)",
+	"Lunar Battlefield (Lg Special)",
+	"Combat Lunaire (Max Sp‚cial)",
+	"Malibu Fields (Med)",
+	"Les Champs de Malibu (Moy)",
+	"Marshland (Med)",
+	"Mar‚cages (Moy)",
+	"MyLai Delta (Med)",
+	"Le Delta Mylai (Moy)",
+	"Natural Harbor (Med)",
+	"Port Naturel (Moy)",
+	"No Way Out (Lg)",
+	"Sans Issue (Max)",
+	"Normandy Landing (Lg)",
+	"Le D‚barquement (Max)",
+	"Ore Wars (Med)",
+	"La Guerre du Minerai (Moy)",
+	"Oz (Lg)",
+	"Oz (Max)",
+	"Pilgrim Fathers II (Lg)",
+	"Les PŠlerins 2 (Max)",
+	"Pip's Ice Tea (Med)",
+	"Les Tranch‚es de Glace (Moy)",
+	"Polar Panic (Lg)",
+	"Panique Polaire (Max)",
+	"Ponds (Med)",
+	"Les Etangs (Moy)",
+	"Putney (Lg)",
+	"La Meilleure D‚fense... (Max)",
+	"Return to Zion (Lg)",
+	"Retour … Sion (Max)",
+	"Ring of Land (Lg)",
+	"Le Cycle Infernal (Max)",
+	"River Basin (Lg)",
+	"Confrontation Navale (Max)",
+	"River Delta (Med)",
+	"Le Delta (Moy)",
+	"River Islands (Med)",
+	"C“tes … Surveiller de PrŠs (Moy)",
+	"River Maze (Sm)",
+	"Labyrinthe Fluvial (Min)",
+	"Rivers (Sm)",
+	"RiviŠres (Min)",
+	"Run the Gauntlet (Med)",
+	"Relevons le D‚fi ! (Moy)",
+	"Scappa Flow (Lg)",
+	"Combats Sanglants (Max)",
+	"Siberian Slaughter (Lg)",
+	"Carnage Sib‚rien (Max)",
+	"Sleepy Valley (Sm)",
+	"La Vall‚e Endormie (Min)",
+	"Snake River (Lg)",
+	"La RiviŠre aux Serpents (Max)",
+	"Snow Wars (Lg)",
+	"Guerres de Neige (Max)",
+	"Snowball fight (Lg)",
+	"Bataille de Boules de Neige (Max)",
+	"Snowy Island (Lg)",
+	"L'Ile sous la Neige (Max)",
+	"So Near So Far (Sm)",
+	"Si Loin, Si Proche (Min)",
+	"South America (Lg)",
+	"Am‚rique du Sud (Max)",
+	"Spring Line (Lg)",
+	"Ligne de Front (Max)",
+	"Star (Lg)",
+	"Etoile (Max)",
+	"Straighter & Narrower (Sm)",
+	"L'Entonnoir (Min)",
+	"TerrainSpotting (Sm)",
+	"TerrainSpotting (Min)",
+	"The Bay (Lg)",
+	"La Baie (Max)",
+	"The Garden (Lg)",
+	"Le Jardin (Max)",
+	"The Great Lakes (Med)",
+	"Les Grands Lacs (Moy)",
+	"The Ice Arena (Lg)",
+	"L'ArŠne de Glace (Max)",
+	"The Lake District (Lg)",
+	"Un Lac Imprenable (Max)",
+	"The Linked lands (Lg)",
+	"Passages … Gu‚ (Max)",
+	"The Mississippi (Med)",
+	"Mississippi (Moy)",
+	"The Sticky Bit (Lg)",
+	"Marasme (Max)",
+	"The Valley (Med)",
+	"La Vall‚e (Moy)",
+	"The Woods Today (Lg)",
+	"Aujoud'hui: la Mort ! (Max)",
+	"Things to Come (Lg)",
+	"D‚nouement Incertain (Max)",
+	"Tiger Core (Sm)",
+	"Le Coeur du Tigre (Min)",
+	"To the Core (Sm)",
+	"Le Coeur du Conflit (Min)",
+	"Tournament Hills (Lg)",
+	"Combat en Altitude (Max)",
+	"Tropical Storm (Med)",
+	"Ouragan Tropical (Moy)",
+	"Tundra Trouble (Lg)",
+	"La Toundra (Max)",
+	"Uk (Med)",
+	"Royaume Uni (Moy)",
+	"Undiscovered Country (Sm)",
+	"Terre Inconnue (Min)",
+	"United States (Med)",
+	"Etats Unis (Moy)",
+	"Volcano (Sm)",
+	"Le Volcan (Min)",
+	"Wastelands (Lg)",
+	"Terres D‚sol‚es (Max)",
+	"Water Works (Sm)",
+	"Jeux d'Eau (Min)",
+	"World Map (Med)",
+	"Carte du Monde (Moy)",
+	"Zambezi (Lg)",
+	"ZambŠze (Max)",
+	// #if 0
+	"A Pattern of Islands (Lg 8 players)",
+	"Archipel (Max. 8 joueurs)",
+	"Arena Valley Extreme (Mega 8 players)",
+	"La Vall‚e de l'arŠne (XL 8 joueurs)",
+	"Around the Rim (Sm 4 players)",
+	"Autour de la crˆte (Min. 4 joueurs)",
+	"Ashes to Ashes (Lg 6 players)",
+	"R‚duit en cendres (Max. 6 joueurs)",
+	"Artic Wasteland (Mega 8 players)",
+	"D‚solation arctique (XL 8 joueurs)",
+	"Badajoz (Med 4 players)",
+	"Badjoz (Moy. 4 joueurs)",
+	"Baptism of Fire (Lg 6 players)",
+	"Baptˆme du feu (Max. 6 joueurs)",
+	"Big Fish, Small Pond (Lg 6 players)",
+	"Gros poisson, Min. Mare (Max. 6 joueurs)",
+	"Blue Lakes (Lg 8 players)",
+	"Lacs bleus (Max. 8 joueurs)",
+	"Booby Traps (Mega 8 players)",
+	"PiŠges (XL 8 joueurs)",
+	"Bridgehead (Lg 6 players)",
+	"Tˆte de pont (Max. 6 joueurs)",
+	"Butterfly Bay (Lg 6 players)",
+	"La baie du papillon (Max. 6 joueurs)",
+	"Central Conflict Extreme (Mega 8 players)",
+	"Conflit central extrˆme (XL 8 joueurs)",
+	"Circles of Death (Mega 8 players)",
+	"Les cercles de la mort (XL 8 joueurs)",
+	"Cold Front (Med 6 players)",
+	"Front froid ( Moy. 6 joueurs)",
+	"Cold Pass (Med 4 players)",
+	"La Passe Glac‚e (Moy. 4 joueurs)",
+	"Combat Zones (Mega 8 players)",
+	"Zones de combat (XL 8 joueurs)",
+	"Conflict Cove (Sm 4 players)",
+	"La Crique du conflit (Min. 4 joueurs)",
+	"Culloden Moor (Med 8 players)",
+	"La Lande de Culloden (Moy. 8 joueurs)",
+	"Damnation Alley (Mega 8 players)",
+	"Le chemin de la damnation (XL 8 joueurs)",
+	"Death Valley (Mega 8 players)",
+	"La vall‚e de la mort (XL 8 joueurs)",
+	"Deep Six (Mega 8 players)",
+	"Six de profondeur (XL 8 joueurs)",
+	"Destruction Derby (Mega 8 players)",
+	"Stock car (XL 8 joueurs)",
+	"Diamonds Aren't Forever (Mega 8 players)",
+	"Les diamants ne sont pas ‚ternels (XL 8 joueurs)",
+	"Elysium (Sm 4 players)",
+	"Elys‚e (Min. 4 joueurs)",
+	"Equal Shares (Lg 4 players)",
+	"Parts ‚gales (Max. 4 joueurs)",
+	"Frost Bitten (Mega 8 players)",
+	"Engelures (XL 8 joueurs)",
+	"Frozen Valley (Med 6 players)",
+	"La Vall‚e glac‚e (Moy. 6 joueurs)",
+	"Gettysburg (Sm 4 players)",
+	"Gettysburg (Min. 4 joueurs)",
+	"Glacial Valley (Sm 4 players)",
+	"Vall‚e de glace (Min. 4 joueurs)",
+	"Gold Coast (Med 6 players)",
+	"La c“te dor‚e (Moy. 6 joueurs)",
+	"Gold Rush (Lg 4 players)",
+	"La ru‚e vers l'or (Max. 4 joueurs)",
+	"Habitat (Lg 4 players)",
+	"Habitat (Max. 4 joueurs)",
+	"Hades Frozen Over (Sm 4 players)",
+	"Les enfers glac‚s (Min. 4 joueurs)",
+	"Hamburger Hill (Mega 8 players)",
+	"Hamburger Hill (XL 8 joueurs)",
+	"Hastings (Sm 4 players)",
+	"Hastings (Min. 4 joueurs)",
+	"Hell's Pass (Med 6 players)",
+	"La route de l'enfer (Moy. 6 joueurs)",
+	"Holy Grounds (Mega 8 players)",
+	"Terres saintes (XL 8 joueurs)",
+	"Ice Bergs (Med 6 players)",
+	"Icebergs (Moy. 6 joueurs)",
+	"Ice Station (Lg 6 players)",
+	"Station glac‚e (Max. 6 joueurs)",
+	"Ice Queen (Lg 4 players)",
+	"Reine des glaces (Max. 4 joueurs)",
+	"In the Sun (Med 6 players)",
+	"Sous le soleil (Moy. 6 joueurs)",
+	"Innocents? (Mega 8 players)",
+	"Innocents ? (XL 8 joueurs)",
+	"Islands (Med 8 players)",
+	"Iles (Moy. 8 joueurs)",
+	"Island Plateau (Lg 4 players)",
+	"Plateau des Œles (Max. 4 joueurs)",
+	"Island Wars Extreme (Mega 8 players)",
+	"Guerres insulaires extrˆme (XL 8 joueurs)",
+	"Kananga (Med 6 players)",
+	"Kananga (Moy. 6 joueurs)",
+	"King of the Hills Extreme (Mega 8 players)",
+	"Roi des collines extrˆme (XL 8 joueurs)",
+	"Lake Land (Lg 8 players)",
+	"Paysage lacustre (Max. 8 joueurs)",
+	"Land Locked (Lg 8 players)",
+	"Enclave (Max. 8 joueurs)",
+	"Lanes (Med 8 players)",
+	"Le parcours du combattant (Moy. 8 joueurs)",
+	"Leipzip (Sm 4 players)",
+	"Leipzig (Min. 4 joueurs)",
+	"Meander (Lg 8 players)",
+	"M‚andre (Max. 8 joueurs)",
+	"Mekong (Med 8 players)",
+	"M‚kong (Moy. 8 joueurs)",
+	"Middle Ground (Med 8 players)",
+	"Plateau m‚dian (Moy. 8 joueurs)",
+	"Naval Conquests (Mega 8 players)",
+	"Conquˆtes navales (XL 8 joueurs)",
+	"On your Marks (Med 4 players)",
+	"A vos marques (Moy. 4 joueurs)",
+	"Open Warfare (Mega 8 players)",
+	"Guerre ouverte (XL 8 joueurs)",
+	"Ore Gardens (Lg 8 players)",
+	"Jardins de minerai (Max. 8 joueurs)",
+	"Potholes (Mega 8 players)",
+	"Nids de poules (XL 8 joueurs)",
+	"Puddles (Med 4 players)",
+	"Flaques (Moy. 4 joueurs)",
+	"Random Violence (Mega 8 players)",
+	"Violence al‚atoire (XL 8 joueurs)",
+	"Revenge (Med 8 players)",
+	"Vengeance (Moy. 8 joueurs)",
+	"Rias (Med 8 players)",
+	"Rias (Moy. 8 joueurs)",
+	"River Crossing (Sm 4 players)",
+	"Passage … gu‚ (Min. 4 joueurs)",
+	"River Rampage (Mega 8 players)",
+	"RiviŠre d‚chaŒn‚e (XL 8 joueurs)",
+	"River Rapids (Lg 6 players)",
+	"Rapides (Max. 6 joueurs)",
+	"Rivers Wild (Mega 8 players)",
+	"RiviŠres sauvages (XL 8 joueurs)",
+	"Rorkes Drift (Lg 4 players)",
+	"L'Exode de Rorkes (Max. 4 joueurs)",
+	"Seaside (Med 4 players)",
+	"C“te (Moy. 4 joueurs)",
+	"Shades (Med 8 players)",
+	"Ombres (Moy. 8 joueurs)",
+	"Smuggler's Cove (Lg 6 players)",
+	"La Crique du contrebandier (Max. 6 joueurs)",
+	"Snow Garden (Sm 2 players)",
+	"Jardin de neige (Min. 2 joueurs)",
+	"Stalingrad (Sm 4 players)",
+	"Stalingrad (Min. 4 joueurs)",
+	"Sticks & Stones (Med 4 players)",
+	"Bƒton & Roches (Moy. 4 joueurs)",
+	"Strathearn Valley (Lg 6 players)",
+	"La Vall‚e de Strathearn (Max. 6 joueurs)",
+	"Super Bridgehead (Mega 8 players)",
+	"Super tˆte de pont (XL 8 joueurs)",
+	"Super Mekong (Mega 8 players)",
+	"Super M‚kong (XL 8 joueurs)",
+	"Super Ore Gardens (Mega 8 players)",
+	"Super jardin de minerai (XL 8 joueurs)",
+	"Switch (Med 4 players)",
+	"Permutation (Moy. 4 joueurs)",
+	"The Berg (Mega 8 players)",
+	"Le Berg (XL 8 joueurs)",
+	"The Boyne (Med 4 players)",
+	"Le Boyne (Moy. 4 joueurs)",
+	"The Bulge (Sm 4 players)",
+	"Le bombement (Min. 4 joueurs)",
+	"The Cauldron (Lg 6 players)",
+	"Le chaudron (Max. 6 joueurs)",
+	"The Finger (Lg 6 players)",
+	"Le doigt (Max. 6 joueurs)",
+	"The Hills Have Eyes (Mega 8 players)",
+	"Les collines ont des yeux (XL 8 joueurs)",
+	"The Keyes (Med 6 players)",
+	"Les Keyes (Moy. 6 joueurs)",
+	"The Lakes (Med 8 players)",
+	"Les lacs (Moy. 8 joueurs)",
+	"The Neck (Med 6 players)",
+	"Le goulot (Moy. 6 joueurs)",
+	"The Web (Lg 6 players)",
+	"La toile (Max. 6 joueurs)",
+	"To the Core (Lg 4 players)",
+	"Jusqu'au cour (Max. 4 joueurs)",
+	"Trafalgar (Lg 4 players)",
+	"Trafalgar (Max. 4 joueurs)",
+	"Twin Rivers (Sm 4 players)",
+	"Les deux riviŠres (Min. 4 joueurs)",
+	"Umtumbo Gorge (Lg 4 players)",
+	"La Gorge de Umtumbo (Max. 4 joueurs)",
+	"Watch Your Step Extreme (Mega 8 players)",
+	"Pas-…-pas extrˆme (XL 8 joueurs)",
+	"Waterfalls (Lg 8 players)",
+	"Chutes d'eau (Max. 8 joueurs)",
+	"Waterloo Revisited (Lg 6 players)",
+	"Waterloo II (Max. 6 joueurs)",
+	"Water Werks (Mega 8 players)",
+	"Jeux d'eau (XL 8 joueurs)",
+	"Warlord's Lake (Sm 4 players)",
+	"Le lac du guerrier (Min. 4 joueurs)",
+	"Zama (Sm 4 players)",
+	"Zama (Min. 4 joueurs)",
+	// #endif
+	NULL
+};
 #endif
 
 /*
@@ -704,13 +1386,21 @@ char const *EngMisStr[] = {
 */
 static int Net_Join_Dialog(void);
 static int Request_To_Join(char *playername, int join_index, HousesType house, PlayerColorType color);
-static void Unjoin_Game(char *namebuf, JoinStateType joinstate, ListClass *gamelist, ColorListClass *playerlist,
-			int game_index, int goto_lobby, int msg_x, int msg_y, int msg_h, int send_x, int send_y,
+static void Unjoin_Game(char *namebuf,
+			JoinStateType joinstate,
+			ListClass *gamelist,
+			ColorListClass *playerlist,
+			int game_index,
+			int goto_lobby,
+			int msg_x,
+			int msg_y,
+			int msg_h,
+			int send_x,
+			int send_y,
 			int msg_len);
-static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow, int playernow, int chatnow,
-			      char *myname, int init = 0);
-static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gamelist, ColorListClass *playerlist,
-					int join_index, char *my_name, RejectType *why);
+static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow, int playernow, int chatnow, char *myname, int init = 0);
+static JoinEventType
+Get_Join_Responses(JoinStateType *joinstate, ListClass *gamelist, ColorListClass *playerlist, int join_index, char *my_name, RejectType *why);
 static int Net_New_Dialog(void);
 static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *color_used);
 void Start_WWChat(ColorListClass *playerlist);
@@ -866,7 +1556,6 @@ bool Process_Global_Packet(GlobalPacketType *packet, IPXAddressClass *address) {
 	//	Another system asking what game this is
 	//------------------------------------------------------------------------
 	if (packet->Command == NET_QUERY_GAME && Session.NetStealth == 0) {
-
 		//.....................................................................
 		//	If the game is closed, let every player respond, and let the sender of
 		//	the query sort it all out.  This way, if the game's host exits the game,
@@ -875,7 +1564,6 @@ bool Process_Global_Packet(GlobalPacketType *packet, IPXAddressClass *address) {
 		//.....................................................................
 		if (strlen(Session.GameName) > 0 &&
 		    ((!Session.NetOpen) || (Session.NetOpen && !strcmp(Session.Players[0]->Name, Session.GameName)))) {
-
 			memset(&mypacket, 0, sizeof(GlobalPacketType));
 
 			mypacket.Command = NET_ANSWER_GAME;
@@ -890,9 +1578,8 @@ bool Process_Global_Packet(GlobalPacketType *packet, IPXAddressClass *address) {
 	//------------------------------------------------------------------------
 	//	Another system asking what player I am
 	//------------------------------------------------------------------------
-	else if (packet->Command == NET_QUERY_PLAYER && !strcmp(packet->Name, Session.GameName) &&
-		 (strlen(Session.GameName) > 0) && Session.NetStealth == 0) {
-
+	else if (packet->Command == NET_QUERY_PLAYER && !strcmp(packet->Name, Session.GameName) && (strlen(Session.GameName) > 0) &&
+		 Session.NetStealth == 0) {
 		memset(&mypacket, 0, sizeof(GlobalPacketType)); // changed DRD 9/26
 
 		mypacket.Command = NET_ANSWER_PLAYER;
@@ -933,8 +1620,7 @@ void Destroy_Connection(int id, int error) {
 	char txt[80];
 
 	if (Debug_Print_Events) {
-		printf("Destroying connection for house %d (%s)\n", id,
-		       HouseClass::As_Pointer((HousesType)id)->IniName);
+		printf("Destroying connection for house %d (%s)\n", id, HouseClass::As_Pointer((HousesType)id)->IniName);
 	}
 
 	//------------------------------------------------------------------------
@@ -955,8 +1641,7 @@ void Destroy_Connection(int id, int error) {
 	}
 
 	if (strlen(txt)) {
-		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT,
-					     Rule.MessageDelay * TICKS_PER_MINUTE);
+		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT, Rule.MessageDelay * TICKS_PER_MINUTE);
 		Map.Flag_To_Redraw(false);
 	}
 
@@ -990,8 +1675,7 @@ void Destroy_Connection(int id, int error) {
 	//------------------------------------------------------------------------
 	if (Session.NumPlayers == 1) {
 		sprintf(txt, "%s", Text_String(TXT_JUST_YOU_AND_ME));
-		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT,
-					     Rule.MessageDelay * TICKS_PER_MINUTE);
+		Session.Messages.Add_Message(NULL, 0, txt, housep->RemapColor, TPF_TEXT, Rule.MessageDelay * TICKS_PER_MINUTE);
 		Map.Flag_To_Redraw(false);
 	}
 
@@ -1019,8 +1703,8 @@ bool Remote_Connect(void) {
 	//	Init network timing parameters; these values should work for both a
 	// "real" network, and a simulated modem network (ie Kali)
 	//------------------------------------------------------------------------
-	Ipx.Set_Timing(30,   // retry 2 times per second
-		       -1,   // ignore max retries
+	Ipx.Set_Timing(30, // retry 2 times per second
+		       -1, // ignore max retries
 		       600); // give up after 10 seconds
 
 	//------------------------------------------------------------------------
@@ -1151,15 +1835,15 @@ static int Net_Join_Dialog(void) {
 	//------------------------------------------------------------------------
 	//	Dialog & button dimensions
 	//------------------------------------------------------------------------
-	int d_dialog_w = 320 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 200 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 320 * RESFACTOR; // dialog width
+	int d_dialog_h = 200 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 6 * RESFACTOR + 1; // ht of 6-pt text
-	int d_margin1 = 17 * RESFACTOR;	  // large margin
-	int d_margin2 = 7 * RESFACTOR;	  // small margin
+	int d_margin1 = 17 * RESFACTOR; // large margin
+	int d_margin2 = 7 * RESFACTOR; // small margin
 
 	int d_name_w = 70 * RESFACTOR;
 	int d_name_h = 9 * RESFACTOR;
@@ -1302,38 +1986,38 @@ static int Net_Join_Dialog(void) {
 	//	Dialog variables
 	//------------------------------------------------------------------------
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 	int cbox_x[] = {
-	    d_color_x,
-	    d_color_x + d_color_w,
-	    d_color_x + (d_color_w * 2),
-	    d_color_x + (d_color_w * 3),
-	    d_color_x + (d_color_w * 4),
-	    d_color_x + (d_color_w * 5),
-	    d_color_x + (d_color_w * 6),
-	    d_color_x + (d_color_w * 7),
+		d_color_x,
+		d_color_x + d_color_w,
+		d_color_x + (d_color_w * 2),
+		d_color_x + (d_color_w * 3),
+		d_color_x + (d_color_w * 4),
+		d_color_x + (d_color_w * 5),
+		d_color_x + (d_color_w * 6),
+		d_color_x + (d_color_w * 7),
 	};
 	char housetext[25] = ""; // buffer for house droplist
 	int isdropped = 0;
 
 	JoinStateType joinstate = JOIN_NOTHING; // current "state" of this dialog
-	char namebuf[MPLAYER_NAME_MAX] = {0};	// buffer for player's name
-	int playertabs[] = {71 * RESFACTOR};	// tabs for player list box
-	int optiontabs[] = {8};			// tabs for player list box
-	int game_index = -1;			// index of currently-selected game
-	int join_index = -1;			// index of game we're joining
-	int rc = 0;				// -1 = user cancelled, 1 = New
-	JoinEventType event;			// event from incoming packet
-	int i;					// loop counter
+	char namebuf[MPLAYER_NAME_MAX] = { 0 }; // buffer for player's name
+	int playertabs[] = { 71 * RESFACTOR }; // tabs for player list box
+	int optiontabs[] = { 8 }; // tabs for player list box
+	int game_index = -1; // index of currently-selected game
+	int join_index = -1; // index of game we're joining
+	int rc = 0; // -1 = user cancelled, 1 = New
+	JoinEventType event; // event from incoming packet
+	int i; // loop counter
 	char txt[128];
 	char const *p;
 	int parms_received = 0; // 1 = game options received
 	int found;
-	NodeNameType *who;			       // node to add to Players
-	RejectType why;				       // reason for rejection
+	NodeNameType *who; // node to add to Players
+	RejectType why; // reason for rejection
 	TTimerClass<SystemTimerClass> lastclick_timer; // time b/w send periods
-	int lastclick_idx = 0;			       // index of item last clicked on
+	int lastclick_idx = 0; // index of item last clicked on
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 	Session.Options.ScenarioDescription[0] = 0; // Flag that we dont know the scenario name yet
 
@@ -1348,22 +2032,41 @@ static int Net_Join_Dialog(void) {
 	//------------------------------------------------------------------------
 	GadgetClass *commands; // button list
 
-	EditClass name_edt(BUTTON_NAME, namebuf, MPLAYER_NAME_MAX, TPF_TEXT, d_name_x, d_name_y, d_name_w, d_name_h,
-			   EditClass::ALPHANUMERIC);
+	EditClass name_edt(BUTTON_NAME, namebuf, MPLAYER_NAME_MAX, TPF_TEXT, d_name_x, d_name_y, d_name_w, d_name_h, EditClass::ALPHANUMERIC);
 
 #ifdef OLDWAY
 	TextButtonClass gdibtn(BUTTON_GDI, TXT_ALLIES, TPF_BUTTON, d_gdi_x, d_gdi_y, d_gdi_w);
 	TextButtonClass nodbtn(BUTTON_NOD, TXT_SOVIET, TPF_BUTTON, d_nod_x, d_nod_y, d_nod_w);
 #else
 	Fancy_Text_Print("", 0, 0, 0, 0, TPF_TEXT);
-	DropListClass housebtn(BUTTON_HOUSE, housetext, sizeof(housetext), TPF_TEXT, d_house_x, d_house_y, d_house_w,
-			       d_house_h, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	DropListClass housebtn(BUTTON_HOUSE,
+			       housetext,
+			       sizeof(housetext),
+			       TPF_TEXT,
+			       d_house_x,
+			       d_house_y,
+			       d_house_w,
+			       d_house_h,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"));
 #endif
 
-	ListClass gamelist(BUTTON_GAMELIST, d_gamelist_x, d_gamelist_y, d_gamelist_w, d_gamelist_h, TPF_TEXT,
-			   MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
-	ColorListClass playerlist(BUTTON_PLAYERLIST, d_playerlist_x, d_playerlist_y, d_playerlist_w, d_playerlist_h,
-				  TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass gamelist(BUTTON_GAMELIST,
+			   d_gamelist_x,
+			   d_gamelist_y,
+			   d_gamelist_w,
+			   d_gamelist_h,
+			   TPF_TEXT,
+			   MFCD::Retrieve("BTN-UP.SHP"),
+			   MFCD::Retrieve("BTN-DN.SHP"));
+	ColorListClass playerlist(BUTTON_PLAYERLIST,
+				  d_playerlist_x,
+				  d_playerlist_y,
+				  d_playerlist_w,
+				  d_playerlist_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
 	TextButtonClass joinbtn(BUTTON_JOIN, TXT_JOIN, TPF_BUTTON, d_join_x, d_join_y, d_join_w);
 	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, d_cancel_w);
 	TextButtonClass newbtn(BUTTON_NEW, TXT_NEW, TPF_BUTTON, d_new_x, d_new_y, d_new_w);
@@ -1371,16 +2074,19 @@ static int Net_Join_Dialog(void) {
 	GaugeClass levelgauge(BUTTON_LEVEL, d_level_x, d_level_y, d_level_w, d_level_h);
 	GaugeClass creditsgauge(BUTTON_CREDITS, d_credits_x, d_credits_y, d_credits_w, d_credits_h);
 	GaugeClass aiplayersgauge(BUTTON_AI_PLAYERS, d_aiplayers_x, d_aiplayers_y, d_aiplayers_w, d_aiplayers_h);
-	CheckListClass optionlist(BUTTON_OPTIONS, d_options_x, d_options_y, d_options_w, d_options_h, TPF_TEXT,
-				  MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
-	StaticButtonClass descrip(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + 16 * RESFACTOR, d_name_y,
-				  d_dialog_w - 32 * RESFACTOR, d_txt6_h + 1);
+	CheckListClass optionlist(BUTTON_OPTIONS,
+				  d_options_x,
+				  d_options_y,
+				  d_options_w,
+				  d_options_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
+	StaticButtonClass descrip(0, "", TPF_CENTER | TPF_TEXT, d_dialog_x + 16 * RESFACTOR, d_name_y, d_dialog_w - 32 * RESFACTOR, d_txt6_h + 1);
 	StaticButtonClass staticcount(0, "     ", TPF_TEXT, d_count_x + d_count_w + 2 * RESFACTOR, d_count_y);
 	StaticButtonClass staticlevel(0, "     ", TPF_TEXT, d_level_x + d_level_w + 2 * RESFACTOR, d_level_y);
-	StaticButtonClass staticcredits(0, "          ", TPF_TEXT, d_credits_x + d_credits_w + 2 * RESFACTOR,
-					d_credits_y);
-	StaticButtonClass staticaiplayers(0, "     ", TPF_TEXT, d_aiplayers_x + d_aiplayers_w + 2 * RESFACTOR,
-					  d_aiplayers_y);
+	StaticButtonClass staticcredits(0, "          ", TPF_TEXT, d_credits_x + d_credits_w + 2 * RESFACTOR, d_credits_y);
+	StaticButtonClass staticaiplayers(0, "     ", TPF_TEXT, d_aiplayers_x + d_aiplayers_w + 2 * RESFACTOR, d_aiplayers_y);
 
 	//------------------------------------------------------------------------
 	//	Init the button states
@@ -1389,7 +2095,7 @@ static int Net_Join_Dialog(void) {
 	// Name & Color
 	//........................................................................
 	Session.ColorIdx = Session.PrefColor; // init my preferred color
-	strcpy(namebuf, Session.Handle);      // set my name
+	strcpy(namebuf, Session.Handle); // set my name
 	name_edt.Set_Text(namebuf, MPLAYER_NAME_MAX);
 	if (Session.ColorIdx == PCOLOR_DIALOG_BLUE) {
 		name_edt.Set_Color(&ColorRemaps[PCOLOR_REALLY_BLUE]);
@@ -1440,8 +2146,7 @@ static int Net_Join_Dialog(void) {
 	// Option gauges
 	//........................................................................
 	countgauge.Use_Thumb(0);
-	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
-			       SessionClass::CountMin[Session.Options.Bases]);
+	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] - SessionClass::CountMin[Session.Options.Bases]);
 	countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 
 	levelgauge.Use_Thumb(0);
@@ -1458,11 +2163,18 @@ static int Net_Join_Dialog(void) {
 
 	Fancy_Text_Print("", 0, 0, scheme, TBLACK, TPF_TEXT);
 
-	Session.Messages.Init(d_message1_x + 1 * RESFACTOR, d_message1_y + 1 * RESFACTOR, 14, MAX_MESSAGE_LENGTH,
-			      d_txt6_h, d_send_x + 1 * RESFACTOR, d_send_y + 1 * RESFACTOR, 1, 20,
-			      MAX_MESSAGE_LENGTH - 5, d_message2_w);
-	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
-				  TPF_TEXT, NULL, '_', d_message2_w);
+	Session.Messages.Init(d_message1_x + 1 * RESFACTOR,
+			      d_message1_y + 1 * RESFACTOR,
+			      14,
+			      MAX_MESSAGE_LENGTH,
+			      d_txt6_h,
+			      d_send_x + 1 * RESFACTOR,
+			      d_send_y + 1 * RESFACTOR,
+			      1,
+			      20,
+			      MAX_MESSAGE_LENGTH - 5,
+			      d_message2_w);
+	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx, TPF_TEXT, NULL, '_', d_message2_w);
 	Session.WWChat = 0;
 
 	lastclick_timer = 0;
@@ -1575,49 +2287,70 @@ static int Net_Join_Dialog(void) {
 				//...............................................................
 				//	Dialog & Field labels
 				//...............................................................
-				Fancy_Text_Print(TXT_CHANNEL_GAMES, d_gamelist_x + (d_gamelist_w / 2),
-						 d_gamelist_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
-				Fancy_Text_Print(TXT_PLAYERS, d_playerlist_x + (d_playerlist_w / 2),
-						 d_playerlist_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_CHANNEL_GAMES,
+						 d_gamelist_x + (d_gamelist_w / 2),
+						 d_gamelist_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
+				Fancy_Text_Print(TXT_PLAYERS,
+						 d_playerlist_x + (d_playerlist_w / 2),
+						 d_playerlist_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_CENTER | TPF_TEXT);
 
 				//...............................................................
 				// For game-browsing, label the name, side, & color buttons:
 				//...............................................................
 				if (joinstate < JOIN_CONFIRMED) {
-					Fancy_Text_Print(TXT_YOUR_NAME, d_name_x + (d_name_w / 2), d_name_y - d_txt6_h,
-							 scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+					Fancy_Text_Print(TXT_YOUR_NAME,
+							 d_name_x + (d_name_w / 2),
+							 d_name_y - d_txt6_h,
+							 scheme,
+							 TBLACK,
+							 TPF_CENTER | TPF_TEXT);
 
 #ifdef OLDWAY
-					Fancy_Text_Print(TXT_SIDE_COLON, d_gdi_x + d_gdi_w, d_gdi_y - d_txt6_h, scheme,
-							 TBLACK, TPF_CENTER | TPF_TEXT);
+					Fancy_Text_Print(TXT_SIDE_COLON, d_gdi_x + d_gdi_w, d_gdi_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 #else
-					Fancy_Text_Print(TXT_SIDE_COLON, d_house_x + (d_house_w / 2),
-							 d_house_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+					Fancy_Text_Print(TXT_SIDE_COLON,
+							 d_house_x + (d_house_w / 2),
+							 d_house_y - d_txt6_h,
+							 scheme,
+							 TBLACK,
+							 TPF_CENTER | TPF_TEXT);
 #endif
 
-					Fancy_Text_Print(TXT_COLOR_COLON, d_dialog_x + ((d_dialog_w / 4) * 3),
-							 d_color_y - d_txt6_h, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
+					Fancy_Text_Print(TXT_COLOR_COLON,
+							 d_dialog_x + ((d_dialog_w / 4) * 3),
+							 d_color_y - d_txt6_h,
+							 scheme,
+							 TBLACK,
+							 TPF_CENTER | TPF_TEXT);
 				} else {
 					//...............................................................
 					// If we're joined to a game, just print the player's name & side.
 					//...............................................................
 #ifdef OLDWAY
 					if (Session.House == HOUSE_GOOD) {
-						sprintf(txt, Text_String(TXT_S_PLAYING_S), namebuf,
-							Text_String(TXT_ALLIES));
+						sprintf(txt, Text_String(TXT_S_PLAYING_S), namebuf, Text_String(TXT_ALLIES));
 					} else {
-						sprintf(txt, Text_String(TXT_S_PLAYING_S), namebuf,
-							Text_String(TXT_SOVIET));
+						sprintf(txt, Text_String(TXT_S_PLAYING_S), namebuf, Text_String(TXT_SOVIET));
 					}
-#else  // OLDWAY
-					sprintf(txt, Text_String(TXT_S_PLAYING_S), namebuf,
+#else // OLDWAY
+					sprintf(txt,
+						Text_String(TXT_S_PLAYING_S),
+						namebuf,
 						Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-					Fancy_Text_Print(txt, d_dialog_cx, d_dialog_y + d_margin2 + (1 * RESFACTOR),
-							 (Session.ColorIdx == PCOLOR_DIALOG_BLUE)
-							     ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-							     : &ColorRemaps[Session.ColorIdx],
-							 TBLACK, TPF_CENTER | TPF_TEXT);
+					Fancy_Text_Print(txt,
+							 d_dialog_cx,
+							 d_dialog_y + d_margin2 + (1 * RESFACTOR),
+							 (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] :
+												    &ColorRemaps[Session.ColorIdx],
+							 TBLACK,
+							 TPF_CENTER | TPF_TEXT);
 				}
 
 				//...............................................................
@@ -1692,18 +2425,18 @@ static int Net_Join_Dialog(void) {
 			//..................................................................
 			if (display >= REDRAW_COLORS && joinstate < JOIN_CONFIRMED) {
 				for (i = 0; i < MAX_MPLAYER_COLORS; i++) {
-					LogicPage->Fill_Rect(cbox_x[i] + 1, d_color_y + 1,
+					LogicPage->Fill_Rect(cbox_x[i] + 1,
+							     d_color_y + 1,
 							     cbox_x[i] + 1 + d_color_w - 2 * RESFACTOR,
-							     d_color_y + 1 + d_color_h - 2, ColorRemaps[i].Box);
+							     d_color_y + 1 + d_color_h - 2,
+							     ColorRemaps[i].Box);
 					//						(i == PCOLOR_DIALOG_BLUE) ?
 					// ColorRemaps[PCOLOR_REALLY_BLUE].Box : ColorRemaps[i].Box);
 
 					if (i == Session.ColorIdx) {
-						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_DOWN,
-							 false);
+						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_DOWN, false);
 					} else {
-						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_RAISED,
-							 false);
+						Draw_Box(cbox_x[i], d_color_y, d_color_w, d_color_h, BOXSTYLE_RAISED, false);
 					}
 				}
 			}
@@ -1713,11 +2446,9 @@ static int Net_Join_Dialog(void) {
 			//..................................................................
 			if (display >= REDRAW_MESSAGE) {
 				if (joinstate == JOIN_CONFIRMED) {
-					Draw_Box(d_message2_x, d_message2_y, d_message2_w, d_message2_h, BOXSTYLE_BOX,
-						 true);
+					Draw_Box(d_message2_x, d_message2_y, d_message2_w, d_message2_h, BOXSTYLE_BOX, true);
 				} else {
-					Draw_Box(d_message1_x, d_message1_y, d_message1_w, d_message1_h, BOXSTYLE_BOX,
-						 true);
+					Draw_Box(d_message1_x, d_message1_y, d_message1_w, d_message1_h, BOXSTYLE_BOX, true);
 				}
 				Draw_Box(d_send_x, d_send_y, d_send_w, d_send_h, BOXSTYLE_BOX, true);
 				Session.Messages.Draw();
@@ -1727,7 +2458,6 @@ static int Net_Join_Dialog(void) {
 			// Redraw the game options
 			//..................................................................
 			if (display >= REDRAW_PARMS && parms_received && joinstate >= JOIN_CONFIRMED) {
-
 				//...............................................................
 				// Scenario title
 				//...............................................................
@@ -1736,7 +2466,6 @@ static int Net_Join_Dialog(void) {
 
 				p = Text_String(TXT_SCENARIO_COLON);
 				if (Session.Options.ScenarioDescription[0]) {
-
 					// EW - Scenario language translation goes here!!!!!!!! VG
 					int ii;
 					for (ii = 0; EngMisStr[ii] != NULL; ii++) {
@@ -1773,8 +2502,7 @@ static int Net_Join_Dialog(void) {
 				//*RESFACTOR, d_count_y, d_count_x + d_count_w + 35 *RESFACTOR, d_aiplayers_y +
 				// d_aiplayers_h+RESFACTOR, BLACK);
 
-				Fancy_Text_Print(TXT_COUNT, d_count_x - 2 * RESFACTOR, d_count_y, scheme, TBLACK,
-						 TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_COUNT, d_count_x - 2 * RESFACTOR, d_count_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
 
 				sprintf(txt, "%d", Session.Options.UnitCount);
 				staticcount.Set_Text(txt);
@@ -1782,8 +2510,7 @@ static int Net_Join_Dialog(void) {
 				//				Fancy_Text_Print(txt, d_count_x + d_count_w + 2
 				//*RESFACTOR, d_count_y, scheme, BLACK, TPF_TEXT);
 
-				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2 * RESFACTOR, d_level_y, scheme, TBLACK,
-						 TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2 * RESFACTOR, d_level_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
 				if (BuildLevel <= MPLAYER_BUILD_LEVEL_MAX) {
 					sprintf(txt, "%d", BuildLevel);
 				} else {
@@ -1794,16 +2521,19 @@ static int Net_Join_Dialog(void) {
 				//				Fancy_Text_Print(txt, d_level_x + d_level_w + 2
 				//*RESFACTOR, d_level_y, scheme, BLACK, TPF_TEXT);
 
-				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2 * RESFACTOR, d_credits_y, scheme,
-						 TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2 * RESFACTOR, d_credits_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
 				sprintf(txt, "%d", Session.Options.Credits);
 				staticcredits.Set_Text(txt);
 				staticcredits.Draw_Me();
 				//				Fancy_Text_Print(txt, d_credits_x + d_credits_w + 2
 				//*RESFACTOR, d_credits_y, scheme, BLACK, TPF_TEXT);
 
-				Fancy_Text_Print(TXT_AI_PLAYERS_COLON, d_aiplayers_x - 2 * RESFACTOR, d_aiplayers_y,
-						 scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_AI_PLAYERS_COLON,
+						 d_aiplayers_x - 2 * RESFACTOR,
+						 d_aiplayers_y,
+						 scheme,
+						 TBLACK,
+						 TPF_TEXT | TPF_RIGHT);
 				sprintf(txt, "%d", Session.Options.AIPlayers);
 				staticaiplayers.Set_Text(txt);
 				staticaiplayers.Draw_Me();
@@ -1829,7 +2559,6 @@ static int Net_Join_Dialog(void) {
 		//	Process input
 		//.....................................................................
 		switch (input) {
-
 		//..................................................................
 		// Mouse Click:
 		// If we're joined to a game, display an error if the user tries to
@@ -1842,21 +2571,19 @@ static int Net_Join_Dialog(void) {
 		//..................................................................
 		case KN_LMOUSE:
 			if (joinstate > JOIN_NOTHING) {
-				if ((Get_Mouse_X() >= d_count_x && Get_Mouse_X() <= d_count_x + d_count_w &&
-				     Get_Mouse_Y() >= d_count_y && Get_Mouse_Y() <= d_aiplayers_y + d_aiplayers_h) ||
-				    (Get_Mouse_X() >= d_options_x && Get_Mouse_X() <= d_options_x + d_options_w &&
-				     Get_Mouse_Y() >= d_options_y && Get_Mouse_Y() <= d_options_y + d_options_h)) {
-					Session.Messages.Add_Message(NULL, 0,
-								     (char *)Text_String(TXT_ONLY_HOST_CAN_MODIFY),
-								     PCOLOR_BROWN, TPF_TEXT, 1200);
+				if ((Get_Mouse_X() >= d_count_x && Get_Mouse_X() <= d_count_x + d_count_w && Get_Mouse_Y() >= d_count_y &&
+				     Get_Mouse_Y() <= d_aiplayers_y + d_aiplayers_h) ||
+				    (Get_Mouse_X() >= d_options_x && Get_Mouse_X() <= d_options_x + d_options_w && Get_Mouse_Y() >= d_options_y &&
+				     Get_Mouse_Y() <= d_options_y + d_options_h)) {
+					Session.Messages
+						.Add_Message(NULL, 0, (char *)Text_String(TXT_ONLY_HOST_CAN_MODIFY), PCOLOR_BROWN, TPF_TEXT, 1200);
 					Sound_Effect(VOC_SYS_ERROR);
 					display = REDRAW_MESSAGE;
 				}
 				break;
 			}
 
-			if (Keyboard->MouseQX > cbox_x[0] &&
-			    Keyboard->MouseQX < (cbox_x[MAX_MPLAYER_COLORS - 1] + d_color_w) &&
+			if (Keyboard->MouseQX > cbox_x[0] && Keyboard->MouseQX < (cbox_x[MAX_MPLAYER_COLORS - 1] + d_color_w) &&
 			    Keyboard->MouseQY > d_color_y && Keyboard->MouseQY < (d_color_y + d_color_h)) {
 				Session.PrefColor = (PlayerColorType)((Keyboard->MouseQX - cbox_x[0]) / d_color_w);
 				Session.ColorIdx = Session.PrefColor;
@@ -1865,13 +2592,11 @@ static int Net_Join_Dialog(void) {
 					name_edt.Set_Color(&ColorRemaps[PCOLOR_REALLY_BLUE]);
 				} else {
 					name_edt.Set_Color(
-					    &ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												  : Session.ColorIdx]);
+						&ColorRemaps[(Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx]);
 				}
 				name_edt.Flag_To_Redraw();
 
-				Session.Messages.Set_Edit_Color(
-				    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx);
+				Session.Messages.Set_Edit_Color((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx);
 
 				display = REDRAW_COLORS;
 			}
@@ -1885,20 +2610,27 @@ static int Net_Join_Dialog(void) {
 			// Handle a double-click
 			//...............................................................
 			if (lastclick_timer < 30 && gamelist.Current_Index() == lastclick_idx) {
-
 				//............................................................
 				// If we're in a game, & the item clicked on is a different
 				// game, un-join the game we're in.
 				//............................................................
-				if ((joinstate == JOIN_CONFIRMED || joinstate == JOIN_WAIT_CONFIRM) &&
-				    lastclick_idx != game_index) {
+				if ((joinstate == JOIN_CONFIRMED || joinstate == JOIN_WAIT_CONFIRM) && lastclick_idx != game_index) {
 					if (gamelist.Current_Index() == 0) {
 						goto_lobby = 1;
 					} else {
 						goto_lobby = 0;
 					}
-					Unjoin_Game(namebuf, joinstate, &gamelist, &playerlist, game_index, goto_lobby,
-						    d_message1_x, d_message1_y, d_txt6_h, d_send_x, d_send_y,
+					Unjoin_Game(namebuf,
+						    joinstate,
+						    &gamelist,
+						    &playerlist,
+						    game_index,
+						    goto_lobby,
+						    d_message1_x,
+						    d_message1_y,
+						    d_txt6_h,
+						    d_send_x,
+						    d_send_y,
 						    MAX_MESSAGE_LENGTH);
 					joinstate = JOIN_NOTHING;
 					display = REDRAW_ALL;
@@ -1914,8 +2646,7 @@ static int Net_Join_Dialog(void) {
 				//............................................................
 				// If we clicked on another game, join that game.
 				//............................................................
-				if (joinstate != JOIN_CONFIRMED && joinstate != JOIN_WAIT_CONFIRM &&
-				    lastclick_idx > 0) {
+				if (joinstate != JOIN_CONFIRMED && joinstate != JOIN_WAIT_CONFIRM && lastclick_idx > 0) {
 					gamelist.Set_Selected_Index(lastclick_idx);
 					game_index = lastclick_idx;
 					name_edt.Clear_Focus();
@@ -1937,14 +2668,22 @@ static int Net_Join_Dialog(void) {
 				//............................................................
 				if (game_index == 0) {
 					Clear_Listbox(&playerlist);
-					Session.Messages.Init(
-					    d_message1_x + 1 * RESFACTOR, d_message1_y + 1 * RESFACTOR, 14,
-					    MAX_MESSAGE_LENGTH, d_txt6_h, d_send_x + 1 * RESFACTOR,
-					    d_send_y + 1 * RESFACTOR, 1, 20, MAX_MESSAGE_LENGTH - 5, d_message2_w);
-					Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE)
-								      ? PCOLOR_REALLY_BLUE
-								      : Session.ColorIdx,
-								  TPF_TEXT, NULL, '_', d_message2_w);
+					Session.Messages.Init(d_message1_x + 1 * RESFACTOR,
+							      d_message1_y + 1 * RESFACTOR,
+							      14,
+							      MAX_MESSAGE_LENGTH,
+							      d_txt6_h,
+							      d_send_x + 1 * RESFACTOR,
+							      d_send_y + 1 * RESFACTOR,
+							      1,
+							      20,
+							      MAX_MESSAGE_LENGTH - 5,
+							      d_message2_w);
+					Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+								  TPF_TEXT,
+								  NULL,
+								  '_',
+								  d_message2_w);
 					Session.WWChat = 0;
 					display = REDRAW_ALL;
 				}
@@ -1973,7 +2712,6 @@ static int Net_Join_Dialog(void) {
 				// init the click timer, to detect a double-click of this item.
 				//............................................................
 				else if (gamelist.Current_Index() != game_index) {
-
 					Clear_Listbox(&playerlist);
 					Clear_Vector(&Session.Players);
 					game_index = gamelist.Current_Index();
@@ -2035,8 +2773,18 @@ static int Net_Join_Dialog(void) {
 			//	packet.  Don't send this to myself (index 0).
 			//...............................................................
 			if (joinstate == JOIN_CONFIRMED) {
-				Unjoin_Game(namebuf, joinstate, &gamelist, &playerlist, game_index, 1, d_message1_x,
-					    d_message1_y, d_txt6_h, d_send_x, d_send_y, MAX_MESSAGE_LENGTH);
+				Unjoin_Game(namebuf,
+					    joinstate,
+					    &gamelist,
+					    &playerlist,
+					    game_index,
+					    1,
+					    d_message1_x,
+					    d_message1_y,
+					    d_txt6_h,
+					    d_send_x,
+					    d_send_y,
+					    MAX_MESSAGE_LENGTH);
 				joinstate = JOIN_NOTHING;
 				display = REDRAW_ALL;
 			} else {
@@ -2048,8 +2796,7 @@ static int Net_Join_Dialog(void) {
 				Session.GPacket.Command = NET_SIGN_OFF;
 				strcpy(Session.GPacket.Name, namebuf);
 				for (i = 1; i < Session.Chat.Count(); i++) {
-					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-								&(Session.Chat[i]->Address));
+					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Chat[i]->Address));
 					Ipx.Service();
 				}
 
@@ -2058,8 +2805,7 @@ static int Net_Join_Dialog(void) {
 				//............................................................
 				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, NULL);
 				if (Session.IsBridge) {
-					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-								&Session.BridgeNet);
+					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
 				}
 
 				while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
@@ -2081,8 +2827,7 @@ static int Net_Join_Dialog(void) {
 			//	Force user to enter a name
 			//...............................................................
 			if (strlen(namebuf) == 0) {
-				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NAME_ERROR), PCOLOR_BROWN,
-							     TPF_TEXT, 1200);
+				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NAME_ERROR), PCOLOR_BROWN, TPF_TEXT, 1200);
 				Sound_Effect(VOC_SYS_ERROR);
 				display = REDRAW_MESSAGE;
 				break;
@@ -2095,9 +2840,8 @@ static int Net_Join_Dialog(void) {
 			for (i = 1; i < Session.Games.Count(); i++) {
 				if (!stricmp(Session.Games[i]->Name, namebuf)) {
 					found = 1;
-					Session.Messages.Add_Message(NULL, 0,
-								     (char *)Text_String(TXT_GAMENAME_MUSTBE_UNIQUE),
-								     PCOLOR_BROWN, TPF_TEXT, 1200);
+					Session.Messages
+						.Add_Message(NULL, 0, (char *)Text_String(TXT_GAMENAME_MUSTBE_UNIQUE), PCOLOR_BROWN, TPF_TEXT, 1200);
 					Sound_Effect(VOC_SYS_ERROR);
 					display = REDRAW_MESSAGE;
 					break;
@@ -2178,8 +2922,7 @@ static int Net_Join_Dialog(void) {
 				//............................................................
 				if (joinstate == JOIN_CONFIRMED) {
 					for (i = 1; i < Session.Players.Count(); i++) {
-						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-									&(Session.Players[i]->Address));
+						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 						Ipx.Service();
 					}
 				} else {
@@ -2187,8 +2930,7 @@ static int Net_Join_Dialog(void) {
 					// Otherwise, send the message to all players in our chat list.
 					//............................................................
 					for (i = 1; i < Session.Chat.Count(); i++) {
-						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-									&(Session.Chat[i]->Address));
+						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Chat[i]->Address));
 						Ipx.Service();
 					}
 					if (Obfuscate(Session.GPacket.Message.Buf) == 0x72A47EF6) {
@@ -2202,17 +2944,18 @@ static int Net_Join_Dialog(void) {
 				//	Add the message to our own list, since we're not in the
 				// player list on this dialog.
 				//............................................................
-				Session.Messages.Add_Message(
-				    Session.GPacket.Name,
-				    (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE)
-					? PCOLOR_REALLY_BLUE
-					: Session.GPacket.Message.Color,
-				    Session.GPacket.Message.Buf,
-				    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
-				    TPF_TEXT, -1);
-				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												   : Session.ColorIdx,
-							  TPF_TEXT, NULL, '_', d_message2_w);
+				Session.Messages.Add_Message(Session.GPacket.Name,
+							     (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+														     Session.GPacket.Message.Color,
+							     Session.GPacket.Message.Buf,
+							     (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							     TPF_TEXT,
+							     -1);
+				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							  TPF_TEXT,
+							  NULL,
+							  '_',
+							  d_message2_w);
 				display = REDRAW_MESSAGE;
 			}
 
@@ -2269,16 +3012,14 @@ static int Net_Join_Dialog(void) {
 
 				bool ready_packet_was_sent = false;
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
-				if (Session.ScenarioIsOfficial &&
-				    ((Expansion_CS_Present() && Is_Mission_Counterstrike(Session.ScenarioFileName)) ||
-				     (Expansion_AM_Present() && Is_Mission_Aftermath(Session.ScenarioFileName)))) {
+				if (Session.ScenarioIsOfficial && ((Expansion_CS_Present() && Is_Mission_Counterstrike(Session.ScenarioFileName)) ||
+								   (Expansion_AM_Present() && Is_Mission_Aftermath(Session.ScenarioFileName)))) {
 #else
 				if (Expansion_CS_Present() && Session.ScenarioIsOfficial) {
 #endif
 
 					CCFileClass check_file(Session.ScenarioFileName);
 					if (!check_file.Is_Available()) {
-
 						int current_drive = CCFileClass::Get_CD_Drive();
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 						int index = Get_CD_Index(current_drive, 1 * 60);
@@ -2307,9 +3048,7 @@ static int Net_Join_Dialog(void) {
 							*/
 							memset((void *)&(Session.GPacket), 0, sizeof(Session.GPacket));
 							Session.GPacket.Command = NET_READY_TO_GO;
-							Ipx.Send_Global_Message(&Session.GPacket,
-										sizeof(GlobalPacketType), 1,
-										&Session.HostAddress);
+							Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &Session.HostAddress);
 							while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
 								;
 							ready_packet_was_sent = true;
@@ -2334,12 +3073,13 @@ static int Net_Join_Dialog(void) {
 				**	we need to fix up the file name so we load the right one.
 				*/
 				Ipx.Set_Timing(25, (unsigned long)-1, 1000);
-				if (Find_Local_Scenario(Session.Options.ScenarioDescription, Session.ScenarioFileName,
-							Session.ScenarioFileLength, Session.ScenarioDigest,
+				if (Find_Local_Scenario(Session.Options.ScenarioDescription,
+							Session.ScenarioFileName,
+							Session.ScenarioFileLength,
+							Session.ScenarioDigest,
 							Session.ScenarioIsOfficial)) {
-
 					Session.Options.ScenarioIndex = 1; // We dont care what it
-									   // is as long as it isnt -1
+						// is as long as it isnt -1
 
 					/*
 					** We have the scenario. Tell the host that I am ready to go.
@@ -2347,8 +3087,7 @@ static int Net_Join_Dialog(void) {
 					if (!ready_packet_was_sent) {
 						memset((void *)&(Session.GPacket), 0, sizeof(Session.GPacket));
 						Session.GPacket.Command = NET_READY_TO_GO;
-						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-									&Session.HostAddress);
+						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &Session.HostAddress);
 
 						while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
 							;
@@ -2367,7 +3106,7 @@ static int Net_Join_Dialog(void) {
 					} else {
 #endif
 						Session.Options.ScenarioIndex = 1; // We dont care what it
-										   // is as long as it isnt -1
+							// is as long as it isnt -1
 #ifdef FIXIT_VERSION_3
 						if (bSpecialAftermathScenario(Session.Options.ScenarioDescription))
 							break;
@@ -2391,7 +3130,6 @@ static int Net_Join_Dialog(void) {
 				process = false;
 
 			} else if (joinstate == JOIN_CONFIRMED) {
-
 				//..................................................................
 				//	If we're newly-confirmed, add myself to the Players list, and
 				// immediately send out a player query
@@ -2410,13 +3148,12 @@ static int Net_Join_Dialog(void) {
 				} else {
 					sprintf(item, "%s\t%s", namebuf, Text_String(TXT_SOVIET));
 				}
-#else  // OLDWAY
-				sprintf(item, "%s\t%s", namebuf,
-					Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
+#else // OLDWAY
+				sprintf(item, "%s\t%s", namebuf, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-				playerlist.Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE)
-							      ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-							      : &ColorRemaps[Session.ColorIdx]);
+				playerlist.Add_Item(item,
+						    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] :
+											       &ColorRemaps[Session.ColorIdx]);
 
 				who = new NodeNameType;
 				strcpy(who->Name, namebuf);
@@ -2429,29 +3166,46 @@ static int Net_Join_Dialog(void) {
 				//...............................................................
 				// Re-init the message system to its new smaller size
 				//...............................................................
-				Session.Messages.Init(d_message2_x + 1 * RESFACTOR, d_message2_y + 1 * RESFACTOR, 8,
-						      MAX_MESSAGE_LENGTH, d_txt6_h, d_send_x + 1 * RESFACTOR,
-						      d_send_y + 1 * RESFACTOR, 1, 20, MAX_MESSAGE_LENGTH - 5,
+				Session.Messages.Init(d_message2_x + 1 * RESFACTOR,
+						      d_message2_y + 1 * RESFACTOR,
+						      8,
+						      MAX_MESSAGE_LENGTH,
+						      d_txt6_h,
+						      d_send_x + 1 * RESFACTOR,
+						      d_send_y + 1 * RESFACTOR,
+						      1,
+						      20,
+						      MAX_MESSAGE_LENGTH - 5,
 						      d_message2_w);
-				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												   : Session.ColorIdx,
-							  TPF_TEXT, NULL, '_', d_message2_w);
+				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							  TPF_TEXT,
+							  NULL,
+							  '_',
+							  d_message2_w);
 			} else if (joinstate == JOIN_REJECTED) {
 				//..................................................................
 				//	If we've been rejected, clear any messages we may have been
 				// typing, add a message stating why we were rejected, and send a
 				// chat announcement.
 				//..................................................................
-				Session.Messages.Init(d_message1_x + 1 * RESFACTOR, d_message1_y + 1 * RESFACTOR, 14,
-						      MAX_MESSAGE_LENGTH, d_txt6_h, d_send_x + 1 * RESFACTOR,
-						      d_send_y + 1 * RESFACTOR, 1, 20, MAX_MESSAGE_LENGTH - 5,
+				Session.Messages.Init(d_message1_x + 1 * RESFACTOR,
+						      d_message1_y + 1 * RESFACTOR,
+						      14,
+						      MAX_MESSAGE_LENGTH,
+						      d_txt6_h,
+						      d_send_x + 1 * RESFACTOR,
+						      d_send_y + 1 * RESFACTOR,
+						      1,
+						      20,
+						      MAX_MESSAGE_LENGTH - 5,
 						      d_message2_w);
-				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												   : Session.ColorIdx,
-							  TPF_TEXT, NULL, '_', d_message2_w);
+				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							  TPF_TEXT,
+							  NULL,
+							  '_',
+							  d_message2_w);
 
-				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_REQUEST_DENIED),
-							     PCOLOR_BROWN, TPF_TEXT, 1200);
+				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_REQUEST_DENIED), PCOLOR_BROWN, TPF_TEXT, 1200);
 				Sound_Effect(VOC_SYS_ERROR);
 
 				item = NULL;
@@ -2479,8 +3233,7 @@ static int Net_Join_Dialog(void) {
 			//.....................................................................
 			//	If the game options have changed, print them.
 			//.....................................................................
-			countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
-					       SessionClass::CountMin[Session.Options.Bases]);
+			countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] - SessionClass::CountMin[Session.Options.Bases]);
 			countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 			levelgauge.Set_Value(BuildLevel - 1);
 			creditsgauge.Set_Value(Session.Options.Credits);
@@ -2518,7 +3271,6 @@ static int Net_Join_Dialog(void) {
 				aiplayersgauge.Set_Value(Rule.MaxPlayers - Session.Players.Count());
 			}
 		} else if (event == EV_GAME_SIGNOFF) {
-
 			//.....................................................................
 			// EV_GAME_SIGNOFF:
 			//	A game before the one I've selected is gone, so we have a new index
@@ -2555,7 +3307,6 @@ static int Net_Join_Dialog(void) {
 			//.....................................................................
 			for (i = 1; i < Session.Games.Count(); i++) {
 				if (TickCount - Session.Games[i]->Game.LastTime > 400) {
-
 					delete Session.Games[i];
 					Session.Games.Delete(Session.Games[i]);
 
@@ -2601,13 +3352,11 @@ static int Net_Join_Dialog(void) {
 				if (TickCount - Session.Chat[i]->Chat.LastTime > 360) {
 					delete Session.Chat[i];
 					Session.Chat.Delete(Session.Chat[i]);
-				} else if (TickCount - Session.Chat[i]->Chat.LastTime > 300 &&
-					   Session.Chat[i]->Chat.LastChance == 0) {
+				} else if (TickCount - Session.Chat[i]->Chat.LastTime > 300 && Session.Chat[i]->Chat.LastChance == 0) {
 					memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
 					Session.GPacket.Name[0] = 0;
 					Session.GPacket.Command = NET_CHAT_REQUEST;
-					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-								&(Session.Chat[i]->Address));
+					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &(Session.Chat[i]->Address));
 					Ipx.Service();
 					Session.Chat[i]->Chat.LastChance = 1;
 				}
@@ -2639,13 +3388,10 @@ static int Net_Join_Dialog(void) {
 					}
 					for (i = 0; i < Session.Chat.Count(); i++) {
 						if (stricmp(Session.Chat[i]->Name, playerlist.Get_Item(i)) ||
-						    &ColorRemaps[(Session.Chat[i]->Chat.Color == PCOLOR_DIALOG_BLUE)
-								     ? PCOLOR_REALLY_BLUE
-								     : Session.Chat[i]->Chat.Color] !=
-							playerlist.Colors[i]) {
-
-							playerlist.Colors[i] =
-							    &ColorRemaps[Session.Chat[i]->Chat.Color];
+						    &ColorRemaps[(Session.Chat[i]->Chat.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+														       Session.Chat[i]->Chat.Color] !=
+							    playerlist.Colors[i]) {
+							playerlist.Colors[i] = &ColorRemaps[Session.Chat[i]->Chat.Color];
 							if (playerlist.Colors[i] == &ColorRemaps[PCOLOR_DIALOG_BLUE]) {
 								playerlist.Colors[i] = &ColorRemaps[PCOLOR_REALLY_BLUE];
 							}
@@ -2694,8 +3440,7 @@ static int Net_Join_Dialog(void) {
 			// Don't send myself the message.
 			//..................................................................
 			for (i = 1; i < Session.Players.Count(); i++) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 				Ipx.Service();
 			}
 
@@ -2703,10 +3448,8 @@ static int Net_Join_Dialog(void) {
 			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, NULL);
 
 			if (Session.IsBridge) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-							&Session.BridgeNet);
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-							&Session.BridgeNet);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
 			}
 
 			while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
@@ -2715,7 +3458,6 @@ static int Net_Join_Dialog(void) {
 			rc = -1;
 
 		} else {
-
 			//---------------------------------------------------------------------
 			// Prepare to load the scenario.
 			//---------------------------------------------------------------------
@@ -2816,14 +3558,12 @@ static int Request_To_Join(char *playername, int join_index, HousesType house, P
 	//	Validate join_index
 	//------------------------------------------------------------------------
 	if (join_index < 1) {
-		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_MUST_SELECT_GAME), PCOLOR_BROWN, TPF_TEXT,
-					     1200);
+		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_MUST_SELECT_GAME), PCOLOR_BROWN, TPF_TEXT, 1200);
 		Sound_Effect(VOC_SYS_ERROR);
 		return (false);
 	}
 	if ((Session.Games.Count() <= 1) || join_index > Session.Games.Count()) {
-		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NOTHING_TO_JOIN), PCOLOR_BROWN, TPF_TEXT,
-					     1200);
+		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NOTHING_TO_JOIN), PCOLOR_BROWN, TPF_TEXT, 1200);
 		Sound_Effect(VOC_SYS_ERROR);
 		return (false);
 	}
@@ -2832,8 +3572,7 @@ static int Request_To_Join(char *playername, int join_index, HousesType house, P
 	//	Force user to enter a name
 	//------------------------------------------------------------------------
 	if (strlen(playername) == 0) {
-		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NAME_ERROR), PCOLOR_BROWN, TPF_TEXT,
-					     1200);
+		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NAME_ERROR), PCOLOR_BROWN, TPF_TEXT, 1200);
 		Sound_Effect(VOC_SYS_ERROR);
 		return (false);
 	}
@@ -2842,8 +3581,7 @@ static int Request_To_Join(char *playername, int join_index, HousesType house, P
 	//	The game must be open
 	//------------------------------------------------------------------------
 	if (!Session.Games[join_index]->Game.IsOpen) {
-		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_GAME_IS_CLOSED), PCOLOR_BROWN, TPF_TEXT,
-					     1200);
+		Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_GAME_IS_CLOSED), PCOLOR_BROWN, TPF_TEXT, 1200);
 		Sound_Effect(VOC_SYS_ERROR);
 		return (false);
 	}
@@ -2902,8 +3640,17 @@ static int Request_To_Join(char *playername, int join_index, HousesType house, P
  * HISTORY:                                                                *
  *   12/12/1995 BRR : Created.                                             *
  *=========================================================================*/
-static void Unjoin_Game(char *namebuf, JoinStateType joinstate, ListClass *gamelist, ColorListClass *playerlist,
-			int game_index, int goto_lobby, int msg_x, int msg_y, int msg_h, int send_x, int send_y,
+static void Unjoin_Game(char *namebuf,
+			JoinStateType joinstate,
+			ListClass *gamelist,
+			ColorListClass *playerlist,
+			int game_index,
+			int goto_lobby,
+			int msg_x,
+			int msg_y,
+			int msg_h,
+			int send_x,
+			int send_y,
 			int msg_len) {
 	int i;
 	char *item;
@@ -2926,16 +3673,14 @@ static void Unjoin_Game(char *namebuf, JoinStateType joinstate, ListClass *gamel
 	}
 
 	if (joinstate == JOIN_WAIT_CONFIRM || joinstate == JOIN_CONFIRMED) {
-		Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-					&(Session.Games[game_index]->Address));
+		Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Games[game_index]->Address));
 	}
 
 	//------------------------------------------------------------------------
 	// Re-init the message system to its new larger size
 	//------------------------------------------------------------------------
 	Session.Messages.Init(msg_x + 1, msg_y + 1, 14, msg_len, msg_h, send_x + 1, send_y + 1, 1, 20, msg_len - 5);
-	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
-				  TPF_TEXT, NULL, '_');
+	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx, TPF_TEXT, NULL, '_');
 
 	//------------------------------------------------------------------------
 	// Remove myself from the player list, and reset my game name
@@ -2996,8 +3741,7 @@ static void Unjoin_Game(char *namebuf, JoinStateType joinstate, ListClass *gamel
  *                                                                         						  *
  * HISTORY: * 02/14/1995 BR : Created. * 04/15/1995 BRR : Created. *
  *=============================================================================================*/
-static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow, int playernow, int chatnow,
-			      char *myname, int init) {
+static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow, int playernow, int chatnow, char *myname, int init) {
 	//........................................................................
 	// These values control the timeouts for sending various types of packets;
 	// they're designed such that they'll rarely occur simultaneously.
@@ -3007,9 +3751,9 @@ static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow,
 		PLAYER_QUERY_TIME = 35,
 		CHAT_ANNOUNCE_TIME = 83,
 	};
-	static CDTimerClass<SystemTimerClass> game_timer;   // time between NET_QUERY_GAME's
+	static CDTimerClass<SystemTimerClass> game_timer; // time between NET_QUERY_GAME's
 	static CDTimerClass<SystemTimerClass> player_timer; // time between NET_QUERY_PLAYERS's
-	static CDTimerClass<SystemTimerClass> chat_timer;   // time between NET_CHAT_ANNOUNCE's
+	static CDTimerClass<SystemTimerClass> chat_timer; // time between NET_CHAT_ANNOUNCE's
 
 	//------------------------------------------------------------------------
 	// Initialize timers
@@ -3025,7 +3769,6 @@ static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow,
 	//	it right now
 	//------------------------------------------------------------------------
 	if (!game_timer || gamenow) {
-
 		game_timer = GAME_QUERY_TIME;
 
 		memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
@@ -3049,7 +3792,6 @@ static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow,
 	//	right now
 	//------------------------------------------------------------------------
 	if (((curgame > 0) && (curgame < Session.Games.Count()) && !player_timer) || playernow) {
-
 		player_timer = PLAYER_QUERY_TIME;
 
 		memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
@@ -3072,7 +3814,6 @@ static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow,
 	// Send the chat announcement
 	//------------------------------------------------------------------------
 	if ((!chat_timer && joinstate != JOIN_CONFIRMED) || chatnow) {
-
 		chat_timer = CHAT_ANNOUNCE_TIME;
 
 		memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
@@ -3132,10 +3873,10 @@ static void Send_Join_Queries(int curgame, JoinStateType joinstate, int gamenow,
  *                                                                         						  *
  * HISTORY: * 02/14/1995 BR : Created. * 04/15/1995 BRR : Created. *
  *=============================================================================================*/
-static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gamelist, ColorListClass *playerlist,
-					int join_index, char *my_name, RejectType *why) {
+static JoinEventType
+Get_Join_Responses(JoinStateType *joinstate, ListClass *gamelist, ColorListClass *playerlist, int join_index, char *my_name, RejectType *why) {
 	int rc;
-	char *item;	   // general-purpose string
+	char *item; // general-purpose string
 	NodeNameType *who; // node to add to Games or Players
 	int i;
 	int found;
@@ -3162,7 +3903,6 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 	//	system to our list box if it's new.
 	//------------------------------------------------------------------------
 	if (Session.GPacket.Command == NET_ANSWER_GAME) {
-
 		//.....................................................................
 		//	See if this name is unique
 		//.....................................................................
@@ -3181,8 +3921,7 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 					if (Session.GPacket.GameInfo.IsOpen) {
 						sprintf(item, Text_String(TXT_THATGUYS_GAME), Session.GPacket.Name);
 					} else {
-						sprintf(item, Text_String(TXT_THATGUYS_GAME_BRACKET),
-							Session.GPacket.Name);
+						sprintf(item, Text_String(TXT_THATGUYS_GAME_BRACKET), Session.GPacket.Name);
 					}
 					Session.Games[i]->Game.IsOpen = Session.GPacket.GameInfo.IsOpen;
 					gamelist->Flag_To_Redraw();
@@ -3202,16 +3941,17 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 					//............................................................
 					if (*joinstate < JOIN_CONFIRMED) {
 						if (Session.Games[i]->Game.IsOpen) {
-							sprintf(txt, Text_String(TXT_S_FORMED_NEW_GAME),
+							sprintf(txt,
+								Text_String(TXT_S_FORMED_NEW_GAME),
 								Session.Games[Session.Games.Count() - 1]->Name);
 							Sound_Effect(VOC_GAME_FORMING);
 						} else {
-							sprintf(txt, Text_String(TXT_GAME_NOW_IN_PROGRESS),
+							sprintf(txt,
+								Text_String(TXT_GAME_NOW_IN_PROGRESS),
 								Session.Games[Session.Games.Count() - 1]->Name);
 							Sound_Effect(VOC_GAME_CLOSED);
 						}
-						Session.Messages.Add_Message(NULL, 0, txt, PCOLOR_BROWN, TPF_TEXT,
-									     1200);
+						Session.Messages.Add_Message(NULL, 0, txt, PCOLOR_BROWN, TPF_TEXT, 1200);
 						retcode = EV_NEW_GAME;
 					}
 				}
@@ -3223,7 +3963,6 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 		//	name not found (or addresses are different); add it to 'Games'
 		//.....................................................................
 		if (found == 0) {
-
 			//..................................................................
 			//	Create a new node structure, fill it in, add it to 'Games'
 			//..................................................................
@@ -3282,7 +4021,6 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 		retcode = EV_NONE;
 		found = 0;
 		for (i = 0; i < Session.Players.Count(); i++) {
-
 			//..................................................................
 			//	If the address is already present, re-copy their name, color &
 			//	house into the existing entry, in case they've changed it without
@@ -3308,8 +4046,7 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 		//	Don't add this player if he's not part of the game that's selected.
 		//.....................................................................
 		i = gamelist->Current_Index();
-		if (Session.Games.Count() &&
-		    Session.GPacket.PlayerInfo.NameCRC != Compute_Name_CRC(Session.Games[i]->Name)) {
+		if (Session.Games.Count() && Session.GPacket.PlayerInfo.NameCRC != Compute_Name_CRC(Session.Games[i]->Name)) {
 			found = 1;
 		}
 
@@ -3346,14 +4083,15 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 			} else {
 				sprintf(item, "%s\t%s", Session.GPacket.Name, Text_String(TXT_SOVIET));
 			}
-#else  // OLDWAY
-			sprintf(
-			    item, "%s\t%s", Session.GPacket.Name,
-			    Text_String(HouseTypeClass::As_Reference(Session.GPacket.PlayerInfo.House).Full_Name()));
+#else // OLDWAY
+			sprintf(item,
+				"%s\t%s",
+				Session.GPacket.Name,
+				Text_String(HouseTypeClass::As_Reference(Session.GPacket.PlayerInfo.House).Full_Name()));
 #endif // OLDWAY
-			playerlist->Add_Item(item, (who->Player.Color == PCOLOR_DIALOG_BLUE)
-						       ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-						       : &ColorRemaps[who->Player.Color]);
+			playerlist->Add_Item(item,
+					     (who->Player.Color == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] :
+											 &ColorRemaps[who->Player.Color]);
 
 			//..................................................................
 			// If this player's in the Chat vector, remove him from there
@@ -3408,15 +4146,13 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 			strcpy(Session.GPacket.Name, my_name);
 
 			for (i = 1; i < Session.Players.Count(); i++) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 				Ipx.Service();
 			}
 
 			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, NULL);
 			if (Session.IsBridge) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-							&Session.BridgeNet);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
 			}
 
 			while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
@@ -3471,8 +4207,7 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 			//	Guest receives game version number from host.
 			//	Added to the transmitted version number is a bit indicating presence of Aftermath
 			// expansion.
-			unsigned long lVersion =
-			    Session.GPacket.ScenarioInfo.Version & ~0x80000000; //	Actual version number.
+			unsigned long lVersion = Session.GPacket.ScenarioInfo.Version & ~0x80000000; //	Actual version number.
 			Session.CommProtocol = VerNum.Version_Protocol(lVersion);
 			bAftermathMultiplayer = Session.GPacket.ScenarioInfo.Version & 0x80000000;
 //			if( bAftermathMultiplayer )
@@ -3504,7 +4239,8 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 			strcpy(Session.Options.ScenarioDescription, Session.GPacket.ScenarioInfo.Scenario);
 			strcpy(Session.ScenarioFileName, Session.GPacket.ScenarioInfo.ShortFileName);
 #ifdef WOLAPI_INTEGRATION
-			strncpy(Session.ScenarioDigest, (char *)Session.GPacket.ScenarioInfo.FileDigest,
+			strncpy(Session.ScenarioDigest,
+				(char *)Session.GPacket.ScenarioInfo.FileDigest,
 				sizeof(Session.GPacket.ScenarioInfo.FileDigest));
 #else
 			strcpy(Session.ScenarioDigest, (char *)Session.GPacket.ScenarioInfo.FileDigest);
@@ -3525,9 +4261,7 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 		//	Remove this name from the list of games
 		//.....................................................................
 		for (i = 1; i < Session.Games.Count(); i++) {
-			if (!strcmp(Session.Games[i]->Name, Session.GPacket.Name) &&
-			    Session.Games[i]->Address == Session.GAddress) {
-
+			if (!strcmp(Session.Games[i]->Name, Session.GPacket.Name) && Session.Games[i]->Address == Session.GAddress) {
 				//...............................................................
 				//	If the system signing off is the currently-selected list
 				//	item, clear the player list since that game is no longer
@@ -3575,7 +4309,6 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 		//	Remove this name from the list of players
 		//.....................................................................
 		for (i = 0; i < Session.Players.Count(); i++) {
-
 			//..................................................................
 			//	Name found; remove it
 			//..................................................................
@@ -3606,12 +4339,10 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 		//	Remove this name from the chat list
 		//.....................................................................
 		for (i = 1; i < Session.Chat.Count(); i++) {
-
 			//..................................................................
 			//	Name found; remove it
 			//..................................................................
 			if (Session.Chat[i]->Address == Session.GAddress) {
-
 				delete Session.Chat[i];
 				Session.Chat.Delete(Session.Chat[i]);
 
@@ -3716,26 +4447,26 @@ static JoinEventType Get_Join_Responses(JoinStateType *joinstate, ListClass *gam
 		//.....................................................................
 		if ((*joinstate) == JOIN_CONFIRMED) {
 			if (Session.GPacket.Message.NameCRC == Compute_Name_CRC(Session.GameName)) {
-				Session.Messages.Add_Message(Session.GPacket.Name,
-							     (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE)
-								 ? PCOLOR_REALLY_BLUE
-								 : Session.GPacket.Message.Color,
-							     Session.GPacket.Message.Buf,
-							     (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE)
-								 ? PCOLOR_REALLY_BLUE
-								 : Session.GPacket.Message.Color,
-							     TPF_TEXT, -1);
+				Session.Messages.Add_Message(
+					Session.GPacket.Name,
+					(Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.GPacket.Message.Color,
+					Session.GPacket.Message.Buf,
+					(Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.GPacket.Message.Color,
+					TPF_TEXT,
+					-1);
 			}
 		}
 		//.....................................................................
 		// Otherwise, we're in the chat room; display any old message.
 		//.....................................................................
 		else {
-			Session.Messages.Add_Message(
-			    Session.GPacket.Name, Session.GPacket.Message.Color, Session.GPacket.Message.Buf,
-			    (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-										  : Session.GPacket.Message.Color,
-			    TPF_TEXT, -1);
+			Session.Messages.Add_Message(Session.GPacket.Name,
+						     Session.GPacket.Message.Color,
+						     Session.GPacket.Message.Buf,
+						     (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+													     Session.GPacket.Message.Color,
+						     TPF_TEXT,
+						     -1);
 		}
 
 		retcode = EV_MESSAGE;
@@ -3795,15 +4526,15 @@ static int Net_New_Dialog(void) {
 	//------------------------------------------------------------------------
 	//	Dialog & button dimensions
 	//------------------------------------------------------------------------
-	int d_dialog_w = 320 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 200 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 320 * RESFACTOR; // dialog width
+	int d_dialog_h = 200 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 6 * RESFACTOR + 1; // ht of 6-pt text
-	int d_margin1 = 5 * RESFACTOR;	  // margin width/height
-	int d_margin2 = 2 * RESFACTOR;	  // margin width/height
+	int d_margin1 = 5 * RESFACTOR; // margin width/height
+	int d_margin2 = 2 * RESFACTOR; // margin width/height
 
 	// BG	int d_playerlist_w = 118*RESFACTOR;
 	int d_playerlist_w = 124 * RESFACTOR;
@@ -3892,38 +4623,31 @@ static int Net_New_Dialog(void) {
 	//------------------------------------------------------------------------
 	//	Redraw values: in order from "top" to "bottom" layer of the dialog
 	//------------------------------------------------------------------------
-	typedef enum {
-		REDRAW_NONE = 0,
-		REDRAW_PARMS,
-		REDRAW_MESSAGE,
-		REDRAW_BUTTONS,
-		REDRAW_BACKGROUND,
-		REDRAW_ALL = REDRAW_BACKGROUND
-	} RedrawType;
+	typedef enum { REDRAW_NONE = 0, REDRAW_PARMS, REDRAW_MESSAGE, REDRAW_BUTTONS, REDRAW_BACKGROUND, REDRAW_ALL = REDRAW_BACKGROUND } RedrawType;
 
 	//------------------------------------------------------------------------
 	//	Dialog variables
 	//------------------------------------------------------------------------
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 
 	int transmit; // 1 = re-transmit new game options
 
 	long ok_timer = 0; // for timing OK button
-	int index;	   // index for rejecting a player
+	int index; // index for rejecting a player
 	int rc;
 	int i, j;
 	char *item;
-	int tabs[] = {77 * RESFACTOR};	    // tabs for player list box
-	int optiontabs[] = {8 * RESFACTOR}; // tabs for option list box
+	int tabs[] = { 77 * RESFACTOR }; // tabs for player list box
+	int optiontabs[] = { 8 * RESFACTOR }; // tabs for option list box
 
-	NodeNameType *who;   // node to add to Players
+	NodeNameType *who; // node to add to Players
 	long ping_timer = 0; // for sending Ping packets
 
 	int color_used[MAX_MPLAYER_COLORS]; // 1 = color has been used
 	char txt[80];
-	JoinEventType whahoppa;	   // event generated by received packets
+	JoinEventType whahoppa; // event generated by received packets
 	static int first_time = 1; // 1 = 1st time this dialog is run
 	CCFileClass loadfile("SAVEGAME.NET");
 	int load_game = 0; // 1 = load a saved game
@@ -3934,27 +4658,43 @@ static int Net_New_Dialog(void) {
 	//------------------------------------------------------------------------
 	GadgetClass *commands; // button list
 
-	ColorListClass playerlist(BUTTON_PLAYERLIST, d_playerlist_x, d_playerlist_y, d_playerlist_w, d_playerlist_h,
-				  TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
-	ListClass scenariolist(BUTTON_SCENARIOLIST, d_scenariolist_x, d_scenariolist_y, d_scenariolist_w,
-			       d_scenariolist_h, TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ColorListClass playerlist(BUTTON_PLAYERLIST,
+				  d_playerlist_x,
+				  d_playerlist_y,
+				  d_playerlist_w,
+				  d_playerlist_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass scenariolist(BUTTON_SCENARIOLIST,
+			       d_scenariolist_x,
+			       d_scenariolist_y,
+			       d_scenariolist_w,
+			       d_scenariolist_h,
+			       TPF_TEXT,
+			       MFCD::Retrieve("BTN-UP.SHP"),
+			       MFCD::Retrieve("BTN-DN.SHP"));
 	TextButtonClass rejectbtn(BUTTON_REJECT, TXT_REJECT, TPF_BUTTON, d_reject_x, d_reject_y);
 	GaugeClass countgauge(BUTTON_COUNT, d_count_x, d_count_y, d_count_w, d_count_h);
 	GaugeClass levelgauge(BUTTON_LEVEL, d_level_x, d_level_y, d_level_w, d_level_h);
 	GaugeClass creditsgauge(BUTTON_CREDITS, d_credits_x, d_credits_y, d_credits_w, d_credits_h);
 	GaugeClass aiplayersgauge(BUTTON_AIPLAYERS, d_aiplayers_x, d_aiplayers_y, d_aiplayers_w, d_aiplayers_h);
-	CheckListClass optionlist(BUTTON_OPTIONS, d_options_x, d_options_y, d_options_w, d_options_h, TPF_TEXT,
-				  MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	CheckListClass optionlist(BUTTON_OPTIONS,
+				  d_options_x,
+				  d_options_y,
+				  d_options_w,
+				  d_options_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
 	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_BUTTON, d_ok_x, d_ok_y, 60 * RESFACTOR);
 	TextButtonClass loadbtn(BUTTON_LOAD, TXT_LOAD_BUTTON, TPF_BUTTON, d_load_x, d_load_y, 60 * RESFACTOR);
 	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON, d_cancel_x, d_cancel_y, 60 * RESFACTOR);
 
 	StaticButtonClass staticunit(0, "    ", TPF_TEXT, d_count_x + d_count_w + 2 * RESFACTOR, d_count_y);
 	StaticButtonClass staticlevel(0, "    ", TPF_TEXT, d_level_x + d_level_w + 2 * RESFACTOR, d_level_y);
-	StaticButtonClass staticcredits(0, "         ", TPF_TEXT, d_credits_x + d_credits_w + 2 * RESFACTOR,
-					d_credits_y);
-	StaticButtonClass staticaiplayers(0, "   ", TPF_TEXT, d_aiplayers_x + d_aiplayers_w + 2 * RESFACTOR,
-					  d_aiplayers_y);
+	StaticButtonClass staticcredits(0, "         ", TPF_TEXT, d_credits_x + d_credits_w + 2 * RESFACTOR, d_credits_y);
+	StaticButtonClass staticaiplayers(0, "   ", TPF_TEXT, d_aiplayers_x + d_aiplayers_w + 2 * RESFACTOR, d_aiplayers_y);
 
 	//------------------------------------------------------------------------
 	//	Build the button list
@@ -3988,12 +4728,11 @@ static int Net_New_Dialog(void) {
 	Special.IsCaptureTheFlag = Rule.IsMPCaptureTheFlag;
 	if (first_time) {
 		Session.Options.Credits = Rule.MPDefaultMoney; // init credits & credit buffer
-		Session.Options.Bases = Rule.IsMPBasesOn;      // init scenario parameters
+		Session.Options.Bases = Rule.IsMPBasesOn; // init scenario parameters
 		Session.Options.Tiberium = Rule.IsMPTiberiumGrow;
 		Session.Options.Goodies = Rule.IsMPCrates;
 		Session.Options.AIPlayers = 0;
-		Session.Options.UnitCount =
-		    (SessionClass::CountMax[Session.Options.Bases] + SessionClass::CountMin[Session.Options.Bases]) / 2;
+		Session.Options.UnitCount = (SessionClass::CountMax[Session.Options.Bases] + SessionClass::CountMin[Session.Options.Bases]) / 2;
 		first_time = 0;
 	}
 
@@ -4015,8 +4754,7 @@ static int Net_New_Dialog(void) {
 	optionlist.Check_Item(3, Special.IsCaptureTheFlag);
 	optionlist.Check_Item(4, Special.IsShadowGrow);
 
-	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
-			       SessionClass::CountMin[Session.Options.Bases]);
+	countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] - SessionClass::CountMin[Session.Options.Bases]);
 	countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 
 	levelgauge.Set_Maximum(MPLAYER_BUILD_LEVEL_MAX - 1);
@@ -4040,12 +4778,10 @@ static int Net_New_Dialog(void) {
 	for (i = 0; i < Session.Scenarios.Count(); i++) {
 		for (j = 0; EngMisStr[j] != NULL; j++) {
 			if (!strcmp(Session.Scenarios[i]->Description(), EngMisStr[j])) {
-#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed).
-		  //	Add mission if it's available to us.
-				if (!((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) &&
-				       !Is_Counterstrike_Installed()) ||
-				      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) &&
-				       !Is_Aftermath_Installed())))
+#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed).                                                                  \
+	//	Add mission if it's available to us.
+				if (!((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Counterstrike_Installed()) ||
+				      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Aftermath_Installed())))
 #endif
 #if defined(GERMAN) || defined(FRENCH)
 					scenariolist.Add_Item(EngMisStr[j + 1]);
@@ -4057,13 +4793,11 @@ static int Net_New_Dialog(void) {
 			}
 		}
 		if (EngMisStr[j] == NULL) {
-#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed). Added officialness check.
-		  //	Add mission if it's available to us.
+#ifdef FIXIT_CSII //	ajw Added Aftermath installed checks (before, it was assumed). Added officialness check.                                        \
+	//	Add mission if it's available to us.
 			if (!Session.Scenarios[i]->Get_Official() ||
-			    !((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) &&
-			       !Is_Counterstrike_Installed()) ||
-			      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) &&
-			       !Is_Aftermath_Installed())))
+			    !((Is_Mission_Counterstrike((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Counterstrike_Installed()) ||
+			      (Is_Mission_Aftermath((char *)(Session.Scenarios[i]->Get_Filename())) && !Is_Aftermath_Installed())))
 #endif
 			{
 				scenariolist.Add_Item(Session.Scenarios[i]->Description());
@@ -4098,11 +4832,18 @@ static int Net_New_Dialog(void) {
 	//------------------------------------------------------------------------
 	//	Init the message display system
 	//------------------------------------------------------------------------
-	Session.Messages.Init(d_message_x + 1 * RESFACTOR, d_message_y + 1 * RESFACTOR, NUM_MESSAGES,
-			      MAX_MESSAGE_LENGTH, d_txt6_h, d_send_x + 1 * RESFACTOR, d_send_y + 1 * RESFACTOR, 1, 20,
-			      MAX_MESSAGE_LENGTH - 5, d_message_w);
-	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
-				  TPF_TEXT, NULL, '_', d_message_w);
+	Session.Messages.Init(d_message_x + 1 * RESFACTOR,
+			      d_message_y + 1 * RESFACTOR,
+			      NUM_MESSAGES,
+			      MAX_MESSAGE_LENGTH,
+			      d_txt6_h,
+			      d_send_x + 1 * RESFACTOR,
+			      d_send_y + 1 * RESFACTOR,
+			      1,
+			      20,
+			      MAX_MESSAGE_LENGTH - 5,
+			      d_message_w);
+	Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx, TPF_TEXT, NULL, '_', d_message_w);
 
 	//------------------------------------------------------------------------
 	//	Init the version-clipping system
@@ -4124,11 +4865,10 @@ static int Net_New_Dialog(void) {
 	} else {
 		sprintf(item, "%s\t%s", Session.Handle, Text_String(TXT_SOVIET));
 	}
-#else  // OLDWAY
+#else // OLDWAY
 	sprintf(item, "%s\t%s", Session.Handle, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-	playerlist.Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-									   : &ColorRemaps[Session.ColorIdx]);
+	playerlist.Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] : &ColorRemaps[Session.ColorIdx]);
 
 	who = new NodeNameType;
 	strcpy(who->Name, Session.Handle);
@@ -4177,25 +4917,33 @@ static int Net_New_Dialog(void) {
 				//...............................................................
 				//	Dialog & Field labels
 				//...............................................................
-				Fancy_Text_Print(TXT_PLAYERS, d_playerlist_x + (d_playerlist_w / 2),
-						 d_playerlist_y - d_txt6_h, scheme, TBLACK, TPF_TEXT | TPF_CENTER);
-				Fancy_Text_Print(TXT_SCENARIOS, d_scenariolist_x + (d_scenariolist_w / 2),
-						 d_scenariolist_y - d_txt6_h, scheme, TBLACK, TPF_TEXT | TPF_CENTER);
-				Fancy_Text_Print(TXT_COUNT, d_count_x - 2 * RESFACTOR, d_count_y, scheme, TBLACK,
+				Fancy_Text_Print(TXT_PLAYERS,
+						 d_playerlist_x + (d_playerlist_w / 2),
+						 d_playerlist_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_TEXT | TPF_CENTER);
+				Fancy_Text_Print(TXT_SCENARIOS,
+						 d_scenariolist_x + (d_scenariolist_w / 2),
+						 d_scenariolist_y - d_txt6_h,
+						 scheme,
+						 TBLACK,
+						 TPF_TEXT | TPF_CENTER);
+				Fancy_Text_Print(TXT_COUNT, d_count_x - 2 * RESFACTOR, d_count_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2 * RESFACTOR, d_level_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2 * RESFACTOR, d_credits_y, scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
+				Fancy_Text_Print(TXT_AI_PLAYERS_COLON,
+						 d_aiplayers_x - 2 * RESFACTOR,
+						 d_aiplayers_y,
+						 scheme,
+						 TBLACK,
 						 TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_LEVEL, d_level_x - 2 * RESFACTOR, d_level_y, scheme, TBLACK,
-						 TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_CREDITS_COLON, d_credits_x - 2 * RESFACTOR, d_credits_y, scheme,
-						 TBLACK, TPF_TEXT | TPF_RIGHT);
-				Fancy_Text_Print(TXT_AI_PLAYERS_COLON, d_aiplayers_x - 2 * RESFACTOR, d_aiplayers_y,
-						 scheme, TBLACK, TPF_TEXT | TPF_RIGHT);
 			}
 
 			//..................................................................
 			//	Redraw buttons
 			//..................................................................
 			if (display >= REDRAW_BUTTONS) {
-
 				/*
 				** Zap, Zap, Zap
 				*/
@@ -4307,7 +5055,6 @@ static int Net_New_Dialog(void) {
 		//	Process input
 		//.....................................................................
 		switch (input) {
-
 			//..................................................................
 			//	New Scenario selected.
 			//..................................................................
@@ -4319,30 +5066,26 @@ static int Net_New_Dialog(void) {
 			}
 			break;
 
-#else		  //	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 		case (BUTTON_SCENARIOLIST | KN_BUTTON):
 			if (scenariolist.Current_Index() != Session.Options.ScenarioIndex) {
 #ifdef FIXIT_CSII //	checked - ajw
-				if ((PlayingAgainstVersion != VERSION_RED_ALERT_107 &&
-				     PlayingAgainstVersion != VERSION_RED_ALERT_108 &&
+				if ((PlayingAgainstVersion != VERSION_RED_ALERT_107 && PlayingAgainstVersion != VERSION_RED_ALERT_108 &&
 				     PlayingAgainstVersion < VERSION_AFTERMATH_CS) &&
 #else
 				if (PlayingAgainstVersion < VERSION_RED_ALERT_107 &&
 #endif
 				    Session.Scenarios[scenariolist.Current_Index()]->Get_Expansion()) {
 					scenariolist.Set_Selected_Index(Session.Options.ScenarioIndex);
-					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS),
-								     PCOLOR_BROWN, TPF_TEXT, 1200);
+					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS), PCOLOR_BROWN, TPF_TEXT, 1200);
 					Sound_Effect(VOC_SYS_ERROR);
 					if (display < REDRAW_MESSAGE)
 						display = REDRAW_MESSAGE;
 #ifdef FIXIT_CSII //	checked - ajw
 				} else if (PlayingAgainstVersion < VERSION_AFTERMATH_CS &&
-					   Is_Mission_126x126((char *)Session.Scenarios[scenariolist.Current_Index()]
-								  ->Get_Filename())) {
+					   Is_Mission_126x126((char *)Session.Scenarios[scenariolist.Current_Index()]->Get_Filename())) {
 					scenariolist.Set_Selected_Index(Session.Options.ScenarioIndex);
-					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS),
-								     PCOLOR_BROWN, TPF_TEXT, 1200);
+					Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_NO_CS_SCENARIOS), PCOLOR_BROWN, TPF_TEXT, 1200);
 					Sound_Effect(VOC_SYS_ERROR);
 					if (display < REDRAW_MESSAGE)
 						display = REDRAW_MESSAGE;
@@ -4363,15 +5106,13 @@ static int Net_New_Dialog(void) {
 			index = playerlist.Current_Index();
 
 			if (index == 0) {
-				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_CANT_REJECT_SELF),
-							     PCOLOR_BROWN, TPF_TEXT, 1200);
+				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_CANT_REJECT_SELF), PCOLOR_BROWN, TPF_TEXT, 1200);
 				Sound_Effect(VOC_SYS_ERROR);
 				display = REDRAW_MESSAGE;
 				break;
 
 			} else if (index < 0 || index >= playerlist.Count()) {
-				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_SELECT_PLAYER_REJECT),
-							     PCOLOR_BROWN, TPF_TEXT, 1200);
+				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_SELECT_PLAYER_REJECT), PCOLOR_BROWN, TPF_TEXT, 1200);
 				Sound_Effect(VOC_SYS_ERROR);
 				display = REDRAW_MESSAGE;
 				break;
@@ -4380,16 +5121,14 @@ static int Net_New_Dialog(void) {
 
 			Session.GPacket.Command = NET_REJECT_JOIN;
 
-			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-						&(Session.Players[index]->Address));
+			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[index]->Address));
 			break;
 
 		//..................................................................
 		//	User adjusts max # units
 		//..................................................................
 		case (BUTTON_COUNT | KN_BUTTON):
-			Session.Options.UnitCount =
-			    countgauge.Get_Value() + SessionClass::CountMin[Session.Options.Bases];
+			Session.Options.UnitCount = countgauge.Get_Value() + SessionClass::CountMin[Session.Options.Bases];
 			transmit = 1;
 			display = REDRAW_PARMS;
 			break;
@@ -4421,8 +5160,7 @@ static int Net_New_Dialog(void) {
 		//..................................................................
 		case (BUTTON_AIPLAYERS | KN_BUTTON):
 			Session.Options.AIPlayers = aiplayersgauge.Get_Value();
-			if (Session.Options.AIPlayers + Session.Players.Count() >
-			    Rule.MaxPlayers) { // if it's pegged, max it out
+			if (Session.Options.AIPlayers + Session.Players.Count() > Rule.MaxPlayers) { // if it's pegged, max it out
 				Session.Options.AIPlayers = Rule.MaxPlayers - Session.Players.Count();
 				aiplayersgauge.Set_Value(Session.Options.AIPlayers);
 			}
@@ -4445,26 +5183,20 @@ static int Net_New_Dialog(void) {
 				Session.Options.Bases = (optionlist.Is_Checked(0) ? 1 : 0);
 				if (Session.Options.Bases) {
 					Session.Options.UnitCount =
-					    Fixed_To_Cardinal(
-						SessionClass::CountMax[1] - SessionClass::CountMin[1],
-						Cardinal_To_Fixed(SessionClass::CountMax[0] - SessionClass::CountMin[0],
-								  Session.Options.UnitCount -
-								      SessionClass::CountMin[0])) +
-					    SessionClass::CountMin[1];
+						Fixed_To_Cardinal(SessionClass::CountMax[1] - SessionClass::CountMin[1],
+								  Cardinal_To_Fixed(SessionClass::CountMax[0] - SessionClass::CountMin[0],
+										    Session.Options.UnitCount - SessionClass::CountMin[0])) +
+						SessionClass::CountMin[1];
 				} else {
 					optionlist.Check_Item(3, false);
 					Session.Options.UnitCount =
-					    Fixed_To_Cardinal(
-						SessionClass::CountMax[0] - SessionClass::CountMin[0],
-						Cardinal_To_Fixed(SessionClass::CountMax[1] - SessionClass::CountMin[1],
-								  Session.Options.UnitCount -
-								      SessionClass::CountMin[1])) +
-					    SessionClass::CountMin[0];
+						Fixed_To_Cardinal(SessionClass::CountMax[0] - SessionClass::CountMin[0],
+								  Cardinal_To_Fixed(SessionClass::CountMax[1] - SessionClass::CountMin[1],
+										    Session.Options.UnitCount - SessionClass::CountMin[1])) +
+						SessionClass::CountMin[0];
 				}
-				countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] -
-						       SessionClass::CountMin[Session.Options.Bases]);
-				countgauge.Set_Value(Session.Options.UnitCount -
-						     SessionClass::CountMin[Session.Options.Bases]);
+				countgauge.Set_Maximum(SessionClass::CountMax[Session.Options.Bases] - SessionClass::CountMin[Session.Options.Bases]);
+				countgauge.Set_Value(Session.Options.UnitCount - SessionClass::CountMin[Session.Options.Bases]);
 			}
 			Session.Options.Tiberium = optionlist.Is_Checked(1);
 			Special.IsTGrowth = Session.Options.Tiberium;
@@ -4504,8 +5236,7 @@ static int Net_New_Dialog(void) {
 				rc = TRUE;
 				process = FALSE;
 			} else {
-				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_ONLY_ONE), PCOLOR_BROWN,
-							     TPF_TEXT, 1200);
+				Session.Messages.Add_Message(NULL, 0, (char *)Text_String(TXT_ONLY_ONE), PCOLOR_BROWN, TPF_TEXT, 1200);
 				Sound_Effect(VOC_SYS_ERROR);
 				display = REDRAW_MESSAGE;
 			}
@@ -4538,10 +5269,8 @@ static int Net_New_Dialog(void) {
 			//	Broadcast my sign-off over a bridged network if there is one
 			//...............................................................
 			if (Session.IsBridge) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-							&Session.BridgeNet);
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-							&Session.BridgeNet);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
 			}
 			while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
 				;
@@ -4556,8 +5285,7 @@ static int Net_New_Dialog(void) {
 			// Don't send this message to myself.
 			//...............................................................
 			for (i = 1; i < Session.Players.Count(); i++) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 				Ipx.Service();
 			}
 			while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
@@ -4620,8 +5348,7 @@ static int Net_New_Dialog(void) {
 				// myself.
 				//............................................................
 				for (i = 1; i < Session.Players.Count(); i++) {
-					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-								&(Session.Players[i]->Address));
+					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 					Ipx.Service();
 				}
 
@@ -4631,18 +5358,19 @@ static int Net_New_Dialog(void) {
 				// If there's no message with this ID already displayed, just
 				// add a new message; if there is one, concatenate it.
 				//............................................................
-				Session.Messages.Add_Message(
-				    Session.GPacket.Name,
-				    (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE)
-					? PCOLOR_REALLY_BLUE
-					: Session.GPacket.Message.Color,
-				    Session.GPacket.Message.Buf,
-				    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
-				    TPF_TEXT, -1);
+				Session.Messages.Add_Message(Session.GPacket.Name,
+							     (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE :
+														     Session.GPacket.Message.Color,
+							     Session.GPacket.Message.Buf,
+							     (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							     TPF_TEXT,
+							     -1);
 
-				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-												   : Session.ColorIdx,
-							  TPF_TEXT, NULL, '_', d_message_w);
+				Session.Messages.Add_Edit((Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.ColorIdx,
+							  TPF_TEXT,
+							  NULL,
+							  '_',
+							  d_message_w);
 
 				display = REDRAW_MESSAGE;
 			}
@@ -4660,27 +5388,24 @@ static int Net_New_Dialog(void) {
 			ok_timer = TickCount;
 			aiplayersgauge.Set_Maximum(Rule.MaxPlayers - Session.Players.Count());
 			Session.Options.AIPlayers = aiplayersgauge.Get_Value();
-			if (Session.Options.AIPlayers + Session.Players.Count() >
-			    Rule.MaxPlayers) { // if it's pegged, max it out
+			if (Session.Options.AIPlayers + Session.Players.Count() > Rule.MaxPlayers) { // if it's pegged, max it out
 				Session.Options.AIPlayers = Rule.MaxPlayers - Session.Players.Count();
 				aiplayersgauge.Set_Value(Session.Options.AIPlayers);
 			}
 #ifdef FIXIT_VERSION_3 //	All scenarios now allowable for download, regardless of if CS scen. or 126x126 scen.
 			if (display < REDRAW_PARMS)
 				display = REDRAW_PARMS;
-#else		  //	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 			if (oldversion == PlayingAgainstVersion) {
 				if (display < REDRAW_PARMS)
 					display = REDRAW_PARMS;
 			} else {
-
 				/*
 				** If a CS scenario was selected and we now have a red alert only player
 				** in the mix then deselect the cs scenario.
 				*/
 #ifdef FIXIT_CSII //	checked - ajw
-				if ((PlayingAgainstVersion != VERSION_RED_ALERT_107 &&
-				     PlayingAgainstVersion != VERSION_RED_ALERT_108 &&
+				if ((PlayingAgainstVersion != VERSION_RED_ALERT_107 && PlayingAgainstVersion != VERSION_RED_ALERT_108 &&
 				     PlayingAgainstVersion < VERSION_AFTERMATH_CS) &&
 #else
 				if (PlayingAgainstVersion < VERSION_RED_ALERT_107 &&
@@ -4695,8 +5420,7 @@ static int Net_New_Dialog(void) {
 				** player in the mix then deselect the mega scenario.
 				*/
 				if (PlayingAgainstVersion < VERSION_AFTERMATH_CS &&
-				    Is_Mission_126x126(
-					(char *)Session.Scenarios[scenariolist.Current_Index()]->Get_Filename())) {
+				    Is_Mission_126x126((char *)Session.Scenarios[scenariolist.Current_Index()]->Get_Filename())) {
 					scenariolist.Set_Selected_Index(0);
 					Session.Options.ScenarioIndex = scenariolist.Current_Index();
 				}
@@ -4711,8 +5435,7 @@ static int Net_New_Dialog(void) {
 		} else if (whahoppa == EV_PLAYER_SIGNOFF) {
 			aiplayersgauge.Set_Maximum(Rule.MaxPlayers - Session.Players.Count());
 			Session.Options.AIPlayers = aiplayersgauge.Get_Value();
-			if (Session.Options.AIPlayers + Session.Players.Count() >
-			    Rule.MaxPlayers) { // if it's pegged, max it out
+			if (Session.Options.AIPlayers + Session.Players.Count() > Rule.MaxPlayers) { // if it's pegged, max it out
 				Session.Options.AIPlayers = Rule.MaxPlayers - Session.Players.Count();
 				aiplayersgauge.Set_Value(Session.Options.AIPlayers);
 				display = REDRAW_PARMS;
@@ -4734,13 +5457,11 @@ static int Net_New_Dialog(void) {
 				** Set up the scenario info so the remote player can match the scenario on his machine
 				** or request a download if it doesnt exist
 				*/
-				strcpy(Session.GPacket.ScenarioInfo.Scenario,
-				       Session.Scenarios[Session.Options.ScenarioIndex]->Description());
+				strcpy(Session.GPacket.ScenarioInfo.Scenario, Session.Scenarios[Session.Options.ScenarioIndex]->Description());
 				CCFileClass file(Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
 				Session.GPacket.ScenarioInfo.FileLength = file.Size();
 #ifdef WOLAPI_INTEGRATION
-				strcpy(Session.GPacket.ScenarioInfo.ShortFileName,
-				       Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
+				strcpy(Session.GPacket.ScenarioInfo.ShortFileName, Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
 #else
 				strncpy(Session.GPacket.ScenarioInfo.ShortFileName,
 					Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename(),
@@ -4749,8 +5470,7 @@ static int Net_New_Dialog(void) {
 				strncpy((char *)Session.GPacket.ScenarioInfo.FileDigest,
 					Session.Scenarios[Session.Options.ScenarioIndex]->Get_Digest(),
 					sizeof(Session.GPacket.ScenarioInfo.FileDigest));
-				Session.GPacket.ScenarioInfo.OfficialScenario =
-				    Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
+				Session.GPacket.ScenarioInfo.OfficialScenario = Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
 
 				Session.GPacket.ScenarioInfo.Credits = Session.Options.Credits;
 				Session.GPacket.ScenarioInfo.IsBases = Session.Options.Bases;
@@ -4768,8 +5488,7 @@ static int Net_New_Dialog(void) {
 				if (bAftermathMultiplayer) {
 					//					debugprint( "Host tells guests 'This is
 					// an Aftermath game'\n" );
-					Session.GPacket.ScenarioInfo.Version =
-					    VerNum.Get_Clipped_Version() | 0x80000000;
+					Session.GPacket.ScenarioInfo.Version = VerNum.Get_Clipped_Version() | 0x80000000;
 				} else {
 					//					debugprint( "Host tells guests 'This is
 					// NOT an Aftermath game'\n" );
@@ -4779,8 +5498,7 @@ static int Net_New_Dialog(void) {
 				Session.GPacket.ScenarioInfo.Version = VerNum.Get_Clipped_Version();
 #endif
 
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 			}
 			Sound_Effect(VOC_OPTIONS_CHANGED);
 			transmit = 0;
@@ -4794,8 +5512,7 @@ static int Net_New_Dialog(void) {
 			memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
 			Session.GPacket.Command = NET_PING;
 			for (i = 1; i < Session.Players.Count(); i++) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 			}
 			ping_timer = TickCount;
 		}
@@ -4830,10 +5547,9 @@ static int Net_New_Dialog(void) {
 		//	  value, 4 more to convert from ticks to frames)
 		//.....................................................................
 		if (Session.CommProtocol == COMM_PROTOCOL_MULTI_E_COMP) {
-			Session.MaxAhead = max(((((Ipx.Global_Response_Time() / 8) + (Session.FrameSendRate - 1)) /
-						 Session.FrameSendRate) *
-						Session.FrameSendRate),
-					       (Session.FrameSendRate * 2));
+			Session.MaxAhead = max(
+				((((Ipx.Global_Response_Time() / 8) + (Session.FrameSendRate - 1)) / Session.FrameSendRate) * Session.FrameSendRate),
+				(Session.FrameSendRate * 2));
 		} else {
 			Session.MaxAhead = max((Ipx.Global_Response_Time() / 8), NETWORK_MIN_MAX_AHEAD);
 		}
@@ -4851,8 +5567,7 @@ static int Net_New_Dialog(void) {
 			Session.GPacket.Command = NET_GO;
 		Session.GPacket.ResponseTime.OneWay = Session.MaxAhead;
 		for (i = 1; i < Session.Players.Count(); i++) {
-			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-						&(Session.Players[i]->Address));
+			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 		}
 		//.....................................................................
 		//	Wait for all the ACK's to come in.
@@ -4877,10 +5592,8 @@ static int Net_New_Dialog(void) {
 
 		do {
 			Ipx.Service();
-			int retcode = Ipx.Get_Global_Message(&Session.GPacket, &Session.GPacketlen, &Session.GAddress,
-							     &Session.GProductID);
+			int retcode = Ipx.Get_Global_Message(&Session.GPacket, &Session.GPacketlen, &Session.GAddress, &Session.GProductID);
 			if (retcode && Session.GProductID == IPXGlobalConnClass::COMMAND_AND_CONQUER0) {
-
 				for (i = 1; i < Session.Players.Count(); i++) {
 					if (Session.Players[i]->Address == Session.GAddress) {
 						if (!responses[i]) {
@@ -5005,7 +5718,7 @@ static int Net_New_Dialog(void) {
  *=========================================================================*/
 static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *color_used) {
 	int rc;
-	char *item;	   // general-purpose string
+	char *item; // general-purpose string
 	NodeNameType *who; // node to add to Players Vector
 	int i;
 	int found;
@@ -5119,8 +5832,7 @@ static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *colo
 
 			Session.GPacket.PlayerInfo.MinVersion &= ~0x80000000; //	Strip special bit.
 #endif
-			version = VerNum.Clip_Version(Session.GPacket.PlayerInfo.MinVersion,
-						      Session.GPacket.PlayerInfo.MaxVersion);
+			version = VerNum.Clip_Version(Session.GPacket.PlayerInfo.MinVersion, Session.GPacket.PlayerInfo.MaxVersion);
 
 #ifndef FIXIT_VERSION_3
 			PlayingAgainstVersion = version;
@@ -5135,8 +5847,7 @@ static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *colo
 				memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
 				Session.GPacket.Command = NET_REJECT_JOIN;
 				Session.GPacket.Reject.Why = (int)REJECT_VERSION_TOO_OLD;
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&Session.GAddress);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &Session.GAddress);
 				return (EV_NONE);
 			}
 
@@ -5147,8 +5858,7 @@ static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *colo
 				memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
 				Session.GPacket.Command = NET_REJECT_JOIN;
 				Session.GPacket.Reject.Why = (int)REJECT_VERSION_TOO_NEW;
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&Session.GAddress);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &Session.GAddress);
 				return (EV_NONE);
 			}
 			//..................................................................
@@ -5195,14 +5905,15 @@ static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *colo
 			} else {
 				sprintf(item, "%s\t%s", Session.GPacket.Name, Text_String(TXT_SOVIET));
 			}
-#else  // OLDWAY
-			sprintf(
-			    item, "%s\t%s", Session.GPacket.Name,
-			    Text_String(HouseTypeClass::As_Reference(Session.GPacket.PlayerInfo.House).Full_Name()));
+#else // OLDWAY
+			sprintf(item,
+				"%s\t%s",
+				Session.GPacket.Name,
+				Text_String(HouseTypeClass::As_Reference(Session.GPacket.PlayerInfo.House).Full_Name()));
 #endif // OLDWAY
-			playerlist->Add_Item(item, (who->Player.Color == PCOLOR_DIALOG_BLUE)
-						       ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-						       : &ColorRemaps[who->Player.Color]);
+			playerlist->Add_Item(item,
+					     (who->Player.Color == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] :
+											 &ColorRemaps[who->Player.Color]);
 
 			//..................................................................
 			//	Send a confirmation packet
@@ -5231,13 +5942,10 @@ static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *colo
 	//------------------------------------------------------------------------
 	else if (Session.GPacket.Command == NET_SIGN_OFF) {
 		for (i = 0; i < Session.Players.Count(); i++) {
-
 			//..................................................................
 			//	Name found; remove it
 			//..................................................................
-			if (!strcmp(Session.Players[i]->Name, Session.GPacket.Name) &&
-			    Session.Players[i]->Address == Session.GAddress) {
-
+			if (!strcmp(Session.Players[i]->Name, Session.GPacket.Name) && Session.Players[i]->Address == Session.GAddress) {
 				//...............................................................
 				//	Remove from the list box
 				//...............................................................
@@ -5274,13 +5982,12 @@ static JoinEventType Get_NewGame_Responses(ColorListClass *playerlist, int *colo
 	//------------------------------------------------------------------------
 	else if (Session.GPacket.Command == NET_MESSAGE) {
 		Session.Messages.Add_Message(
-		    Session.GPacket.Name,
-		    (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-									  : Session.GPacket.Message.Color,
-		    Session.GPacket.Message.Buf,
-		    (Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE
-									  : Session.GPacket.Message.Color,
-		    TPF_TEXT, -1);
+			Session.GPacket.Name,
+			(Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.GPacket.Message.Color,
+			Session.GPacket.Message.Buf,
+			(Session.GPacket.Message.Color == PCOLOR_DIALOG_BLUE) ? PCOLOR_REALLY_BLUE : Session.GPacket.Message.Color,
+			TPF_TEXT,
+			-1);
 
 		Sound_Effect(VOC_INCOMING_MESSAGE);
 
@@ -5354,8 +6061,8 @@ void Net_Reconnect_Dialog(int reconn, int fresh, int oldest_index, unsigned long
 #if (0) // PG
 	static int x, y, w, h;
 	int id;
-	char buf1[40] = {0};
-	char buf2[40] = {0};
+	char buf1[40] = { 0 };
+	char buf2[40] = { 0 };
 	char const *buf3 = "";
 
 	int d_txt6_h = 6 * RESFACTOR + 1;
@@ -5447,20 +6154,20 @@ void Net_Reconnect_Dialog(int reconn, int fresh, int oldest_index, unsigned long
 
 		Fancy_Text_Print(buf1, 160 * RESFACTOR, y + (d_margin * 2), scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 
-		Fancy_Text_Print(buf2, 160 * RESFACTOR, y + (d_margin * 2) + d_txt6_h + d_margin, scheme, TBLACK,
-				 TPF_CENTER | TPF_TEXT);
+		Fancy_Text_Print(buf2, 160 * RESFACTOR, y + (d_margin * 2) + d_txt6_h + d_margin, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 
 #ifdef FIXIT_VERSION_3
 		if (Session.Type == GAME_INTERNET && pWolapi && pWolapi->GameInfoCurrent.bTournament)
-			Fancy_Text_Print(szNewCancelMessage, 160 * RESFACTOR,
-					 y + (d_margin * 2) + (d_txt6_h + d_margin) * 2, scheme, TBLACK,
+			Fancy_Text_Print(szNewCancelMessage,
+					 160 * RESFACTOR,
+					 y + (d_margin * 2) + (d_txt6_h + d_margin) * 2,
+					 scheme,
+					 TBLACK,
 					 TPF_CENTER | TPF_TEXT);
 		else
-			Fancy_Text_Print(buf3, 160 * RESFACTOR, y + (d_margin * 2) + (d_txt6_h + d_margin) * 2, scheme,
-					 TBLACK, TPF_CENTER | TPF_TEXT);
+			Fancy_Text_Print(buf3, 160 * RESFACTOR, y + (d_margin * 2) + (d_txt6_h + d_margin) * 2, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 #else
-		Fancy_Text_Print(buf3, 160 * RESFACTOR, y + (d_margin * 2) + (d_txt6_h + d_margin) * 2, scheme, TBLACK,
-				 TPF_CENTER | TPF_TEXT);
+		Fancy_Text_Print(buf3, 160 * RESFACTOR, y + (d_margin * 2) + (d_txt6_h + d_margin) * 2, scheme, TBLACK, TPF_CENTER | TPF_TEXT);
 #endif
 
 		Show_Mouse();
@@ -5475,12 +6182,13 @@ void Net_Reconnect_Dialog(int reconn, int fresh, int oldest_index, unsigned long
 		sprintf(buf2, Text_String(TXT_TIME_ALLOWED), timeval + 1);
 
 		int fillx = 160 * RESFACTOR - (String_Pixel_Width(buf2) / 2) - 6;
-		LogicPage->Fill_Rect(fillx, y + (d_margin * 2) + d_txt6_h + d_margin,
+		LogicPage->Fill_Rect(fillx,
+				     y + (d_margin * 2) + d_txt6_h + d_margin,
 				     fillx + String_Pixel_Width(buf2) + 12,
-				     y + (d_margin * 2) + d_txt6_h + d_margin + d_txt6_h + 1 * RESFACTOR, BLACK);
+				     y + (d_margin * 2) + d_txt6_h + d_margin + d_txt6_h + 1 * RESFACTOR,
+				     BLACK);
 
-		Fancy_Text_Print(buf2, 160 * RESFACTOR, y + (d_margin * 2) + d_txt6_h + d_margin, scheme, BLACK,
-				 TPF_CENTER | TPF_TEXT);
+		Fancy_Text_Print(buf2, 160 * RESFACTOR, y + (d_margin * 2) + d_txt6_h + d_margin, scheme, BLACK, TPF_CENTER | TPF_TEXT);
 
 		Show_Mouse();
 	}
@@ -5498,1407 +6206,1406 @@ struct WWPerson {
 };
 
 struct WWPerson WWPersons[] = {
-    {{
-	 66,
-	 105,
-	 108,
-	 108,
-	 32,
-	 82,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72, 101, 121, 44, 32, 105, 115, 110, 39, 116, 32, 116, 104, 105, 115, 32, 99, 111, 111, 108, 63, 0, 0,
-	 0,  0,	  0,   0,  0,  0,   0,	 0,   0,  0,   0,  0,	0,   0,	  0,   0,  0,  0,   0,	 0,   0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 105,
-	 108,
-	 108,
-	 32,
-	 82,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72, 101, 121, 44, 32, 119, 97, 110, 116, 32, 115, 111, 109, 101, 32, 115, 101, 97, 102, 111, 111, 100, 63,
-	 0,  0,	  0,   0,  0,  0,   0,	0,   0,	  0,  0,   0,	0,   0,	  0,  0,   0,	0,  0,	 0,   0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 97,
-	 114,
-	 114,
-	 121,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 71, 114, 101, 97, 116, 46, 32, 74, 117, 115, 116, 32, 103, 114, 101, 97, 116, 46, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,  0,	0,  0,	0,  0,	 0,   0,   0,  0,   0,	 0,   0,  0,   0,  0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 97,
-	 114,
-	 114,
-	 121,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 87,  111, 110, 100, 101, 114, 102, 117, 108, 46, 32, 80, 101, 114, 102, 101, 99, 116, 44, 32, 105, 110, 32,
-	 102, 97,  99,	116, 46,  0,   0,   0,	 0,   0,  0,  0,  0,   0,   0,	 0,   0,  0,   0,  0,  0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 105,
-	 108,
-	 108,
-	 32,
-	 80,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 89,  111, 117, 32, 99, 97, 108, 108, 32, 116, 104, 105, 115, 32, 65, 73, 63, 32, 32, 83, 104, 101, 101,
-	 115, 104, 33,	0,  0,	0,  0,	 0,   0,  0,   0,   0,	 0,   0,  0,  0,  0,  0,  0,  0,  0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 105,
-	 108,
-	 108,
-	 32,
-	 80,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 66, 105, 108, 108, 115, 32, 114, 117, 108, 101, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	 0,  0,	  0,   0,   0,	 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 114,
-	 101,
-	 116,
-	 116,
-	 32,
-	 83,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 97, 107, 101, 32, 116, 104, 105, 115, 32, 111, 117, 116, 44, 32, 110, 111, 119, 33, 0, 0, 0, 0,
-	 0,  0,	 0,   0,   0,  0,   0,	 0,   0,   0,  0,   0,	 0,   0,  0,  0,   0,	0,   0,	 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 114,
-	 101,
-	 116,
-	 116,
-	 32,
-	 83,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 87,  104, 121, 32, 99,	 97,  110, 39,	116, 32,  121, 111, 117, 32,  102, 105, 116, 32,  97, 110, 121, 32, 109,
-	 111, 114, 101, 32, 108, 101, 116, 116, 101, 114, 115, 32,  111, 110, 32,  116, 104, 101, 32, 108, 0,	0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 114,
-	 101,
-	 116,
-	 116,
-	 32,
-	 83,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 69,  100, 44, 32, 73, 32,  119, 97,  110, 116, 32,  116, 111, 32, 116, 97, 108, 107, 32, 116, 111, 32, 121,
-	 111, 117, 32, 97, 98, 111, 117, 116, 32,  116, 104, 105, 115, 46, 0,	0,  0,	 0,   0,  0,   0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 114,
-	 101,
-	 116,
-	 116,
-	 32,
-	 83,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 69,  100, 44,	32, 99, 111, 109, 101, 32,  116, 111, 32,  109, 121, 32, 111, 102, 102, 105, 99, 101, 44, 32,
-	 110, 111, 119, 33, 32, 32,  91,  99,  114, 97,	 99,  107, 33,	93,  0,	 0,   0,   0,	0,   0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 80,
-	 101,
-	 110,
-	 105,
-	 110,
-	 97,
-	 32,
-	 70,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72,  97,  115, 32, 97, 110, 121, 111, 110, 101, 32, 115, 101, 101, 110, 32, 109, 121, 32, 115, 116, 97, 112,
-	 108, 101, 114, 63, 0,	0,   0,	  0,   0,   0,	 0,  0,	  0,   0,   0,	 0,  0,	  0,   0,  0,	0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 80,
-	 101,
-	 110,
-	 105,
-	 110,
-	 97,
-	 32,
-	 70,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72, 97,  115, 32,  97,	 110, 121, 111, 110, 101, 32, 115, 101, 101, 110, 32, 109, 121, 32, 116, 104, 101, 115,
-	 97, 117, 114, 117, 115, 63,  0,   0,	0,   0,	  0,  0,   0,	0,   0,	  0,  0,   0,	0,  0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 80,
-	 101,
-	 110,
-	 105,
-	 110,
-	 97,
-	 32,
-	 70,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72,  97,  115, 32, 97, 110, 121, 111, 110, 101, 32, 115, 101, 101, 110, 32, 109, 121, 32, 112, 101, 110, 99,
-	 105, 108, 63,	0,  0,	0,   0,	  0,   0,   0,	 0,  0,	  0,   0,   0,	 0,  0,	  0,   0,  0,	0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 105,
-	 108,
-	 111,
-	 32,
-	 66,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72,  101, 121, 32,  83,  116, 101, 118, 101, 44,  32,	99,  97, 110, 32, 119, 101, 32, 109, 101, 101, 116, 32,
-	 105, 110, 32,	121, 111, 117, 114, 32,	 111, 102, 102, 105, 99, 101, 63, 0,   0,   0,	0,   0,	  0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 105,
-	 108,
-	 111,
-	 32,
-	 66,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 83, 116, 101, 118, 101, 44,  32,  105, 116, 39, 108, 108, 32, 111, 110, 108, 121, 32, 116, 97, 107, 101, 32,
-	 97, 32,  109, 105, 110, 117, 116, 101, 46,  0,	 0,   0,   0,  0,   0,	 0,   0,   0,  0,   0,	0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 82,
-	 111,
-	 98,
-	 32,
-	 83,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 77, 105, 108, 111, 44, 32, 100, 105, 97, 108, 32, 50, 52, 57, 46, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	0,  0,	 0,   0,  0,   0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 108,
-	 115,
-	 98,
-	 101,
-	 116,
-	 104,
-	 32,
-	 87,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 97, 116, 39, 115, 32, 39, 69, 108, 115, 98, 101, 116, 104, 39, 44, 32, 119, 105, 116, 104, 32,
-	 97, 110, 32, 69,  45, 76,  45, 83, 46, 0,   0,	  0,  0,   0,	0,   0,	 0,  0,	 0,   0,   0,	0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 108,
-	 115,
-	 98,
-	 101,
-	 116,
-	 104,
-	 32,
-	 87,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 97,  116, 39, 115, 32,  39, 69, 108, 115, 98, 101, 116, 104, 39, 44, 32, 110, 111, 116, 32, 39,
-	 69, 108, 115, 98,  97, 114, 102, 39, 46, 0,   0,   0,	0,   0,	  0,   0,  0,  0,  0,	0,   0,	  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 108,
-	 115,
-	 98,
-	 101,
-	 116,
-	 104,
-	 32,
-	 87,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 97,  116, 39,	 115, 32,  39, 69, 108, 115, 98, 101, 116, 104, 39, 44, 32, 110, 111, 116, 32, 39,
-	 69, 108, 102, 98,  117, 116, 116, 39, 46, 0,	0,   0,	 0,   0,   0,	0,  0,	0,  0,	 0,   0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 75,
-	 97,
-	 114,
-	 101,
-	 110,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 105, 115, 32, 105, 115, 32, 115, 111, 111, 111, 32, 119, 101, 105, 114, 100, 33, 0, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	0,   0,	  0,  0,   0,	0,   0,	  0,  0,   0,	0,   0,	  0,   0,  0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 75,
-	 97,
-	 114,
-	 101,
-	 110,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 68, 117, 104, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 80,
-	 104,
-	 105,
-	 108,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72,  101, 121, 44,  32,  105, 116, 32, 119, 111, 114, 107, 101, 100, 32, 111, 110, 32, 109, 121, 32, 99, 111,
-	 109, 112, 117, 116, 101, 114, 33,  0,	0,   0,	  0,   0,   0,	 0,   0,  0,   0,   0,	0,   0,	  0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 80,
-	 104,
-	 105,
-	 108,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 105, 115, 32,	 116, 104, 105, 110, 103, 32,  105, 115, 32,  99,  108, 101, 97, 114, 108, 121, 32, 97,
-	 32, 119, 97,  115, 116, 101, 32,  111, 102, 32,  109, 101, 109, 111, 114, 121, 46,  0,	 0,   0,   0,	0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 111,
-	 101,
-	 32,
-	 66,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72, 109, 109, 44, 32, 73, 32, 115, 101, 101, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,  0,  0,  0,  0,   0,	 0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 111,
-	 101,
-	 32,
-	 66,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 65, 104, 104, 44, 32, 121, 101, 115, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,  0,  0,   0,	 0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 97,
-	 114,
-	 105,
-	 97,
-	 32,
-	 68,
-	 77,
-	 77,
-	 76,
-	 0,
-	 0,
-     },
-     {
-	 78, 111, 116, 32, 97, 110, 111, 116, 104, 101, 114, 32, 105, 110, 115, 116, 97, 108, 108, 101, 114, 33, 0,
-	 0,  0,	  0,   0,  0,  0,   0,	 0,   0,   0,	0,   0,	 0,   0,   0,	0,   0,	 0,   0,   0,	0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 97,
-	 114,
-	 105,
-	 97,
-	 32,
-	 68,
-	 77,
-	 77,
-	 76,
-	 0,
-	 0,
-     },
-     {
-	 72, 65, 32, 72, 65, 32, 72, 65, 32, 72, 65, 32, 72, 65, 33, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	 0,  0,	 0,  0,	 0,  0,	 0,  0,	 0,  0,	 0,  0,	 0,  0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 105,
-	 107,
-	 101,
-	 32,
-	 76,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84,  104, 105, 115, 32,  105, 115, 32,	 114, 101, 97, 108, 108, 121, 32, 99, 111, 111, 108, 33, 32, 32, 71,
-	 111, 115, 104, 32,  103, 117, 121, 115, 33,  32,  32, 87,  111, 119, 33, 0,  0,   0,	0,   0,	 0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 105,
-	 107,
-	 101,
-	 32,
-	 76,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 87,  111, 119, 33, 32,	 32,  89,  111, 117, 32, 103, 117, 121, 115, 32, 97, 114, 101, 32, 116, 104, 101, 32,
-	 103, 114, 101, 97, 116, 101, 115, 116, 33,  0,	 0,   0,   0,	0,   0,	 0,  0,	  0,   0,  0,	0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 105,
-	 107,
-	 101,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 71,  114, 97, 121, 102, 105, 115, 104, 32, 102, 111, 114, 32, 108, 117, 110, 99, 104, 32, 97, 103, 97, 105,
-	 110, 63,  0,  0,   0,	 0,   0,   0,	0,  0,	 0,   0,   0,  0,   0,	 0,   0,  0,   0,  0,  0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 105,
-	 107,
-	 101,
-	 32,
-	 71,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 105, 115, 32, 105, 115, 32, 108, 97, 109, 101, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	0,   0,	  0,  0,   0,  0,   0,	 0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 71,
-	 108,
-	 101,
-	 110,
-	 110,
-	 32,
-	 83,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 105, 115, 32, 116, 104, 105, 110, 103, 39, 115, 32, 98, 117, 103, 103, 101, 100, 46, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	0,   0,	  0,   0,   0,	 0,  0,	  0,  0,  0,   0,   0,	 0,   0,   0,  0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 71,
-	 108,
-	 101,
-	 110,
-	 110,
-	 32,
-	 83,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 83, 104, 105, 112, 32, 105, 116, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	0,   0,	  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 83,
-	 116,
-	 101,
-	 118,
-	 101,
-	 32,
-	 87,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 79,  75,  32,	101, 118, 101, 114, 121, 111, 110, 101, 44, 32, 111, 117, 116, 32, 111, 102, 32, 109, 121, 32,
-	 111, 102, 102, 105, 99,  101, 46,  0,	 0,   0,   0,	0,  0,	0,   0,	  0,   0,  0,	0,   0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 100,
-	 32,
-	 68,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 65,  32,  103, 111, 111, 100, 32, 99,	104, 97,  116, 32, 112, 114, 111, 103, 114, 97, 109, 32, 105, 115, 32,
-	 108, 105, 107, 101, 32,  97,  32, 110, 105, 110, 106, 97, 46,	46,  46,  0,   0,   0,	0,   0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 100,
-	 32,
-	 68,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 65,  32,  103, 111, 111, 100, 32, 110, 105, 110, 106, 97, 32, 105, 115, 32, 108, 105, 107, 101, 32, 97, 32,
-	 110, 105, 110, 106, 97,  46,  46, 46,	0,   0,	  0,   0,  0,  0,   0,	 0,  0,	  0,   0,   0,	 0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 114,
-	 105,
-	 107,
-	 32,
-	 89,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73, 32, 119, 101, 97, 114, 32, 100, 101, 115, 105, 103, 110, 101, 114, 32, 106, 101, 97, 110, 115, 46, 0,
-	 0,  0,	 0,   0,   0,  0,   0,	0,   0,	  0,   0,   0,	 0,   0,   0,	0,  0,	 0,   0,  0,   0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 114,
-	 105,
-	 107,
-	 32,
-	 89,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72,  101, 121, 32, 66, 105, 108, 108, 44, 32, 116, 104, 105, 115, 32, 116, 104, 105, 110, 103, 32, 107, 101,
-	 101, 112, 115, 32, 99, 114, 97,  25,  26, 24, 104, 105, 110, 103, 0,  0,   0,	 0,   0,   0,	0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 101,
-	 102,
-	 102,
-	 32,
-	 70,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 105, 115, 32, 105, 115, 32,  97,  98, 115, 111, 108, 117, 116, 101, 108, 121, 32, 116, 104, 101, 32,
-	 98, 101, 115, 116, 32, 101, 118, 101, 114, 33, 0,   0,	  0,   0,   0,	 0,   0,   0,	0,  0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 101,
-	 102,
-	 102,
-	 32,
-	 70,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84,  104, 105, 115, 32,  105, 115, 32, 97,  98,  115, 111, 108, 117, 116,
-	 101, 108, 121, 32,  116, 104, 101, 32, 119, 111, 114, 115, 116, 32,  101,
-	 118, 101, 114, 33,  0,	  0,   0,   0,	0,   0,	  0,   0,   0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 82,
-	 105,
-	 99,
-	 107,
-	 32,
-	 78,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 83,  111, 117, 110, 100, 115, 32, 108, 105, 107, 101, 32, 97, 32, 100, 114, 105, 118, 101, 114, 32, 112, 114,
-	 111, 98,  108, 101, 109, 46,  0,  0,	0,   0,	  0,   0,  0,  0,  0,	0,   0,	  0,   0,   0,	 0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 83,
-	 99,
-	 111,
-	 116,
-	 116,
-	 32,
-	 66,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73, 32, 110, 101, 101, 100, 32, 116, 104, 105, 115, 32, 102, 111, 114, 32, 76, 79, 76, 50, 33, 0, 0,
-	 0,  0,	 0,   0,   0,	0,   0,	 0,   0,   0,	0,   0,	 0,   0,   0,	0,  0,	0,  0,	0,  0,	0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 83,
-	 116,
-	 101,
-	 118,
-	 101,
-	 32,
-	 84,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 105, 115, 32,	 115, 101, 101, 109, 115, 32, 114, 97, 116, 104, 101, 114, 32, 115, 105, 108, 108, 121,
-	 44, 32,  97,  99,  116, 117, 97,  108, 108, 121, 46, 0,   0,  0,   0,	 0,   0,   0,  0,   0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 80,
-	 97,
-	 117,
-	 108,
-	 32,
-	 77,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 78, 111, 32, 46, 46, 46, 46, 32, 32, 87, 32, 65, 32, 89, 33, 33, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 82,
-	 105,
-	 99,
-	 107,
-	 32,
-	 80,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 65, 72, 32, 72, 65, 32, 72, 65, 32, 72, 65, 33, 33, 32, 32, 72, 65, 72, 65, 33, 33, 32, 32,
-	 65, 72, 72, 32, 72, 65, 33, 0,	 0,  0,	 0,  0,	 0,  0,	 0,  0,	 0,  0,	 0,  0,	 0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 111,
-	 101,
-	 32,
-	 75,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 83, 116, 97, 108, 105, 110, 32, 107, 105, 108, 108, 101, 100, 32, 109, 121, 32, 102, 97, 116, 104, 101, 114,
-	 46, 0,	  0,  0,   0,	0,   0,	 0,   0,   0,	0,   0,	  0,   0,  0,	0,   0,	 0,   0,  0,   0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 111,
-	 101,
-	 32,
-	 75,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73,  32,  104, 111, 112, 101, 32,  121, 111, 117, 39, 114, 101, 32,  112, 114, 111, 117, 100, 32, 111, 102, 32,
-	 121, 111, 117, 114, 115, 101, 108, 102, 44,  32,  66, 105, 108, 108, 46,  0,	0,   0,	  0,   0,  0,	0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 105,
-	 103,
-	 32,
-	 87,
-	 105,
-	 108,
-	 108,
-	 121,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 65, 110, 121, 98,  111, 100, 121, 32, 102, 101, 114, 32, 97, 32, 115, 112, 105, 116, 116, 105, 110, 39, 32,
-	 99, 111, 110, 116, 101, 115, 116, 63, 0,   0,	 0,   0,  0,  0,  0,   0,   0,	 0,   0,   0,	0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 69,
-	 114,
-	 105,
-	 99,
-	 32,
-	 87,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 75,  97,  114, 97, 116, 101, 32, 105, 115, 32,	 103, 111, 111, 100, 32,  98, 117, 116, 32, 121, 111, 117, 32,
-	 117, 115, 101, 32, 105, 116, 32, 102, 111, 114, 32,  101, 118, 105, 108, 33, 0,   0,	0,  0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 84,
-	 101,
-	 100,
-	 32,
-	 77,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72,  97,  46,	32, 32, 70, 117, 110, 110, 121, 46, 32, 32, 84, 104, 105, 115, 32, 105, 115, 32, 102, 117,
-	 110, 110, 121, 46, 0,	0,  0,	 0,   0,   0,	0,  0,	0,  0,	0,   0,	  0,   0,  0,	0,   0,	 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 68,
-	 97,
-	 109,
-	 111,
-	 110,
-	 32,
-	 82,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73, 32, 98, 108, 97, 109, 101, 32, 116, 104, 101, 32, 70, 114, 101, 110, 99, 104, 46, 0, 0, 0, 0,
-	 0,  0,	 0,  0,	  0,  0,   0,	0,  0,	 0,   0,   0,  0,  0,	0,   0,	  0,  0,   0,  0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 68,
-	 119,
-	 105,
-	 103,
-	 104,
-	 116,
-	 32,
-	 79,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 79, 104, 44, 32, 109, 97, 110, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,  0,  0,   0,  0,	0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 75,
-	 105,
-	 97,
-	 32,
-	 72,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73, 111, 110, 32, 99, 97, 110, 110, 111, 110, 32, 114, 101, 97, 100, 121, 46, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,  0,  0,  0,	0,   0,	  0,   0,  0,	0,   0,	 0,   0,   0,  0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 75,
-	 105,
-	 97,
-	 32,
-	 72,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 83, 101, 108, 101, 99, 116, 32, 116, 97, 114, 103, 101, 116, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	0,   0,	 0,   0,  0,   0,   0,	 0,   0,  0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 66,
-	 114,
-	 117,
-	 99,
-	 101,
-	 32,
-	 74,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73, 32,  97,  109, 32, 116, 104, 101, 32, 71, 101, 110, 105, 101, 32, 111, 102, 32, 116, 104, 101, 32, 108,
-	 97, 109, 112, 33,  0,	0,   0,	  0,   0,  0,  0,   0,	 0,   0,   0,  0,   0,	 0,  0,	  0,   0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 76,
-	 97,
-	 117,
-	 114,
-	 97,
-	 32,
-	 87,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 71, 111, 32, 97, 119, 97, 121, 44, 32, 66, 105, 108, 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,  0,  0,   0,  0,	0,  0,	0,  0,	 0,   0,   0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 68,
-	 97,
-	 118,
-	 105,
-	 100,
-	 32,
-	 68,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 72, 109, 109, 109, 46, 46, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,   0,   0,	0,  0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 105,
-	 107,
-	 101,
-	 32,
-	 76,
-	 105,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 67, 97, 108, 108, 32, 109, 101, 32, 78, 97, 116, 101, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	 0,   0,   0,  0,   0,	 0,  0,	 0,  0,	  0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 68,
-	 101,
-	 110,
-	 122,
-	 105,
-	 108,
-	 32,
-	 76,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 105, 115, 32, 119, 111, 117, 108, 100, 32, 98, 101, 32, 98, 101, 116, 116, 101, 114, 32, 111, 110,
-	 32, 116, 104, 101, 32, 77,  97,  99,  46,  0,	 0,  0,	 0,   0,  0,  0,   0,	0,   0,	  0,   0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 71,
-	 114,
-	 101,
-	 103,
-	 32,
-	 72,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 66, 117, 116, 32, 100, 111, 101, 115, 32, 105, 116, 32, 102, 105, 116, 32, 105, 110, 116, 111, 32, 50, 32,
-	 77, 66,  63,  0,  0,	0,   0,	  0,   0,  0,	0,   0,	 0,   0,   0,	0,  0,	 0,   0,   0,	0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 111,
-	 110,
-	 97,
-	 116,
-	 104,
-	 97,
-	 110,
-	 32,
-	 76,
-	 0,
-	 0,
-     },
-     {
-	 73,  32, 116, 104, 105, 110, 107, 32, 73, 32, 110, 101, 101, 100, 32, 97, 32, 104, 97, 105, 114, 99, 117,
-	 116, 46, 0,   0,   0,	 0,   0,   0,  0,  0,  0,   0,	 0,   0,   0,  0,  0,  0,   0,	0,   0,	  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 65,
-	 100,
-	 97,
-	 109,
-	 32,
-	 73,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 87, 104, 97, 116, 101, 118, 101, 114, 46, 32, 32, 66, 101, 101, 102, 33, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	  0,  0,   0,	0,   0,	  0,   0,  0,  0,  0,  0,   0,	 0,   0,  0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 75,
-	 117,
-	 114,
-	 116,
-	 32,
-	 79,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 70,  105, 120, 32, 105, 116, 32, 121, 111, 117, 114, 115, 101, 108, 102, 46, 32, 32, 73, 39, 109, 32, 98,
-	 117, 115, 121, 46, 0,	 0,   0,  0,   0,   0,	 0,   0,   0,	0,   0,	  0,  0,  0,  0,  0,  0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 111,
-	 115,
-	 101,
-	 112,
-	 104,
-	 32,
-	 72,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 60, 73, 99, 121, 32, 103, 108, 97, 114, 101, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0,  0,	 0,  0,	  0,  0,   0,	0,  0,	 0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 77,
-	 97,
-	 116,
-	 116,
-	 32,
-	 72,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73,  39,  109, 32, 110, 101, 118, 101, 114, 32,  103, 111, 111, 100, 32,  119, 105, 116, 104, 32, 99, 108, 101,
-	 118, 101, 114, 32, 111, 110, 32,  116, 104, 101, 32,  115, 112, 111, 116, 46,	46,  46,  0,   0,  0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 67,
-	 104,
-	 114,
-	 105,
-	 115,
-	 32,
-	 82,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73, 32, 108, 111, 118, 101, 32, 109, 121, 32, 106, 111, 98, 46, 32, 32, 89, 101, 97, 104, 46, 0, 0,
-	 0,  0,	 0,   0,   0,	0,   0,	 0,   0,   0,  0,   0,	 0,  0,	 0,  0,	 0,  0,	  0,  0,   0,  0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 80,
-	 97,
-	 116,
-	 32,
-	 67,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73,  39,  109, 32,  97, 32, 112, 114, 111, 102, 101, 115, 115, 105, 111, 110, 97, 108, 32, 121, 111, 100, 101,
-	 108, 108, 101, 114, 46, 0,  0,	  0,   0,   0,	 0,   0,   0,	0,   0,	  0,   0,  0,	0,  0,	 0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 73,
-	 97,
-	 110,
-	 32,
-	 76,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 97,
-	 99,
-	 107,
-	 32,
-	 77,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 73,  32,  108, 105, 118, 101, 32, 97,	98,  111, 117, 116, 32,	 97,  32,  98, 108, 111, 99,  107, 32, 102, 114,
-	 111, 109, 32,	116, 104, 101, 32, 112, 114, 111, 112, 111, 115, 101, 100, 32, 115, 105, 116, 101, 46, 0,
-     },
-     PCOLOR_GREEN,
-     0},
-    {{
-	 74,
-	 101,
-	 102,
-	 102,
-	 32,
-	 66,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-	 0,
-     },
-     {
-	 84, 104, 101, 121, 32,	 97, 108, 108, 32, 108, 111, 111, 107, 32, 108, 105, 107, 101, 32, 97, 110, 116, 115,
-	 32, 102, 114, 111, 109, 32, 117, 112, 32, 104, 101, 114, 101, 46, 0,	0,   0,	  0,   0,  0,  0,   0,
-     },
-     PCOLOR_GREEN,
-     0},
+	{ {
+		  66,
+		  105,
+		  108,
+		  108,
+		  32,
+		  82,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72, 101, 121, 44, 32, 105, 115, 110, 39, 116, 32, 116, 104, 105, 115, 32, 99, 111, 111, 108, 63, 0, 0,
+		  0,  0,   0,	0,  0,	0,   0,	  0,   0,  0,	0,  0,	 0,   0,   0,	0,  0,	0,   0,	  0,   0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  105,
+		  108,
+		  108,
+		  32,
+		  82,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72, 101, 121, 44, 32, 119, 97, 110, 116, 32, 115, 111, 109, 101, 32, 115, 101, 97, 102, 111, 111, 100, 63,
+		  0,  0,   0,	0,  0,	0,   0,	 0,   0,   0,  0,   0,	 0,   0,   0,  0,   0,	 0,  0,	  0,   0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  97,
+		  114,
+		  114,
+		  121,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  71, 114, 101, 97, 116, 46, 32, 74, 117, 115, 116, 32, 103, 114, 101, 97, 116, 46, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,  0,	 0,  0,	 0,  0,	  0,   0,   0,	0,   0,	  0,   0,  0,	0,  0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  97,
+		  114,
+		  114,
+		  121,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  87,  111, 110, 100, 101, 114, 102, 117, 108, 46, 32, 80, 101, 114, 102, 101, 99, 116, 44, 32, 105, 110, 32,
+		  102, 97,  99,	 116, 46,  0,	0,   0,	  0,   0,  0,  0,  0,	0,   0,	  0,   0,  0,	0,  0,	0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  105,
+		  108,
+		  108,
+		  32,
+		  80,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  89,  111, 117, 32, 99, 97, 108, 108, 32, 116, 104, 105, 115, 32, 65, 73, 63, 32, 32, 83, 104, 101, 101,
+		  115, 104, 33,	 0,  0,	 0,  0,	  0,   0,  0,	0,   0,	  0,   0,  0,  0,  0,  0,  0,  0,  0,	0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  105,
+		  108,
+		  108,
+		  32,
+		  80,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  66, 105, 108, 108, 115, 32, 114, 117, 108, 101, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,   0,	  0,  0,   0,	0,   0,	  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  114,
+		  101,
+		  116,
+		  116,
+		  32,
+		  83,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 97, 107, 101, 32, 116, 104, 105, 115, 32, 111, 117, 116, 44, 32, 110, 111, 119, 33, 0, 0, 0, 0,
+		  0,  0,  0,   0,   0,	0,   0,	  0,   0,   0,	0,   0,	  0,   0,  0,  0,   0,	 0,   0,  0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  114,
+		  101,
+		  116,
+		  116,
+		  32,
+		  83,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  87,  104, 121, 32, 99,  97,  110, 39,	 116, 32,  121, 111, 117, 32,  102, 105, 116, 32,  97, 110, 121, 32, 109,
+		  111, 114, 101, 32, 108, 101, 116, 116, 101, 114, 115, 32,  111, 110, 32,  116, 104, 101, 32, 108, 0,	 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  114,
+		  101,
+		  116,
+		  116,
+		  32,
+		  83,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  69,  100, 44, 32, 73, 32,  119, 97,  110, 116, 32,  116, 111, 32, 116, 97, 108, 107, 32, 116, 111, 32, 121,
+		  111, 117, 32, 97, 98, 111, 117, 116, 32,  116, 104, 105, 115, 46, 0,	 0,  0,	  0,   0,  0,	0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  114,
+		  101,
+		  116,
+		  116,
+		  32,
+		  83,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  69,  100, 44,	 32, 99, 111, 109, 101, 32,  116, 111, 32,  109, 121, 32, 111, 102, 102, 105, 99, 101, 44, 32,
+		  110, 111, 119, 33, 32, 32,  91,  99,	114, 97,  99,  107, 33,	 93,  0,  0,   0,   0,	 0,   0,  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  80,
+		  101,
+		  110,
+		  105,
+		  110,
+		  97,
+		  32,
+		  70,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72,  97,  115, 32, 97, 110, 121, 111, 110, 101, 32, 115, 101, 101, 110, 32, 109, 121, 32, 115, 116, 97, 112,
+		  108, 101, 114, 63, 0,	 0,   0,   0,	0,   0,	  0,  0,   0,	0,   0,	  0,  0,   0,	0,  0,	 0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  80,
+		  101,
+		  110,
+		  105,
+		  110,
+		  97,
+		  32,
+		  70,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72, 97,  115, 32,  97,  110, 121, 111, 110, 101, 32, 115, 101, 101, 110, 32, 109, 121, 32, 116, 104, 101, 115,
+		  97, 117, 114, 117, 115, 63,  0,   0,	 0,   0,   0,  0,   0,	 0,   0,   0,  0,   0,	 0,  0,	  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  80,
+		  101,
+		  110,
+		  105,
+		  110,
+		  97,
+		  32,
+		  70,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72,  97,  115, 32, 97, 110, 121, 111, 110, 101, 32, 115, 101, 101, 110, 32, 109, 121, 32, 112, 101, 110, 99,
+		  105, 108, 63,	 0,  0,	 0,   0,   0,	0,   0,	  0,  0,   0,	0,   0,	  0,  0,   0,	0,  0,	 0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  105,
+		  108,
+		  111,
+		  32,
+		  66,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72,  101, 121, 32,  83,  116, 101, 118, 101, 44,  32,	 99,  97, 110, 32, 119, 101, 32, 109, 101, 101, 116, 32,
+		  105, 110, 32,	 121, 111, 117, 114, 32,  111, 102, 102, 105, 99, 101, 63, 0,	0,   0,	 0,   0,   0,	0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  105,
+		  108,
+		  111,
+		  32,
+		  66,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  83, 116, 101, 118, 101, 44,  32,  105, 116, 39, 108, 108, 32, 111, 110, 108, 121, 32, 116, 97, 107, 101, 32,
+		  97, 32,  109, 105, 110, 117, 116, 101, 46,  0,  0,   0,   0,	0,   0,	  0,   0,   0,	0,   0,	 0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  82,
+		  111,
+		  98,
+		  32,
+		  83,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  77, 105, 108, 111, 44, 32, 100, 105, 97, 108, 32, 50, 52, 57, 46, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,   0,	 0,  0,	  0,   0,  0,	0,  0,	0,  0,	0,  0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  108,
+		  115,
+		  98,
+		  101,
+		  116,
+		  104,
+		  32,
+		  87,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 97, 116, 39, 115, 32, 39, 69, 108, 115, 98, 101, 116, 104, 39, 44, 32, 119, 105, 116, 104, 32,
+		  97, 110, 32, 69,  45, 76,  45, 83, 46, 0,   0,   0,  0,   0,	 0,   0,  0,  0,  0,   0,   0,	 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  108,
+		  115,
+		  98,
+		  101,
+		  116,
+		  104,
+		  32,
+		  87,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 97,	116, 39, 115, 32,  39, 69, 108, 115, 98, 101, 116, 104, 39, 44, 32, 110, 111, 116, 32, 39,
+		  69, 108, 115, 98,  97, 114, 102, 39, 46, 0,	0,   0,	 0,   0,   0,	0,  0,	0,  0,	 0,   0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  108,
+		  115,
+		  98,
+		  101,
+		  116,
+		  104,
+		  32,
+		  87,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 97,	116, 39,  115, 32,  39, 69, 108, 115, 98, 101, 116, 104, 39, 44, 32, 110, 111, 116, 32, 39,
+		  69, 108, 102, 98,  117, 116, 116, 39, 46, 0,	 0,   0,  0,   0,   0,	 0,  0,	 0,  0,	  0,   0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  75,
+		  97,
+		  114,
+		  101,
+		  110,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 105, 115, 32, 105, 115, 32, 115, 111, 111, 111, 32, 119, 101, 105, 114, 100, 33, 0, 0, 0, 0,
+		  0,  0,   0,	0,   0,	 0,   0,   0,  0,   0,	 0,   0,   0,  0,   0,	 0,   0,   0,	0,  0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  75,
+		  97,
+		  114,
+		  101,
+		  110,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  68, 117, 104, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  80,
+		  104,
+		  105,
+		  108,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72,  101, 121, 44,  32,  105, 116, 32, 119, 111, 114, 107, 101, 100, 32, 111, 110, 32, 109, 121, 32, 99, 111,
+		  109, 112, 117, 116, 101, 114, 33,  0,	 0,   0,   0,	0,   0,	  0,   0,  0,	0,   0,	 0,   0,   0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  80,
+		  104,
+		  105,
+		  108,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 105, 115, 32,  116, 104, 105, 110, 103, 32,	105, 115, 32,  99,  108, 101, 97, 114, 108, 121, 32, 97,
+		  32, 119, 97,	115, 116, 101, 32,  111, 102, 32,  109, 101, 109, 111, 114, 121, 46,  0,  0,   0,   0,	 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  111,
+		  101,
+		  32,
+		  66,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72, 109, 109, 44, 32, 73, 32, 115, 101, 101, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,  0,	0,  0,	0,   0,	  0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  111,
+		  101,
+		  32,
+		  66,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  65, 104, 104, 44, 32, 121, 101, 115, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,  0,	0,   0,	  0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  97,
+		  114,
+		  105,
+		  97,
+		  32,
+		  68,
+		  77,
+		  77,
+		  76,
+		  0,
+		  0,
+	  },
+	  {
+		  78, 111, 116, 32, 97, 110, 111, 116, 104, 101, 114, 32, 105, 110, 115, 116, 97, 108, 108, 101, 114, 33, 0,
+		  0,  0,   0,	0,  0,	0,   0,	  0,   0,   0,	 0,   0,  0,   0,   0,	 0,   0,  0,   0,   0,	 0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  97,
+		  114,
+		  105,
+		  97,
+		  32,
+		  68,
+		  77,
+		  77,
+		  76,
+		  0,
+		  0,
+	  },
+	  {
+		  72, 65, 32, 72, 65, 32, 72, 65, 32, 72, 65, 32, 72, 65, 33, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  105,
+		  107,
+		  101,
+		  32,
+		  76,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84,  104, 105, 115, 32,  105, 115, 32,  114, 101, 97, 108, 108, 121, 32, 99, 111, 111, 108, 33, 32, 32, 71,
+		  111, 115, 104, 32,  103, 117, 121, 115, 33,  32,  32, 87,  111, 119, 33, 0,  0,   0,	 0,   0,  0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  105,
+		  107,
+		  101,
+		  32,
+		  76,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  87,  111, 119, 33, 32,  32,  89,  111, 117, 32, 103, 117, 121, 115, 32, 97, 114, 101, 32, 116, 104, 101, 32,
+		  103, 114, 101, 97, 116, 101, 115, 116, 33,  0,  0,   0,   0,	 0,   0,  0,  0,   0,	0,  0,	 0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  105,
+		  107,
+		  101,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  71,  114, 97, 121, 102, 105, 115, 104, 32, 102, 111, 114, 32, 108, 117, 110, 99, 104, 32, 97, 103, 97, 105,
+		  110, 63,  0,	0,   0,	  0,   0,   0,	 0,  0,	  0,   0,   0,	0,   0,	  0,   0,  0,	0,  0,	0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  105,
+		  107,
+		  101,
+		  32,
+		  71,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 105, 115, 32, 105, 115, 32, 108, 97, 109, 101, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,   0,	 0,   0,   0,  0,   0,	0,   0,	  0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  71,
+		  108,
+		  101,
+		  110,
+		  110,
+		  32,
+		  83,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 105, 115, 32, 116, 104, 105, 110, 103, 39, 115, 32, 98, 117, 103, 103, 101, 100, 46, 0, 0, 0,
+		  0,  0,   0,	0,   0,	 0,   0,   0,	0,   0,	  0,  0,   0,  0,  0,	0,   0,	  0,   0,   0,	0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  71,
+		  108,
+		  101,
+		  110,
+		  110,
+		  32,
+		  83,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  83, 104, 105, 112, 32, 105, 116, 33, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,   0,	 0,   0,   0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  83,
+		  116,
+		  101,
+		  118,
+		  101,
+		  32,
+		  87,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  79,  75,  32,	 101, 118, 101, 114, 121, 111, 110, 101, 44, 32, 111, 117, 116, 32, 111, 102, 32, 109, 121, 32,
+		  111, 102, 102, 105, 99,  101, 46,  0,	  0,   0,   0,	 0,  0,	 0,   0,   0,	0,  0,	 0,   0,  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  100,
+		  32,
+		  68,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  65,  32,  103, 111, 111, 100, 32, 99,	 104, 97,  116, 32, 112, 114, 111, 103, 114, 97, 109, 32, 105, 115, 32,
+		  108, 105, 107, 101, 32,  97,	32, 110, 105, 110, 106, 97, 46,	 46,  46,  0,	0,   0,	 0,   0,  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  100,
+		  32,
+		  68,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  65,  32,  103, 111, 111, 100, 32, 110, 105, 110, 106, 97, 32, 105, 115, 32, 108, 105, 107, 101, 32, 97, 32,
+		  110, 105, 110, 106, 97,  46,	46, 46,	 0,   0,   0,	0,  0,	0,   0,	  0,  0,   0,	0,   0,	  0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  114,
+		  105,
+		  107,
+		  32,
+		  89,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73, 32, 119, 101, 97, 114, 32, 100, 101, 115, 105, 103, 110, 101, 114, 32, 106, 101, 97, 110, 115, 46, 0,
+		  0,  0,  0,   0,   0,	0,   0,	 0,   0,   0,	0,   0,	  0,   0,   0,	 0,  0,	  0,   0,  0,	0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  114,
+		  105,
+		  107,
+		  32,
+		  89,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72,  101, 121, 32, 66, 105, 108, 108, 44, 32, 116, 104, 105, 115, 32, 116, 104, 105, 110, 103, 32, 107, 101,
+		  101, 112, 115, 32, 99, 114, 97,  25,	26, 24, 104, 105, 110, 103, 0,	0,   0,	  0,   0,   0,	 0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  101,
+		  102,
+		  102,
+		  32,
+		  70,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 105, 115, 32, 105, 115, 32,	97,  98, 115, 111, 108, 117, 116, 101, 108, 121, 32, 116, 104, 101, 32,
+		  98, 101, 115, 116, 32, 101, 118, 101, 114, 33, 0,   0,   0,	0,   0,	  0,   0,   0,	 0,  0,	  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  101,
+		  102,
+		  102,
+		  32,
+		  70,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84,  104, 105, 115, 32,  105, 115, 32,  97,  98,  115, 111, 108, 117, 116, 101, 108, 121, 32, 116, 104, 101, 32,
+		  119, 111, 114, 115, 116, 32,	101, 118, 101, 114, 33,	 0,   0,   0,	0,   0,	  0,   0,   0,	0,   0,	  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  82,
+		  105,
+		  99,
+		  107,
+		  32,
+		  78,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  83,  111, 117, 110, 100, 115, 32, 108, 105, 107, 101, 32, 97, 32, 100, 114, 105, 118, 101, 114, 32, 112, 114,
+		  111, 98,  108, 101, 109, 46,	0,  0,	 0,   0,   0,	0,  0,	0,  0,	 0,   0,   0,	0,   0,	  0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  83,
+		  99,
+		  111,
+		  116,
+		  116,
+		  32,
+		  66,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73, 32, 110, 101, 101, 100, 32, 116, 104, 105, 115, 32, 102, 111, 114, 32, 76, 79, 76, 50, 33, 0, 0,
+		  0,  0,  0,   0,   0,	 0,   0,  0,   0,   0,	 0,   0,  0,   0,   0,	 0,  0,	 0,  0,	 0,  0,	 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  83,
+		  116,
+		  101,
+		  118,
+		  101,
+		  32,
+		  84,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 105, 115, 32,  115, 101, 101, 109, 115, 32, 114, 97, 116, 104, 101, 114, 32, 115, 105, 108, 108, 121,
+		  44, 32,  97,	99,  116, 117, 97,  108, 108, 121, 46, 0,   0,	0,   0,	  0,   0,   0,	0,   0,	  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  80,
+		  97,
+		  117,
+		  108,
+		  32,
+		  77,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  78, 111, 32, 46, 46, 46, 46, 32, 32, 87, 32, 65, 32, 89, 33, 33, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  82,
+		  105,
+		  99,
+		  107,
+		  32,
+		  80,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  65, 72, 32, 72, 65, 32, 72, 65, 32, 72, 65, 33, 33, 32, 32, 72, 65, 72, 65, 33, 33, 32, 32,
+		  65, 72, 72, 32, 72, 65, 33, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  111,
+		  101,
+		  32,
+		  75,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  83, 116, 97, 108, 105, 110, 32, 107, 105, 108, 108, 101, 100, 32, 109, 121, 32, 102, 97, 116, 104, 101, 114,
+		  46, 0,   0,  0,   0,	 0,   0,  0,   0,   0,	 0,   0,   0,	0,  0,	 0,   0,  0,   0,  0,	0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  111,
+		  101,
+		  32,
+		  75,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73,  32,  104, 111, 112, 101, 32,  121, 111, 117, 39, 114, 101, 32,  112, 114, 111, 117, 100, 32, 111, 102, 32,
+		  121, 111, 117, 114, 115, 101, 108, 102, 44,  32,  66, 105, 108, 108, 46,  0,	 0,   0,   0,	0,  0,	 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  105,
+		  103,
+		  32,
+		  87,
+		  105,
+		  108,
+		  108,
+		  121,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  65, 110, 121, 98,  111, 100, 121, 32, 102, 101, 114, 32, 97, 32, 115, 112, 105, 116, 116, 105, 110, 39, 32,
+		  99, 111, 110, 116, 101, 115, 116, 63, 0,   0,	  0,   0,  0,  0,  0,	0,   0,	  0,   0,   0,	 0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  69,
+		  114,
+		  105,
+		  99,
+		  32,
+		  87,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  75,  97,  114, 97, 116, 101, 32, 105, 115, 32,  103, 111, 111, 100, 32,  98, 117, 116, 32, 121, 111, 117, 32,
+		  117, 115, 101, 32, 105, 116, 32, 102, 111, 114, 32,  101, 118, 105, 108, 33, 0,   0,	 0,  0,	  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  84,
+		  101,
+		  100,
+		  32,
+		  77,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72,  97,  46,	 32, 32, 70, 117, 110, 110, 121, 46, 32, 32, 84, 104, 105, 115, 32, 105, 115, 32, 102, 117,
+		  110, 110, 121, 46, 0,	 0,  0,	  0,   0,   0,	 0,  0,	 0,  0,	 0,   0,   0,	0,  0,	 0,   0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  68,
+		  97,
+		  109,
+		  111,
+		  110,
+		  32,
+		  82,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73, 32, 98, 108, 97, 109, 101, 32, 116, 104, 101, 32, 70, 114, 101, 110, 99, 104, 46, 0, 0, 0, 0,
+		  0,  0,  0,  0,   0,  0,   0,	 0,  0,	  0,   0,   0,	0,  0,	 0,   0,   0,  0,   0,	0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  68,
+		  119,
+		  105,
+		  103,
+		  104,
+		  116,
+		  32,
+		  79,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  79, 104, 44, 32, 109, 97, 110, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,  0,  0,	0,  0,	 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  75,
+		  105,
+		  97,
+		  32,
+		  72,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73, 111, 110, 32, 99, 97, 110, 110, 111, 110, 32, 114, 101, 97, 100, 121, 46, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,  0,	0,  0,	 0,   0,   0,	0,  0,	 0,   0,  0,   0,   0,	0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  75,
+		  105,
+		  97,
+		  32,
+		  72,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  83, 101, 108, 101, 99, 116, 32, 116, 97, 114, 103, 101, 116, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,   0,	 0,   0,  0,   0,  0,	0,   0,	  0,   0,  0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  66,
+		  114,
+		  117,
+		  99,
+		  101,
+		  32,
+		  74,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73, 32,  97,	109, 32, 116, 104, 101, 32, 71, 101, 110, 105, 101, 32, 111, 102, 32, 116, 104, 101, 32, 108,
+		  97, 109, 112, 33,  0,	 0,   0,   0,	0,  0,	0,   0,	  0,   0,   0,	0,   0,	  0,  0,   0,	0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  76,
+		  97,
+		  117,
+		  114,
+		  97,
+		  32,
+		  87,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  71, 111, 32, 97, 119, 97, 121, 44, 32, 66, 105, 108, 108, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,  0,  0,	0,  0,	 0,  0,	 0,  0,	  0,   0,   0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  68,
+		  97,
+		  118,
+		  105,
+		  100,
+		  32,
+		  68,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  72, 109, 109, 109, 46, 46, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,	0,   0,	 0,  0,	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  105,
+		  107,
+		  101,
+		  32,
+		  76,
+		  105,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  67, 97, 108, 108, 32, 109, 101, 32, 78, 97, 116, 101, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,  0,   0,   0,	0,   0,	  0,  0,  0,  0,   0,	0,  0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  68,
+		  101,
+		  110,
+		  122,
+		  105,
+		  108,
+		  32,
+		  76,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 105, 115, 32, 119, 111, 117, 108, 100, 32, 98, 101, 32, 98, 101, 116, 116, 101, 114, 32, 111, 110,
+		  32, 116, 104, 101, 32, 77,  97,  99,	46,  0,	  0,  0,  0,   0,  0,  0,   0,	 0,   0,   0,	0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  71,
+		  114,
+		  101,
+		  103,
+		  32,
+		  72,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  66, 117, 116, 32, 100, 111, 101, 115, 32, 105, 116, 32, 102, 105, 116, 32, 105, 110, 116, 111, 32, 50, 32,
+		  77, 66,  63,	0,  0,	 0,   0,   0,	0,  0,	 0,   0,  0,   0,   0,	 0,  0,	  0,   0,   0,	 0,  0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  111,
+		  110,
+		  97,
+		  116,
+		  104,
+		  97,
+		  110,
+		  32,
+		  76,
+		  0,
+		  0,
+	  },
+	  {
+		  73,  32, 116, 104, 105, 110, 107, 32, 73, 32, 110, 101, 101, 100, 32, 97, 32, 104, 97, 105, 114, 99, 117,
+		  116, 46, 0,	0,   0,	  0,   0,   0,	0,  0,	0,   0,	  0,   0,   0,	0,  0,	0,   0,	 0,   0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  65,
+		  100,
+		  97,
+		  109,
+		  32,
+		  73,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  87, 104, 97, 116, 101, 118, 101, 114, 46, 32, 32, 66, 101, 101, 102, 33, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,   0,  0,   0,	 0,   0,   0,	0,  0,	0,  0,	0,   0,	  0,   0,  0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  75,
+		  117,
+		  114,
+		  116,
+		  32,
+		  79,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  70,  105, 120, 32, 105, 116, 32, 121, 111, 117, 114, 115, 101, 108, 102, 46, 32, 32, 73, 39, 109, 32, 98,
+		  117, 115, 121, 46, 0,	  0,   0,  0,	0,   0,	  0,   0,   0,	 0,   0,   0,  0,  0,  0,  0,  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  111,
+		  115,
+		  101,
+		  112,
+		  104,
+		  32,
+		  72,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  60, 73, 99, 121, 32, 103, 108, 97, 114, 101, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0,  0,  0,  0,   0,  0,   0,	 0,  0,	  0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  77,
+		  97,
+		  116,
+		  116,
+		  32,
+		  72,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73,  39,  109, 32, 110, 101, 118, 101, 114, 32,  103, 111, 111, 100, 32,  119, 105, 116, 104, 32, 99, 108, 101,
+		  118, 101, 114, 32, 111, 110, 32,  116, 104, 101, 32,	115, 112, 111, 116, 46,	 46,  46,  0,	0,  0,	0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  67,
+		  104,
+		  114,
+		  105,
+		  115,
+		  32,
+		  82,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73, 32, 108, 111, 118, 101, 32, 109, 121, 32, 106, 111, 98, 46, 32, 32, 89, 101, 97, 104, 46, 0, 0,
+		  0,  0,  0,   0,   0,	 0,   0,  0,   0,   0,	0,   0,	  0,  0,  0,  0,  0,  0,   0,  0,   0,	0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  80,
+		  97,
+		  116,
+		  32,
+		  67,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73,  39,  109, 32,  97, 32, 112, 114, 111, 102, 101, 115, 115, 105, 111, 110, 97, 108, 32, 121, 111, 100, 101,
+		  108, 108, 101, 114, 46, 0,  0,   0,	0,   0,	  0,   0,   0,	 0,   0,   0,	0,  0,	 0,  0,	  0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  73,
+		  97,
+		  110,
+		  32,
+		  76,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  97,
+		  99,
+		  107,
+		  32,
+		  77,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  73,  32,  108, 105, 118, 101, 32, 97,	 98,  111, 117, 116, 32,  97,  32,  98, 108, 111, 99,  107, 32, 102, 114,
+		  111, 109, 32,	 116, 104, 101, 32, 112, 114, 111, 112, 111, 115, 101, 100, 32, 115, 105, 116, 101, 46, 0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
+	{ {
+		  74,
+		  101,
+		  102,
+		  102,
+		  32,
+		  66,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+		  0,
+	  },
+	  {
+		  84, 104, 101, 121, 32,  97, 108, 108, 32, 108, 111, 111, 107, 32, 108, 105, 107, 101, 32, 97, 110, 116, 115,
+		  32, 102, 114, 111, 109, 32, 117, 112, 32, 104, 101, 114, 101, 46, 0,	 0,   0,   0,	0,  0,	0,   0,
+	  },
+	  PCOLOR_GREEN,
+	  0 },
 };
 
 CDTimerClass<SystemTimerClass> wwperson_timer;
@@ -6923,11 +7630,10 @@ void Start_WWChat(ColorListClass *playerlist) {
 	} else {
 		sprintf(item, "%s\t%s", Session.Handle, Text_String(TXT_SOVIET));
 	}
-#else  // OLDWAY
+#else // OLDWAY
 	sprintf(item, "%s\t%s", Session.Handle, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-	playerlist->Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-									    : &ColorRemaps[Session.ColorIdx]);
+	playerlist->Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] : &ColorRemaps[Session.ColorIdx]);
 
 	//------------------------------------------------------------------------
 	// Add everyone else to the list
@@ -6951,9 +7657,9 @@ void Start_WWChat(ColorListClass *playerlist) {
 			} else {
 				sprintf(item, "%s\t%s", WWPersons[i].Name, Text_String(TXT_SOVIET));
 			}
-			playerlist->Add_Item(item, (WWPersons[i].Color == PCOLOR_DIALOG_BLUE)
-						       ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-						       : &ColorRemaps[WWPersons[i].Color]);
+			playerlist->Add_Item(item,
+					     (WWPersons[i].Color == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] :
+											  &ColorRemaps[WWPersons[i].Color]);
 		}
 		//.....................................................................
 		// If this entry's name is the same as the previous, copy the color
@@ -7013,13 +7719,13 @@ int Update_WWChat(void) {
 void Start_Logging(void) {
 	FILE *fp;
 	static char *ColorNames[6] = {
-	    "Yellow", "Red", "BlueGreen", "Orange", "Green", "Blue",
+		"Yellow", "Red", "BlueGreen", "Orange", "Green", "Blue",
 	};
 	int i;
 	int id;
 	HousesType house;
 	char *housenames[] = {
-	    "ALLIES", "SOVIET", "Neutral", "Special", "Multi1", "Multi2", "Multi3", "Multi4",
+		"ALLIES", "SOVIET", "Neutral", "Special", "Multi1", "Multi2", "Multi3", "Multi4",
 	};
 	time_t t;
 
@@ -7153,15 +7859,15 @@ static int Net_Fake_New_Dialog(void) {
 	//------------------------------------------------------------------------
 	//	Dialog & button dimensions
 	//------------------------------------------------------------------------
-	int d_dialog_w = 120 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 80 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 120 * RESFACTOR; // dialog width
+	int d_dialog_h = 80 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 6 * RESFACTOR + 1; // ht of 6-pt text
-	int d_margin1 = 5 * RESFACTOR;	  // margin width/height
-	int d_margin2 = 2 * RESFACTOR;	  // margin width/height
+	int d_margin1 = 5 * RESFACTOR; // margin width/height
+	int d_margin2 = 2 * RESFACTOR; // margin width/height
 
 	int d_playerlist_w = 118 * RESFACTOR;
 	int d_playerlist_h = ((6 * 6) + 3) * RESFACTOR; // 6 rows high
@@ -7189,20 +7895,13 @@ static int Net_Fake_New_Dialog(void) {
 	//------------------------------------------------------------------------
 	//	Redraw values: in order from "top" to "bottom" layer of the dialog
 	//------------------------------------------------------------------------
-	typedef enum {
-		REDRAW_NONE = 0,
-		REDRAW_PARMS,
-		REDRAW_MESSAGE,
-		REDRAW_BUTTONS,
-		REDRAW_BACKGROUND,
-		REDRAW_ALL = REDRAW_BACKGROUND
-	} RedrawType;
+	typedef enum { REDRAW_NONE = 0, REDRAW_PARMS, REDRAW_MESSAGE, REDRAW_BUTTONS, REDRAW_BACKGROUND, REDRAW_ALL = REDRAW_BACKGROUND } RedrawType;
 
 	//------------------------------------------------------------------------
 	//	Dialog variables
 	//------------------------------------------------------------------------
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 
 	int transmit; // 1 = re-transmit new game options
@@ -7211,14 +7910,14 @@ static int Net_Fake_New_Dialog(void) {
 	int rc;
 	int i;
 	char *item;
-	int tabs[] = {77};	// tabs for player list box
-	int optiontabs[] = {8}; // tabs for option list box
+	int tabs[] = { 77 }; // tabs for player list box
+	int optiontabs[] = { 8 }; // tabs for option list box
 
-	NodeNameType *who;   // node to add to Players
+	NodeNameType *who; // node to add to Players
 	long ping_timer = 0; // for sending Ping packets
 
 	int color_used[MAX_MPLAYER_COLORS]; // 1 = color has been used
-	JoinEventType whahoppa;		    // event generated by received packets
+	JoinEventType whahoppa; // event generated by received packets
 	CCFileClass loadfile("SAVEGAME.NET");
 	int load_game = 0; // 1 = load a saved game
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
@@ -7238,14 +7937,25 @@ static int Net_Fake_New_Dialog(void) {
 	//------------------------------------------------------------------------
 	GadgetClass *commands; // button list
 
-	ColorListClass playerlist(BUTTON_PLAYERLIST, d_playerlist_x, d_playerlist_y, d_playerlist_w, d_playerlist_h,
-				  TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ColorListClass playerlist(BUTTON_PLAYERLIST,
+				  d_playerlist_x,
+				  d_playerlist_y,
+				  d_playerlist_w,
+				  d_playerlist_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
+				  TPF_BUTTON,
 				  // #if (GERMAN | FRENCH)
 				  //		d_cancel_x, d_cancel_y);
 				  // #else
-				  d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
+				  d_cancel_x,
+				  d_cancel_y,
+				  d_cancel_w,
+				  d_cancel_h);
 	// #endif
 
 	//------------------------------------------------------------------------
@@ -7298,11 +8008,10 @@ static int Net_Fake_New_Dialog(void) {
 	} else {
 		sprintf(item, "%s\t%s", Session.Handle, Text_String(TXT_SOVIET));
 	}
-#else  // OLDWAY
+#else // OLDWAY
 	sprintf(item, "%s\t%s", Session.Handle, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-	playerlist.Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-									   : &ColorRemaps[Session.ColorIdx]);
+	playerlist.Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] : &ColorRemaps[Session.ColorIdx]);
 
 	/*
 	** Process the message loop until we are in focus.
@@ -7376,8 +8085,7 @@ static int Net_Fake_New_Dialog(void) {
 				//...............................................................
 				//	Dialog & Field labels
 				//...............................................................
-				Fancy_Text_Print(TXT_HACKHACK, d_dialog_cx - width / 2, d_dialog_y + 25 * RESFACTOR,
-						 scheme, TBLACK, TPF_TEXT);
+				Fancy_Text_Print(TXT_HACKHACK, d_dialog_cx - width / 2, d_dialog_y + 25 * RESFACTOR, scheme, TBLACK, TPF_TEXT);
 			}
 
 			//..................................................................
@@ -7400,7 +8108,6 @@ static int Net_Fake_New_Dialog(void) {
 		//	Process input
 		//.....................................................................
 		switch (input) {
-
 		case (KN_ESC):
 		case (BUTTON_CANCEL | KN_BUTTON):
 			memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
@@ -7426,8 +8133,7 @@ static int Net_Fake_New_Dialog(void) {
 			// Don't send this message to myself.
 			//...............................................................
 			for (i = 1; i < Session.Players.Count(); i++) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 				Ipx.Service();
 			}
 			while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
@@ -7445,7 +8151,6 @@ static int Net_Fake_New_Dialog(void) {
 		//..................................................................
 		default:
 			if (Session.Players.Count() > 1) {
-
 				/*
 				** Wait for several secs after receiving request to join before sending
 				** start game packet
@@ -7511,13 +8216,11 @@ static int Net_Fake_New_Dialog(void) {
 				** Set up the scenario info so the remote player can match the scenario on his machine
 				** or request a download if it doesnt exist
 				*/
-				strcpy(Session.GPacket.ScenarioInfo.Scenario,
-				       Session.Scenarios[Session.Options.ScenarioIndex]->Description());
+				strcpy(Session.GPacket.ScenarioInfo.Scenario, Session.Scenarios[Session.Options.ScenarioIndex]->Description());
 				CCFileClass file(Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
 
 				//	ajw - I don't understand why this check is done here and not later.
 				if (!file.Is_Available()) {
-
 					/*
 					** Special new kludge for counterstrike.
 					**
@@ -7533,17 +8236,14 @@ static int Net_Fake_New_Dialog(void) {
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 					if (Expansion_CS_Present() || Expansion_AM_Present()) {
 						if (toupper(Session.ScenarioFileName[2]) == 'M') {
-
 							int current_drive = CCFileClass::Get_CD_Drive();
 							int index = Get_CD_Index(current_drive, 1 * 60);
 							bool needcd = false;
-							if (Is_Mission_Counterstrike(Session.ScenarioFileName) &&
-							    index != 2 && index != 3) {
+							if (Is_Mission_Counterstrike(Session.ScenarioFileName) && index != 2 && index != 3) {
 								needcd = true;
 								RequiredCD = 2;
 							}
-							if (Is_Mission_Aftermath(Session.ScenarioFileName) &&
-							    index != 3) {
+							if (Is_Mission_Aftermath(Session.ScenarioFileName) && index != 3) {
 								needcd = true;
 								RequiredCD = 3;
 							}
@@ -7576,7 +8276,6 @@ static int Net_Fake_New_Dialog(void) {
 					** See if that file is available now. Its fatal if it isnt.
 					*/
 					if (!file.Is_Available()) {
-
 						WWMessageBox().Process(TXT_UNABLE_PLAY_WAAUGH);
 
 						memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
@@ -7589,15 +8288,14 @@ static int Net_Fake_New_Dialog(void) {
 						//..................................................................
 						for (i = 1; i < Session.Players.Count(); i++) {
 							Ipx.Send_Global_Message(&Session.GPacket,
-										sizeof(GlobalPacketType), 1,
+										sizeof(GlobalPacketType),
+										1,
 										&(Session.Players[i]->Address));
 							Ipx.Service();
 						}
 
-						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-									NULL);
-						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-									NULL);
+						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, NULL);
+						Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, NULL);
 
 						while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
 							;
@@ -7621,8 +8319,7 @@ static int Net_Fake_New_Dialog(void) {
 
 				Session.GPacket.ScenarioInfo.FileLength = file.Size();
 #ifdef WOLAPI_INTEGRATION
-				strcpy(Session.GPacket.ScenarioInfo.ShortFileName,
-				       Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
+				strcpy(Session.GPacket.ScenarioInfo.ShortFileName, Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename());
 #else
 				strncpy(Session.GPacket.ScenarioInfo.ShortFileName,
 					Session.Scenarios[Session.Options.ScenarioIndex]->Get_Filename(),
@@ -7631,8 +8328,7 @@ static int Net_Fake_New_Dialog(void) {
 				strncpy((char *)Session.GPacket.ScenarioInfo.FileDigest,
 					Session.Scenarios[Session.Options.ScenarioIndex]->Get_Digest(),
 					sizeof(Session.GPacket.ScenarioInfo.FileDigest));
-				Session.GPacket.ScenarioInfo.OfficialScenario =
-				    Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
+				Session.GPacket.ScenarioInfo.OfficialScenario = Session.Scenarios[Session.Options.ScenarioIndex]->Get_Official();
 
 				Session.GPacket.ScenarioInfo.Credits = Session.Options.Credits;
 				Session.GPacket.ScenarioInfo.IsBases = Session.Options.Bases;
@@ -7647,8 +8343,7 @@ static int Net_Fake_New_Dialog(void) {
 				Session.GPacket.ScenarioInfo.GameSpeed = Options.GameSpeed;
 				Session.GPacket.ScenarioInfo.Version = VerNum.Get_Clipped_Version();
 
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 			}
 			Sound_Effect(VOC_OPTIONS_CHANGED);
 			transmit = 0;
@@ -7662,8 +8357,7 @@ static int Net_Fake_New_Dialog(void) {
 			memset(&Session.GPacket, 0, sizeof(GlobalPacketType));
 			Session.GPacket.Command = NET_PING;
 			for (i = 1; i < Session.Players.Count(); i++) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 			}
 			ping_timer = TickCount;
 		}
@@ -7698,10 +8392,9 @@ static int Net_Fake_New_Dialog(void) {
 		//	  value, 4 more to convert from ticks to frames)
 		//.....................................................................
 		if (Session.CommProtocol == COMM_PROTOCOL_MULTI_E_COMP) {
-			Session.MaxAhead = MAX(((((Ipx.Global_Response_Time() / 8) + (Session.FrameSendRate - 1)) /
-						 Session.FrameSendRate) *
-						Session.FrameSendRate),
-					       (Session.FrameSendRate * 2));
+			Session.MaxAhead = MAX(
+				((((Ipx.Global_Response_Time() / 8) + (Session.FrameSendRate - 1)) / Session.FrameSendRate) * Session.FrameSendRate),
+				(Session.FrameSendRate * 2));
 		} else {
 			Session.MaxAhead = MAX(((int)Ipx.Global_Response_Time() / 8), NETWORK_MIN_MAX_AHEAD);
 		}
@@ -7717,8 +8410,7 @@ static int Net_Fake_New_Dialog(void) {
 			Session.GPacket.Command = NET_GO;
 		Session.GPacket.ResponseTime.OneWay = Session.MaxAhead;
 		for (i = 1; i < Session.Players.Count(); i++) {
-			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-						&(Session.Players[i]->Address));
+			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 		}
 		//.....................................................................
 		//	Wait for all the ACK's to come in.
@@ -7742,10 +8434,8 @@ static int Net_Fake_New_Dialog(void) {
 
 		do {
 			Ipx.Service();
-			int retcode = Ipx.Get_Global_Message(&Session.GPacket, &Session.GPacketlen, &Session.GAddress,
-							     &Session.GProductID);
+			int retcode = Ipx.Get_Global_Message(&Session.GPacket, &Session.GPacketlen, &Session.GAddress, &Session.GProductID);
 			if (retcode && Session.GProductID == IPXGlobalConnClass::COMMAND_AND_CONQUER0) {
-
 				for (i = 1; i < Session.Players.Count(); i++) {
 					if (Session.Players[i]->Address == Session.GAddress) {
 						if (!responses[i]) {
@@ -7925,25 +8615,23 @@ static int Net_Fake_New_Dialog(void) {
  *   02/14/1995 BR : Created.                                                                  *
  *=============================================================================================*/
 static int Net_Fake_Join_Dialog(void) {
-
 #ifdef WIN32
 	//------------------------------------------------------------------------
 	//	Dialog & button dimensions
 	//------------------------------------------------------------------------
-	int d_dialog_w = 120 * RESFACTOR;		       // dialog width
-	int d_dialog_h = 80 * RESFACTOR;		       // dialog height
+	int d_dialog_w = 120 * RESFACTOR; // dialog width
+	int d_dialog_h = 80 * RESFACTOR; // dialog height
 	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
 	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2); // center x-coord
 
 	int d_txt6_h = 6 * RESFACTOR + 1; // ht of 6-pt text
-	int d_margin1 = 5 * RESFACTOR;	  // large margin
-	int d_margin2 = 7 * RESFACTOR;	  // small margin
+	int d_margin1 = 5 * RESFACTOR; // large margin
+	int d_margin2 = 7 * RESFACTOR; // small margin
 
 	int d_gamelist_w = 160 * RESFACTOR;
-	int d_gamelist_h =
-	    ((6 * 6) + 3) * RESFACTOR;	    // 6 rows high
-					    //		int d_gamelist_x = d_dialog_x + d_margin1 + d_margin1;
+	int d_gamelist_h = ((6 * 6) + 3) * RESFACTOR; // 6 rows high
+		//		int d_gamelist_x = d_dialog_x + d_margin1 + d_margin1;
 	int d_gamelist_x = 500 * RESFACTOR; // d_dialog_x + d_margin1 + d_margin1;
 	int d_gamelist_y = 50 + d_margin2 + 2 * RESFACTOR /*KO + d_txt6_h + d_margin2*/;
 
@@ -7988,25 +8676,25 @@ static int Net_Fake_Join_Dialog(void) {
 	//	Dialog variables
 	//------------------------------------------------------------------------
 	RedrawType display = REDRAW_ALL; // redraw level
-	bool process = true;		 // process while true
+	bool process = true; // process while true
 	KeyNumType input;
 	char housetext[25] = ""; // buffer for house droplist
 	int isdropped = 0;
 
-	JoinStateType joinstate = JOIN_NOTHING;	       // current "state" of this dialog
-	char namebuf[MPLAYER_NAME_MAX] = {0};	       // buffer for player's name
-	int playertabs[] = {77 * RESFACTOR};	       // tabs for player list box
-	int optiontabs[] = {8};			       // tabs for player list box
-	int game_index = -1;			       // index of currently-selected game
-	int join_index = -1;			       // index of game we're joining
-	int rc = 0;				       // -1 = user cancelled, 1 = New
-	JoinEventType event;			       // event from incoming packet
-	int i;					       // loop counter
-	int parms_received = 0;			       // 1 = game options received
-	NodeNameType *who;			       // node to add to Players
-	RejectType why;				       // reason for rejection
+	JoinStateType joinstate = JOIN_NOTHING; // current "state" of this dialog
+	char namebuf[MPLAYER_NAME_MAX] = { 0 }; // buffer for player's name
+	int playertabs[] = { 77 * RESFACTOR }; // tabs for player list box
+	int optiontabs[] = { 8 }; // tabs for player list box
+	int game_index = -1; // index of currently-selected game
+	int join_index = -1; // index of game we're joining
+	int rc = 0; // -1 = user cancelled, 1 = New
+	JoinEventType event; // event from incoming packet
+	int i; // loop counter
+	int parms_received = 0; // 1 = game options received
+	NodeNameType *who; // node to add to Players
+	RejectType why; // reason for rejection
 	TTimerClass<SystemTimerClass> lastclick_timer; // time b/w send periods
-	int lastclick_idx = 0;			       // index of item last clicked on
+	int lastclick_idx = 0; // index of item last clicked on
 	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 	int ready_to_go = 0;
 	Session.Options.ScenarioDescription[0] = 0; // Flag that we dont know the scenario name yet
@@ -8025,17 +8713,34 @@ static int Net_Fake_Join_Dialog(void) {
 	//------------------------------------------------------------------------
 	GadgetClass *commands; // button list
 
-	ListClass gamelist(BUTTON_GAMELIST, d_gamelist_x, d_gamelist_y, d_gamelist_w, d_gamelist_h, TPF_TEXT,
-			   MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ListClass gamelist(BUTTON_GAMELIST,
+			   d_gamelist_x,
+			   d_gamelist_y,
+			   d_gamelist_w,
+			   d_gamelist_h,
+			   TPF_TEXT,
+			   MFCD::Retrieve("BTN-UP.SHP"),
+			   MFCD::Retrieve("BTN-DN.SHP"));
 
-	ColorListClass playerlist(BUTTON_PLAYERLIST, d_playerlist_x, d_playerlist_y, d_playerlist_w, d_playerlist_h,
-				  TPF_TEXT, MFCD::Retrieve("BTN-UP.SHP"), MFCD::Retrieve("BTN-DN.SHP"));
+	ColorListClass playerlist(BUTTON_PLAYERLIST,
+				  d_playerlist_x,
+				  d_playerlist_y,
+				  d_playerlist_w,
+				  d_playerlist_h,
+				  TPF_TEXT,
+				  MFCD::Retrieve("BTN-UP.SHP"),
+				  MFCD::Retrieve("BTN-DN.SHP"));
 
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_BUTTON,
+	TextButtonClass cancelbtn(BUTTON_CANCEL,
+				  TXT_CANCEL,
+				  TPF_BUTTON,
 				  // #if (GERMAN | FRENCH)
 				  //		d_cancel_x, d_cancel_y);
 				  // #else
-				  d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
+				  d_cancel_x,
+				  d_cancel_y,
+				  d_cancel_w,
+				  d_cancel_h);
 	// #endif
 
 	//------------------------------------------------------------------------
@@ -8045,7 +8750,7 @@ static int Net_Fake_Join_Dialog(void) {
 	// Name & Color
 	//........................................................................
 	Session.ColorIdx = Session.PrefColor; // init my preferred color
-	strcpy(namebuf, Session.Handle);      // set my name
+	strcpy(namebuf, Session.Handle); // set my name
 
 	//........................................................................
 	// List boxes
@@ -8129,7 +8834,6 @@ static int Net_Fake_Join_Dialog(void) {
 	//	Processing loop
 	//------------------------------------------------------------------------
 	while (process) {
-
 #ifdef WIN32
 		/*
 		** If we have just received input focus again after running in the background then
@@ -8157,8 +8861,7 @@ static int Net_Fake_Join_Dialog(void) {
 				//...............................................................
 				//	Dialog & Field labels
 				//...............................................................
-				Fancy_Text_Print(TXT_HACKHACK, d_dialog_cx - width / 2, d_dialog_y + 25 * RESFACTOR,
-						 scheme, TBLACK, TPF_TEXT);
+				Fancy_Text_Print(TXT_HACKHACK, d_dialog_cx - width / 2, d_dialog_y + 25 * RESFACTOR, scheme, TBLACK, TPF_TEXT);
 
 				//...............................................................
 				//	Rebuild the button list
@@ -8192,7 +8895,6 @@ static int Net_Fake_Join_Dialog(void) {
 		//	Process input
 		//.....................................................................
 		switch (input) {
-
 		//..................................................................
 		// ESC / CANCEL: send a SIGN_OFF
 		// - If we're part of a game, stay in this dialog; otherwise, exit
@@ -8205,8 +8907,7 @@ static int Net_Fake_Join_Dialog(void) {
 			//	packet.  Don't send this to myself (index 0).
 			//...............................................................
 			if (joinstate == JOIN_CONFIRMED) {
-				Unjoin_Game(namebuf, joinstate, &gamelist, &playerlist, game_index, 1, 0, 0, d_txt6_h,
-					    0, 0, MAX_MESSAGE_LENGTH);
+				Unjoin_Game(namebuf, joinstate, &gamelist, &playerlist, game_index, 1, 0, 0, d_txt6_h, 0, 0, MAX_MESSAGE_LENGTH);
 				joinstate = JOIN_NOTHING;
 				display = REDRAW_ALL;
 			}
@@ -8219,8 +8920,7 @@ static int Net_Fake_Join_Dialog(void) {
 				Session.GPacket.Command = NET_SIGN_OFF;
 				strcpy(Session.GPacket.Name, namebuf);
 				for (i = 1; i < Session.Chat.Count(); i++) {
-					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-								&(Session.Chat[i]->Address));
+					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Chat[i]->Address));
 					Ipx.Service();
 				}
 
@@ -8229,8 +8929,7 @@ static int Net_Fake_Join_Dialog(void) {
 				//............................................................
 				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, NULL);
 				if (Session.IsBridge) {
-					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-								&Session.BridgeNet);
+					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
 				}
 
 				while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
@@ -8239,8 +8938,7 @@ static int Net_Fake_Join_Dialog(void) {
 				//............................................................
 				// exit the dialog
 				//............................................................
-				Send_Data_To_DDE_Server("Hello", strlen("Hello"),
-							DDEServerClass::DDE_CONNECTION_FAILED);
+				Send_Data_To_DDE_Server("Hello", strlen("Hello"), DDEServerClass::DDE_CONNECTION_FAILED);
 				GameStatisticsPacketSent = false;
 				Spawn_WChat(false);
 				process = false;
@@ -8309,17 +9007,14 @@ static int Net_Fake_Join_Dialog(void) {
 
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 					if (Session.ScenarioIsOfficial &&
-					    ((Expansion_CS_Present() &&
-					      Is_Mission_Counterstrike(Session.ScenarioFileName)) ||
-					     (Expansion_AM_Present() &&
-					      Is_Mission_Aftermath(Session.ScenarioFileName)))) {
+					    ((Expansion_CS_Present() && Is_Mission_Counterstrike(Session.ScenarioFileName)) ||
+					     (Expansion_AM_Present() && Is_Mission_Aftermath(Session.ScenarioFileName)))) {
 #else
 					if (Expansion_CS_Present() && Session.ScenarioIsOfficial) {
 #endif
 
 						CCFileClass check_file(Session.ScenarioFileName);
 						if (!check_file.Is_Available()) {
-
 							int current_drive = CCFileClass::Get_CD_Drive();
 #ifdef FIXIT_CSII //	checked - ajw 9/28/98
 							int index = Get_CD_Index(current_drive, 1 * 60);
@@ -8346,11 +9041,11 @@ static int Net_Fake_Join_Dialog(void) {
 								** We should have the scenario but the wrong disk is in.
 								** Tell the host that I am ready to go anyway.
 								*/
-								memset((void *)&(Session.GPacket), 0,
-								       sizeof(Session.GPacket));
+								memset((void *)&(Session.GPacket), 0, sizeof(Session.GPacket));
 								Session.GPacket.Command = NET_READY_TO_GO;
 								Ipx.Send_Global_Message(&Session.GPacket,
-											sizeof(GlobalPacketType), 1,
+											sizeof(GlobalPacketType),
+											1,
 											&Session.HostAddress);
 								while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
 									;
@@ -8375,9 +9070,8 @@ static int Net_Fake_Join_Dialog(void) {
 								*/
 								Session.Options.ScenarioIndex = -1;
 								for (i = 0; i < Session.Scenarios.Count(); i++) {
-									if (!strcmp(
-										Session.Scenarios[i]->Description(),
-										Session.Options.ScenarioDescription)) {
+									if (!strcmp(Session.Scenarios[i]->Description(),
+										    Session.Options.ScenarioDescription)) {
 										Session.Options.ScenarioIndex = i;
 										break;
 									}
@@ -8392,11 +9086,12 @@ static int Net_Fake_Join_Dialog(void) {
 					*then *	we need to fix up the file name so we load the right one.
 					*/
 					if (Find_Local_Scenario(Session.Options.ScenarioDescription,
-								Session.ScenarioFileName, Session.ScenarioFileLength,
-								Session.ScenarioDigest, Session.ScenarioIsOfficial)) {
-
+								Session.ScenarioFileName,
+								Session.ScenarioFileLength,
+								Session.ScenarioDigest,
+								Session.ScenarioIsOfficial)) {
 						Session.Options.ScenarioIndex = 1; // We dont care what it
-										   // is as long as it isnt -1
+							// is as long as it isnt -1
 
 						/*
 						** We have the scenario. Tell the host that I am ready to go.
@@ -8404,9 +9099,7 @@ static int Net_Fake_Join_Dialog(void) {
 						if (!ready_packet_was_sent) {
 							memset((void *)&(Session.GPacket), 0, sizeof(Session.GPacket));
 							Session.GPacket.Command = NET_READY_TO_GO;
-							Ipx.Send_Global_Message(&Session.GPacket,
-										sizeof(GlobalPacketType), 1,
-										&Session.HostAddress);
+							Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &Session.HostAddress);
 							while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
 								;
 						}
@@ -8425,10 +9118,9 @@ static int Net_Fake_Join_Dialog(void) {
 						} else {
 #endif
 							Session.Options.ScenarioIndex = 1; // We dont care what it
-											   // is as long as it isnt -1
+								// is as long as it isnt -1
 #ifdef FIXIT_VERSION_3
-							if (bSpecialAftermathScenario(
-								Session.Options.ScenarioDescription))
+							if (bSpecialAftermathScenario(Session.Options.ScenarioDescription))
 								break;
 #endif
 
@@ -8449,8 +9141,7 @@ static int Net_Fake_Join_Dialog(void) {
 					*/
 					memset((void *)&(Session.GPacket), 0, sizeof(Session.GPacket));
 					Session.GPacket.Command = NET_READY_TO_GO;
-					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-								&Session.HostAddress);
+					Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &Session.HostAddress);
 					while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
 						;
 				}
@@ -8479,13 +9170,12 @@ static int Net_Fake_Join_Dialog(void) {
 				} else {
 					sprintf(item, "%s\t%s", namebuf, Text_String(TXT_SOVIET));
 				}
-#else  // OLDWAY
-				sprintf(item, "%s\t%s", namebuf,
-					Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
+#else // OLDWAY
+				sprintf(item, "%s\t%s", namebuf, Text_String(HouseTypeClass::As_Reference(Session.House).Full_Name()));
 #endif // OLDWAY
-				playerlist.Add_Item(item, (Session.ColorIdx == PCOLOR_DIALOG_BLUE)
-							      ? &ColorRemaps[PCOLOR_REALLY_BLUE]
-							      : &ColorRemaps[Session.ColorIdx]);
+				playerlist.Add_Item(item,
+						    (Session.ColorIdx == PCOLOR_DIALOG_BLUE) ? &ColorRemaps[PCOLOR_REALLY_BLUE] :
+											       &ColorRemaps[Session.ColorIdx]);
 
 				who = new NodeNameType;
 				strcpy(who->Name, namebuf);
@@ -8498,8 +9188,7 @@ static int Net_Fake_Join_Dialog(void) {
 				//...............................................................
 				// Re-init the message system to its new smaller size
 				//...............................................................
-				Session.Messages.Init(0, 0, 8, MAX_MESSAGE_LENGTH, d_txt6_h, 0, 0, 1, 20,
-						      MAX_MESSAGE_LENGTH - 5);
+				Session.Messages.Init(0, 0, 8, MAX_MESSAGE_LENGTH, d_txt6_h, 0, 0, 1, 20, MAX_MESSAGE_LENGTH - 5);
 				Session.Messages.Add_Edit(Session.ColorIdx, TPF_TEXT | TPF_BRIGHT_COLOR, NULL, '_');
 #endif //(0)
 			}
@@ -8519,7 +9208,6 @@ static int Net_Fake_Join_Dialog(void) {
 		//	If the game options have changed, print them.
 		//.....................................................................
 		else if (event == EV_GAME_OPTIONS) {
-
 			Sound_Effect(VOC_OPTIONS_CHANGED);
 
 			parms_received = 1;
@@ -8563,7 +9251,6 @@ static int Net_Fake_Join_Dialog(void) {
 			//.....................................................................
 			for (i = 1; i < Session.Games.Count(); i++) {
 				if (TickCount - Session.Games[i]->Game.LastTime > 400) {
-
 					delete Session.Games[i];
 					Session.Games.Delete(Session.Games[i]);
 
@@ -8626,8 +9313,7 @@ static int Net_Fake_Join_Dialog(void) {
 			// Don't send myself the message.
 			//..................................................................
 			for (i = 1; i < Session.Players.Count(); i++) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1,
-							&(Session.Players[i]->Address));
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 1, &(Session.Players[i]->Address));
 				Ipx.Service();
 			}
 
@@ -8635,10 +9321,8 @@ static int Net_Fake_Join_Dialog(void) {
 			Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, NULL);
 
 			if (Session.IsBridge) {
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-							&Session.BridgeNet);
-				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0,
-							&Session.BridgeNet);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
+				Ipx.Send_Global_Message(&Session.GPacket, sizeof(GlobalPacketType), 0, &Session.BridgeNet);
 			}
 
 			while (Ipx.Global_Num_Send() > 0 && Ipx.Service() != 0)
@@ -8733,8 +9417,8 @@ bool Server_Remote_Connect(void) {
 	//	Init network timing parameters; these values should work for both a
 	// "real" network, and a simulated modem network (ie Kali)
 	//------------------------------------------------------------------------
-	Ipx.Set_Timing(30,   // retry 2 times per second
-		       -1,   // ignore max retries
+	Ipx.Set_Timing(30, // retry 2 times per second
+		       -1, // ignore max retries
 		       600); // give up after 10 seconds
 
 	//------------------------------------------------------------------------
@@ -8773,8 +9457,8 @@ bool Client_Remote_Connect(void) {
 	//	Init network timing parameters; these values should work for both a
 	// "real" network, and a simulated modem network (ie Kali)
 	//------------------------------------------------------------------------
-	Ipx.Set_Timing(30,   // retry 2 times per second
-		       -1,   // ignore max retries
+	Ipx.Set_Timing(30, // retry 2 times per second
+		       -1, // ignore max retries
 		       600); // give up after 10 seconds
 
 	//------------------------------------------------------------------------

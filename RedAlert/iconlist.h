@@ -34,7 +34,7 @@
 
 enum ICONKIND {
 	ICON_SHAPE = 0, //	pIcon points to a shape.
-	ICON_DIB	//	pIcon points to DIBitmap data.
+	ICON_DIB //	pIcon points to DIBitmap data.
 };
 
 struct FIXEDICON //	For putting icons in list entries at a specific fixed offset.
@@ -57,37 +57,66 @@ struct IconList_ItemExtras {
 		delete[] szExtraData;
 	}
 
-	bool bMultiSelected;  //	True if selected when bMultiSelect is on.
-	void *pIcon[3];	      //	Icon that appears before an item.
+	bool bMultiSelected; //	True if selected when bMultiSelect is on.
+	void *pIcon[3]; //	Icon that appears before an item.
 	ICONKIND IconKind[3]; //	Specifies what kind of image data pIcon points to.
-	char *szHelp;	      //	Tooltip help string that can be associated with item. Allocated and deleted here.
-	char *szExtraData;    //	Extra string that can be associated with item. Allocated and deleted here.
-	void *pvExtraData;    //	Hidden pointer that can be associated with item.
+	char *szHelp; //	Tooltip help string that can be associated with item. Allocated and deleted here.
+	char *szExtraData; //	Extra string that can be associated with item. Allocated and deleted here.
+	void *pvExtraData; //	Hidden pointer that can be associated with item.
 	RemapControlType *pColorRemap; //	Pointer to a color remap, or null for default colored text.
 	FIXEDICON FixedIcon;
 };
 
 class IconListClass : public ListClass {
 public:
-	IconListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up, void const *down,
-		      bool bResponsibleForStringAlloc = FALSE, int iSelectionType = 1, int iMaxItemsSaved = 0);
+	IconListClass(int id,
+		      int x,
+		      int y,
+		      int w,
+		      int h,
+		      TextPrintType flags,
+		      void const *up,
+		      void const *down,
+		      bool bResponsibleForStringAlloc = FALSE,
+		      int iSelectionType = 1,
+		      int iMaxItemsSaved = 0);
 	//		IconListClass( const IconListClass& list );
 	virtual ~IconListClass(void);
 
 	virtual int Add_Item(char const *text);
-	virtual int Add_Item(const char *text, const char *szHelp, void *pIcon0, ICONKIND IconKind0,
-			     const char *szExtraDataString = NULL, void *pvExtraDataPtr = NULL,
-			     RemapControlType *pColorRemap = NULL, void *pIcon1 = NULL, ICONKIND IconKind1 = ICON_SHAPE,
-			     void *pIcon2 = NULL, ICONKIND IconKind2 = ICON_SHAPE, void *pFixedIcon = NULL,
-			     ICONKIND FixedIconKind = ICON_SHAPE, int iXFixedIcon = 0, int iYFixedIcon = 0,
+	virtual int Add_Item(const char *text,
+			     const char *szHelp,
+			     void *pIcon0,
+			     ICONKIND IconKind0,
+			     const char *szExtraDataString = NULL,
+			     void *pvExtraDataPtr = NULL,
+			     RemapControlType *pColorRemap = NULL,
+			     void *pIcon1 = NULL,
+			     ICONKIND IconKind1 = ICON_SHAPE,
+			     void *pIcon2 = NULL,
+			     ICONKIND IconKind2 = ICON_SHAPE,
+			     void *pFixedIcon = NULL,
+			     ICONKIND FixedIconKind = ICON_SHAPE,
+			     int iXFixedIcon = 0,
+			     int iYFixedIcon = 0,
 			     int iFixedIconWidth = -1);
 
 	virtual int Add_Item(int text);
-	virtual int Add_Item(int text, const char *szHelp, void *pIcon0, ICONKIND IconKind0,
-			     const char *szExtraDataString = NULL, void *pvExtraDataPtr = NULL,
-			     RemapControlType *pColorRemap = NULL, void *pIcon1 = NULL, ICONKIND IconKind1 = ICON_SHAPE,
-			     void *pIcon2 = NULL, ICONKIND IconKind2 = ICON_SHAPE, void *pFixedIcon = NULL,
-			     ICONKIND FixedIconKind = ICON_SHAPE, int iXFixedIcon = 0, int iYFixedIcon = 0,
+	virtual int Add_Item(int text,
+			     const char *szHelp,
+			     void *pIcon0,
+			     ICONKIND IconKind0,
+			     const char *szExtraDataString = NULL,
+			     void *pvExtraDataPtr = NULL,
+			     RemapControlType *pColorRemap = NULL,
+			     void *pIcon1 = NULL,
+			     ICONKIND IconKind1 = ICON_SHAPE,
+			     void *pIcon2 = NULL,
+			     ICONKIND IconKind2 = ICON_SHAPE,
+			     void *pFixedIcon = NULL,
+			     ICONKIND FixedIconKind = ICON_SHAPE,
+			     int iXFixedIcon = 0,
+			     int iYFixedIcon = 0,
 			     int iFixedIconWidth = -1);
 
 	//		virtual int Add_Scroll_Bar(void);
@@ -132,7 +161,9 @@ public:
 	virtual void Set_Item_Color(int index, RemapControlType *pColorRemap);
 	virtual const IconList_ItemExtras *Get_ItemExtras(int index) const;
 	virtual void Clear();
-	virtual int Get_View_Index() { return CurrentTopIndex; }
+	virtual int Get_View_Index() {
+		return CurrentTopIndex;
+	}
 	bool bScrollBeingDragged() {
 		//	Returns true if the scroll bar of the list is being dragged by the user.
 		return (GadgetClass::StuckOn == &ScrollGadget);
@@ -161,10 +192,21 @@ protected:
 	virtual int Action(unsigned flags, KeyNumType &key);
 	virtual void Draw_Entry(int index, int x, int y, int width, int selected);
 
-	virtual int Add_Item_Detail(const char *szToken, const char *szHelp, void *pIcon0, ICONKIND IconKind0,
-				    const char *szExtraDataString, void *pvExtraData, RemapControlType *pColorRemap,
-				    void *pIcon1, ICONKIND IconKind1, void *pIcon2, ICONKIND IconKind2,
-				    void *pFixedIcon, ICONKIND FixedIconKind, int iXFixedIcon, int iYFixedIcon,
+	virtual int Add_Item_Detail(const char *szToken,
+				    const char *szHelp,
+				    void *pIcon0,
+				    ICONKIND IconKind0,
+				    const char *szExtraDataString,
+				    void *pvExtraData,
+				    RemapControlType *pColorRemap,
+				    void *pIcon1,
+				    ICONKIND IconKind1,
+				    void *pIcon2,
+				    ICONKIND IconKind2,
+				    void *pFixedIcon,
+				    ICONKIND FixedIconKind,
+				    int iXFixedIcon,
+				    int iYFixedIcon,
 				    int iFixedIconWidth);
 
 	//	The list of Icons.
@@ -172,11 +214,11 @@ protected:
 	// DynamicVectorClass< IconList_ItemExtras* > ExtrasList;		ajw: creates hellacious linking problems
 	DynamicVectorClass<void *> ExtrasList;
 
-	bool bDoAlloc;	 //	True if I am responsible for mem. allocation/deletion of strings.
-			 //		bool bMultiSelect;	//	True if we are using the multiple item selection
-			 //feature.
+	bool bDoAlloc; //	True if I am responsible for mem. allocation/deletion of strings.
+		//		bool bMultiSelect;	//	True if we are using the multiple item selection
+		//feature.
 	int iSelectType; //	0 for no selection shown, 1 for normal ListClass selection, 2 for n multiple selections
-	int iMaxItems;	 //	Number of items to limit list to, if bDoAlloc is true.
+	int iMaxItems; //	Number of items to limit list to, if bDoAlloc is true.
 };
 
 #endif

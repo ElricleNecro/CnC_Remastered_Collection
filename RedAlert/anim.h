@@ -53,10 +53,14 @@ public:
 	AnimClass(NoInitClass const &x) : ObjectClass(x), Class(x), StageClass(x) {};
 	virtual ~AnimClass(void);
 
-	operator AnimType(void) const { return Class->Type; };
+	operator AnimType(void) const {
+		return Class->Type;
+	};
 
 	static void *operator new(size_t size);
-	static void *operator new(size_t, void *ptr) { return (ptr); };
+	static void *operator new(size_t, void *ptr) {
+		return (ptr);
+	};
 	static void operator delete(void *ptr);
 
 	/*---------------------------------------------------------------------
@@ -66,9 +70,15 @@ public:
 
 	void Attach_To(ObjectClass *obj);
 	void Sort_Above(TARGET target);
-	void Make_Invisible(void) { IsInvisible = true; };
-	void Make_Visible(void) { IsInvisible = false; };
-	void Kill_At(unsigned long long kill_time) { KillTime = kill_time; }
+	void Make_Invisible(void) {
+		IsInvisible = true;
+	};
+	void Make_Visible(void) {
+		IsInvisible = false;
+	};
+	void Kill_At(unsigned long long kill_time) {
+		KillTime = kill_time;
+	}
 	static void Do_Atom_Damage(HousesType ownerhouse, CELL cell);
 
 	/*
@@ -76,17 +86,25 @@ public:
 	** Added functions for accessing which players can see this anim
 	*/
 	void Set_Visible_Flags(unsigned flags);
-	unsigned Get_Visible_Flags() const { return (Delay == 0) ? VisibleFlags : 0; }
+	unsigned Get_Visible_Flags() const {
+		return (Delay == 0) ? VisibleFlags : 0;
+	}
 
 	virtual void Set_Owner(HousesType owner);
-	virtual HousesType Owner(void) const { return OwnerHouse; };
-	virtual bool Can_Place_Here(COORDINATE) const { return true; }
+	virtual HousesType Owner(void) const {
+		return OwnerHouse;
+	};
+	virtual bool Can_Place_Here(COORDINATE) const {
+		return true;
+	}
 	virtual bool Mark(MarkType mark = MARK_CHANGE);
 	virtual bool Render(bool forced) const;
 	virtual COORDINATE Center_Coord(void) const;
 	virtual COORDINATE Sort_Y(void) const;
 	virtual LayerType In_Which_Layer(void) const;
-	virtual ObjectTypeClass const &Class_Of(void) const { return *Class; };
+	virtual ObjectTypeClass const &Class_Of(void) const {
+		return *Class;
+	};
 	virtual short const *Occupy_List(bool = false) const;
 	virtual short const *Overlap_List(void) const;
 	virtual void Draw_It(int x, int y, WindowNumberType window) const;

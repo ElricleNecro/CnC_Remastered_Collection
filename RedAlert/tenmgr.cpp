@@ -429,7 +429,9 @@ int TenConnManClass::Get_Global_Message(void *buf, int *buflen, int *address) {
  * HISTORY:                                                                *
  *   07/22/1996 BRR : Created.                                             *
  *=========================================================================*/
-int TenConnManClass::Num_Connections(void) { return (NumConnections); } // end of Num_Connections
+int TenConnManClass::Num_Connections(void) {
+	return (NumConnections);
+} // end of Num_Connections
 
 /***************************************************************************
  * TenConnManClass::Connection_ID -- Reports a connection's ID             *
@@ -633,7 +635,9 @@ int TenConnManClass::Connection_Address(int id) {
  * HISTORY:                                                                *
  *   07/22/1996 BRR : Created.                                             *
  *=========================================================================*/
-int TenConnManClass::Global_Num_Send(void) { return (0); } // end of Global_Num_Send
+int TenConnManClass::Global_Num_Send(void) {
+	return (0);
+} // end of Global_Num_Send
 
 /***************************************************************************
  * TenConnManClass::Global_Num_Receive -- Reports # incoming packets       *
@@ -653,7 +657,9 @@ int TenConnManClass::Global_Num_Send(void) { return (0); } // end of Global_Num_
  * HISTORY:                                                                *
  *   07/22/1996 BRR : Created.                                             *
  *=========================================================================*/
-int TenConnManClass::Global_Num_Receive(void) { return (GlobalQueue->Num_Receive()); } // end of Global_Num_Receive
+int TenConnManClass::Global_Num_Receive(void) {
+	return (GlobalQueue->Num_Receive());
+} // end of Global_Num_Receive
 
 /***************************************************************************
  * TenConnManClass::Private_Num_Send -- Reports # outgoing packets         *
@@ -673,7 +679,9 @@ int TenConnManClass::Global_Num_Receive(void) { return (GlobalQueue->Num_Receive
  * HISTORY:                                                                *
  *   07/22/1996 BRR : Created.                                             *
  *=========================================================================*/
-int TenConnManClass::Private_Num_Send(int /*id*/) { return (0); } // end of Private_Num_Send
+int TenConnManClass::Private_Num_Send(int /*id*/) {
+	return (0);
+} // end of Private_Num_Send
 
 /***************************************************************************
  * TenConnManClass::Private_Num_Receive -- Reports # incoming packets      *
@@ -815,8 +823,7 @@ unsigned long TenConnManClass::Response_Time(void) {
  * HISTORY:                                                                *
  *   07/22/1996 BRR : Created.                                             *
  *=========================================================================*/
-void TenConnManClass::Set_Timing(unsigned long /*retrydelta*/, unsigned long /*maxretries*/,
-				 unsigned long /*timeout*/) {
+void TenConnManClass::Set_Timing(unsigned long /*retrydelta*/, unsigned long /*maxretries*/, unsigned long /*timeout*/) {
 	//
 	// (This function intentionally left blank.)
 	//
@@ -841,8 +848,7 @@ void TenConnManClass::Set_Timing(unsigned long /*retrydelta*/, unsigned long /*m
  * HISTORY:                                                                *
  *   07/22/1996 BRR : Created.                                             *
  *=========================================================================*/
-void TenConnManClass::Configure_Debug(int /*index*/, int /*type_offset*/, int /*type_size*/, char ** /*names*/,
-				      int /*namestart*/, int /*namecount*/) {
+void TenConnManClass::Configure_Debug(int /*index*/, int /*type_offset*/, int /*type_size*/, char ** /*names*/, int /*namestart*/, int /*namecount*/) {
 	//
 	// (This function intentionally left blank.)
 	//
@@ -1091,8 +1097,7 @@ void doIncomingPacket(int addr, void *buf, size_t size) {
  * HISTORY:                                                                *
  *   07/22/1996 BRR : Created.                                             *
  *=========================================================================*/
-void doPlayerEntered(int pid, int isYou, char * /*options*/, char * /*termOptions*/, char * /*address*/,
-		     long /*uniqueId*/, char * /*joinType*/) {
+void doPlayerEntered(int pid, int isYou, char * /*options*/, char * /*termOptions*/, char * /*address*/, long /*uniqueId*/, char * /*joinType*/) {
 	if (isYou) {
 		Session.TenPlayerID = pid;
 	}

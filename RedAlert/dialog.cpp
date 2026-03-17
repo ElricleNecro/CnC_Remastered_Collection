@@ -190,12 +190,12 @@ void Draw_Box(int x, int y, int w, int h, BoxStyleEnum up, bool filled) {
 	// Filler, Shadow, Hilite, Corner colors
 
 	BoxStyleType const ButtonColors[BOXSTYLE_COUNT] = {
-	    {scheme->Background, scheme->Highlight, scheme->Shadow, scheme->Corners}, // Down
-	    {scheme->Background, scheme->Shadow, scheme->Highlight, scheme->Corners}, // Raised
-	    {DKGREY, WHITE, BLACK, DKGREY},					      // Disabled down
-	    {DKGREY, BLACK, LTGREY, DKGREY},					      // Disabled up
-	    {BLACK, scheme->Box, scheme->Box, BLACK},				      // List box
-	    {BLACK, scheme->Box, scheme->Box, BLACK},				      // Dialog box
+		{ scheme->Background, scheme->Highlight, scheme->Shadow, scheme->Corners }, // Down
+		{ scheme->Background, scheme->Shadow, scheme->Highlight, scheme->Corners }, // Raised
+		{ DKGREY, WHITE, BLACK, DKGREY }, // Disabled down
+		{ DKGREY, BLACK, LTGREY, DKGREY }, // Disabled up
+		{ BLACK, scheme->Box, scheme->Box, BLACK }, // List box
+		{ BLACK, scheme->Box, scheme->Box, BLACK }, // Dialog box
 	};
 
 	w--;
@@ -278,7 +278,6 @@ int Format_Window_String(char *string, int maxlinelen, int &width, int &height) 
 
 		// if the line is to long...
 		if (linelen >= maxlinelen) {
-
 			/*
 			**	Back up to an appropriate location to break.
 			*/
@@ -383,12 +382,11 @@ void Window_Box(WindowNumberType window, BoxStyleEnum style) {
  *   12/24/1991 JLB : Created.                                                                 *
  *   10/26/94   JLB : Handles font X spacing in a more friendly manner.                        *
  *=============================================================================================*/
-void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back,
-		       TextPrintType flag) {
-	static int yspace = 0;	       // Y spacing adjustment for font.
-	static int xspace = 0;	       // Spacing adjustment for font.
-	void const *font = 0;	       // Font to use.
-	int shadow;		       // Requested shadow value.
+void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back, TextPrintType flag) {
+	static int yspace = 0; // Y spacing adjustment for font.
+	static int xspace = 0; // Spacing adjustment for font.
+	void const *font = 0; // Font to use.
+	int shadow; // Requested shadow value.
 	unsigned char fontpalette[16]; // Working font palette array.
 	int forecolor;
 
@@ -407,9 +405,7 @@ void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlTyp
 	**	A gradient font always requires special fixups for the palette
 	*/
 	int point = (flag & (TextPrintType)0x000F);
-	if (point == TPF_VCR || point == TPF_6PT_GRAD || point == TPF_METAL12 || point == TPF_EFNT ||
-	    point == TPF_TYPE) {
-
+	if (point == TPF_VCR || point == TPF_6PT_GRAD || point == TPF_METAL12 || point == TPF_EFNT || point == TPF_TYPE) {
 		/*
 		** If a gradient palette is specified, copy the remap table directly, otherwise
 		**	use the foreground color as the entire font remap color.
@@ -525,8 +521,8 @@ void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlTyp
 #ifdef WOLAPI_INTEGRATION
 		xspace -= 2;
 		yspace += 2;
-#else //	I am implicitly assuming that TPF_TYPE was no longer being used, before I came along, despite the
-      // following. ajw
+#else //	I am implicitly assuming that TPF_TYPE was no longer being used, before I came along, despite the                                           \
+	// following. ajw
 #ifdef GERMAN
 		yspace += 4; // VG 10/17/96
 #endif
@@ -544,7 +540,6 @@ void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlTyp
 	*/
 	shadow = (flag & (TPF_NOSHADOW | TPF_DROPSHADOW | TPF_FULLSHADOW | TPF_LIGHTSHADOW));
 	switch (shadow) {
-
 	/*
 	**	The text is rendered plain.
 	*/
@@ -654,10 +649,9 @@ void Simple_Text_Print(char const *text, unsigned x, unsigned y, RemapControlTyp
  * HISTORY:                                                                                    *
  *   11/29/1994 JLB : Created                                                                  *
  *=============================================================================================*/
-void Fancy_Text_Print(int text, unsigned x, unsigned y, RemapControlType *fore, unsigned back, TextPrintType flag,
-		      ...) {
+void Fancy_Text_Print(int text, unsigned x, unsigned y, RemapControlType *fore, unsigned back, TextPrintType flag, ...) {
 	char buffer[512]; // Working staging buffer.
-	va_list arg;	  // Argument list var.
+	va_list arg; // Argument list var.
 
 	/*
 	**	If the text number is valid, then process it.
@@ -675,7 +669,6 @@ void Fancy_Text_Print(int text, unsigned x, unsigned y, RemapControlType *fore, 
 
 		Simple_Text_Print(buffer, x, y, fore, back, flag);
 	} else {
-
 		/*
 		**	Just the flags are to be changed, since the text number is TXT_NONE.
 		*/
@@ -710,17 +703,15 @@ void Fancy_Text_Print(int text, unsigned x, unsigned y, RemapControlType *fore, 
  *   10/26/94   JLB : Handles font X spacing in a more friendly manner.                        *
  *   11/29/1994 JLB : Separated actual draw action.                                            *
  *=============================================================================================*/
-void Fancy_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back,
-		      TextPrintType flag, ...) {
+void Fancy_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back, TextPrintType flag, ...) {
 	char buffer[512]; // Working staging buffer.
-	va_list arg;	  // Argument list var.
+	va_list arg; // Argument list var.
 
 	/*
 	**	If there is a valid text string pointer then build the final string into the
 	**	working buffer before sending it to the simple string printing routine.
 	*/
 	if (text) {
-
 		/*
 		**	Since vsprintf doesn't know about EMS pointers, be sure to surround this
 		**	call with locking code.
@@ -731,7 +722,6 @@ void Fancy_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType
 
 		Simple_Text_Print(buffer, x, y, fore, back, flag);
 	} else {
-
 		/*
 		**	Just the flags are desired to be changed, so call the simple print routine with
 		**	a NULL text pointer.
@@ -769,8 +759,14 @@ void Fancy_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType
  * HISTORY:                                                                                    *
  *   01/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Conquer_Clip_Text_Print(char const *text, unsigned x, unsigned y, RemapControlType *fore, unsigned back,
-			     TextPrintType flag, int width, int const *tabs) {
+void Conquer_Clip_Text_Print(char const *text,
+			     unsigned x,
+			     unsigned y,
+			     RemapControlType *fore,
+			     unsigned back,
+			     TextPrintType flag,
+			     int width,
+			     int const *tabs) {
 	char buffer[512];
 
 	if (text) {
@@ -797,7 +793,6 @@ void Conquer_Clip_Text_Print(char const *text, unsigned x, unsigned y, RemapCont
 			}
 
 			if (*source) {
-
 				/*
 				**	Scan forward until the end of the string is reached or the
 				**	maximum width, whichever comes first.
@@ -961,7 +956,9 @@ unsigned char *Font_Palette(int color) {
  * HISTORY:                                                                                    *
  *   06/23/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Draw_Caption(int text, int x, int y, int w) { Draw_Caption(Text_String(text), x, y, w); }
+void Draw_Caption(int text, int x, int y, int w) {
+	Draw_Caption(Text_String(text), x, y, w);
+}
 
 void Draw_Caption(char const *text, int x, int y, int w) {
 	/*
@@ -969,16 +966,20 @@ void Draw_Caption(char const *text, int x, int y, int w) {
 	*/
 	if (text != NULL && *text != '\0') {
 		if (Debug_Map) {
-			Fancy_Text_Print(text, w / 2 + x, (2 * RESFACTOR) + y, GadgetClass::Get_Color_Scheme(), TBLACK,
+			Fancy_Text_Print(text,
+					 w / 2 + x,
+					 (2 * RESFACTOR) + y,
+					 GadgetClass::Get_Color_Scheme(),
+					 TBLACK,
 					 TPF_CENTER | TPF_EFNT | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 		} else {
-			Fancy_Text_Print(text, w / 2 + x, (8 * RESFACTOR) + y, GadgetClass::Get_Color_Scheme(), TBLACK,
-					 TPF_CENTER | TPF_TEXT);
+			Fancy_Text_Print(text, w / 2 + x, (8 * RESFACTOR) + y, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER | TPF_TEXT);
 			int length = String_Pixel_Width(text);
-			LogicPage->Draw_Line(
-			    (x + (w / 2)) - (length / 2), y + FontHeight + FontYSpacing + (8 * RESFACTOR),
-			    (x + (w / 2)) + (length / 2), y + FontHeight + FontYSpacing + (8 * RESFACTOR),
-			    GadgetClass::Get_Color_Scheme()->Box);
+			LogicPage->Draw_Line((x + (w / 2)) - (length / 2),
+					     y + FontHeight + FontYSpacing + (8 * RESFACTOR),
+					     (x + (w / 2)) + (length / 2),
+					     y + FontHeight + FontYSpacing + (8 * RESFACTOR),
+					     GadgetClass::Get_Color_Scheme()->Box);
 		}
 	}
 }

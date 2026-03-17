@@ -312,15 +312,13 @@ const char TXT_WOL_DOWNLOADLOCATING[] = "Status: Locating file...";
 
 const char TXT_WOL_DOWNLOADDOWNLOADING[] = "Status: Downloading...";
 
-const char TXT_WOL_DOWNLOADEXITWARNING[] =
-    "Download complete! Red Alert will now restart in order to apply the update patch.";
+const char TXT_WOL_DOWNLOADEXITWARNING[] = "Download complete! Red Alert will now restart in order to apply the update patch.";
 
 const char TXT_WOL_HELPSHELL[] = "Are you sure you want to launch the Internet browser for Westwood Online help?";
 
 const char TXT_WOL_LADDERSHELL[] = "Are you sure you want to launch the Internet browser for the Red Alert ladders?";
 
-const char TXT_WOL_WEBREGISTRATIONSHELL[] =
-    "No saved usernames found. Would you like to register a new username for Westwood Online?";
+const char TXT_WOL_WEBREGISTRATIONSHELL[] = "No saved usernames found. Would you like to register a new username for Westwood Online?";
 
 const char TXT_WOL_GAMEADVERTSHELL[] = "Are you sure you want to launch the Internet browser for information about %s?";
 //	Appears above user list. %i = number of users in the current channel.
@@ -449,8 +447,7 @@ const char TXT_WOL_CHANNELLISTLOADING[] = "... Daten werden heruntergeladen ..."
 const char TXT_WOL_YOURENOTINCHANNEL[] = "Sie befinden sich zur Zeit nicht in einem Chat-Channel.";
 const char TXT_WOL_ACTION[] = "Action";
 const char TXT_WOL_JOIN[] = "Teilnehmen";
-const char TXT_WOL_CANTCREATEINCHANNEL[] =
-    "Sie kînnen keinen neuen Channel erstellen, bevor Sie diesen Channel verlassen.";
+const char TXT_WOL_CANTCREATEINCHANNEL[] = "Sie kînnen keinen neuen Channel erstellen, bevor Sie diesen Channel verlassen.";
 const char TXT_WOL_NEWSOMETHING[] = "Neu";
 const char TXT_WOL_CREATECHANNELTITLE[] = "Channel erstellen";
 const char TXT_WOL_CREATECHANNELPROMPT[] = "Channel-Name: ";
@@ -535,10 +532,8 @@ const char TXT_WOL_CG_PRIVACY[] = "Privat";
 const char TXT_WOL_CG_RAGAME[] = "Alarmstufe-Rot-Spiel";
 const char TXT_WOL_CG_CSGAME[] = "Gegenangriff-Spiel";
 const char TXT_WOL_CG_AMGAME[] = "Vergeltungsschlag-Spiel";
-const char TXT_WOL_NEEDCOUNTERSTRIKE[] =
-    "Sie mÅssen 'Gegenangriff' installiert haben, um dieses Spiel spielen zu kînnen.";
-const char TXT_WOL_NEEDAFTERMATH[] =
-    "Sie mÅssen 'Vergeltungsschlag' installiert haben, um dieses Spiel spielen zu kînnen.";
+const char TXT_WOL_NEEDCOUNTERSTRIKE[] = "Sie mÅssen 'Gegenangriff' installiert haben, um dieses Spiel spielen zu kînnen.";
+const char TXT_WOL_NEEDAFTERMATH[] = "Sie mÅssen 'Vergeltungsschlag' installiert haben, um dieses Spiel spielen zu kînnen.";
 const char TXT_WOL_TTIP_CHANLIST_CHAT[] = " Doppelklick zur Teilnahme am '%s'-Channel (z.Z. %i User). ";
 const char TXT_WOL_TTIP_CHANLIST_LOBBY[] = " Doppelklick zur Teilnahme an der '%s'-Lobby (z.Z. %i User). ";
 const char TXT_WOL_TTIP_REDALERT[] = "Alarmstufe Rot";
@@ -555,8 +550,7 @@ const char TXT_WOL_RULESMISMATCH[] = "Ihr Spiel ist mit dem des Host nicht kompa
 const char TXT_WOL_STARTTIMEOUT[] = "Keine Antworten von GÑsten! Spielstart abgebrochen.";
 const char TXT_WOL_STARTCANCELLED[] = "Spielstart abgebrochen.";
 const char TXT_WOL_CANCELGAME[] = "ZurÅck";
-const char TXT_WOL_PATCHQUESTION[] =
-    "Ein Update-Patch wird fÅr Internet-Spiele benîtigt. Mîchten Sie es jetzt herunterladen?";
+const char TXT_WOL_PATCHQUESTION[] = "Ein Update-Patch wird fÅr Internet-Spiele benîtigt. Mîchten Sie es jetzt herunterladen?";
 const char TXT_WOL_DOWNLOADING[] = "Datei %i von %i herunterladen";
 const char TXT_WOL_DOWNLOADERROR[] = "Ein Fehler trat beim Herunterladen der Dateien auf.";
 const char TXT_WOL_DOWNLOADBYTES[] = "%i Bytes von %i erhalten. (%i%%%%)";
@@ -567,14 +561,11 @@ const char TXT_WOL_DOWNLOADLOCATING[] = "Status: Suche Datei ...";
 const char TXT_WOL_DOWNLOADDOWNLOADING[] = "Status: Lade herunter ...";
 const char TXT_WOL_DOWNLOADEXITWARNING[] = "Herunterladen abgeschlossen! Alarmstufe Rot wird jetzt neugestartet, damit "
 					   "das Update-Patch angewendet werden kann.";
-const char TXT_WOL_HELPSHELL[] =
-    "Sind Sie sicher, da\251 Sie den Internet-Browser fÅr die Westwood-Online-Hilfe starten mîchten?";
-const char TXT_WOL_LADDERSHELL[] =
-    "Sind Sie sicher, da\251 Sie den Internet-Browser fÅr die Alarmstufe-Rot-Tabellen starten mîchten?";
+const char TXT_WOL_HELPSHELL[] = "Sind Sie sicher, da\251 Sie den Internet-Browser fÅr die Westwood-Online-Hilfe starten mîchten?";
+const char TXT_WOL_LADDERSHELL[] = "Sind Sie sicher, da\251 Sie den Internet-Browser fÅr die Alarmstufe-Rot-Tabellen starten mîchten?";
 const char TXT_WOL_WEBREGISTRATIONSHELL[] =
-    "Keine gespeicherten User-Namen gefunden. Mîchten Sie einen neuen User-Namen fÅr Westwood Online eintragen?";
-const char TXT_WOL_GAMEADVERTSHELL[] =
-    "Sind Sie sicher, da\251 Sie den Internet-Browser fÅr Informationen Åber %s starten mîchten?";
+	"Keine gespeicherten User-Namen gefunden. Mîchten Sie einen neuen User-Namen fÅr Westwood Online eintragen?";
+const char TXT_WOL_GAMEADVERTSHELL[] = "Sind Sie sicher, da\251 Sie den Internet-Browser fÅr Informationen Åber %s starten mîchten?";
 const char TXT_WOL_USERLIST[] = "User: %i";
 const char TXT_WOL_NOUSERLIST[] = "(nicht in einem Channel)";
 const char TXT_WOL_CANTCREATEHERE[] = "Um ein Spiel zu starten, mÅssen Sie in der Lobby Alarmstufe Rot sein.";
@@ -583,8 +574,7 @@ const char TXT_WOL_WOLAPIREINIT[] = "Verbindung zu Westwood Online verloren. Ver
 const char TXT_WOL_NOTPAGED[] = "Kann keine Antwort senden, niemand hat Ihnen geschrieben.";
 const char TXT_WOL_SCENARIONAMEWAIT[] = "Warte auf Szenario ...";
 const char TXT_WOL_BACK[] = "ZurÅck";
-const char TXT_WOL_AMDISCNEEDED[] =
-    "Die CD 'Vergeltungsschlag' wird fÅr dieses Spiel benîtigt, bitte legen Sie sie jetzt ein.";
+const char TXT_WOL_AMDISCNEEDED[] = "Die CD 'Vergeltungsschlag' wird fÅr dieses Spiel benîtigt, bitte legen Sie sie jetzt ein.";
 const char TXT_WOL_CONFIRMLOGOUT[] = "Sind Sie sicher, da\251 Sie Westwood Online verlassen mîchten?";
 const char TXT_WOL_PROPOSE_DRAW[] = "Unentschieden vorschlagen";
 const char TXT_WOL_RETRACT_DRAW[] = "Unentschieden-Vorschlag zurÅckziehen";
@@ -599,8 +589,7 @@ const char TXT_WOL_DRAW[] = "Das Spiel ist unentschieden";
 const char TXT_WOL_CANTLAUNCHBROWSER[] = "Web-Browser kann %s nicht îffnen!";
 const char TXT_WOL_CHANNELFULL[] = "Dieser Chat-/Game-Channel ist voll.";
 const char TXT_WOL_CHANNELTYPE_TOP[] = " Doppelklicken Sie, um zum obersten Level zu gelangen. ";
-const char TXT_WOL_CHANNELTYPE_OFFICIALCHAT[] =
-    " Doppelklicken Sie, um zum offiziellen Chat-Channel-Level zu gelangen. ";
+const char TXT_WOL_CHANNELTYPE_OFFICIALCHAT[] = " Doppelklicken Sie, um zum offiziellen Chat-Channel-Level zu gelangen. ";
 const char TXT_WOL_CHANNELTYPE_USERCHAT[] = " Doppelklicken Sie, um zum User-Chat-Channel-Level zu gelangen. ";
 const char TXT_WOL_CHANNELTYPE_GAMES[] = " Doppelklicken Sie, um zum Game-Channel-Level zu gelangen. ";
 const char TXT_WOL_CHANNELTYPE_LOADING[] = " Liste von Westwood Online wird geladen, bitte warten... ";
@@ -620,8 +609,7 @@ const char TXT_WOL_OPTRANKAM[] = "Vergeltungsschlag-Platz anzeigen.";
 const char TXT_WOL_CANCELMEANSFORFEIT[] = " (UND BÅSSEN SIE DAS SPIEL EIN)";
 const char TXT_WOL_DLLERROR_GETIE3[] = "Ihre Version der Windows ist veraltet. Bauen Sie bitte zu den Windows SP1, aus "
 				       "oder installieren Sie Internet Explorer 3,0 oder hîheres.";
-const char TXT_WOL_DLLERROR_CALLUS[] =
-    "Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Technischen Kundendienst.";
+const char TXT_WOL_DLLERROR_CALLUS[] = "Ein unerwarteter Fehler ist aufgetreten. Bitte wenden Sie sich an den Technischen Kundendienst.";
 const char TXT_WOL_PRIVATE[] = "<privat>";
 
 #else //	FRENCH
@@ -657,8 +645,7 @@ const char TXT_WOL_CHANNELLISTLOADING[] = "...En cours de tÇlÇchargement...";
 const char TXT_WOL_YOURENOTINCHANNEL[] = "Vous n'àtes pas dans un canal de conversation.";
 const char TXT_WOL_ACTION[] = "Action";
 const char TXT_WOL_JOIN[] = "Rejoindre";
-const char TXT_WOL_CANTCREATEINCHANNEL[] =
-    "CrÇation d'un nouveau canal impossible tant que vous ne quittez pas ce canal.";
+const char TXT_WOL_CANTCREATEINCHANNEL[] = "CrÇation d'un nouveau canal impossible tant que vous ne quittez pas ce canal.";
 const char TXT_WOL_NEWSOMETHING[] = "Nouveau";
 const char TXT_WOL_CREATECHANNELTITLE[] = "CrÇer un canal";
 const char TXT_WOL_CREATECHANNELPROMPT[] = "Nom du canal : ";
@@ -761,8 +748,7 @@ const char TXT_WOL_RULESMISMATCH[] = "Votre partie n'est pas compatible avec cel
 const char TXT_WOL_STARTTIMEOUT[] = "Expiration du temps de rÇponse des clients ! DÇmarrage du jeu annulÇ.";
 const char TXT_WOL_STARTCANCELLED[] = "DÇmarrage du jeu annulÇ.";
 const char TXT_WOL_CANCELGAME[] = "Retour";
-const char TXT_WOL_PATCHQUESTION[] =
-    "Un patch mis Ö jour est nÇcessaire pour le jeu sur Internet. Voulez-vous le tÇlÇcharger maintenant ?";
+const char TXT_WOL_PATCHQUESTION[] = "Un patch mis Ö jour est nÇcessaire pour le jeu sur Internet. Voulez-vous le tÇlÇcharger maintenant ?";
 const char TXT_WOL_DOWNLOADING[] = "TÇlÇcharger %i fichier(s) sur %i.";
 const char TXT_WOL_DOWNLOADERROR[] = "Erreur lors du tÇlÇchargement du fichier.";
 const char TXT_WOL_DOWNLOADBYTES[] = "RÇception de %i octets sur %i. (%i%%%%).";
@@ -771,16 +757,12 @@ const char TXT_WOL_DOWNLOADRESUMED[] = "%s (reprise apräs interruption.)";
 const char TXT_WOL_DOWNLOADCONNECTING[] = "Etat : en cours de connexion...";
 const char TXT_WOL_DOWNLOADLOCATING[] = "Etat : recherche du fichier...";
 const char TXT_WOL_DOWNLOADDOWNLOADING[] = "Etat : en cours de tÇlÇchargement...";
-const char TXT_WOL_DOWNLOADEXITWARNING[] =
-    "TÇlÇchargement terminÇ ! Alerte Rouge est relancÇ pour que le nouveau patch soit pris en compte.";
-const char TXT_WOL_HELPSHELL[] =
-    "Voulez-vous vraiment lancer le navigateur Internet pour obtenir l'aide Westwood Online ?";
-const char TXT_WOL_LADDERSHELL[] =
-    "Voulez-vous vraiment lancer le navigateur Internet pour les hiÇrarchies d'Alerte Rouge ?";
+const char TXT_WOL_DOWNLOADEXITWARNING[] = "TÇlÇchargement terminÇ ! Alerte Rouge est relancÇ pour que le nouveau patch soit pris en compte.";
+const char TXT_WOL_HELPSHELL[] = "Voulez-vous vraiment lancer le navigateur Internet pour obtenir l'aide Westwood Online ?";
+const char TXT_WOL_LADDERSHELL[] = "Voulez-vous vraiment lancer le navigateur Internet pour les hiÇrarchies d'Alerte Rouge ?";
 const char TXT_WOL_WEBREGISTRATIONSHELL[] =
-    "Aucun nom d'utilisateur sauvegardÇ. Voulez-vous enregistrer un nouveau nom d'utilisateur pour Westwood Online ?";
-const char TXT_WOL_GAMEADVERTSHELL[] =
-    "Voulez-vous vraiment lancer le navigateur Internet pour obtenir des informations sur %s ?";
+	"Aucun nom d'utilisateur sauvegardÇ. Voulez-vous enregistrer un nouveau nom d'utilisateur pour Westwood Online ?";
+const char TXT_WOL_GAMEADVERTSHELL[] = "Voulez-vous vraiment lancer le navigateur Internet pour obtenir des informations sur %s ?";
 const char TXT_WOL_USERLIST[] = "Utilisateurs %i";
 const char TXT_WOL_NOUSERLIST[] = "(absent du canal)";
 const char TXT_WOL_CANTCREATEHERE[] = "Pour commencer une partie, vous devez àtre dans un salon d'Alerte Rouge.";
@@ -789,8 +771,7 @@ const char TXT_WOL_WOLAPIREINIT[] = "Perte de connexion avec Westwood Online. RÇ
 const char TXT_WOL_NOTPAGED[] = "Impossible de rÇpondre au message ; personne ne vous en a envoyÇ.";
 const char TXT_WOL_SCENARIONAMEWAIT[] = "En attente du scÇnario...";
 const char TXT_WOL_BACK[] = "Retour";
-const char TXT_WOL_AMDISCNEEDED[] =
-    "Le CD de Missions M.A.D. est nÇcessaire pour cette partie ; insÇrez-le maintenant.";
+const char TXT_WOL_AMDISCNEEDED[] = "Le CD de Missions M.A.D. est nÇcessaire pour cette partie ; insÇrez-le maintenant.";
 const char TXT_WOL_CONFIRMLOGOUT[] = "Voulez-vous vraiment quitter Westwood Online ?";
 const char TXT_WOL_PROPOSE_DRAW[] = "Proposer une fin avec ÇgalitÇ";
 const char TXT_WOL_RETRACT_DRAW[] = "Annuler la proposition de fin avec ÇgalitÇ";
@@ -799,10 +780,8 @@ const char TXT_WOL_PROPOSE_DRAW_CONFIRM[] = "Voulez-vous vraiment proposer une f
 const char TXT_WOL_ACCEPT_DRAW_CONFIRM[] = "Voulez-vous vraiment accepter une fin avec ÇgalitÇ ?";
 const char TXT_WOL_DRAW_PROPOSED_LOCAL[] = "Vous proposez de terminer la partie sans vainqueur ni perdant.";
 const char TXT_WOL_DRAW_PROPOSED_OTHER[] = "%s a proposÇ de terminer la partie sans vainqueur ni perdant.";
-const char TXT_WOL_DRAW_RETRACTED_LOCAL[] =
-    "Vous avez annulÇ votre proposition de terminer la partie sans vainqueur ni perdant.";
-const char TXT_WOL_DRAW_RETRACTED_OTHER[] =
-    "%s a annulÇ sa proposition de terminer la partie sans vainqueur ni perdant.";
+const char TXT_WOL_DRAW_RETRACTED_LOCAL[] = "Vous avez annulÇ votre proposition de terminer la partie sans vainqueur ni perdant.";
+const char TXT_WOL_DRAW_RETRACTED_OTHER[] = "%s a annulÇ sa proposition de terminer la partie sans vainqueur ni perdant.";
 const char TXT_WOL_DRAW[] = "Match nul";
 const char TXT_WOL_CANTLAUNCHBROWSER[] = "Impossible de lancer le navigateur web pour ouvrir %s !";
 const char TXT_WOL_CHANNELFULL[] = "Ce canal de jeu/conversation est saturÇ.";
@@ -827,8 +806,7 @@ const char TXT_WOL_OPTRANKAM[] = "Afficher les positions de Missions M.A.D.";
 const char TXT_WOL_CANCELMEANSFORFEIT[] = " (ET RENONCER AU JEU)";
 const char TXT_WOL_DLLERROR_GETIE3[] = "Votre version des Windows est dÇmodÇe. AmÇliorez s'il vous plait aux Windows "
 				       "SP1, ou installez l'Internet Explorer 3,0 ou plus haut.";
-const char TXT_WOL_DLLERROR_CALLUS[] =
-    "Une erreur inattendue s'est produite. Veuillez contacter l'assistance technique de Electronic Arts.";
+const char TXT_WOL_DLLERROR_CALLUS[] = "Une erreur inattendue s'est produite. Veuillez contacter l'assistance technique de Electronic Arts.";
 const char TXT_WOL_PRIVATE[] = "<personnel>";
 
 #endif

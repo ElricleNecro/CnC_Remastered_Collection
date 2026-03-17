@@ -40,10 +40,10 @@
 
 #include <tile.h>
 
-#define ICON_WIDTH 24		// Icons must be this width to be cached
-#define ICON_HEIGHT 24		// Icons must be this height to be cached
-#define MAX_CACHED_ICONS 500	// Maximum number of icons that can be cached
-#define MAX_ICON_SETS 100	// Maximum number of icon sets that can be registered
+#define ICON_WIDTH 24 // Icons must be this width to be cached
+#define ICON_HEIGHT 24 // Icons must be this height to be cached
+#define MAX_CACHED_ICONS 500 // Maximum number of icons that can be cached
+#define MAX_ICON_SETS 100 // Maximum number of icon sets that can be registered
 #define MAX_LOOKUP_ENTRIES 3000 // Size of icon index table
 
 /*
@@ -58,27 +58,26 @@
 */
 
 class IconCacheClass {
-
 public:
-	IconCacheClass(void);  // class constructor
+	IconCacheClass(void); // class constructor
 	~IconCacheClass(void); // class destructor
 
-	void Restore(void);	       // restore the surface
+	void Restore(void); // restore the surface
 	BOOL Cache_It(void *icon_ptr); // Cache the icon to video memory
-	void Uncache_It(void);	       // Restore the video memory and flag the icon as uncached
-	void Draw_It(LPDIRECTDRAWSURFACE dest_surface, int x_pixel, int y_pixel, int window_left, int window_top,
-		     int window_width, int window_height);
+	void Uncache_It(void); // Restore the video memory and flag the icon as uncached
+	void
+	Draw_It(LPDIRECTDRAWSURFACE dest_surface, int x_pixel, int y_pixel, int window_left, int window_top, int window_width, int window_height);
 	inline BOOL Get_Is_Cached(void); // Return the IsCached member
 
-	int TimesDrawn;	 // counter of times cached icon has been drawn
+	int TimesDrawn; // counter of times cached icon has been drawn
 	int TimesFailed; // counter of times cached icon has failed to draw
 
 private:
 	LPDIRECTDRAWSURFACE CacheSurface; // Ptr to direct draw surface where icon resides
-	BOOL IsCached;			  // Flag to say whether an icon is cached
-	BOOL SurfaceLost;		  // Flag to indicate that our icons surface has been lost
-	int DrawFrequency;		  // Number of times icon has been drawn
-	void *IconSource;		  // Ptr to original icon data in system memory
+	BOOL IsCached; // Flag to say whether an icon is cached
+	BOOL SurfaceLost; // Flag to indicate that our icons surface has been lost
+	int DrawFrequency; // Number of times icon has been drawn
+	void *IconSource; // Ptr to original icon data in system memory
 };
 
 /*
@@ -88,7 +87,7 @@ private:
 
 typedef struct tIconSetType {
 	IControl_Type *IconSetPtr; // Ptr to icon set data
-	int IconListOffset;	   // Offset into icon index table for this icon set
+	int IconListOffset; // Offset into icon index table for this icon set
 } IconSetType;
 
 extern IconCacheClass CachedIcons[MAX_CACHED_ICONS];
@@ -125,6 +124,8 @@ extern int UnCachedIconsDrawn;
  * HISTORY:                                                                                    *
  *    11/13/95 9:42AM ST : Created                                                             *
  *=============================================================================================*/
-inline BOOL IconCacheClass::Get_Is_Cached(void) { return (IsCached); }
+inline BOOL IconCacheClass::Get_Is_Cached(void) {
+	return (IsCached);
+}
 
 #endif // ICONCACH_H

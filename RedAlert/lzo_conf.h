@@ -239,8 +239,7 @@ typedef long lzo_ptrdiff_t;
 
 #if 0 
 /* This line causes problems on some architectures */
-#define LZO_CHECK_MPOS_DET(m_pos, m_off, in, ip, max_offset)                                                           \
-	(BOUNDS_CHECKING_OFF_IN_EXPR((m_off = ip - m_pos) > max_offset))
+#define LZO_CHECK_MPOS_DET(m_pos, m_off, in, ip, max_offset) (BOUNDS_CHECKING_OFF_IN_EXPR((m_off = ip - m_pos) > max_offset))
 
 #else
 /* This is the safe (but slower) version */
@@ -251,7 +250,7 @@ typedef long lzo_ptrdiff_t;
  * This marco is probably a good candidate for architecture specific problems.
  * Try casting the pointers to lzo_ptr_t before comparing them.
  */
-#define LZO_CHECK_MPOS_NON_DET(m_pos, m_off, in, ip, max_offset)                                                       \
+#define LZO_CHECK_MPOS_NON_DET(m_pos, m_off, in, ip, max_offset)                                                                                     \
 	(BOUNDS_CHECKING_OFF_IN_EXPR((m_pos < in || (m_off = ip - m_pos) <= 0 || m_off > max_offset)))
 
 #endif /* already included */
