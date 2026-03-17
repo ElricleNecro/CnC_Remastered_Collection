@@ -190,9 +190,12 @@ typedef struct {
 // #include	<mem.h>
 // #include	<dos.h>
 #include <assert.h>
+#ifdef WIN32
 #include <direct.h>
 #include <process.h>
+#endif
 #include <stdarg.h>
+#include <unistd.h>
 // #include	<new.h>
 
 #ifdef WIN32
@@ -240,7 +243,9 @@ CELL Coord_Cell(COORDINATE coord);
 #include "mapedit.h" // map editor class
 #include "object.h"
 #include "overlay.h" // Overlay objects.
+#ifdef WIN32
 #include "palette.h"
+#endif
 #include "palettec.h" //ST 5/13/2019
 #include "rgb.h"
 #include "score.h"   // Scoring system class.
