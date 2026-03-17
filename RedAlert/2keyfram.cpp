@@ -38,6 +38,7 @@
 #include "function.h"
 
 #ifdef WIN32
+#include <win32lib/drawmisc.h>
 #include <win32lib/memflag.h>
 #else
 #include <linuxlib/drawmisc.h>
