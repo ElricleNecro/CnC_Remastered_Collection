@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/PKPIPE.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -38,9 +38,7 @@
  *   PKPipe::Put_To -- Chains one pipe to another.                                             *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"pkpipe.h"
-
+#include "pkpipe.h"
 
 /***********************************************************************************************
  * PKPipe::PKPipe -- Constructor for the public key pipe object.                               *
@@ -59,17 +57,9 @@
  * HISTORY:                                                                                    *
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-PKPipe::PKPipe(CryptControl control, RandomStraw & rnd) :
-	IsGettingKey(true),
-	Rand(rnd),
-	BF((control == ENCRYPT) ? BlowPipe::ENCRYPT : BlowPipe::DECRYPT),
-	Control(control),
-	CipherKey(NULL),
-	Counter(0),
-	BytesLeft(0)
-{
-}
-
+PKPipe::PKPipe(CryptControl control, RandomStraw &rnd)
+    : IsGettingKey(true), Rand(rnd), BF((control == ENCRYPT) ? BlowPipe::ENCRYPT : BlowPipe::DECRYPT), Control(control),
+      CipherKey(NULL), Counter(0), BytesLeft(0) {}
 
 /***********************************************************************************************
  * PKPipe::Put_To -- Chains one pipe to another.                                               *
@@ -87,8 +77,7 @@ PKPipe::PKPipe(CryptControl control, RandomStraw & rnd) :
  * HISTORY:                                                                                    *
  *   07/12/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PKPipe::Put_To(Pipe * pipe)
-{
+void PKPipe::Put_To(Pipe *pipe) {
 	if (BF.ChainTo != pipe) {
 		if (pipe != NULL && pipe->ChainFrom != NULL) {
 			pipe->ChainFrom->Put_To(NULL);
@@ -106,7 +95,6 @@ void PKPipe::Put_To(Pipe * pipe)
 		ChainTo = &BF;
 	}
 }
-
 
 /***********************************************************************************************
  * PKPipe::Key -- Submit a key to enable processing of data flow.                              *
@@ -126,8 +114,7 @@ void PKPipe::Put_To(Pipe * pipe)
  * HISTORY:                                                                                    *
  *   07/07/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PKPipe::Key(PKey const * key)
-{
+void PKPipe::Key(PKey const *key) {
 	if (key == NULL) {
 		Flush();
 		IsGettingKey = false;
@@ -141,7 +128,6 @@ void PKPipe::Key(PKey const * key)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * PKPipe::Put -- Submit data to the pipe for processing.                                      *
@@ -161,14 +147,13 @@ void PKPipe::Key(PKey const * key)
  * HISTORY:                                                                                    *
  *   07/07/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PKPipe::Put(void const * source, int length)
-{
+int PKPipe::Put(void const *source, int length) {
 	/*
 	**	If the parameter seem illegal, then pass the pipe request to the
 	**	next pipe in the chain and let them deal with it.
 	*/
 	if (source == NULL || length < 1 || CipherKey == NULL) {
-		return(Pipe::Put(source, length));
+		return (Pipe::Put(source, length));
 	}
 
 	int total = 0;
@@ -208,7 +193,7 @@ int PKPipe::Put(void const * source, int length)
 			**	First try to accumulate a full key.
 			*/
 			int toget = (BytesLeft < length) ? BytesLeft : length;
-			memmove(&Buffer[Counter-BytesLeft], source, toget);
+			memmove(&Buffer[Counter - BytesLeft], source, toget);
 			length -= toget;
 			BytesLeft -= toget;
 			source = (char *)source + toget;
@@ -233,9 +218,8 @@ int PKPipe::Put(void const * source, int length)
 	**	blowfish engine.
 	*/
 	total += Pipe::Put(source, length);
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * PKPipe::Encrypted_Key_Length -- Fetch the encrypted key length.                             *
@@ -253,12 +237,11 @@ int PKPipe::Put(void const * source, int length)
  * HISTORY:                                                                                    *
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PKPipe::Encrypted_Key_Length(void) const
-{
-	if (CipherKey == NULL) return(0);
-	return(CipherKey->Block_Count(BLOWFISH_KEY_SIZE) * CipherKey->Crypt_Block_Size());
+int PKPipe::Encrypted_Key_Length(void) const {
+	if (CipherKey == NULL)
+		return (0);
+	return (CipherKey->Block_Count(BLOWFISH_KEY_SIZE) * CipherKey->Crypt_Block_Size());
 }
-
 
 /***********************************************************************************************
  * PKPipe::Plain_Key_Length -- Returns the number of bytes to encrypt key.                     *
@@ -277,8 +260,8 @@ int PKPipe::Encrypted_Key_Length(void) const
  * HISTORY:                                                                                    *
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PKPipe::Plain_Key_Length(void) const
-{
-	if (CipherKey == NULL) return(0);
-	return(CipherKey->Block_Count(BLOWFISH_KEY_SIZE) * CipherKey->Plain_Block_Size());
+int PKPipe::Plain_Key_Length(void) const {
+	if (CipherKey == NULL)
+		return (0);
+	return (CipherKey->Block_Count(BLOWFISH_KEY_SIZE) * CipherKey->Plain_Block_Size());
 }

@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/DIAL8.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -39,7 +39,6 @@
 
 #include "function.h"
 
-
 /***************************************************************************
  * Dial8Class::Dial8Class -- constructor for the facing dial               *
  *                                                                         *
@@ -58,9 +57,8 @@
  * HISTORY:                                                                *
  *   11/16/1994 BR : Created.                                              *
  *=========================================================================*/
-Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir) :
-	ControlClass(id, x, y, w, h, LEFTPRESS | LEFTHELD | LEFTRELEASE, true)
-{
+Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir)
+    : ControlClass(id, x, y, w, h, LEFTPRESS | LEFTHELD | LEFTRELEASE, true) {
 	/*
 	**	Center coordinates.
 	*/
@@ -70,9 +68,9 @@ Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir) :
 	/*
 	**	Init directions.
 	*/
-	Direction = dir;							// 0 - 255
-	Facing = Dir_Facing(Direction);		// 0 - 7
-	OldFacing = Facing;						// 0 - 7
+	Direction = dir;		// 0 - 255
+	Facing = Dir_Facing(Direction); // 0 - 7
+	OldFacing = Facing;		// 0 - 7
 
 	/*
 	**	Compute the drawing dimensions:  a 45-degree angle intersects a unity-
@@ -129,7 +127,6 @@ Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir) :
 	FaceLine[7][1] = FaceY - (h * 7 * 6 / 2) / 100;
 }
 
-
 /***************************************************************************
  * Dial8Class::Action -- activation function for Dial8Class                *
  *                                                                         *
@@ -146,8 +143,7 @@ Dial8Class::Dial8Class(int id, int x, int y, int w, int h, DirType dir) :
  * HISTORY:                                                                *
  *   02/06/1995 BR : Created.                                              *
  *=========================================================================*/
-int Dial8Class::Action(unsigned flags, KeyNumType &key)
-{
+int Dial8Class::Action(unsigned flags, KeyNumType &key) {
 	static int is_sel = 0;
 
 	/*
@@ -182,10 +178,10 @@ int Dial8Class::Action(unsigned flags, KeyNumType &key)
 		/*
 		**	If it's moved, redraw.
 		*/
-		if (Facing!=OldFacing) {
+		if (Facing != OldFacing) {
 			OldFacing = Facing;
 			ControlClass::Action(flags, key);
-			return(true);
+			return (true);
 
 		} else {
 
@@ -194,7 +190,7 @@ int Dial8Class::Action(unsigned flags, KeyNumType &key)
 			*/
 			key = KN_NONE;
 			ControlClass::Action(0, key);
-			return(true);
+			return (true);
 		}
 
 	} else {
@@ -207,10 +203,9 @@ int Dial8Class::Action(unsigned flags, KeyNumType &key)
 			key = KN_NONE;
 			is_sel = 0;
 		}
-		return(ControlClass::Action(0, key));
+		return (ControlClass::Action(0, key));
 	}
 }
-
 
 /***************************************************************************
  * Dial8Class::Draw_Me -- custom render routine for Dial8Class             *
@@ -227,9 +222,8 @@ int Dial8Class::Action(unsigned flags, KeyNumType &key)
  * HISTORY:                                                                *
  *   02/06/1995 BR : Created.                                              *
  *=========================================================================*/
-int Dial8Class::Draw_Me(int forced)
-{
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+int Dial8Class::Draw_Me(int forced) {
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
 	**	Redraw if parent indicates a redraw is needed
@@ -247,14 +241,15 @@ int Dial8Class::Draw_Me(int forced)
 		**	Draw background & decorations.
 		*/
 		Draw_Box(X, Y, Width, Height, BOXSTYLE_DOWN, true);
-		for (int i=0; i<8; i++) {
-			Draw_Box(FacePoint[i][0] - 1, FacePoint[i][1] -1, 3, 3, BOXSTYLE_RAISED, false);
+		for (int i = 0; i < 8; i++) {
+			Draw_Box(FacePoint[i][0] - 1, FacePoint[i][1] - 1, 3, 3, BOXSTYLE_RAISED, false);
 		}
 
 		/*
 		**	Draw the hand & its shadow.
 		*/
-		LogicPage->Draw_Line(FaceX+1, FaceY+1, FaceLine[Facing][0]+1, FaceLine[Facing][1]+1, scheme->Shadow);
+		LogicPage->Draw_Line(FaceX + 1, FaceY + 1, FaceLine[Facing][0] + 1, FaceLine[Facing][1] + 1,
+				     scheme->Shadow);
 		LogicPage->Draw_Line(FaceX, FaceY, FaceLine[Facing][0], FaceLine[Facing][1], scheme->Highlight);
 
 		/*
@@ -264,12 +259,11 @@ int Dial8Class::Draw_Me(int forced)
 			Show_Mouse();
 		}
 
-		return(true);
+		return (true);
 	}
 
-	return(false);
+	return (false);
 }
-
 
 /***************************************************************************
  * Dial8Class::Get_Direction -- retrieves direction (0-255) of dial        *
@@ -286,11 +280,7 @@ int Dial8Class::Draw_Me(int forced)
  * HISTORY:                                                                *
  *   11/17/1994 BR : Created.                                              *
  *=========================================================================*/
-DirType Dial8Class::Get_Direction(void) const
-{
-	return(Direction);
-}
-
+DirType Dial8Class::Get_Direction(void) const { return (Direction); }
 
 /***************************************************************************
  * Dial8Class::Set_Direction -- sets current direction (0-255) of dial     *
@@ -307,8 +297,7 @@ DirType Dial8Class::Get_Direction(void) const
  * HISTORY:                                                                *
  *   11/17/1994 BR : Created.                                              *
  *=========================================================================*/
-void Dial8Class::Set_Direction(DirType dir)
-{
+void Dial8Class::Set_Direction(DirType dir) {
 	Direction = dir;
 	Facing = Dir_Facing(Direction);
 	OldFacing = Facing;

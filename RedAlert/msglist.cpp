@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/MSGLIST.CPP 2     3/04/97 2:52p Joe_bostic $ */
@@ -47,14 +47,12 @@
  *   MessageListClass::Set_Width -- sets allowable width of messages       *
  *   MessageListClass::Trim_Message -- trims chars off start of message    *
  *   MessageListClass::Compute_Y -- recomputes y-coord for all messages    *
- *   MessageListClass::Reset -- Reset so no messages are visible.          * 
+ *   MessageListClass::Reset -- Reset so no messages are visible.          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 #include "function.h"
 
-
 /**************************** Globals **************************************/
-
 
 /***************************************************************************
  * MessageListClass::MessageListClass -- constructor                       *
@@ -72,8 +70,7 @@
  * HISTORY:                                                                *
  *   05/21/1995 BRR : Created.                                             *
  *=========================================================================*/
-MessageListClass::MessageListClass(void)
-{
+MessageListClass::MessageListClass(void) {
 	int i;
 
 	//------------------------------------------------------------------------
@@ -104,8 +101,7 @@ MessageListClass::MessageListClass(void)
 		BufferAvail[i] = 1;
 	}
 
-}	// end of MessageListClass
-
+} // end of MessageListClass
 
 /***************************************************************************
  * MessageListClass::~MessageListClass -- destructor                       *
@@ -123,12 +119,7 @@ MessageListClass::MessageListClass(void)
  * HISTORY:                                                                *
  *   05/21/1995 BRR : Created.                                             *
  *=========================================================================*/
-MessageListClass::~MessageListClass()
-{
-	Init(0,0,0,0,0,0,0,0,0,0);
-
-}	// end of ~MessageListClass
-
+MessageListClass::~MessageListClass() { Init(0, 0, 0, 0, 0, 0, 0, 0, 0, 0); } // end of ~MessageListClass
 
 /***************************************************************************
  * MessageListClass::Init -- Inits message system, sets options            *
@@ -137,15 +128,13 @@ MessageListClass::~MessageListClass()
  *    x,y				coord of upper-left of top message                    *
  *    max_msg			max messages allowed, NOT including edit message      *
  *    maxchars			max # characters allowed per message                	*
- *		height			pixel height of a line of text								*
- *		edit_x			x-coord of edit field; -1 = put at the top of the		*
- *							other messages														*
- *		edit_y			y-coord of edit field; -1 = put at the top of the		*
- *							other messages														*
- *		overflow_on		true = enable the overflow typing feature					*
- *		over_start		start index for overflow processing							*
- *		over_end			end index for overflow processing							*
- *     width          pixel width of message buffer                         *
+ *		height			pixel height of a line of text
+ ** edit_x			x-coord of edit field; -1 = put at the top of the		* other messages
+ ** edit_y			y-coord of edit field; -1 = put at the top of the		* other messages
+ ** overflow_on		true = enable the overflow typing feature					* over_start
+ *start index for overflow processing							* over_end
+ *end index for overflow processing							* width          pixel width of
+ *message buffer                         *
  *                                                                         *
  * OUTPUT:                                                                 *
  *    none.                                                              	*
@@ -156,11 +145,9 @@ MessageListClass::~MessageListClass()
  * HISTORY:                                                                *
  *   05/21/1995 BRR : Created.                                             *
  *=========================================================================*/
-void MessageListClass::Init(int x, int y, int max_msg, int maxchars,
-	int height, int edit_x, int edit_y, int overflow_on, int over_start,
-	int over_end, int width)
-{
-	TextLabelClass * txtlabel;
+void MessageListClass::Init(int x, int y, int max_msg, int maxchars, int height, int edit_x, int edit_y,
+			    int overflow_on, int over_start, int over_end, int width) {
+	TextLabelClass *txtlabel;
 	int i;
 
 	Width = width;
@@ -218,8 +205,7 @@ void MessageListClass::Init(int x, int y, int max_msg, int maxchars,
 		AdjustEdit = 1;
 		EditX = x;
 		EditY = y;
-	}
-	else {
+	} else {
 		AdjustEdit = 0;
 		EditX = edit_x;
 		EditY = edit_y;
@@ -243,30 +229,28 @@ void MessageListClass::Init(int x, int y, int max_msg, int maxchars,
 		OverflowStart = OverflowEnd - 1;
 	}
 
-}	// end of Init
+} // end of Init
 
-
-/*********************************************************************************************** 
- * MessageListClass::Reset -- Reset so no messages are visible.                                * 
- *                                                                                             * 
- *    This routine will reset the message list tracker so that any displayed messages are      * 
- *    cleared.                                                                                 * 
- *                                                                                             * 
- * INPUT:   none                                                                               * 
- *                                                                                             * 
- * OUTPUT:  none                                                                               * 
- *                                                                                             * 
- * WARNINGS:   none                                                                            * 
- *                                                                                             * 
- * HISTORY:                                                                                    * 
- *   03/04/1997 JLB : Created.                                                                 * 
+/***********************************************************************************************
+ * MessageListClass::Reset -- Reset so no messages are visible.                                *
+ *                                                                                             *
+ *    This routine will reset the message list tracker so that any displayed messages are      *
+ *    cleared.                                                                                 *
+ *                                                                                             *
+ * INPUT:   none                                                                               *
+ *                                                                                             *
+ * OUTPUT:  none                                                                               *
+ *                                                                                             *
+ * WARNINGS:   none                                                                            *
+ *                                                                                             *
+ * HISTORY:                                                                                    *
+ *   03/04/1997 JLB : Created.                                                                 *
  *=============================================================================================*/
-void MessageListClass::Reset(void)
-{
+void MessageListClass::Reset(void) {
 	//------------------------------------------------------------------------
 	//	Remove every entry in the list
 	//------------------------------------------------------------------------
-	TextLabelClass * txtlabel = MessageList;
+	TextLabelClass *txtlabel = MessageList;
 	while (txtlabel) {
 		MessageList = (TextLabelClass *)txtlabel->Remove();
 		delete txtlabel;
@@ -296,33 +280,32 @@ void MessageListClass::Reset(void)
 	IsEdit = 0;
 }
 
-extern void On_Message(const char* message, float timeout_seconds, long long message_id);
+extern void On_Message(const char *message, float timeout_seconds, long long message_id);
 
 /***************************************************************************
  * MessageListClass::Add_Message -- displays the given message             *
  *                                                                         *
  * INPUT:                                                                  *
- *		name			name of sender, NULL = none										*
- *		id				numerical ID for this message										*
- *    txt         text to display                                        	*
- *    color       color to draw text in                                		*
- *    style       style to use                                         		*
- *    timeout     # of ticks the thing is supposed to last (-1 = forever)	*
+ *		name			name of sender, NULL = none
+ ** id				numerical ID for this message
+ ** txt         text to display                                        	* color       color to draw text in * style
+ *style to use                                         		* timeout     # of ticks the thing is supposed to last
+ *(-1 = forever)	*
  *                                                                         *
  * OUTPUT:                                                                 *
  *    ptr to new TextLabelClass object.                                  	*
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   05/05/1995 BRR : Created.                                             *
  *   10/16/1996 JLB : Audio feedback added.                                *
  *=========================================================================*/
-TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char const * txt,
-	PlayerColorType color, TextPrintType style, int timeout)
-{
-	TextLabelClass * txtlabel = NULL;
+TextLabelClass *MessageListClass::Add_Message(char const *name, int id, char const *txt, PlayerColorType color,
+					      TextPrintType style, int timeout) {
+	TextLabelClass *txtlabel = NULL;
 	char message[MAX_MESSAGE_LENGTH + 30];
 
 	//------------------------------------------------------------------------
@@ -351,22 +334,22 @@ TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char c
 	print_this_pass = 0;
 	Fancy_Text_Print(TXT_NONE, 0, 0, &ColorRemaps[color], TBLACK, style);
 	int wid = String_Pixel_Width(message);
-	if (wid >= Width-8) {
+	if (wid >= Width - 8) {
 		//------------------------------------------------------------------------
 		//	Bugger. Its too long. Loop through and find out how many chars we can print
 		//------------------------------------------------------------------------
 		if (name) {
-			sprintf (temp, "%s:", name);
-			mess_start = strlen (name)+1;
+			sprintf(temp, "%s:", name);
+			mess_start = strlen(name) + 1;
 		} else {
 			mess_start = 0;
 		}
-		for (int i=1 ; i<(int)strlen(txt) ; i++) {
-			strncpy (&temp[mess_start], txt, i);
-			temp [mess_start + i] = 0;
+		for (int i = 1; i < (int)strlen(txt); i++) {
+			strncpy(&temp[mess_start], txt, i);
+			temp[mess_start + i] = 0;
 			wid = String_Pixel_Width(temp);
-			if (wid >= Width-8) {
-				print_this_pass = mess_start + i-1;
+			if (wid >= Width - 8) {
+				print_this_pass = mess_start + i - 1;
 				break;
 			}
 		}
@@ -376,21 +359,19 @@ TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char c
 		// We will re-enter at the end to print the rest.
 		//------------------------------------------------------------------------
 		if (print_this_pass) {
-			save = message [print_this_pass];
-			message [print_this_pass] = 0;
+			save = message[print_this_pass];
+			message[print_this_pass] = 0;
 		}
 	}
-
-
 
 	//------------------------------------------------------------------------
 	//	Remove the top-most message if we're about to exceed the max allowed
 	//------------------------------------------------------------------------
-	if ( (MaxMessages > 0) && ((Num_Messages() + 1) > MaxMessages)) {
+	if ((MaxMessages > 0) && ((Num_Messages() + 1) > MaxMessages)) {
 		txtlabel = MessageList;
 
-		if (txtlabel==NULL)
-			return(NULL);
+		if (txtlabel == NULL)
+			return (NULL);
 
 		//.....................................................................
 		//	Remove this message from the list; mark its buffer as being available.
@@ -406,12 +387,10 @@ TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char c
 	//------------------------------------------------------------------------
 	//	Create the message
 	//------------------------------------------------------------------------
-	txtlabel = new TextLabelClass (message, MessageX, MessageY,
-		&ColorRemaps[color], style);
-	if (timeout==-1) {
+	txtlabel = new TextLabelClass(message, MessageX, MessageY, &ColorRemaps[color], style);
+	if (timeout == -1) {
 		txtlabel->UserData1 = 0;
-	}
-	else {
+	} else {
 		txtlabel->UserData1 = TickCount + timeout;
 	}
 	txtlabel->UserData2 = id;
@@ -424,8 +403,8 @@ TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char c
 	for (i = 0; i < MAX_NUM_MESSAGES; i++) {
 		if (BufferAvail[i]) {
 			BufferAvail[i] = 0;
-			memset (MessageBuffers[i],0,MAX_MESSAGE_LENGTH + 30);
-			strcpy (MessageBuffers[i],message);
+			memset(MessageBuffers[i], 0, MAX_MESSAGE_LENGTH + 30);
+			strcpy(MessageBuffers[i], message);
 			txtlabel->Text = MessageBuffers[i];
 			found = 1;
 			break;
@@ -439,7 +418,7 @@ TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char c
 #endif
 
 	On_Message(message, timeout * 60.0f / TICKS_PER_MINUTE, id);
-	//Sound_Effect(VOC_INCOMING_MESSAGE);
+	// Sound_Effect(VOC_INCOMING_MESSAGE);
 
 #if (0)
 
@@ -447,9 +426,8 @@ TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char c
 	//	Attach the message to our list
 	//------------------------------------------------------------------------
 	if (MessageList) {
-		txtlabel->Add_Tail (*MessageList);
-	}
-	else {
+		txtlabel->Add_Tail(*MessageList);
+	} else {
 		MessageList = txtlabel;
 	}
 
@@ -463,35 +441,36 @@ TextLabelClass * MessageListClass::Add_Message(char const * name, int id, char c
 	// add a new message with the rest of the string.
 	//------------------------------------------------------------------------
 	if (save) {
-		message [print_this_pass] = save;
-		Add_Message (name, id, &message [print_this_pass], color, style, timeout);
+		message[print_this_pass] = save;
+		Add_Message(name, id, &message[print_this_pass], color, style, timeout);
 	}
 
 #endif
 
-	return(txtlabel);
+	return (txtlabel);
 
-}	// end of Add_Message
-
+} // end of Add_Message
 
 /***************************************************************************
  * MessageListClass::Get_Message -- retrieves given message                *
  *                                                                         *
  * INPUT:                                                                  *
- *		id			ID of message to get														*
+ *		id			ID of message to get
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		ptr to message text, NULL if not found											*
+ *		ptr to message text, NULL if not found
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   11/07/1995 BRR : Created.                                             *
  *=========================================================================*/
-char * MessageListClass::Get_Message(int id)
-{
-	TextLabelClass * gadg;
+char *MessageListClass::Get_Message(int id) {
+	TextLabelClass *gadg;
 
 	//------------------------------------------------------------------------
 	// Scan the message list, searching for the given ID
@@ -508,27 +487,28 @@ char * MessageListClass::Get_Message(int id)
 
 	return (NULL);
 
-}	// end of Get_Message
-
+} // end of Get_Message
 
 /***************************************************************************
  * MessageListClass::Get_Label -- retrieves given text label					*
  *                                                                         *
  * INPUT:                                                                  *
- *		id			ID of message to get														*
+ *		id			ID of message to get
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		ptr to message text, NULL if not found											*
+ *		ptr to message text, NULL if not found
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   11/07/1995 BRR : Created.                                             *
  *=========================================================================*/
-TextLabelClass * MessageListClass::Get_Label(int id)
-{
-	TextLabelClass * gadg;
+TextLabelClass *MessageListClass::Get_Label(int id) {
+	TextLabelClass *gadg;
 
 	//------------------------------------------------------------------------
 	// Scan the message list, searching for the given ID
@@ -545,20 +525,21 @@ TextLabelClass * MessageListClass::Get_Label(int id)
 
 	return (NULL);
 
-}	// end of Get_Label
-
+} // end of Get_Label
 
 /***************************************************************************
  * MessageListClass::Concat_Message -- concats the given message           *
  *                                                                         *
  * INPUT:                                                                  *
- *		name			name of sender; NULL = none										*
- *		id				ID of message to concatenate to									*
- *		txt			text to concatenate onto existing message						*
- *		timeout		new timeout for message												*
+ *		name			name of sender; NULL = none
+ ** id				ID of message to concatenate to
+ ** txt			text to concatenate onto existing message						*
+ *		timeout		new timeout for message
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		1 = OK, 0 = error (id or name not found)										*
+ *		1 = OK, 0 = error (id or name not found)
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		If the required message doesn't exist, this routine does nothing.		*
@@ -566,12 +547,11 @@ TextLabelClass * MessageListClass::Get_Label(int id)
  * HISTORY:                                                                *
  *   11/07/1995 BRR : Created.                                             *
  *=========================================================================*/
-int MessageListClass::Concat_Message(char const * name, int id, char const * txt, int timeout)
-{
+int MessageListClass::Concat_Message(char const *name, int id, char const *txt, int timeout) {
 	int min_chars;
 	int max_chars;
-	char * msg;
-	TextLabelClass * tlabel;
+	char *msg;
+	TextLabelClass *tlabel;
 	int found;
 
 	//------------------------------------------------------------------------
@@ -590,8 +570,7 @@ int MessageListClass::Concat_Message(char const * name, int id, char const * txt
 	if (MessageList) {
 		tlabel = MessageList;
 		while (tlabel) {
-			if (tlabel->UserData2 == id &&
-				!memcmp(tlabel->Text,name,strlen(name))) {
+			if (tlabel->UserData2 == id && !memcmp(tlabel->Text, name, strlen(name))) {
 				found = 1;
 				break;
 			}
@@ -614,39 +593,39 @@ int MessageListClass::Concat_Message(char const * name, int id, char const * txt
 	//------------------------------------------------------------------------
 	// If there's room enough in the message, just add the given string
 	//------------------------------------------------------------------------
-	if ( (int)(strlen(msg) + strlen(txt)) < MaxChars) {
+	if ((int)(strlen(msg) + strlen(txt)) < MaxChars) {
 
 		//---------------------------------------------------------------------
 		// We need to trim the message if there is no room to draw it
 		//---------------------------------------------------------------------
-		char *concat_test = new char [MaxChars+1];
+		char *concat_test = new char[MaxChars + 1];
 		Fancy_Text_Print(TXT_NONE, 0, 0, tlabel->Color, TBLACK, tlabel->Style);
 		int name_width = String_Pixel_Width(tlabel->Text) - String_Pixel_Width(msg);
 		int width;
 
-		strcpy (concat_test, msg);
-		strcat (concat_test, txt);
+		strcpy(concat_test, msg);
+		strcat(concat_test, txt);
 		width = String_Pixel_Width(concat_test) + name_width;
 		min_chars = 10;
 
-		while (width >= Width-8){
+		while (width >= Width - 8) {
 
-			max_chars = strlen (msg);
+			max_chars = strlen(msg);
 			if (max_chars < min_chars) {
 				max_chars = min_chars;
 			}
 
-			Trim_Message (NULL, msg, min_chars, max_chars, 0);
+			Trim_Message(NULL, msg, min_chars, max_chars, 0);
 
-			strcpy (concat_test, msg);
-			strcat (concat_test, txt);
+			strcpy(concat_test, msg);
+			strcat(concat_test, txt);
 
 			width = String_Pixel_Width(concat_test) + name_width;
 		};
 
-		delete [] concat_test;
+		delete[] concat_test;
 
-		strcat (msg,txt);
+		strcat(msg, txt);
 	}
 
 	//------------------------------------------------------------------------
@@ -660,25 +639,22 @@ int MessageListClass::Concat_Message(char const * name, int id, char const * txt
 		if (max_chars < min_chars) {
 			max_chars = min_chars;
 		}
-		Trim_Message (NULL, msg, min_chars, max_chars, 0);
-		strcat (msg, txt);
+		Trim_Message(NULL, msg, min_chars, max_chars, 0);
+		strcat(msg, txt);
 	}
 
 	//------------------------------------------------------------------------
 	// Set the new timeout value for the message
 	//------------------------------------------------------------------------
-	if (timeout==-1) {
+	if (timeout == -1) {
 		tlabel->UserData1 = 0;
-	}
-	else {
+	} else {
 		tlabel->UserData1 = TickCount + timeout;
 	}
 
 	return (1);
 
-}	// end of Concat_Message
-
-
+} // end of Concat_Message
 
 /***********************************************************************************************
  * MessageListClass::Set_Edit_Focus -- Give the gadget system focus to the edit box            *
@@ -694,11 +670,10 @@ int MessageListClass::Concat_Message(char const * name, int id, char const * txt
  * HISTORY:                                                                                    *
  *    10/19/96 4:41PM ST : Created                                                             *
  *=============================================================================================*/
-void MessageListClass::Set_Edit_Focus (void)
-{
-	if (IsEdit) EditLabel->Set_Focus();
+void MessageListClass::Set_Edit_Focus(void) {
+	if (IsEdit)
+		EditLabel->Set_Focus();
 }
-
 
 /***********************************************************************************************
  * MessageListClass::Has_Edit_Focus -- Find out if the edit box has the input focus            *
@@ -714,16 +689,13 @@ void MessageListClass::Set_Edit_Focus (void)
  * HISTORY:                                                                                    *
  *    10/19/96 4:41PM ST : Created                                                             *
  *=============================================================================================*/
-bool MessageListClass::Has_Edit_Focus (void)
-{
-	if (IsEdit){
+bool MessageListClass::Has_Edit_Focus(void) {
+	if (IsEdit) {
 		return (EditLabel->Has_Focus());
-	}else{
-		return(false);
+	} else {
+		return (false);
 	}
 }
-
-
 
 /***************************************************************************
  * MessageListClass::Add_Edit -- Adds editable string to message list      *
@@ -731,8 +703,8 @@ bool MessageListClass::Has_Edit_Focus (void)
  * INPUT:                                                                  *
  *    color			color of edit message                                		*
  *    style			style of edit message                                		*
- *    to				string: who to send to; NULL = none								*
- *		cursor		character to use as a cursor; 0 = none							*
+ *    to				string: who to send to; NULL = none
+ ** cursor		character to use as a cursor; 0 = none							*
  *                                                                         *
  * OUTPUT:                                                                 *
  *    ptr to new TextLabelClass                                          	*
@@ -743,18 +715,17 @@ bool MessageListClass::Has_Edit_Focus (void)
  * HISTORY:                                                                *
  *   05/22/1995 BRR : Created.                                             *
  *=========================================================================*/
-TextLabelClass * MessageListClass::Add_Edit(PlayerColorType color,
-	TextPrintType style, char * to, char cursor, int width)
-{
+TextLabelClass *MessageListClass::Add_Edit(PlayerColorType color, TextPrintType style, char *to, char cursor,
+					   int width) {
 	int i;
-	TextLabelClass * txtlabel;
+	TextLabelClass *txtlabel;
 
 	//------------------------------------------------------------------------
 	//	Do nothing if we're already in "edit" mode
 	//------------------------------------------------------------------------
 	if (IsEdit) {
 		EditLabel->Set_Focus();
-		return(NULL);
+		return (NULL);
 	}
 
 	//------------------------------------------------------------------------
@@ -785,20 +756,18 @@ TextLabelClass * MessageListClass::Add_Edit(PlayerColorType color,
 	//------------------------------------------------------------------------
 	//	Initialize the buffer positions; create a new text label object
 	//------------------------------------------------------------------------
-	memset (EditBuf, 0, sizeof(EditBuf));
-	strcpy (EditBuf, to);
+	memset(EditBuf, 0, sizeof(EditBuf));
+	strcpy(EditBuf, to);
 	OverflowBuf[0] = 0;
 	EditCurPos = EditInitPos = strlen(to);
-	EditLabel = new TextLabelClass (EditBuf, EditX, EditY,
-		&ColorRemaps[color], style);
+	EditLabel = new TextLabelClass(EditBuf, EditX, EditY, &ColorRemaps[color], style);
 
 	Width = width;
 
 	if (EditLabel) {
 		IsEdit = 1;
 		EditLabel->Set_Focus();
-	}
-	else {
+	} else {
 		IsEdit = 0;
 	}
 
@@ -812,28 +781,29 @@ TextLabelClass * MessageListClass::Add_Edit(PlayerColorType color,
 		MaxMessages--;
 	}
 
-	return(EditLabel);
+	return (EditLabel);
 
-}	// end of Add_Edit
-
+} // end of Add_Edit
 
 /***************************************************************************
  * MessageListClass::Remove_Edit -- removes the edit field                 *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   11/06/1995 BRR : Created.                                             *
  *=========================================================================*/
-void MessageListClass::Remove_Edit(void)
-{
+void MessageListClass::Remove_Edit(void) {
 	//------------------------------------------------------------------------
 	// If the edit field is active, delete it
 	//------------------------------------------------------------------------
@@ -852,8 +822,7 @@ void MessageListClass::Remove_Edit(void)
 		}
 	}
 
-}	// end if Remove_Edit
-
+} // end if Remove_Edit
 
 /***************************************************************************
  * MessageListClass::Get_Edit_Buf -- gets edit buffer                      *
@@ -870,36 +839,32 @@ void MessageListClass::Remove_Edit(void)
  * HISTORY:                                                                *
  *   05/21/1995 BRR : Created.                                             *
  *=========================================================================*/
-char * MessageListClass::Get_Edit_Buf(void)
-{
-	return(EditBuf + EditInitPos);
-
-}	// end of Get_Edit_Buf
-
+char *MessageListClass::Get_Edit_Buf(void) { return (EditBuf + EditInitPos); } // end of Get_Edit_Buf
 
 /***************************************************************************
  * MessageListClass::Set_Edit_Color -- sets color of edit gizmo            *
  *                                                                         *
  * INPUT:                                                                  *
- *		color		color to set edit label to												*
+ *		color		color to set edit label to
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/08/1995 BRR : Created.                                             *
  *=========================================================================*/
-void MessageListClass::Set_Edit_Color(PlayerColorType color)
-{
+void MessageListClass::Set_Edit_Color(PlayerColorType color) {
 	if (IsEdit) {
 		EditLabel->Color = &ColorRemaps[color];
 	}
 
-}	// end of Set_Edit_Color
-
+} // end of Set_Edit_Color
 
 /***************************************************************************
  * MessageListClass::Manage -- Manages multiplayer messages                *
@@ -918,10 +883,9 @@ void MessageListClass::Set_Edit_Color(PlayerColorType color)
  * HISTORY:                                                                *
  *   05/05/1995 BRR : Created.                                             *
  *=========================================================================*/
-int MessageListClass::Manage (void)
-{
-	TextLabelClass * txtlabel;
-	TextLabelClass * next;
+int MessageListClass::Manage(void) {
+	TextLabelClass *txtlabel;
+	TextLabelClass *next;
 	int changed = 0;
 	int i;
 
@@ -949,8 +913,7 @@ int MessageListClass::Manage (void)
 			delete txtlabel;
 			changed = 1;
 			txtlabel = next;
-		}
-		else {
+		} else {
 			txtlabel = (TextLabelClass *)txtlabel->Get_Next();
 		}
 	}
@@ -962,10 +925,9 @@ int MessageListClass::Manage (void)
 		Compute_Y();
 	}
 
-	return(changed);
+	return (changed);
 
-}	// end of Manage
-
+} // end of Manage
 
 /***************************************************************************
  * MessageListClass::Input -- Handles input for sending messages           *
@@ -979,7 +941,8 @@ int MessageListClass::Manage (void)
  *    2 = caller should completely refresh the display.                  	*
  *    3 = caller should send the edit message.                           	*
  *        (sets 'input' to 0 if it processes it.)                          *
- *		4 = caller should send the Overflow buffer									*
+ *		4 = caller should send the Overflow buffer
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *    none.                                                              	*
@@ -987,8 +950,7 @@ int MessageListClass::Manage (void)
  * HISTORY:                                                                *
  *   05/05/1995 BRR : Created.                                             *
  *=========================================================================*/
-int MessageListClass::Input(KeyNumType &input)
-{
+int MessageListClass::Input(KeyNumType &input) {
 	KeyASCIIType ascii;
 	int retcode = 0;
 	int numchars;
@@ -997,15 +959,14 @@ int MessageListClass::Input(KeyNumType &input)
 	//	Do nothing if nothing to do.
 	//------------------------------------------------------------------------
 	if (input == KN_NONE) {
-		return(0);
+		return (0);
 	}
 
 	//------------------------------------------------------------------------
 	//	Leave mouse events alone.
 	//------------------------------------------------------------------------
-	if ( (input & (~KN_RLSE_BIT))==KN_LMOUSE ||
-		(input & (~KN_RLSE_BIT))==KN_RMOUSE) {
-		return(0);
+	if ((input & (~KN_RLSE_BIT)) == KN_LMOUSE || (input & (~KN_RLSE_BIT)) == KN_RMOUSE) {
+		return (0);
 	}
 
 	//------------------------------------------------------------------------
@@ -1013,14 +974,13 @@ int MessageListClass::Input(KeyNumType &input)
 	//------------------------------------------------------------------------
 	if (IsEdit) {
 
-
 		ascii = (KeyASCIIType)(Keyboard->To_ASCII(input) & 0x00ff);
 
 #ifdef WIN32
 		/*
 		** Allow numeric keypad presses to map to ascii numbers
 		*/
-		if ((input & WWKEY_VK_BIT) && ascii >='0' && ascii <= '9') {
+		if ((input & WWKEY_VK_BIT) && ascii >= '0' && ascii <= '9') {
 
 			input = (KeyNumType)(input & ~WWKEY_VK_BIT);
 
@@ -1028,123 +988,119 @@ int MessageListClass::Input(KeyNumType &input)
 			/*
 			** Filter out all special keys except return, escape and backspace
 			*/
-			if ((!(input & WWKEY_VK_BIT) && !(input & KN_BUTTON)
-					&& ascii >= ' ' && ascii <= 127)
-				|| (input & 0xff)== (KN_RETURN & 0xff)
-				|| (input & 0xff)== (KN_BACKSPACE & 0xff)
-				|| (input & 0xff)== (KN_ESC & 0xff) ) {
+			if ((!(input & WWKEY_VK_BIT) && !(input & KN_BUTTON) && ascii >= ' ' && ascii <= 127) ||
+			    (input & 0xff) == (KN_RETURN & 0xff) || (input & 0xff) == (KN_BACKSPACE & 0xff) ||
+			    (input & 0xff) == (KN_ESC & 0xff)) {
 
-				//ascii = (KeyASCIIType)(Keyboard->To_ASCII(input));
+				// ascii = (KeyASCIIType)(Keyboard->To_ASCII(input));
 			} else {
 				input = KN_NONE;
 				return (0);
 			}
 		}
-#endif	//WIN32
-
-
+#endif // WIN32
 
 		switch (ascii) {
-			//..................................................................
-			//	ESC = abort message
-			//..................................................................
-			case KA_ESC & 0xff:
-				Remove_Edit();
-				retcode = 2;
+		//..................................................................
+		//	ESC = abort message
+		//..................................................................
+		case KA_ESC & 0xff:
+			Remove_Edit();
+			retcode = 2;
+			input = KN_NONE;
+			break;
+
+		//..................................................................
+		//	RETURN = send the message.
+		// Add a space to the end, in case another message gets concatenated
+		// onto this one after we send it; then, they won't be mushed
+		// together.
+		//..................................................................
+		case KA_RETURN & 0xff:
+			if (EditCurPos == EditInitPos) {
+				retcode = 0;
 				input = KN_NONE;
 				break;
+			}
+			if ((EditCurPos - EditInitPos) < (MaxChars - 1)) {
+				EditBuf[EditCurPos] = ' ';
+				EditCurPos++;
+				EditBuf[EditCurPos] = 0;
+			}
+			Remove_Edit();
+			retcode = 3;
+			input = KN_NONE;
+			break;
 
-			//..................................................................
-			//	RETURN = send the message.
-			// Add a space to the end, in case another message gets concatenated
-			// onto this one after we send it; then, they won't be mushed
-			// together.
-			//..................................................................
-			case KA_RETURN & 0xff:
-				if (EditCurPos == EditInitPos) {
-					retcode = 0;
-					input = KN_NONE;
-					break;
-				}
-				if ( (EditCurPos - EditInitPos) < (MaxChars - 1) ) {
-					EditBuf[EditCurPos] = ' ';
+		//..................................................................
+		//	BACKSPACE = remove a character
+		//..................................................................
+		case KA_BACKSPACE & 0xff:
+			if (EditCurPos > EditInitPos) {
+				EditCurPos--;
+				EditBuf[EditCurPos] = 0;
+				retcode = 2;
+			}
+			input = KN_NONE;
+			EditLabel->Set_Focus();
+			break;
+
+		//..................................................................
+		// default: add a character.  Reserve the last buffer position for
+		// null.  (EditCurPos - EditInitPos) is the buffer index # of the
+		// next character, after the "To:" prefix.
+		//..................................................................
+		default:
+			EditLabel->Set_Focus();
+			bool overflowed = false;
+			if (ascii >= ' ' && ascii <= 127) {
+				if ((EditCurPos - EditInitPos) < (MaxChars - 1)) {
+
+					EditBuf[EditCurPos] = ascii;
 					EditCurPos++;
 					EditBuf[EditCurPos] = 0;
-				}
-				Remove_Edit();
-				retcode = 3;
-				input = KN_NONE;
-				break;
+					retcode = 1;
 
-			//..................................................................
-			//	BACKSPACE = remove a character
-			//..................................................................
-			case KA_BACKSPACE & 0xff:
-				if (EditCurPos > EditInitPos) {
-					EditCurPos--;
-					EditBuf[EditCurPos] = 0;
-					retcode = 2;
-				}
-				input = KN_NONE;
-				EditLabel->Set_Focus();
-				break;
-
-			//..................................................................
-			// default: add a character.  Reserve the last buffer position for
-			// null.  (EditCurPos - EditInitPos) is the buffer index # of the
-			// next character, after the "To:" prefix.
-			//..................................................................
-			default:
-				EditLabel->Set_Focus();
-				bool overflowed = false;
-				if (ascii >= ' ' && ascii <= 127) {
-					if ( (EditCurPos - EditInitPos) < (MaxChars - 1) ) {
-
-						EditBuf[EditCurPos] = ascii;
-						EditCurPos++;
+					/*
+					** Verify that the additional character would not overrun the on screen edit
+					*box.
+					*/
+					Fancy_Text_Print(TXT_NONE, 0, 0, EditLabel->Color, TBLACK, EditLabel->Style);
+					int width = String_Pixel_Width(EditBuf);
+					if (width >= Width - 10) {
+						overflowed = true;
+						EditCurPos--;
 						EditBuf[EditCurPos] = 0;
-						retcode = 1;
-
-						/*
-						** Verify that the additional character would not overrun the on screen edit box.
-						*/
-						Fancy_Text_Print(TXT_NONE, 0, 0, EditLabel->Color, TBLACK, EditLabel->Style);
-						int width = String_Pixel_Width(EditBuf);
-						if (width >= Width-10) {
-							overflowed = true;
-							EditCurPos--;
-							EditBuf[EditCurPos] = 0;
-							retcode = 0;
-						}
-					} else {
+						retcode = 0;
+					}
+				} else {
 					//............................................................
 					// If there's no room in the buffer, and overflow is enabled,
 					// trim the extra characters off (from right to left, to
 					// remove the max possible characters), and then add the new
 					// character in.
 					//............................................................
-						overflowed = true;
-					}
-
-					if (/*BGEnableOverflow &&*/ overflowed) {
-						numchars = Trim_Message (OverflowBuf, EditBuf + EditInitPos,
-							OverflowStart,OverflowEnd, 1);
-						EditCurPos -= numchars;
-						EditBuf[EditCurPos] = ascii;
-						EditCurPos++;
-						EditBuf[EditCurPos] = 0;
-						retcode = 4;
-					}
+					overflowed = true;
 				}
-				input = KN_NONE;
-				break;
+
+				if (/*BGEnableOverflow &&*/ overflowed) {
+					numchars = Trim_Message(OverflowBuf, EditBuf + EditInitPos, OverflowStart,
+								OverflowEnd, 1);
+					EditCurPos -= numchars;
+					EditBuf[EditCurPos] = ascii;
+					EditCurPos++;
+					EditBuf[EditCurPos] = 0;
+					retcode = 4;
+				}
+			}
+			input = KN_NONE;
+			break;
 		}
 	}
 
-	return(retcode);
+	return (retcode);
 
-}	// end of Input
-
+} // end of Input
 
 /***************************************************************************
  * MessageListClass::Draw -- draws messages                                *
@@ -1161,9 +1117,8 @@ int MessageListClass::Input(KeyNumType &input)
  * HISTORY:                                                                *
  *   05/22/1995 BRR : Created.                                             *
  *=========================================================================*/
-void MessageListClass::Draw(void)
-{
-	char txt[2] = {0,0};
+void MessageListClass::Draw(void) {
+	char txt[2] = {0, 0};
 
 	if (IsEdit) {
 		if (LogicPage == &SeenBuff) {
@@ -1173,12 +1128,8 @@ void MessageListClass::Draw(void)
 
 		if (CursorChar && (EditCurPos - EditInitPos) < (MaxChars - 1) && EditLabel->Has_Focus()) {
 			txt[0] = CursorChar;
-			Fancy_Text_Print(txt,
-				EditLabel->X + String_Pixel_Width(EditLabel->Text),
-				EditLabel->Y,
-				EditLabel->Color,
-				TBLACK,
-				EditLabel->Style);
+			Fancy_Text_Print(txt, EditLabel->X + String_Pixel_Width(EditLabel->Text), EditLabel->Y,
+					 EditLabel->Color, TBLACK, EditLabel->Style);
 		}
 
 		if (LogicPage == &SeenBuff) {
@@ -1195,8 +1146,7 @@ void MessageListClass::Draw(void)
 		}
 	}
 
-}	// end of Draw
-
+} // end of Draw
 
 /***************************************************************************
  * MessageListClass::Num_Messages -- returns # messages in the list        *
@@ -1213,9 +1163,8 @@ void MessageListClass::Draw(void)
  * HISTORY:                                                                *
  *   06/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-int MessageListClass::Num_Messages(void)
-{
-	GadgetClass * gadg;
+int MessageListClass::Num_Messages(void) {
+	GadgetClass *gadg;
 	int num;
 
 	num = 0;
@@ -1234,8 +1183,7 @@ int MessageListClass::Num_Messages(void)
 
 	return (num);
 
-}	// end of Num_Messages
-
+} // end of Num_Messages
 
 /***************************************************************************
  * MessageListClass::Set_Width -- sets allowable width of messages         *
@@ -1252,9 +1200,8 @@ int MessageListClass::Num_Messages(void)
  * HISTORY:                                                                *
  *   06/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-void MessageListClass::Set_Width(int width)
-{
-	GadgetClass * gadg;
+void MessageListClass::Set_Width(int width) {
+	GadgetClass *gadg;
 
 	if (MessageList) {
 		gadg = MessageList;
@@ -1268,31 +1215,30 @@ void MessageListClass::Set_Width(int width)
 		EditLabel->PixWidth = width;
 	}
 
-}	// end of Set_Width
-
+} // end of Set_Width
 
 /***************************************************************************
  * MessageListClass::Trim_Message -- trims chars off start of message      *
  *                                                                         *
  * INPUT:                                                                  *
  *		dest				buffer to store removed characters in; NULL = none		*
- *		src				text buffer to trim												*
- *		min_chars		min # chars that must be trimmed off						*
- *		max_chars		max # chars allowed to trim									*
- *		scandir			0 = left-to-right, 1 = right-to-left						*
+ *		src				text buffer to trim
+ ** min_chars		min # chars that must be trimmed off						* max_chars
+ *max # chars allowed to trim									* scandir
+ *0 = left-to-right, 1 = right-to-left						*
  *                                                                         *
  * OUTPUT:                                                                 *
- *		# characters removed																	*
+ *		# characters removed
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   11/07/1995 BRR : Created.                                             *
  *=========================================================================*/
-int MessageListClass::Trim_Message(char * dest, char * src, int min_chars,
-	int max_chars, int scandir)
-{
+int MessageListClass::Trim_Message(char *dest, char *src, int min_chars, int max_chars, int scandir) {
 	int i;
 	int len;
 	int found;
@@ -1301,10 +1247,10 @@ int MessageListClass::Trim_Message(char * dest, char * src, int min_chars,
 	// validate parameters
 	//------------------------------------------------------------------------
 	if (min_chars <= 0) {
-		return(0);
+		return (0);
 	}
 
-	len = strlen (src);
+	len = strlen(src);
 	if (max_chars > len) {
 		max_chars = len;
 	}
@@ -1348,38 +1294,39 @@ int MessageListClass::Trim_Message(char * dest, char * src, int min_chars,
 	// Save trimmed characters in the dest buffer, if there is one
 	//------------------------------------------------------------------------
 	if (dest) {
-		memcpy (dest, src, i);
-		dest[i] ='\0';
+		memcpy(dest, src, i);
+		dest[i] = '\0';
 	}
 
 	//------------------------------------------------------------------------
 	// Shift characters over in the source buffer
 	//------------------------------------------------------------------------
-	memmove (src, src + i, len - i + 1);
+	memmove(src, src + i, len - i + 1);
 
 	return (i);
 
-}	// end of Trim_Message
-
+} // end of Trim_Message
 
 /***************************************************************************
  * MessageListClass::Compute_Y -- recomputes y-coord for all messages      *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   11/07/1995 BRR : Created.                                             *
  *=========================================================================*/
-void MessageListClass::Compute_Y(void)
-{
-	GadgetClass * gadg;
+void MessageListClass::Compute_Y(void) {
+	GadgetClass *gadg;
 	int y;
 
 	//------------------------------------------------------------------------
@@ -1389,8 +1336,7 @@ void MessageListClass::Compute_Y(void)
 	//------------------------------------------------------------------------
 	if (IsEdit && AdjustEdit) {
 		y = MessageY + Height;
-	}
-	else {
+	} else {
 		y = MessageY;
 	}
 	if (MessageList) {
@@ -1402,7 +1348,6 @@ void MessageListClass::Compute_Y(void)
 		}
 	}
 
-}	// end of Compute_Y
-
+} // end of Compute_Y
 
 /*************************** end of msglist.cpp ****************************/

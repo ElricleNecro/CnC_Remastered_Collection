@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/palette.cpp 2     9/23/97 11:00p Steve_t $ */
@@ -42,74 +42,75 @@
 #ifndef NOINITCLASS
 #define NOINITCLASS
 struct NoInitClass {
-	public:
-		void operator () (void) const {};
+public:
+	void operator()(void) const {};
 };
 #endif
 
-void __cdecl Set_Palette(void * palette);
-
+void __cdecl Set_Palette(void *palette);
 
 #ifndef BITMAPCLASS
 #define BITMAPCLASS
-class BitmapClass
-{
-	public:
-		BitmapClass(int w, int h, unsigned char * data) :
-			Width(w), Height(h), Data(data) {};
+class BitmapClass {
+public:
+	BitmapClass(int w, int h, unsigned char *data) : Width(w), Height(h), Data(data) {};
 
-		int Width;
-		int Height;
-		unsigned char * Data;
+	int Width;
+	int Height;
+	unsigned char *Data;
 };
 
-class TPoint2D
-{
-	public:
-		TPoint2D(int xx, int yy) : x(xx), y(yy) {};
-		TPoint2D(void) : x(0), y(0) {};
+class TPoint2D {
+public:
+	TPoint2D(int xx, int yy) : x(xx), y(yy) {};
+	TPoint2D(void) : x(0), y(0) {};
 
-		int x;
-		int y;
+	int x;
+	int y;
 };
 #endif
 
-#include	"function.h"
-#include	"watcom.h"
-#include	"palette.h"
-#include	"palettec.h"
-#include	"ftimer.h"
-//#define TIMER_H
-#include	"wwlib32.h"
-//#include	"timer.h"
-#include	<string.h>
+#include "palettec.h"
+#include "ftimer.h"
+#include "function.h"
+#include "palette.h"
+#include "watcom.h"
+// #define TIMER_H
+#include "wwlib32.h"
+// #include	"timer.h"
+#include <string.h>
 
 #ifndef SYSTEM_TIMER_CLASS
 #define SYSTEM_TIMER_CLASS
 
 #ifdef WIN32
-extern WinTimerClass	*		WindowsTimer;
+extern WinTimerClass *WindowsTimer;
 #endif
 
-class SystemTimerClass
-{
-	public:
-		#ifdef WIN32
-			long operator () (void) const {if (!WindowsTimer) return(0);return(WindowsTimer->Get_System_Tick_Count());};
-			operator long (void) const {if (!WindowsTimer) return(0);return(WindowsTimer->Get_System_Tick_Count());};
-		#else
-			long operator () (void) const {return(Get_System_Tick_Count());};
-			operator long (void) const {return(Get_System_Tick_Count());};
-		#endif
+class SystemTimerClass {
+public:
+#ifdef WIN32
+	long operator()(void) const {
+		if (!WindowsTimer)
+			return (0);
+		return (WindowsTimer->Get_System_Tick_Count());
+	};
+	operator long(void) const {
+		if (!WindowsTimer)
+			return (0);
+		return (WindowsTimer->Get_System_Tick_Count());
+	};
+#else
+	long operator()(void) const { return (Get_System_Tick_Count()); };
+	operator long(void) const { return (Get_System_Tick_Count()); };
+#endif
 };
 #endif
 
-
-//PaletteClass const PaletteClass::CurrentPalette;
+// PaletteClass const PaletteClass::CurrentPalette;
 extern "C" unsigned char CurrentPalette[];
 
-PaletteClass const & PaletteClass::CurrentPalette = *(PaletteClass *)&::CurrentPalette[0];
-
+PaletteClass const &PaletteClass::CurrentPalette = *(PaletteClass *)&::CurrentPalette[0];
 
 /***********************************************************************************************
  * PaletteClass::PaletteClass -- Constructor that fills palette with color specified.          *
@@ -125,13 +126,11 @@ PaletteClass const & PaletteClass::CurrentPalette = *(PaletteClass *)&::CurrentP
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-PaletteClass::PaletteClass(RGBClass const & rgb)
-{
+PaletteClass::PaletteClass(RGBClass const &rgb) {
 	for (int index = 0; index < COLOR_COUNT; index++) {
 		Palette[index] = rgb;
 	}
 }
-
 
 /***********************************************************************************************
  * PaletteClass::operator == -- Equality operator for palette objects.                         *
@@ -148,12 +147,11 @@ PaletteClass::PaletteClass(RGBClass const & rgb)
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PaletteClass::operator == (PaletteClass const & palette) const
-{
-	if (this == &palette) return(true);
-	return(memcmp(&Palette[0], &palette.Palette[0], sizeof(Palette)) == 0);
+int PaletteClass::operator==(PaletteClass const &palette) const {
+	if (this == &palette)
+		return (true);
+	return (memcmp(&Palette[0], &palette.Palette[0], sizeof(Palette)) == 0);
 }
-
 
 /***********************************************************************************************
  * PaletteClass::operator = -- Assignment operator for palette objects.                        *
@@ -171,14 +169,13 @@ int PaletteClass::operator == (PaletteClass const & palette) const
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-PaletteClass & PaletteClass::operator = (PaletteClass const & palette)
-{
-	if (this == &palette) return(*this);
+PaletteClass &PaletteClass::operator=(PaletteClass const &palette) {
+	if (this == &palette)
+		return (*this);
 
 	memcpy(&Palette[0], &palette.Palette[0], sizeof(Palette));
-	return(*this);
+	return (*this);
 }
-
 
 /***********************************************************************************************
  * PaletteClass::Adjust -- Adjusts this palette toward black.                                  *
@@ -197,13 +194,11 @@ PaletteClass & PaletteClass::operator = (PaletteClass const & palette)
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PaletteClass::Adjust(int ratio)
-{
+void PaletteClass::Adjust(int ratio) {
 	for (int index = 0; index < COLOR_COUNT; index++) {
 		Palette[index].Adjust(ratio, BlackColor);
 	}
 }
-
 
 /***********************************************************************************************
  * PaletteClass::Adjust -- Adjusts the palette toward another palette.                         *
@@ -224,23 +219,23 @@ void PaletteClass::Adjust(int ratio)
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PaletteClass::Adjust(int ratio, PaletteClass const & palette)
-{
+void PaletteClass::Adjust(int ratio, PaletteClass const &palette) {
 	for (int index = 0; index < COLOR_COUNT; index++) {
 
-//if (index == 1) {
-//	Mono_Printf("From R=%d,G=%d,B=%d ", Palette[index].Red_Component(), Palette[index].Green_Component(), Palette[index].Blue_Component());
-//	Mono_Printf("To R=%d,G=%d,B=%d [%d] ", palette[index].Red_Component(), palette[index].Green_Component(), palette[index].Blue_Component(), ratio);
-//}
+		// if (index == 1) {
+		//	Mono_Printf("From R=%d,G=%d,B=%d ", Palette[index].Red_Component(),
+		// Palette[index].Green_Component(), Palette[index].Blue_Component()); 	Mono_Printf("To R=%d,G=%d,B=%d
+		//[%d] ", palette[index].Red_Component(), palette[index].Green_Component(),
+		// palette[index].Blue_Component(), ratio);
+		// }
 		Palette[index].Adjust(ratio, palette[index]);
 
-//if (index == 1) {
-//	Mono_Printf("Equals R=%d,G=%d,B=%d.\n", Palette[index].Red_Component(), Palette[index].Green_Component(), Palette[index].Blue_Component());
-//}
-
+		// if (index == 1) {
+		//	Mono_Printf("Equals R=%d,G=%d,B=%d.\n", Palette[index].Red_Component(),
+		// Palette[index].Green_Component(), Palette[index].Blue_Component());
+		// }
 	}
 }
-
 
 /***********************************************************************************************
  * PaletteClass::Partial_Adjust -- Adjusts the specified parts of this palette toward black.   *
@@ -262,15 +257,13 @@ void PaletteClass::Adjust(int ratio, PaletteClass const & palette)
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PaletteClass::Partial_Adjust(int ratio, char *lut)
-{
+void PaletteClass::Partial_Adjust(int ratio, char *lut) {
 	for (int index = 0; index < COLOR_COUNT; index++) {
 		if (lut[index]) {
 			Palette[index].Adjust(ratio, BlackColor);
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * PaletteClass::Partial_Adjust -- Adjusts the palette toward another palette.                 *
@@ -296,15 +289,13 @@ void PaletteClass::Partial_Adjust(int ratio, char *lut)
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PaletteClass::Partial_Adjust(int ratio, PaletteClass const & palette, char *lut)
-{
+void PaletteClass::Partial_Adjust(int ratio, PaletteClass const &palette, char *lut) {
 	for (int index = 0; index < COLOR_COUNT; index++) {
 		if (lut[index]) {
 			Palette[index].Adjust(ratio, palette[index]);
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * PaletteClass::Closest_Color -- Finds closest match to color specified.                      *
@@ -322,12 +313,11 @@ void PaletteClass::Partial_Adjust(int ratio, PaletteClass const & palette, char 
  * HISTORY:                                                                                    *
  *   12/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PaletteClass::Closest_Color(RGBClass const & rgb) const
-{
+int PaletteClass::Closest_Color(RGBClass const &rgb) const {
 	int closest = 0;
 	int value = -1;
 
-	RGBClass const * ptr = &Palette[0];
+	RGBClass const *ptr = &Palette[0];
 	for (int index = 0; index < COLOR_COUNT; index++) {
 		int difference = rgb.Difference(*ptr++);
 		if (value == -1 || difference < value) {
@@ -335,29 +325,26 @@ int PaletteClass::Closest_Color(RGBClass const & rgb) const
 			closest = index;
 		}
 	}
-	return(closest);
+	return (closest);
 }
 
-
-#ifndef	WIN32
+#ifndef WIN32
 extern void Vsync(void);
-#pragma aux Vsync modify [edx ebx eax] = \
-	"mov	edx,03DAh"				\
-	"mov	ebx,[VertBlank]"		\
-	"and	bl,001h"					\
-	"shl	bl,3"						\
-	"in_vbi:"						\
-	"in	al,dx"					\
-	"and	al,008h"					\
-	"xor	al,bl"					\
-	"je	in_vbi"					\
-	"out_vbi:"						\
-	"in	al,dx"					\
-	"and	al,008h"					\
-	"xor	al,bl"					\
-	"jne	out_vbi"
-#endif	//WIN32
-
+#pragma aux Vsync modify[edx ebx eax] = "mov	edx,03DAh"                                                                \
+					"mov	ebx,[VertBlank]"                                                          \
+					"and	bl,001h"                                                                  \
+					"shl	bl,3"                                                                     \
+					"in_vbi:"                                                                      \
+					"in	al,dx"                                                                     \
+					"and	al,008h"                                                                  \
+					"xor	al,bl"                                                                    \
+					"je	in_vbi"                                                                    \
+					"out_vbi:"                                                                     \
+					"in	al,dx"                                                                     \
+					"and	al,008h"                                                                  \
+					"xor	al,bl"                                                                    \
+					"jne	out_vbi"
+#endif // WIN32
 
 /***********************************************************************************************
  * PaletteClass::Set -- Fade the display palette to this palette.                              *
@@ -380,8 +367,7 @@ extern void Vsync(void);
  *   12/02/1995 JLB : Created.                                                                 *
  *   02/05/1996 JLB : Uses new timer system.                                                   *
  *=============================================================================================*/
-void PaletteClass::Set(int time, void (* callback)(void)) const
-{
+void PaletteClass::Set(int time, void (*callback)(void)) const {
 	CDTimerClass<SystemTimerClass> timer = time;
 	PaletteClass original = CurrentPalette;
 
@@ -408,10 +394,10 @@ void PaletteClass::Set(int time, void (* callback)(void)) const
 		**	to calculate and set a new intermediate palette.
 		*/
 #ifdef WIN32
-		Set_Palette((void*)&palette[0]);
+		Set_Palette((void *)&palette[0]);
 #else
 		palette.Set();
-#endif	//WIN32
+#endif // WIN32
 
 		/*
 		**	If the callback routine was specified, then call it once per palette
@@ -427,7 +413,8 @@ void PaletteClass::Set(int time, void (* callback)(void)) const
 		**	result in the same intermediate palette that was previously calculated.
 		*/
 		while (timer == holdtime && holdtime != 0) {
-			if (callback) callback();
+			if (callback)
+				callback();
 		}
 	}
 
@@ -437,14 +424,14 @@ void PaletteClass::Set(int time, void (* callback)(void)) const
 	*/
 #ifndef WIN32
 	Vsync();
-	RGBClass const * rgbptr = &Palette[0];
+	RGBClass const *rgbptr = &Palette[0];
 	RGBClass::Raw_Color_Prep(0);
 	for (int index = 0; index < COLOR_COUNT; index++) {
 		rgbptr->Raw_Set();
 		rgbptr++;
 	}
 	((PaletteClass &)CurrentPalette) = *this;
-#else	//WIN32
-	Set_Palette((void*)&Palette[0]);
+#else // WIN32
+	Set_Palette((void *)&Palette[0]);
 #endif
 }

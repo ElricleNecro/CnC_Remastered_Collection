@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/GAUGE.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -38,8 +38,7 @@
  *   GaugeClass::Value_To_Pixel -- Convert gauge value to pixel offset.                        *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-
+#include "function.h"
 
 /***************************************************************************
  * GaugeClass::GaugeClass -- class constructor                             *
@@ -57,8 +56,7 @@
  * HISTORY:  01/05/1995 MML : Created.                                     *
  *=========================================================================*/
 GaugeClass::GaugeClass(unsigned id, int x, int y, int w, int h)
-	: ControlClass(id, x, y, w, h, LEFTHELD|LEFTPRESS|LEFTRELEASE, true)
-{
+    : ControlClass(id, x, y, w, h, LEFTHELD | LEFTPRESS | LEFTRELEASE, true) {
 	Set_Maximum(255);
 	Set_Value(0);
 
@@ -68,7 +66,6 @@ GaugeClass::GaugeClass(unsigned id, int x, int y, int w, int h)
 
 	ClickDiff = 0;
 }
-
 
 /***********************************************************************************************
  * GaugeClass::Set_Maximum -- Sets the maximum value for the gauge.                            *
@@ -87,16 +84,14 @@ GaugeClass::GaugeClass(unsigned id, int x, int y, int w, int h)
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int GaugeClass::Set_Maximum(int value)
-{
+int GaugeClass::Set_Maximum(int value) {
 	if (value != MaxValue) {
-	   MaxValue = value;
+		MaxValue = value;
 		Flag_To_Redraw();
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * GaugeClass::Set_Value -- Set the value of the gauge.                                        *
@@ -114,17 +109,15 @@ int GaugeClass::Set_Maximum(int value)
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int GaugeClass::Set_Value(int value)
-{
+int GaugeClass::Set_Value(int value) {
 	value = Bound(value, 0, MaxValue);
 	if (value != CurValue) {
 		CurValue = value;
 		Flag_To_Redraw();
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * GaugeClass::Pixel_To_Value -- Convert a pixel offset into a gauge value.                    *
@@ -141,23 +134,21 @@ int GaugeClass::Set_Value(int value)
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int GaugeClass::Pixel_To_Value(int pixel)
-{
+int GaugeClass::Pixel_To_Value(int pixel) {
 	int maximum;
 
 	if (IsHorizontal) {
-		pixel -= X+1;
+		pixel -= X + 1;
 		maximum = Width;
 	} else {
-		pixel -= Y+1;
+		pixel -= Y + 1;
 		maximum = Height;
 	}
 	maximum -= 2;
 	pixel = Bound(pixel, 0, maximum);
-	return(MaxValue * fixed(pixel, maximum));
-//	return(Fixed_To_Cardinal(MaxValue, Cardinal_To_Fixed(maximum, pixel)));
+	return (MaxValue * fixed(pixel, maximum));
+	//	return(Fixed_To_Cardinal(MaxValue, Cardinal_To_Fixed(maximum, pixel)));
 }
-
 
 /***********************************************************************************************
  * GaugeClass::Value_To_Pixel -- Convert gauge value to pixel offset.                          *
@@ -175,8 +166,7 @@ int GaugeClass::Pixel_To_Value(int pixel)
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int GaugeClass::Value_To_Pixel(int value)
-{
+int GaugeClass::Value_To_Pixel(int value) {
 	int maximum;
 	int start;
 	if (IsHorizontal) {
@@ -187,10 +177,9 @@ int GaugeClass::Value_To_Pixel(int value)
 		start = Y;
 	}
 	maximum -= 2;
-	return(start + maximum * fixed(value, MaxValue));
-//	return(start + Fixed_To_Cardinal(maximum, Cardinal_To_Fixed(MaxValue, value)));
+	return (start + maximum * fixed(value, MaxValue));
+	//	return(start + Fixed_To_Cardinal(maximum, Cardinal_To_Fixed(MaxValue, value)));
 }
-
 
 /***********************************************************************************************
  * GaugeClass::Draw_Me -- Draws the body of the gauge.                                         *
@@ -205,21 +194,20 @@ int GaugeClass::Value_To_Pixel(int value)
  *                                                                                             *
  * HISTORY:    01/16/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-int GaugeClass::Draw_Me(int forced)
-{
+int GaugeClass::Draw_Me(int forced) {
 	if (ControlClass::Draw_Me(forced)) {
 
 		/*
 		**	Hide the mouse
 		*/
 		if (LogicPage == &SeenBuff) {
-			Conditional_Hide_Mouse(X, Y, X+Width, Y+Height);
+			Conditional_Hide_Mouse(X, Y, X + Width, Y + Height);
 		}
 
 		/*
 		**	Draw the body & set text color
 		*/
-		Draw_Box (X, Y, Width, Height, BOXSTYLE_DOWN, true);
+		Draw_Box(X, Y, Width, Height, BOXSTYLE_DOWN, true);
 
 		/*
 		**	Colourize the inside of the gauge if indicated.
@@ -229,10 +217,10 @@ int GaugeClass::Draw_Me(int forced)
 			int color = GadgetClass::Get_Color_Scheme()->Bright;
 			if (IsHorizontal) {
 				if (middle >= (X + 1))
-					LogicPage->Fill_Rect(X+1, Y+1, middle, Y+Height-2, color);
+					LogicPage->Fill_Rect(X + 1, Y + 1, middle, Y + Height - 2, color);
 			} else {
 				if (middle >= (Y + 1))
-					LogicPage->Fill_Rect(X+1, Y+1, X+Width-2, middle, color);
+					LogicPage->Fill_Rect(X + 1, Y + 1, X + Width - 2, middle, color);
 			}
 		}
 
@@ -246,11 +234,10 @@ int GaugeClass::Draw_Me(int forced)
 		if (LogicPage == &SeenBuff) {
 			Conditional_Show_Mouse();
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * GaugeClass::Action -- Handles input events for the gauge.                                   *
@@ -268,13 +255,12 @@ int GaugeClass::Draw_Me(int forced)
  * HISTORY:                                                                                    *
  *   01/16/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int GaugeClass::Action(unsigned flags, KeyNumType &key)
-{
+int GaugeClass::Action(unsigned flags, KeyNumType &key) {
 	/*
 	** If there's no thumb on this gauge, it's a display-only device.
 	*/
 	if (!HasThumb) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -298,14 +284,14 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key)
 			int curpix = Value_To_Pixel(CurValue);
 			int clickpix = (IsHorizontal ? Get_Mouse_X() : Get_Mouse_Y());
 
-			if ( (clickpix > curpix) && (clickpix - curpix) < Thumb_Pixels()) {
+			if ((clickpix > curpix) && (clickpix - curpix) < Thumb_Pixels()) {
 				ClickDiff = (clickpix - curpix);
 			} else {
 				ClickDiff = 0;
 			}
 
-			int testval = Pixel_To_Value(IsHorizontal ?
-				Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff);
+			int testval =
+			    Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff);
 
 			/*
 			** Correct for round-down errors in Pixel_To_Value() and
@@ -315,8 +301,8 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key)
 			*/
 			while (testval < CurValue && ClickDiff > 0) {
 				ClickDiff--;
-				testval = Pixel_To_Value(IsHorizontal ?
-				Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff);
+				testval = Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff
+								      : Get_Mouse_Y() - ClickDiff);
 			}
 		}
 
@@ -325,13 +311,12 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key)
 		** but turn off the flags so it won't fill in 'key' with the button ID.
 		** Thus, no button ID will be returned by Input.
 		*/
-		if (!Set_Value(Pixel_To_Value(IsHorizontal ?
-			Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff))) {
+		if (!Set_Value(Pixel_To_Value(IsHorizontal ? Get_Mouse_X() - ClickDiff : Get_Mouse_Y() - ClickDiff))) {
 
-			flags &= ~(LEFTHELD|LEFTRELEASE|LEFTPRESS);
+			flags &= ~(LEFTHELD | LEFTRELEASE | LEFTPRESS);
 			ControlClass::Action(0, key);
 			key = KN_NONE;
-			return(true);
+			return (true);
 		}
 
 	} else {
@@ -344,9 +329,8 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key)
 		*/
 		flags &= ~LEFTHELD;
 	}
-	return(ControlClass::Action(flags, key));
+	return (ControlClass::Action(flags, key));
 }
-
 
 /***********************************************************************************************
  * GaugeClass::Draw_Thumb -- Draws the body of the gauge.                                      *
@@ -361,8 +345,7 @@ int GaugeClass::Action(unsigned flags, KeyNumType &key)
  *                                                                                             *
  * HISTORY:    01/16/1995 MML : Created.                                                       *
  *=============================================================================================*/
-void GaugeClass::Draw_Thumb(void)
-{
+void GaugeClass::Draw_Thumb(void) {
 	int x = Value_To_Pixel(CurValue);
 
 	if ((x + 4) > Value_To_Pixel(MaxValue)) {
@@ -376,10 +359,9 @@ void GaugeClass::Draw_Thumb(void)
 	if (IsHorizontal) {
 		Draw_Box(x, Y, 4, Height, BOXSTYLE_RAISED, true);
 	} else {
-		Draw_Box(X, x, Width, 4,  BOXSTYLE_RAISED, true);
+		Draw_Box(X, x, Width, 4, BOXSTYLE_RAISED, true);
 	}
 }
-
 
 /***********************************************************************************************
  * TriColorGaugeClass::TriColorGaugeClass -- Constructor for 3 color (red\yellow\green) gauge. *
@@ -394,13 +376,10 @@ void GaugeClass::Draw_Thumb(void)
  *                                                                                             *
  * HISTORY:    01/16/1995 MML : Created.                                                       *
  *=============================================================================================*/
-TriColorGaugeClass::TriColorGaugeClass(unsigned id, int x, int y, int w, int h)
-	: GaugeClass(id, x, y, w, h)
-{
-	RedLimit = 0;				// maximum value for red
-	YellowLimit = 0;			// maximum value for yellow
+TriColorGaugeClass::TriColorGaugeClass(unsigned id, int x, int y, int w, int h) : GaugeClass(id, x, y, w, h) {
+	RedLimit = 0;	 // maximum value for red
+	YellowLimit = 0; // maximum value for yellow
 }
-
 
 /***********************************************************************************************
  * TriColorGaugeClass::Set_Red_Limit -- Set the value for the red area of gauge.               *
@@ -413,22 +392,20 @@ TriColorGaugeClass::TriColorGaugeClass(unsigned id, int x, int y, int w, int h)
  *                                                                                             *
  * HISTORY:    01/16/1995 MML : Created.                                                       *
  *=============================================================================================*/
-int TriColorGaugeClass::Set_Red_Limit(int value)
-{
+int TriColorGaugeClass::Set_Red_Limit(int value) {
 	if (value >= 0 && value < MaxValue) {
 
-//		if (value > YellowLimit) {
-//			RedLimit = YellowLimit;
-//			YellowLimit = value;
-//		} else {
-			RedLimit = value;
-//		}
+		//		if (value > YellowLimit) {
+		//			RedLimit = YellowLimit;
+		//			YellowLimit = value;
+		//		} else {
+		RedLimit = value;
+		//		}
 		Flag_To_Redraw();
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * TriColorGaugeClass::Set_Yellow_Limit -- Set the value for the yellow area of gauge.         *
@@ -441,22 +418,20 @@ int TriColorGaugeClass::Set_Red_Limit(int value)
  *                                                                                             *
  * HISTORY:    01/16/1995 MML : Created.                                                       *
  *=============================================================================================*/
-int TriColorGaugeClass::Set_Yellow_Limit(int value)
-{
+int TriColorGaugeClass::Set_Yellow_Limit(int value) {
 	if (value >= 0 && value < MaxValue) {
 
-//		if (value < RedLimit) {
-//			YellowLimit = RedLimit;
-//			RedLimit = value;
-//		} else {
-			YellowLimit = value;
-//		}
+		//		if (value < RedLimit) {
+		//			YellowLimit = RedLimit;
+		//			RedLimit = value;
+		//		} else {
+		YellowLimit = value;
+		//		}
 		Flag_To_Redraw();
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * TriColorGaugeClass::Draw_Me -- Draw the tri color gauge.                                    *
@@ -469,53 +444,52 @@ int TriColorGaugeClass::Set_Yellow_Limit(int value)
  *                                                                                             *
  * HISTORY:    01/16/1995 MML : Created.                                                       *
  *=============================================================================================*/
-int TriColorGaugeClass::Draw_Me(int forced)
-{
+int TriColorGaugeClass::Draw_Me(int forced) {
 	if (ControlClass::Draw_Me(forced)) {
 
 		/*
 		**	Hide the mouse
 		*/
 		if (LogicPage == &SeenBuff) {
-			Conditional_Hide_Mouse(X, Y, X+Width, Y+Height);
+			Conditional_Hide_Mouse(X, Y, X + Width, Y + Height);
 		}
 
 		/*
 		**	Draw the body & set text color
 		*/
-		Draw_Box (X, Y, Width, Height, (IsDisabled ? BOXSTYLE_RAISED : BOXSTYLE_DOWN), true);
+		Draw_Box(X, Y, Width, Height, (IsDisabled ? BOXSTYLE_RAISED : BOXSTYLE_DOWN), true);
 
 		/*
 		**	Colourize the inside of the gauge if indicated.
 		*/
-		int red    = Value_To_Pixel(RedLimit);
+		int red = Value_To_Pixel(RedLimit);
 		int yellow = Value_To_Pixel(YellowLimit);
 		int middle = Value_To_Pixel(CurValue);
 
 		if (CurValue <= RedLimit) {
 			if (IsHorizontal) {
-				LogicPage->Fill_Rect(X+1, Y+1, middle, Y+Height-2, PINK);
+				LogicPage->Fill_Rect(X + 1, Y + 1, middle, Y + Height - 2, PINK);
 			} else {
-				LogicPage->Fill_Rect(X+1, Y+1, X+Width-2, middle, PINK);
+				LogicPage->Fill_Rect(X + 1, Y + 1, X + Width - 2, middle, PINK);
 			}
 		} else if (CurValue > RedLimit && CurValue <= YellowLimit) {
 			if (IsHorizontal) {
-				LogicPage->Fill_Rect(X+1, Y+1, red,    Y+Height-2, PINK);
-				LogicPage->Fill_Rect(red, Y+1, middle, Y+Height-2, YELLOW);
+				LogicPage->Fill_Rect(X + 1, Y + 1, red, Y + Height - 2, PINK);
+				LogicPage->Fill_Rect(red, Y + 1, middle, Y + Height - 2, YELLOW);
 			} else {
-				LogicPage->Fill_Rect(X+1, Y+1, X+Width-2, red,    PINK);
-				LogicPage->Fill_Rect(X+1, red, X+Width-2, middle, YELLOW);
+				LogicPage->Fill_Rect(X + 1, Y + 1, X + Width - 2, red, PINK);
+				LogicPage->Fill_Rect(X + 1, red, X + Width - 2, middle, YELLOW);
 			}
 		} else if (CurValue > YellowLimit && CurValue <= MaxValue) {
 
 			if (IsHorizontal) {
-				LogicPage->Fill_Rect(X+1,    Y+1, red,    Y+Height-2, PINK);
-				LogicPage->Fill_Rect(red,    Y+1, yellow, Y+Height-2, YELLOW);
-				LogicPage->Fill_Rect(yellow, Y+1, middle, Y+Height-2, GREEN);
+				LogicPage->Fill_Rect(X + 1, Y + 1, red, Y + Height - 2, PINK);
+				LogicPage->Fill_Rect(red, Y + 1, yellow, Y + Height - 2, YELLOW);
+				LogicPage->Fill_Rect(yellow, Y + 1, middle, Y + Height - 2, GREEN);
 			} else {
-				LogicPage->Fill_Rect(X+1, Y+1,    X+Width-2, red,    PINK);
-				LogicPage->Fill_Rect(X+1, red,    X+Width-2, yellow, YELLOW);
-				LogicPage->Fill_Rect(X+1, yellow, X+Width-2, middle, GREEN);
+				LogicPage->Fill_Rect(X + 1, Y + 1, X + Width - 2, red, PINK);
+				LogicPage->Fill_Rect(X + 1, red, X + Width - 2, yellow, YELLOW);
+				LogicPage->Fill_Rect(X + 1, yellow, X + Width - 2, middle, GREEN);
 			}
 		}
 
@@ -529,8 +503,7 @@ int TriColorGaugeClass::Draw_Me(int forced)
 		if (LogicPage == &SeenBuff) {
 			Conditional_Show_Mouse();
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-

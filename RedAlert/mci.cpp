@@ -1,32 +1,32 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /****************************************************************************
-*
-* FILE
-*     MCI.cpp
-*
-* DESCRIPTION
-*
-* PROGRAMMER
-*     Denzil E. Long, Jr.
-*
-* DATE
-*     6/22/98
-*
-****************************************************************************/
+ *
+ * FILE
+ *     MCI.cpp
+ *
+ * DESCRIPTION
+ *
+ * PROGRAMMER
+ *     Denzil E. Long, Jr.
+ *
+ * DATE
+ *     6/22/98
+ *
+ ****************************************************************************/
 
 #include "function.h"
 
@@ -34,22 +34,21 @@
 #include "mci.h"
 
 /****************************************************************************
-*
-* NAME
-*     GetDeviceCount()
-*
-* DESCRIPTION
-*
-* INPUTS
-*     NONE
-*
-* RESULT
-*     Count - Number of MCI device entries
-*
-****************************************************************************/
+ *
+ * NAME
+ *     GetDeviceCount()
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *     NONE
+ *
+ * RESULT
+ *     Count - Number of MCI device entries
+ *
+ ****************************************************************************/
 
-unsigned int MCI::GetDeviceCount(void)
-	{
+unsigned int MCI::GetDeviceCount(void) {
 	MCIERROR rc;
 	MCI_SYSINFO_PARMS sysInfo;
 	unsigned int count;
@@ -58,34 +57,31 @@ unsigned int MCI::GetDeviceCount(void)
 	sysInfo.lpstrReturn = (LPSTR)&count;
 	sysInfo.dwRetSize = sizeof(count);
 
-	rc = mciSendCommand(MCI_ALL_DEVICE_ID, MCI_SYSINFO,
-			MCI_WAIT | MCI_SYSINFO_QUANTITY, (DWORD)&sysInfo);
+	rc = mciSendCommand(MCI_ALL_DEVICE_ID, MCI_SYSINFO, MCI_WAIT | MCI_SYSINFO_QUANTITY, (DWORD)&sysInfo);
 
 	if (rc)
 		return 0;
 
 	return count;
-	}
-
+}
 
 /****************************************************************************
-*
-* NAME
-*     GetDeviceName(entry, name)
-*
-* DESCRIPTION
-*
-* INPUTS
-*     Entry - Entry number to get name for.
-*     Name  - On return; device entry name
-*
-* RESULT
-*     Success - Success / Failure flag
-*
-****************************************************************************/
+ *
+ * NAME
+ *     GetDeviceName(entry, name)
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *     Entry - Entry number to get name for.
+ *     Name  - On return; device entry name
+ *
+ * RESULT
+ *     Success - Success / Failure flag
+ *
+ ****************************************************************************/
 
-bool MCI::GetDeviceName(unsigned int item, char* buffer)
-	{
+bool MCI::GetDeviceName(unsigned int item, char *buffer) {
 	MCIERROR rc;
 	MCI_SYSINFO_PARMS sysInfo;
 
@@ -95,30 +91,27 @@ bool MCI::GetDeviceName(unsigned int item, char* buffer)
 	sysInfo.dwRetSize = 63;
 	sysInfo.dwNumber = item;
 
-	rc = mciSendCommand(MCI_ALL_DEVICE_ID, MCI_SYSINFO,
-			MCI_WAIT | MCI_SYSINFO_NAME, (DWORD)&sysInfo);
+	rc = mciSendCommand(MCI_ALL_DEVICE_ID, MCI_SYSINFO, MCI_WAIT | MCI_SYSINFO_NAME, (DWORD)&sysInfo);
 
 	if (rc)
 		return false;
 
 	return true;
-	}
-
+}
 
 /****************************************************************************
-*
-* NAME
-*
-* DESCRIPTION
-*
-* INPUTS
-*
-* RESULT
-*
-****************************************************************************/
+ *
+ * NAME
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *
+ * RESULT
+ *
+ ****************************************************************************/
 
-bool MCI::GetProductName(MCIDEVICEID id, char* buffer)
-	{
+bool MCI::GetProductName(MCIDEVICEID id, char *buffer) {
 	MCIERROR rc;
 	MCI_INFO_PARMS info;
 
@@ -127,33 +120,30 @@ bool MCI::GetProductName(MCIDEVICEID id, char* buffer)
 	info.lpstrReturn = (LPSTR)buffer;
 	info.dwRetSize = 63;
 
-	rc = mciSendCommand(id, MCI_INFO, MCI_WAIT | MCI_INFO_PRODUCT,
-			(DWORD)&info);
+	rc = mciSendCommand(id, MCI_INFO, MCI_WAIT | MCI_INFO_PRODUCT, (DWORD)&info);
 
 	if (rc)
 		return false;
 
 	return true;
-	}
-
+}
 
 /****************************************************************************
-*
-* NAME
-*     OpenDevice(name)
-*
-* DESCRIPTION
-*
-* INPUTS
-*     Name - Device name to open
-*
-* RESULT
-*     DeviceID - ID of opened device, 0 if error.
-*
-****************************************************************************/
+ *
+ * NAME
+ *     OpenDevice(name)
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *     Name - Device name to open
+ *
+ * RESULT
+ *     DeviceID - ID of opened device, 0 if error.
+ *
+ ****************************************************************************/
 
-MCIDEVICEID MCI::OpenDevice(const char* name)
-	{
+MCIDEVICEID MCI::OpenDevice(const char *name) {
 	MCIERROR rc;
 	MCI_OPEN_PARMS open;
 
@@ -166,35 +156,31 @@ MCIDEVICEID MCI::OpenDevice(const char* name)
 		return 0;
 
 	return (open.wDeviceID);
-	}
+}
 
-
-void MCI::CloseDevice(MCIDEVICEID id)
-	{
+void MCI::CloseDevice(MCIDEVICEID id) {
 	MCI_GENERIC_PARMS close;
 
 	close.dwCallback = (DWORD)NULL;
-	
+
 	if (id)
 		mciSendCommand(id, MCI_CLOSE, MCI_WAIT, (DWORD)&close);
-	}
-
+}
 
 /****************************************************************************
-*
-* NAME
-*     GetDeviceDescription
-*
-* DESCRIPTION
-*
-* INPUTS
-*
-* RESULT
-*
-****************************************************************************/
+ *
+ * NAME
+ *     GetDeviceDescription
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *
+ * RESULT
+ *
+ ****************************************************************************/
 
-bool MCI::GetDeviceDescription(const char* name, MCIDevice* caps)
-	{
+bool MCI::GetDeviceDescription(const char *name, MCIDevice *caps) {
 	MCIDEVICEID id;
 	unsigned long result;
 
@@ -238,103 +224,95 @@ bool MCI::GetDeviceDescription(const char* name, MCIDevice* caps)
 	CloseDevice(id);
 
 	return true;
-	}
-
+}
 
 /****************************************************************************
-*
-* NAME
-*
-* DESCRIPTION
-*
-* INPUTS
-*
-* RESULT
-*
-****************************************************************************/
+ *
+ * NAME
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *
+ * RESULT
+ *
+ ****************************************************************************/
 
-bool MCI::GetCapability(MCIDEVICEID id, unsigned long capItem,
-		unsigned long* result)
-	{
+bool MCI::GetCapability(MCIDEVICEID id, unsigned long capItem, unsigned long *result) {
 	MCIERROR rc;
 	MCI_GETDEVCAPS_PARMS devCaps;
 
 	memset(&devCaps, 0, sizeof(devCaps));
 	devCaps.dwItem = capItem;
-	rc = mciSendCommand(id, MCI_GETDEVCAPS, MCI_WAIT|MCI_GETDEVCAPS_ITEM,
-		(DWORD)&devCaps);
+	rc = mciSendCommand(id, MCI_GETDEVCAPS, MCI_WAIT | MCI_GETDEVCAPS_ITEM, (DWORD)&devCaps);
 
 	if (rc)
 		return false;
 
 	*result = devCaps.dwReturn;
 	return true;
-	}
-
+}
 
 /****************************************************************************
-*
-* NAME
-*
-* DESCRIPTION
-*
-* INPUTS
-*
-* RESULT
-*
-****************************************************************************/
+ *
+ * NAME
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *
+ * RESULT
+ *
+ ****************************************************************************/
 
-const char* MCI::GetDeviceTypeName(unsigned long type)
-	{
-	static struct _DeviceType {unsigned long typeID; const char* typeName;}
-		_deviceTypeNames[] =
-		{
-			{MCI_DEVTYPE_ANIMATION, "Animation"},
-			{MCI_DEVTYPE_CD_AUDIO, "CD Audio"},
-			{MCI_DEVTYPE_DAT, "DAT"},
-			{MCI_DEVTYPE_DIGITAL_VIDEO, "Digital Video"},
-			{MCI_DEVTYPE_OTHER, "Other"},
-			{MCI_DEVTYPE_OVERLAY, "Overlay"},
-			{MCI_DEVTYPE_SCANNER, "Scanner"},
-			{MCI_DEVTYPE_SEQUENCER, "MIDI Sequencer"},
-			{MCI_DEVTYPE_VCR, "VCR"},
-			{MCI_DEVTYPE_VIDEODISC, "VideoDisc"},
-			{MCI_DEVTYPE_WAVEFORM_AUDIO, "Wave Audio"},
-			{0, NULL},
-		};
+const char *MCI::GetDeviceTypeName(unsigned long type) {
+	static struct _DeviceType {
+		unsigned long typeID;
+		const char *typeName;
+	} _deviceTypeNames[] = {
+	    {MCI_DEVTYPE_ANIMATION, "Animation"},
+	    {MCI_DEVTYPE_CD_AUDIO, "CD Audio"},
+	    {MCI_DEVTYPE_DAT, "DAT"},
+	    {MCI_DEVTYPE_DIGITAL_VIDEO, "Digital Video"},
+	    {MCI_DEVTYPE_OTHER, "Other"},
+	    {MCI_DEVTYPE_OVERLAY, "Overlay"},
+	    {MCI_DEVTYPE_SCANNER, "Scanner"},
+	    {MCI_DEVTYPE_SEQUENCER, "MIDI Sequencer"},
+	    {MCI_DEVTYPE_VCR, "VCR"},
+	    {MCI_DEVTYPE_VIDEODISC, "VideoDisc"},
+	    {MCI_DEVTYPE_WAVEFORM_AUDIO, "Wave Audio"},
+	    {0, NULL},
+	};
 
 	int i = 0;
 
-	while (_deviceTypeNames[i].typeID != 0)
-		{
+	while (_deviceTypeNames[i].typeID != 0) {
 		if (_deviceTypeNames[i].typeID == type)
 			return _deviceTypeNames[i].typeName;
 
 		i++;
-		}
-
-	return NULL;
 	}
 
+	return NULL;
+}
 
 /****************************************************************************
-*
-* NAME
-*     MCIEnumerate(callack, context)
-*
-* DESCRIPTION
-*
-* INPUTS
-*     Callback -
-*     Context  -
-*
-* RESULT
-*     Success - Success / Failure flag
-*
-****************************************************************************/
+ *
+ * NAME
+ *     MCIEnumerate(callack, context)
+ *
+ * DESCRIPTION
+ *
+ * INPUTS
+ *     Callback -
+ *     Context  -
+ *
+ * RESULT
+ *     Success - Success / Failure flag
+ *
+ ****************************************************************************/
 
-bool MCI::EnumerateDevices(MCIEnumCB* callback, void* context)
-	{
+bool MCI::EnumerateDevices(MCIEnumCB *callback, void *context) {
 	DWORD count;
 	DWORD i;
 	char name[64];
@@ -344,19 +322,16 @@ bool MCI::EnumerateDevices(MCIEnumCB* callback, void* context)
 	count = GetDeviceCount();
 
 	// Do for each device
-	for (i = 1; i <= count; i++)
-		{
+	for (i = 1; i <= count; i++) {
 		GetDeviceName(i, name);
 		memset(&device, 0, sizeof(device));
 
-		if (GetDeviceDescription(name, &device))
-			{
+		if (GetDeviceDescription(name, &device)) {
 			if (!callback(&device, context))
 				break;
-			}
 		}
+	}
 
 	return true;
-	}
+}
 #endif // MCIMPEG
-

@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/RULES.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -48,10 +48,8 @@
  *   RulesClass::Objects -- Fetch all the object characteristic values.                        *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"function.h"
-#include	"vortex.h"
-
+#include "function.h"
+#include "vortex.h"
 
 /***********************************************************************************************
  * _Scale_To_256 -- Scales a 1..100 number into a 1..255 number.                               *
@@ -68,13 +66,11 @@
  * HISTORY:                                                                                    *
  *   06/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-static inline int _Scale_To_256(int val)
-{
+static inline int _Scale_To_256(int val) {
 	val = fixed(100, 256) * val;
 	val = min(val, 255);
-	return(val);
+	return (val);
 }
-
 
 /***********************************************************************************************
  * RulesClass::RulesClass -- Default constructor for rules class object.                       *
@@ -92,203 +88,59 @@ static inline int _Scale_To_256(int val)
  * HISTORY:                                                                                    *
  *   06/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-RulesClass::RulesClass(void) :
-	TurboBoost("1.5"),
-	AttackInterval(3),
-	AttackDelay(5),
-	PowerEmergencyFraction(fixed::_3_4),
-	BadgerBombCount(1),
-	AirstripRatio(".12"),
-	AirstripLimit(5),
-	HelipadRatio(".12"),
-	HelipadLimit(5),
-	TeslaRatio(".16"),
-	TeslaLimit(10),
-	AARatio(".14"),
-	AALimit(10),
-	DefenseRatio(".5"),
-	DefenseLimit(40),
-	WarRatio(".1"),
-	WarLimit(2),
-	BarracksRatio(".16"),
-	BarracksLimit(2),
-	RefineryLimit(4),
-	RefineryRatio(".16"),
-	BaseSizeAdd(3),
-	PowerSurplus(50),
-	InfantryReserve(2000),
-	InfantryBaseMult(2),
-	ChronoDuration(3),
-	WaterCrateChance(".2"),
-	SoloCrateMoney(2000),
-	GPSTechLevel(0),
-	UnitCrateType(UNIT_NONE),
-	PatrolTime(".016"),
-	TeamDelay(".6"),
-	CloakDelay(0),
-	GameSpeedBias(1),
-	NervousBias(1),
-	VortexRange(10*CELL_LEPTON_W),
-	VortexSpeed((MPHType)10),
-	VortexDamage(200),
-	VortexChance(".2"),
-	ExplosionSpread(fixed::_1_2),
-	SupressRadius(CELL_LEPTON_W),
-	ParaInfantryTechLevel(10),
-	SpyPlaneTechLevel(10),
-	ParaBombTechLevel(10),
-	MaxIQ(5),
-	IQSuperWeapons(4),
-	IQProduction(5),
-	IQGuardArea(4),
-	IQRepairSell(3),
-	IQCrush(2),
-	IQScatter(3),
-	IQContentScan(4),
-	IQAircraft(4),
-	IQHarvester(3),
-	IQSellBack(2),
-	SilverCrate(CRATE_HEAL_BASE),
-	WoodCrate(CRATE_MONEY),
-	WaterCrate(CRATE_MONEY),
-	CrateMinimum(1),
-	CrateMaximum(255),
-	LZScanRadius(16*CELL_LEPTON_W),
-	MPDefaultMoney(3000),
-	MPMaxMoney(10000),
-	IsMPShadowGrow(true),
-	IsMPBasesOn(true),
-	IsMPTiberiumGrow(true),
-	IsMPCrates(true),
-	IsMPAIPlayers(false),
-	IsMPCaptureTheFlag(false),
-	DropZoneRadius(4*CELL_LEPTON_W),
-	MessageDelay(".6"),
-	SavourDelay(".03"),
-	AVMineDamage(1200),
-	APMineDamage(1000),
-	MaxPlayers(8),
-	BaseDefenseDelay(fixed::_1_4),
-	SuspendPriority(20),
-	SuspendDelay(2),
-	SurvivorFraction(fixed::_1_2),
-	ReloadRate(".05"),
-	AutocreateTime(5),
-	BuildupTime(".05"),
-	OreDumpRate(2),
-	AtomDamage(1000),
-	IsComputerParanoid(true),
-	IsCurleyShuffle(false),
-	IsFlashLowPower(true),
-	IsCompEasyBonus(true),
-	IsFineDifficulty(false),
-	IsExplosiveHarvester(false),
-	IsMCVDeploy(false),
-	IsAllyReveal(true),
-	IsSeparate(false),
-	IsTreeTarget(false),
-	IsMineAware(true),
-	IsTGrowth(true),
-	IsTSpread(true),
-	IsNamed(false),
-	IsAutoCrush(false),
-	IsSmartDefense(false),
-	IsScatter(false),
-	IsChronoKill(true),
-	ProneDamageBias(fixed::_1_2),
-	QuakeDamagePercent(".33"),
-	QuakeChance(".2"),
-	GrowthRate(2),
-	ShroudRate(4),
-	CrateTime(10),
-	TimerWarning(2),
-	ChronoTechLevel(1),
-	SonarTime(14),
-	ChronoTime(3),
-	ParaBombTime(14),
-	ParaInfantryTime(2),
-	ParaSaboteurTime(14),
-	SpyTime(2),
-	IronCurtainTime(14),
-	GPSTime(1),
-	NukeTime(14),
-	SpeakDelay(2),
-	DamageDelay(1),
-	Gravity(3),
-	GapShroudRadius(10),
-	GapRegenInterval(".1"),
-	RadarJamRadius(10*CELL_LEPTON_W),
-	Incoming(MPH_IMMOBILE),
-	MinDamage(1),
-	MaxDamage(1000),
-	RepairStep(5),
-	RepairPercent(fixed::_1_4),
-	URepairStep(5),
-	URepairPercent(fixed::_1_4),
-	RepairRate(".016"),
-	ConditionGreen(1),
-	ConditionYellow(fixed::_1_2),
-	ConditionRed(fixed::_1_4),
-	RandomAnimateTime(".083"),
-	BailCount(28),
-	GoldValue(35),
-	GemValue(110),
-	AircraftMax(100),
-	AnimMax(100),
-	BuildingMax(500),
-	BulletMax(40),
-	FactoryMax(20),
-	InfantryMax(500),
-	OverlayMax(1),
-	SmudgeMax(1),
-	TeamMax(60),
-	TeamTypeMax(60),
-	TemplateMax(1),
-	TerrainMax(500),
-	TriggerMax(60),
-	UnitMax(500),
-	VesselMax(100),
-	ProjectileMax(20),
-	WeaponMax(20),
-	WarheadMax(20),
-	TrigTypeMax(80),
-	CloseEnoughDistance(0x0280),
-	StrayDistance(0x0200),
-	CrushDistance(0x0180),
-	CrateRadius(0x0280),
-	HomingScatter(0x0200),
-	BallisticScatter(0x0100),
-	RefundPercent(fixed::_1_2),
-	IronCurtainDuration(fixed::_1_2),
-	BridgeStrength(1000),
-	BuildSpeedBias(1),
-	C4Delay(".03"),
-	RepairThreshhold(1000),
-	PathDelay(".016"),
-	MovieTime(fixed::_1_4),
-	TiberiumShortScan(0x0600),
-	TiberiumLongScan(0x2000),
-	HealthBarDisplayMode(HB_SELECTED),
-	ResourceBarDisplayMode(RB_SELECTED)
-{
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+RulesClass::RulesClass(void)
+    : TurboBoost("1.5"), AttackInterval(3), AttackDelay(5), PowerEmergencyFraction(fixed::_3_4), BadgerBombCount(1),
+      AirstripRatio(".12"), AirstripLimit(5), HelipadRatio(".12"), HelipadLimit(5), TeslaRatio(".16"), TeslaLimit(10),
+      AARatio(".14"), AALimit(10), DefenseRatio(".5"), DefenseLimit(40), WarRatio(".1"), WarLimit(2),
+      BarracksRatio(".16"), BarracksLimit(2), RefineryLimit(4), RefineryRatio(".16"), BaseSizeAdd(3), PowerSurplus(50),
+      InfantryReserve(2000), InfantryBaseMult(2), ChronoDuration(3), WaterCrateChance(".2"), SoloCrateMoney(2000),
+      GPSTechLevel(0), UnitCrateType(UNIT_NONE), PatrolTime(".016"), TeamDelay(".6"), CloakDelay(0), GameSpeedBias(1),
+      NervousBias(1), VortexRange(10 * CELL_LEPTON_W), VortexSpeed((MPHType)10), VortexDamage(200), VortexChance(".2"),
+      ExplosionSpread(fixed::_1_2), SupressRadius(CELL_LEPTON_W), ParaInfantryTechLevel(10), SpyPlaneTechLevel(10),
+      ParaBombTechLevel(10), MaxIQ(5), IQSuperWeapons(4), IQProduction(5), IQGuardArea(4), IQRepairSell(3), IQCrush(2),
+      IQScatter(3), IQContentScan(4), IQAircraft(4), IQHarvester(3), IQSellBack(2), SilverCrate(CRATE_HEAL_BASE),
+      WoodCrate(CRATE_MONEY), WaterCrate(CRATE_MONEY), CrateMinimum(1), CrateMaximum(255),
+      LZScanRadius(16 * CELL_LEPTON_W), MPDefaultMoney(3000), MPMaxMoney(10000), IsMPShadowGrow(true),
+      IsMPBasesOn(true), IsMPTiberiumGrow(true), IsMPCrates(true), IsMPAIPlayers(false), IsMPCaptureTheFlag(false),
+      DropZoneRadius(4 * CELL_LEPTON_W), MessageDelay(".6"), SavourDelay(".03"), AVMineDamage(1200), APMineDamage(1000),
+      MaxPlayers(8), BaseDefenseDelay(fixed::_1_4), SuspendPriority(20), SuspendDelay(2), SurvivorFraction(fixed::_1_2),
+      ReloadRate(".05"), AutocreateTime(5), BuildupTime(".05"), OreDumpRate(2), AtomDamage(1000),
+      IsComputerParanoid(true), IsCurleyShuffle(false), IsFlashLowPower(true), IsCompEasyBonus(true),
+      IsFineDifficulty(false), IsExplosiveHarvester(false), IsMCVDeploy(false), IsAllyReveal(true), IsSeparate(false),
+      IsTreeTarget(false), IsMineAware(true), IsTGrowth(true), IsTSpread(true), IsNamed(false), IsAutoCrush(false),
+      IsSmartDefense(false), IsScatter(false), IsChronoKill(true), ProneDamageBias(fixed::_1_2),
+      QuakeDamagePercent(".33"), QuakeChance(".2"), GrowthRate(2), ShroudRate(4), CrateTime(10), TimerWarning(2),
+      ChronoTechLevel(1), SonarTime(14), ChronoTime(3), ParaBombTime(14), ParaInfantryTime(2), ParaSaboteurTime(14),
+      SpyTime(2), IronCurtainTime(14), GPSTime(1), NukeTime(14), SpeakDelay(2), DamageDelay(1), Gravity(3),
+      GapShroudRadius(10), GapRegenInterval(".1"), RadarJamRadius(10 * CELL_LEPTON_W), Incoming(MPH_IMMOBILE),
+      MinDamage(1), MaxDamage(1000), RepairStep(5), RepairPercent(fixed::_1_4), URepairStep(5),
+      URepairPercent(fixed::_1_4), RepairRate(".016"), ConditionGreen(1), ConditionYellow(fixed::_1_2),
+      ConditionRed(fixed::_1_4), RandomAnimateTime(".083"), BailCount(28), GoldValue(35), GemValue(110),
+      AircraftMax(100), AnimMax(100), BuildingMax(500), BulletMax(40), FactoryMax(20), InfantryMax(500), OverlayMax(1),
+      SmudgeMax(1), TeamMax(60), TeamTypeMax(60), TemplateMax(1), TerrainMax(500), TriggerMax(60), UnitMax(500),
+      VesselMax(100), ProjectileMax(20), WeaponMax(20), WarheadMax(20), TrigTypeMax(80), CloseEnoughDistance(0x0280),
+      StrayDistance(0x0200), CrushDistance(0x0180), CrateRadius(0x0280), HomingScatter(0x0200),
+      BallisticScatter(0x0100), RefundPercent(fixed::_1_2), IronCurtainDuration(fixed::_1_2), BridgeStrength(1000),
+      BuildSpeedBias(1), C4Delay(".03"), RepairThreshhold(1000), PathDelay(".016"), MovieTime(fixed::_1_4),
+      TiberiumShortScan(0x0600), TiberiumLongScan(0x2000), HealthBarDisplayMode(HB_SELECTED),
+      ResourceBarDisplayMode(RB_SELECTED) {
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	NewUnitsEnabled = SecretUnitsEnabled = 0;
 	MTankDistance = 30;
 	QuakeUnitDamage = 0x080;
 	QuakeBuildingDamage = 0x040;
 	QuakeInfantryDamage = 0;
-	QuakeDelay      = 120;
+	QuakeDelay = 120;
 	ChronoTankDuration = 0x300;
-#ifdef FIXIT_ENGINEER	//	checked - ajw 9/28/98
-	EngineerDamage=(fixed)1 / (fixed)3;	// Amount of damage an engineer does
-	EngineerCaptureLevel=ConditionRed;	// Building damage level before engineer can capture
+#ifdef FIXIT_ENGINEER			      //	checked - ajw 9/28/98
+	EngineerDamage = (fixed)1 / (fixed)3; // Amount of damage an engineer does
+	EngineerCaptureLevel = ConditionRed;  // Building damage level before engineer can capture
 #endif
-#ifdef FIXIT_CARRIER	//	checked - ajw 9/28/98
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
 	CarrierLaunchDelay = 60;
 #endif
 #endif
 }
-
 
 /***********************************************************************************************
  * Difficulty_Get -- Fetch the difficulty bias values.                                         *
@@ -308,8 +160,7 @@ RulesClass::RulesClass(void) :
  * HISTORY:                                                                                    *
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-static void Difficulty_Get(CCINIClass & ini, DifficultyClass & diff, char const * section)
-{
+static void Difficulty_Get(CCINIClass &ini, DifficultyClass &diff, char const *section) {
 	if (ini.Is_Present(section)) {
 		diff.FirepowerBias = ini.Get_Fixed(section, "FirePower", 1);
 		diff.GroundspeedBias = ini.Get_Fixed(section, "Groundspeed", 1);
@@ -326,7 +177,6 @@ static void Difficulty_Get(CCINIClass & ini, DifficultyClass & diff, char const 
 	}
 }
 
-
 /***********************************************************************************************
  * RulesClass::Process -- Fetch the bulk of the rule data from the control file.               *
  *                                                                                             *
@@ -341,8 +191,7 @@ static void Difficulty_Get(CCINIClass & ini, DifficultyClass & diff, char const 
  * HISTORY:                                                                                    *
  *   06/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Process(CCINIClass & ini)
-{
+bool RulesClass::Process(CCINIClass &ini) {
 	BStart(BENCH_RULES);
 
 	General(ini);
@@ -359,9 +208,8 @@ bool RulesClass::Process(CCINIClass & ini)
 
 	BEnd(BENCH_RULES);
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * RulesClass::General -- Process the general main game rules.                                 *
@@ -379,31 +227,33 @@ bool RulesClass::Process(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::General(CCINIClass & ini)
-{
-	static char const * const GENERAL = "General";
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-	static char const * const AFTERMATH = "Aftermath";
+bool RulesClass::General(CCINIClass &ini) {
+	static char const *const GENERAL = "General";
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+	static char const *const AFTERMATH = "Aftermath";
 
-	if(ini.Is_Present(AFTERMATH)) {
-//debugprint( "NewUnitsEnabled previously %i\n", NewUnitsEnabled );
+	if (ini.Is_Present(AFTERMATH)) {
+		// debugprint( "NewUnitsEnabled previously %i\n", NewUnitsEnabled );
 		NewUnitsEnabled = ini.Get_Int(AFTERMATH, "NewUnitsEnabled", 0);
-//debugprint( "NewUnitsEnabled set to %i by Rules\n", NewUnitsEnabled );
-		MTankDistance = ini.Get_Int(AFTERMATH,"MTankDistance",MTankDistance);
+		// debugprint( "NewUnitsEnabled set to %i by Rules\n", NewUnitsEnabled );
+		MTankDistance = ini.Get_Int(AFTERMATH, "MTankDistance", MTankDistance);
 		QuakeUnitDamage = ini.Get_Fixed(AFTERMATH, "QuakeUnitDamage", QuakeUnitDamage);
 		QuakeBuildingDamage = ini.Get_Fixed(AFTERMATH, "QuakeBuildingDamage", QuakeBuildingDamage);
-		QuakeInfantryDamage = ini.Get_Int(AFTERMATH,"QuakeInfantryDamage",QuakeInfantryDamage);
-		QuakeDelay      = ini.Get_Int(AFTERMATH,"QuakeDelay",QuakeDelay);
+		QuakeInfantryDamage = ini.Get_Int(AFTERMATH, "QuakeInfantryDamage", QuakeInfantryDamage);
+		QuakeDelay = ini.Get_Int(AFTERMATH, "QuakeDelay", QuakeDelay);
 		ChronoTankDuration = ini.Get_Fixed(AFTERMATH, "ChronoTankDuration", ChronoTankDuration);
-//Mono_Set_Cursor(0,0);Mono_Printf("Chrono duration: %08x \n",ChronoTankDuration);Keyboard->Get();Keyboard->Get();
-#ifdef FIXIT_CARRIER	//	checked - ajw 9/28/98
-		CarrierLaunchDelay = ini.Get_Int(AFTERMATH,"CarrierLaunchDelay",120);
+// Mono_Set_Cursor(0,0);Mono_Printf("Chrono duration: %08x \n",ChronoTankDuration);Keyboard->Get();Keyboard->Get();
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
+		CarrierLaunchDelay = ini.Get_Int(AFTERMATH, "CarrierLaunchDelay", 120);
 #endif
-#ifdef FIXIT_ENGINEER	//	checked - ajw 9/28/98
-		//	Engineer changing fields were specifically left out of Aftrmath.ini, thus these values are not found to set. ajw
-		//	Implies interesting security hole if user creates a separate Aftrmath.ini file!
-		EngineerDamage = ini.Get_Fixed(AFTERMATH, "EngineerDamage", EngineerDamage);	// Amount of damage an engineer does
-		EngineerCaptureLevel = ini.Get_Fixed(AFTERMATH, "EngineerCaptureLevel", EngineerCaptureLevel);	// Building damage level before engineer can capture
+#ifdef FIXIT_ENGINEER //	checked - ajw 9/28/98
+		//	Engineer changing fields were specifically left out of Aftrmath.ini, thus these values are not
+		// found to set. ajw 	Implies interesting security hole if user creates a separate Aftrmath.ini file!
+		EngineerDamage =
+		    ini.Get_Fixed(AFTERMATH, "EngineerDamage", EngineerDamage); // Amount of damage an engineer does
+		EngineerCaptureLevel =
+		    ini.Get_Fixed(AFTERMATH, "EngineerCaptureLevel",
+				  EngineerCaptureLevel); // Building damage level before engineer can capture
 #endif
 	}
 
@@ -510,15 +360,14 @@ bool RulesClass::General(CCINIClass & ini)
 		ChronalVortex.Set_Speed(VortexSpeed);
 		ChronalVortex.Set_Damage(VortexDamage);
 
-		//ChronalVortex.Set_Range ( ini.Get_Int (GENERAL, "VortexRange", ChronalVortex.Get_Range() ) );
-		//ChronalVortex.Set_Speed ( ini.Get_Int (GENERAL, "VortexSpeed", ChronalVortex.Get_Speed() ) );
-		//ChronalVortex.Set_Damage ( ini.Get_Int (GENERAL, "VortexDamage", ChronalVortex.Get_Damage() ) );
+		// ChronalVortex.Set_Range ( ini.Get_Int (GENERAL, "VortexRange", ChronalVortex.Get_Range() ) );
+		// ChronalVortex.Set_Speed ( ini.Get_Int (GENERAL, "VortexSpeed", ChronalVortex.Get_Speed() ) );
+		// ChronalVortex.Set_Damage ( ini.Get_Int (GENERAL, "VortexDamage", ChronalVortex.Get_Damage() ) );
 
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * RulesClass::MPlayer -- Fetch and process the multiplayer default settings.                  *
@@ -534,9 +383,8 @@ bool RulesClass::General(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::MPlayer(CCINIClass & ini)
-{
-	static char const * const MPLAYER = "MultiplayerDefaults";
+bool RulesClass::MPlayer(CCINIClass &ini) {
+	static char const *const MPLAYER = "MultiplayerDefaults";
 	if (ini.Is_Present(MPLAYER)) {
 		MPDefaultMoney = ini.Get_Int(MPLAYER, "Money", MPDefaultMoney);
 		MPMaxMoney = ini.Get_Int(MPLAYER, "MaxMoney", MPMaxMoney);
@@ -545,11 +393,10 @@ bool RulesClass::MPlayer(CCINIClass & ini)
 		IsMPTiberiumGrow = ini.Get_Bool(MPLAYER, "OreGrows", IsMPTiberiumGrow);
 		IsMPCrates = ini.Get_Bool(MPLAYER, "Crates", IsMPCrates);
 		IsMPCaptureTheFlag = ini.Get_Bool(MPLAYER, "CaptureTheFlag", IsMPCaptureTheFlag);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * RulesClass::Recharge -- Process the super weapon recharge statistics.                       *
@@ -565,9 +412,8 @@ bool RulesClass::MPlayer(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Recharge(CCINIClass & ini)
-{
-	static char const * const RECHARGE = "Recharge";
+bool RulesClass::Recharge(CCINIClass &ini) {
+	static char const *const RECHARGE = "Recharge";
 	if (ini.Is_Present(RECHARGE)) {
 		SonarTime = ini.Get_Fixed(RECHARGE, "Sonar", SonarTime);
 		ChronoTime = ini.Get_Fixed(RECHARGE, "Chrono", ChronoTime);
@@ -577,11 +423,10 @@ bool RulesClass::Recharge(CCINIClass & ini)
 		IronCurtainTime = ini.Get_Fixed(RECHARGE, "IronCurtain", IronCurtainTime);
 		GPSTime = ini.Get_Fixed(RECHARGE, "GPS", GPSTime);
 		NukeTime = ini.Get_Fixed(RECHARGE, "Nuke", NukeTime);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * RulesClass::Heap_Maximums -- Fetch and process the heap override values.                    *
@@ -599,12 +444,11 @@ bool RulesClass::Recharge(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Heap_Maximums(CCINIClass & ini)
-{
+bool RulesClass::Heap_Maximums(CCINIClass &ini) {
 	/*
 	**	Heap maximum values.
 	*/
-	static char const * const MAXIMUMS = "Maximums";
+	static char const *const MAXIMUMS = "Maximums";
 	if (ini.Is_Present(MAXIMUMS)) {
 		MaxPlayers = ini.Get_Int(MAXIMUMS, "Players", MaxPlayers);
 		AircraftMax = ini.Get_Int(MAXIMUMS, "Aircraft", AircraftMax);
@@ -646,7 +490,7 @@ bool RulesClass::Heap_Maximums(CCINIClass & ini)
 	new WarheadTypeClass("Super");
 	new WarheadTypeClass("Organic");
 	new WarheadTypeClass("Nuke");
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	new WarheadTypeClass("Mechanical");
 #endif
 
@@ -691,7 +535,7 @@ bool RulesClass::Heap_Maximums(CCINIClass & ini)
 	new WeaponTypeClass("Mandible");
 #endif
 
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	new WeaponTypeClass("PortaTesla");
 	new WeaponTypeClass("GoodWrench");
 	new WeaponTypeClass("SubSCUD");
@@ -699,13 +543,12 @@ bool RulesClass::Heap_Maximums(CCINIClass & ini)
 	new WeaponTypeClass("APTusk");
 	new WeaponTypeClass("Democharge");
 #endif
-#ifdef FIXIT_CARRIER	//	checked - ajw 9/28/98
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
 	new WeaponTypeClass("AirAssault");
 #endif
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * RulesClass::AI -- Processes the AI control constants from the database.                     *
@@ -721,9 +564,8 @@ bool RulesClass::Heap_Maximums(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::AI(CCINIClass & ini)
-{
-	static char const * const AI = "AI";
+bool RulesClass::AI(CCINIClass &ini) {
+	static char const *const AI = "AI";
 	if (ini.Is_Present(AI)) {
 		AttackInterval = ini.Get_Fixed(AI, "AttackInterval", AttackInterval);
 		AttackDelay = ini.Get_Fixed(AI, "AttackDelay", AttackDelay);
@@ -756,11 +598,10 @@ bool RulesClass::AI(CCINIClass & ini)
 		IsCompEasyBonus = ini.Get_Bool(AI, "CompEasyBonus", IsCompEasyBonus);
 		IsComputerParanoid = ini.Get_Bool(AI, "Paranoid", IsComputerParanoid);
 		PowerEmergencyFraction = ini.Get_Fixed(AI, "PowerEmergency", PowerEmergencyFraction);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * RulesClass::Powerups -- Process the powerup values from the database.                       *
@@ -777,9 +618,8 @@ bool RulesClass::AI(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Powerups(CCINIClass & ini)
-{
-	static char const * const POWERUPS = "Powerups";
+bool RulesClass::Powerups(CCINIClass &ini) {
+	static char const *const POWERUPS = "Powerups";
 	if (ini.Is_Present(POWERUPS)) {
 		for (CrateType crate = CRATE_FIRST; crate < CRATE_COUNT; crate++) {
 			char buffer[128];
@@ -788,7 +628,7 @@ bool RulesClass::Powerups(CCINIClass & ini)
 				/*
 				**	Share odds.
 				*/
-				char * token = strtok(buffer, ",");
+				char *token = strtok(buffer, ",");
 				if (token) {
 					strtrim(token);
 					CrateShares[crate] = atoi(token);
@@ -817,11 +657,10 @@ bool RulesClass::Powerups(CCINIClass & ini)
 				}
 			}
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * RulesClass::Land_Types -- Inits the land type values.                                       *
@@ -837,25 +676,15 @@ bool RulesClass::Powerups(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Land_Types(CCINIClass & ini)
-{
+bool RulesClass::Land_Types(CCINIClass &ini) {
 	/*
 	**	Fetch the movement characteristic data for terrain types.
 	*/
 	for (LandType land = LAND_FIRST; land < LAND_COUNT; land++) {
-		static char const * _lands[LAND_COUNT] = {
-			"Clear",
-			"Road",
-			"Water",
-			"Rock",
-			"Wall",
-			"Ore",
-			"Beach",
-			"Rough",
-			"River"
-		};
+		static char const *_lands[LAND_COUNT] = {"Clear", "Road",  "Water", "Rock", "Wall",
+							 "Ore",	  "Beach", "Rough", "River"};
 
-		GroundType * gptr = &Ground[land];
+		GroundType *gptr = &Ground[land];
 
 		if (ini.Is_Present(_lands[land])) {
 			gptr->Cost[SPEED_FOOT] = ini.Get_Fixed(_lands[land], "Foot", 1);
@@ -866,9 +695,8 @@ bool RulesClass::Land_Types(CCINIClass & ini)
 			gptr->Build = ini.Get_Bool(_lands[land], "Buildable", false);
 		}
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * RulesClass::Themes -- Fetches the theme control values from the INI database.               *
@@ -886,9 +714,8 @@ bool RulesClass::Land_Types(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Themes(CCINIClass & ini)
-{
-	static char const * const THEMECONTROL = "ThemeControl";
+bool RulesClass::Themes(CCINIClass &ini) {
+	static char const *const THEMECONTROL = "ThemeControl";
 
 	if (ini.Is_Present(THEMECONTROL)) {
 		for (ThemeType theme = THEME_FIRST; theme < THEME_COUNT; theme++) {
@@ -899,7 +726,7 @@ bool RulesClass::Themes(CCINIClass & ini)
 				int owners = HOUSEF_ALLIES | HOUSEF_SOVIET | HOUSEF_OTHERS;
 
 				ini.Get_String(THEMECONTROL, Theme.Base_Name(theme), "", buffer, sizeof(buffer));
-				char const * token = strtok(buffer, ",");
+				char const *token = strtok(buffer, ",");
 				if (token != NULL) {
 					scen = atoi(token);
 				}
@@ -912,11 +739,10 @@ bool RulesClass::Themes(CCINIClass & ini)
 				Theme.Set_Theme_Data(theme, scen, owners);
 			}
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * RulesClass::IQ -- Fetches the IQ control values from the INI database.                      *
@@ -934,9 +760,8 @@ bool RulesClass::Themes(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   08/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::IQ(CCINIClass & ini)
-{
-	static char const * const IQCONTROL = "IQ";
+bool RulesClass::IQ(CCINIClass &ini) {
+	static char const *const IQCONTROL = "IQ";
 	if (ini.Is_Present(IQCONTROL)) {
 		MaxIQ = ini.Get_Int(IQCONTROL, "MaxIQLevels", MaxIQ);
 		IQSuperWeapons = ini.Get_Int(IQCONTROL, "SuperWeapons", IQSuperWeapons);
@@ -950,11 +775,10 @@ bool RulesClass::IQ(CCINIClass & ini)
 		IQHarvester = ini.Get_Int(IQCONTROL, "Harvester", IQHarvester);
 		IQSellBack = ini.Get_Int(IQCONTROL, "SellBack", IQSellBack);
 
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * RulesClass::Objects -- Fetch all the object characteristic values.                          *
@@ -971,8 +795,7 @@ bool RulesClass::IQ(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   09/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Objects(CCINIClass & ini)
-{
+bool RulesClass::Objects(CCINIClass &ini) {
 	/*
 	**	Fetch the game object values from the rules file.
 	*/
@@ -1019,14 +842,13 @@ bool RulesClass::Objects(CCINIClass & ini)
 	**	Fetch the mission control values.
 	*/
 	for (MissionType mission = MISSION_FIRST; mission < MISSION_COUNT; mission++) {
-		MissionControlClass * miss = &MissionControl[mission];
+		MissionControlClass *miss = &MissionControl[mission];
 		miss->Mission = mission;
 		miss->Read_INI(ini);
 	}
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * RulesClass::Difficulty -- Fetch the various difficulty group settings.                      *
@@ -1042,16 +864,14 @@ bool RulesClass::Objects(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   09/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool RulesClass::Difficulty(CCINIClass & ini)
-{
+bool RulesClass::Difficulty(CCINIClass &ini) {
 #if 0
 	Difficulty_Get(ini, Diff[DIFF_EASY], "Easy");
 	Difficulty_Get(ini, Diff[DIFF_NORMAL], "Normal");
 	Difficulty_Get(ini, Diff[DIFF_HARD], "Difficult");
 #endif
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * Is_MCV_Deploy -- Check if MCV can be deployed.                                              *
@@ -1068,7 +888,4 @@ bool RulesClass::Difficulty(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   10/24/2019 SKY : Created.                                                                 *
  *=============================================================================================*/
-bool Is_MCV_Deploy()
-{
-	return Special.UseMCVDeploy ? Special.IsMCVDeploy : Rule.IsMCVDeploy;
-}
+bool Is_MCV_Deploy() { return Special.UseMCVDeploy ? Special.IsMCVDeploy : Rule.IsMCVDeploy; }

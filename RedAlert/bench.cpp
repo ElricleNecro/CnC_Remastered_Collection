@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/BENCH.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -38,9 +38,8 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 #if (0)
-#include	"bench.h"
-#include	"mpu.h"
-
+#include "bench.h"
+#include "mpu.h"
 
 /***********************************************************************************************
  * Benchmark::Benchmark -- Constructor for the benchmark object.                               *
@@ -56,13 +55,7 @@
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Benchmark::Benchmark(void) :
-	Average(0),
-	Counter(0),
-	TotalCount(0)
-{
-}
-
+Benchmark::Benchmark(void) : Average(0), Counter(0), TotalCount(0) {}
 
 /***********************************************************************************************
  * Benchmark::Reset -- Clear out the benchmark statistics.                                     *
@@ -79,13 +72,11 @@ Benchmark::Benchmark(void) :
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Benchmark::Reset(void)
-{
+void Benchmark::Reset(void) {
 	Average = 0;
 	Counter = 0;
 	TotalCount = 0;
 }
-
 
 /***********************************************************************************************
  * Benchmark::Begin -- Start the benchmark operation.                                          *
@@ -102,12 +93,11 @@ void Benchmark::Reset(void)
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Benchmark::Begin(bool reset)
-{
-	if (reset) Reset();
+void Benchmark::Begin(bool reset) {
+	if (reset)
+		Reset();
 	Clock = 0;
 }
-
 
 /***********************************************************************************************
  * Benchmark::End -- Mark the end of a benchmarked operation                                   *
@@ -125,8 +115,7 @@ void Benchmark::Begin(bool reset)
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Benchmark::End(void)
-{
+void Benchmark::End(void) {
 	unsigned long value = Clock;
 
 	if (Counter == MAXIMUM_EVENT_COUNT) {
@@ -138,7 +127,6 @@ void Benchmark::End(void)
 	}
 	TotalCount++;
 }
-
 
 /***********************************************************************************************
  * Benchmark::Value -- Fetch the current average benchmark time.                               *
@@ -155,11 +143,10 @@ void Benchmark::End(void)
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-unsigned long Benchmark::Value(void) const
-{
+unsigned long Benchmark::Value(void) const {
 	if (Counter) {
-		return(Average / Counter);
+		return (Average / Counter);
 	}
-	return(0);
+	return (0);
 }
 #endif

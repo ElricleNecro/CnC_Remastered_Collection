@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/EDIT.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -40,8 +40,7 @@
  *   EditClass::~EditClass -- Default destructor for the edit gadget.                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * EditClass::EditClass -- Normal constructor for edit class object.                           *
@@ -77,9 +76,8 @@
  *   01/05/1995 MML : Created.                                                                 *
  *   01/21/1995 JLB : Modified.                                                                *
  *=============================================================================================*/
-EditClass::EditClass(int id, char * text, int max_len, TextPrintType flags, int x, int y, int w, int h, EditStyle style) :
-	ControlClass (id, x, y, w, h, LEFTPRESS), String(text)
-{
+EditClass::EditClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w, int h, EditStyle style)
+    : ControlClass(id, x, y, w, h, LEFTPRESS), String(text) {
 	TextFlags = flags & ~(TPF_CENTER);
 	EditFlags = style;
 	Set_Text(text, max_len);
@@ -87,23 +85,22 @@ EditClass::EditClass(int id, char * text, int max_len, TextPrintType flags, int 
 
 	if (w == -1 || h == -1) {
 		// PG_TO_FIX
-		//Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TextFlags);
+		// Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TextFlags);
 
 		if (h == -1) {
-			Height = FontHeight+1;
+			Height = FontHeight + 1;
 		}
 		if (w == -1) {
 			if (strlen(String) > 0) {
 				Width = String_Pixel_Width(String) + 6;
 			} else {
-				Width = ((Char_Pixel_Width('X')+FontXSpacing) * (MaxLength+1)) + 2;
+				Width = ((Char_Pixel_Width('X') + FontXSpacing) * (MaxLength + 1)) + 2;
 			}
-    	}
+		}
 	}
 
 	IsReadOnly = 0;
 }
-
 
 /***********************************************************************************************
  * EditClass::~EditClass -- Default destructor for the edit gadget.                            *
@@ -119,13 +116,11 @@ EditClass::EditClass(int id, char * text, int max_len, TextPrintType flags, int 
  * HISTORY:                                                                                    *
  *   01/24/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-EditClass::~EditClass(void)
-{
+EditClass::~EditClass(void) {
 	if (Has_Focus()) {
 		Clear_Focus();
 	}
 }
-
 
 /***********************************************************************************************
  * EditClass::Set_Text -- Sets the text to the edit gadget.                                    *
@@ -141,14 +136,12 @@ EditClass::~EditClass(void)
  * HISTORY:                                                                                    *
  *   01/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void EditClass::Set_Text(char * text, int max_len)
-{
+void EditClass::Set_Text(char *text, int max_len) {
 	String = text;
-	MaxLength = max_len-1;
+	MaxLength = max_len - 1;
 	Length = strlen(String);
 	Flag_To_Redraw();
 }
-
 
 /***********************************************************************************************
  * EditClass::Draw_Me -- Draws the edit box and embedded text.                                 *
@@ -165,14 +158,13 @@ void EditClass::Set_Text(char * text, int max_len)
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int EditClass::Draw_Me(int forced)
-{
+int EditClass::Draw_Me(int forced) {
 	if (ControlClass::Draw_Me(forced)) {
 		/*
 		**	Hide the mouse.
 		*/
 		if (LogicPage == &SeenBuff) {
-			Conditional_Hide_Mouse(X, Y, X+Width, Y+Height);
+			Conditional_Hide_Mouse(X, Y, X + Width, Y + Height);
 		}
 
 		/*
@@ -192,11 +184,10 @@ int EditClass::Draw_Me(int forced)
 			Conditional_Show_Mouse();
 		}
 
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * EditClass::Action -- Handles input events.                                                  *
@@ -215,13 +206,12 @@ int EditClass::Draw_Me(int forced)
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int EditClass::Action(unsigned flags, KeyNumType & key)
-{
+int EditClass::Action(unsigned flags, KeyNumType &key) {
 	/*
 	** If this is a read-only edit box, it's a display-only device
 	*/
 	if (IsReadOnly) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -231,7 +221,7 @@ int EditClass::Action(unsigned flags, KeyNumType & key)
 	if ((flags & LEFTPRESS)) {
 		flags &= ~LEFTPRESS;
 		Set_Focus();
-		Flag_To_Redraw();		// force to draw cursor
+		Flag_To_Redraw(); // force to draw cursor
 	}
 
 	/*
@@ -258,11 +248,11 @@ int EditClass::Action(unsigned flags, KeyNumType & key)
 			/*
 			** Allow numeric keypad presses to map to ascii numbers
 			*/
-			if ((key & WWKEY_VK_BIT) && ascii >='0' && ascii <= '9') {
+			if ((key & WWKEY_VK_BIT) && ascii >= '0' && ascii <= '9') {
 
 				key = (KeyNumType)(key & ~WWKEY_VK_BIT);
-				if ( (!(flags & LEFTRELEASE)) && (!(flags & RIGHTRELEASE))) {
-					if (Handle_Key (ascii) ) {
+				if ((!(flags & LEFTRELEASE)) && (!(flags & RIGHTRELEASE))) {
+					if (Handle_Key(ascii)) {
 						flags &= ~KEYBOARD;
 						key = KN_NONE;
 					}
@@ -270,10 +260,9 @@ int EditClass::Action(unsigned flags, KeyNumType & key)
 			} else {
 				/*
 				** Filter out all special keys except return and backspace
-				*/  	if ((!(key & WWKEY_VK_BIT) && ascii >= ' ' && ascii <= 255)
-					|| key == KN_RETURN || key == KN_BACKSPACE) {
-
-
+				*/
+				if ((!(key & WWKEY_VK_BIT) && ascii >= ' ' && ascii <= 255) || key == KN_RETURN ||
+				    key == KN_BACKSPACE) {
 
 					if ((!(flags & LEFTRELEASE)) && (!(flags & RIGHTRELEASE))) {
 						if (Handle_Key(Keyboard->To_ASCII(key))) {
@@ -288,18 +277,17 @@ int EditClass::Action(unsigned flags, KeyNumType & key)
 			}
 		}
 
-#else	//WIN32
+#else  // WIN32
 			if (Handle_Key(Keyboard->To_ASCII(key))) {
 				flags &= ~KEYBOARD;
 				key = KN_NONE;
 			}
 		}
-#endif	//WIN32
+#endif // WIN32
 	}
 
-	return(ControlClass::Action(flags, key));
+	return (ControlClass::Action(flags, key));
 }
-
 
 /***********************************************************************************************
  * EditClass::Draw_Background -- Draw the background to the edit gadget.                       *
@@ -316,11 +304,7 @@ int EditClass::Action(unsigned flags, KeyNumType & key)
  * HISTORY:                                                                                    *
  *   01/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void EditClass::Draw_Background(void)
-{
-	Draw_Box (X, Y, Width, Height, BOXSTYLE_BOX, true);
-}
-
+void EditClass::Draw_Background(void) { Draw_Box(X, Y, Width, Height, BOXSTYLE_BOX, true); }
 
 /***********************************************************************************************
  * EditClass::Draw_Text -- Draws the edit gadget text.                                         *
@@ -338,8 +322,7 @@ void EditClass::Draw_Background(void)
  * HISTORY:                                                                                    *
  *   01/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void EditClass::Draw_Text(char const * text)
-{
+void EditClass::Draw_Text(char const *text) {
 	TextPrintType flags;
 
 	if (Has_Focus()) {
@@ -348,14 +331,13 @@ void EditClass::Draw_Text(char const * text)
 		flags = (TextPrintType)0;
 	}
 
-	Conquer_Clip_Text_Print(text, X+1, Y+1, Color, TBLACK, TextFlags | flags, Width-2);
+	Conquer_Clip_Text_Print(text, X + 1, Y + 1, Color, TBLACK, TextFlags | flags, Width - 2);
 
 	if (Has_Focus() && (int)strlen(text) < MaxLength &&
-		((int)String_Pixel_Width(text) + (int)String_Pixel_Width ("_") < Width-2) ) {
-		Conquer_Clip_Text_Print( "_", X+1+String_Pixel_Width(text), Y+1, Color, TBLACK, TextFlags | flags);
+	    ((int)String_Pixel_Width(text) + (int)String_Pixel_Width("_") < Width - 2)) {
+		Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(text), Y + 1, Color, TBLACK, TextFlags | flags);
 	}
 }
-
 
 /***********************************************************************************************
  * EditClass::Handle_Key -- Handles keyboard input to edit gadget.                             *
@@ -374,96 +356,94 @@ void EditClass::Draw_Text(char const * text)
  * HISTORY:                                                                                    *
  *   01/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool EditClass::Handle_Key(KeyASCIIType ascii)
-{
+bool EditClass::Handle_Key(KeyASCIIType ascii) {
 	switch (ascii) {
-		/*
-		**	Handle the special case of a non-keyboard event. It is possible that this
-		**	key code might be passed to this routine if this routine has been overridden
-		**	and the key event was consumed.
-		*/
-		case 0:
-			break;
+	/*
+	**	Handle the special case of a non-keyboard event. It is possible that this
+	**	key code might be passed to this routine if this routine has been overridden
+	**	and the key event was consumed.
+	*/
+	case 0:
+		break;
 
-		/*
-		**	If the return key is pressed, then remove the focus from this edit
-		**	gadget but otherwise let the normal gadget processing proceed. This
-		**	causes the gadget ID number to be returned from the Input() function
-		**	so that the controlling program will know that the text can be
-		**	processed.
-		*/
-		case KA_RETURN:
-			Clear_Focus();
-			return(false);
+	/*
+	**	If the return key is pressed, then remove the focus from this edit
+	**	gadget but otherwise let the normal gadget processing proceed. This
+	**	causes the gadget ID number to be returned from the Input() function
+	**	so that the controlling program will know that the text can be
+	**	processed.
+	*/
+	case KA_RETURN:
+		Clear_Focus();
+		return (false);
 
-		/*
-		**	When the BACKSPACE key is pressed, remove the last character in the edit string.
-		*/
-		case KA_BACKSPACE:
-			if (Length) {
-				Length--;
-				String[Length] = '\0';
-				Flag_To_Redraw();
-			}
-			break;
-
-		/*
-		**	If the keyboard event was not a recognized special key, then examine to see
-		**	if it can legally be added to the edit string and do so if possible.
-		*/
-		default:
-
-			/*
-			**	Don't add a character if the length is greater than edit width.
-			*/
-			if (((int)String_Pixel_Width(String) + (int)Char_Pixel_Width(ascii) ) >= (Width-2)) {
-				break;
-			}
-
-			/*
-			**	Don't add a character if the length is already at maximum.
-			*/
-			if (Length >= MaxLength) break;
-
-			/*
-			**	Invisible characters are never added to the string. This is
-			**	especially true for spaces at the beginning of the string.
-			*/
-			if (!isgraph(ascii) && ascii != ' ') break;
-			if (ascii == ' ' && Length == 0) break;
-
-			/*
-			**	If this is an upper case only edit gadget, then force the alphabetic
-			**	character to upper case.
-			*/
-			if ((EditFlags & UPPERCASE) && isalpha(ascii)) {
-				ascii = (KeyASCIIType)toupper(ascii);
-			}
-
-			if ((!(EditFlags & NUMERIC) || !isdigit(ascii)) &&
-				(!(EditFlags & ALPHA) || !isalpha(ascii)) &&
-				(!(EditFlags & MISC) || isalnum(ascii)) &&
-				ascii != ' ') {
-					break;
-			}
-
-			/*
-			**	The character passed all legality checks, so add it to the edit string
-			**	and flag this gadget to be redrawn. The manual flag to redraw is needed
-			**	because the event flag has been cleared. This prevents the gadget's ID
-			**	number from being returned just because the gadget has been edited.
-			*/
-			String[Length++] = ascii;
+	/*
+	**	When the BACKSPACE key is pressed, remove the last character in the edit string.
+	*/
+	case KA_BACKSPACE:
+		if (Length) {
+			Length--;
 			String[Length] = '\0';
 			Flag_To_Redraw();
+		}
+		break;
+
+	/*
+	**	If the keyboard event was not a recognized special key, then examine to see
+	**	if it can legally be added to the edit string and do so if possible.
+	*/
+	default:
+
+		/*
+		**	Don't add a character if the length is greater than edit width.
+		*/
+		if (((int)String_Pixel_Width(String) + (int)Char_Pixel_Width(ascii)) >= (Width - 2)) {
 			break;
+		}
+
+		/*
+		**	Don't add a character if the length is already at maximum.
+		*/
+		if (Length >= MaxLength)
+			break;
+
+		/*
+		**	Invisible characters are never added to the string. This is
+		**	especially true for spaces at the beginning of the string.
+		*/
+		if (!isgraph(ascii) && ascii != ' ')
+			break;
+		if (ascii == ' ' && Length == 0)
+			break;
+
+		/*
+		**	If this is an upper case only edit gadget, then force the alphabetic
+		**	character to upper case.
+		*/
+		if ((EditFlags & UPPERCASE) && isalpha(ascii)) {
+			ascii = (KeyASCIIType)toupper(ascii);
+		}
+
+		if ((!(EditFlags & NUMERIC) || !isdigit(ascii)) && (!(EditFlags & ALPHA) || !isalpha(ascii)) &&
+		    (!(EditFlags & MISC) || isalnum(ascii)) && ascii != ' ') {
+			break;
+		}
+
+		/*
+		**	The character passed all legality checks, so add it to the edit string
+		**	and flag this gadget to be redrawn. The manual flag to redraw is needed
+		**	because the event flag has been cleared. This prevents the gadget's ID
+		**	number from being returned just because the gadget has been edited.
+		*/
+		String[Length++] = ascii;
+		String[Length] = '\0';
+		Flag_To_Redraw();
+		break;
 	}
-	return(true);
+	return (true);
 }
 
-
-void EditClass::Set_Focus(void)
-{
+void EditClass::Set_Focus(void) {
 	Length = 0;
 	if (String) {
 		Length = strlen(String);

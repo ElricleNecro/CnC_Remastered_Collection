@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /***************************************************************************
@@ -33,58 +33,53 @@
  *   Free_Icon_Set -- Frees allocations made by Load_Icon_Set().           *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-//#include	"function.h"
+// #include	"function.h"
 
-//#define		_WIN32
-//#define		WIN32_LEAN_AND_MEAN
+// #define		_WIN32
+// #define		WIN32_LEAN_AND_MEAN
 
-//#include	<dos.h>
-#include	<stdlib.h>
-#include	<stdio.h>
-//#include	<mem.h>
-#include	<wwstd.h>
-#include	<file.h>
-#include	"tile.h"
-#include	<iff.h>
-
+// #include	<dos.h>
+#include <stdio.h>
+#include <stdlib.h>
+// #include	<mem.h>
+#include "tile.h"
+#include <file.h>
+#include <iff.h>
+#include <wwstd.h>
 
 // Misc? ST - 1/3/2019 10:40AM
-//extern int Misc;
+// extern int Misc;
 int Misc;
 
+void *Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize);
+void Free_Icon_Set(void const *iconset);
+long Get_Icon_Set_Size(void const *iconset);
+int Get_Icon_Set_Width(void const *iconset);
+int Get_Icon_Set_Height(void const *iconset);
+void *Get_Icon_Set_Icondata(void const *iconset);
+void *Get_Icon_Set_Trans(void const *iconset);
+void *Get_Icon_Set_Remapdata(void const *iconset);
+void *Get_Icon_Set_Palettedata(void const *iconset);
+int Get_Icon_Set_Count(void const *iconset);
+void *Get_Icon_Set_Map(void const *iconset);
 
-void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize);
-void  Free_Icon_Set(void const *iconset);
-long  Get_Icon_Set_Size(void const *iconset);
-int  Get_Icon_Set_Width(void const *iconset);
-int  Get_Icon_Set_Height(void const *iconset);
-void *  Get_Icon_Set_Icondata(void const *iconset);
-void *  Get_Icon_Set_Trans(void const *iconset);
-void *  Get_Icon_Set_Remapdata(void const *iconset);
-void *  Get_Icon_Set_Palettedata(void const *iconset);
-int  Get_Icon_Set_Count(void const *iconset);
-void *  Get_Icon_Set_Map(void const *iconset);
-
-
-//#define	ICON_PALETTE_BYTES	16
-//#define	ICON_MAX					256
+// #define	ICON_PALETTE_BYTES	16
+// #define	ICON_MAX					256
 
 /***************************************************************************
 **	The terrain is rendered by using icons.  These are the buffers that hold
 **	the icon data, remap tables, and remap index arrays.
 */
-//PRIVATE char *IconPalette = NULL;		// MCGA only.
-//PRIVATE char *IconRemap = NULL;			// MCGA only.
+// PRIVATE char *IconPalette = NULL;		// MCGA only.
+// PRIVATE char *IconRemap = NULL;			// MCGA only.
 
-#define	FORM_RPAL	MAKE_ID('R','P','A','L')
-#define	FORM_RTBL	MAKE_ID('R','T','B','L')
-#define	FORM_SSET	MAKE_ID('S','S','E','T')
-#define	FORM_SINF	MAKE_ID('S','I','N','F')
-#define	FORM_ICON	MAKE_ID('I','C','O','N')
-#define	FORM_TRNS	MAKE_ID('T','R','N','S')
-#define	FORM_MAP		MAKE_ID('M','A','P',' ')
-
-
+#define FORM_RPAL MAKE_ID('R', 'P', 'A', 'L')
+#define FORM_RTBL MAKE_ID('R', 'T', 'B', 'L')
+#define FORM_SSET MAKE_ID('S', 'S', 'E', 'T')
+#define FORM_SINF MAKE_ID('S', 'I', 'N', 'F')
+#define FORM_ICON MAKE_ID('I', 'C', 'O', 'N')
+#define FORM_TRNS MAKE_ID('T', 'R', 'N', 'S')
+#define FORM_MAP MAKE_ID('M', 'A', 'P', ' ')
 
 /***************************************************************************
  * LOAD_ICON_SET -- Loads an icons set and initializes it.                 *
@@ -109,28 +104,27 @@ void *  Get_Icon_Set_Map(void const *iconset);
  *   07/15/1991 JLB : Load and uncompress onto the same buffer.            *
  *   09/15/1993 JLB : Added EMS support.                                   *
  *=========================================================================*/
-void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize)
-{
-	int	fh;				// File handle of iconset.
-	int	bytespericon;	// The number of bytes per icon.
-	unsigned long	icons=0;			// Number of icons loaded.
-	unsigned long	size;				// Size of the icon chunk (raw).
+void *Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize) {
+	int fh;			 // File handle of iconset.
+	int bytespericon;	 // The number of bytes per icon.
+	unsigned long icons = 0; // Number of icons loaded.
+	unsigned long size;	 // Size of the icon chunk (raw).
 
-	unsigned long	transsize;
-	void	*transptr=NULL;
+	unsigned long transsize;
+	void *transptr = NULL;
 
-	unsigned long	mapsize;				// Icon map chunk size.
-	void	*mapptr=NULL;		// Icon map pointer.
-	void	*returnptr=NULL;	// Iconset pointer returned by routine.
-	BOOL	allocated=FALSE;	// Was the iconset block allocated?
-	IControl_Type	*idata=NULL;	// Icon data loaded.
-	long	id;				// ID of file openned.
+	unsigned long mapsize;	     // Icon map chunk size.
+	void *mapptr = NULL;	     // Icon map pointer.
+	void *returnptr = NULL;	     // Iconset pointer returned by routine.
+	BOOL allocated = FALSE;	     // Was the iconset block allocated?
+	IControl_Type *idata = NULL; // Icon data loaded.
+	long id;		     // ID of file openned.
 	struct {
-		char	Width;		// Width of icon in bytes.
-		char	Height;		// Height of icon in bytes.
-		char	Format;		// Graphic mode.
-								//lint -esym(754,Format)
-		char	Bitplanes;	// Number of bitplanes per icon.
+		char Width;	// Width of icon in bytes.
+		char Height;	// Height of icon in bytes.
+		char Format;	// Graphic mode.
+				// lint -esym(754,Format)
+		char Bitplanes; // Number of bitplanes per icon.
 	} sinf;
 
 	/*
@@ -148,10 +142,11 @@ void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize)
 			**	data blocks that have to be loaded.
 			*/
 			Read_Iff_Chunk(fh, FORM_SINF, &sinf, sizeof(sinf));
-			bytespericon = ((((int)sinf.Width)<<3)*(((int)sinf.Height)<<3)*(int)sinf.Bitplanes)>>3;
+			bytespericon =
+			    ((((int)sinf.Width) << 3) * (((int)sinf.Height) << 3) * (int)sinf.Bitplanes) >> 3;
 
-			size = Get_Iff_Chunk_Size(fh,FORM_SSET);
-				transsize = Get_Iff_Chunk_Size(fh, FORM_TRNS);
+			size = Get_Iff_Chunk_Size(fh, FORM_SSET);
+			transsize = Get_Iff_Chunk_Size(fh, FORM_TRNS);
 			mapsize = Get_Iff_Chunk_Size(fh, FORM_MAP);
 
 			/*
@@ -160,14 +155,15 @@ void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize)
 			*/
 			allocated = FALSE;
 			if (!iconsetptr) {
-					buffsize = size + transsize + mapsize + sizeof(IControl_Type);
+				buffsize = size + transsize + mapsize + sizeof(IControl_Type);
 
 				Misc = buffsize;
 				iconsetptr = Alloc(buffsize, MEM_NORMAL);
 				allocated = (iconsetptr != NULL);
 			}
 
-			if (iconsetptr && (size+transsize+mapsize+sizeof(IControl_Type)) <= (unsigned long)buffsize) {
+			if (iconsetptr &&
+			    (size + transsize + mapsize + sizeof(IControl_Type)) <= (unsigned long)buffsize) {
 
 				idata = (IControl_Type *)iconsetptr;
 
@@ -176,21 +172,23 @@ void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize)
 				/*
 				**	Initialize the iconset header structure.
 				*/
-				idata->Width = (short)(((short)sinf.Width)<<3);
-				idata->Height = (short)(((short)sinf.Height)<<3);
+				idata->Width = (short)(((short)sinf.Width) << 3);
+				idata->Height = (short)(((short)sinf.Height) << 3);
 				idata->Allocated = (short)allocated;
 				idata->Icons = (long)iconsetptr + sizeof(IControl_Type);
 				idata->Map = idata->Icons + size;
-					idata->TransFlag = sizeof(IControl_Type) + size + mapsize;
+				idata->TransFlag = sizeof(IControl_Type) + size + mapsize;
 				idata->Size = buffsize;
 
-					{
-						long	val;
+				{
+					long val;
 
-						val = Read_Iff_Chunk(fh, FORM_SSET, Add_Long_To_Pointer(iconsetptr, sizeof(IControl_Type)), size);
-						icons = (int)(val/(long)bytespericon);
-						idata = (IControl_Type *)iconsetptr;
-					}
+					val = Read_Iff_Chunk(fh, FORM_SSET,
+							     Add_Long_To_Pointer(iconsetptr, sizeof(IControl_Type)),
+							     size);
+					icons = (int)(val / (long)bytespericon);
+					idata = (IControl_Type *)iconsetptr;
+				}
 
 				if (mapsize) {
 					icons = mapsize;
@@ -202,22 +200,22 @@ void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize)
 				**	raw icon data because it might have been compressed and thus need any
 				**	extra space to perform an overlapped decompression.
 				*/
-					if ((unsigned long)buffsize > size + transsize + mapsize + sizeof(IControl_Type)) {
-						buffsize = size + transsize + mapsize + sizeof(IControl_Type);
-					}
+				if ((unsigned long)buffsize > size + transsize + mapsize + sizeof(IControl_Type)) {
+					buffsize = size + transsize + mapsize + sizeof(IControl_Type);
+				}
 
-					transptr = Add_Long_To_Pointer(iconsetptr, idata->TransFlag);
-					Read_Iff_Chunk(fh, FORM_TRNS, transptr, transsize);
-					idata = (IControl_Type *)iconsetptr;
+				transptr = Add_Long_To_Pointer(iconsetptr, idata->TransFlag);
+				Read_Iff_Chunk(fh, FORM_TRNS, transptr, transsize);
+				idata = (IControl_Type *)iconsetptr;
 
-				mapptr = (void*)idata->Map;
+				mapptr = (void *)idata->Map;
 				Read_Iff_Chunk(fh, FORM_MAP, mapptr, mapsize);
 
 				/*
 				**	Let the graphic overlay know of the icon data.  This could involve
 				**	translation and other data manipulations.
 				*/
-				//Init_Stamps(iconsetptr);
+				// Init_Stamps(iconsetptr);
 
 				returnptr = iconsetptr;
 			}
@@ -225,9 +223,8 @@ void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize)
 		Close_Iff_File(fh);
 	}
 
-	return (returnptr);		// Return with icon pointer.
+	return (returnptr); // Return with icon pointer.
 }
-
 
 /***************************************************************************
  * FREE_ICON_SET -- Frees allocations made by Load_Icon_Set().             *
@@ -244,9 +241,8 @@ void *  Load_Icon_Set(char const *filename, void *iconsetptr, long buffsize)
  * HISTORY:                                                                *
  *   06/21/1991 JLB : Created.                                             *
  *=========================================================================*/
-void  Free_Icon_Set(void const *iconset)
-{
-	IControl_Type	*icontrol;
+void Free_Icon_Set(void const *iconset) {
+	IControl_Type *icontrol;
 
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol) {
@@ -256,86 +252,73 @@ void  Free_Icon_Set(void const *iconset)
 	}
 }
 
-
-long  Get_Icon_Set_Size(void const *iconset)
-{
-	IControl_Type	*icontrol;
-	long				size=0;
+long Get_Icon_Set_Size(void const *iconset) {
+	IControl_Type *icontrol;
+	long size = 0;
 
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol) {
 		size = icontrol->Size;
 	}
-	return(size);
+	return (size);
 }
 
-
-int  Get_Icon_Set_Width(void const *iconset)
-{
-	IControl_Type	*icontrol;
-	int				width=0;
+int Get_Icon_Set_Width(void const *iconset) {
+	IControl_Type *icontrol;
+	int width = 0;
 
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol) {
 		width = icontrol->Width;
 	}
-	return(width);
+	return (width);
 }
 
-
-int  Get_Icon_Set_Height(void const *iconset)
-{
-	IControl_Type	*icontrol;
-	int				height=0;
+int Get_Icon_Set_Height(void const *iconset) {
+	IControl_Type *icontrol;
+	int height = 0;
 
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol) {
 		height = icontrol->Height;
 	}
-	return(height);
+	return (height);
 }
 
-
-void *  Get_Icon_Set_Icondata(void const *iconset)
-{
-	IControl_Type	*icontrol;
+void *Get_Icon_Set_Icondata(void const *iconset) {
+	IControl_Type *icontrol;
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol)
-		return(Add_Long_To_Pointer(iconset, (LONG)icontrol->Icons));
-	return(NULL);
+		return (Add_Long_To_Pointer(iconset, (LONG)icontrol->Icons));
+	return (NULL);
 }
 
-void *  Get_Icon_Set_Trans(void const *iconset)
-{
-	IControl_Type	*icontrol;
-	void				*ptr=NULL;
+void *Get_Icon_Set_Trans(void const *iconset) {
+	IControl_Type *icontrol;
+	void *ptr = NULL;
 
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol) {
 		ptr = Add_Long_To_Pointer((void *)iconset, icontrol->TransFlag);
 	}
-	return(ptr);
+	return (ptr);
 }
 
-
-int  Get_Icon_Set_Count(void const *iconset)
-{
-	IControl_Type	*icontrol;
-	int				count;
+int Get_Icon_Set_Count(void const *iconset) {
+	IControl_Type *icontrol;
+	int count;
 
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol) {
 		count = icontrol->Count;
 	}
-	return(count);
+	return (count);
 }
 
-
-void *  Get_Icon_Set_Map(void const *iconset)
-{
-	IControl_Type	*icontrol;
+void *Get_Icon_Set_Map(void const *iconset) {
+	IControl_Type *icontrol;
 	icontrol = (IControl_Type *)iconset;
 	if (icontrol)
-		return(Add_Long_To_Pointer(iconset, (LONG)icontrol->Map));
-	return(NULL);
+		return (Add_Long_To_Pointer(iconset, (LONG)icontrol->Map));
+	return (NULL);
 }

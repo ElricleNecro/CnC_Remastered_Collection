@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/ANIM.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -52,8 +52,8 @@
  *   Shorten_Attached_Anims -- Reduces attached animation durations.                           *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#define   VIC   1
+#include "function.h"
+#define VIC 1
 
 /***********************************************************************************************
  * Anim_From_Name -- Given a name, this finds the corresponding anim type.                     *
@@ -71,20 +71,19 @@
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-AnimType Anim_From_Name(char const * name)
-{
-  #ifdef VIC
-	if (name == NULL) return(ANIM_NONE);
+AnimType Anim_From_Name(char const *name) {
+#ifdef VIC
+	if (name == NULL)
+		return (ANIM_NONE);
 
 	for (int anim = ANIM_FIRST; anim < ANIM_COUNT; anim++) {
 		if (stricmp(AnimTypeClass::As_Reference((AnimType)anim).IniName, name) == 0) {
-			return((AnimType)anim);
+			return ((AnimType)anim);
 		}
 	}
 #endif
-	return(ANIM_NONE);
+	return (ANIM_NONE);
 }
-
 
 /***********************************************************************************************
  * Shorten_Attached_Anims -- Reduces attached animation durations.                             *
@@ -105,11 +104,10 @@ AnimType Anim_From_Name(char const * name)
  * HISTORY:                                                                                    *
  *   12/11/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Shorten_Attached_Anims(ObjectClass * obj)
-{
+void Shorten_Attached_Anims(ObjectClass *obj) {
 	if (obj != NULL) {
 		for (int index = 0; index < Anims.Count(); index++) {
-			AnimClass & anim = * Anims.Ptr(index);
+			AnimClass &anim = *Anims.Ptr(index);
 
 			if (As_Object(anim.xObject) == obj) {
 				anim.Loops = 0;
@@ -117,7 +115,6 @@ void Shorten_Attached_Anims(ObjectClass * obj)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * AnimClass::Sort_Y -- Returns with the sorting coordinate for the animation.                 *
@@ -135,31 +132,29 @@ void Shorten_Attached_Anims(ObjectClass * obj)
  *   10/17/1994 JLB : Created.                                                                 *
  *   12/15/1994 JLB : Handles flat anims (infantry decay anims).                               *
  *=============================================================================================*/
-COORDINATE AnimClass::Sort_Y(void) const
-{
+COORDINATE AnimClass::Sort_Y(void) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 
 	if (xObject != TARGET_NONE) {
-		return(Coord_Add(As_Object(xObject)->Sort_Y(), 0x00010000L));
+		return (Coord_Add(As_Object(xObject)->Sort_Y(), 0x00010000L));
 	}
 	if (Target_Legal(SortTarget)) {
-		ObjectClass * obj = As_Object(SortTarget);
+		ObjectClass *obj = As_Object(SortTarget);
 		if (obj && obj->IsActive) {
-			return(Coord_Add(obj->Sort_Y(), 0x00010000L));
+			return (Coord_Add(obj->Sort_Y(), 0x00010000L));
 		}
 	}
 	if (*this == ANIM_MOVE_FLASH) {
-		return(Coord_Add(Center_Coord(), XYP_COORD(0, -24)));
+		return (Coord_Add(Center_Coord(), XYP_COORD(0, -24)));
 	}
 	if (Class->IsGroundLayer || *this == ANIM_LZ_SMOKE) {
-		return(Coord_Add(Center_Coord(), XYP_COORD(0, 14)));
+		return (Coord_Add(Center_Coord(), XYP_COORD(0, 14)));
 	}
 #endif
-	return(Coord);
+	return (Coord);
 }
-
 
 /***********************************************************************************************
  * AnimClass::Center_Coord -- Determine center of animation.                                   *
@@ -179,19 +174,17 @@ COORDINATE AnimClass::Sort_Y(void) const
  *   09/19/1994 JLB : Created.                                                                 *
  *   02/02/1996 JLB : Coordinate based on visual center of object.                             *
  *=============================================================================================*/
-COORDINATE AnimClass::Center_Coord(void) const
-{
+COORDINATE AnimClass::Center_Coord(void) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 
 	if (xObject != TARGET_NONE) {
-		return(Coord_Add(Coord, As_Object(xObject)->Target_Coord()));
+		return (Coord_Add(Coord, As_Object(xObject)->Target_Coord()));
 	}
 #endif
-	return(Coord);
+	return (Coord);
 }
-
 
 /***********************************************************************************************
  * AnimClass::Render -- Draws an animation object.                                             *
@@ -208,20 +201,19 @@ COORDINATE AnimClass::Center_Coord(void) const
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool AnimClass::Render(bool forced) const
-{
+bool AnimClass::Render(bool forced) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 
-	if (Delay) return(false);
+	if (Delay)
+		return (false);
 	if (Map[Center_Coord()].IsVisible) {
-		const_cast<AnimClass*>(this)->IsToDisplay = true;	// const_cast. ST - 5/8/2019
+		const_cast<AnimClass *>(this)->IsToDisplay = true; // const_cast. ST - 5/8/2019
 	}
 #endif
-	return(ObjectClass::Render(forced));
+	return (ObjectClass::Render(forced));
 }
-
 
 /***********************************************************************************************
  * AnimClass::Draw_It -- Draws the animation at the location specified.                        *
@@ -241,8 +233,7 @@ bool AnimClass::Render(bool forced) const
  *   09/24/1994 JLB : Created.                                                                 *
  *   05/19/1995 JLB : Added white translucent effect.                                          *
  *=============================================================================================*/
-void AnimClass::Draw_It(int x, int y, WindowNumberType window) const
-{
+void AnimClass::Draw_It(int x, int y, WindowNumberType window) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
@@ -255,12 +246,12 @@ void AnimClass::Draw_It(int x, int y, WindowNumberType window) const
 
 		IsTheaterShape = Class->IsTheater;
 
-		void const * shapefile = Get_Image_Data();
+		void const *shapefile = Get_Image_Data();
 		if (shapefile != NULL) {
-			void const * transtable = NULL;
+			void const *transtable = NULL;
 			int shapenum = Class->Start + Fetch_Stage();
-			void const * remap = NULL;
-			ShapeFlags_Type flags = SHAPE_CENTER|SHAPE_WIN_REL;
+			void const *remap = NULL;
+			ShapeFlags_Type flags = SHAPE_CENTER | SHAPE_WIN_REL;
 			bool alt = false;
 			int width = 0;
 			int height = 0;
@@ -269,30 +260,32 @@ void AnimClass::Draw_It(int x, int y, WindowNumberType window) const
 			**	Some animations require special fixups.
 			*/
 			switch (Class->Type) {
-				case ANIM_ATOM_BLAST:
-					transtable = Map.UnitShadow;
-					break;
+			case ANIM_ATOM_BLAST:
+				transtable = Map.UnitShadow;
+				break;
 
-				case ANIM_FLAG:
-					x += (ICON_PIXEL_W / 2) - 2;
-					y += (3 * ICON_PIXEL_H / 4) - Get_Build_Frame_Height(shapefile);
-					transtable = Map.UnitShadow;
-					alt = true;
-					break;
+			case ANIM_FLAG:
+				x += (ICON_PIXEL_W / 2) - 2;
+				y += (3 * ICON_PIXEL_H / 4) - Get_Build_Frame_Height(shapefile);
+				transtable = Map.UnitShadow;
+				alt = true;
+				break;
 
-				case ANIM_BEACON_VIRTUAL:
-					width = 29;
-					height = 39;
-					flags = flags | SHAPE_BOTTOM | SHAPE_COMPACT;
-					break;
+			case ANIM_BEACON_VIRTUAL:
+				width = 29;
+				height = 39;
+				flags = flags | SHAPE_BOTTOM | SHAPE_COMPACT;
+				break;
 			}
 
 			/*
 			**	If the translucent table hasn't been determined yet, then check to see if it
 			**	should use the white or normal translucent tables.
 			*/
-			if (transtable == NULL && Class->IsWhiteTrans) transtable = DisplayClass::WhiteTranslucentTable;
-			if (transtable == NULL && Class->IsTranslucent) transtable = DisplayClass::TranslucentTable;
+			if (transtable == NULL && Class->IsWhiteTrans)
+				transtable = DisplayClass::WhiteTranslucentTable;
+			if (transtable == NULL && Class->IsTranslucent)
+				transtable = DisplayClass::TranslucentTable;
 
 			/*
 			**	Set the shape flags to properly take into account any fading or ghosting
@@ -306,28 +299,29 @@ void AnimClass::Draw_It(int x, int y, WindowNumberType window) const
 					remap = ColorRemaps[PCOLOR_GOLD].RemapTable;
 				}
 			}
-			if (transtable != NULL) flags = flags | SHAPE_GHOST;
+			if (transtable != NULL)
+				flags = flags | SHAPE_GHOST;
 
 			/*
 			**	Draw the animation shape, but ignore legacy if beyond normal stage count.
 			*/
 			if ((window == WINDOW_VIRTUAL) || (Fetch_Stage() < Class->Stages)) {
 				// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-				CC_Draw_Shape(this, shapefile, shapenum, x, y, window, flags, remap, transtable, DIR_N, Class->VirtualScale, width, height);
+				CC_Draw_Shape(this, shapefile, shapenum, x, y, window, flags, remap, transtable, DIR_N,
+					      Class->VirtualScale, width, height);
 			}
 		}
 		IsTheaterShape = false;
 		BEnd(BENCH_ANIMS);
 	}
 	if (render_virtual) {
-		AnimClass* virtual_anim = As_Animation(VirtualAnimTarget);
+		AnimClass *virtual_anim = As_Animation(VirtualAnimTarget);
 		virtual_anim->Make_Visible();
 		virtual_anim->Draw_It(x, y, window);
 		virtual_anim->Make_Invisible();
 	}
 #endif
 }
-
 
 /***********************************************************************************************
  * AnimClass::Mark -- Signals to map that redrawing is necessary.                              *
@@ -344,21 +338,19 @@ void AnimClass::Draw_It(int x, int y, WindowNumberType window) const
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool AnimClass::Mark(MarkType mark)
-{
+bool AnimClass::Mark(MarkType mark) {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 
 	if (ObjectClass::Mark(mark)) {
 		Map.Refresh_Cells(Coord_Cell(Center_Coord()), Overlap_List());
-//		ObjectClass::Mark(mark);
-		return(true);
+		//		ObjectClass::Mark(mark);
+		return (true);
 	}
 #endif
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * AnimClass::Overlap_List -- Determines the overlap list for the animation.                   *
@@ -376,56 +368,52 @@ bool AnimClass::Mark(MarkType mark)
  * HISTORY:                                                                                    *
  *   03/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-short const * AnimClass::Overlap_List(void) const
-{
+short const *AnimClass::Overlap_List(void) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 	static short const OverlapAtom[] = {
-		(-MAP_CELL_W * 2) - 1, (-MAP_CELL_W * 2), (-MAP_CELL_W * 2) + 1,
-		(-MAP_CELL_W * 1) - 1, (-MAP_CELL_W * 1), (-MAP_CELL_W * 1) + 1,
-		(-MAP_CELL_W * 0) - 1, (-MAP_CELL_W * 0), (-MAP_CELL_W * 0) + 1,
-		( MAP_CELL_W * 1) - 1, ( MAP_CELL_W * 1), ( MAP_CELL_W * 1) + 1,
-		( MAP_CELL_W * 2) - 1, ( MAP_CELL_W * 2), ( MAP_CELL_W * 2) + 1,
- 		REFRESH_EOL
-	};
-	static short const OverlapFlag[] = { 0, 1, -MAP_CELL_W, -(MAP_CELL_W-1), MAP_CELL_W, MAP_CELL_W+1, REFRESH_EOL };
+	    (-MAP_CELL_W * 2) - 1, (-MAP_CELL_W * 2),	  (-MAP_CELL_W * 2) + 1, (-MAP_CELL_W * 1) - 1,
+	    (-MAP_CELL_W * 1),	   (-MAP_CELL_W * 1) + 1, (-MAP_CELL_W * 0) - 1, (-MAP_CELL_W * 0),
+	    (-MAP_CELL_W * 0) + 1, (MAP_CELL_W * 1) - 1,  (MAP_CELL_W * 1),	 (MAP_CELL_W * 1) + 1,
+	    (MAP_CELL_W * 2) - 1,  (MAP_CELL_W * 2),	  (MAP_CELL_W * 2) + 1,	 REFRESH_EOL};
+	static short const OverlapFlag[] = {0,		1, -MAP_CELL_W, -(MAP_CELL_W - 1), MAP_CELL_W, MAP_CELL_W + 1,
+					    REFRESH_EOL};
 
 	if (IsToDelete) {
 		static short const _list[] = {REFRESH_EOL};
-		return(_list);
+		return (_list);
 	}
 
 	if (Class->Type == ANIM_ATOM_BLAST) {
-		return(OverlapAtom);
+		return (OverlapAtom);
 	}
 
 	if (Class->Type == ANIM_FLAG) {
-		return(OverlapFlag);
+		return (OverlapFlag);
 	}
 
 #ifdef PARTIAL
-IsTheaterShape = Class->IsTheater;
+	IsTheaterShape = Class->IsTheater;
 	if (Class->Get_Image_Data() != NULL) {
 		int shapenum = Class->Start + Fetch_Stage();
 		int count = Get_Build_Frame_Count(Class->Get_Image_Data());
-		shapenum = min(shapenum, count-1);
+		shapenum = min(shapenum, count - 1);
 
 		if (Class->DimensionData == NULL) {
-			Class->DimensionData = new Rect [count];
+			Class->DimensionData = new Rect[count];
 		}
 		if (Class->DimensionData != NULL && !Class->DimensionData[shapenum].Is_Valid()) {
 			Class->DimensionData[shapenum] = Shape_Dimensions(Class->Get_Image_Data(), shapenum);
-IsTheaterShape = false;
-			return(Coord_Spillage_List(Center_Coord(), Class->DimensionData[shapenum]));
+			IsTheaterShape = false;
+			return (Coord_Spillage_List(Center_Coord(), Class->DimensionData[shapenum]));
 		}
 	}
-IsTheaterShape = false;
+	IsTheaterShape = false;
 #endif
 #endif
-	return(Coord_Spillage_List(Center_Coord(), Class->Size));
+	return (Coord_Spillage_List(Center_Coord(), Class->Size));
 }
-
 
 /***********************************************************************************************
  * AnimClass::Occupy_List -- Determines the occupy list for the animation.                     *
@@ -442,8 +430,7 @@ IsTheaterShape = false;
  * HISTORY:                                                                                    *
  *   03/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-short const * AnimClass::Occupy_List(bool) const
-{
+short const *AnimClass::Occupy_List(bool) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
@@ -451,9 +438,8 @@ short const * AnimClass::Occupy_List(bool) const
 	static short _simple[] = {REFRESH_EOL};
 
 #endif
-	return(_simple);
+	return (_simple);
 }
-
 
 /***********************************************************************************************
  * AnimClass::Init -- Performs pre-scenario initialization.                                    *
@@ -470,11 +456,7 @@ short const * AnimClass::Occupy_List(bool) const
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::Init(void)
-{
-	Anims.Free_All();
-}
-
+void AnimClass::Init(void) { Anims.Free_All(); }
 
 /***********************************************************************************************
  * AnimClass::new -- Allocates an anim object from the pool.                                   *
@@ -491,17 +473,15 @@ void AnimClass::Init(void)
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * AnimClass::operator new(size_t)
-{
-	void * ptr = Anims.Allocate();
+void *AnimClass::operator new(size_t) {
+	void *ptr = Anims.Allocate();
 	if (ptr != NULL) {
 		((AnimClass *)ptr)->Set_Active();
 	} else {
 		GlyphX_Debug_Print("AnimClass::operator new FAILED");
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***********************************************************************************************
  * AnimClass::delete -- Returns an anim object back to the free pool.                          *
@@ -518,14 +498,12 @@ void * AnimClass::operator new(size_t)
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::operator delete(void * ptr)
-{
+void AnimClass::operator delete(void *ptr) {
 	if (ptr != NULL) {
 		((AnimClass *)ptr)->IsActive = false;
 	}
 	Anims.Free((AnimClass *)ptr);
 }
-
 
 /***********************************************************************************************
  * AnimClass::AnimClass -- The constructor for animation objects.                              *
@@ -549,30 +527,18 @@ void AnimClass::operator delete(void * ptr)
  *   05/31/1994 JLB : Created.                                                                 *
  *   08/03/1994 JLB : Added a delayed affect parameter.                                        *
  *=============================================================================================*/
-AnimClass::AnimClass(AnimType animnum, COORDINATE coord, unsigned char timedelay, char loop) :
-	ObjectClass(RTTI_ANIM, Anims.ID(this)),
-	Class(AnimTypes.Ptr((int)animnum)),
-	xObject(TARGET_NONE),
-	SortTarget(TARGET_NONE),
-	OwnerHouse(HOUSE_NONE),
-	Loops(1),
-	IsToDelete(false),
-	IsBrandNew(true),
-	IsInvisible(false),
-	Delay(timedelay),
-	Accum(0),
-	AttachLayer(LAYER_NONE),
-	KillTime(0ULL)
-{
+AnimClass::AnimClass(AnimType animnum, COORDINATE coord, unsigned char timedelay, char loop)
+    : ObjectClass(RTTI_ANIM, Anims.ID(this)), Class(AnimTypes.Ptr((int)animnum)), xObject(TARGET_NONE),
+      SortTarget(TARGET_NONE), OwnerHouse(HOUSE_NONE), Loops(1), IsToDelete(false), IsBrandNew(true),
+      IsInvisible(false), Delay(timedelay), Accum(0), AttachLayer(LAYER_NONE), KillTime(0ULL) {
 #ifdef VIC
 	if (Class->Stages == -1) {
-IsTheaterShape = Class->IsTheater;
-		((int&)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
-IsTheaterShape = false;
-
+		IsTheaterShape = Class->IsTheater;
+		((int &)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
+		IsTheaterShape = false;
 	}
 	if (Class->LoopEnd == -1) {
-		((int&)Class->LoopEnd) = Class->Stages;
+		((int &)Class->LoopEnd) = Class->Stages;
 	}
 	if (Class->IsNormalized) {
 		Set_Rate(Options.Normalize_Delay(Class->Delay));
@@ -593,7 +559,8 @@ IsTheaterShape = false;
 	**	Drop zone smoke always reveals the map around itself.
 	*/
 	if (*this == ANIM_LZ_SMOKE) {
-		// Added PlayerPtr here as Sight_From now needs to know who to perform the action for. This should be OK as long as it's not used in MP. ST - 8/2/2019 2:34PM
+		// Added PlayerPtr here as Sight_From now needs to know who to perform the action for. This should be OK
+		// as long as it's not used in MP. ST - 8/2/2019 2:34PM
 		Map.Sight_From(Coord_Cell(coord), Rule.DropZoneRadius / CELL_LEPTON_W, PlayerPtr, false);
 	}
 
@@ -615,7 +582,7 @@ IsTheaterShape = false;
 	**	Check for a virtual animation
 	*/
 	if (Class->VirtualAnim != ANIM_NONE) {
-		AnimClass* virtual_anim = new AnimClass(Class->VirtualAnim, Coord, timedelay, loop);
+		AnimClass *virtual_anim = new AnimClass(Class->VirtualAnim, Coord, timedelay, loop);
 		if (virtual_anim != NULL) {
 			virtual_anim->Make_Invisible();
 			VirtualAnimTarget = virtual_anim->As_Target();
@@ -627,7 +594,6 @@ IsTheaterShape = false;
 	}
 #endif
 }
-
 
 /***********************************************************************************************
  * AnimClass::~AnimClass -- Destructor for anim objects.                                       *
@@ -644,8 +610,7 @@ IsTheaterShape = false;
  * HISTORY:                                                                                    *
  *   11/29/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-AnimClass::~AnimClass(void)
-{
+AnimClass::~AnimClass(void) {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
@@ -658,7 +623,7 @@ AnimClass::~AnimClass(void)
 		**	an animation.
 		*/
 		if (Target_Legal(xObject) && As_Object(xObject) != NULL) {
-			ObjectClass * to = As_Object(xObject);
+			ObjectClass *to = As_Object(xObject);
 
 			/*
 			**	Remove the object from the appropriate display list.
@@ -672,7 +637,8 @@ AnimClass::~AnimClass(void)
 			*/
 			int index;
 			for (index = 0; index < Anims.Count(); index++) {
-				if (Anims.Ptr(index) != this && Anims.Ptr(index)->xObject == xObject) break;
+				if (Anims.Ptr(index) != this && Anims.Ptr(index)->xObject == xObject)
+					break;
 			}
 
 			/*
@@ -680,9 +646,11 @@ AnimClass::~AnimClass(void)
 			*/
 			if (index == Anims.Count()) {
 				to->Fire_Out();
-				if (to->In_Which_Layer() == LAYER_GROUND) to->Mark(MARK_OVERLAP_UP);
+				if (to->In_Which_Layer() == LAYER_GROUND)
+					to->Mark(MARK_OVERLAP_UP);
 				to->IsAnimAttached = false;
-				if (to->In_Which_Layer() == LAYER_GROUND) to->Mark(MARK_OVERLAP_DOWN);
+				if (to->In_Which_Layer() == LAYER_GROUND)
+					to->Mark(MARK_OVERLAP_DOWN);
 			}
 			Coord = Coord_Add(to->Center_Coord(), Coord);
 			xObject = TARGET_NONE;
@@ -697,7 +665,6 @@ AnimClass::~AnimClass(void)
 
 #endif
 }
-
 
 /***********************************************************************************************
  * AnimClass::AI -- This is the low level anim processor.                                      *
@@ -714,8 +681,7 @@ AnimClass::~AnimClass(void)
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::AI(void)
-{
+void AnimClass::AI(void) {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
@@ -757,7 +723,8 @@ void AnimClass::AI(void)
 		FILETIME ft;
 		GetSystemTimeAsFileTime(&ft);
 
-		unsigned long long now = (unsigned long long)ft.dwLowDateTime + ((unsigned long long)ft.dwHighDateTime << 32ULL);
+		unsigned long long now =
+		    (unsigned long long)ft.dwLowDateTime + ((unsigned long long)ft.dwHighDateTime << 32ULL);
 		if (now >= KillTime) {
 			IsToDelete = true;
 		}
@@ -785,11 +752,11 @@ void AnimClass::AI(void)
 #ifdef FIXIT_MULTI_SAVE
 	if (Class->Stages == -1) {
 		IsTheaterShape = Class->IsTheater;
-		((int&)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
+		((int &)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
 		IsTheaterShape = false;
 	}
 	if (Class->LoopEnd == -1) {
-		((int&)Class->LoopEnd) = Class->Stages;
+		((int &)Class->LoopEnd) = Class->Stages;
 	}
 #endif
 
@@ -803,11 +770,11 @@ void AnimClass::AI(void)
 #ifdef FIXIT_MULTI_SAVE
 		if (Class->Stages == -1) {
 			IsTheaterShape = Class->IsTheater;
-			((int&)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
+			((int &)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
 			IsTheaterShape = false;
 		}
 		if (Class->LoopEnd == -1) {
-			((int&)Class->LoopEnd) = Class->Stages;
+			((int &)Class->LoopEnd) = Class->Stages;
 		}
 #endif
 
@@ -838,7 +805,8 @@ void AnimClass::AI(void)
 					*/
 					int damage = Accum;
 					Accum -= damage;
-					if (As_Object(xObject)->Take_Damage(damage, 0, WARHEAD_FIRE) == RESULT_DESTROYED) {
+					if (As_Object(xObject)->Take_Damage(damage, 0, WARHEAD_FIRE) ==
+					    RESULT_DESTROYED) {
 						if (Target_Legal(VirtualAnimTarget)) {
 							delete As_Animation(VirtualAnimTarget);
 						}
@@ -853,7 +821,7 @@ void AnimClass::AI(void)
 			**	action required. This masks craters and scorch marks, so that they appear
 			**	naturally rather than "popping" into existence while in plain sight.
 			*/
-			if (Class->Biggest && Class->Start+stage == Class->Biggest) {
+			if (Class->Biggest && Class->Start + stage == Class->Biggest) {
 				Middle();
 			}
 
@@ -861,13 +829,15 @@ void AnimClass::AI(void)
 			**	Check to see if the last frame has been displayed. If so, then the
 			**	animation either ends or loops.
 			*/
-			if ((Loops <= 1 && stage >= Class->Stages) || (Loops > 1 && stage >= Class->LoopEnd-Class->Start)) {
+			if ((Loops <= 1 && stage >= Class->Stages) ||
+			    (Loops > 1 && stage >= Class->LoopEnd - Class->Start)) {
 
 				/*
 				**	Determine if this animation should loop another time. If so, then start the loop
 				**	but if not, then proceed into the animation termination handler.
 				*/
-				if (Loops > 0) Loops--;
+				if (Loops > 0)
+					Loops--;
 				if (Loops != 0) {
 					Set_Stage(Class->LoopStart);
 				} else {
@@ -877,18 +847,15 @@ void AnimClass::AI(void)
 						if (!Target_Legal(VirtualAnimTarget)) {
 							if (Class->ChainTo != ANIM_NONE) {
 								Chain();
-							}
-							else {
+							} else {
 								delete this;
 							}
 						}
-					}
-					else {
+					} else {
 						if ((Class->VirtualStages < 0) || (stage >= Class->VirtualStages)) {
 							if (Class->ChainTo != ANIM_NONE) {
 								Chain();
-							}
-							else {
+							} else {
 								delete this;
 							}
 						}
@@ -899,7 +866,6 @@ void AnimClass::AI(void)
 	}
 #endif
 }
-
 
 /***********************************************************************************************
  * AnimClass::Attach_To -- Attaches animation to object specified.                             *
@@ -917,18 +883,20 @@ void AnimClass::AI(void)
  * HISTORY:                                                                                    *
  *   09/19/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::Attach_To(ObjectClass * obj)
-{
+void AnimClass::Attach_To(ObjectClass *obj) {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 
-	if (obj == NULL) return;
+	if (obj == NULL)
+		return;
 	assert(obj->IsActive);
 
-	if (obj->In_Which_Layer() == LAYER_GROUND) obj->Mark(MARK_OVERLAP_UP);
+	if (obj->In_Which_Layer() == LAYER_GROUND)
+		obj->Mark(MARK_OVERLAP_UP);
 	obj->IsAnimAttached = true;
-	if (obj->In_Which_Layer() == LAYER_GROUND) obj->Mark(MARK_OVERLAP_DOWN);
+	if (obj->In_Which_Layer() == LAYER_GROUND)
+		obj->Mark(MARK_OVERLAP_DOWN);
 	Limbo();
 	xObject = obj->As_Target();
 	Unlimbo(Coord);
@@ -937,7 +905,6 @@ void AnimClass::Attach_To(ObjectClass * obj)
 	Coord = Coord_Sub(Coord, obj->Target_Coord());
 #endif
 }
-
 
 /***********************************************************************************************
  * AnimClass::Sort_Above -- Sorts the animation right above the specified target.              *
@@ -954,13 +921,11 @@ void AnimClass::Attach_To(ObjectClass * obj)
  * HISTORY:                                                                                    *
  *   08/14/2019 SKY : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::Sort_Above(TARGET target)
-{
+void AnimClass::Sort_Above(TARGET target) {
 #ifdef VIC
 	SortTarget = target;
 #endif
 }
-
 
 /***********************************************************************************************
  * AnimClass::In_Which_Layer -- Determines what render layer the anim should be in.            *
@@ -978,8 +943,7 @@ void AnimClass::Sort_Above(TARGET target)
  * HISTORY:                                                                                    *
  *   12/25/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-LayerType AnimClass::In_Which_Layer(void) const
-{
+LayerType AnimClass::In_Which_Layer(void) const {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
@@ -989,7 +953,7 @@ LayerType AnimClass::In_Which_Layer(void) const
 	}
 
 	if (Class->Type >= ANIM_CORPSE1 && Class->Type <= ANIM_CORPSE3) {
-		return(LAYER_SURFACE);
+		return (LAYER_SURFACE);
 	}
 
 	if (Target_Legal(xObject)) {
@@ -997,12 +961,11 @@ LayerType AnimClass::In_Which_Layer(void) const
 	}
 
 	if (Class->IsGroundLayer) {
-		return(LAYER_GROUND);
+		return (LAYER_GROUND);
 	}
 #endif
-	return(LAYER_AIR);
+	return (LAYER_AIR);
 }
-
 
 /***********************************************************************************************
  * AnimClass::Start -- Processes initial animation side effects.                               *
@@ -1021,8 +984,7 @@ LayerType AnimClass::In_Which_Layer(void) const
  * HISTORY:                                                                                    *
  *   06/30/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::Start(void)
-{
+void AnimClass::Start(void) {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
@@ -1045,7 +1007,6 @@ void AnimClass::Start(void)
 #endif
 }
 
-
 /***********************************************************************************************
  * AnimClass::Middle -- Processes any middle events.                                           *
  *                                                                                             *
@@ -1063,14 +1024,13 @@ void AnimClass::Start(void)
  *   06/30/1995 JLB : Created.                                                                 *
  *   10/17/1995 JLB : Ion camera added.                                                        *
  *=============================================================================================*/
-void AnimClass::Middle(void)
-{
+void AnimClass::Middle(void) {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
 
 	CELL cell = Coord_Cell(Center_Coord());
-	CellClass * cellptr = &Map[cell];
+	CellClass *cellptr = &Map[cell];
 
 	if (Class->Type == ANIM_ATOM_BLAST) {
 		Do_Atom_Damage(OwnerHouse, cell);
@@ -1101,7 +1061,7 @@ void AnimClass::Middle(void)
 		new SmudgeClass(SMUDGE_CRATER1, Center_Coord());
 	}
 
-	AnimClass * newanim;
+	AnimClass *newanim;
 
 	/*
 	**	If this animation spawns side effects during its lifetime, then
@@ -1109,35 +1069,37 @@ void AnimClass::Middle(void)
 	**	animations.
 	*/
 	switch (Class->Type) {
-		case ANIM_NAPALM1:
-		case ANIM_NAPALM2:
-		case ANIM_NAPALM3:
-			new AnimClass(ANIM_FIRE_SMALL, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0040), true), 0, Random_Pick(1, 2));
-			if (Percent_Chance(50)) {
-				new AnimClass(ANIM_FIRE_SMALL, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x00A0), true), 0, Random_Pick(1, 2));
-			}
-			if (Percent_Chance(50)) {
-				new AnimClass(ANIM_FIRE_MED, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0070), true), 0, Random_Pick(1, 2));
-			}
-			break;
+	case ANIM_NAPALM1:
+	case ANIM_NAPALM2:
+	case ANIM_NAPALM3:
+		new AnimClass(ANIM_FIRE_SMALL, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0040), true), 0,
+			      Random_Pick(1, 2));
+		if (Percent_Chance(50)) {
+			new AnimClass(ANIM_FIRE_SMALL,
+				      Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x00A0), true), 0,
+				      Random_Pick(1, 2));
+		}
+		if (Percent_Chance(50)) {
+			new AnimClass(ANIM_FIRE_MED, Map.Closest_Free_Spot(Coord_Scatter(Center_Coord(), 0x0070), true),
+				      0, Random_Pick(1, 2));
+		}
+		break;
 
-		case ANIM_FIRE_MED:
-		case ANIM_FIRE_MED2:
-			newanim = new AnimClass(ANIM_FIRE_SMALL, Center_Coord(), 0, Random_Pick(1, 2));
-			if (newanim != NULL && xObject != TARGET_NONE) {
-				newanim->Attach_To(As_Object(xObject));
-			}
-			break;
+	case ANIM_FIRE_MED:
+	case ANIM_FIRE_MED2:
+		newanim = new AnimClass(ANIM_FIRE_SMALL, Center_Coord(), 0, Random_Pick(1, 2));
+		if (newanim != NULL && xObject != TARGET_NONE) {
+			newanim->Attach_To(As_Object(xObject));
+		}
+		break;
 
-		default:
-			break;
+	default:
+		break;
 	}
 #endif
 }
 
-
-void AnimClass::Chain(void)
-{
+void AnimClass::Chain(void) {
 	/*
 	**	The animation should end now, but first check to see if
 	**	it needs to chain into another animation. If so, then the
@@ -1150,11 +1112,11 @@ void AnimClass::Chain(void)
 
 		if (Class->Stages == -1) {
 			IsTheaterShape = Class->IsTheater;
-			((int&)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
+			((int &)Class->Stages) = Get_Build_Frame_Count(Class->Get_Image_Data());
 			IsTheaterShape = false;
 		}
 		if (Class->LoopEnd == -1) {
-			((int&)Class->LoopEnd) = Class->Stages;
+			((int &)Class->LoopEnd) = Class->Stages;
 		}
 
 		IsToDelete = false;
@@ -1169,7 +1131,6 @@ void AnimClass::Chain(void)
 		Start();
 	}
 }
-
 
 /***********************************************************************************************
  * AnimClass::Detach -- Remove animation if attached to target.                                *
@@ -1192,8 +1153,7 @@ void AnimClass::Chain(void)
  *   06/30/1995 JLB : Created.                                                                 *
  *   07/02/1995 JLB : Detach is a precursor to animation destruction.                          *
  *=============================================================================================*/
-void AnimClass::Detach(TARGET target, bool all)
-{
+void AnimClass::Detach(TARGET target, bool all) {
 #ifdef VIC
 	assert(Anims.ID(this) == ID);
 	assert(IsActive);
@@ -1217,7 +1177,6 @@ void AnimClass::Detach(TARGET target, bool all)
 #endif
 }
 
-
 /***********************************************************************************************
  * AnimClass::Do_Atom_Damage -- Do atom bomb damage centered around the cell specified.        *
  *                                                                                             *
@@ -1234,19 +1193,18 @@ void AnimClass::Detach(TARGET target, bool all)
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AnimClass::Do_Atom_Damage(HousesType ownerhouse, CELL cell)
-{
+void AnimClass::Do_Atom_Damage(HousesType ownerhouse, CELL cell) {
 #ifdef VIC
 	/*
 	**	Find someone to blame the explosion on. This is necessary in
 	**	order to properly enact retribution and record the kill for
 	**	score purposes.
 	*/
-	BuildingClass * building = NULL;
-	TechnoClass * backup = NULL;
+	BuildingClass *building = NULL;
+	TechnoClass *backup = NULL;
 	if (ownerhouse != HOUSE_NONE) {
 		for (int index = 0; index < Logic.Count(); index++) {
-			ObjectClass * obj = Logic[index];
+			ObjectClass *obj = Logic[index];
 
 			if (obj != NULL && obj->Is_Techno() && obj->Owner() == ownerhouse) {
 				backup = (TechnoClass *)obj;
@@ -1257,7 +1215,8 @@ void AnimClass::Do_Atom_Damage(HousesType ownerhouse, CELL cell)
 			}
 		}
 
-		if (building == NULL) building = (BuildingClass *)backup;
+		if (building == NULL)
+			building = (BuildingClass *)backup;
 	}
 
 	int radius;
@@ -1265,30 +1224,28 @@ void AnimClass::Do_Atom_Damage(HousesType ownerhouse, CELL cell)
 	if (Session.Type == GAME_NORMAL) {
 		radius = 4;
 		rawdamage = Rule.AtomDamage;
-		//WhitePalette.Set(FADE_PALETTE_SLOW, Call_Back);		//TO_FIX. ST 5/8/2019
+		// WhitePalette.Set(FADE_PALETTE_SLOW, Call_Back);		//TO_FIX. ST 5/8/2019
 	} else {
 		radius = 3;
-		rawdamage = Rule.AtomDamage/5;
+		rawdamage = Rule.AtomDamage / 5;
 	}
 
 	Wide_Area_Damage(Cell_Coord(cell), radius * CELL_LEPTON_W, rawdamage, building, WARHEAD_FIRE);
 	Shake_The_Screen(3);
 	if (Session.Type == GAME_NORMAL) {
-		//GamePalette.Set(FADE_PALETTE_SLOW, Call_Back);	//TO_FIX. ST 5/8/2019
+		// GamePalette.Set(FADE_PALETTE_SLOW, Call_Back);	//TO_FIX. ST 5/8/2019
 	}
 #endif
 }
 
-void AnimClass::Set_Owner(HousesType owner)
-{
+void AnimClass::Set_Owner(HousesType owner) {
 	OwnerHouse = owner;
 	if (Target_Legal(VirtualAnimTarget)) {
 		As_Animation(VirtualAnimTarget)->Set_Owner(owner);
 	}
 }
 
-void AnimClass::Set_Visible_Flags(unsigned flags)
-{
+void AnimClass::Set_Visible_Flags(unsigned flags) {
 	VisibleFlags = flags;
 	if (Target_Legal(VirtualAnimTarget)) {
 		As_Animation(VirtualAnimTarget)->Set_Visible_Flags(flags);

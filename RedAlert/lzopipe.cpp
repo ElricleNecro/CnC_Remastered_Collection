@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/LZOPIPE.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -36,13 +36,11 @@
  *   LZWPipe::~LZWPipe -- Deconstructor for the LZO pipe object.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"lzopipe.h"
-#include	"lzo.h"
-#include	"buff.h"
-#include	<string.h>
-#include	<assert.h>
-
+#include "lzopipe.h"
+#include "buff.h"
+#include "lzo.h"
+#include <assert.h>
+#include <string.h>
 
 /***********************************************************************************************
  * LZOPipe::LZOPipe -- Constructor for the LZO processor pipe.                                 *
@@ -61,19 +59,13 @@
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LZOPipe::LZOPipe(CompControl control, int blocksize) :
-		Control(control),
-		Counter(0),
-		Buffer(NULL),
-		Buffer2(NULL),
-		BlockSize(blocksize)
-{
+LZOPipe::LZOPipe(CompControl control, int blocksize)
+    : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
 	SafetyMargin = BlockSize;
-	Buffer = new char[BlockSize+SafetyMargin];
-	Buffer2 = new char[BlockSize+SafetyMargin];
+	Buffer = new char[BlockSize + SafetyMargin];
+	Buffer2 = new char[BlockSize + SafetyMargin];
 	BlockHeader.CompCount = 0xFFFF;
 }
-
 
 /***********************************************************************************************
  * LZOPipe::~LZOPipe -- Deconstructor for the LZO pipe object.                                 *
@@ -89,15 +81,13 @@ LZOPipe::LZOPipe(CompControl control, int blocksize) :
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LZOPipe::~LZOPipe(void)
-{
-	delete [] Buffer;
+LZOPipe::~LZOPipe(void) {
+	delete[] Buffer;
 	Buffer = NULL;
 
-	delete [] Buffer2;
+	delete[] Buffer2;
 	Buffer2 = NULL;
 }
-
 
 /***********************************************************************************************
  * LZOPipe::Put -- Send some data through the LZO processor pipe.                              *
@@ -118,10 +108,9 @@ LZOPipe::~LZOPipe(void)
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int LZOPipe::Put(void const * source, int slen)
-{
+int LZOPipe::Put(void const *source, int slen) {
 	if (source == NULL || slen < 1) {
-		return(Pipe::Put(source, slen));
+		return (Pipe::Put(source, slen));
 	}
 
 	assert(Buffer != NULL);
@@ -131,7 +120,7 @@ int LZOPipe::Put(void const * source, int slen)
 	/*
 	**	Copy as much as can fit into the buffer from the source data supplied.
 	*/
-	if (Control ==  DECOMPRESS) {
+	if (Control == DECOMPRESS) {
 
 		while (slen > 0) {
 
@@ -141,7 +130,9 @@ int LZOPipe::Put(void const * source, int slen)
 			**	data processing begin for the block.
 			*/
 			if (BlockHeader.CompCount == 0xFFFF) {
-				int len = (slen < ((int)sizeof(BlockHeader)-Counter)) ? slen : (sizeof(BlockHeader)-Counter);
+				int len = (slen < ((int)sizeof(BlockHeader) - Counter))
+					      ? slen
+					      : (sizeof(BlockHeader) - Counter);
 				memmove(&Buffer[Counter], source, len);
 				source = ((char *)source) + len;
 				slen -= len;
@@ -161,7 +152,9 @@ int LZOPipe::Put(void const * source, int slen)
 			**	data block.
 			*/
 			if (slen > 0) {
-				int len = (slen < (BlockHeader.CompCount-Counter)) ? slen : (BlockHeader.CompCount-Counter);
+				int len = (slen < (BlockHeader.CompCount - Counter))
+					      ? slen
+					      : (BlockHeader.CompCount - Counter);
 
 				memmove(&Buffer[Counter], source, len);
 				slen -= len;
@@ -173,8 +166,9 @@ int LZOPipe::Put(void const * source, int slen)
 				**	through the pipe.
 				*/
 				if (Counter == BlockHeader.CompCount) {
-					unsigned int length = sizeof (Buffer2);
-					lzo1x_decompress ((unsigned char*)Buffer, BlockHeader.CompCount, (unsigned char*)Buffer2, &length, NULL);
+					unsigned int length = sizeof(Buffer2);
+					lzo1x_decompress((unsigned char *)Buffer, BlockHeader.CompCount,
+							 (unsigned char *)Buffer2, &length, NULL);
 					total += Pipe::Put(Buffer2, BlockHeader.UncompCount);
 					Counter = 0;
 					BlockHeader.CompCount = 0xFFFF;
@@ -189,17 +183,18 @@ int LZOPipe::Put(void const * source, int slen)
 		**	into the staging buffer until a full set has been accumulated.
 		*/
 		if (Counter > 0) {
-			int tocopy = (slen < (BlockSize-Counter)) ? slen : (BlockSize-Counter);
+			int tocopy = (slen < (BlockSize - Counter)) ? slen : (BlockSize - Counter);
 			memmove(&Buffer[Counter], source, tocopy);
 			source = ((char *)source) + tocopy;
 			slen -= tocopy;
 			Counter += tocopy;
 
 			if (Counter == BlockSize) {
-				unsigned int len = sizeof (Buffer2);
-				char *dictionary = new char [64*1024];
-				lzo1x_1_compress ((unsigned char*)Buffer, BlockSize, (unsigned char*)Buffer2, &len, dictionary);
-				delete [] dictionary;
+				unsigned int len = sizeof(Buffer2);
+				char *dictionary = new char[64 * 1024];
+				lzo1x_1_compress((unsigned char *)Buffer, BlockSize, (unsigned char *)Buffer2, &len,
+						 dictionary);
+				delete[] dictionary;
 				BlockHeader.CompCount = (unsigned short)len;
 				BlockHeader.UncompCount = (unsigned short)BlockSize;
 				total += Pipe::Put(&BlockHeader, sizeof(BlockHeader));
@@ -213,10 +208,11 @@ int LZOPipe::Put(void const * source, int slen)
 		**	source data left for a whole data block.
 		*/
 		while (slen >= BlockSize) {
-			unsigned int len = sizeof (Buffer2);
-			char *dictionary = new char [64*1024];
-			lzo1x_1_compress ((unsigned char*)source, BlockSize, (unsigned char*)Buffer2, &len, dictionary);
-			delete [] dictionary;
+			unsigned int len = sizeof(Buffer2);
+			char *dictionary = new char[64 * 1024];
+			lzo1x_1_compress((unsigned char *)source, BlockSize, (unsigned char *)Buffer2, &len,
+					 dictionary);
+			delete[] dictionary;
 			source = ((char *)source) + BlockSize;
 			slen -= BlockSize;
 
@@ -236,9 +232,8 @@ int LZOPipe::Put(void const * source, int slen)
 		}
 	}
 
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * LZOPipe::Flush -- Flushes any partially accumulated block.                                  *
@@ -259,8 +254,7 @@ int LZOPipe::Put(void const * source, int slen)
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int LZOPipe::Flush(void)
-{
+int LZOPipe::Flush(void) {
 	assert(Buffer != NULL);
 
 	int total = 0;
@@ -300,10 +294,10 @@ int LZOPipe::Flush(void)
 			**	A partial block in the compression process is a normal occurrence. Just
 			**	compress the partial block and output normally.
 			*/
-			unsigned int len = sizeof (Buffer2);
-			char *dictionary = new char [64*1024];
-			lzo1x_1_compress ((unsigned char*)Buffer, Counter, (unsigned char *)Buffer2, &len, dictionary);
-			delete [] dictionary;
+			unsigned int len = sizeof(Buffer2);
+			char *dictionary = new char[64 * 1024];
+			lzo1x_1_compress((unsigned char *)Buffer, Counter, (unsigned char *)Buffer2, &len, dictionary);
+			delete[] dictionary;
 			BlockHeader.CompCount = (unsigned short)len;
 			BlockHeader.UncompCount = (unsigned short)Counter;
 			total += Pipe::Put(&BlockHeader, sizeof(BlockHeader));
@@ -313,6 +307,5 @@ int LZOPipe::Flush(void)
 	}
 
 	total += Pipe::Flush();
-	return(total);
+	return (total);
 }
-

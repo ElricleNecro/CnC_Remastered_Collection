@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header:   F:\projects\c&c\vcs\code\sidebar.cpv   2.13   02 Aug 1995 17:03:22   JOE_BOSTIC  $ */
@@ -31,25 +31,24 @@
  *---------------------------------------------------------------------------------------------*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
 #include "SidebarGlyphx.h"
-
+#include "function.h"
 
 /*
 **  ST - 3/14/2019 10:49AM
-** 
-**  We are going to need one sidebar per player for multiplayer with GlyphX. We can't have different maps / cell arrays per 
+**
+**  We are going to need one sidebar per player for multiplayer with GlyphX. We can't have different maps / cell arrays
+*per
 **  player though, so SidebarClass being in the middle of the map/display class hierarchy is a problem.
-** 
+**
 **  All the class static data will have to be made non-static so we can have multiple instances.
-** 
-**  So, this is a stub sidebar class with the functionality we need just to support the exporting of production data to the
+**
+**  So, this is a stub sidebar class with the functionality we need just to support the exporting of production data to
+*the
 **  GlyphX client.
-** 
-** 
+**
+**
 */
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::SidebarGlyphxClass -- Default constructor for the sidebar.              *
@@ -66,15 +65,11 @@
  * HISTORY:                                                                                    *
  *   11/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-SidebarGlyphxClass::SidebarGlyphxClass(void)
-{
-	//IsRepairActive = false;
-	//IsUpgradeActive = false;
-	//IsDemolishActive = false;
+SidebarGlyphxClass::SidebarGlyphxClass(void) {
+	// IsRepairActive = false;
+	// IsUpgradeActive = false;
+	// IsDemolishActive = false;
 }
-
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Init_Clear -- Sets sidebar to a known (and deactivated) state           *
@@ -88,13 +83,12 @@ SidebarGlyphxClass::SidebarGlyphxClass(void)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarGlyphxClass::Init_Clear(HouseClass *player_ptr)
-{
+void SidebarGlyphxClass::Init_Clear(HouseClass *player_ptr) {
 	SidebarPlayerPtr = player_ptr;
-	
-	//IsRepairActive = false;
-	//IsUpgradeActive = false;
-	//IsDemolishActive = false;
+
+	// IsRepairActive = false;
+	// IsUpgradeActive = false;
+	// IsDemolishActive = false;
 
 	Column[0].Set_Parent_Sidebar(this);
 	Column[1].Set_Parent_Sidebar(this);
@@ -102,10 +96,8 @@ void SidebarGlyphxClass::Init_Clear(HouseClass *player_ptr)
 	Column[0].Init_Clear();
 	Column[1].Init_Clear();
 
-
-	//Activate(false);
+	// Activate(false);
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Init_IO -- Adds buttons to the button list                              *
@@ -119,18 +111,15 @@ void SidebarGlyphxClass::Init_Clear(HouseClass *player_ptr)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarGlyphxClass::Init_IO(void)
-{
+void SidebarGlyphxClass::Init_IO(void) {
 	/*
 	** If a game was loaded & the sidebar was enabled, pop it up now
 	*/
-	//if (IsSidebarActive) {
+	// if (IsSidebarActive) {
 	//	IsSidebarActive = false;
 	//	Activate(1);
-	//}
+	// }
 }
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Which_Column -- Determines which column a given type should appear.     *
@@ -147,14 +136,12 @@ void SidebarGlyphxClass::Init_IO(void)
  * HISTORY:                                                                                    *
  *   01/01/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int SidebarGlyphxClass::Which_Column(RTTIType type)
-{
+int SidebarGlyphxClass::Which_Column(RTTIType type) {
 	if (type == RTTI_BUILDINGTYPE || type == RTTI_BUILDING) {
-		return(0);
+		return (0);
 	}
-	return(1);
+	return (1);
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Factory_Link -- Links a factory to a sidebar strip.                     *
@@ -176,12 +163,9 @@ int SidebarGlyphxClass::Which_Column(RTTIType type)
  * HISTORY:                                                                                    *
  *   05/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarGlyphxClass::Factory_Link(int factory, RTTIType type, int id)
-{
-	return(Column[Which_Column(type)].Factory_Link(factory, type, id));
+bool SidebarGlyphxClass::Factory_Link(int factory, RTTIType type, int id) {
+	return (Column[Which_Column(type)].Factory_Link(factory, type, id));
 }
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Add -- Adds a game object to the sidebar list.                          *
@@ -199,8 +183,7 @@ bool SidebarGlyphxClass::Factory_Link(int factory, RTTIType type, int id)
  * HISTORY:                                                                                    *
  *   11/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarGlyphxClass::Add(RTTIType type, int id, bool via_capture)
-{
+bool SidebarGlyphxClass::Add(RTTIType type, int id, bool via_capture) {
 	int column;
 
 	/*
@@ -210,16 +193,14 @@ bool SidebarGlyphxClass::Add(RTTIType type, int id, bool via_capture)
 		column = Which_Column(type);
 
 		if (Column[column].Add(type, id, via_capture)) {
-			//Activate(1);
-			return(true);
+			// Activate(1);
+			return (true);
 		}
-		return(false);
+		return (false);
 	}
 
-	return(false);
+	return (false);
 }
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::AI -- Handles player clicking on sidebar area.                          *
@@ -243,14 +224,12 @@ bool SidebarGlyphxClass::Add(RTTIType type, int id, bool via_capture)
  *   12/31/1994 JLB : Uses mouse coordinate parameters.                                        *
  *   06/27/1995 JLB : <TAB> key toggles sidebar.                                               *
  *=============================================================================================*/
-void SidebarGlyphxClass::AI(KeyNumType & input, int x, int y)
-{
+void SidebarGlyphxClass::AI(KeyNumType &input, int x, int y) {
 	if (!Debug_Map) {
 		Column[0].AI(input, x, y);
 		Column[1].AI(input, x, y);
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Recalc -- Examines the sidebar data and updates it as necessary.        *
@@ -271,13 +250,10 @@ void SidebarGlyphxClass::AI(KeyNumType & input, int x, int y)
  * HISTORY:                                                                                    *
  *   11/30/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarGlyphxClass::Recalc(void)
-{
+void SidebarGlyphxClass::Recalc(void) {
 	Column[0].Recalc();
 	Column[1].Recalc();
 }
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::StripClass::StripClass -- Default constructor for the side strip class. *
@@ -293,8 +269,7 @@ void SidebarGlyphxClass::Recalc(void)
  * HISTORY:                                                                                    *
  *   12/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-SidebarGlyphxClass::StripClass::StripClass(void)
-{
+SidebarGlyphxClass::StripClass::StripClass(void) {
 	IsBuilding = false;
 	BuildableCount = 0;
 	for (int index = 0; index < MAX_BUILDABLES; index++) {
@@ -305,8 +280,6 @@ SidebarGlyphxClass::StripClass::StripClass(void)
 	}
 	ParentSidebar = NULL;
 }
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::StripClass::Init_Clear -- Sets sidebar to a known (and deactivated) state*
@@ -320,8 +293,7 @@ SidebarGlyphxClass::StripClass::StripClass(void)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarGlyphxClass::StripClass::Init_Clear(void)
-{
+void SidebarGlyphxClass::StripClass::Init_Clear(void) {
 	IsBuilding = false;
 	BuildableCount = 0;
 
@@ -335,9 +307,6 @@ void SidebarGlyphxClass::StripClass::Init_Clear(void)
 		Buildables[index].BuildableViaCapture = false;
 	}
 }
-
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::StripClass::Add -- Add an object to the side strip.                     *
@@ -356,12 +325,11 @@ void SidebarGlyphxClass::StripClass::Init_Clear(void)
  * HISTORY:                                                                                    *
  *   12/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarGlyphxClass::StripClass::Add(RTTIType type, int id, bool via_capture)
-{
+bool SidebarGlyphxClass::StripClass::Add(RTTIType type, int id, bool via_capture) {
 	if (BuildableCount <= MAX_BUILDABLES) {
 		for (int index = 0; index < BuildableCount; index++) {
 			if (Buildables[index].BuildableType == type && Buildables[index].BuildableID == id) {
-				return(false);
+				return (false);
 			}
 		}
 		if (!ScenarioInit && type != RTTI_SPECIAL) {
@@ -372,12 +340,10 @@ bool SidebarGlyphxClass::StripClass::Add(RTTIType type, int id, bool via_capture
 		Buildables[BuildableCount].Factory = -1;
 		Buildables[BuildableCount].BuildableViaCapture = via_capture;
 		BuildableCount++;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::StripClass::AI -- Input and AI processing for the side strip.                 *
@@ -400,54 +366,54 @@ bool SidebarGlyphxClass::StripClass::Add(RTTIType type, int id, bool via_capture
  *   12/31/1994 JLB : Created.                                                                 *
  *   12/31/1994 JLB : Uses mouse coordinate parameters.                                        *
  *=============================================================================================*/
-bool SidebarGlyphxClass::StripClass::AI(KeyNumType & input, int , int )
-{
+bool SidebarGlyphxClass::StripClass::AI(KeyNumType &input, int, int) {
 	/*
 	** This is needed as it's where units get queued for structure exit. ST -3/14/2019 12:03PM
 	*/
-	
-	
+
 	if (IsBuilding) {
 		for (int index = 0; index < BuildableCount; index++) {
 			int factoryid = Buildables[index].Factory;
 
 			if (factoryid != -1) {
-				FactoryClass * factory = Factories.Raw_Ptr(factoryid);
+				FactoryClass *factory = Factories.Raw_Ptr(factoryid);
 
 				if (factory && (factory->Has_Changed() || factory->Is_Blocked())) {
-					
+
 					if (factory->Has_Completed()) {
 
 						/*
-						**	Construction has been completed. Announce this fact to the player and
-						**	try to get the object to automatically leave the factory. Buildings are
-						**	the main exception to the ability to leave the factory under their own
-						**	power.
+						**	Construction has been completed. Announce this fact to the
+						*player and *	try to get the object to automatically leave the
+						*factory. Buildings are *	the main exception to the ability to
+						*leave the factory under their own *	power.
 						*/
-						TechnoClass * pending = factory->Get_Object();
+						TechnoClass *pending = factory->Get_Object();
 						if (pending) {
 							switch (pending->What_Am_I()) {
-								case RTTI_VESSEL:
-								case RTTI_UNIT:
-								case RTTI_AIRCRAFT:
-									OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
-									if (!factory->Is_Blocked()) {
-										Speak(VOX_UNIT_READY);
-									}
-									break;
+							case RTTI_VESSEL:
+							case RTTI_UNIT:
+							case RTTI_AIRCRAFT:
+								OutList.Add(EventClass(EventClass::PLACE,
+										       pending->What_Am_I(), -1));
+								if (!factory->Is_Blocked()) {
+									Speak(VOX_UNIT_READY);
+								}
+								break;
 
-								case RTTI_BUILDING:
-									if (!factory->Is_Blocked()) {
-										Speak(VOX_CONSTRUCTION);
-									}
-									break;
+							case RTTI_BUILDING:
+								if (!factory->Is_Blocked()) {
+									Speak(VOX_CONSTRUCTION);
+								}
+								break;
 
-								case RTTI_INFANTRY:
-									OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
-									if (!factory->Is_Blocked()) {
-										Speak(VOX_UNIT_READY);
-									}
-									break;
+							case RTTI_INFANTRY:
+								OutList.Add(EventClass(EventClass::PLACE,
+										       pending->What_Am_I(), -1));
+								if (!factory->Is_Blocked()) {
+									Speak(VOX_UNIT_READY);
+								}
+								break;
 							}
 						}
 					}
@@ -456,11 +422,8 @@ bool SidebarGlyphxClass::StripClass::AI(KeyNumType & input, int , int )
 		}
 	}
 
-	return(false);
+	return (false);
 }
-
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::StripClass::Recalc -- Revalidates the current sidebar list of objects.  *
@@ -481,12 +444,11 @@ bool SidebarGlyphxClass::StripClass::AI(KeyNumType & input, int , int )
  *   01/19/1995 JLB : Created.                                                                 *
  *   06/26/1995 JLB : Doesn't collapse sidebar when buildables removed.                        *
  *=============================================================================================*/
-bool SidebarGlyphxClass::StripClass::Recalc(void)
-{
+bool SidebarGlyphxClass::StripClass::Recalc(void) {
 	int ok;
 
 	if (Debug_Map || !BuildableCount) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -495,13 +457,15 @@ bool SidebarGlyphxClass::StripClass::Recalc(void)
 	**	any current production must be abandoned.
 	*/
 	for (int index = 0; index < BuildableCount; index++) {
-		TechnoTypeClass const * tech = Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
+		TechnoTypeClass const *tech =
+		    Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
 		if (tech) {
 			ok = tech->Who_Can_Build_Me(true, false, ParentSidebar->SidebarPlayerPtr->Class->House) != NULL;
 		} else {
-			
+
 			if ((unsigned)Buildables[index].BuildableID < SPC_COUNT) {
-				ok = ParentSidebar->SidebarPlayerPtr->SuperWeapon[Buildables[index].BuildableID].Is_Present();
+				ok = ParentSidebar->SidebarPlayerPtr->SuperWeapon[Buildables[index].BuildableID]
+					 .Is_Present();
 			} else {
 				ok = false;
 			}
@@ -512,8 +476,9 @@ bool SidebarGlyphxClass::StripClass::Recalc(void)
 			/*
 			**	Removes this entry from the list.
 			*/
-			if (BuildableCount > 1 && index < BuildableCount-1) {
-				memcpy(&Buildables[index], &Buildables[index+1], sizeof(Buildables[0])*((BuildableCount-index)-1));
+			if (BuildableCount > 1 && index < BuildableCount - 1) {
+				memcpy(&Buildables[index], &Buildables[index + 1],
+				       sizeof(Buildables[0]) * ((BuildableCount - index) - 1));
 			}
 			BuildableCount--;
 			index--;
@@ -525,10 +490,8 @@ bool SidebarGlyphxClass::StripClass::Recalc(void)
 		}
 	}
 
-	return(false);
+	return (false);
 }
-
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::StripClass::Factory_Link -- Links a factory to a sidebar button.              *
@@ -552,19 +515,17 @@ bool SidebarGlyphxClass::StripClass::Recalc(void)
  * HISTORY:                                                                                    *
  *   05/18/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarGlyphxClass::StripClass::Factory_Link(int factory, RTTIType type, int id)
-{
+bool SidebarGlyphxClass::StripClass::Factory_Link(int factory, RTTIType type, int id) {
 	for (int index = 0; index < BuildableCount; index++) {
 		if (Buildables[index].BuildableType == type && Buildables[index].BuildableID == id) {
 			Buildables[index].Factory = factory;
 			IsBuilding = true;
 
-			return(true);
+			return (true);
 		}
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Abandon_Production -- Stops production of the object specified.               *
@@ -585,11 +546,9 @@ bool SidebarGlyphxClass::StripClass::Factory_Link(int factory, RTTIType type, in
  * HISTORY:                                                                                    *
  *   05/18/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarGlyphxClass::Abandon_Production(RTTIType type, int factory)
-{
-	return(Column[Which_Column(type)].Abandon_Production(factory));
+bool SidebarGlyphxClass::Abandon_Production(RTTIType type, int factory) {
+	return (Column[Which_Column(type)].Abandon_Production(factory));
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::StripClass::Abandon_Produ -- Abandons production associated with sidebar.     *
@@ -607,8 +566,7 @@ bool SidebarGlyphxClass::Abandon_Production(RTTIType type, int factory)
  *   05/18/1995 JLB : Created.                                                                 *
  *   08/06/1995 JLB : More intelligent abandon logic for multiple factories.                   *
  *=============================================================================================*/
-bool SidebarGlyphxClass::StripClass::Abandon_Production(int factory)
-{
+bool SidebarGlyphxClass::StripClass::Abandon_Production(int factory) {
 	bool noprod = true;
 	bool abandon = false;
 	for (int index = 0; index < BuildableCount; index++) {
@@ -629,7 +587,7 @@ bool SidebarGlyphxClass::StripClass::Abandon_Production(int factory)
 	if (noprod) {
 		IsBuilding = false;
 	}
-	return(abandon);
+	return (abandon);
 }
 
 /***********************************************************************************************
@@ -644,15 +602,13 @@ bool SidebarGlyphxClass::StripClass::Abandon_Production(int factory)
  * HISTORY:                                                                                    *
  *   9/25/2019 5:36PM ST : Created.                                                            *
  *=============================================================================================*/
-void SidebarGlyphxClass::Code_Pointers(void)
-{
+void SidebarGlyphxClass::Code_Pointers(void) {
 	if (SidebarPlayerPtr) {
 		((HouseClass *&)SidebarPlayerPtr) = (HouseClass *)SidebarPlayerPtr->Class->House;
 	} else {
 		((HouseClass *&)SidebarPlayerPtr) = (HouseClass *)HOUSE_NONE;
-	}	
+	}
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Decode_Pointers -- Converts classes savable representation to run-time  *
@@ -666,15 +622,13 @@ void SidebarGlyphxClass::Code_Pointers(void)
  * HISTORY:                                                                                    *
  *   9/25/2019 5:36PM ST : Created.                                                            *
  *=============================================================================================*/
-void SidebarGlyphxClass::Decode_Pointers(void)
-{
-	if (*((HousesType*)&SidebarPlayerPtr) == HOUSE_NONE) {
+void SidebarGlyphxClass::Decode_Pointers(void) {
+	if (*((HousesType *)&SidebarPlayerPtr) == HOUSE_NONE) {
 		SidebarPlayerPtr = NULL;
 	} else {
-		((HouseClass *&)SidebarPlayerPtr) = HouseClass::As_Pointer(*((HousesType*)&SidebarPlayerPtr));
+		((HouseClass *&)SidebarPlayerPtr) = HouseClass::As_Pointer(*((HousesType *)&SidebarPlayerPtr));
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Load -- Loads from a save game file.                                    *
@@ -688,11 +642,10 @@ void SidebarGlyphxClass::Decode_Pointers(void)
  * HISTORY:                                                                                    *
  *   9/26/2019 10:57AM ST : Created.                                                           *
  *=============================================================================================*/
-bool SidebarGlyphxClass::Load(Straw &file)
-{
+bool SidebarGlyphxClass::Load(Straw &file) {
 	::new (this) SidebarGlyphxClass();
 
-	//bool ok = Read_Object(this, sizeof(*this), file, false);
+	// bool ok = Read_Object(this, sizeof(*this), file, false);
 	if (file.Get(this, sizeof(*this)) != sizeof(*this)) {
 		return false;
 	}
@@ -702,7 +655,6 @@ bool SidebarGlyphxClass::Load(Straw &file)
 
 	return true;
 }
-
 
 /***********************************************************************************************
  * SidebarGlyphxClass::Save -- Write to a save game file.                                      *
@@ -716,36 +668,31 @@ bool SidebarGlyphxClass::Load(Straw &file)
  * HISTORY:                                                                                    *
  *   9/26/2019 10:57AM ST : Created.                                                           *
  *=============================================================================================*/
-bool SidebarGlyphxClass::Save(Pipe &file)
-{
-	//return(Write_Object(this, sizeof(*this), file));
-	
+bool SidebarGlyphxClass::Save(Pipe &file) {
+	// return(Write_Object(this, sizeof(*this), file));
+
 	file.Put(this, sizeof(*this));
-	
+
 	return true;
 }
 
-
 extern SidebarGlyphxClass *Get_Current_Context_Sidebar(HouseClass *player_ptr);
 
-void Sidebar_Glyphx_Init_Clear(HouseClass *player_ptr)
-{
+void Sidebar_Glyphx_Init_Clear(HouseClass *player_ptr) {
 	SidebarGlyphxClass *sidebar = Get_Current_Context_Sidebar(player_ptr);
 	if (sidebar) {
 		sidebar->Init_Clear(player_ptr);
 	}
 }
 
-void Sidebar_Glyphx_Init_IO(HouseClass *player_ptr)
-{
+void Sidebar_Glyphx_Init_IO(HouseClass *player_ptr) {
 	SidebarGlyphxClass *sidebar = Get_Current_Context_Sidebar(player_ptr);
 	if (sidebar) {
 		sidebar->Init_IO();
 	}
 }
 
-bool Sidebar_Glyphx_Abandon_Production(RTTIType type, int factory, HouseClass *player_ptr)
-{
+bool Sidebar_Glyphx_Abandon_Production(RTTIType type, int factory, HouseClass *player_ptr) {
 	SidebarGlyphxClass *sidebar = Get_Current_Context_Sidebar(player_ptr);
 	if (sidebar) {
 		return sidebar->Abandon_Production(type, factory);
@@ -754,8 +701,7 @@ bool Sidebar_Glyphx_Abandon_Production(RTTIType type, int factory, HouseClass *p
 	return false;
 }
 
-bool Sidebar_Glyphx_Add(RTTIType type, int id, HouseClass *player_ptr, bool via_capture)
-{
+bool Sidebar_Glyphx_Add(RTTIType type, int id, HouseClass *player_ptr, bool via_capture) {
 	SidebarGlyphxClass *sidebar = Get_Current_Context_Sidebar(player_ptr);
 	if (sidebar) {
 		return sidebar->Add(type, id, via_capture);
@@ -764,24 +710,21 @@ bool Sidebar_Glyphx_Add(RTTIType type, int id, HouseClass *player_ptr, bool via_
 	return false;
 }
 
-void Sidebar_Glyphx_Recalc(HouseClass *player_ptr)
-{
+void Sidebar_Glyphx_Recalc(HouseClass *player_ptr) {
 	SidebarGlyphxClass *sidebar = Get_Current_Context_Sidebar(player_ptr);
 	if (sidebar) {
 		sidebar->Recalc();
 	}
 }
 
-void Sidebar_Glyphx_AI(HouseClass *player_ptr, KeyNumType & input)
-{
+void Sidebar_Glyphx_AI(HouseClass *player_ptr, KeyNumType &input) {
 	SidebarGlyphxClass *sidebar = Get_Current_Context_Sidebar(player_ptr);
 	if (sidebar) {
 		sidebar->AI(input, 0, 0);
 	}
 }
 
-bool Sidebar_Glyphx_Factory_Link(int factory, RTTIType type, int id, HouseClass *player_ptr)
-{
+bool Sidebar_Glyphx_Factory_Link(int factory, RTTIType type, int id, HouseClass *player_ptr) {
 	SidebarGlyphxClass *sidebar = Get_Current_Context_Sidebar(player_ptr);
 	if (sidebar) {
 		return sidebar->Factory_Link(factory, type, id);
@@ -790,31 +733,27 @@ bool Sidebar_Glyphx_Factory_Link(int factory, RTTIType type, int id, HouseClass 
 	return false;
 }
 
-bool Sidebar_Glyphx_Save(Pipe &file, SidebarGlyphxClass *sidebar)
-{
+bool Sidebar_Glyphx_Save(Pipe &file, SidebarGlyphxClass *sidebar) {
 	if (sidebar) {
 		return sidebar->Save(file);
 	}
 	return false;
-}			  
+}
 
-bool Sidebar_Glyphx_Load(Straw &file, SidebarGlyphxClass *sidebar)
-{
+bool Sidebar_Glyphx_Load(Straw &file, SidebarGlyphxClass *sidebar) {
 	if (sidebar) {
 		return sidebar->Load(file);
 	}
 	return false;
-}			  
+}
 
-void Sidebar_Glyphx_Code_Pointers(SidebarGlyphxClass *sidebar)
-{
+void Sidebar_Glyphx_Code_Pointers(SidebarGlyphxClass *sidebar) {
 	if (sidebar) {
 		sidebar->Code_Pointers();
 	}
-}			  
+}
 
-void Sidebar_Glyphx_Decode_Pointers(SidebarGlyphxClass *sidebar)
-{
+void Sidebar_Glyphx_Decode_Pointers(SidebarGlyphxClass *sidebar) {
 	if (sidebar) {
 		sidebar->Decode_Pointers();
 	}

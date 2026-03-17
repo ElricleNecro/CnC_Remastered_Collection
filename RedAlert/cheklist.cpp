@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/CHEKLIST.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -44,7 +44,6 @@
 
 #include "function.h"
 
-
 /***************************************************************************
  * CheckListClass::CheckListClass -- constructor                           *
  *                                                                         *
@@ -67,13 +66,9 @@
  * HISTORY:                                                                *
  *   02/16/1995 BR : Created.                                              *
  *=========================================================================*/
-CheckListClass::CheckListClass(int id, int x, int y, int w, int h, TextPrintType flags,
-	void const * up, void const * down) :
-	ListClass (id, x, y, w, h, flags, up, down),
-	IsReadOnly(false)
-{
-}
-
+CheckListClass::CheckListClass(int id, int x, int y, int w, int h, TextPrintType flags, void const *up,
+			       void const *down)
+    : ListClass(id, x, y, w, h, flags, up, down), IsReadOnly(false) {}
 
 /***********************************************************************************************
  * CheckListClass::~CheckListClass -- Destructor for check list object.                        *
@@ -89,16 +84,14 @@ CheckListClass::CheckListClass(int id, int x, int y, int w, int h, TextPrintType
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-CheckListClass::~CheckListClass(void)
-{
+CheckListClass::~CheckListClass(void) {
 	while (CheckListClass::Count()) {
-		CheckObject * obj = (CheckObject *)ListClass::Get_Item(0);
+		CheckObject *obj = (CheckObject *)ListClass::Get_Item(0);
 
 		ListClass::Remove_Item(0);
 		delete obj;
 	}
 }
-
 
 /***********************************************************************************************
  * CheckListClass::Add_Item -- Adds specifies text to check list box.                          *
@@ -114,22 +107,18 @@ CheckListClass::~CheckListClass(void)
  * HISTORY:                                                                                    *
  *   02/14/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int CheckListClass::Add_Item(char const * text)
-{
-	CheckObject * obj = new CheckObject(text, false);
-	return(ListClass::Add_Item((char const *)obj));
+int CheckListClass::Add_Item(char const *text) {
+	CheckObject *obj = new CheckObject(text, false);
+	return (ListClass::Add_Item((char const *)obj));
 }
 
-
-char const * CheckListClass::Current_Item(void) const
-{
-	CheckObject * obj = (CheckObject *)ListClass::Current_Item();
+char const *CheckListClass::Current_Item(void) const {
+	CheckObject *obj = (CheckObject *)ListClass::Current_Item();
 	if (obj) {
-		return(obj->Text);
+		return (obj->Text);
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * CheckListClass::Get_Item -- Fetches a pointer to the text associated with the index.        *
@@ -146,15 +135,13 @@ char const * CheckListClass::Current_Item(void) const
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-char const * CheckListClass::Get_Item(int index) const
-{
-	CheckObject * obj = (CheckObject *)ListClass::Get_Item(index);
+char const *CheckListClass::Get_Item(int index) const {
+	CheckObject *obj = (CheckObject *)ListClass::Get_Item(index);
 	if (obj) {
-		return(obj->Text);
+		return (obj->Text);
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * CheckListClass::Remove_Item -- Remove the item that matches the text pointer specified.     *
@@ -171,10 +158,9 @@ char const * CheckListClass::Get_Item(int index) const
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void CheckListClass::Remove_Item(char const * text)
-{
+void CheckListClass::Remove_Item(char const *text) {
 	for (int index = 0; index < Count(); index++) {
-		CheckObject * obj = (CheckObject *)ListClass::Get_Item(index);
+		CheckObject *obj = (CheckObject *)ListClass::Get_Item(index);
 		if (obj && stricmp(obj->Text, text) == 0) {
 			ListClass::Remove_Item(index);
 			delete obj;
@@ -182,7 +168,6 @@ void CheckListClass::Remove_Item(char const * text)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * CheckListClass::Set_Selected_Index -- Set the selected index to match the text pointer spec *
@@ -200,17 +185,15 @@ void CheckListClass::Remove_Item(char const * text)
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void CheckListClass::Set_Selected_Index(char const * text)
-{
+void CheckListClass::Set_Selected_Index(char const *text) {
 	for (int index = 0; index < Count(); index++) {
-		CheckObject * obj = (CheckObject *)ListClass::Get_Item(index);
+		CheckObject *obj = (CheckObject *)ListClass::Get_Item(index);
 		if (obj && stricmp(obj->Text, text) == 0) {
 			Set_Selected_Index(index);
 			break;
 		}
 	}
 }
-
 
 /***************************************************************************
  * CheckListClass::Check_Item -- [un]checks an items                       *
@@ -229,15 +212,13 @@ void CheckListClass::Set_Selected_Index(char const * text)
  *   02/16/1995 BR : Created.                                              *
  *   02/14/1996 JLB : Revamped.                                            *
  *=========================================================================*/
-void CheckListClass::Check_Item(int index, bool checked)
-{
-	CheckObject * obj = (CheckObject *)ListClass::Get_Item(index);
+void CheckListClass::Check_Item(int index, bool checked) {
+	CheckObject *obj = (CheckObject *)ListClass::Get_Item(index);
 	if (obj && obj->IsChecked != checked) {
 		obj->IsChecked = checked;
 		Flag_To_Redraw();
 	}
 }
-
 
 /***************************************************************************
  * CheckListClass::Is_Checked -- returns checked state of an item          *
@@ -255,15 +236,13 @@ void CheckListClass::Check_Item(int index, bool checked)
  *   02/16/1995 BR : Created.                                              *
  *   02/14/1996 JLB : Revamped.                                            *
  *=========================================================================*/
-bool CheckListClass::Is_Checked(int index) const
-{
-	CheckObject * obj = (CheckObject *)ListClass::Get_Item(index);
+bool CheckListClass::Is_Checked(int index) const {
+	CheckObject *obj = (CheckObject *)ListClass::Get_Item(index);
 	if (obj) {
-		return(obj->IsChecked);
+		return (obj->IsChecked);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***************************************************************************
  * CheckListClass::Action -- action function for this class                *
@@ -281,21 +260,20 @@ bool CheckListClass::Is_Checked(int index) const
  * HISTORY:                                                                *
  *   02/16/1995 BR : Created.                                              *
  *=========================================================================*/
-int CheckListClass::Action(unsigned flags, KeyNumType &key)
-{
+int CheckListClass::Action(unsigned flags, KeyNumType &key) {
 	int rc;
 
 	/*
 	** If this is a read-only list, it's a display-only device
 	*/
 	if (IsReadOnly) {
-		return(false);
+		return (false);
 	}
 
 	/*
 	**	Invoke parents Action first, so it can set the SelectedIndex if needed.
 	*/
-	rc =  ListClass::Action(flags, key);
+	rc = ListClass::Action(flags, key);
 
 	/*
 	**	Now, if this event was a left-press, toggle the checked state of the
@@ -305,9 +283,8 @@ int CheckListClass::Action(unsigned flags, KeyNumType &key)
 		Check_Item(SelectedIndex, !Is_Checked(SelectedIndex));
 	}
 
-	return(rc);
+	return (rc);
 }
-
 
 /***************************************************************************
  * CheckListClass::Draw_Entry -- draws a list box entry                    *
@@ -319,19 +296,21 @@ int CheckListClass::Action(unsigned flags, KeyNumType &key)
  *		selected		true = this item is selected                         		*
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/14/1995 BRR : Created.                                             *
  *=========================================================================*/
-void CheckListClass::Draw_Entry(int index, int x, int y, int width, int selected)
-{
-	if (index >= Count()) return;
+void CheckListClass::Draw_Entry(int index, int x, int y, int width, int selected) {
+	if (index >= Count())
+		return;
 
-	CheckObject * obj = (CheckObject *)ListClass::Get_Item(index);
+	CheckObject *obj = (CheckObject *)ListClass::Get_Item(index);
 
 	if (obj) {
 		char buffer[100] = "";
@@ -345,11 +324,11 @@ void CheckListClass::Draw_Entry(int index, int x, int y, int width, int selected
 		sprintf(&buffer[2], obj->Text);
 
 		TextPrintType flags = TextFlags;
-		RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+		RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
-			LogicPage->Fill_Rect (x, y, x + width - 1, y + LineHeight - 1, scheme->Shadow);
+			LogicPage->Fill_Rect(x, y, x + width - 1, y + LineHeight - 1, scheme->Shadow);
 		} else {
 			if (!(flags & TPF_USE_GRAD_PAL)) {
 				flags = flags | TPF_MEDIUM_COLOR;
@@ -359,4 +338,3 @@ void CheckListClass::Draw_Entry(int index, int x, int y, int width, int selected
 		Conquer_Clip_Text_Print(buffer, x, y, scheme, TBLACK, flags, width, Tabs);
 	}
 }
-

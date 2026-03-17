@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/ENDING.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -32,10 +32,9 @@
  * Functions:                                                                                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
+#include "function.h"
 
-void GDI_Ending(void)
-{
+void GDI_Ending(void) {
 #ifdef NEVER
 	if (TempleIoned) {
 		Play_Movie("GDIFINB");
@@ -54,7 +53,6 @@ void GDI_Ending(void)
 #endif
 }
 
-
 /***********************************************************************************************
  * Nod_Ending -- play ending movies for Nod players                                            *
  *                                                                                             *
@@ -67,26 +65,26 @@ void GDI_Ending(void)
  * HISTORY:                                                                                    *
  *   7/10/1995 BWG : Created.                                                                  *
  *=============================================================================================*/
-void Nod_Ending(void)
-{
+void Nod_Ending(void) {
 #ifdef NEVER
-	static char const _tanpal[]={0x0,0x0,0xED,0x0,0x2C,0x0,0xFB,0x0,0xFD,0x0,0x0,0x0,0x0,0x0,0x52,0x0};
+	static char const _tanpal[] = {0x0,  0x0, 0xED, 0x0, 0x2C, 0x0, 0xFB, 0x0,
+				       0xFD, 0x0, 0x0,	0x0, 0x0,  0x0, 0x52, 0x0};
 
 	char fname[12];
-	char * satpic = new char[64000];
+	char *satpic = new char[64000];
 	int oldfontxspacing = FontXSpacing;
-	void const * oldfont;
+	void const *oldfont;
 
 	Score.Presentation();
 
 	oldfont = Set_Font(ScoreFontPtr);
 
-	void * localpal = Load_Alloc_Data(CCFileClass("SATSEL.PAL"));
+	void *localpal = Load_Alloc_Data(CCFileClass("SATSEL.PAL"));
 	Load_Uncompress(CCFileClass("SATSEL.CPS"), HidPage, HidPage);
 	memcpy(satpic, HidPage.Get_Buffer(), 64000);
 
-	void * kanefinl = Load_Sample("KANEFINL.AUD");
-	void * loopie6m = Load_Sample("LOOPIE6M.AUD");
+	void *kanefinl = Load_Sample("KANEFINL.AUD");
+	void *loopie6m = Load_Sample("LOOPIE6M.AUD");
 
 	Play_Movie("NODFINAL", THEME_NONE, false);
 
@@ -113,7 +111,8 @@ void Nod_Ending(void)
 		}
 		Call_Back_Delay(1);
 		if (!Keyboard->Check()) {
-			if (!Is_Sample_Playing(loopie6m))	Play_Sample(loopie6m, 255, 128);
+			if (!Is_Sample_Playing(loopie6m))
+				Play_Sample(loopie6m, 255, 128);
 		} else {
 			if (Is_Sample_Playing(kanefinl)) {
 				Clear_KeyBuffer();
@@ -124,22 +123,27 @@ void Nod_Ending(void)
 					int mousey = MouseQY;
 					if (mousey >= 22 && mousey <= 177) {
 						done++;
-						if (mousex <  160 && mousey <  100) selection = 2;
-						if (mousex <  160 && mousey >= 100) selection = 3;
-						if (mousex >= 160 && mousey >= 100) selection = 4;
+						if (mousex < 160 && mousey < 100)
+							selection = 2;
+						if (mousex < 160 && mousey >= 100)
+							selection = 3;
+						if (mousex >= 160 && mousey >= 100)
+							selection = 4;
 					}
 				}
 			}
 		}
 	}
-	if (mouseshown) Hide_Mouse();
+	if (mouseshown)
+		Hide_Mouse();
 	delete satpic;
 
-/* get rid of all the animating objects */
-	for (int i = 0; i < MAXSCOREOBJS; i++) if (ScoreObjs[i]) {
-		delete ScoreObjs[i];
-		ScoreObjs[i] = 0;
-	}
+	/* get rid of all the animating objects */
+	for (int i = 0; i < MAXSCOREOBJS; i++)
+		if (ScoreObjs[i]) {
+			delete ScoreObjs[i];
+			ScoreObjs[i] = 0;
+		}
 	// erase the "choose a target" text
 	SeenBuff.Fill_Rect(0, 180, 319, 199, 0);
 

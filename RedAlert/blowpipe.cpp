@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/BLOWPIPE.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -35,11 +35,9 @@
  *   BlowPipe::Put -- Submit a block of data for encrypt/decrypt.                              *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"blowpipe.h"
-#include	<string.h>
-#include	<assert.h>
-
+#include "blowpipe.h"
+#include <assert.h>
+#include <string.h>
 
 /***********************************************************************************************
  * BlowPipe::Flush -- Flushes any pending data out the pipe.                                   *
@@ -57,17 +55,15 @@
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int BlowPipe::Flush(void)
-{
+int BlowPipe::Flush(void) {
 	int total = 0;
 	if (Counter > 0 && BF != NULL) {
 		total += Pipe::Put(Buffer, Counter);
 	}
 	Counter = 0;
 	total += Pipe::Flush();
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * BlowPipe::Put -- Submit a block of data for encrypt/decrypt.                                *
@@ -88,10 +84,9 @@ int BlowPipe::Flush(void)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int BlowPipe::Put(void const * source, int slen)
-{
+int BlowPipe::Put(void const *source, int slen) {
 	if (source == NULL || slen < 1) {
-		return(Pipe::Put(source, slen));
+		return (Pipe::Put(source, slen));
 	}
 
 	/*
@@ -99,7 +94,7 @@ int BlowPipe::Put(void const * source, int slen)
 	**	unchanged in any way.
 	*/
 	if (BF == NULL) {
-		return(Pipe::Put(source, slen));
+		return (Pipe::Put(source, slen));
 	}
 
 	int total = 0;
@@ -111,7 +106,7 @@ int BlowPipe::Put(void const * source, int slen)
 	**	can be skipped if there are no pending bytes in the buffer.
 	*/
 	if (Counter) {
-		int sublen = ((int)sizeof(Buffer)-Counter < slen) ? (sizeof(Buffer)-Counter) : slen;
+		int sublen = ((int)sizeof(Buffer) - Counter < slen) ? (sizeof(Buffer) - Counter) : slen;
 		memmove(&Buffer[Counter], source, sublen);
 		Counter += sublen;
 		source = ((char *)source) + sublen;
@@ -157,9 +152,8 @@ int BlowPipe::Put(void const * source, int slen)
 	**	Return with the total number of bytes flushed out to the final end of the
 	**	pipe chain.
 	*/
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * BlowPipe::Key -- Submit a key to the blowfish pipe handler.                                 *
@@ -179,8 +173,7 @@ int BlowPipe::Put(void const * source, int slen)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BlowPipe::Key(void const * key, int length)
-{
+void BlowPipe::Key(void const *key, int length) {
 	/*
 	**	Create the blowfish engine if one isn't already present.
 	*/
@@ -194,6 +187,3 @@ void BlowPipe::Key(void const * key, int length)
 		BF->Submit_Key(key, length);
 	}
 }
-
-
-

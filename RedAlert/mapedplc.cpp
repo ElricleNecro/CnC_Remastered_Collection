@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/MAPEDPLC.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -51,10 +51,9 @@
  *   MapEditClass::Toggle_House -- toggles current placement object's house*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
+#include "function.h"
 
 #ifdef SCENARIO_EDITOR
-
 
 /***************************************************************************
  * MapEditClass::Placement_Dialog -- adds an object to the scenario        *
@@ -97,10 +96,9 @@
  *   12/13/1995 JLB : Fixed house buttons to handle expanded house list.   *
  *   05/12/1996 JLB : Handles hi-res.                                      *
  *=========================================================================*/
-int MapEditClass::Placement_Dialog(void)
-{
+int MapEditClass::Placement_Dialog(void) {
 	HousesType house;
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
 	**	Dialog & button dimensions
@@ -115,15 +113,15 @@ int MapEditClass::Placement_Dialog(void)
 		D_TXT8_H = 11,
 		D_MARGIN = 7,
 
-		D_PICTURE_W = 152,					// must be divisible by 8!
+		D_PICTURE_W = 152, // must be divisible by 8!
 		D_PICTURE_H = 105,
-		D_PICTURE_X = D_DIALOG_X + 35,		// must start on a byte boundary!
+		D_PICTURE_X = D_DIALOG_X + 35, // must start on a byte boundary!
 		D_PICTURE_Y = D_DIALOG_Y + D_MARGIN + D_TXT8_H + D_MARGIN,
 		D_PICTURE_CX = D_PICTURE_X + D_PICTURE_W / 2,
 
 		D_GDI_W = 65,
 		D_GDI_H = 9,
-		D_GDI_X = D_PICTURE_X+D_PICTURE_W+5,
+		D_GDI_X = D_PICTURE_X + D_PICTURE_W + 5,
 		D_GDI_Y = D_PICTURE_Y,
 
 		D_LEFT_W = 45,
@@ -202,7 +200,7 @@ int MapEditClass::Placement_Dialog(void)
 	**	Button enumerations:
 	*/
 	enum {
-		BUTTON_GDI=100,
+		BUTTON_GDI = 100,
 		BUTTON_HOUSE,
 		BUTTON_NEXT,
 		BUTTON_PREV,
@@ -222,25 +220,22 @@ int MapEditClass::Placement_Dialog(void)
 	/*
 	**	Dialog variables
 	*/
-	bool cancel = false;							// true = user cancels
-	const ObjectTypeClass * curobj;			// Working object pointer.
-	int x,y;											// for drawing the grid
-	KeyNumType input;								// user input
-	short const * occupy;							// ptr into object's OccupyList
-	int cell;										// cell index for parsing OccupyList
+	bool cancel = false;	       // true = user cancels
+	const ObjectTypeClass *curobj; // Working object pointer.
+	int x, y;		       // for drawing the grid
+	KeyNumType input;	       // user input
+	short const *occupy;	       // ptr into object's OccupyList
+	int cell;		       // cell index for parsing OccupyList
 	int i;
-	int typeindex;									// index of class type
+	int typeindex; // index of class type
 
 	/*
 	**	Buttons
 	*/
-	ControlClass * commands;
+	ControlClass *commands;
 
-	ListClass housebtn(BUTTON_HOUSE,
-		D_GDI_X, D_GDI_Y, 60, 8*16,
-		TPF_EFNT | TPF_NOSHADOW,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	ListClass housebtn(BUTTON_HOUSE, D_GDI_X, D_GDI_Y, 60, 8 * 16, TPF_EFNT | TPF_NOSHADOW,
+			   MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
 	for (house = HOUSE_FIRST; house < HOUSE_COUNT; house++) {
 		housebtn.Add_Item(HouseTypeClass::As_Reference(house).IniName);
 	}
@@ -250,14 +245,20 @@ int MapEditClass::Placement_Dialog(void)
 	TextButtonClass prevbtn(BUTTON_PREV, TXT_LEFT, TPF_EBUTTON, D_LEFT_X, D_LEFT_Y, D_LEFT_W, D_LEFT_H);
 	TextButtonClass okbtn(BUTTON_OK, "OK", TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
 	TextButtonClass cancelbtn(BUTTON_CANCEL, "Cancel", TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
-	TextButtonClass templatebtn(BUTTON_TEMPLATE, "Template", TPF_EBUTTON, D_TEMPLATE_X, D_TEMPLATE_Y, D_TEMPLATE_W, D_TEMPLATE_H);
-	TextButtonClass overlaybtn(BUTTON_OVERLAY, "Overlay", TPF_EBUTTON, D_OVERLAY_X, D_OVERLAY_Y, D_OVERLAY_W, D_OVERLAY_H);
+	TextButtonClass templatebtn(BUTTON_TEMPLATE, "Template", TPF_EBUTTON, D_TEMPLATE_X, D_TEMPLATE_Y, D_TEMPLATE_W,
+				    D_TEMPLATE_H);
+	TextButtonClass overlaybtn(BUTTON_OVERLAY, "Overlay", TPF_EBUTTON, D_OVERLAY_X, D_OVERLAY_Y, D_OVERLAY_W,
+				   D_OVERLAY_H);
 	TextButtonClass smudgebtn(BUTTON_SMUDGE, "Smudge", TPF_EBUTTON, D_SMUDGE_X, D_SMUDGE_Y, D_SMUDGE_W, D_SMUDGE_H);
-	TextButtonClass terrainbtn(BUTTON_TERRAIN, "Terrain", TPF_EBUTTON, D_TERRAIN_X, D_TERRAIN_Y, D_TERRAIN_W, D_TERRAIN_H);
+	TextButtonClass terrainbtn(BUTTON_TERRAIN, "Terrain", TPF_EBUTTON, D_TERRAIN_X, D_TERRAIN_Y, D_TERRAIN_W,
+				   D_TERRAIN_H);
 	TextButtonClass unitbtn(BUTTON_UNIT, "Unit", TPF_EBUTTON, D_UNIT_X, D_UNIT_Y, D_UNIT_W, D_UNIT_H);
-	TextButtonClass infantrybtn(BUTTON_INFANTRY, "Infantry", TPF_EBUTTON, D_INFANTRY_X, D_INFANTRY_Y, D_INFANTRY_W, D_INFANTRY_H);
-	TextButtonClass aircraftbtn(BUTTON_AIRCRAFT, "Ships", TPF_EBUTTON, D_AIRCRAFT_X, D_AIRCRAFT_Y, D_AIRCRAFT_W, D_AIRCRAFT_H);
-	TextButtonClass buildingbtn(BUTTON_BUILDING, "Building", TPF_EBUTTON, D_BUILDING_X, D_BUILDING_Y, D_BUILDING_W, D_BUILDING_H);
+	TextButtonClass infantrybtn(BUTTON_INFANTRY, "Infantry", TPF_EBUTTON, D_INFANTRY_X, D_INFANTRY_Y, D_INFANTRY_W,
+				    D_INFANTRY_H);
+	TextButtonClass aircraftbtn(BUTTON_AIRCRAFT, "Ships", TPF_EBUTTON, D_AIRCRAFT_X, D_AIRCRAFT_Y, D_AIRCRAFT_W,
+				    D_AIRCRAFT_H);
+	TextButtonClass buildingbtn(BUTTON_BUILDING, "Building", TPF_EBUTTON, D_BUILDING_X, D_BUILDING_Y, D_BUILDING_W,
+				    D_BUILDING_H);
 	TextButtonClass airbtn(BUTTON_AIR, "Aircraft", TPF_EBUTTON, D_AIR_X, D_AIR_Y, D_AIR_W, D_AIR_H);
 
 	/*
@@ -281,14 +282,14 @@ int MapEditClass::Placement_Dialog(void)
 	*/
 	TypeOffset[0] = 0;
 	for (i = 1; i < NUM_EDIT_CLASSES; i++) {
-		TypeOffset[i] = TypeOffset[i-1] + NumType[i-1];
+		TypeOffset[i] = TypeOffset[i - 1] + NumType[i - 1];
 	}
 
 	/*
 	**	Return if no objects to place
 	*/
-	if (!ObjCount)  {
-		return(-1);
+	if (!ObjCount) {
+		return (-1);
 	}
 
 	/*
@@ -298,7 +299,7 @@ int MapEditClass::Placement_Dialog(void)
 	if (LastChoice >= ObjCount) {
 		LastChoice = 0;
 	}
-	curobj = Objects[LastChoice];		// current object to choose
+	curobj = Objects[LastChoice]; // current object to choose
 
 	commands = &nextbtn;
 	housebtn.Add_Tail(*commands);
@@ -358,21 +359,20 @@ int MapEditClass::Placement_Dialog(void)
 			WindowList[WINDOW_EDITOR][WINDOWHEIGHT] = D_PICTURE_H;
 			Change_Window((int)WINDOW_EDITOR);
 			Draw_Box(D_PICTURE_X, D_PICTURE_Y, D_PICTURE_W, D_PICTURE_H, BOXSTYLE_DOWN, false);
-			curobj->Display(WinW/2, WinH>>1, WINDOW_EDITOR, LastHouse);
-//			curobj->Display(WinW<<2, WinH>>1, WINDOW_EDITOR, LastHouse);
+			curobj->Display(WinW / 2, WinH >> 1, WINDOW_EDITOR, LastHouse);
+			//			curobj->Display(WinW<<2, WinH>>1, WINDOW_EDITOR, LastHouse);
 
 			/*
 			**	Erase the grid
 			*/
-			LogicPage->Fill_Rect(D_GRID_X - GRIDBLOCK_W * 2, D_GRID_Y,
-				D_GRID_X + GRIDSIZE * GRIDBLOCK_W,
-				D_GRID_Y + GRIDSIZE * GRIDBLOCK_H, BLACK);
+			LogicPage->Fill_Rect(D_GRID_X - GRIDBLOCK_W * 2, D_GRID_Y, D_GRID_X + GRIDSIZE * GRIDBLOCK_W,
+					     D_GRID_Y + GRIDSIZE * GRIDBLOCK_H, BLACK);
 
 			/*
 			**	Draw a box for every cell occupied
 			*/
 			occupy = curobj->Occupy_List();
-			while ( (*occupy) != REFRESH_EOL) {
+			while ((*occupy) != REFRESH_EOL) {
 				cell = (*occupy);
 				occupy++;
 				x = D_GRID_X + ((cell % MAP_CELL_W) * GRIDBLOCK_W);
@@ -386,12 +386,12 @@ int MapEditClass::Placement_Dialog(void)
 			for (y = 0; y <= GRIDSIZE; y++) {
 				for (x = 0; x <= GRIDSIZE; x++) {
 					LogicPage->Draw_Line(D_GRID_X + x * GRIDBLOCK_W, D_GRID_Y,
-						D_GRID_X + x * GRIDBLOCK_W,
-						D_GRID_Y + GRIDSIZE * GRIDBLOCK_H, scheme->Shadow);
+							     D_GRID_X + x * GRIDBLOCK_W,
+							     D_GRID_Y + GRIDSIZE * GRIDBLOCK_H, scheme->Shadow);
 				}
 				LogicPage->Draw_Line(D_GRID_X, D_GRID_Y + y * GRIDBLOCK_H,
-					D_GRID_X + GRIDSIZE * GRIDBLOCK_W, D_GRID_Y + y * GRIDBLOCK_H,
-					scheme->Shadow);
+						     D_GRID_X + GRIDSIZE * GRIDBLOCK_W, D_GRID_Y + y * GRIDBLOCK_H,
+						     scheme->Shadow);
 			}
 
 			/*
@@ -399,9 +399,8 @@ int MapEditClass::Placement_Dialog(void)
 			**	Warning: Text_String returns an EMS pointer, so standard string
 			**	functions won't work!
 			*/
-			Fancy_Text_Print (curobj->Full_Name(),
-				D_PICTURE_CX, D_PICTURE_Y + D_MARGIN, scheme, TBLACK,
-				TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print(curobj->Full_Name(), D_PICTURE_CX, D_PICTURE_Y + D_MARGIN, scheme, TBLACK,
+					 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
 
 			/*
 			**	Redraw buttons
@@ -412,7 +411,8 @@ int MapEditClass::Placement_Dialog(void)
 			i = 0;
 			for (typeindex = 0; typeindex < NUM_EDIT_CLASSES; typeindex++) {
 				i += NumType[typeindex];
-				if (LastChoice < i) break;
+				if (LastChoice < i)
+					break;
 			}
 			templatebtn.Turn_Off();
 			overlaybtn.Turn_Off();
@@ -424,41 +424,41 @@ int MapEditClass::Placement_Dialog(void)
 			airbtn.Turn_Off();
 			buildingbtn.Turn_Off();
 			switch (typeindex + BUTTON_TEMPLATE) {
-				case BUTTON_TEMPLATE:
-					templatebtn.Turn_On();
-					break;
+			case BUTTON_TEMPLATE:
+				templatebtn.Turn_On();
+				break;
 
-				case BUTTON_OVERLAY:
-					overlaybtn.Turn_On();
-					break;
+			case BUTTON_OVERLAY:
+				overlaybtn.Turn_On();
+				break;
 
-				case BUTTON_SMUDGE:
-					smudgebtn.Turn_On();
-					break;
+			case BUTTON_SMUDGE:
+				smudgebtn.Turn_On();
+				break;
 
-				case BUTTON_TERRAIN:
-					terrainbtn.Turn_On();
-					break;
+			case BUTTON_TERRAIN:
+				terrainbtn.Turn_On();
+				break;
 
-				case BUTTON_UNIT:
-					unitbtn.Turn_On();
-					break;
+			case BUTTON_UNIT:
+				unitbtn.Turn_On();
+				break;
 
-				case BUTTON_INFANTRY:
-					infantrybtn.Turn_On();
-					break;
+			case BUTTON_INFANTRY:
+				infantrybtn.Turn_On();
+				break;
 
-				case BUTTON_AIRCRAFT:
-					aircraftbtn.Turn_On();
-					break;
+			case BUTTON_AIRCRAFT:
+				aircraftbtn.Turn_On();
+				break;
 
-				case BUTTON_AIR:
-					airbtn.Turn_On();
-					break;
+			case BUTTON_AIR:
+				airbtn.Turn_On();
+				break;
 
-				case BUTTON_BUILDING:
-					buildingbtn.Turn_On();
-					break;
+			case BUTTON_BUILDING:
+				buildingbtn.Turn_On();
+				break;
 			}
 
 			/*
@@ -467,7 +467,6 @@ int MapEditClass::Placement_Dialog(void)
 			commands->Draw_All();
 			Show_Mouse();
 			display = false;
-
 		}
 
 		/*
@@ -480,158 +479,157 @@ int MapEditClass::Placement_Dialog(void)
 		*/
 		switch (input) {
 
-			/*
-			**	GDI House
-			*/
-			case (BUTTON_HOUSE | KN_BUTTON):
-				house = HousesType(housebtn.Current_Index());
-
-				/*
-				**	Set flags & buttons
-				*/
-				LastHouse = house;
-				display = true;
-				break;
+		/*
+		**	GDI House
+		*/
+		case (BUTTON_HOUSE | KN_BUTTON):
+			house = HousesType(housebtn.Current_Index());
 
 			/*
-			**	Next in list
+			**	Set flags & buttons
 			*/
-			case (KN_RIGHT):
-			case (BUTTON_NEXT | KN_BUTTON):
-				/*
-				**	Increment to next obj
-				*/
-				LastChoice++;
-				if (LastChoice == ObjCount) {
-					LastChoice = 0;
-				}
-				curobj = Objects[LastChoice];
+			LastHouse = house;
+			display = true;
+			break;
 
-				nextbtn.Turn_Off();
-				display = true;
-				break;
-
+		/*
+		**	Next in list
+		*/
+		case (KN_RIGHT):
+		case (BUTTON_NEXT | KN_BUTTON):
 			/*
-			**	Previous in list
+			**	Increment to next obj
 			*/
-			case (KN_LEFT):
-			case (BUTTON_PREV | KN_BUTTON):
-
-				/*
-				**	Decrement to prev obj
-				*/
-				LastChoice--;
-				if (LastChoice < 0) {
-					LastChoice = ObjCount-1;
-				}
-				curobj = Objects[LastChoice];
-				prevbtn.Turn_Off();
-				display = true;
-				break;
-
-			/*
-			**	Select a class type
-			*/
-			case (BUTTON_TEMPLATE | KN_BUTTON):
-			case (BUTTON_OVERLAY | KN_BUTTON):
-			case (BUTTON_SMUDGE | KN_BUTTON):
-			case (BUTTON_TERRAIN | KN_BUTTON):
-			case (BUTTON_UNIT | KN_BUTTON):
-			case (BUTTON_INFANTRY | KN_BUTTON):
-			case (BUTTON_AIRCRAFT | KN_BUTTON):
-			case (BUTTON_BUILDING | KN_BUTTON):
-			case (BUTTON_AIR | KN_BUTTON):
-
-				/*
-				**	Find index of class
-				*/
-				typeindex = input - (BUTTON_TEMPLATE | KN_BUTTON);
-
-				/*
-				**	If no objects of that type, do nothing
-				*/
-				if (NumType[typeindex]==0) {
-					display = true;
-					break;
-				}
-
-				/*
-				**	Set current object
-				*/
-				LastChoice = TypeOffset[typeindex];
-				curobj = Objects[LastChoice];
-				display = true;
-				break;
-
-			/*
-			**	Next category
-			*/
-			case KN_PGDN:
-				typeindex++;
-				if (typeindex==NUM_EDIT_CLASSES) {
-					typeindex = 0;
-				}
-
-				/*
-				**	Set current object
-				*/
-				LastChoice = TypeOffset[typeindex];
-				curobj = Objects[LastChoice];
-				display = true;
-				break;
-
-			/*
-			**	Previous category
-			*/
-			case KN_PGUP:
-				typeindex--;
-				if (typeindex < 0) {
-					typeindex = NUM_EDIT_CLASSES - 1;
-				}
-
-				/*
-				**	Set current object
-				*/
-				LastChoice = TypeOffset[typeindex];
-				curobj = Objects[LastChoice];
-				display = true;
-				break;
-
-			/*
-			**	Jump to 1st choice
-			*/
-			case KN_HOME:
+			LastChoice++;
+			if (LastChoice == ObjCount) {
 				LastChoice = 0;
+			}
+			curobj = Objects[LastChoice];
 
-				/*
-				**	Set current object
-				*/
-				curobj = Objects[LastChoice];
+			nextbtn.Turn_Off();
+			display = true;
+			break;
+
+		/*
+		**	Previous in list
+		*/
+		case (KN_LEFT):
+		case (BUTTON_PREV | KN_BUTTON):
+
+			/*
+			**	Decrement to prev obj
+			*/
+			LastChoice--;
+			if (LastChoice < 0) {
+				LastChoice = ObjCount - 1;
+			}
+			curobj = Objects[LastChoice];
+			prevbtn.Turn_Off();
+			display = true;
+			break;
+
+		/*
+		**	Select a class type
+		*/
+		case (BUTTON_TEMPLATE | KN_BUTTON):
+		case (BUTTON_OVERLAY | KN_BUTTON):
+		case (BUTTON_SMUDGE | KN_BUTTON):
+		case (BUTTON_TERRAIN | KN_BUTTON):
+		case (BUTTON_UNIT | KN_BUTTON):
+		case (BUTTON_INFANTRY | KN_BUTTON):
+		case (BUTTON_AIRCRAFT | KN_BUTTON):
+		case (BUTTON_BUILDING | KN_BUTTON):
+		case (BUTTON_AIR | KN_BUTTON):
+
+			/*
+			**	Find index of class
+			*/
+			typeindex = input - (BUTTON_TEMPLATE | KN_BUTTON);
+
+			/*
+			**	If no objects of that type, do nothing
+			*/
+			if (NumType[typeindex] == 0) {
 				display = true;
 				break;
+			}
 
 			/*
-			**	OK
+			**	Set current object
 			*/
-			case (KN_RETURN):
-			case (BUTTON_OK | KN_BUTTON):
-				cancel = false;
-				process = false;
-				break;
+			LastChoice = TypeOffset[typeindex];
+			curobj = Objects[LastChoice];
+			display = true;
+			break;
+
+		/*
+		**	Next category
+		*/
+		case KN_PGDN:
+			typeindex++;
+			if (typeindex == NUM_EDIT_CLASSES) {
+				typeindex = 0;
+			}
 
 			/*
-			**	Cancel
+			**	Set current object
 			*/
-			case (KN_ESC):
-			case (BUTTON_CANCEL | KN_BUTTON):
-				cancel = true;
-				process = false;
-				break;
+			LastChoice = TypeOffset[typeindex];
+			curobj = Objects[LastChoice];
+			display = true;
+			break;
 
-			default:
-				break;
+		/*
+		**	Previous category
+		*/
+		case KN_PGUP:
+			typeindex--;
+			if (typeindex < 0) {
+				typeindex = NUM_EDIT_CLASSES - 1;
+			}
+
+			/*
+			**	Set current object
+			*/
+			LastChoice = TypeOffset[typeindex];
+			curobj = Objects[LastChoice];
+			display = true;
+			break;
+
+		/*
+		**	Jump to 1st choice
+		*/
+		case KN_HOME:
+			LastChoice = 0;
+
+			/*
+			**	Set current object
+			*/
+			curobj = Objects[LastChoice];
+			display = true;
+			break;
+
+		/*
+		**	OK
+		*/
+		case (KN_RETURN):
+		case (BUTTON_OK | KN_BUTTON):
+			cancel = false;
+			process = false;
+			break;
+
+		/*
+		**	Cancel
+		*/
+		case (KN_ESC):
+		case (BUTTON_CANCEL | KN_BUTTON):
+			cancel = true;
+			process = false;
+			break;
+
+		default:
+			break;
 		}
-
 	}
 
 	/*
@@ -642,12 +640,11 @@ int MapEditClass::Placement_Dialog(void)
 	Render();
 
 	if (cancel) {
-		return(-1);
+		return (-1);
 	}
 
-	return(0);
+	return (0);
 }
-
 
 /***************************************************************************
  * MapEditClass::Start_Placement -- enters placement mode                  *
@@ -664,8 +661,7 @@ int MapEditClass::Placement_Dialog(void)
  * HISTORY:                                                                *
  *   11/04/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Start_Placement(void)
-{
+void MapEditClass::Start_Placement(void) {
 
 	/*
 	**	Initialize addable objects list; we must do this every time in case one
@@ -689,7 +685,7 @@ void MapEditClass::Start_Placement(void)
 	*/
 	TypeOffset[0] = 0;
 	for (int i = 1; i < NUM_EDIT_CLASSES; i++) {
-		TypeOffset[i] = TypeOffset[i-1] + NumType[i-1];
+		TypeOffset[i] = TypeOffset[i - 1] + NumType[i - 1];
 	}
 
 	/*
@@ -740,7 +736,6 @@ void MapEditClass::Start_Placement(void)
 	Set_Cursor_Shape(PendingObject->Occupy_List());
 }
 
-
 /***************************************************************************
  * MapEditClass::Place_Object -- attempts to place the current object      *
  *                                                                         *
@@ -770,16 +765,16 @@ void MapEditClass::Start_Placement(void)
  * HISTORY:                                                                *
  *   11/04/1994 BR : Created.                                              *
  *=========================================================================*/
-int MapEditClass::Place_Object(void)
-{
-	CELL template_cell;						// cell being checked for template
-	COORDINATE obj_coord;							// coord of occupier object
-	int okflag;									// OK to place a template?
-	short const * occupy;						// ptr into template's OccupyList
-	ObjectClass * occupier;					// occupying object
-	TemplateType save_ttype;				// for saving cell's TType
-	unsigned char save_ticon;				// for saving cell's TIcon
-//	BaseNodeClass node;						// for adding to an AI Base
+int MapEditClass::Place_Object(void) {
+	CELL template_cell;	  // cell being checked for template
+	COORDINATE obj_coord;	  // coord of occupier object
+	int okflag;		  // OK to place a template?
+	short const *occupy;	  // ptr into template's OccupyList
+	ObjectClass *occupier;	  // occupying object
+	TemplateType save_ttype;  // for saving cell's TType
+	unsigned char save_ticon; // for saving cell's TIcon
+				  //	BaseNodeClass node;						// for adding to
+				  //an AI Base
 
 	/*
 	**	Placing a template:
@@ -787,7 +782,7 @@ int MapEditClass::Place_Object(void)
 	**	- place the template, and try to replace the objects; if they won't go
 	**	  back, the template can't go there
 	*/
-	//ScenarioInit++;
+	// ScenarioInit++;
 	if (PendingObject->What_Am_I() == RTTI_TEMPLATETYPE) {
 
 		/*
@@ -800,7 +795,7 @@ int MapEditClass::Place_Object(void)
 			/*
 			**	Check this cell for an occupier
 			*/
-			template_cell = (ZoneCell+ZoneOffset) + (*occupy);
+			template_cell = (ZoneCell + ZoneOffset) + (*occupy);
 			if ((*this)[template_cell].Cell_Occupier()) {
 				occupier = (*this)[template_cell].Cell_Occupier();
 
@@ -819,10 +814,9 @@ int MapEditClass::Place_Object(void)
 				*/
 				save_ttype = (*this)[template_cell].TType;
 				save_ticon = (*this)[template_cell].TIcon;
-				(*this)[template_cell].TType =
-					((TemplateTypeClass *)PendingObject)->Type;
-				(*this)[template_cell].TIcon = Cell_X(*occupy) + Cell_Y(*occupy) *
-					((TemplateTypeClass *)PendingObject)->Width;
+				(*this)[template_cell].TType = ((TemplateTypeClass *)PendingObject)->Type;
+				(*this)[template_cell].TIcon =
+				    Cell_X(*occupy) + Cell_Y(*occupy) * ((TemplateTypeClass *)PendingObject)->Width;
 				(*this)[template_cell].Recalc_Attributes();
 
 				/*
@@ -863,7 +857,7 @@ int MapEditClass::Place_Object(void)
 					/*
 					**	Get cell for this occupy item
 					*/
-					template_cell = (ZoneCell+ZoneOffset) + (*occupy);
+					template_cell = (ZoneCell + ZoneOffset) + (*occupy);
 
 					/*
 					**	Clear smudge & overlay
@@ -889,24 +883,24 @@ int MapEditClass::Place_Object(void)
 				PendingObject = 0;
 				PendingHouse = HOUSE_NONE;
 				Set_Cursor_Shape(0);
-				//ScenarioInit--;
+				// ScenarioInit--;
 				TotalValue = Overpass();
 				Flag_To_Redraw(false);
-				return(0);
+				return (0);
 			}
 
 			/*
 			**	Failure to deploy results in a returned failure code.
 			*/
-			//ScenarioInit--;
-			return(-1);
+			// ScenarioInit--;
+			return (-1);
 		}
 
 		/*
 		**	Not OK; return error
 		*/
-		//ScenarioInit--;
-		return(-1);
+		// ScenarioInit--;
+		return (-1);
 	}
 
 	/*
@@ -928,8 +922,8 @@ int MapEditClass::Place_Object(void)
 		**	No free spots; don't place the object
 		*/
 		if (obj_coord == NULL) {
-			//ScenarioInit--;
-			return(-1);
+			// ScenarioInit--;
+			return (-1);
 		}
 
 		/*
@@ -937,18 +931,18 @@ int MapEditClass::Place_Object(void)
 		*/
 		if (PendingObjectPtr->Unlimbo(obj_coord)) {
 			((InfantryClass *)PendingObjectPtr)->Set_Occupy_Bit(obj_coord);
-//			Map[obj_coord].Flag.Composite |=
-//				(1 << CellClass::Spot_Index(obj_coord));
+			//			Map[obj_coord].Flag.Composite |=
+			//				(1 << CellClass::Spot_Index(obj_coord));
 			PendingObjectPtr = 0;
 			PendingObject = 0;
 			PendingHouse = HOUSE_NONE;
 			Set_Cursor_Shape(0);
-			//ScenarioInit--;
-			return(0);
+			// ScenarioInit--;
+			return (0);
 		}
 
-		//ScenarioInit--;
-		return(-1);
+		// ScenarioInit--;
+		return (-1);
 	}
 
 	/*
@@ -959,8 +953,7 @@ int MapEditClass::Place_Object(void)
 		/*
 		** Update the Tiberium computation if we're placing an overlay
 		*/
-		if (PendingObject->What_Am_I() == RTTI_OVERLAYTYPE &&
-			((OverlayTypeClass *)PendingObject)->IsTiberium) {
+		if (PendingObject->What_Am_I() == RTTI_OVERLAYTYPE && ((OverlayTypeClass *)PendingObject)->IsTiberium) {
 			TotalValue = Overpass();
 			Flag_To_Redraw(false);
 		}
@@ -969,22 +962,22 @@ int MapEditClass::Place_Object(void)
 		** If we're building a base, add this building to the base's Node list.
 		*/
 		if (BaseBuilding && PendingObject->What_Am_I() == RTTI_BUILDINGTYPE) {
-//			node.Type = ((BuildingTypeClass *)PendingObject)->Type;
-//			node.Cell = Coord_Cell(PendingObjectPtr->Coord);
-			Base.Nodes.Add(BaseNodeClass(((BuildingTypeClass *)PendingObject)->Type, Coord_Cell(PendingObjectPtr->Coord)));
+			//			node.Type = ((BuildingTypeClass *)PendingObject)->Type;
+			//			node.Cell = Coord_Cell(PendingObjectPtr->Coord);
+			Base.Nodes.Add(BaseNodeClass(((BuildingTypeClass *)PendingObject)->Type,
+						     Coord_Cell(PendingObjectPtr->Coord)));
 		}
 
 		PendingObjectPtr = 0;
 		PendingObject = 0;
 		PendingHouse = HOUSE_NONE;
 		Set_Cursor_Shape(0);
-		//ScenarioInit--;
-		return(0);
+		// ScenarioInit--;
+		return (0);
 	}
 
-	return(-1);
+	return (-1);
 }
-
 
 /***************************************************************************
  * MapEditClass::Cancel_Placement -- cancels placement mode                *
@@ -1001,8 +994,7 @@ int MapEditClass::Place_Object(void)
  * HISTORY:                                                                *
  *   11/04/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Cancel_Placement(void)
-{
+void MapEditClass::Cancel_Placement(void) {
 	/*
 	**	Delete the placement object
 	*/
@@ -1024,7 +1016,6 @@ void MapEditClass::Cancel_Placement(void)
 	Render();
 }
 
-
 /***************************************************************************
  * MapEditClass::Place_Next -- while placing object, goes to next          *
  *                                                                         *
@@ -1045,8 +1036,7 @@ void MapEditClass::Cancel_Placement(void)
  * HISTORY:                                                                *
  *   11/03/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Place_Next(void)
-{
+void MapEditClass::Place_Next(void) {
 	delete PendingObjectPtr;
 	PendingObjectPtr = NULL;
 	PendingObject = NULL;
@@ -1098,7 +1088,6 @@ void MapEditClass::Place_Next(void)
 	Render();
 }
 
-
 /***************************************************************************
  * MapEditClass::Place_Prev -- while placing object, goes to previous      *
  *                                                                         *
@@ -1119,8 +1108,7 @@ void MapEditClass::Place_Next(void)
  * HISTORY:                                                                *
  *   11/03/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Place_Prev(void)
-{
+void MapEditClass::Place_Prev(void) {
 	delete PendingObjectPtr;
 	PendingObjectPtr = NULL;
 	PendingObject = NULL;
@@ -1175,7 +1163,6 @@ void MapEditClass::Place_Prev(void)
 	Render();
 }
 
-
 /***************************************************************************
  * MapEditClass::Place_Next_Category -- places next category of object     *
  *                                                                         *
@@ -1191,8 +1178,7 @@ void MapEditClass::Place_Prev(void)
  * HISTORY:                                                                *
  *   11/03/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Place_Next_Category(void)
-{
+void MapEditClass::Place_Next_Category(void) {
 	int i;
 
 	/*
@@ -1227,9 +1213,9 @@ void MapEditClass::Place_Next_Category(void)
 		/*
 		**	Get house for this object type
 		*/
-//		if (!Verify_House(LastHouse, Objects[LastChoice])) {
-//			LastHouse = Cycle_House(LastHouse, Objects[LastChoice]);
-//		}
+		//		if (!Verify_House(LastHouse, Objects[LastChoice])) {
+		//			LastHouse = Cycle_House(LastHouse, Objects[LastChoice]);
+		//		}
 
 		/*
 		**	Create placement object
@@ -1265,7 +1251,6 @@ void MapEditClass::Place_Next_Category(void)
 	Render();
 }
 
-
 /***************************************************************************
  * MapEditClass::Place_Prev_Category -- places previous category of object *
  *                                                                         *
@@ -1281,8 +1266,7 @@ void MapEditClass::Place_Next_Category(void)
  * HISTORY:                                                                *
  *   11/03/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Place_Prev_Category(void)
-{
+void MapEditClass::Place_Prev_Category(void) {
 	int i;
 
 	/*
@@ -1313,7 +1297,8 @@ void MapEditClass::Place_Prev_Category(void)
 	}
 
 	i--;
-	if (i < 0) i = ObjCount-1;
+	if (i < 0)
+		i = ObjCount - 1;
 	LastChoice = i;
 
 	/*
@@ -1327,7 +1312,8 @@ void MapEditClass::Place_Prev_Category(void)
 	}
 
 	i++;
-	if (i >= ObjCount) i = 0;
+	if (i >= ObjCount)
+		i = 0;
 	LastChoice = i;
 
 	/*
@@ -1338,9 +1324,9 @@ void MapEditClass::Place_Prev_Category(void)
 		/*
 		**	Get house for this object type
 		*/
-//		if (!Verify_House(LastHouse, Objects[LastChoice])) {
-//			LastHouse = Cycle_House(LastHouse, Objects[LastChoice]);
-//		}
+		//		if (!Verify_House(LastHouse, Objects[LastChoice])) {
+		//			LastHouse = Cycle_House(LastHouse, Objects[LastChoice]);
+		//		}
 
 		/*
 		**	Create placement object
@@ -1376,7 +1362,6 @@ void MapEditClass::Place_Prev_Category(void)
 	Render();
 }
 
-
 /***************************************************************************
  * MapEditClass::Place_Home -- homes the placement object                  *
  *                                                                         *
@@ -1392,8 +1377,7 @@ void MapEditClass::Place_Prev_Category(void)
  * HISTORY:                                                                *
  *   11/03/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Place_Home(void)
-{
+void MapEditClass::Place_Home(void) {
 	delete PendingObjectPtr;
 	PendingObjectPtr = NULL;
 	PendingObject = NULL;
@@ -1453,7 +1437,6 @@ void MapEditClass::Place_Home(void)
 	Render();
 }
 
-
 /***************************************************************************
  * MapEditClass::Toggle_House -- toggles current placement object's house  *
  *                                                                         *
@@ -1466,8 +1449,7 @@ void MapEditClass::Place_Home(void)
  * HISTORY:                                                                *
  *   11/04/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Toggle_House(void)
-{
+void MapEditClass::Toggle_House(void) {
 	TechnoClass *tp;
 
 	/*
@@ -1502,7 +1484,6 @@ void MapEditClass::Toggle_House(void)
 	PendingHouse = LastHouse;
 }
 
-
 /***************************************************************************
  * MapEditClass::Set_House_Buttons -- toggles house buttons for btn list   *
  *                                                                         *
@@ -1525,15 +1506,15 @@ void MapEditClass::Toggle_House(void)
  *   11/23/1994 BR : Created.                                              *
  *   01/26/1996 JLB : Uses new house selection list method.                *
  *=========================================================================*/
-void MapEditClass::Set_House_Buttons(HousesType house, GadgetClass *, int )
-//void MapEditClass::Set_House_Buttons(HousesType house, GadgetClass * btnlist, int base_id)
+void MapEditClass::Set_House_Buttons(HousesType house, GadgetClass *, int)
+// void MapEditClass::Set_House_Buttons(HousesType house, GadgetClass * btnlist, int base_id)
 {
 	HouseList->Set_Selected_Index(house);
 
 #ifdef NEVER
 	HousesType h;
 	int id;
-	TextButtonClass * btn;
+	TextButtonClass *btn;
 
 	/*
 	**	Loop through all houses, searching the button list for each one.
@@ -1561,7 +1542,6 @@ void MapEditClass::Set_House_Buttons(HousesType house, GadgetClass *, int )
 #endif
 }
 
-
 /***************************************************************************
  * MapEditClass::Start_Trigger_Placement -- enters trigger placement mode  *
  *                                                                         *
@@ -1574,12 +1554,10 @@ void MapEditClass::Set_House_Buttons(HousesType house, GadgetClass *, int )
  * HISTORY:                                                                *
  *   12/01/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Start_Trigger_Placement(void)
-{
+void MapEditClass::Start_Trigger_Placement(void) {
 	Set_Default_Mouse(MOUSE_CAN_MOVE);
 	Override_Mouse_Shape(MOUSE_CAN_MOVE);
 }
-
 
 /***************************************************************************
  * MapEditClass::Stop_Trigger_Placement -- exits trigger placement mode    *
@@ -1596,13 +1574,11 @@ void MapEditClass::Start_Trigger_Placement(void)
  * HISTORY:                                                                *
  *   12/01/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Stop_Trigger_Placement(void)
-{
+void MapEditClass::Stop_Trigger_Placement(void) {
 	CurTrigger = NULL;
 	Set_Default_Mouse(MOUSE_NORMAL);
 	Override_Mouse_Shape(MOUSE_NORMAL);
 }
-
 
 /***************************************************************************
  * MapEditClass::Place_Trigger -- assigns trigger to object or cell        *
@@ -1619,11 +1595,10 @@ void MapEditClass::Stop_Trigger_Placement(void)
  * HISTORY:                                                                *
  *   12/01/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Place_Trigger(void)
-{
-	ObjectClass * object=NULL;		// Generic object clicked on.
-	int x,y;
-	CELL cell;									// Cell that was selected.
+void MapEditClass::Place_Trigger(void) {
+	ObjectClass *object = NULL; // Generic object clicked on.
+	int x, y;
+	CELL cell; // Cell that was selected.
 
 	/*
 	**	See if an object was clicked on
@@ -1639,8 +1614,8 @@ void MapEditClass::Place_Trigger(void)
 	/*
 	**	Convert x,y to offset from cell upper-left
 	*/
-	x = (x-TacPixelX) % ICON_PIXEL_W;
-	y = (y-TacPixelY) % ICON_PIXEL_H;
+	x = (x - TacPixelX) % ICON_PIXEL_W;
+	y = (y - TacPixelY) % ICON_PIXEL_H;
 
 	/*
 	**	Get object at that x,y
@@ -1653,7 +1628,7 @@ void MapEditClass::Place_Trigger(void)
 	AttachType a1 = CurTrigger->Attaches_To();
 	if (object && (a1 & ATTACH_OBJECT) != 0) {
 		if (CurTrigger) {
-			TriggerClass * tt = Find_Or_Make(CurTrigger);
+			TriggerClass *tt = Find_Or_Make(CurTrigger);
 			if (tt) {
 				object->Trigger = tt;
 			}
@@ -1665,10 +1640,10 @@ void MapEditClass::Place_Trigger(void)
 		*/
 		if ((a1 & ATTACH_CELL) != 0) {
 			if (CurTrigger) {
-				TriggerClass * tt = Find_Or_Make(CurTrigger);
+				TriggerClass *tt = Find_Or_Make(CurTrigger);
 				Map[cell].Trigger = tt;
 			}
-//			CellTriggers[cell] = CurTrigger;
+			//			CellTriggers[cell] = CurTrigger;
 		}
 	}
 
@@ -1678,7 +1653,6 @@ void MapEditClass::Place_Trigger(void)
 	HidPage.Clear();
 	Flag_To_Redraw(true);
 }
-
 
 /***************************************************************************
  * MapEditClass::Start_Base_Building -- starts base-building mode          *
@@ -1695,8 +1669,7 @@ void MapEditClass::Place_Trigger(void)
  * HISTORY:                                                                *
  *   12/01/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Start_Base_Building(void)
-{
+void MapEditClass::Start_Base_Building(void) {
 	/*
 	** Fully build the base so the user can edit it
 	*/
@@ -1715,7 +1688,6 @@ void MapEditClass::Start_Base_Building(void)
 	Flag_To_Redraw(true);
 }
 
-
 /***************************************************************************
  * MapEditClass::Cancel_Base_Building -- stops base-building mode          *
  *                                                                         *
@@ -1731,8 +1703,7 @@ void MapEditClass::Start_Base_Building(void)
  * HISTORY:                                                                *
  *   12/01/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Cancel_Base_Building(void)
-{
+void MapEditClass::Cancel_Base_Building(void) {
 	/*
 	** Build the base to the proper amount
 	*/
@@ -1751,7 +1722,6 @@ void MapEditClass::Cancel_Base_Building(void)
 	Flag_To_Redraw(true);
 }
 
-
 /***************************************************************************
  * MapEditClass::Build_Base_To -- builds the AI base to the given percent  *
  *                                                                         *
@@ -1767,14 +1737,13 @@ void MapEditClass::Cancel_Base_Building(void)
  * HISTORY:                                                                *
  *   12/01/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Build_Base_To(int percent)
-{
+void MapEditClass::Build_Base_To(int percent) {
 	int i;
 	int num_buildings;
-	BuildingTypeClass const * objtype;
-	BuildingClass * obj;
+	BuildingTypeClass const *objtype;
+	BuildingClass *obj;
 
-	//ScenarioInit++;
+	// ScenarioInit++;
 
 	/*
 	** Completely dismantle the base, so we start at a known point
@@ -1814,8 +1783,7 @@ void MapEditClass::Build_Base_To(int percent)
 		ScenarioInit--;
 	}
 
-	//ScenarioInit--;
+	// ScenarioInit--;
 }
-
 
 #endif

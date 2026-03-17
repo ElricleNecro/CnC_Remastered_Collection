@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/CONNECT.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -38,29 +38,22 @@
  *   ConnectionClass::Service -- main polling routine; services packets		*
  *   ConnectionClass::Service_Send_Queue -- services the send queue			*
  *   ConnectionClass::Service_Receive_Queue -- services receive queue		*
- *   ConnectionClass::Time -- gets current time										*
- *   ConnectionClass::Command_Name -- returns name for a packet command		*
+ *   ConnectionClass::Time -- gets current time * ConnectionClass::Command_Name -- returns name for a packet command
+ **
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-
-#include	"function.h"
+#include "function.h"
 #include <stdio.h>
-//#include <mem.h>
-#include <sys\timeb.h>
+// #include <mem.h>
 #include "connect.h"
+#include <sys\timeb.h>
 
-//#include "WolDebug.h"
+// #include "WolDebug.h"
 
 /*
 ********************************* Globals ***********************************
 */
-char *ConnectionClass::Commands[PACKET_COUNT] = {
-	"ADATA",
-	"NDATA",
-	"ACK"
-};
-
+char *ConnectionClass::Commands[PACKET_COUNT] = {"ADATA", "NDATA", "ACK"};
 
 /***************************************************************************
  * ConnectionClass::ConnectionClass -- class constructor                   *
@@ -68,28 +61,29 @@ char *ConnectionClass::Commands[PACKET_COUNT] = {
  * INPUT:                                                                  *
  *		numsend			desired # of entries for the send queue					*
  *		numreceive		desired # of entries for the receive queue				*
- *		maxlen			max length of an application packet							*
- *		magicnum			the packet "magic number" for this connection			*
- *		retry_delta		the time to wait between sends								*
- *		max_retries		the max # of retries allowed for a packet					*
- *							(-1 means retry forever, based on this parameter)		*
- *		timeout			the max amount of time before we give up on a packet	*
- *							(-1 means retry forever, based on this parameter)		*
- *		extralen			max size of app-specific extra bytes (optional)			*
+ *		maxlen			max length of an application packet
+ ** magicnum			the packet "magic number" for this connection			* retry_delta
+ *the time to wait between sends								* max_retries
+ *the max # of retries allowed for a packet					*
+ *							(-1 means retry forever, based on this parameter) * timeout
+ *the max amount of time before we give up on a packet	*
+ *							(-1 means retry forever, based on this parameter) * extralen
+ *max size of app-specific extra bytes (optional)			*
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-ConnectionClass::ConnectionClass (int numsend, int numreceive,
-	int maxlen, unsigned short magicnum, unsigned long retry_delta,
-	unsigned long max_retries, unsigned long timeout, int extralen)
-{
+ConnectionClass::ConnectionClass(int numsend, int numreceive, int maxlen, unsigned short magicnum,
+				 unsigned long retry_delta, unsigned long max_retries, unsigned long timeout,
+				 int extralen) {
 	/*------------------------------------------------------------------------
 	Compute our maximum packet length
 	------------------------------------------------------------------------*/
@@ -119,7 +113,7 @@ ConnectionClass::ConnectionClass (int numsend, int numreceive,
 	/*------------------------------------------------------------------------
 	Allocate the packet staging buffer.  This will be used to
 	------------------------------------------------------------------------*/
-	PacketBuf = new char[ MaxPacketLen ];
+	PacketBuf = new char[MaxPacketLen];
 
 	/*------------------------------------------------------------------------
 	Allocate the packet Queue.  This will store incoming packets (placed there
@@ -128,54 +122,56 @@ ConnectionClass::ConnectionClass (int numsend, int numreceive,
 	packet, but aren't transmitted as part of the packet.  If 'extralen'
 	is 0, the CommBufferClass ignores this parameter.
 	------------------------------------------------------------------------*/
-	Queue = new CommBufferClass (numsend, numreceive, MaxPacketLen, extralen);
+	Queue = new CommBufferClass(numsend, numreceive, MaxPacketLen, extralen);
 
-}	/* end of ConnectionClass */
-
+} /* end of ConnectionClass */
 
 /***************************************************************************
  * ConnectionClass::~ConnectionClass -- class destructor                   *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-ConnectionClass::~ConnectionClass ()
-{
+ConnectionClass::~ConnectionClass() {
 	/*------------------------------------------------------------------------
 	Free memory.
 	------------------------------------------------------------------------*/
-	delete [] PacketBuf;
+	delete[] PacketBuf;
 	delete Queue;
 
-}	/* end of ~ConnectionClass */
-
+} /* end of ~ConnectionClass */
 
 /***************************************************************************
  * ConnectionClass::Init -- Initializes connection queue to empty				*
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-void ConnectionClass::Init (void)
-{
+void ConnectionClass::Init(void) {
 	NumRecNoAck = 0;
 	NumRecAck = 0;
 	NumSendNoAck = 0;
@@ -186,8 +182,7 @@ void ConnectionClass::Init (void)
 
 	Queue->Init();
 
-}	/* end of Init */
-
+} /* end of Init */
 
 /***************************************************************************
  * ConnectionClass::Send_Packet -- adds a packet to the send queue			*
@@ -198,21 +193,22 @@ void ConnectionClass::Init (void)
  * The packet's MagicNumber, Code, and PacketID are set here.					*
  *                                                                         *
  * INPUT:                                                                  *
- *		buf			buffer to send															*
- *		buflen		length of buffer														*
- *		ack_req		1 = ACK is required for this packet; 0 = isn't				*
+ *		buf			buffer to send
+ ** buflen		length of buffer
+ ** ack_req		1 = ACK is required for this packet; 0 = isn't				*
  *                                                                         *
  * OUTPUT:                                                                 *
- *		1 = packet was queue'd OK, 0 = wasn't											*
+ *		1 = packet was queue'd OK, 0 = wasn't
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-int ConnectionClass::Send_Packet (void * buf, int buflen, int ack_req)
-{
+int ConnectionClass::Send_Packet(void *buf, int buflen, int ack_req) {
 	/*------------------------------------------------------------------------
 	Set the magic # for the packet
 	------------------------------------------------------------------------*/
@@ -225,8 +221,7 @@ int ConnectionClass::Send_Packet (void * buf, int buflen, int ack_req)
 	if (ack_req) {
 		((CommHeaderType *)PacketBuf)->Code = PACKET_DATA_ACK;
 		((CommHeaderType *)PacketBuf)->PacketID = NumSendAck;
-	}
-	else {
+	} else {
 		((CommHeaderType *)PacketBuf)->Code = PACKET_DATA_NOACK;
 		((CommHeaderType *)PacketBuf)->PacketID = NumSendNoAck;
 	}
@@ -239,47 +234,46 @@ int ConnectionClass::Send_Packet (void * buf, int buflen, int ack_req)
 	/*------------------------------------------------------------------------
 	Add it to the queue; don't add any extra data with it.
 	------------------------------------------------------------------------*/
-	if (Queue->Queue_Send(PacketBuf,buflen + sizeof(CommHeaderType), NULL, 0)) {
+	if (Queue->Queue_Send(PacketBuf, buflen + sizeof(CommHeaderType), NULL, 0)) {
 		if (ack_req) {
 			NumSendAck++;
-		}
-		else {
+		} else {
 			NumSendNoAck++;
 		}
-		return(1);
-	}
-	else {
-		return(0);
+		return (1);
+	} else {
+		return (0);
 	}
 
-}	/* end of Send_Packet */
-
+} /* end of Send_Packet */
 
 /***************************************************************************
  * ConnectionClass::Receive_Packet -- adds packet to receive queue			*
  *                                                                         *
  * INPUT:                                                                  *
  *		buf		buffer to process (already includes CommHeaderType)			*
- *		buflen	length of buffer to process											*
+ *		buflen	length of buffer to process
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		1 = packet was processed OK, 0 = error											*
+ *		1 = packet was processed OK, 0 = error
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-int ConnectionClass::Receive_Packet (void * buf, int buflen)
-{
-	CommHeaderType *packet;								// ptr to packet header
-	SendQueueType *send_entry;							// ptr to send entry header
-	ReceiveQueueType *rec_entry;						// ptr to recv entry header
-	CommHeaderType *entry_data;						// ptr to queue entry data
-	CommHeaderType ackpacket;							// ACK packet to send
+int ConnectionClass::Receive_Packet(void *buf, int buflen) {
+	CommHeaderType *packet;	     // ptr to packet header
+	SendQueueType *send_entry;   // ptr to send entry header
+	ReceiveQueueType *rec_entry; // ptr to recv entry header
+	CommHeaderType *entry_data;  // ptr to queue entry data
+	CommHeaderType ackpacket;    // ACK packet to send
 	int i;
-	int save_packet = 1;									// 0 = this is a resend
+	int save_packet = 1; // 0 = this is a resend
 	int found;
 
 	/*------------------------------------------------------------------------
@@ -287,7 +281,7 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 	------------------------------------------------------------------------*/
 	packet = (CommHeaderType *)buf;
 	if (packet->MagicNumber != MagicNum) {
-		return(0);
+		return (0);
 	}
 
 	/*------------------------------------------------------------------------
@@ -310,15 +304,14 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 				/*...............................................................
 				If ACK is for this entry, mark it
 				...............................................................*/
-				if (packet->PacketID==entry_data->PacketID &&
-					entry_data->Code == PACKET_DATA_ACK) {
+				if (packet->PacketID == entry_data->PacketID && entry_data->Code == PACKET_DATA_ACK) {
 					send_entry->IsACK = 1;
 					break;
 				}
 			}
 		}
 
-		return(1);
+		return (1);
 	}
 
 	/*------------------------------------------------------------------------
@@ -329,19 +322,19 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 		If there's only one slot left, don't tie up the queue with this packet
 		.....................................................................*/
 		if (Queue->Max_Receive() - Queue->Num_Receive() <= 1) {
-			return(0);
+			return (0);
 		}
 
 		/*.....................................................................
 		Error if we can't queue the packet
 		.....................................................................*/
-		if (!Queue->Queue_Receive (buf, buflen, NULL, 0)) {
-			return(0);
+		if (!Queue->Queue_Receive(buf, buflen, NULL, 0)) {
+			return (0);
 		}
 
 		NumRecNoAck++;
 
-		return(1);
+		return (1);
 	}
 
 	/*------------------------------------------------------------------------
@@ -373,13 +366,13 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 					Packet is found; it's a resend
 					...........................................................*/
 					if (entry_data->Code == PACKET_DATA_ACK &&
-						entry_data->PacketID == packet->PacketID) {
+					    entry_data->PacketID == packet->PacketID) {
 						save_packet = 0;
 						break;
 					}
 				}
 			}
-		}	/* end of scan for resend */
+		} /* end of scan for resend */
 
 		/*.....................................................................
 		Queue the packet & update our LastSeqID value.
@@ -391,16 +384,16 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 			get stuck, forever unable to increment LastSeqID.
 			..................................................................*/
 			if (Queue->Max_Receive() - Queue->Num_Receive() <= 1) {
-				if (packet->PacketID != (LastSeqID + 1) ) {
-					return(0);
+				if (packet->PacketID != (LastSeqID + 1)) {
+					return (0);
 				}
 			}
 
 			/*..................................................................
 			If we can't queue the packet, return; don't send an ACK.
 			..................................................................*/
-			if (!Queue->Queue_Receive (buf, buflen, NULL, 0)) {
-				return(0);
+			if (!Queue->Queue_Receive(buf, buflen, NULL, 0)) {
+				return (0);
 			}
 
 			NumRecAck++;
@@ -430,7 +423,7 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 							Entry is found
 							......................................................*/
 							if (entry_data->Code == PACKET_DATA_ACK &&
-								entry_data->PacketID == (LastSeqID + 1)) {
+							    entry_data->PacketID == (LastSeqID + 1)) {
 
 								LastSeqID = entry_data->PacketID;
 								found = 1;
@@ -440,7 +433,7 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 					}
 				} while (found);
 			}
-		}	/* end of save packet */
+		} /* end of save packet */
 
 		/*.....................................................................
 		Send an ACK, regardless of whether this was a resend or not.
@@ -448,36 +441,36 @@ int ConnectionClass::Receive_Packet (void * buf, int buflen)
 		ackpacket.MagicNumber = Magic_Num();
 		ackpacket.Code = PACKET_ACK;
 		ackpacket.PacketID = packet->PacketID;
-		Send ((char *)&ackpacket, sizeof(CommHeaderType), NULL, 0);
+		Send((char *)&ackpacket, sizeof(CommHeaderType), NULL, 0);
 
-		return(1);
+		return (1);
 	}
 
-	return(0);
+	return (0);
 
-}	/* end of Receive_Packet */
-
+} /* end of Receive_Packet */
 
 /***************************************************************************
  * ConnectionClass::Get_Packet -- gets a packet from receive queue			*
  *                                                                         *
  * INPUT:                                                                  *
- *		buf		location to store buffer												*
- *		buflen	filled in with length of 'buf'										*
+ *		buf		location to store buffer
+ ** buflen	filled in with length of 'buf' *
  *                                                                         *
  * OUTPUT:                                                                 *
- *		1 = packet was read, 0 = wasn't													*
+ *		1 = packet was read, 0 = wasn't
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-int ConnectionClass::Get_Packet (void * buf, int *buflen)
-{
-	ReceiveQueueType *rec_entry;					// ptr to receive entry header
-	int packetlen;										// size of received packet
+int ConnectionClass::Get_Packet(void *buf, int *buflen) {
+	ReceiveQueueType *rec_entry; // ptr to receive entry header
+	int packetlen;		     // size of received packet
 	CommHeaderType *entry_data;
 	int i;
 
@@ -492,7 +485,7 @@ int ConnectionClass::Get_Packet (void * buf, int *buflen)
 		/*.....................................................................
 		Only read this entry if it hasn't been yet
 		.....................................................................*/
-		if (rec_entry && rec_entry->IsRead==0) {
+		if (rec_entry && rec_entry->IsRead == 0) {
 
 			entry_data = (CommHeaderType *)rec_entry->Buffer;
 
@@ -500,19 +493,17 @@ int ConnectionClass::Get_Packet (void * buf, int *buflen)
 			If this is a DATA_ACK packet, its ID must be one greater than
 			the last one we read.
 			..................................................................*/
-			if ( (entry_data->Code == PACKET_DATA_ACK) &&
-				(entry_data->PacketID == (LastReadID + 1))) {
+			if ((entry_data->Code == PACKET_DATA_ACK) && (entry_data->PacketID == (LastReadID + 1))) {
 
 				LastReadID = entry_data->PacketID;
 				rec_entry->IsRead = 1;
 
 				packetlen = rec_entry->BufLen - sizeof(CommHeaderType);
 				if (packetlen > 0) {
-					memcpy(buf, rec_entry->Buffer + sizeof(CommHeaderType),
-						packetlen);
+					memcpy(buf, rec_entry->Buffer + sizeof(CommHeaderType), packetlen);
 				}
 				(*buflen) = packetlen;
-				return(1);
+				return (1);
 			}
 			/*..................................................................
 			If this is a DATA_NOACK packet, who cares what the ID is?
@@ -522,37 +513,37 @@ int ConnectionClass::Get_Packet (void * buf, int *buflen)
 
 				packetlen = rec_entry->BufLen - sizeof(CommHeaderType);
 				if (packetlen > 0) {
-					memcpy(buf, rec_entry->Buffer + sizeof(CommHeaderType),
-						packetlen);
+					memcpy(buf, rec_entry->Buffer + sizeof(CommHeaderType), packetlen);
 				}
 				(*buflen) = packetlen;
-				return(1);
+				return (1);
 			}
 		}
 	}
 
-	return(0);
+	return (0);
 
-}	/* end of Get_Packet */
-
+} /* end of Get_Packet */
 
 /***************************************************************************
  * ConnectionClass::Service -- main polling routine; services packets		*
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		1 = OK, 0 = error (connection is broken!)										*
+ *		1 = OK, 0 = error (connection is broken!)
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-int ConnectionClass::Service (void)
-{
+int ConnectionClass::Service(void) {
 	/*------------------------------------------------------------------------
 	Service the Send Queue:  This [re]sends packets in the Send Queue which
 	haven't been ACK'd yet, and if their retry timeout has expired, and
@@ -563,38 +554,38 @@ int ConnectionClass::Service (void)
 	been ACK'd yet.  Entries that the app has read, and have been ACK'd,
 	should be removed.
 	------------------------------------------------------------------------*/
-	if ( Service_Send_Queue() && Service_Receive_Queue() ) {
-		return(1);
-	}
-	else {
-		return(0);
+	if (Service_Send_Queue() && Service_Receive_Queue()) {
+		return (1);
+	} else {
+		return (0);
 	}
 
-}	/* end of Service */
-
+} /* end of Service */
 
 /***************************************************************************
  * ConnectionClass::Service_Send_Queue -- services the send queue				*
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		1 = OK, 0 = error																		*
+ *		1 = OK, 0 = error
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-int ConnectionClass::Service_Send_Queue (void)
-{
+int ConnectionClass::Service_Send_Queue(void) {
 	int i;
 	int num_entries;
-	SendQueueType *send_entry;						// ptr to send queue entry
-	CommHeaderType *packet_hdr;					// packet header
-	unsigned long curtime;							// current time
+	SendQueueType *send_entry;  // ptr to send queue entry
+	CommHeaderType *packet_hdr; // packet header
+	unsigned long curtime;	    // current time
 	int bad_conn = 0;
 
 	/*------------------------------------------------------------------------
@@ -622,7 +613,7 @@ int ConnectionClass::Service_Send_Queue (void)
 			/*..................................................................
 			Unqueue the packet
 			..................................................................*/
-			Queue->UnQueue_Send(NULL,NULL,i,NULL,NULL);
+			Queue->UnQueue_Send(NULL, NULL, i, NULL, NULL);
 			i--;
 		}
 	}
@@ -651,14 +642,13 @@ int ConnectionClass::Service_Send_Queue (void)
 			/*..................................................................
 			Send the message
 			..................................................................*/
-			Send (send_entry->Buffer, send_entry->BufLen, send_entry->ExtraBuffer,
-				send_entry->ExtraLen);
+			Send(send_entry->Buffer, send_entry->BufLen, send_entry->ExtraBuffer, send_entry->ExtraLen);
 
 			/*..................................................................
 			Fill in Time fields
 			..................................................................*/
 			send_entry->LastTime = curtime;
-			if (send_entry->SendCount==0) {
+			if (send_entry->SendCount == 0) {
 				send_entry->FirstTime = curtime;
 
 				/*...............................................................
@@ -684,8 +674,7 @@ int ConnectionClass::Service_Send_Queue (void)
 				bad_conn = 1;
 			}
 
-			if (Timeout != -1 &&
-				(send_entry->LastTime - send_entry->FirstTime) > Timeout) {
+			if (Timeout != -1 && (send_entry->LastTime - send_entry->FirstTime) > Timeout) {
 				bad_conn = 1;
 			}
 		}
@@ -695,34 +684,34 @@ int ConnectionClass::Service_Send_Queue (void)
 	If the connection is going bad, return an error
 	------------------------------------------------------------------------*/
 	if (bad_conn) {
-		return(0);
-	}
-	else {
-		return(1);
+		return (0);
+	} else {
+		return (1);
 	}
 
-}	/* end of Service_Send_Queue */
-
+} /* end of Service_Send_Queue */
 
 /***************************************************************************
  * ConnectionClass::Service_Receive_Queue -- services receive queue			*
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		1 = OK, 0 = error																		*
+ *		1 = OK, 0 = error
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-int ConnectionClass::Service_Receive_Queue (void)
-{
-	ReceiveQueueType *rec_entry;					// ptr to receive entry header
-	CommHeaderType *packet_hdr;					// packet header
+int ConnectionClass::Service_Receive_Queue(void) {
+	ReceiveQueueType *rec_entry; // ptr to receive entry header
+	CommHeaderType *packet_hdr;  // packet header
 	int i;
 
 	/*------------------------------------------------------------------------
@@ -738,39 +727,38 @@ int ConnectionClass::Service_Receive_Queue (void)
 			packet_hdr = (CommHeaderType *)(rec_entry->Buffer);
 
 			if (packet_hdr->Code == PACKET_DATA_NOACK) {
-				Queue->UnQueue_Receive(NULL,NULL,i,NULL,NULL);
+				Queue->UnQueue_Receive(NULL, NULL, i, NULL, NULL);
 				i--;
 
-			}
-			else if (packet_hdr->PacketID < LastSeqID) {
-				Queue->UnQueue_Receive(NULL,NULL,i,NULL,NULL);
+			} else if (packet_hdr->PacketID < LastSeqID) {
+				Queue->UnQueue_Receive(NULL, NULL, i, NULL, NULL);
 				i--;
 			}
 		}
 	}
 
-	return(1);
+	return (1);
 
-}	/* end of Service_Receive_Queue */
-
+} /* end of Service_Receive_Queue */
 
 /***************************************************************************
- * ConnectionClass::Time -- gets current time										*
+ * ConnectionClass::Time -- gets current time *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   12/20/1994 BR : Created.                                              *
  *=========================================================================*/
-unsigned long ConnectionClass::Time (void)
-{
-	static struct timeb mytime;			// DOS time
+unsigned long ConnectionClass::Time(void) {
+	static struct timeb mytime; // DOS time
 	unsigned long msec;
 
 #ifdef WWLIB32_H
@@ -779,7 +767,7 @@ unsigned long ConnectionClass::Time (void)
 	If the Westwood timer system has been activated, use TickCount's value
 	------------------------------------------------------------------------*/
 	if (TimerSystemOn) {
-		return(TickCount);				// Westwood Library time
+		return (TickCount); // Westwood Library time
 	}
 	/*------------------------------------------------------------------------
 	Otherwise, use the DOS timer
@@ -787,7 +775,7 @@ unsigned long ConnectionClass::Time (void)
 	else {
 		ftime(&mytime);
 		msec = (unsigned long)mytime.time * 1000L + (unsigned long)mytime.millitm;
-		return((msec / 100) * 6);
+		return ((msec / 100) * 6);
 	}
 
 #else
@@ -797,39 +785,36 @@ unsigned long ConnectionClass::Time (void)
 	------------------------------------------------------------------------*/
 	ftime(&mytime);
 	msec = (unsigned long)mytime.time * 1000L + (unsigned long)mytime.millitm;
-	return((msec / 100) * 6);
+	return ((msec / 100) * 6);
 
 #endif
 
-}	/* end of Time */
-
+} /* end of Time */
 
 /***************************************************************************
  * ConnectionClass::Command_Name -- returns name for given packet command  *
  *                                                                         *
  * INPUT:                                                                  *
- *		command		packet Command value to get name for							*
+ *		command		packet Command value to get name for *
  *                                                                         *
  * OUTPUT:                                                                 *
- *		ptr to command name, NULL if invalid											*
+ *		ptr to command name, NULL if invalid
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   05/31/1995 BRR : Created.                                             *
  *=========================================================================*/
-char *ConnectionClass::Command_Name(int command)
-{
+char *ConnectionClass::Command_Name(int command) {
 	if (command >= 0 && command < PACKET_COUNT) {
-		return(Commands[command]);
-	}
-	else {
-		return(NULL);
+		return (Commands[command]);
+	} else {
+		return (NULL);
 	}
 
-}	/* end of Command_Name */
+} /* end of Command_Name */
 
 /************************** end of connect.cpp *****************************/
-
-

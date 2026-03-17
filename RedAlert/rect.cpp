@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/RECT.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -35,9 +35,7 @@
  *   Rect::Intersect -- Find the intersection between two rectangles.                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"rect.h"
-
+#include "rect.h"
 
 /***********************************************************************************************
  * Rect::Rect -- Constructs a rectangle object.                                                *
@@ -55,14 +53,7 @@
  * HISTORY:                                                                                    *
  *   07/22/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Rect::Rect(int x, int y, int w, int h) :
-	X(x),
-	Y(y),
-	Width(w),
-	Height(h)
-{
-}
-
+Rect::Rect(int x, int y, int w, int h) : X(x), Y(y), Width(w), Height(h) {}
 
 /***********************************************************************************************
  * Rect::Is_Valid -- Determines if the rectangle is valid.                                     *
@@ -80,11 +71,7 @@ Rect::Rect(int x, int y, int w, int h) :
  * HISTORY:                                                                                    *
  *   07/22/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool Rect::Is_Valid(void) const
-{
-	return(Width > 0 && Height > 0);
-}
-
+bool Rect::Is_Valid(void) const { return (Width > 0 && Height > 0); }
 
 /***********************************************************************************************
  * Rect::Intersect -- Find the intersection between two rectangles.                            *
@@ -109,16 +96,16 @@ bool Rect::Is_Valid(void) const
  * HISTORY:                                                                                    *
  *   07/22/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Rect const Rect::Intersect(Rect const & rectangle, int * x, int * y) const
-{
-	Rect rect(0, 0, 0, 0);			// Dummy (illegal) rectangle.
-	Rect r = rectangle;				// Working rectangle.
+Rect const Rect::Intersect(Rect const &rectangle, int *x, int *y) const {
+	Rect rect(0, 0, 0, 0); // Dummy (illegal) rectangle.
+	Rect r = rectangle;    // Working rectangle.
 
 	/*
 	**	Both rectangles must be valid or else no intersection can occur. In such
 	**	a case, return an illegal rectangle.
 	*/
-	if (!Is_Valid() || !rectangle.Is_Valid()) return(rect);
+	if (!Is_Valid() || !rectangle.Is_Valid())
+		return (rect);
 
 	/*
 	**	The rectangle spills past the left edge.
@@ -127,7 +114,8 @@ Rect const Rect::Intersect(Rect const & rectangle, int * x, int * y) const
 		r.Width -= X - r.X;
 		r.X = X;
 	}
-	if (r.Width < 1) return(rect);
+	if (r.Width < 1)
+		return (rect);
 
 	/*
 	**	The rectangle spills past top edge.
@@ -136,7 +124,8 @@ Rect const Rect::Intersect(Rect const & rectangle, int * x, int * y) const
 		r.Height -= Y - r.Y;
 		r.Y = Y;
 	}
-	if (r.Height < 1) return(rect);
+	if (r.Height < 1)
+		return (rect);
 
 	/*
 	**	The rectangle spills past the right edge.
@@ -144,7 +133,8 @@ Rect const Rect::Intersect(Rect const & rectangle, int * x, int * y) const
 	if (r.X + r.Width > X + Width) {
 		r.Width -= (r.X + r.Width) - (X + Width);
 	}
-	if (r.Width < 1) return(rect);
+	if (r.Width < 1)
+		return (rect);
 
 	/*
 	**	The rectangle spills past the bottom edge.
@@ -152,46 +142,45 @@ Rect const Rect::Intersect(Rect const & rectangle, int * x, int * y) const
 	if (r.Y + r.Height > Y + Height) {
 		r.Height -= (r.Y + r.Height) - (Y + Height);
 	}
-	if (r.Height < 1) return(rect);
+	if (r.Height < 1)
+		return (rect);
 
 	/*
 	**	Adjust Height relative draw position according to Height new rectangle
 	**	union.
 	*/
 	if (x != NULL) {
-		*x -= (r.X-X);
+		*x -= (r.X - X);
 	}
 	if (y != NULL) {
-		*y -= (r.Y-Y);
+		*y -= (r.Y - Y);
 	}
 
-	return(r);
+	return (r);
 }
 
-
-Rect const Union(Rect const & rect1, Rect const & rect2)
-{
+Rect const Union(Rect const &rect1, Rect const &rect2) {
 	if (rect1.Is_Valid()) {
 		if (rect2.Is_Valid()) {
 			Rect result = rect1;
 
 			if (result.X > rect2.X) {
-				result.Width += result.X-rect2.X;
+				result.Width += result.X - rect2.X;
 				result.X = rect2.X;
 			}
 			if (result.Y > rect2.Y) {
-				result.Height += result.Y-rect2.Y;
+				result.Height += result.Y - rect2.Y;
 				result.Y = rect2.Y;
 			}
-			if (result.X+result.Width < rect2.X+rect2.Width) {
-				result.Width = ((rect2.X+rect2.Width)-result.X)+1;
+			if (result.X + result.Width < rect2.X + rect2.Width) {
+				result.Width = ((rect2.X + rect2.Width) - result.X) + 1;
 			}
-			if (result.Y+result.Height < rect2.Y+rect2.Height) {
-				result.Height = ((rect2.Y+rect2.Height)-result.Y)+1;
+			if (result.Y + result.Height < rect2.Y + rect2.Height) {
+				result.Height = ((rect2.Y + rect2.Height) - result.Y) + 1;
 			}
-			return(result);
+			return (result);
 		}
-		return(rect1);
+		return (rect1);
 	}
-	return(rect2);
+	return (rect2);
 }

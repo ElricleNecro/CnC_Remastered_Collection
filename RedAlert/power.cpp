@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/POWER.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -41,17 +41,15 @@
  *   PowerClass::Flash_Power -- Flag the power bar to flash.                                   *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-
+#include "function.h"
 
 /*
 **	Points to the shape to use for the "desired" power level indicator.
 */
-void const * PowerClass::PowerShape;
-void const * PowerClass::PowerBarShape;
+void const *PowerClass::PowerShape;
+void const *PowerClass::PowerBarShape;
 
 PowerClass::PowerButtonClass PowerClass::PowerButton;
-
 
 /***********************************************************************************************
  * PowerClass::PowerClass -- Default constructor for the power bar class.                      *
@@ -67,23 +65,9 @@ PowerClass::PowerButtonClass PowerClass::PowerButton;
  * HISTORY:                                                                                    *
  *   12/20/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-PowerClass::PowerClass(void) :
-	IsToRedraw(false),
-	IsActive(false),
-	FlashTimer(0),
-	RecordedDrain(-1),
-	RecordedPower(-1),
-	DesiredDrainHeight(0),
-	DesiredPowerHeight(0),
-	DrainHeight(0),
-	PowerHeight(0),
-	DrainBounce(0),
-	PowerBounce(0),
-	PowerDir(0),
-	DrainDir(0)
-{
-}
-
+PowerClass::PowerClass(void)
+    : IsToRedraw(false), IsActive(false), FlashTimer(0), RecordedDrain(-1), RecordedPower(-1), DesiredDrainHeight(0),
+      DesiredPowerHeight(0), DrainHeight(0), PowerHeight(0), DrainBounce(0), PowerBounce(0), PowerDir(0), DrainDir(0) {}
 
 /***********************************************************************************************
  * PowerClass::Init_Clear -- Clears all the power bar variables.                               *
@@ -101,8 +85,7 @@ PowerClass::PowerClass(void) :
  * HISTORY:                                                                                    *
  *   08/07/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PowerClass::Init_Clear(void)
-{
+void PowerClass::Init_Clear(void) {
 	RadarClass::Init_Clear();
 	RecordedDrain = -1;
 	RecordedPower = -1;
@@ -116,7 +99,6 @@ void PowerClass::Init_Clear(void)
 	PowerDir = 0;
 	FlashTimer = 0;
 }
-
 
 /***********************************************************************************************
  * PowerClass::One_Time -- One time processing for the power bar.                              *
@@ -132,17 +114,15 @@ void PowerClass::Init_Clear(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PowerClass::One_Time(void)
-{
+void PowerClass::One_Time(void) {
 	RadarClass::One_Time();
 	PowerButton.X = POWER_X * RESFACTOR;
 	PowerButton.Y = POWER_Y * RESFACTOR;
-	PowerButton.Width = (POWER_WIDTH * RESFACTOR)-1;
+	PowerButton.Width = (POWER_WIDTH * RESFACTOR) - 1;
 	PowerButton.Height = POWER_HEIGHT * RESFACTOR;
 	PowerShape = MFCD::Retrieve("POWER.SHP");
 	PowerBarShape = MFCD::Retrieve("POWERBAR.SHP");
 }
-
 
 /***********************************************************************************************
  * PowerClass::Draw_It -- Renders the power bar graphic.                                       *
@@ -160,11 +140,8 @@ void PowerClass::One_Time(void)
  *   12/20/1994 JLB : Created.                                                                 *
  *   12/27/1994 JLB : Changes power bar color depending on amount of power.                    *
  *=============================================================================================*/
-void PowerClass::Draw_It(bool complete)
-{
-	static int _modtable[]={
-		0, -1, 0, 1, 0, -1, -2, -1, 0, 1, 2, 1 ,0
-	};
+void PowerClass::Draw_It(bool complete) {
+	static int _modtable[] = {0, -1, 0, 1, 0, -1, -2, -1, 0, 1, 2, 1, 0};
 
 	if (complete || IsToRedraw) {
 		BStart(BENCH_POWER);
@@ -173,29 +150,36 @@ void PowerClass::Draw_It(bool complete)
 			if (Map.IsSidebarActive) {
 				IsToRedraw = false;
 				ShapeFlags_Type flags = SHAPE_NORMAL;
-				void const * remap = NULL;
+				void const *remap = NULL;
 
 				if (FlashTimer > 1 && ((FlashTimer % 3) & 0x01) != 0) {
 					flags = flags | SHAPE_FADING;
 					remap = Map.FadingRed;
 				}
 
-//				LogicPage->Fill_Rect(POWER_X, POWER_Y, POWER_X+POWER_WIDTH-1, POWER_Y+POWER_HEIGHT-1, LTGREY);
-				CC_Draw_Shape(PowerBarShape, 0, 240 * RESFACTOR, 88 * RESFACTOR, WINDOW_MAIN, flags | SHAPE_NORMAL | SHAPE_WIN_REL, remap);
+				//				LogicPage->Fill_Rect(POWER_X, POWER_Y,
+				// POWER_X+POWER_WIDTH-1, POWER_Y+POWER_HEIGHT-1, LTGREY);
+				CC_Draw_Shape(PowerBarShape, 0, 240 * RESFACTOR, 88 * RESFACTOR, WINDOW_MAIN,
+					      flags | SHAPE_NORMAL | SHAPE_WIN_REL, remap);
 
 #ifdef WIN32
 				/*
 				** Hires power strip is too big to fit into a shape so it is in two parts
 				*/
-				CC_Draw_Shape(PowerBarShape, 1, 240 * RESFACTOR, (88 * RESFACTOR) + (56*RESFACTOR), WINDOW_MAIN, flags | SHAPE_NORMAL | SHAPE_WIN_REL, remap);
+				CC_Draw_Shape(PowerBarShape, 1, 240 * RESFACTOR, (88 * RESFACTOR) + (56 * RESFACTOR),
+					      WINDOW_MAIN, flags | SHAPE_NORMAL | SHAPE_WIN_REL, remap);
 #endif
 				/*
 				**	Determine how much the power production exceeds or falls short
 				**	of power demands.
 				*/
-				int bottom       = (POWER_Y + POWER_HEIGHT - 1) * RESFACTOR;
-				int power_height  = (PowerHeight == DesiredPowerHeight) ? PowerHeight + (_modtable[PowerBounce] * PowerDir) : PowerHeight;
-				int drain_height  = (DrainHeight == DesiredDrainHeight) ? DrainHeight + (_modtable[DrainBounce] * DrainDir) : DrainHeight;
+				int bottom = (POWER_Y + POWER_HEIGHT - 1) * RESFACTOR;
+				int power_height = (PowerHeight == DesiredPowerHeight)
+						       ? PowerHeight + (_modtable[PowerBounce] * PowerDir)
+						       : PowerHeight;
+				int drain_height = (DrainHeight == DesiredDrainHeight)
+						       ? DrainHeight + (_modtable[DrainBounce] * DrainDir)
+						       : DrainHeight;
 				power_height = Bound(power_height, 0, POWER_HEIGHT - 2);
 				drain_height = Bound(drain_height, 0, POWER_HEIGHT - 2);
 
@@ -223,19 +207,23 @@ void PowerClass::Draw_It(bool complete)
 					** ST - 5/2/96 11:23AM
 					*/
 #ifdef WIN32
-					power_height = (power_height*(76*RESFACTOR+1)) / (53*RESFACTOR+1);
-					drain_height = (drain_height*(76*RESFACTOR+1)) / (53*RESFACTOR+1);
+					power_height = (power_height * (76 * RESFACTOR + 1)) / (53 * RESFACTOR + 1);
+					drain_height = (drain_height * (76 * RESFACTOR + 1)) / (53 * RESFACTOR + 1);
 #endif
-					bottom = (175*RESFACTOR)+1;
+					bottom = (175 * RESFACTOR) + 1;
 
-					LogicPage->Fill_Rect(245*RESFACTOR, bottom-power_height, 245*RESFACTOR+1, bottom, color2);
-					LogicPage->Fill_Rect(246*RESFACTOR, bottom-power_height, 246*RESFACTOR+1, bottom, color1);
+					LogicPage->Fill_Rect(245 * RESFACTOR, bottom - power_height,
+							     245 * RESFACTOR + 1, bottom, color2);
+					LogicPage->Fill_Rect(246 * RESFACTOR, bottom - power_height,
+							     246 * RESFACTOR + 1, bottom, color1);
 				}
 
 				/*
 				**	Draw the power drain threshold marker.
 				*/
-				CC_Draw_Shape(PowerShape, 0, (POWER_X * RESFACTOR)+RESFACTOR, bottom - (drain_height + (2 * RESFACTOR)), WINDOW_MAIN, flags | SHAPE_NORMAL, remap);
+				CC_Draw_Shape(PowerShape, 0, (POWER_X * RESFACTOR) + RESFACTOR,
+					      bottom - (drain_height + (2 * RESFACTOR)), WINDOW_MAIN,
+					      flags | SHAPE_NORMAL, remap);
 			}
 			LogicPage->Unlock();
 		}
@@ -243,7 +231,6 @@ void PowerClass::Draw_It(bool complete)
 	}
 	RadarClass::Draw_It(complete);
 }
-
 
 /***********************************************************************************************
  * PowerClass::AI -- Process the power bar logic.                                              *
@@ -262,12 +249,10 @@ void PowerClass::Draw_It(bool complete)
  *   12/20/1994 JLB : Created.                                                                 *
  *   12/31/1994 JLB : Uses mouse coordinate parameters.                                        *
  *=============================================================================================*/
-void PowerClass::AI(KeyNumType &input, int x, int y)
-{
+void PowerClass::AI(KeyNumType &input, int x, int y) {
 	if (Map.IsSidebarActive /*IsActive*/) {
 		int olddrain = DrainHeight;
-		int oldpower  = PowerHeight;
-
+		int oldpower = PowerHeight;
 
 		/*
 		** If the recorded power value has changed we need to adjust for
@@ -275,8 +260,8 @@ void PowerClass::AI(KeyNumType &input, int x, int y)
 		*/
 		if (PlayerPtr->Power != RecordedPower) {
 			DesiredPowerHeight = Power_Height(PlayerPtr->Power);
-			RecordedPower		 = PlayerPtr->Power;
-			PowerBounce			 = 12;
+			RecordedPower = PlayerPtr->Power;
+			PowerBounce = 12;
 			if (PowerHeight > DesiredPowerHeight) {
 				PowerDir = -1;
 			} else if (PowerHeight < DesiredPowerHeight) {
@@ -292,8 +277,8 @@ void PowerClass::AI(KeyNumType &input, int x, int y)
 		*/
 		if (PlayerPtr->Drain != RecordedDrain) {
 			DesiredDrainHeight = Power_Height(PlayerPtr->Drain);
-			RecordedDrain		 = PlayerPtr->Drain;
-			DrainBounce			 = 12;
+			RecordedDrain = PlayerPtr->Drain;
+			DrainBounce = 12;
 			if (DrainHeight > DesiredDrainHeight) {
 				DrainDir = -1;
 			} else if (DrainHeight < DesiredDrainHeight) {
@@ -337,7 +322,7 @@ void PowerClass::AI(KeyNumType &input, int x, int y)
 		/*
 		**	Flag to redraw if the power bar flash effect has expired.
 		*/
-//		if (FlashTimer == 1) {
+		//		if (FlashTimer == 1) {
 		if (FlashTimer > 0) {
 			IsToRedraw = true;
 			Flag_To_Redraw(false);
@@ -345,7 +330,6 @@ void PowerClass::AI(KeyNumType &input, int x, int y)
 	}
 	RadarClass::AI(input, x, y);
 }
-
 
 /***********************************************************************************************
  * PowerClass::Refresh_Cells -- Intercepts the redraw logic to see if sidebar to redraw too.   *
@@ -366,15 +350,13 @@ void PowerClass::AI(KeyNumType &input, int x, int y)
  * HISTORY:                                                                                    *
  *   06/01/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PowerClass::Refresh_Cells(CELL cell, short const * list)
-{
+void PowerClass::Refresh_Cells(CELL cell, short const *list) {
 	if (*list == REFRESH_SIDEBAR) {
 		IsToRedraw = true;
 		Flag_To_Redraw(false);
 	}
 	RadarClass::Refresh_Cells(cell, list);
 }
-
 
 /***************************************************************************
  * PowerClass::Power_Height -- Given a value figure where it falls on bar  *
@@ -388,18 +370,17 @@ void PowerClass::Refresh_Cells(CELL cell, short const * list)
  * HISTORY:                                                                *
  *   06/14/1995 PWG : Created.                                             *
  *=========================================================================*/
-int PowerClass::Power_Height(int value)
-{
-	int num		= value/ POWER_STEP_LEVEL;		// figure out the initial num of DRAIN_VALUE's
-	int retval	= 0;									// currently there is no power
+int PowerClass::Power_Height(int value) {
+	int num = value / POWER_STEP_LEVEL; // figure out the initial num of DRAIN_VALUE's
+	int retval = 0;			    // currently there is no power
 
 	/*
 	** Loop through the different hundreds figuring out the fractional piece
 	** of each.
 	*/
-	for (int lp = 0; lp < num; lp ++)  {
-		retval  = retval + (((POWER_HEIGHT - 2) - retval) / POWER_STEP_FACTOR);
-		value  -= POWER_STEP_LEVEL;
+	for (int lp = 0; lp < num; lp++) {
+		retval = retval + (((POWER_HEIGHT - 2) - retval) / POWER_STEP_FACTOR);
+		value -= POWER_STEP_LEVEL;
 	}
 
 	/*
@@ -409,10 +390,9 @@ int PowerClass::Power_Height(int value)
 		retval = retval + (((((POWER_HEIGHT - 2) - retval) / POWER_STEP_FACTOR) * value) / POWER_STEP_LEVEL);
 	}
 
-	retval = Bound(retval, 0, POWER_HEIGHT-2);
-	return(retval);
+	retval = Bound(retval, 0, POWER_HEIGHT - 2);
+	return (retval);
 }
-
 
 /***********************************************************************************************
  * PowerClass::PowerButtonClass::Action -- Handles the mouse over the power bar area.          *
@@ -431,10 +411,9 @@ int PowerClass::Power_Height(int value)
  * HISTORY:                                                                                    *
  *   08/07/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PowerClass::PowerButtonClass::Action(unsigned flags, KeyNumType & key)
-{
+int PowerClass::PowerButtonClass::Action(unsigned flags, KeyNumType &key) {
 	if (!Map.IsSidebarActive) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -448,9 +427,8 @@ int PowerClass::PowerButtonClass::Action(unsigned flags, KeyNumType & key)
 		Map.Help_Text(TXT_POWER_OUTPUT, -1, -1, GadgetClass::Get_Color_Scheme()->Color);
 	}
 	GadgetClass::Action(flags, key);
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * PowerClass::Flash_Power -- Flag the power bar to flash.                                     *
@@ -467,8 +445,7 @@ int PowerClass::PowerButtonClass::Action(unsigned flags, KeyNumType & key)
  * HISTORY:                                                                                    *
  *   10/14/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PowerClass::Flash_Power(void)
-{
+void PowerClass::Flash_Power(void) {
 	FlashTimer = TICKS_PER_SECOND;
 	IsToRedraw = true;
 	Flag_To_Redraw(false);

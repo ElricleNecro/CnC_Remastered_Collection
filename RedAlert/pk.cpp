@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/PK.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -40,9 +40,8 @@
  *   PKey::PKey -- Construct a key using encoded strings.                                      *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"pk.h"
-#include	"rndstraw.h"
-
+#include "pk.h"
+#include "rndstraw.h"
 
 /***********************************************************************************************
  * PKey::PKey -- Construct a key using encoded strings.                                        *
@@ -60,13 +59,11 @@
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-PKey::PKey(void const * exponent, void const * modulus)
-{
+PKey::PKey(void const *exponent, void const *modulus) {
 	Modulus.DERDecode((unsigned char *)modulus);
 	Exponent.DERDecode((unsigned char *)exponent);
-	BitPrecision = Modulus.BitCount()-1;
+	BitPrecision = Modulus.BitCount() - 1;
 }
-
 
 /***********************************************************************************************
  * PKey::Encode_Modulus -- Encode the modulus portion of the key.                              *
@@ -84,14 +81,12 @@ PKey::PKey(void const * exponent, void const * modulus)
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PKey::Encode_Modulus(void * buffer) const
-{
+int PKey::Encode_Modulus(void *buffer) const {
 	if (buffer == NULL) {
-		return(0);
+		return (0);
 	}
-	return(Modulus.DEREncode((unsigned char *)buffer));
+	return (Modulus.DEREncode((unsigned char *)buffer));
 }
-
 
 /***********************************************************************************************
  * PKey::Encode_Exponent -- Encode the exponent portion of the key into a buffer.              *
@@ -109,14 +104,12 @@ int PKey::Encode_Modulus(void * buffer) const
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PKey::Encode_Exponent(void * buffer) const
-{
+int PKey::Encode_Exponent(void *buffer) const {
 	if (buffer == NULL) {
-		return(0);
+		return (0);
 	}
-	return(Exponent.DEREncode((unsigned char *)buffer));
+	return (Exponent.DEREncode((unsigned char *)buffer));
 }
-
 
 /***********************************************************************************************
  * PKey::Decode_Modulus -- Decodes the modulus value back into the key.                        *
@@ -133,12 +126,10 @@ int PKey::Encode_Exponent(void * buffer) const
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PKey::Decode_Modulus(void * buffer)
-{
+void PKey::Decode_Modulus(void *buffer) {
 	Modulus.DERDecode((unsigned char *)buffer);
-	BitPrecision = Modulus.BitCount()-1;
+	BitPrecision = Modulus.BitCount() - 1;
 }
-
 
 /***********************************************************************************************
  * PKey::Decode_Exponent -- Decodes the exponent back into the key.                            *
@@ -155,11 +146,7 @@ void PKey::Decode_Modulus(void * buffer)
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PKey::Decode_Exponent(void * buffer)
-{
-	Exponent.DERDecode((unsigned char *)buffer);
-}
-
+void PKey::Decode_Exponent(void *buffer) { Exponent.DERDecode((unsigned char *)buffer); }
 
 /***********************************************************************************************
  * PKey::Generate -- Generate a public and private key.                                        *
@@ -189,9 +176,8 @@ void PKey::Decode_Exponent(void * buffer)
  *   07/05/1996 JLB : Created.                                                                 *
  *   07/10/1996 JLB : Must supply source of random data.                                       *
  *=============================================================================================*/
-void PKey::Generate(Straw & random, int bits, PKey & fastkey, PKey & slowkey)
-{
-	//PG_TO_FIX
+void PKey::Generate(Straw &random, int bits, PKey &fastkey, PKey &slowkey) {
+	// PG_TO_FIX
 	fastkey;
 	slowkey;
 #if (0)
@@ -215,7 +201,7 @@ void PKey::Generate(Straw & random, int bits, PKey & fastkey, PKey & slowkey)
 		*/
 		BigInt e = Fast_Exponent();
 		BigInt n = p * q;
-		BigInt pqmin = (p-(unsigned short)1)*(q-(unsigned short)1);
+		BigInt pqmin = (p - (unsigned short)1) * (q - (unsigned short)1);
 		BigInt d = e.Inverse(pqmin);
 
 		/*
@@ -228,7 +214,7 @@ void PKey::Generate(Straw & random, int bits, PKey & fastkey, PKey & slowkey)
 		*/
 		fastkey.Exponent = e;
 		fastkey.Modulus = n;
-		fastkey.BitPrecision = n.BitCount()-1;
+		fastkey.BitPrecision = n.BitCount() - 1;
 
 		slowkey.Exponent = d;
 		slowkey.Modulus = n;
@@ -251,11 +237,11 @@ void PKey::Generate(Straw & random, int bits, PKey & fastkey, PKey & slowkey)
 		**	Compare the pre and post processing buffer. A match indicates
 		**	a valid key pair.
 		*/
-		if (memcmp(before, after, fastkey.Plain_Block_Size()) == 0) break;
+		if (memcmp(before, after, fastkey.Plain_Block_Size()) == 0)
+			break;
 	}
 #endif
 }
-
 
 /***********************************************************************************************
  * PKey::Encrypt -- Encrypt blocks of plaintext.                                               *
@@ -277,8 +263,7 @@ void PKey::Generate(Straw & random, int bits, PKey & fastkey, PKey & slowkey)
  * HISTORY:                                                                                    *
  *   07/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PKey::Encrypt(void const * source, int slen, void * dest) const
-{
+int PKey::Encrypt(void const *source, int slen, void *dest) const {
 	int total = 0;
 
 	/*
@@ -304,9 +289,8 @@ int PKey::Encrypt(void const * source, int slen, void * dest) const
 		total += Crypt_Block_Size();
 	}
 
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * PKey::Decrypt -- Decrypt supplied cyphertext into its original plaintext.                   *
@@ -329,8 +313,7 @@ int PKey::Encrypt(void const * source, int slen, void * dest) const
  * HISTORY:                                                                                    *
  *   07/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int PKey::Decrypt(void const * source, int slen, void * dest) const
-{
+int PKey::Decrypt(void const *source, int slen, void *dest) const {
 	int total = 0;
 	BigInt temp;
 
@@ -356,5 +339,5 @@ int PKey::Decrypt(void const * source, int slen, void * dest) const
 		total += Plain_Block_Size();
 	}
 
-	return(total);
+	return (total);
 }

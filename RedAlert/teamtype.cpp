@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/TEAMTYPE.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -58,30 +58,14 @@
 
 #include "function.h"
 
-
 TeamMissionClass TeamMissions[TMISSION_COUNT] = {
-	{TMISSION_ATTACK},
-	{TMISSION_ATT_WAYPT},
-	{TMISSION_FORMATION},
-	{TMISSION_MOVE},
-	{TMISSION_MOVECELL},
-	{TMISSION_GUARD},
-	{TMISSION_LOOP},
-	{TMISSION_ATTACKTARCOM},
-	{TMISSION_UNLOAD},
-	{TMISSION_DEPLOY},
-	{TMISSION_HOUND_DOG},
-	{TMISSION_DO},
-	{TMISSION_SET_GLOBAL},
-	{TMISSION_LOAD},
-	{TMISSION_SPY},
-	{TMISSION_PATROL},
+    {TMISSION_ATTACK},	   {TMISSION_ATT_WAYPT}, {TMISSION_FORMATION}, {TMISSION_MOVE},
+    {TMISSION_MOVECELL},   {TMISSION_GUARD},	 {TMISSION_LOOP},      {TMISSION_ATTACKTARCOM},
+    {TMISSION_UNLOAD},	   {TMISSION_DEPLOY},	 {TMISSION_HOUND_DOG}, {TMISSION_DO},
+    {TMISSION_SET_GLOBAL}, {TMISSION_LOAD},	 {TMISSION_SPY},       {TMISSION_PATROL},
 };
 
-
-
-int atoh(char * str);
-
+int atoh(char *str);
 
 #if defined(CHEAT_KEYS) || defined(SCENARIO_EDITOR)
 /***********************************************************************************************
@@ -99,9 +83,8 @@ int atoh(char * str);
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TeamTypeClass::Draw_It(int , int x, int y, int width, int height, bool selected, TextPrintType flags) const
-{
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+void TeamTypeClass::Draw_It(int, int x, int y, int width, int height, bool selected, TextPrintType flags) const {
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 	static int _tabs[] = {35, 60, 80, 100};
 	if ((flags & 0x0F) == TPF_6PT_GRAD || (flags & 0x0F) == TPF_EFNT) {
 
@@ -116,35 +99,33 @@ void TeamTypeClass::Draw_It(int , int x, int y, int width, int height, bool sele
 
 		Conquer_Clip_Text_Print(Description(), x, y, scheme, TBLACK, flags, width, _tabs);
 	} else {
-		Conquer_Clip_Text_Print(Description(), x, y, (selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]), TBLACK, flags, width, _tabs);
+		Conquer_Clip_Text_Print(Description(), x, y,
+					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
+					TBLACK, flags, width, _tabs);
 	}
 }
 #endif
 
-
 /*
 ********************************** Globals **********************************
 */
-char const * TeamTypeClass::TMissions[TMISSION_COUNT] = {
-	"Attack...",
-	"Attack Waypoint...",
-	"Change Formation to...",
-	"Move to waypoint...",
-	"Move to Cell...",
-	"Guard area (1/10th min)...",
-	"Jump to line #...",
-	"Attack Tarcom",
-	"Unload",
-	"Deploy",
-	"Follow friendlies",
-	"Do this...",
-	"Set global...",
-	"Invulnerable",
-	"Load onto Transport",
-	"Spy on bldg @ waypt...",
-	"Patrol to waypoint..."
-};
-
+char const *TeamTypeClass::TMissions[TMISSION_COUNT] = {"Attack...",
+							"Attack Waypoint...",
+							"Change Formation to...",
+							"Move to waypoint...",
+							"Move to Cell...",
+							"Guard area (1/10th min)...",
+							"Jump to line #...",
+							"Attack Tarcom",
+							"Unload",
+							"Deploy",
+							"Follow friendlies",
+							"Do this...",
+							"Set global...",
+							"Invulnerable",
+							"Load onto Transport",
+							"Spy on bldg @ waypt...",
+							"Patrol to waypoint..."};
 
 /***************************************************************************
  * TeamTypeClass::TeamTypeClass -- class constructor                       *
@@ -159,31 +140,15 @@ char const * TeamTypeClass::TMissions[TMISSION_COUNT] = {
  *   12/07/1994 BR : Created.                                              *
  *   11/22/1995 JLB : Uses initializer constructor method.                 *
  *=========================================================================*/
-TeamTypeClass::TeamTypeClass(void) :
-	AbstractTypeClass(RTTI_TEAMTYPE, TeamTypes.ID(this), TXT_NONE, ""),
-	IsRoundAbout(false),
-	IsSuicide(false),
-	IsAutocreate(false),
-	IsPrebuilt(true),
-	IsReinforcable(true),
-	IsTransient(false),
-	RecruitPriority(7),
-	InitNum(0),
-	MaxAllowed(0),
-	Fear(0),
-	House(HOUSE_NONE),
-	Trigger(0),
-	Origin(-1),
-	Number(0),
-	MissionCount(0),
-	ClassCount(0)
-{
+TeamTypeClass::TeamTypeClass(void)
+    : AbstractTypeClass(RTTI_TEAMTYPE, TeamTypes.ID(this), TXT_NONE, ""), IsRoundAbout(false), IsSuicide(false),
+      IsAutocreate(false), IsPrebuilt(true), IsReinforcable(true), IsTransient(false), RecruitPriority(7), InitNum(0),
+      MaxAllowed(0), Fear(0), House(HOUSE_NONE), Trigger(0), Origin(-1), Number(0), MissionCount(0), ClassCount(0) {
 	for (int i = 0; i < MAX_TEAM_CLASSCOUNT; i++) {
 		Members[i].Class = NULL;
 		Members[i].Quantity = 0;
 	}
 }
-
 
 /***************************************************************************
  * TeamTypeClass::Init -- pre-scenario initialization                      *
@@ -197,11 +162,7 @@ TeamTypeClass::TeamTypeClass(void) :
  * HISTORY:                                                                *
  *   12/07/1994 BR : Created.                                              *
  *=========================================================================*/
-void TeamTypeClass::Init(void)
-{
-	TeamTypes.Free_All();
-}
-
+void TeamTypeClass::Init(void) { TeamTypes.Free_All(); }
 
 /***************************************************************************
  * TeamTypeClass::As_Pointer -- gets ptr for team type with given name     *
@@ -218,18 +179,16 @@ void TeamTypeClass::Init(void)
  * HISTORY:                                                                *
  *   12/07/1994 BR : Created.                                              *
  *=========================================================================*/
-TeamTypeClass * TeamTypeClass::As_Pointer(char const * name)
-{
+TeamTypeClass *TeamTypeClass::As_Pointer(char const *name) {
 	if (name) {
 		for (int index = 0; index < TeamTypes.Count(); index++) {
 			if (!stricmp(name, TeamTypes.Ptr(index)->IniName)) {
-				return(TeamTypes.Ptr(index));
+				return (TeamTypes.Ptr(index));
 			}
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***************************************************************************
  * TeamTypeClass::Mission_From_Name -- returns team mission for given name *
@@ -246,19 +205,17 @@ TeamTypeClass * TeamTypeClass::As_Pointer(char const * name)
  * HISTORY:                                                                *
  *   12/13/1994 BR : Created.                                              *
  *=========================================================================*/
-TeamMissionType TeamTypeClass::Mission_From_Name(char const * name)
-{
+TeamMissionType TeamTypeClass::Mission_From_Name(char const *name) {
 	if (name) {
 		for (TeamMissionType order = TMISSION_FIRST; order < TMISSION_COUNT; order++) {
 			if (stricmp(TMissions[order], name) == 0) {
-				return(order);
+				return (order);
 			}
 		}
 	}
 
-	return(TMISSION_NONE);
+	return (TMISSION_NONE);
 }
-
 
 /***************************************************************************
  * TeamTypeClass::Name_From_Mission -- returns name for given mission      *
@@ -275,13 +232,11 @@ TeamMissionType TeamTypeClass::Mission_From_Name(char const * name)
  * HISTORY:                                                                *
  *   12/13/1994 BR : Created.                                              *
  *=========================================================================*/
-char const * TeamTypeClass::Name_From_Mission(TeamMissionType order)
-{
+char const *TeamTypeClass::Name_From_Mission(TeamMissionType order) {
 	assert((unsigned)order < TMISSION_COUNT);
 
-	return(TMissions[order]);
+	return (TMissions[order]);
 }
-
 
 /***************************************************************************
  * TeamTypeClass::operator new -- 'new' operator                           *
@@ -298,15 +253,13 @@ char const * TeamTypeClass::Name_From_Mission(TeamMissionType order)
  * HISTORY:                                                                *
  *   11/28/1994 BR : Created.                                              *
  *=========================================================================*/
-void * TeamTypeClass::operator new(size_t )
-{
-	void * ptr = TeamTypes.Allocate();
+void *TeamTypeClass::operator new(size_t) {
+	void *ptr = TeamTypes.Allocate();
 	if (ptr) {
 		((TeamTypeClass *)ptr)->IsActive = true;
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***************************************************************************
  * TeamTypeClass::operator delete -- 'delete' operator                     *
@@ -323,14 +276,12 @@ void * TeamTypeClass::operator new(size_t )
  * HISTORY:                                                                *
  *   11/28/1994 BR : Created.                                              *
  *=========================================================================*/
-void TeamTypeClass::operator delete(void * ptr)
-{
+void TeamTypeClass::operator delete(void *ptr) {
 	if (ptr) {
 		((TeamTypeClass *)ptr)->IsActive = false;
 	}
 	TeamTypes.Free((TeamTypeClass *)ptr);
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::Create_One_Of -- Creates a team of this type.                                *
@@ -347,15 +298,13 @@ void TeamTypeClass::operator delete(void * ptr)
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-TeamClass * TeamTypeClass::Create_One_Of(void) const
-{
+TeamClass *TeamTypeClass::Create_One_Of(void) const {
 	if (ScenarioInit || Number < MaxAllowed) {
-//	if (ScenarioInit || TeamClass::Number[ID] < MaxAllowed) {
-		return(new TeamClass(this, HouseClass::As_Pointer(House)));
+		//	if (ScenarioInit || TeamClass::Number[ID] < MaxAllowed) {
+		return (new TeamClass(this, HouseClass::As_Pointer(House)));
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::Destroy_All_Of -- Destroy all teams of this type.                            *
@@ -372,10 +321,9 @@ TeamClass * TeamTypeClass::Create_One_Of(void) const
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TeamTypeClass::Destroy_All_Of(void) const
-{
+void TeamTypeClass::Destroy_All_Of(void) const {
 	for (int index = 0; index < Teams.Count(); index++) {
-		TeamClass * team = Teams.Ptr(index);
+		TeamClass *team = Teams.Ptr(index);
 
 		if (team->Class == this) {
 			delete team;
@@ -383,7 +331,6 @@ void TeamTypeClass::Destroy_All_Of(void) const
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::Suggested_New_Team -- Suggests a new team to create.                         *
@@ -413,17 +360,18 @@ void TeamTypeClass::Destroy_All_Of(void) const
  *   07/13/1995 JLB : Created.                                                                 *
  *   07/21/1995 JLB : Will autocreate team even if no members in field.                        *
  *=============================================================================================*/
-TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long , long , long , long , bool alerted)
-//TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long atypes, long utypes, long itypes, long vtypes, bool alerted)
+TeamTypeClass const *TeamTypeClass::Suggested_New_Team(HouseClass *house, long, long, long, long, bool alerted)
+// TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long atypes, long utypes, long itypes,
+// long vtypes, bool alerted)
 {
-//	TeamTypeClass const * best = NULL;
-//	int bestvalue = 0;
+	//	TeamTypeClass const * best = NULL;
+	//	int bestvalue = 0;
 
-	TeamTypeClass const * choices[20];
+	TeamTypeClass const *choices[20];
 	int choicecount = 0;
 
 	for (int index = 0; index < TeamTypes.Count(); index++) {
-		TeamTypeClass const * ttype = TeamTypes.Ptr(index);
+		TeamTypeClass const *ttype = TeamTypes.Ptr(index);
 
 		assert(ttype != NULL);
 
@@ -432,7 +380,8 @@ TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long
 			maxnum = 0;
 		}
 
-		if (choicecount >= ARRAY_SIZE(choices)) break;
+		if (choicecount >= ARRAY_SIZE(choices))
+			break;
 
 		if (ttype != NULL && ttype->House == house->Class->House && ttype->Number < maxnum) {
 
@@ -448,21 +397,21 @@ TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long
 			long aneeded = 0;
 			for (int ctype = 0; ctype < ttype->ClassCount; ctype++) {
 				switch (ttype->Members[ctype].Class->What_Am_I()) {
-					case RTTI_INFANTRYTYPE:
-						ineeded |= (1 << ((InfantryTypeClass *)ttype->Members[ctype].Class)->Type);
-						break;
+				case RTTI_INFANTRYTYPE:
+					ineeded |= (1 << ((InfantryTypeClass *)ttype->Members[ctype].Class)->Type);
+					break;
 
-					case RTTI_UNITTYPE:
-						uneeded |= (1 << ((UnitTypeClass *)ttype->Members[ctype].Class)->Type);
-						break;
+				case RTTI_UNITTYPE:
+					uneeded |= (1 << ((UnitTypeClass *)ttype->Members[ctype].Class)->Type);
+					break;
 
-					case RTTI_VESSELTYPE:
-						vneeded |= (1 << ((VesselTypeClass *)ttype->Members[ctype].Class)->Type);
-						break;
+				case RTTI_VESSELTYPE:
+					vneeded |= (1 << ((VesselTypeClass *)ttype->Members[ctype].Class)->Type);
+					break;
 
-					case RTTI_AIRCRAFTTYPE:
-						aneeded |= (1 << ((AircraftTypeClass *)ttype->Members[ctype].Class)->Type);
-						break;
+				case RTTI_AIRCRAFTTYPE:
+					aneeded |= (1 << ((AircraftTypeClass *)ttype->Members[ctype].Class)->Type);
+					break;
 				}
 			}
 
@@ -471,10 +420,11 @@ TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long
 			**	team type to create.
 			*/
 			int value = 0;
-			if ((aneeded & atypes) != 0 || (ineeded & itypes) != 0 || (uneeded & utypes) != 0 || (vneeded & vtypes) != 0) {
+			if ((aneeded & atypes) != 0 || (ineeded & itypes) != 0 || (uneeded & utypes) != 0 ||
+			    (vneeded & vtypes) != 0) {
 				value = ttype->RecruitPriority;
 			} else {
-				value = ttype->RecruitPriority/2;
+				value = ttype->RecruitPriority / 2;
 			}
 
 			if (best == NULL || bestvalue < value) {
@@ -486,13 +436,12 @@ TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long
 	}
 
 	if (choicecount > 0) {
-		return(choices[Random_Pick(0, choicecount-1)]);
+		return (choices[Random_Pick(0, choicecount - 1)]);
 	}
-	return(NULL);
+	return (NULL);
 
-//	return(best);
+	//	return(best);
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::From_Name -- Converts a name into a team type pointer.                       *
@@ -510,18 +459,16 @@ TeamTypeClass const * TeamTypeClass::Suggested_New_Team(HouseClass * house, long
  * HISTORY:                                                                                    *
  *   01/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-TeamTypeClass * TeamTypeClass::From_Name(char const * name)
-{
+TeamTypeClass *TeamTypeClass::From_Name(char const *name) {
 	if (name) {
 		for (int index = 0; index < TeamTypes.Count(); index++) {
 			if (stricmp(name, TeamTypes.Ptr(index)->IniName) == 0) {
-				return(TeamTypes.Ptr(index));
+				return (TeamTypes.Ptr(index));
 			}
 		}
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * TeamMission_Needs -- Determines what extra data is needed by team mission.                  *
@@ -538,53 +485,51 @@ TeamTypeClass * TeamTypeClass::From_Name(char const * name)
  * HISTORY:                                                                                    *
  *   01/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-NeedType TeamMission_Needs(TeamMissionType tmtype)
-{
+NeedType TeamMission_Needs(TeamMissionType tmtype) {
 	switch (tmtype) {
-		/*
-		**	Requires a formation type.
-		*/
-		case TMISSION_FORMATION:
-			return(NEED_FORMATION);
+	/*
+	**	Requires a formation type.
+	*/
+	case TMISSION_FORMATION:
+		return (NEED_FORMATION);
 
-		/*
-		**	Team mission requires a target quarry value.
-		*/
-		case TMISSION_ATTACK:
-			return(NEED_QUARRY);
+	/*
+	**	Team mission requires a target quarry value.
+	*/
+	case TMISSION_ATTACK:
+		return (NEED_QUARRY);
 
-		/*
-		**	Team mission requires a data value.
-		*/
-		case TMISSION_MOVECELL:
-			return(NEED_HEX_NUMBER);
+	/*
+	**	Team mission requires a data value.
+	*/
+	case TMISSION_MOVECELL:
+		return (NEED_HEX_NUMBER);
 
-		case TMISSION_SET_GLOBAL:
-		case TMISSION_GUARD:
-		case TMISSION_LOOP:
-			return(NEED_NUMBER);
+	case TMISSION_SET_GLOBAL:
+	case TMISSION_GUARD:
+	case TMISSION_LOOP:
+		return (NEED_NUMBER);
 
-		/*
-		**	Team mission requires a waypoint.
-		*/
-		case TMISSION_PATROL:
-		case TMISSION_MOVE:
-		case TMISSION_ATT_WAYPT:
-		case TMISSION_SPY:
-			return(NEED_WAYPOINT);
+	/*
+	**	Team mission requires a waypoint.
+	*/
+	case TMISSION_PATROL:
+	case TMISSION_MOVE:
+	case TMISSION_ATT_WAYPT:
+	case TMISSION_SPY:
+		return (NEED_WAYPOINT);
 
-		/*
-		**	Team mission requires a general mission type.
-		*/
-		case TMISSION_DO:
-			return(NEED_MISSION);
+	/*
+	**	Team mission requires a general mission type.
+	*/
+	case TMISSION_DO:
+		return (NEED_MISSION);
 
-		default:
-			break;
+	default:
+		break;
 	}
-	return(NEED_NONE);
+	return (NEED_NONE);
 }
-
 
 #ifdef SCENARIO_EDITOR
 /***********************************************************************************************
@@ -613,16 +558,14 @@ NeedType TeamMission_Needs(TeamMissionType tmtype)
  * HISTORY:                                                                                    *
  *   01/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TeamMissionClass::Draw_It(int index, int x, int y, int width, int height, bool selected, TextPrintType flags)
-{
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
-	static int _tabs[] = {13,40};
+void TeamMissionClass::Draw_It(int index, int x, int y, int width, int height, bool selected, TextPrintType flags) {
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
+	static int _tabs[] = {13, 40};
 	if ((flags & 0x0F) == TPF_6PT_GRAD || (flags & 0x0F) == TPF_EFNT) {
 
 		if (selected) {
 			flags = flags | TPF_BRIGHT_COLOR;
-			LogicPage->Fill_Rect(x, y, x + width - 1, y + height - 1,
-				scheme->Shadow);
+			LogicPage->Fill_Rect(x, y, x + width - 1, y + height - 1, scheme->Shadow);
 		} else {
 			if (!(flags & TPF_USE_GRAD_PAL)) {
 				flags = flags | TPF_MEDIUM_COLOR;
@@ -632,10 +575,10 @@ void TeamMissionClass::Draw_It(int index, int x, int y, int width, int height, b
 		Conquer_Clip_Text_Print(Description(index), x, y, scheme, TBLACK, flags, width, _tabs);
 	} else {
 		Conquer_Clip_Text_Print(Description(index), x, y,
-			(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]), TBLACK, flags, width, _tabs);
+					(selected ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY]),
+					TBLACK, flags, width, _tabs);
 	}
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::Edit -- Edit the team type.                                                  *
@@ -651,8 +594,7 @@ void TeamMissionClass::Draw_It(int index, int x, int y, int width, int height, b
  * HISTORY:                                                                                    *
  *   01/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool TeamTypeClass::Edit(void)
-{
+bool TeamTypeClass::Edit(void) {
 	/*
 	**	Dialog & button dimensions
 	*/
@@ -662,25 +604,25 @@ bool TeamTypeClass::Edit(void)
 		D_DIALOG_X = 0,
 		D_DIALOG_Y = 0,
 
-		D_NAME_X=D_DIALOG_X+35,
-		D_NAME_Y=D_DIALOG_Y+27,
-		ED_WIDTH=40,
+		D_NAME_X = D_DIALOG_X + 35,
+		D_NAME_Y = D_DIALOG_Y + 27,
+		ED_WIDTH = 40,
 
-		D_CHECK_X=D_DIALOG_X+35,							// Start of check box attribute list.
-		D_CHECK_Y=D_NAME_Y+25,
+		D_CHECK_X = D_DIALOG_X + 35, // Start of check box attribute list.
+		D_CHECK_Y = D_NAME_Y + 25,
 
-		CB_SPACING_Y=9,										// Vertical spacing between check box lines.
-		CB_SPACING_X=8,										// Horizontal spacing for check box description text.
-		D_SPACING_X=9,											// Horizontal spacing between data entry fields.
+		CB_SPACING_Y = 9, // Vertical spacing between check box lines.
+		CB_SPACING_X = 8, // Horizontal spacing for check box description text.
+		D_SPACING_X = 9,  // Horizontal spacing between data entry fields.
 
 		D_CANCEL_W = 50,
 		D_CANCEL_H = 9,
-		D_CANCEL_X = D_DIALOG_X + D_DIALOG_W - (D_CANCEL_W+35),
-		D_CANCEL_Y = D_DIALOG_Y + D_DIALOG_H - (D_CANCEL_H+20),
+		D_CANCEL_X = D_DIALOG_X + D_DIALOG_W - (D_CANCEL_W + 35),
+		D_CANCEL_Y = D_DIALOG_Y + D_DIALOG_H - (D_CANCEL_H + 20),
 
 		D_OK_W = 50,
 		D_OK_H = 9,
-		D_OK_X = D_DIALOG_X + D_DIALOG_W - (D_OK_W+18)*2,
+		D_OK_X = D_DIALOG_X + D_DIALOG_W - (D_OK_W + 18) * 2,
 		D_OK_Y = D_CANCEL_Y
 	};
 
@@ -688,7 +630,7 @@ bool TeamTypeClass::Edit(void)
 	**	Button enumerations:
 	*/
 	enum {
-		BUTTON_NAME=100,
+		BUTTON_NAME = 100,
 		BUTTON_RECRUIT,
 		BUTTON_MAXNUM,
 		BUTTON_INITNUM,
@@ -719,16 +661,15 @@ bool TeamTypeClass::Edit(void)
 	/*
 	**	Dialog variables:
 	*/
-	ControlClass * commands = 0;
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+	ControlClass *commands = 0;
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
 	**	Team name edit field.
 	*/
 	char name_buf[10];
-	EditClass name_edt(BUTTON_NAME, name_buf, sizeof(name_buf),
-		TPF_EFNT | TPF_NOSHADOW,
-		D_NAME_X, D_NAME_Y, ED_WIDTH, 9, EditClass::ALPHANUMERIC);
+	EditClass name_edt(BUTTON_NAME, name_buf, sizeof(name_buf), TPF_EFNT | TPF_NOSHADOW, D_NAME_X, D_NAME_Y,
+			   ED_WIDTH, 9, EditClass::ALPHANUMERIC);
 	strcpy(name_buf, IniName);
 	commands = &name_edt;
 
@@ -736,15 +677,14 @@ bool TeamTypeClass::Edit(void)
 	**	House ownership of this team.
 	*/
 	char housetext[25] = "";
-	DropListClass housebtn(BUTTON_HOUSE, housetext, sizeof(housetext),
-		TPF_EFNT | TPF_NOSHADOW,
-		name_edt.X+name_edt.Width+D_SPACING_X, name_edt.Y, 55, 8*5,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass housebtn(BUTTON_HOUSE, housetext, sizeof(housetext), TPF_EFNT | TPF_NOSHADOW,
+			       name_edt.X + name_edt.Width + D_SPACING_X, name_edt.Y, 55, 8 * 5,
+			       MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
 	for (HousesType house = HOUSE_FIRST; house < HOUSE_COUNT; house++) {
 		housebtn.Add_Item(HouseTypeClass::As_Reference(house).IniName);
 	}
-	if (House == HOUSE_NONE) House = HOUSE_GOOD;
+	if (House == HOUSE_NONE)
+		House = HOUSE_GOOD;
 	housebtn.Set_Selected_Index(House);
 	housebtn.Add(*commands);
 
@@ -752,9 +692,8 @@ bool TeamTypeClass::Edit(void)
 	**	Recruit priority for this team.
 	*/
 	char recr_buf[4];
-	EditClass recr_edt(BUTTON_RECRUIT, recr_buf, sizeof(recr_buf),
-		TPF_EFNT | TPF_NOSHADOW,
-		housebtn.X+housebtn.Width+5+D_SPACING_X, housebtn.Y, ED_WIDTH, 9, EditClass::NUMERIC);
+	EditClass recr_edt(BUTTON_RECRUIT, recr_buf, sizeof(recr_buf), TPF_EFNT | TPF_NOSHADOW,
+			   housebtn.X + housebtn.Width + 5 + D_SPACING_X, housebtn.Y, ED_WIDTH, 9, EditClass::NUMERIC);
 	sprintf(recr_buf, "%d", RecruitPriority);
 	recr_edt.Add(*commands);
 
@@ -762,9 +701,8 @@ bool TeamTypeClass::Edit(void)
 	**	Maximum allowed for this team type.
 	*/
 	char maxnum_buf[4];
-	EditClass maxnum_edt(BUTTON_MAXNUM, maxnum_buf, sizeof(maxnum_buf),
-		TPF_EFNT | TPF_NOSHADOW,
-		recr_edt.X+recr_edt.Width+D_SPACING_X, recr_edt.Y, ED_WIDTH, 9, EditClass::NUMERIC);
+	EditClass maxnum_edt(BUTTON_MAXNUM, maxnum_buf, sizeof(maxnum_buf), TPF_EFNT | TPF_NOSHADOW,
+			     recr_edt.X + recr_edt.Width + D_SPACING_X, recr_edt.Y, ED_WIDTH, 9, EditClass::NUMERIC);
 	sprintf(maxnum_buf, "%d", MaxAllowed);
 	maxnum_edt.Add(*commands);
 
@@ -772,9 +710,9 @@ bool TeamTypeClass::Edit(void)
 	**	Initial number for this team type.
 	*/
 	char initnum_buf[4];
-	EditClass initnum_edt(BUTTON_INITNUM, initnum_buf, sizeof(initnum_buf),
-		TPF_EFNT | TPF_NOSHADOW,
-		maxnum_edt.X+maxnum_edt.Width+D_SPACING_X, maxnum_edt.Y, ED_WIDTH, 9, EditClass::NUMERIC);
+	EditClass initnum_edt(BUTTON_INITNUM, initnum_buf, sizeof(initnum_buf), TPF_EFNT | TPF_NOSHADOW,
+			      maxnum_edt.X + maxnum_edt.Width + D_SPACING_X, maxnum_edt.Y, ED_WIDTH, 9,
+			      EditClass::NUMERIC);
 	sprintf(initnum_buf, "%d", InitNum);
 	initnum_edt.Add(*commands);
 
@@ -782,15 +720,14 @@ bool TeamTypeClass::Edit(void)
 	**	Waypoint preference to create/reinforce this team.
 	*/
 	char origin[4];
-	EditClass originbtn(BUTTON_ORIGIN, origin, sizeof(origin),
-		TPF_EFNT | TPF_NOSHADOW,
-		initnum_edt.X+initnum_edt.Width+D_SPACING_X, initnum_edt.Y, 20, 9, EditClass::ALPHA);
+	EditClass originbtn(BUTTON_ORIGIN, origin, sizeof(origin), TPF_EFNT | TPF_NOSHADOW,
+			    initnum_edt.X + initnum_edt.Width + D_SPACING_X, initnum_edt.Y, 20, 9, EditClass::ALPHA);
 	*originbtn.Get_Text() = '\0';
 	if (Origin != -1) {
 		if (Origin < 26) {
 			sprintf(originbtn.Get_Text(), "%c", Origin + 'A');
 		} else {
-			sprintf(originbtn.Get_Text(), "%c%c", (Origin/26) + 'A'-1, Origin % 26 + 'A');
+			sprintf(originbtn.Get_Text(), "%c%c", (Origin / 26) + 'A' - 1, Origin % 26 + 'A');
 		}
 	}
 	originbtn.Add(*commands);
@@ -798,18 +735,16 @@ bool TeamTypeClass::Edit(void)
 	/*
 	**	Members of this team control button.
 	*/
-	TextButtonClass membersbtn(BUTTON_MEMBERS, "Members", TPF_EBUTTON, name_edt.X, name_edt.Y+12, 50);
+	TextButtonClass membersbtn(BUTTON_MEMBERS, "Members", TPF_EBUTTON, name_edt.X, name_edt.Y + 12, 50);
 	membersbtn.Add(*commands);
 
 	/*
 	**	Trigger to assign to each member of this team (when object joins team).
 	*/
 	char trigtext[25] = "";
-	DropListClass triggerbtn(BUTTON_TRIGGER, trigtext, sizeof(trigtext),
-		TPF_EFNT | TPF_NOSHADOW,
-		D_DIALOG_X+D_DIALOG_W-95, membersbtn.Y, 60, 8*5,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass triggerbtn(BUTTON_TRIGGER, trigtext, sizeof(trigtext), TPF_EFNT | TPF_NOSHADOW,
+				 D_DIALOG_X + D_DIALOG_W - 95, membersbtn.Y, 60, 8 * 5, MFCD::Retrieve("EBTN-UP.SHP"),
+				 MFCD::Retrieve("EBTN-DN.SHP"));
 	triggerbtn.Add_Item("<NONE>");
 	for (int index = 0; index < TriggerTypes.Count(); index++) {
 		triggerbtn.Add_Item(TriggerTypes.Ptr(index)->IniName);
@@ -835,7 +770,7 @@ bool TeamTypeClass::Edit(void)
 	/*
 	**	Suicide travel to target attribute.
 	*/
-	CheckBoxClass suicidebtn(BUTTON_SUICIDE, D_CHECK_X, roundbtn.Y+CB_SPACING_Y);
+	CheckBoxClass suicidebtn(BUTTON_SUICIDE, D_CHECK_X, roundbtn.Y + CB_SPACING_Y);
 	if (IsSuicide) {
 		suicidebtn.Turn_On();
 	} else {
@@ -846,7 +781,7 @@ bool TeamTypeClass::Edit(void)
 	/*
 	**	Autocreate attribute for this team.
 	*/
-	CheckBoxClass autocreatebtn(BUTTON_AUTO, D_CHECK_X, suicidebtn.Y+CB_SPACING_Y);
+	CheckBoxClass autocreatebtn(BUTTON_AUTO, D_CHECK_X, suicidebtn.Y + CB_SPACING_Y);
 	if (IsAutocreate) {
 		autocreatebtn.Turn_On();
 	} else {
@@ -857,7 +792,7 @@ bool TeamTypeClass::Edit(void)
 	/*
 	**	Prebuild team members attribute for this team.
 	*/
-	CheckBoxClass prebuildbtn(BUTTON_PREBUILT, D_CHECK_X, autocreatebtn.Y+CB_SPACING_Y);
+	CheckBoxClass prebuildbtn(BUTTON_PREBUILT, D_CHECK_X, autocreatebtn.Y + CB_SPACING_Y);
 	if (IsPrebuilt) {
 		prebuildbtn.Turn_On();
 	} else {
@@ -868,7 +803,7 @@ bool TeamTypeClass::Edit(void)
 	/*
 	**	Reinforce this team in progress attribute.
 	*/
-	CheckBoxClass reinforcebtn(BUTTON_REINFORCE, D_CHECK_X, prebuildbtn.Y+CB_SPACING_Y);
+	CheckBoxClass reinforcebtn(BUTTON_REINFORCE, D_CHECK_X, prebuildbtn.Y + CB_SPACING_Y);
 	if (IsReinforcable) {
 		reinforcebtn.Turn_On();
 	} else {
@@ -881,11 +816,9 @@ bool TeamTypeClass::Edit(void)
 	**	team mission list.
 	*/
 	char droptext[45];
-	DropListClass missionlist1(BUTTON_MISSION1, droptext, sizeof(droptext),
-		TPF_EFNT | TPF_NOSHADOW,
-		reinforcebtn.X, reinforcebtn.Y+15, 170, 8*8,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass missionlist1(BUTTON_MISSION1, droptext, sizeof(droptext), TPF_EFNT | TPF_NOSHADOW, reinforcebtn.X,
+				   reinforcebtn.Y + 15, 170, 8 * 8, MFCD::Retrieve("EBTN-UP.SHP"),
+				   MFCD::Retrieve("EBTN-DN.SHP"));
 	for (TeamMissionType tm = TMISSION_FIRST; tm < TMISSION_COUNT; tm++) {
 		missionlist1.Add_Item(TeamTypeClass::Name_From_Mission(tm));
 	}
@@ -896,17 +829,14 @@ bool TeamTypeClass::Edit(void)
 	**	Optional mission argument entry field.
 	*/
 	char arg_buf[6] = {0};
-	EditClass arg_edt(BUTTON_ARG, arg_buf, sizeof(arg_buf),
-		TPF_EFNT | TPF_NOSHADOW,
-		missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 60, -1, EditClass::ALPHANUMERIC);
-//	arg_edt.Add(*commands);
+	EditClass arg_edt(BUTTON_ARG, arg_buf, sizeof(arg_buf), TPF_EFNT | TPF_NOSHADOW,
+			  missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 60, -1, EditClass::ALPHANUMERIC);
+	//	arg_edt.Add(*commands);
 
 	char qtext[55];
-	DropListClass qlist(BUTTON_QUARRY, qtext, sizeof(qtext),
-		TPF_EFNT | TPF_NOSHADOW,
-		missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 100, 5*8,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass qlist(BUTTON_QUARRY, qtext, sizeof(qtext), TPF_EFNT | TPF_NOSHADOW,
+			    missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 100, 5 * 8,
+			    MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
 	for (QuarryType q = QUARRY_FIRST; q < QUARRY_COUNT; q++) {
 		qlist.Add_Item(QuarryName[q]);
 	}
@@ -914,11 +844,9 @@ bool TeamTypeClass::Edit(void)
 	qlist.Add_Tail(*commands);
 
 	char ftext[55];
-	DropListClass flist(BUTTON_FORMATION, ftext, sizeof(ftext),
-		TPF_EFNT | TPF_NOSHADOW,
-		missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 100, 5*8,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass flist(BUTTON_FORMATION, ftext, sizeof(ftext), TPF_EFNT | TPF_NOSHADOW,
+			    missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 100, 5 * 8,
+			    MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
 	for (FormationType f = FORMATION_FIRST; f < FORMATION_COUNT; f++) {
 		flist.Add_Item(FormationName[f]);
 	}
@@ -926,47 +854,45 @@ bool TeamTypeClass::Edit(void)
 	flist.Add_Tail(*commands);
 
 	char mtext[55];
-	DropListClass mlist(BUTTON_MISSION, mtext, sizeof(mtext),
-		TPF_EFNT | TPF_NOSHADOW,
-		missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 100, 5*8,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	DropListClass mlist(BUTTON_MISSION, mtext, sizeof(mtext), TPF_EFNT | TPF_NOSHADOW,
+			    missionlist1.X + missionlist1.Width + 15, missionlist1.Y, 100, 5 * 8,
+			    MFCD::Retrieve("EBTN-UP.SHP"), MFCD::Retrieve("EBTN-DN.SHP"));
 	for (MissionType m = MISSION_FIRST; m < MISSION_COUNT; m++) {
 		mlist.Add_Item(MissionClass::Mission_Name(m));
 	}
 	mlist.Set_Selected_Index(0);
 	mlist.Add_Tail(*commands);
 
-	TListClass<TeamMissionClass *> missionlist2(BUTTON_MISSION2, missionlist1.X+60, missionlist1.Y+22, 240, 8*7,
-		TPF_EFNT | TPF_NOSHADOW,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	TListClass<TeamMissionClass *> missionlist2(BUTTON_MISSION2, missionlist1.X + 60, missionlist1.Y + 22, 240,
+						    8 * 7, TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+						    MFCD::Retrieve("EBTN-DN.SHP"));
 	for (index = 0; index < MissionCount; index++) {
 		missionlist2.Add_Item(new TeamMissionClass(MissionList[index]));
-//		missionlist2.Add_Item(&TeamMissions[MissionList[index].Mission]);
+		//		missionlist2.Add_Item(&TeamMissions[MissionList[index].Mission]);
 	}
-	static int tabs[] = {13, 40};		// list box tab stops
+	static int tabs[] = {13, 40}; // list box tab stops
 	missionlist2.Set_Tabs(tabs);
 	missionlist2.Add_Tail(*commands);
 
 	/*
 	**	Mission editing command buttons.
 	*/
-	TextButtonClass addbtn(BUTTON_ADD, "Append", TPF_EBUTTON, D_NAME_X, missionlist1.Y+missionlist1.Height+1, 50);
+	TextButtonClass addbtn(BUTTON_ADD, "Append", TPF_EBUTTON, D_NAME_X, missionlist1.Y + missionlist1.Height + 1,
+			       50);
 	addbtn.Add(*commands);
 
-	TextButtonClass insertbtn(BUTTON_INSERT, "Insert", TPF_EBUTTON, addbtn.X, addbtn.Y+10, 50);
+	TextButtonClass insertbtn(BUTTON_INSERT, "Insert", TPF_EBUTTON, addbtn.X, addbtn.Y + 10, 50);
 	insertbtn.Add(*commands);
 
-	TextButtonClass delbtn(BUTTON_DELETE, "Delete", TPF_EBUTTON, insertbtn.X, insertbtn.Y+10, 50);
+	TextButtonClass delbtn(BUTTON_DELETE, "Delete", TPF_EBUTTON, insertbtn.X, insertbtn.Y + 10, 50);
 	delbtn.Add(*commands);
 
-	TextButtonClass repbtn(BUTTON_REPLACE, "Replace", TPF_EBUTTON, delbtn.X, delbtn.Y+10, 50);
+	TextButtonClass repbtn(BUTTON_REPLACE, "Replace", TPF_EBUTTON, delbtn.X, delbtn.Y + 10, 50);
 	repbtn.Add(*commands);
 
-
 	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
-	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_EBUTTON, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W,
+				  D_CANCEL_H);
 
 	/*
 	**	Initialize
@@ -1008,26 +934,26 @@ bool TeamTypeClass::Edit(void)
 			flist.Remove();
 			mlist.Remove();
 			switch (TeamMission_Needs(TeamMissionType(missionlist1.Current_Index()))) {
-				default:
-					break;
+			default:
+				break;
 
-				case NEED_MISSION:
-					mlist.Add(*commands);
-					break;
+			case NEED_MISSION:
+				mlist.Add(*commands);
+				break;
 
-				case NEED_FORMATION:
-					flist.Add(*commands);
-					break;
+			case NEED_FORMATION:
+				flist.Add(*commands);
+				break;
 
-				case NEED_WAYPOINT:
-				case NEED_NUMBER:
-				case NEED_HEX_NUMBER:
-					arg_edt.Add(*commands);
-					break;
+			case NEED_WAYPOINT:
+			case NEED_NUMBER:
+			case NEED_HEX_NUMBER:
+				arg_edt.Add(*commands);
+				break;
 
-				case NEED_QUARRY:
-					qlist.Add(*commands);
-					break;
+			case NEED_QUARRY:
+				qlist.Add(*commands);
+				break;
 			}
 
 			/*
@@ -1041,22 +967,33 @@ bool TeamTypeClass::Edit(void)
 			/*
 			**	Draw the captions
 			*/
-			Fancy_Text_Print("Name:", name_edt.X, name_edt.Y-7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("House:", housebtn.X, housebtn.Y-7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Pri:", recr_edt.X, recr_edt.Y-7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Max:", maxnum_edt.X, maxnum_edt.Y-7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Num:", initnum_edt.X, initnum_edt.Y-7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Loc:", originbtn.X, originbtn.Y-7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("#  Team Mission", missionlist2.X, missionlist2.Y-7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Trigger:", triggerbtn.X-4, triggerbtn.Y+1, scheme, TBLACK, TPF_RIGHT | TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Name:", name_edt.X, name_edt.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("House:", housebtn.X, housebtn.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Pri:", recr_edt.X, recr_edt.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Max:", maxnum_edt.X, maxnum_edt.Y - 7, scheme, TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Num:", initnum_edt.X, initnum_edt.Y - 7, scheme, TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Loc:", originbtn.X, originbtn.Y - 7, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("#  Team Mission", missionlist2.X, missionlist2.Y - 7, scheme, TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Trigger:", triggerbtn.X - 4, triggerbtn.Y + 1, scheme, TBLACK,
+					 TPF_RIGHT | TPF_EFNT | TPF_NOSHADOW);
 
-			Fancy_Text_Print(Member_Description(), membersbtn.X + membersbtn.Width + 3, membersbtn.Y+1, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print(Member_Description(), membersbtn.X + membersbtn.Width + 3, membersbtn.Y + 1,
+					 scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
 
-			Fancy_Text_Print("Use safest, possibly longer, route to target?", roundbtn.X+CB_SPACING_X, roundbtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Charge toward target ignoring distractions?", suicidebtn.X+CB_SPACING_X, suicidebtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Only 'Autocreate A.I.' uses this team type?", autocreatebtn.X+CB_SPACING_X, autocreatebtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Prebuild team members before team is created?", prebuildbtn.X+CB_SPACING_X, prebuildbtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
-			Fancy_Text_Print("Automatically reinforce team whenever possible?", reinforcebtn.X+CB_SPACING_X, reinforcebtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Use safest, possibly longer, route to target?", roundbtn.X + CB_SPACING_X,
+					 roundbtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Charge toward target ignoring distractions?", suicidebtn.X + CB_SPACING_X,
+					 suicidebtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Only 'Autocreate A.I.' uses this team type?", autocreatebtn.X + CB_SPACING_X,
+					 autocreatebtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Prebuild team members before team is created?", prebuildbtn.X + CB_SPACING_X,
+					 prebuildbtn.Y, scheme, TBLACK, TPF_EFNT | TPF_NOSHADOW);
+			Fancy_Text_Print("Automatically reinforce team whenever possible?",
+					 reinforcebtn.X + CB_SPACING_X, reinforcebtn.Y, scheme, TBLACK,
+					 TPF_EFNT | TPF_NOSHADOW);
 
 			/*
 			**	Redraw the buttons
@@ -1077,303 +1014,310 @@ bool TeamTypeClass::Edit(void)
 		*/
 		switch (input) {
 
-			/*
-			**	Select a Mission on the right-hand mission list; update the Argument
-			**	field to reflect the current value. This only serves as an aide to editing
-			**	the team mission list.
-			*/
-			case BUTTON_MISSION2 | KN_BUTTON:
-				if (missionlist2.Count() && lastcount == missionlist2.Count() && lastbutton == BUTTON_MISSION2 && lastindex == missionlist2.Current_Index()) {
-					missionlist1.Set_Selected_Index(missionlist2.Current_Item()->Mission);
+		/*
+		**	Select a Mission on the right-hand mission list; update the Argument
+		**	field to reflect the current value. This only serves as an aide to editing
+		**	the team mission list.
+		*/
+		case BUTTON_MISSION2 | KN_BUTTON:
+			if (missionlist2.Count() && lastcount == missionlist2.Count() &&
+			    lastbutton == BUTTON_MISSION2 && lastindex == missionlist2.Current_Index()) {
+				missionlist1.Set_Selected_Index(missionlist2.Current_Item()->Mission);
 
-					switch (TeamMission_Needs(missionlist2.Current_Item()->Mission)) {
-						case NEED_MISSION:
-							mlist.Set_Selected_Index(missionlist2.Current_Item()->Data.Mission);
-							break;
+				switch (TeamMission_Needs(missionlist2.Current_Item()->Mission)) {
+				case NEED_MISSION:
+					mlist.Set_Selected_Index(missionlist2.Current_Item()->Data.Mission);
+					break;
 
-						case NEED_FORMATION:
-							flist.Set_Selected_Index(missionlist2.Current_Item()->Data.Formation);
-							break;
+				case NEED_FORMATION:
+					flist.Set_Selected_Index(missionlist2.Current_Item()->Data.Formation);
+					break;
 
-						case NEED_NUMBER:
-							sprintf(arg_edt.Get_Text(), "%d", missionlist2.Current_Item()->Data.Value);
-							break;
+				case NEED_NUMBER:
+					sprintf(arg_edt.Get_Text(), "%d", missionlist2.Current_Item()->Data.Value);
+					break;
 
-						case NEED_HEX_NUMBER:
-							sprintf(arg_edt.Get_Text(), "%x", missionlist2.Current_Item()->Data.Value);
-							break;
+				case NEED_HEX_NUMBER:
+					sprintf(arg_edt.Get_Text(), "%x", missionlist2.Current_Item()->Data.Value);
+					break;
 
-						case NEED_QUARRY:
-							strcpy(qlist.Get_Text(), QuarryName[missionlist2.Current_Item()->Data.Quarry]);
-							break;
+				case NEED_QUARRY:
+					strcpy(qlist.Get_Text(), QuarryName[missionlist2.Current_Item()->Data.Quarry]);
+					break;
 
-						case NEED_WAYPOINT:
-							if (missionlist2.Current_Item()->Data.Value < 26) {
-								sprintf(arg_edt.Get_Text(), "%c", missionlist2.Current_Item()->Data.Value + 'A');
-							} else {
-								sprintf(arg_edt.Get_Text(), "%c%c", (missionlist2.Current_Item()->Data.Value)/26 + 'A'-1, (missionlist2.Current_Item()->Data.Value % 26) + 'A');
-							}
-							break;
+				case NEED_WAYPOINT:
+					if (missionlist2.Current_Item()->Data.Value < 26) {
+						sprintf(arg_edt.Get_Text(), "%c",
+							missionlist2.Current_Item()->Data.Value + 'A');
+					} else {
+						sprintf(arg_edt.Get_Text(), "%c%c",
+							(missionlist2.Current_Item()->Data.Value) / 26 + 'A' - 1,
+							(missionlist2.Current_Item()->Data.Value % 26) + 'A');
 					}
+					break;
 				}
-				lastindex = missionlist2.Current_Index();
-				lastcount = missionlist2.Count();
-				display = true;
-				break;
+			}
+			lastindex = missionlist2.Current_Index();
+			lastcount = missionlist2.Count();
+			display = true;
+			break;
 
-			/*
-			**	Add current mission data to current position of team mission list. Any
-			**	subsequent missions get moved downward.
-			*/
-			case BUTTON_INSERT | KN_BUTTON:
-				if (missionlist2.Count() < MAX_TEAM_MISSIONS) {
-					TeamMissionClass * tm = new TeamMissionClass;
-					tm->Mission = TeamMissionType(missionlist1.Current_Index());
+		/*
+		**	Add current mission data to current position of team mission list. Any
+		**	subsequent missions get moved downward.
+		*/
+		case BUTTON_INSERT | KN_BUTTON:
+			if (missionlist2.Count() < MAX_TEAM_MISSIONS) {
+				TeamMissionClass *tm = new TeamMissionClass;
+				tm->Mission = TeamMissionType(missionlist1.Current_Index());
+				tm->Data.Value = 0;
+				switch (TeamMission_Needs(tm->Mission)) {
+				case NEED_MISSION:
+					tm->Data.Mission = MissionType(mlist.Current_Index());
+					break;
+
+				case NEED_FORMATION:
+					tm->Data.Formation = FormationType(flist.Current_Index());
+					break;
+
+				case NEED_QUARRY:
+					tm->Data.Quarry = QuarryType(qlist.Current_Index());
+					break;
+
+				case NEED_NUMBER:
+					tm->Data.Value = atoi(arg_edt.Get_Text());
+					break;
+
+				case NEED_HEX_NUMBER:
+					tm->Data.Value = atoh(arg_edt.Get_Text());
+					break;
+
+				case NEED_WAYPOINT:
+					tm->Data.Value = toupper(*arg_edt.Get_Text()) - 'A';
+					if (*((arg_edt.Get_Text()) + 1)) {
+						tm->Data.Value = (tm->Data.Value + 1) * 26;
+						tm->Data.Value += toupper(*((arg_edt.Get_Text()) + 1)) - 'A';
+						;
+					}
+					if ((unsigned)tm->Data.Value >= WAYPT_HOME) {
+						tm->Data.Value = 0;
+					}
+					break;
+
+				default:
 					tm->Data.Value = 0;
-					switch (TeamMission_Needs(tm->Mission)) {
-						case NEED_MISSION:
-							tm->Data.Mission = MissionType(mlist.Current_Index());
-							break;
-
-						case NEED_FORMATION:
-							tm->Data.Formation = FormationType(flist.Current_Index());
-							break;
-
-						case NEED_QUARRY:
-							tm->Data.Quarry = QuarryType(qlist.Current_Index());
-							break;
-
-						case NEED_NUMBER:
-							tm->Data.Value = atoi(arg_edt.Get_Text());
-							break;
-
-						case NEED_HEX_NUMBER:
-							tm->Data.Value = atoh(arg_edt.Get_Text());
-							break;
-
-						case NEED_WAYPOINT:
-							tm->Data.Value = toupper(*arg_edt.Get_Text()) - 'A';
-							if ( *((arg_edt.Get_Text())+1)) {
-								tm->Data.Value = (tm->Data.Value+1)*26;
-								tm->Data.Value += toupper(*((arg_edt.Get_Text())+1)) - 'A';;
-							}
-							if ((unsigned)tm->Data.Value >= WAYPT_HOME) {
-								tm->Data.Value = 0;
-							}
-							break;
-
-						default:
-							tm->Data.Value = 0;
-							break;
-					}
-					missionlist2.Insert_Item(tm);
+					break;
 				}
-				display = true;
-				break;
+				missionlist2.Insert_Item(tm);
+			}
+			display = true;
+			break;
 
-			/*
-			**	Add mission data to the end of the mission list.
-			*/
-			case BUTTON_ADD | KN_BUTTON:
-				if (missionlist2.Count() < MAX_TEAM_MISSIONS) {
-					TeamMissionClass * tm = new TeamMissionClass;
-					tm->Mission = TeamMissionType(missionlist1.Current_Index());
+		/*
+		**	Add mission data to the end of the mission list.
+		*/
+		case BUTTON_ADD | KN_BUTTON:
+			if (missionlist2.Count() < MAX_TEAM_MISSIONS) {
+				TeamMissionClass *tm = new TeamMissionClass;
+				tm->Mission = TeamMissionType(missionlist1.Current_Index());
+				tm->Data.Value = 0;
+				switch (TeamMission_Needs(tm->Mission)) {
+				case NEED_MISSION:
+					tm->Data.Mission = MissionType(mlist.Current_Index());
+					break;
+
+				case NEED_FORMATION:
+					tm->Data.Formation = FormationType(flist.Current_Index());
+					break;
+
+				case NEED_QUARRY:
+					tm->Data.Quarry = QuarryType(qlist.Current_Index());
+					break;
+
+				case NEED_NUMBER:
+					tm->Data.Value = atoi(arg_edt.Get_Text());
+					break;
+
+				case NEED_HEX_NUMBER:
+					tm->Data.Value = atoh(arg_edt.Get_Text());
+					break;
+
+				case NEED_WAYPOINT:
+					tm->Data.Value = toupper(*arg_edt.Get_Text()) - 'A';
+					;
+					if (*((arg_edt.Get_Text()) + 1)) {
+						tm->Data.Value = (tm->Data.Value + 1) * 26;
+						tm->Data.Value += toupper(*((arg_edt.Get_Text()) + 1)) - 'A';
+						;
+					}
+					if ((unsigned)tm->Data.Value >= WAYPT_HOME) {
+						tm->Data.Value = 0;
+					}
+					break;
+
+				default:
 					tm->Data.Value = 0;
-					switch (TeamMission_Needs(tm->Mission)) {
-						case NEED_MISSION:
-							tm->Data.Mission = MissionType(mlist.Current_Index());
-							break;
-
-						case NEED_FORMATION:
-							tm->Data.Formation = FormationType(flist.Current_Index());
-							break;
-
-						case NEED_QUARRY:
-							tm->Data.Quarry = QuarryType(qlist.Current_Index());
-							break;
-
-						case NEED_NUMBER:
-							tm->Data.Value = atoi(arg_edt.Get_Text());
-							break;
-
-						case NEED_HEX_NUMBER:
-							tm->Data.Value = atoh(arg_edt.Get_Text());
-							break;
-
-						case NEED_WAYPOINT:
-							tm->Data.Value = toupper(*arg_edt.Get_Text()) - 'A';;
-							if ( *((arg_edt.Get_Text())+1)) {
-								tm->Data.Value = (tm->Data.Value+1)*26;
-								tm->Data.Value += toupper(*((arg_edt.Get_Text())+1)) - 'A';;
-							}
-							if ((unsigned)tm->Data.Value >= WAYPT_HOME) {
-								tm->Data.Value = 0;
-							}
-							break;
-
-						default:
-							tm->Data.Value = 0;
-							break;
-					}
-					missionlist2.Add_Item(tm);
-					display = true;
+					break;
 				}
-				break;
+				missionlist2.Add_Item(tm);
+				display = true;
+			}
+			break;
 
-			/*
-			**	Replace the currently selected mission with the work mission data.
-			*/
-			case BUTTON_REPLACE | KN_BUTTON:
-				if (missionlist2.Count()) {
-					TeamMissionClass * tm = missionlist2.Current_Item();
-					tm->Mission = TeamMissionType(missionlist1.Current_Index());
+		/*
+		**	Replace the currently selected mission with the work mission data.
+		*/
+		case BUTTON_REPLACE | KN_BUTTON:
+			if (missionlist2.Count()) {
+				TeamMissionClass *tm = missionlist2.Current_Item();
+				tm->Mission = TeamMissionType(missionlist1.Current_Index());
+				tm->Data.Value = 0;
+				switch (TeamMission_Needs(tm->Mission)) {
+				case NEED_MISSION:
+					tm->Data.Mission = MissionType(mlist.Current_Index());
+					break;
+
+				case NEED_FORMATION:
+					tm->Data.Formation = FormationType(flist.Current_Index());
+					break;
+
+				case NEED_QUARRY:
+					tm->Data.Quarry = QuarryType(qlist.Current_Index());
+					break;
+
+				case NEED_NUMBER:
+					tm->Data.Value = atoi(arg_edt.Get_Text());
+					break;
+
+				case NEED_HEX_NUMBER:
+					tm->Data.Value = atoh(arg_edt.Get_Text());
+					break;
+
+				case NEED_WAYPOINT:
+					tm->Data.Value = toupper(*arg_edt.Get_Text()) - 'A';
+					if (*((arg_edt.Get_Text()) + 1)) {
+						tm->Data.Value = (tm->Data.Value + 1) * 26;
+						tm->Data.Value += toupper(*((arg_edt.Get_Text()) + 1)) - 'A';
+					}
+					if ((unsigned)tm->Data.Value >= WAYPT_HOME) {
+						tm->Data.Value = 0;
+					}
+					break;
+
+				default:
 					tm->Data.Value = 0;
-					switch (TeamMission_Needs(tm->Mission)) {
-						case NEED_MISSION:
-							tm->Data.Mission = MissionType(mlist.Current_Index());
-							break;
-
-						case NEED_FORMATION:
-							tm->Data.Formation = FormationType(flist.Current_Index());
-							break;
-
-						case NEED_QUARRY:
-							tm->Data.Quarry = QuarryType(qlist.Current_Index());
-							break;
-
-						case NEED_NUMBER:
-							tm->Data.Value = atoi(arg_edt.Get_Text());
-							break;
-
-						case NEED_HEX_NUMBER:
-							tm->Data.Value = atoh(arg_edt.Get_Text());
-							break;
-
-						case NEED_WAYPOINT:
-							tm->Data.Value = toupper(*arg_edt.Get_Text()) - 'A';
-							if ( *((arg_edt.Get_Text())+1)) {
-								tm->Data.Value = (tm->Data.Value+1)*26;
-								tm->Data.Value += toupper(*((arg_edt.Get_Text())+1)) - 'A';
-							}
-							if ((unsigned)tm->Data.Value >= WAYPT_HOME) {
-								tm->Data.Value = 0;
-							}
-							break;
-
-						default:
-							tm->Data.Value = 0;
-							break;
-					}
-					missionlist2[missionlist2.Current_Index()] = tm;
+					break;
 				}
-				display = true;
-				break;
+				missionlist2[missionlist2.Current_Index()] = tm;
+			}
+			display = true;
+			break;
+
+		/*
+		**	Delete the currently selected mission.
+		*/
+		case BUTTON_DELETE | KN_BUTTON:
+			if (missionlist2.Count()) {
+				TeamMissionClass *tm = missionlist2.Current_Item();
+				missionlist2.Remove_Index(missionlist2.Current_Index());
+				delete tm;
+			}
+			display = true;
+			break;
+
+		/*
+		**	Invoke the members dialog
+		*/
+		case BUTTON_MEMBERS | KN_BUTTON:
 
 			/*
-			**	Delete the currently selected mission.
+			**	Take editor focus away
 			*/
-			case BUTTON_DELETE | KN_BUTTON:
-				if (missionlist2.Count()) {
-					TeamMissionClass * tm = missionlist2.Current_Item();
-					missionlist2.Remove_Index(missionlist2.Current_Index());
-					delete tm;
-				}
-				display = true;
-				break;
+			membersbtn.Turn_Off();
 
 			/*
-			**	Invoke the members dialog
+			**	Invoke the dialog
 			*/
-			case BUTTON_MEMBERS | KN_BUTTON:
-
-				/*
-				**	Take editor focus away
-				*/
-				membersbtn.Turn_Off();
-
-				/*
-				**	Invoke the dialog
-				*/
-				Map.Team_Members(HousesType(housebtn.Current_Index()));
-
-				/*
-				**	Redraw
-				*/
-				display = true;
-				break;
+			Map.Team_Members(HousesType(housebtn.Current_Index()));
 
 			/*
-			**	When the OK button is selected, lift the values from the dialog box
-			**	and place them into the team type object.
+			**	Redraw
 			*/
-			case BUTTON_OK | KN_BUTTON:
-				strtrim(name_edt.Get_Text());
-				if (strlen(name_edt.Get_Text()) != 0) {
-					strcpy(IniName, name_edt.Get_Text());
-				} else {
-					strcpy(IniName, "----");
-				}
+			display = true;
+			break;
 
-				IsRoundAbout = roundbtn.IsOn;
-				IsSuicide = suicidebtn.IsOn;
-				IsAutocreate = autocreatebtn.IsOn;
-				IsPrebuilt = prebuildbtn.IsOn;
-				IsReinforcable = reinforcebtn.IsOn;
+		/*
+		**	When the OK button is selected, lift the values from the dialog box
+		**	and place them into the team type object.
+		*/
+		case BUTTON_OK | KN_BUTTON:
+			strtrim(name_edt.Get_Text());
+			if (strlen(name_edt.Get_Text()) != 0) {
+				strcpy(IniName, name_edt.Get_Text());
+			} else {
+				strcpy(IniName, "----");
+			}
 
-				RecruitPriority = atoi(recr_edt.Get_Text());
-				InitNum = atoi(initnum_edt.Get_Text());
-				MaxAllowed = atoi(maxnum_edt.Get_Text());
-				House = HousesType(housebtn.Current_Index());
-				Trigger = NULL;
-				if (triggerbtn.Current_Index() > 0) {
-					Trigger = TriggerTypes.Ptr(triggerbtn.Current_Index()-1);
-				}
+			IsRoundAbout = roundbtn.IsOn;
+			IsSuicide = suicidebtn.IsOn;
+			IsAutocreate = autocreatebtn.IsOn;
+			IsPrebuilt = prebuildbtn.IsOn;
+			IsReinforcable = reinforcebtn.IsOn;
 
-				MissionCount = missionlist2.Count();
-				for (index = 0; index < MissionCount; index++) {
-					MissionList[index].Data.Value = 0;				// Clears extra bits.
-					MissionList[index] = *missionlist2[index];
-				}
+			RecruitPriority = atoi(recr_edt.Get_Text());
+			InitNum = atoi(initnum_edt.Get_Text());
+			MaxAllowed = atoi(maxnum_edt.Get_Text());
+			House = HousesType(housebtn.Current_Index());
+			Trigger = NULL;
+			if (triggerbtn.Current_Index() > 0) {
+				Trigger = TriggerTypes.Ptr(triggerbtn.Current_Index() - 1);
+			}
+
+			MissionCount = missionlist2.Count();
+			for (index = 0; index < MissionCount; index++) {
+				MissionList[index].Data.Value = 0; // Clears extra bits.
+				MissionList[index] = *missionlist2[index];
+			}
 
 #ifdef TOFIX
 // the mission class objects pointed to in the list should be deleted?
 #endif
 
-				if (strlen(originbtn.Get_Text())) {
-					if (strlen(originbtn.Get_Text()) == 1) {
-						Origin = toupper(*originbtn.Get_Text()) - 'A';
-					} else {
-						Origin = (toupper(*originbtn.Get_Text())+1 - 'A' ) * 26;
-						Origin += toupper(*(originbtn.Get_Text()+1)) - 'A';
-					}
+			if (strlen(originbtn.Get_Text())) {
+				if (strlen(originbtn.Get_Text()) == 1) {
+					Origin = toupper(*originbtn.Get_Text()) - 'A';
 				} else {
-					Origin = -1;
+					Origin = (toupper(*originbtn.Get_Text()) + 1 - 'A') * 26;
+					Origin += toupper(*(originbtn.Get_Text() + 1)) - 'A';
 				}
-				cancel = false;
-				process = false;
-				break;
+			} else {
+				Origin = -1;
+			}
+			cancel = false;
+			process = false;
+			break;
 
-			/*
-			**	Cancel: return
-			*/
-			case BUTTON_CANCEL | KN_BUTTON:
-				cancel = true;
-				process = false;
-				break;
+		/*
+		**	Cancel: return
+		*/
+		case BUTTON_CANCEL | KN_BUTTON:
+			cancel = true;
+			process = false;
+			break;
 
-			/*
-			**	Unrecognized events are ignored. If any button related event is
-			**	detected, then collapse any drop down list boxes. This keeps the
-			**	dialog box clean.
-			*/
-			default:
-				if (input & KN_BUTTON) {
-					housebtn.Collapse();
-					missionlist1.Collapse();
-					triggerbtn.Collapse();
-					display = true;
-				}
-				break;
+		/*
+		**	Unrecognized events are ignored. If any button related event is
+		**	detected, then collapse any drop down list boxes. This keeps the
+		**	dialog box clean.
+		*/
+		default:
+			if (input & KN_BUTTON) {
+				housebtn.Collapse();
+				missionlist1.Collapse();
+				triggerbtn.Collapse();
+				display = true;
+			}
+			break;
 		}
 
 		/*
@@ -1385,17 +1329,15 @@ bool TeamTypeClass::Edit(void)
 		}
 	}
 
-	return(!cancel);
+	return (!cancel);
 }
 
-
-int atoh(char * str)
-{
+int atoh(char *str) {
 	int retval = 0;
 	while (*str) {
 		retval *= 16;
 		if (*str >= '0' && *str <= '9') {
-			retval += *str-'0';
+			retval += *str - '0';
 		} else {
 			if (*str >= 'a' && *str <= 'f') {
 				retval += 10 + (*str - 'a');
@@ -1407,11 +1349,10 @@ int atoh(char * str)
 		}
 		str++;
 	}
-	return(retval);
+	return (retval);
 }
 
 #endif
-
 
 #if defined(CHEAT_KEYS) || defined(SCENARIO_EDITOR)
 /***********************************************************************************************
@@ -1432,8 +1373,7 @@ int atoh(char * str)
  * HISTORY:                                                                                    *
  *   01/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-char const * TeamTypeClass::Member_Description(void) const
-{
+char const *TeamTypeClass::Member_Description(void) const {
 	static char buffer[128];
 
 	buffer[0] = '\0';
@@ -1450,18 +1390,17 @@ char const * TeamTypeClass::Member_Description(void) const
 		sprintf(txt, "%d", Members[index].Quantity);
 		strcat(buffer, txt);
 
-		if (index < ClassCount-1) {
+		if (index < ClassCount - 1) {
 			strcat(buffer, ",");
 		}
 	}
 
 	if (strlen(buffer) > 25) {
-		strcpy(&buffer[25-3], "...");
+		strcpy(&buffer[25 - 3], "...");
 	}
 
-	return(buffer);
+	return (buffer);
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::Description -- Builds a description of the team.                             *
@@ -1478,28 +1417,28 @@ char const * TeamTypeClass::Member_Description(void) const
  * HISTORY:                                                                                    *
  *   01/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-char const * TeamTypeClass::Description(void) const
-{
+char const *TeamTypeClass::Description(void) const {
 	static char _buffer[128];
 	char extra = ' ';
 	char loc[3];
 
 	loc[0] = loc[1] = loc[2] = 0;
-	if (IsAutocreate) extra = '*';
+	if (IsAutocreate)
+		extra = '*';
 	if (Origin > -1) {
-//	if (Origin != -1) {
+		//	if (Origin != -1) {
 		if (Origin < 26) {
 			loc[0] = 'A' + Origin;
 		} else {
-			loc[0] = Origin / 26 + 'A'-1;
+			loc[0] = Origin / 26 + 'A' - 1;
 			loc[1] = Origin % 26 + 'A';
 		}
 	}
 
-	sprintf(_buffer, "%s\t%s\t%c%s\t%d\t%s", IniName, HouseTypeClass::As_Reference(House).Suffix, extra, loc, MissionCount, Member_Description());
-	return(_buffer);
+	sprintf(_buffer, "%s\t%s\t%c%s\t%d\t%s", IniName, HouseTypeClass::As_Reference(House).Suffix, extra, loc,
+		MissionCount, Member_Description());
+	return (_buffer);
 }
-
 
 /***********************************************************************************************
  * TeamMissionClass::Description -- Compose a text description of team mission.                *
@@ -1517,47 +1456,44 @@ char const * TeamTypeClass::Description(void) const
  * HISTORY:                                                                                    *
  *   01/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-char const * TeamMissionClass::Description(int index) const
-{
+char const *TeamMissionClass::Description(int index) const {
 	static char buffer[64];
 
 	sprintf(buffer, "%d\t%s", index, TeamTypeClass::Name_From_Mission(Mission));
 
 	switch (TeamMission_Needs(Mission)) {
-		case NEED_MISSION:
-			strcat(buffer, MissionClass::Mission_Name(Data.Mission));
-			break;
+	case NEED_MISSION:
+		strcat(buffer, MissionClass::Mission_Name(Data.Mission));
+		break;
 
-		case NEED_FORMATION:
-			strcat(buffer, FormationName[Data.Quarry]);
-			break;
+	case NEED_FORMATION:
+		strcat(buffer, FormationName[Data.Quarry]);
+		break;
 
-		case NEED_NUMBER:
-			sprintf(&buffer[strlen(buffer)], "%d", Data.Value);
-			break;
+	case NEED_NUMBER:
+		sprintf(&buffer[strlen(buffer)], "%d", Data.Value);
+		break;
 
-		case NEED_HEX_NUMBER:
-			sprintf(&buffer[strlen(buffer)], "%x", Data.Value);
-			break;
+	case NEED_HEX_NUMBER:
+		sprintf(&buffer[strlen(buffer)], "%x", Data.Value);
+		break;
 
-		case NEED_QUARRY:
-			strcat(buffer, QuarryName[Data.Quarry]);
-			break;
+	case NEED_QUARRY:
+		strcat(buffer, QuarryName[Data.Quarry]);
+		break;
 
-		case NEED_WAYPOINT:
-			if (Data.Value < 26) {
-				sprintf(&buffer[strlen(buffer)], "%c", Data.Value + 'A');
-			} else {
-				sprintf(&buffer[strlen(buffer)], "%c%c", (Data.Value/26) + 'A'-1, (Data.Value % 26) + 'A');
-			}
-			break;
-
+	case NEED_WAYPOINT:
+		if (Data.Value < 26) {
+			sprintf(&buffer[strlen(buffer)], "%c", Data.Value + 'A');
+		} else {
+			sprintf(&buffer[strlen(buffer)], "%c%c", (Data.Value / 26) + 'A' - 1, (Data.Value % 26) + 'A');
+		}
+		break;
 	}
 
-	return(buffer);
+	return (buffer);
 }
 #endif
-
 
 /***********************************************************************************************
  * TeamTypeClass::Detach -- Detach the specified target from this team type.                   *
@@ -1575,13 +1511,11 @@ char const * TeamMissionClass::Description(int index) const
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TeamTypeClass::Detach(TARGET target, bool)
-{
+void TeamTypeClass::Detach(TARGET target, bool) {
 	if (Is_Target_TriggerType(target) && Trigger.Is_Valid() && Trigger == As_TriggerType(target)) {
 		Trigger = NULL;
 	}
 }
-
 
 /***************************************************************************
  * TeamTypeClass::Read_INI -- reads INI data                               *
@@ -1605,10 +1539,9 @@ void TeamTypeClass::Detach(TARGET target, bool)
  *   12/07/1994 BR : Created.                                              *
  *   02/01/1995 BR : No del team if no classes (editor needs empty teams!) *
  *=========================================================================*/
-void TeamTypeClass::Read_INI(CCINIClass & ini)
-{
-	TeamTypeClass * team;					// Working team pointer.
-	char buf[500];								// INI entry buffer
+void TeamTypeClass::Read_INI(CCINIClass &ini) {
+	TeamTypeClass *team; // Working team pointer.
+	char buf[500];	     // INI entry buffer
 
 	int len = ini.Entry_Count(INI_Name());
 
@@ -1618,13 +1551,12 @@ void TeamTypeClass::Read_INI(CCINIClass & ini)
 	for (int index = 0; index < len; index++) {
 		team = new TeamTypeClass();
 		if (team != NULL) {
-			char const * entry = ini.Get_Entry(INI_Name(), index);
+			char const *entry = ini.Get_Entry(INI_Name(), index);
 			ini.Get_String(INI_Name(), entry, NULL, buf, sizeof(buf));
 			team->Fill_In((char *)entry, buf);
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::Fill_In -- fills in trigger from the given INI entry                         *
@@ -1654,8 +1586,7 @@ void TeamTypeClass::Read_INI(CCINIClass & ini)
  *   11/28/1994 BR : Created.                                                                  *
  *   11/29/1995 JLB : Revamped to use new team class.                                          *
  *=============================================================================================*/
-void TeamTypeClass::Fill_In(char * name, char * entry)
-{
+void TeamTypeClass::Fill_In(char *name, char *entry) {
 	assert(TeamTypes.ID(this) == ID);
 
 	/*
@@ -1667,23 +1598,23 @@ void TeamTypeClass::Fill_In(char * name, char * entry)
 
 	int code;
 	switch (NewINIFormat) {
-		default:
-			code = atoi(strtok(NULL, ","));
-			IsRoundAbout = ((code & 0x0001) != 0);
-			IsSuicide = ((code & 0x0002) != 0);
-			IsAutocreate = ((code & 0x0004) != 0);
-			IsPrebuilt = ((code & 0x0008) != 0);
-			IsReinforcable = ((code & 0x0010) != 0);
-			break;
+	default:
+		code = atoi(strtok(NULL, ","));
+		IsRoundAbout = ((code & 0x0001) != 0);
+		IsSuicide = ((code & 0x0002) != 0);
+		IsAutocreate = ((code & 0x0004) != 0);
+		IsPrebuilt = ((code & 0x0008) != 0);
+		IsReinforcable = ((code & 0x0010) != 0);
+		break;
 
-		case 0:
-		case 1:
-			IsRoundAbout = atoi(strtok(NULL, ","));
-			IsSuicide = atoi(strtok(NULL, ","));
-			IsAutocreate = atoi(strtok(NULL, ","));
-			IsPrebuilt = atoi(strtok(NULL, ","));
-			IsReinforcable = atoi(strtok(NULL, ","));
-			break;
+	case 0:
+	case 1:
+		IsRoundAbout = atoi(strtok(NULL, ","));
+		IsSuicide = atoi(strtok(NULL, ","));
+		IsAutocreate = atoi(strtok(NULL, ","));
+		IsPrebuilt = atoi(strtok(NULL, ","));
+		IsReinforcable = atoi(strtok(NULL, ","));
+		break;
 	}
 
 	RecruitPriority = atoi(strtok(NULL, ","));
@@ -1692,15 +1623,15 @@ void TeamTypeClass::Fill_In(char * name, char * entry)
 	Origin = atoi(strtok(NULL, ","));
 
 	switch (NewINIFormat) {
-		default:
-			Trigger.Set_Raw(atoi(strtok(NULL, ",")));
-			break;
+	default:
+		Trigger.Set_Raw(atoi(strtok(NULL, ",")));
+		break;
 
-		case 0:
-		case 1:
-			// Throw this token away -- it isn't used.
-			strtok(NULL, ",");
-			break;
+	case 0:
+	case 1:
+		// Throw this token away -- it isn't used.
+		strtok(NULL, ",");
+		break;
 	}
 
 	/*
@@ -1708,9 +1639,9 @@ void TeamTypeClass::Fill_In(char * name, char * entry)
 	*/
 	ClassCount = atoi(strtok(NULL, ","));
 	for (int index = 0; index < ClassCount; index++) {
-		char * p1 = strtok(NULL, ",:");
-		char * p2 = strtok(NULL, ",:");
-		TechnoTypeClass const * otype = NULL;
+		char *p1 = strtok(NULL, ",:");
+		char *p2 = strtok(NULL, ",:");
+		TechnoTypeClass const *otype = NULL;
 
 		/*
 		**	See if this is an infantry name
@@ -1757,7 +1688,8 @@ void TeamTypeClass::Fill_In(char * name, char * entry)
 			}
 		} else {
 			ClassCount--;
-			if (index == 0) break;
+			if (index == 0)
+				break;
 			index--;
 		}
 	}
@@ -1780,7 +1712,6 @@ void TeamTypeClass::Fill_In(char * name, char * entry)
 	}
 }
 
-
 /***********************************************************************************************
  * TeamTypeClass::Write_INI -- Write out the team types to the INI database.                   *
  *                                                                                             *
@@ -1795,8 +1726,7 @@ void TeamTypeClass::Fill_In(char * name, char * entry)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TeamTypeClass::Write_INI(CCINIClass & ini)
-{
+void TeamTypeClass::Write_INI(CCINIClass &ini) {
 	ini.Clear("TeamTypes");
 	ini.Clear(INI_Name());
 
@@ -1804,8 +1734,8 @@ void TeamTypeClass::Write_INI(CCINIClass & ini)
 	**	Now write all the team data out
 	*/
 	for (int index = 0; index < TeamTypes.Count(); index++) {
-//	for (int index = TeamTypes.Count()-1; index >= 0; index--) {
-		TeamTypeClass * team = TeamTypes.Ptr(index);
+		//	for (int index = TeamTypes.Count()-1; index >= 0; index--) {
+		TeamTypeClass *team = TeamTypes.Ptr(index);
 		char buf[256];
 
 		buf[0] = 0;
@@ -1813,7 +1743,6 @@ void TeamTypeClass::Write_INI(CCINIClass & ini)
 		ini.Put_String(INI_Name(), team->IniName, buf);
 	}
 }
-
 
 /***********************************************************************************************
  * TeamTypeClass::Build_INI_Entry -- Builds the INI entry for this team type.                  *
@@ -1832,8 +1761,7 @@ void TeamTypeClass::Write_INI(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TeamTypeClass::Build_INI_Entry(char * buf)
-{
+void TeamTypeClass::Build_INI_Entry(char *buf) {
 	int code = 0;
 	code |= IsRoundAbout ? 0x0001 : 0;
 	code |= IsSuicide ? 0x0002 : 0;
@@ -1844,24 +1772,17 @@ void TeamTypeClass::Build_INI_Entry(char * buf)
 	/*
 	**	Output the general data for this team type.
 	*/
-	sprintf(buf, "%d,%d,%d,%d,%d,%d,%d",
-		House,
-		code,
-		RecruitPriority,
-		InitNum,
-		MaxAllowed,
-		Origin,
-		TriggerTypes.Logical_ID(Trigger)
-		);
+	sprintf(buf, "%d,%d,%d,%d,%d,%d,%d", House, code, RecruitPriority, InitNum, MaxAllowed, Origin,
+		TriggerTypes.Logical_ID(Trigger));
 	buf += strlen(buf);
 
 	/*
 	**	For every class in the team, record the class's name & desired count
 	*/
-	sprintf (buf, ",%d", ClassCount);
+	sprintf(buf, ",%d", ClassCount);
 	buf += strlen(buf);
 	for (int i = 0; i < ClassCount; i++) {
-		sprintf (buf, ",%s:%d", Members[i].Class->IniName, Members[i].Quantity);
+		sprintf(buf, ",%s:%d", Members[i].Class->IniName, Members[i].Quantity);
 		buf += strlen(buf);
 	}
 
@@ -1871,9 +1792,7 @@ void TeamTypeClass::Build_INI_Entry(char * buf)
 	sprintf(buf, ",%d", MissionCount);
 	buf += strlen(buf);
 	for (int i = 0; i < MissionCount; i++) {
-		sprintf (buf, ",%d:%d", MissionList[i].Mission, MissionList[i].Data.Value);
+		sprintf(buf, ",%d:%d", MissionList[i].Mission, MissionList[i].Data.Value);
 		buf += strlen(buf);
 	}
 }
-
-

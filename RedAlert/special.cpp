@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/SPECIAL.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -37,20 +37,19 @@
  *   SpecialClass::Init -- Initialize the special class of options.                            *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
+#include "function.h"
 
 #ifdef WIN32
-#define	OPTION_WIDTH	236*2
-#define	OPTION_HEIGHT	162*2
-#define	OPTION_X			((640 - OPTION_WIDTH) / 2)
-#define	OPTION_Y			(400 - OPTION_HEIGHT) / 2
+#define OPTION_WIDTH 236 * 2
+#define OPTION_HEIGHT 162 * 2
+#define OPTION_X ((640 - OPTION_WIDTH) / 2)
+#define OPTION_Y (400 - OPTION_HEIGHT) / 2
 #else
-#define	OPTION_WIDTH	236
-#define	OPTION_HEIGHT	162
-#define	OPTION_X			((320 - OPTION_WIDTH) / 2)
-#define	OPTION_Y			(200 - OPTION_HEIGHT) / 2
+#define OPTION_WIDTH 236
+#define OPTION_HEIGHT 162
+#define OPTION_X ((320 - OPTION_WIDTH) / 2)
+#define OPTION_Y (200 - OPTION_HEIGHT) / 2
 #endif
-
 
 /***********************************************************************************************
  * SpecialClass::Init -- Initialize the special class of options.                              *
@@ -69,8 +68,7 @@
  * HISTORY:                                                                                    *
  *   08/20/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SpecialClass::Init(void)
-{
+void SpecialClass::Init(void) {
 	IsShadowGrow = false;
 	IsSpeedBuild = false;
 	IsFromInstall = false;
@@ -84,7 +82,6 @@ void SpecialClass::Init(void)
 	IsEarlyWin = false;
 	ModernBalance = false;
 }
-
 
 /***********************************************************************************************
  * Special_Dialog -- Handles the special options dialog.                                       *
@@ -101,40 +98,42 @@ void SpecialClass::Init(void)
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Special_Dialog(bool simple)
-{
+void Special_Dialog(bool simple) {
 	simple;
-#if (0)//PG
+#if (0) // PG
 	SpecialClass oldspecial = Special;
-	GadgetClass * buttons = NULL;
+	GadgetClass *buttons = NULL;
 	static struct {
 		int Description;
 		int Setting;
-		CheckBoxClass * Button;
+		CheckBoxClass *Button;
 	} _options[] = {
-		{TXT_THREE_POINT, 0, 0},
-		{TXT_SPEED_BUILD, 0, 0},
+	    {TXT_THREE_POINT, 0, 0},
+	    {TXT_SPEED_BUILD, 0, 0},
 	};
 
-	TextButtonClass ok(200, TXT_OK, TPF_BUTTON, OPTION_X+15*RESFACTOR, OPTION_Y+OPTION_HEIGHT-15*RESFACTOR);
-	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X+OPTION_WIDTH-60*RESFACTOR, OPTION_Y+OPTION_HEIGHT-15*RESFACTOR);
+	TextButtonClass ok(200, TXT_OK, TPF_BUTTON, OPTION_X + 15 * RESFACTOR,
+			   OPTION_Y + OPTION_HEIGHT - 15 * RESFACTOR);
+	TextButtonClass cancel(201, TXT_CANCEL, TPF_BUTTON, OPTION_X + OPTION_WIDTH - 60 * RESFACTOR,
+			       OPTION_Y + OPTION_HEIGHT - 15 * RESFACTOR);
 	buttons = &ok;
 	cancel.Add(*buttons);
 
-	for (int index = 0; index < sizeof(_options)/sizeof(_options[0]); index++) {
-		_options[index].Button = new CheckBoxClass(100+index, OPTION_X+17*RESFACTOR, OPTION_Y+20*RESFACTOR+(index*10*RESFACTOR));
+	for (int index = 0; index < sizeof(_options) / sizeof(_options[0]); index++) {
+		_options[index].Button = new CheckBoxClass(100 + index, OPTION_X + 17 * RESFACTOR,
+							   OPTION_Y + 20 * RESFACTOR + (index * 10 * RESFACTOR));
 		if (_options[index].Button) {
 			_options[index].Button->Add(*buttons);
 
 			bool value = false;
 			switch (_options[index].Description) {
-				case TXT_THREE_POINT:
-					value = Special.IsThreePoint;
-					break;
+			case TXT_THREE_POINT:
+				value = Special.IsThreePoint;
+				break;
 
-				case TXT_SPEED_BUILD:
-					value = Special.IsSpeedBuild;
-					break;
+			case TXT_SPEED_BUILD:
+				value = Special.IsSpeedBuild;
+				break;
 			}
 
 			_options[index].Setting = value;
@@ -168,8 +167,11 @@ void Special_Dialog(bool simple)
 			Dialog_Box(OPTION_X, OPTION_Y, OPTION_WIDTH, OPTION_HEIGHT);
 			Draw_Caption(TXT_SPECIAL_OPTIONS, OPTION_X, OPTION_Y, OPTION_WIDTH);
 
-			for (index = 0; index < sizeof(_options)/sizeof(_options[0]); index++) {
-				Fancy_Text_Print(_options[index].Description, _options[index].Button->X+10*RESFACTOR, _options[index].Button->Y, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
+			for (index = 0; index < sizeof(_options) / sizeof(_options[0]); index++) {
+				Fancy_Text_Print(_options[index].Description,
+						 _options[index].Button->X + 10 * RESFACTOR, _options[index].Button->Y,
+						 GadgetClass::Get_Color_Scheme(), TBLACK,
+						 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 			}
 			buttons->Draw_All();
 			Show_Mouse();
@@ -177,41 +179,41 @@ void Special_Dialog(bool simple)
 
 		KeyNumType input = buttons->Input();
 		switch (input) {
-			case KN_ESC:
-			case 200|KN_BUTTON:
-				process = false;
-				for (index = 0; index < sizeof(_options)/sizeof(_options[0]); index++) {
-					bool setting = _options[index].Setting;
-					switch (_options[index].Description) {
-						case TXT_THREE_POINT:
-							oldspecial.IsThreePoint = setting;
-							break;
+		case KN_ESC:
+		case 200 | KN_BUTTON:
+			process = false;
+			for (index = 0; index < sizeof(_options) / sizeof(_options[0]); index++) {
+				bool setting = _options[index].Setting;
+				switch (_options[index].Description) {
+				case TXT_THREE_POINT:
+					oldspecial.IsThreePoint = setting;
+					break;
 
-						case TXT_SPEED_BUILD:
-							oldspecial.IsSpeedBuild = setting;
-							break;
-					}
+				case TXT_SPEED_BUILD:
+					oldspecial.IsSpeedBuild = setting;
+					break;
 				}
-				if (!simple) {
-					OutList.Add(EventClass(oldspecial));
-				} else {
-					Special = oldspecial;
-				}
-				break;
+			}
+			if (!simple) {
+				OutList.Add(EventClass(oldspecial));
+			} else {
+				Special = oldspecial;
+			}
+			break;
 
-			case 201|KN_BUTTON:
-				process = false;
-				break;
+		case 201 | KN_BUTTON:
+			process = false;
+			break;
 
-			case KN_NONE:
-				break;
+		case KN_NONE:
+			break;
 
-			default:
-				index = (input & ~KN_BUTTON) - 100;
-				if ((unsigned)index < sizeof(_options)/sizeof(_options[0])) {
-					_options[index].Setting = _options[index].Button->IsOn;
-				}
-				break;
+		default:
+			index = (input & ~KN_BUTTON) - 100;
+			if ((unsigned)index < sizeof(_options) / sizeof(_options[0])) {
+				_options[index].Setting = _options[index].Button->IsOn;
+			}
+			break;
 		}
 	}
 
@@ -224,22 +226,19 @@ void Special_Dialog(bool simple)
 #endif
 }
 
-
 /*
 **	Derived from the edit class, this class allows entry of passwords style text
 **	as an edit box. This style is characterized by "*" being displayed for every
 **	real character entered.
 */
-class PWEditClass : public EditClass
-{
-	public:
-		PWEditClass(int id, char * text, int max_len, TextPrintType flags, int x, int y, int w=-1, int h=-1) :
-			EditClass(id, text, max_len, flags, x, y, w, h, ALPHANUMERIC) {};
+class PWEditClass : public EditClass {
+public:
+	PWEditClass(int id, char *text, int max_len, TextPrintType flags, int x, int y, int w = -1, int h = -1)
+	    : EditClass(id, text, max_len, flags, x, y, w, h, ALPHANUMERIC) {};
 
-	protected:
-		virtual void Draw_Text(char const * text);
+protected:
+	virtual void Draw_Text(char const *text);
 };
-
 
 /***********************************************************************************************
  * PWEditClass::Draw_Text -- Draws password style obscured text.                               *
@@ -258,8 +257,7 @@ class PWEditClass : public EditClass
  * HISTORY:                                                                                    *
  *   10/27/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void PWEditClass::Draw_Text(char const * text)
-{
+void PWEditClass::Draw_Text(char const *text) {
 	char buffer[80];
 
 	memset(buffer, '\0', sizeof(buffer));
@@ -274,23 +272,23 @@ void PWEditClass::Draw_Text(char const * text)
 			flags = (TextPrintType)0;
 		}
 
-		Conquer_Clip_Text_Print(buffer, X+1, Y+1, Color, TBLACK, TextFlags | flags, Width-2);
+		Conquer_Clip_Text_Print(buffer, X + 1, Y + 1, Color, TBLACK, TextFlags | flags, Width - 2);
 
 		if (Has_Focus() && (int)strlen(buffer) < MaxLength) {
-			Conquer_Clip_Text_Print( "_", X+1+String_Pixel_Width(buffer), Y+1, Color, TBLACK, TextFlags | flags);
+			Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(buffer), Y + 1, Color, TBLACK,
+						TextFlags | flags);
 		}
 	} else {
-		Conquer_Clip_Text_Print(buffer, X+1, Y+1, Has_Focus() ?
-			&ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY],
-			TBLACK, TextFlags, Width-2);
+		Conquer_Clip_Text_Print(buffer, X + 1, Y + 1,
+					Has_Focus() ? &ColorRemaps[PCOLOR_DIALOG_BLUE] : &ColorRemaps[PCOLOR_GREY],
+					TBLACK, TextFlags, Width - 2);
 
 		if (Has_Focus() && (int)strlen(buffer) < MaxLength) {
-			Conquer_Clip_Text_Print("_", X+1+String_Pixel_Width(buffer), Y+1,
-				&ColorRemaps[PCOLOR_DIALOG_BLUE], TBLACK, TextFlags);
+			Conquer_Clip_Text_Print("_", X + 1 + String_Pixel_Width(buffer), Y + 1,
+						&ColorRemaps[PCOLOR_DIALOG_BLUE], TBLACK, TextFlags);
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * Fetch_Password -- Prompts for a password entry from client.                                 *
@@ -312,47 +310,47 @@ void PWEditClass::Draw_Text(char const * text)
  *   10/27/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
 #define BUFFSIZE (511)
-char const * Fetch_Password(int caption, int message, int btext)
-{
+char const *Fetch_Password(int caption, int message, int btext) {
 	char buffer[BUFFSIZE];
-	bool process;								// loop while true
-	KeyNumType input;							// user input
+	bool process;	  // loop while true
+	KeyNumType input; // user input
 	bool pressed;
 	int curbutton;
 	TextButtonClass ok;
 
-	if (btext == TXT_NONE) btext = TXT_OK;
-	
-	//PG_TO_FIX
-	//Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TPF_6PT_GRAD|TPF_NOSHADOW);
+	if (btext == TXT_NONE)
+		btext = TXT_OK;
+
+	// PG_TO_FIX
+	// Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TPF_6PT_GRAD|TPF_NOSHADOW);
 
 	/*
 	**	Examine the optional button parameters. Fetch the width and starting
 	**	characters for each.
 	*/
-	int bwidth, bheight;				// button width and height
+	int bwidth, bheight; // button width and height
 
 	/*
 	**	Build the button list.
 	*/
-	bheight = FontHeight + FontYSpacing + 2*RESFACTOR;
-	bwidth = max((String_Pixel_Width(Text_String(btext)) + 8*RESFACTOR), 30*RESFACTOR);
+	bheight = FontHeight + FontYSpacing + 2 * RESFACTOR;
+	bwidth = max((String_Pixel_Width(Text_String(btext)) + 8 * RESFACTOR), 30 * RESFACTOR);
 
 	/*
 	**	Determine the dimensions of the text to be used for the dialog box.
 	**	These dimensions will control how the dialog box looks.
 	*/
-	buffer[BUFFSIZE-1] = 0;
-	strncpy(buffer, Text_String(message), BUFFSIZE-1);
-	//PG_TO_FIX
-	//Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TPF_6PT_GRAD|TPF_NOSHADOW);
+	buffer[BUFFSIZE - 1] = 0;
+	strncpy(buffer, Text_String(message), BUFFSIZE - 1);
+	// PG_TO_FIX
+	// Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TPF_6PT_GRAD|TPF_NOSHADOW);
 	int width;
 	int height;
 	Format_Window_String(buffer, 255, width, height);
 
-	width = max(width, 50*RESFACTOR);
-	width += 40*RESFACTOR;
-	height += (60+25)*RESFACTOR;
+	width = max(width, 50 * RESFACTOR);
+	width += 40 * RESFACTOR;
+	height += (60 + 25) * RESFACTOR;
 
 	int x = (SeenBuff.Get_Width() - width) / 2;
 	int y = (SeenBuff.Get_Height() - height) / 2;
@@ -360,16 +358,17 @@ char const * Fetch_Password(int caption, int message, int btext)
 	/*
 	**	Create the "ok" and password edit buttons.
 	*/
-	TextButtonClass button1(1, btext, TPF_BUTTON,
-		x + ((width - bwidth) >> 1), y + height - (bheight + 5*RESFACTOR), bwidth);
+	TextButtonClass button1(1, btext, TPF_BUTTON, x + ((width - bwidth) >> 1),
+				y + height - (bheight + 5 * RESFACTOR), bwidth);
 
 	static char pbuffer[45];
 	memset(pbuffer, '\0', sizeof(pbuffer));
-	int editx = x+26*RESFACTOR;
-	int editwidth = (SeenBuff.Get_Width()/2 - editx) * 2;
-	PWEditClass button2(2, &pbuffer[0], sizeof(pbuffer), TPF_6PT_GRAD|TPF_NOSHADOW, editx, (y+height)-35*RESFACTOR, editwidth, 10*RESFACTOR);
+	int editx = x + 26 * RESFACTOR;
+	int editwidth = (SeenBuff.Get_Width() / 2 - editx) * 2;
+	PWEditClass button2(2, &pbuffer[0], sizeof(pbuffer), TPF_6PT_GRAD | TPF_NOSHADOW, editx,
+			    (y + height) - 35 * RESFACTOR, editwidth, 10 * RESFACTOR);
 
-	TextButtonClass * buttonlist = 0;
+	TextButtonClass *buttonlist = 0;
 	curbutton = 0;
 
 	/*
@@ -389,7 +388,8 @@ char const * Fetch_Password(int caption, int message, int btext)
 	/*
 	**	Draw the body of the message box.
 	*/
-	Fancy_Text_Print(buffer, x + 20*RESFACTOR, y + 25*RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
+	Fancy_Text_Print(buffer, x + 20 * RESFACTOR, y + 25 * RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK,
+			 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	/*
 	**	Redraw the buttons.
@@ -417,11 +417,11 @@ char const * Fetch_Password(int caption, int message, int btext)
 		** Handle possible surface loss due to a focus switch
 		*/
 		if (AllSurfaces.SurfacesRestored) {
-			AllSurfaces.SurfacesRestored=FALSE;
+			AllSurfaces.SurfacesRestored = FALSE;
 			process = false;
 			break;
 		}
-#endif	//WIN32
+#endif // WIN32
 
 		/*
 		**	Fetch and process input.
@@ -433,27 +433,26 @@ char const * Fetch_Password(int caption, int message, int btext)
 			first = false;
 		}
 		switch (input) {
-			case (1|BUTTON_FLAG):
-				process = false;
-				break;
+		case (1 | BUTTON_FLAG):
+			process = false;
+			break;
 
-			case (KN_ESC):
-			case (2|BUTTON_FLAG):
-				process = false;
-				break;
+		case (KN_ESC):
+		case (2 | BUTTON_FLAG):
+			process = false;
+			break;
 
-			case (KN_RETURN):
-				process = false;
-				break;
+		case (KN_RETURN):
+			process = false;
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 
-	return(pbuffer);
+	return (pbuffer);
 }
-
 
 /***********************************************************************************************
  * Fetch_Difficulty -- Fetches the difficulty setting desired.                                 *
@@ -470,7 +469,7 @@ char const * Fetch_Password(int caption, int message, int btext)
  * HISTORY:                                                                                    *
  *   08/13/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 int Fetch_Difficulty(bool amath)
 #else
 int Fetch_Difficulty(void)
@@ -478,8 +477,8 @@ int Fetch_Difficulty(void)
 {
 	int const w = 250 * RESFACTOR;
 	int const h = 80 * RESFACTOR;
-	int const x = ((320 * RESFACTOR)/2) - w/2;
-	int const y = ((200 * RESFACTOR)/2) - h/2;
+	int const x = ((320 * RESFACTOR) / 2) - w / 2;
+	int const y = ((200 * RESFACTOR) / 2) - h / 2;
 	int const bwidth = 30 * RESFACTOR;
 
 	/*
@@ -487,34 +486,36 @@ int Fetch_Difficulty(void)
 	**	the text into appropriate spacing.
 	*/
 	char buffer[512];
-	strncpy(buffer, Text_String(TXT_DIFFICULTY), sizeof(buffer)-1);
-	buffer[sizeof(buffer)-1] = '\0';
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-// If it's an aftermath mission, trim the sentence to get rid of the campaign stuff.
+	strncpy(buffer, Text_String(TXT_DIFFICULTY), sizeof(buffer) - 1);
+	buffer[sizeof(buffer) - 1] = '\0';
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+		  // If it's an aftermath mission, trim the sentence to get rid of the campaign stuff.
 	if (amath) {
-		int index=0;
-		while (buffer[index] && buffer[index]!='.') index++;
-		if (buffer[index]=='.') {
-			buffer[index+1]=0;
+		int index = 0;
+		while (buffer[index] && buffer[index] != '.')
+			index++;
+		if (buffer[index] == '.') {
+			buffer[index + 1] = 0;
 		}
 	}
 #endif
-	//PG_TO_FIX
-	//Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TPF_6PT_GRAD|TPF_NOSHADOW);
+	// PG_TO_FIX
+	// Fancy_Text_Print(TXT_NONE, 0, 0, TBLACK, TBLACK, TPF_6PT_GRAD|TPF_NOSHADOW);
 	int width;
 	int height;
-	Format_Window_String(buffer, w-60*RESFACTOR, width, height);
+	Format_Window_String(buffer, w - 60 * RESFACTOR, width, height);
 
 	/*
 	**	Create the OK button.
 	*/
-	TextButtonClass okbutton(1, TXT_OK, TPF_BUTTON, (x+w) - (bwidth+20*RESFACTOR) , (y+h) - (18*RESFACTOR), bwidth);
-	GadgetClass * buttonlist = &okbutton;
+	TextButtonClass okbutton(1, TXT_OK, TPF_BUTTON, (x + w) - (bwidth + 20 * RESFACTOR), (y + h) - (18 * RESFACTOR),
+				 bwidth);
+	GadgetClass *buttonlist = &okbutton;
 
 	/*
 	**	Create the slider button.
 	*/
-	SliderClass slider(2, x+20*RESFACTOR, y+h - 29*RESFACTOR, w - 40*RESFACTOR, 8*RESFACTOR, true);
+	SliderClass slider(2, x + 20 * RESFACTOR, y + h - 29 * RESFACTOR, w - 40 * RESFACTOR, 8 * RESFACTOR, true);
 	if (Rule.IsFineDifficulty) {
 		slider.Set_Maximum(5);
 		slider.Set_Value(2);
@@ -544,15 +545,22 @@ int Fetch_Difficulty(void)
 			/*
 			**	Draw the body of the message.
 			*/
-//			Fancy_Text_Print(buffer, x + 20*RESFACTOR, y + 15*RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
-			Fancy_Text_Print(buffer, x + 20*RESFACTOR, y + 15*RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD|TPF_NOSHADOW);
+			//			Fancy_Text_Print(buffer, x + 20*RESFACTOR, y + 15*RESFACTOR,
+			// GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
+			Fancy_Text_Print(buffer, x + 20 * RESFACTOR, y + 15 * RESFACTOR,
+					 GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD | TPF_NOSHADOW);
 
 			/*
 			**	Display the descripton of the slider range.
 			*/
-			Fancy_Text_Print(TXT_HARD, slider.X+slider.Width, slider.Y-9*RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_RIGHT|TPF_6PT_GRAD|TPF_DROPSHADOW);
-			Fancy_Text_Print(TXT_EASY, slider.X, slider.Y-9*RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_6PT_GRAD|TPF_DROPSHADOW);
-			Fancy_Text_Print(TXT_NORMAL, slider.X + (slider.Width/2), slider.Y-9*RESFACTOR, GadgetClass::Get_Color_Scheme(), TBLACK, TPF_CENTER|TPF_6PT_GRAD|TPF_DROPSHADOW);
+			Fancy_Text_Print(TXT_HARD, slider.X + slider.Width, slider.Y - 9 * RESFACTOR,
+					 GadgetClass::Get_Color_Scheme(), TBLACK,
+					 TPF_RIGHT | TPF_6PT_GRAD | TPF_DROPSHADOW);
+			Fancy_Text_Print(TXT_EASY, slider.X, slider.Y - 9 * RESFACTOR, GadgetClass::Get_Color_Scheme(),
+					 TBLACK, TPF_6PT_GRAD | TPF_DROPSHADOW);
+			Fancy_Text_Print(TXT_NORMAL, slider.X + (slider.Width / 2), slider.Y - 9 * RESFACTOR,
+					 GadgetClass::Get_Color_Scheme(), TBLACK,
+					 TPF_CENTER | TPF_6PT_GRAD | TPF_DROPSHADOW);
 
 			/*
 			**	Redraw the buttons.
@@ -573,11 +581,11 @@ int Fetch_Difficulty(void)
 		** Handle possible surface loss due to a focus switch
 		*/
 		if (AllSurfaces.SurfacesRestored) {
-			AllSurfaces.SurfacesRestored=FALSE;
+			AllSurfaces.SurfacesRestored = FALSE;
 			redraw = true;
 			continue;
 		}
-#endif	//WIN32
+#endif // WIN32
 
 		/*
 		**	Fetch and process input.
@@ -585,15 +593,15 @@ int Fetch_Difficulty(void)
 		KeyNumType input = buttonlist->Input();
 
 		switch (input) {
-			case KN_RETURN:
-			case (1|BUTTON_FLAG):
-				process = false;
-				break;
+		case KN_RETURN:
+		case (1 | BUTTON_FLAG):
+			process = false;
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 
-	return(slider.Get_Value() * (Rule.IsFineDifficulty ? 1 : 2));
+	return (slider.Get_Value() * (Rule.IsFineDifficulty ? 1 : 2));
 }

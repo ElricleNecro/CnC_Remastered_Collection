@@ -1,18 +1,17 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
-
 
 /*************************************************************************************
  **   C O N F I D E N T I A L --- W E S T W O O D    S T U D I O S                  **
@@ -39,36 +38,36 @@
  *                                                                         				*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#if (0)//PG
+#if (0) // PG
 #include "function.h"
 
-//#include "WolDebug.h"
+// #include "WolDebug.h"
 
 #ifdef WINSOCK_IPX
 #include "WSProto.h"
 #else
 
 #ifdef WIN32
-#include	"tcpip.h"
+#include "tcpip.h"
 #else
-#include	"fakesock.h"
-#endif	//WIN32
+#include "fakesock.h"
+#endif // WIN32
 
-#endif	//WINSOCK_IPX
+#endif // WINSOCK_IPX
 
-bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gametype);
-bool Send_Remote_File ( char *file_name, int gametype );
+bool Receive_Remote_File(char *file_name, unsigned int file_length, int gametype);
+bool Send_Remote_File(char *file_name, int gametype);
 
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-extern bool Is_Mission_Counterstrike (char *file_name);
-extern bool Is_Mission_Aftermath (char *file_name);
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+extern bool Is_Mission_Counterstrike(char *file_name);
+extern bool Is_Mission_Aftermath(char *file_name);
 #endif
 
-#define RESPONSE_TIMEOUT	60*60
+#define RESPONSE_TIMEOUT 60 * 60
 
 #ifdef WOLAPI_INTEGRATION
 #include "WolapiOb.h"
-extern WolapiObject* pWolapi;
+extern WolapiObject *pWolapi;
 #endif
 
 /***********************************************************************************************
@@ -86,112 +85,104 @@ extern WolapiObject* pWolapi;
  * HISTORY:                                                                                    *
  *    8/22/96 3:06PM ST : Created                                                              *
  *=============================================================================================*/
-bool Get_Scenario_File_From_Host(char *return_name, int gametype)
-{
-	//WWDebugString ("RA95 - In Get_Scenario_From_Host\n");
+bool Get_Scenario_File_From_Host(char *return_name, int gametype) {
+	// WWDebugString ("RA95 - In Get_Scenario_From_Host\n");
 
 	unsigned int file_length;
 
-	SerialPacketType 	send_packet;
-	SerialPacketType 	receive_packet;
-	GlobalPacketType	net_send_packet;
-	GlobalPacketType	net_receive_packet;
-	unsigned int		packet_len;
-	unsigned short		product_id;
+	SerialPacketType send_packet;
+	SerialPacketType receive_packet;
+	GlobalPacketType net_send_packet;
+	GlobalPacketType net_receive_packet;
+	unsigned int packet_len;
+	unsigned short product_id;
 
-	IPXAddressClass	sender_address;
+	IPXAddressClass sender_address;
 
-	CDTimerClass<SystemTimerClass> response_timer;		// timeout timer for waiting for responses
+	CDTimerClass<SystemTimerClass> response_timer; // timeout timer for waiting for responses
 
 	/*
 	** Send the scenario request using guaranteed delivery.
 	*/
 	if (!gametype) {
-		memset ((void*)&send_packet, 0, sizeof (send_packet));
+		memset((void *)&send_packet, 0, sizeof(send_packet));
 		send_packet.Command = SERIAL_REQ_SCENARIO;
-		NullModem.Send_Message (&send_packet, sizeof(send_packet), 1);
+		NullModem.Send_Message(&send_packet, sizeof(send_packet), 1);
 	} else {
-		memset ((void*)&net_send_packet, 0, sizeof (net_send_packet));
+		memset((void *)&net_send_packet, 0, sizeof(net_send_packet));
 		net_send_packet.Command = NET_REQ_SCENARIO;
-		Ipx.Send_Global_Message (&net_send_packet, sizeof (net_send_packet),
-			1, &(Session.HostAddress) );
+		Ipx.Send_Global_Message(&net_send_packet, sizeof(net_send_packet), 1, &(Session.HostAddress));
 	}
 
-
-
-	//WWDebugString ("RA95 - Waiting for response from host\n");
+	// WWDebugString ("RA95 - Waiting for response from host\n");
 
 	/*
 	** Wait for host to respond with a file info packet
 	*/
 	response_timer = RESPONSE_TIMEOUT;
-	if (!gametype){
+	if (!gametype) {
 		do {
 			NullModem.Service();
 
-			if (NullModem.Get_Message ((void*)&receive_packet, (int*)&packet_len) > 0) {
+			if (NullModem.Get_Message((void *)&receive_packet, (int *)&packet_len) > 0) {
 
-				if (receive_packet.Command == SERIAL_FILE_INFO){
-					strcpy (return_name, receive_packet.ScenarioInfo.ShortFileName);
+				if (receive_packet.Command == SERIAL_FILE_INFO) {
+					strcpy(return_name, receive_packet.ScenarioInfo.ShortFileName);
 					file_length = receive_packet.ScenarioInfo.FileLength;
 					break;
 				}
 			}
-		} while ( response_timer );
-	}else{
+		} while (response_timer);
+	} else {
 		do {
 			Ipx.Service();
-			int receive_packet_length = sizeof (net_receive_packet);
-			if (Ipx.Get_Global_Message (&net_receive_packet, &receive_packet_length,
-				&sender_address, &product_id)){
+			int receive_packet_length = sizeof(net_receive_packet);
+			if (Ipx.Get_Global_Message(&net_receive_packet, &receive_packet_length, &sender_address,
+						   &product_id)) {
 
-//WWDebugString ("RA95 - Got packet from host\n");
+// WWDebugString ("RA95 - Got packet from host\n");
 #ifdef WINSOCK_IPX
-				if (net_receive_packet.Command == NET_FILE_INFO && sender_address == Session.HostAddress) {
-#else	//WINSOCK_IPX
 				if (net_receive_packet.Command == NET_FILE_INFO &&
-						(Winsock.Get_Connected() || sender_address == Session.HostAddress)){
-#endif	//WINSOCK_IPX
-					strcpy (return_name, net_receive_packet.ScenarioInfo.ShortFileName);
+				    sender_address == Session.HostAddress) {
+#else  // WINSOCK_IPX
+				if (net_receive_packet.Command == NET_FILE_INFO &&
+				    (Winsock.Get_Connected() || sender_address == Session.HostAddress)) {
+#endif // WINSOCK_IPX
+					strcpy(return_name, net_receive_packet.ScenarioInfo.ShortFileName);
 					file_length = net_receive_packet.ScenarioInfo.FileLength;
-//WWDebugString ("RA95 - Got file info packet from host\n");
+					// WWDebugString ("RA95 - Got file info packet from host\n");
 					break;
 				}
 			}
 
 #ifdef WOLAPI_INTEGRATION
-			if( Session.Type == GAME_INTERNET && pWolapi && ( ::timeGetTime() > pWolapi->dwTimeNextWolapiPump ) )
-			{
+			if (Session.Type == GAME_INTERNET && pWolapi &&
+			    (::timeGetTime() > pWolapi->dwTimeNextWolapiPump)) {
 				pWolapi->pChat->PumpMessages();
 				pWolapi->dwTimeNextWolapiPump = ::timeGetTime() + WOLAPIPUMPWAIT;
 			}
 #endif
-		} while ( response_timer );
+		} while (response_timer);
 	}
 
-//char rt[80];
-//sprintf (rt, "RA95 - response_timer = %d\n", response_timer );
-//WWDebugString (rt);
+	// char rt[80];
+	// sprintf (rt, "RA95 - response_timer = %d\n", response_timer );
+	// WWDebugString (rt);
 
 	/*
 	** If we timed out then something horrible has happened to the other player so just
 	** return failure.
 	*/
-	if (!response_timer) return (false);
+	if (!response_timer)
+		return (false);
 
-//	debugprint( "about to download '%s'\n", return_name );
+	//	debugprint( "about to download '%s'\n", return_name );
 
 	/*
 	** Receive the file from the host
 	*/
-	return (Receive_Remote_File ( return_name, file_length, gametype));
+	return (Receive_Remote_File(return_name, file_length, gametype));
 }
-
-
-
-
-
-
 
 /***********************************************************************************************
  * Receive_Remote_File -- Handles incoming file download packets from the game host            *
@@ -209,77 +200,71 @@ bool Get_Scenario_File_From_Host(char *return_name, int gametype)
  * HISTORY:                                                                                    *
  *   8/22/96 3:07PM ST : Created                                                               *
  *=============================================================================================*/
-bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gametype)
-{
+bool Receive_Remote_File(char *file_name, unsigned int file_length, int gametype) {
 
-	//WWDebugString ("RA95 - In Receive_Remote_File\n");
-	unsigned short		product_id;
-	IPXAddressClass	sender_address;
+	// WWDebugString ("RA95 - In Receive_Remote_File\n");
+	unsigned short product_id;
+	IPXAddressClass sender_address;
 
 	/*
 	** Dialog & button dimensions
 	*/
-	int d_dialog_w = 200 *RESFACTOR;											// dialog width
-	int d_dialog_h = 90*RESFACTOR;											// dialog height
-	int d_dialog_x = ((320*RESFACTOR - d_dialog_w) / 2);				// dialog x-coord
-	int d_dialog_y = ((200*RESFACTOR - d_dialog_h) / 2);				// centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);		// center x-coord
+	int d_dialog_w = 200 * RESFACTOR;		       // dialog width
+	int d_dialog_h = 90 * RESFACTOR;		       // dialog height
+	int d_dialog_x = ((320 * RESFACTOR - d_dialog_w) / 2); // dialog x-coord
+	int d_dialog_y = ((200 * RESFACTOR - d_dialog_h) / 2); // centered y-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);       // center x-coord
 
-	int d_margin1=10;
-	int d_txt6_h=15;
+	int d_margin1 = 10;
+	int d_txt6_h = 15;
 
 #if (GERMAN | FRENCH)
-	int d_cancel_w = 50*RESFACTOR;
+	int d_cancel_w = 50 * RESFACTOR;
 #else
-	int d_cancel_w = 40*RESFACTOR;
+	int d_cancel_w = 40 * RESFACTOR;
 #endif
-	int d_cancel_h = 9*RESFACTOR;
+	int d_cancel_h = 9 * RESFACTOR;
 	int d_cancel_x = d_dialog_cx - d_cancel_w / 2;
-	int d_cancel_y = d_dialog_y + d_dialog_h - 20*RESFACTOR;
+	int d_cancel_y = d_dialog_y + d_dialog_h - 20 * RESFACTOR;
 
-	int d_progress_w = 100*RESFACTOR;
-	int d_progress_h = 10*RESFACTOR;
-	int d_progress_x = (SeenBuff.Get_Width()/2) - d_progress_w/2;
-	int d_progress_y = d_dialog_y + 45*RESFACTOR;
+	int d_progress_w = 100 * RESFACTOR;
+	int d_progress_h = 10 * RESFACTOR;
+	int d_progress_x = (SeenBuff.Get_Width() / 2) - d_progress_w / 2;
+	int d_progress_y = d_dialog_y + 45 * RESFACTOR;
 
-	int	width;
-	int	height;
+	int width;
+	int height;
 
-	char *info_string = (char*)Text_String (TXT_RECEIVING_SCENARIO);
+	char *info_string = (char *)Text_String(TXT_RECEIVING_SCENARIO);
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(),
-		TBLACK, TPF_CENTER|TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
+			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	Format_Window_String(info_string, SeenBuff.Get_Height(), width, height);
-
 
 	/*
 	** Button Enumerations
 	*/
-	enum {
-		BUTTON_CANCEL = 100,
-		BUTTON_PROGRESS
-	};
+	enum { BUTTON_CANCEL = 100, BUTTON_PROGRESS };
 
 	/*
 	** Buttons
 	*/
-	//TextButtonClass *buttons;										// button list
+	// TextButtonClass *buttons;										//
+	// button list
 
 	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL,
-		TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
+				  TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
 #if (GERMAN | FRENCH)
-		d_cancel_x, d_cancel_y);
+				  d_cancel_x, d_cancel_y);
 #else
-		d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
+				  d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 #endif
 
-	GaugeClass progress_meter (BUTTON_PROGRESS,
-		d_progress_x, d_progress_y, d_progress_w, d_progress_h);
+	GaugeClass progress_meter(BUTTON_PROGRESS, d_progress_x, d_progress_y, d_progress_w, d_progress_h);
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(),
-		TBLACK, TPF_CENTER|TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
-
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
+			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	typedef enum {
 		REDRAW_NONE = 0,
@@ -289,75 +274,72 @@ bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gamety
 		REDRAW_ALL = REDRAW_BACKGROUND
 	} RedrawType;
 
-
-	bool 			process = true;
-	RedrawType 	display = REDRAW_ALL;		// redraw level
-	KeyNumType 	input;
-	GadgetClass *commands;					// button list
-	bool			return_code;
-	int			update_time = 0;
-
-
+	bool process = true;
+	RedrawType display = REDRAW_ALL; // redraw level
+	KeyNumType input;
+	GadgetClass *commands; // button list
+	bool return_code;
+	int update_time = 0;
 
 	RemoteFileTransferType receive_packet;
 
-	int 				last_received_block = -1;		//No blocks received yet
-	unsigned int 	total_length = 0;
-	unsigned int	packet_len;
+	int last_received_block = -1; // No blocks received yet
+	unsigned int total_length = 0;
+	unsigned int packet_len;
 
 	/*
 	** If the file name is already in use, use the temp file name
 	*/
-	CCFileClass test_file (file_name);
-	if (test_file.Is_Available()){
-		strcpy (file_name, "DOWNLOAD.TMP");
+	CCFileClass test_file(file_name);
+	if (test_file.Is_Available()) {
+		strcpy(file_name, "DOWNLOAD.TMP");
 	}
 
-	RawFileClass save_file (file_name);
+	RawFileClass save_file(file_name);
 
 	/*
 	** If the file already exists then delete it and re-create it.
 	*/
-	if (save_file.Is_Available()) save_file.Delete();
+	if (save_file.Is_Available())
+		save_file.Delete();
 
 	/*
 	** Open the file for write
 	*/
-	save_file.Open ( WRITE );
+	save_file.Open(WRITE);
 
 	commands = &cancelbtn;
-	commands->Add_Tail (progress_meter);
+	commands->Add_Tail(progress_meter);
 
-	progress_meter.Set_Maximum(100);		// Max is 100%
-	progress_meter.Set_Value(0);			// Current is 0%
+	progress_meter.Set_Maximum(100); // Max is 100%
+	progress_meter.Set_Value(0);	 // Current is 0%
 
 	/*
 	** Wait for all the blocks to arrive
 	*/
 
-	do	{
+	do {
 #ifdef WIN32
 		/*
 		** If we have just received input focus again after running in the background then
 		** we need to redraw.
 		*/
 		if (AllSurfaces.SurfacesRestored) {
-			AllSurfaces.SurfacesRestored=FALSE;
+			AllSurfaces.SurfacesRestored = FALSE;
 			display = REDRAW_ALL;
 		}
 #endif
 
 #ifdef WOLAPI_INTEGRATION
-		if( Session.Type == GAME_INTERNET && pWolapi && ( ::timeGetTime() > pWolapi->dwTimeNextWolapiPump ) )
-		{
+		if (Session.Type == GAME_INTERNET && pWolapi && (::timeGetTime() > pWolapi->dwTimeNextWolapiPump)) {
 			pWolapi->pChat->PumpMessages();
 			pWolapi->dwTimeNextWolapiPump = ::timeGetTime() + WOLAPIPUMPWAIT;
 		}
 #endif
 
-		if (display){
+		if (display) {
 
-			if (display >= REDRAW_BACKGROUND){
+			if (display >= REDRAW_BACKGROUND) {
 
 				Hide_Mouse();
 				/*
@@ -371,90 +353,89 @@ bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gamety
 				/*
 				** Dialog & Field labels
 				*/
-				Draw_Caption (TXT_NONE, d_dialog_x, d_dialog_y, d_dialog_w);
+				Draw_Caption(TXT_NONE, d_dialog_x, d_dialog_y, d_dialog_w);
 
-				Fancy_Text_Print(info_string, d_dialog_cx-width/2, d_dialog_y + 25*RESFACTOR,
-									GadgetClass::Get_Color_Scheme(), TBLACK,
-									TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
+				Fancy_Text_Print(info_string, d_dialog_cx - width / 2, d_dialog_y + 25 * RESFACTOR,
+						 GadgetClass::Get_Color_Scheme(), TBLACK,
+						 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 				Show_Mouse();
-
 			}
 
-			if (display >= REDRAW_BUTTONS){
+			if (display >= REDRAW_BUTTONS) {
 
 				commands->Draw_All();
-
 			}
 
-			if (display >= REDRAW_PROGRESS){
+			if (display >= REDRAW_PROGRESS) {
 				progress_meter.Draw_Me(true);
 			}
 
 			display = REDRAW_NONE;
 		}
 
-
-		if (!gametype){
+		if (!gametype) {
 			NullModem.Service();
 
-			if (NullModem.Get_Message ((void*)&receive_packet, (int*)&packet_len) > 0) {
+			if (NullModem.Get_Message((void *)&receive_packet, (int *)&packet_len) > 0) {
 
-				if (receive_packet.Command == NET_FILE_CHUNK){
+				if (receive_packet.Command == NET_FILE_CHUNK) {
 
-					if (receive_packet.BlockNumber == last_received_block + 1){
+					if (receive_packet.BlockNumber == last_received_block + 1) {
 
-						save_file.Write ( receive_packet.RawData, receive_packet.BlockLength );
+						save_file.Write(receive_packet.RawData, receive_packet.BlockLength);
 						total_length += receive_packet.BlockLength;
-						last_received_block ++;
+						last_received_block++;
 
 						update_time++;
-						if (update_time >7){
-							progress_meter.Set_Value ( (total_length*100) / file_length );
+						if (update_time > 7) {
+							progress_meter.Set_Value((total_length * 100) / file_length);
 							display = REDRAW_PROGRESS;
-							update_time = 0;;
+							update_time = 0;
+							;
 						}
 
-						if (total_length >= file_length){
+						if (total_length >= file_length) {
 							process = false;
 							return_code = true;
-							progress_meter.Set_Value ( 100 );
+							progress_meter.Set_Value(100);
 							progress_meter.Draw_Me(true);
 						}
 					}
 				}
 			}
-		}else{
+		} else {
 			Ipx.Service();
 
-			int receive_packet_len = sizeof (receive_packet);
-			if (Ipx.Get_Global_Message (&receive_packet, &receive_packet_len,
-				&sender_address, &product_id)){
+			int receive_packet_len = sizeof(receive_packet);
+			if (Ipx.Get_Global_Message(&receive_packet, &receive_packet_len, &sender_address,
+						   &product_id)) {
 
 #ifdef WINSOCK_IPX
-				if (receive_packet.Command == NET_FILE_CHUNK && sender_address == Session.HostAddress){
-#else	//WINSOCK_IPX
+				if (receive_packet.Command == NET_FILE_CHUNK && sender_address == Session.HostAddress) {
+#else  // WINSOCK_IPX
 				if (receive_packet.Command == NET_FILE_CHUNK &&
-							(Winsock.Get_Connected() || sender_address == Session.HostAddress)){
-#endif	//WINSOCK_IPX
+				    (Winsock.Get_Connected() || sender_address == Session.HostAddress)) {
+#endif // WINSOCK_IPX
 
-					if (receive_packet.BlockNumber == last_received_block + 1){
+					if (receive_packet.BlockNumber == last_received_block + 1) {
 
-						save_file.Write ( receive_packet.RawData, receive_packet.BlockLength );
+						save_file.Write(receive_packet.RawData, receive_packet.BlockLength);
 						total_length += receive_packet.BlockLength;
-						last_received_block ++;
+						last_received_block++;
 
 						update_time++;
-						if (update_time >7){
-							progress_meter.Set_Value ( (total_length*100) / file_length );
+						if (update_time > 7) {
+							progress_meter.Set_Value((total_length * 100) / file_length);
 							display = REDRAW_PROGRESS;
-							update_time = 0;;
+							update_time = 0;
+							;
 						}
 
-						if (total_length >= file_length){
+						if (total_length >= file_length) {
 							process = false;
 							return_code = true;
-							progress_meter.Set_Value ( 100 );
+							progress_meter.Set_Value(100);
 							progress_meter.Draw_Me(true);
 						}
 					}
@@ -462,8 +443,7 @@ bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gamety
 			}
 		}
 
-
-		if (process){
+		if (process) {
 			input = cancelbtn.Input();
 
 			/*
@@ -471,19 +451,18 @@ bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gamety
 			*/
 			switch (input) {
 
-				/*
-				** Cancel. Just return to the main menu
-				*/
-				case (KN_ESC):
-				case (BUTTON_CANCEL | KN_BUTTON):
-					process = false;
-					return_code = false;
-					break;
+			/*
+			** Cancel. Just return to the main menu
+			*/
+			case (KN_ESC):
+			case (BUTTON_CANCEL | KN_BUTTON):
+				process = false;
+				return_code = false;
+				break;
 			}
 		}
 
-
-	} while ( process );
+	} while (process);
 
 	save_file.Close();
 
@@ -495,11 +474,6 @@ bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gamety
 
 	return (return_code);
 }
-
-
-
-
-
 
 /***********************************************************************************************
  * Send_Remote_File -- Sends a file to game clients                                            *
@@ -516,78 +490,72 @@ bool Receive_Remote_File ( char *file_name, unsigned int file_length, int gamety
  * HISTORY:                                                                                    *
  *    8/22/96 3:09PM ST : Created                                                              *
  *=============================================================================================*/
-bool Send_Remote_File ( char *file_name, int gametype )
-{
-	//WWDebugString ("RA95 - In Send_Remote_File\n");
+bool Send_Remote_File(char *file_name, int gametype) {
+	// WWDebugString ("RA95 - In Send_Remote_File\n");
 
 	/*
 	** Dialog & button dimensions
 	*/
-	int factor			= (SeenBuff.Get_Width() == 320) ? 1 : 2;
+	int factor = (SeenBuff.Get_Width() == 320) ? 1 : 2;
 
-	int d_dialog_w = 240 *factor;											// dialog width
-	int d_dialog_h = 90*factor;											// dialog height
-	int d_dialog_x = ((320*factor - d_dialog_w) / 2);				// dialog x-coord
-	int d_dialog_y = ((200*factor - d_dialog_h) / 2);				// centered y-coord
-	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);		// center x-coord
+	int d_dialog_w = 240 * factor;			    // dialog width
+	int d_dialog_h = 90 * factor;			    // dialog height
+	int d_dialog_x = ((320 * factor - d_dialog_w) / 2); // dialog x-coord
+	int d_dialog_y = ((200 * factor - d_dialog_h) / 2); // centered y-coord
+	int d_dialog_cx = d_dialog_x + (d_dialog_w / 2);    // center x-coord
 
-	int d_margin1=10;
-	int d_txt6_h=15;
+	int d_margin1 = 10;
+	int d_txt6_h = 15;
 
 #if (GERMAN | FRENCH)
-	int d_cancel_w = 50*factor;
+	int d_cancel_w = 50 * factor;
 #else
-	int d_cancel_w = 40*factor;
+	int d_cancel_w = 40 * factor;
 #endif
-	int d_cancel_h = 9*factor;
+	int d_cancel_h = 9 * factor;
 	int d_cancel_x = d_dialog_cx - d_cancel_w / 2;
-	int d_cancel_y = d_dialog_y + d_dialog_h - 20*factor;
+	int d_cancel_y = d_dialog_y + d_dialog_h - 20 * factor;
 
-	int d_progress_w = 100*factor;
-	int d_progress_h = 10*factor;
-	int d_progress_x = (SeenBuff.Get_Width()/2) - d_progress_w/2;
-	int d_progress_y = d_dialog_y + 45*factor;
+	int d_progress_w = 100 * factor;
+	int d_progress_h = 10 * factor;
+	int d_progress_x = (SeenBuff.Get_Width() / 2) - d_progress_w / 2;
+	int d_progress_y = d_dialog_y + 45 * factor;
 
-	int	width;
-	int	height;
+	int width;
+	int height;
 
-	char *info_string = (char*)Text_String (TXT_SENDING_SCENARIO);
+	char *info_string = (char *)Text_String(TXT_SENDING_SCENARIO);
 
-	CDTimerClass<SystemTimerClass> response_timer;		// timeout timer for waiting for responses
+	CDTimerClass<SystemTimerClass> response_timer; // timeout timer for waiting for responses
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(),
-		TBLACK, TPF_CENTER|TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
+			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	Format_Window_String(info_string, SeenBuff.Get_Height(), width, height);
-
 
 	/*
 	** Button Enumerations
 	*/
-	enum {
-		BUTTON_CANCEL = 100,
-		BUTTON_PROGRESS
-	};
+	enum { BUTTON_CANCEL = 100, BUTTON_PROGRESS };
 
 	/*
 	** Buttons
 	*/
-	//TextButtonClass *buttons;										// button list
+	// TextButtonClass *buttons;										//
+	// button list
 
 	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL,
-		TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
+				  TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW,
 #if (GERMAN | FRENCH)
-		d_cancel_x, d_cancel_y);
+				  d_cancel_x, d_cancel_y);
 #else
-		d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
+				  d_cancel_x, d_cancel_y, d_cancel_w, d_cancel_h);
 #endif
 
-	GaugeClass progress_meter (BUTTON_PROGRESS,
-		d_progress_x, d_progress_y, d_progress_w, d_progress_h);
+	GaugeClass progress_meter(BUTTON_PROGRESS, d_progress_x, d_progress_y, d_progress_w, d_progress_h);
 
-	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(),
-		TBLACK, TPF_CENTER|TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_NOSHADOW);
-
+	Fancy_Text_Print(TXT_NONE, 0, 0, GadgetClass::Get_Color_Scheme(), TBLACK,
+			 TPF_CENTER | TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 	typedef enum {
 		REDRAW_NONE = 0,
@@ -597,14 +565,12 @@ bool Send_Remote_File ( char *file_name, int gametype )
 		REDRAW_ALL = REDRAW_BACKGROUND
 	} RedrawType;
 
-
-	bool 			process = true;
-	RedrawType 	display = REDRAW_ALL;		// redraw level
-	KeyNumType 	input;
-	GadgetClass *commands;					// button list
-	bool			return_code;
-	int			update_time = 0;
-
+	bool process = true;
+	RedrawType display = REDRAW_ALL; // redraw level
+	KeyNumType input;
+	GadgetClass *commands; // button list
+	bool return_code;
+	int update_time = 0;
 
 	int file_length;
 	int block_number;
@@ -614,16 +580,15 @@ bool Send_Remote_File ( char *file_name, int gametype )
 
 	void *read_ptr;
 
-	RemoteFileTransferType	send_packet;
-	SerialPacketType			file_info;
-	GlobalPacketType			net_file_info;
+	RemoteFileTransferType send_packet;
+	SerialPacketType file_info;
+	GlobalPacketType net_file_info;
 
+	CCFileClass send_file(file_name);
 
-	CCFileClass send_file (file_name);
-
-	if ( !send_file.Is_Available() ){
-		//WWDebugString ("RA95 - Error - could not find file to send to client\n");
-//		debugprint("RA95 - Error - could not find file to send to client\n");
+	if (!send_file.Is_Available()) {
+		// WWDebugString ("RA95 - Error - could not find file to send to client\n");
+		//		debugprint("RA95 - Error - could not find file to send to client\n");
 		return (false);
 	}
 	file_length = send_file.Size();
@@ -633,52 +598,53 @@ bool Send_Remote_File ( char *file_name, int gametype )
 	/*
 	** Send the file info to the remote machine(s)
 	*/
-	if (!gametype){
+	if (!gametype) {
 		file_info.Command = SERIAL_FILE_INFO;
-		strcpy (&file_info.ScenarioInfo.ShortFileName[0], file_name);
+		strcpy(&file_info.ScenarioInfo.ShortFileName[0], file_name);
 #ifdef FIXIT_VERSION_3
 		//	If we're sending an official map, always send it to 'download.tmp'.
-		if( Is_Mission_Counterstrike( file_name ) || Is_Mission_Aftermath( file_name ) ) {
-			strcpy (&file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
+		if (Is_Mission_Counterstrike(file_name) || Is_Mission_Aftermath(file_name)) {
+			strcpy(&file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
 		}
 #else
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-// If we're sending an Aftermath map, always send it to 'download.tmp'.
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+		// If we're sending an Aftermath map, always send it to 'download.tmp'.
 		if (Is_Mission_Aftermath(file_name)) {
-			strcpy (&file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
+			strcpy(&file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
 		}
 #endif
 #endif
 		file_info.ScenarioInfo.FileLength = file_length;
-		NullModem.Send_Message (&file_info, sizeof (file_info), 1);
-		while (NullModem.Num_Send() > 0 && response_timer){
+		NullModem.Send_Message(&file_info, sizeof(file_info), 1);
+		while (NullModem.Num_Send() > 0 && response_timer) {
 			NullModem.Service();
 		}
 	} else {
 		net_file_info.Command = NET_FILE_INFO;
-		strcpy (&net_file_info.ScenarioInfo.ShortFileName[0], file_name);
+		strcpy(&net_file_info.ScenarioInfo.ShortFileName[0], file_name);
 //		debugprint( "Uploading '%s'\n", file_name );
 #ifdef FIXIT_VERSION_3
 		//	If we're sending an official map, always send it to 'download.tmp'.
-		if( Is_Mission_Counterstrike( file_name ) || Is_Mission_Aftermath( file_name ) ) {
-			strcpy (&net_file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
+		if (Is_Mission_Counterstrike(file_name) || Is_Mission_Aftermath(file_name)) {
+			strcpy(&net_file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
 		}
 #else
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-// If we're sending an Aftermath map, always send it to 'download.tmp'.
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+		// If we're sending an Aftermath map, always send it to 'download.tmp'.
 		if (Is_Mission_Aftermath(file_name)) {
-			strcpy (&file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
-			//	There was a bug here: s/b net_file_info. This means that players that don't have Aftermath could have been 
-			//	accumulating Aftermath maps all this time!!! (File wasn't getting renamed to "DOWNLOAD.TMP".)
+			strcpy(&file_info.ScenarioInfo.ShortFileName[0], "DOWNLOAD.TMP");
+			//	There was a bug here: s/b net_file_info. This means that players that don't have
+			// Aftermath could have been 	accumulating Aftermath maps all this time!!! (File wasn't
+			// getting renamed to "DOWNLOAD.TMP".)
 		}
 #endif
 #endif
-//		debugprint( "ShortFileName is '%s'\n", net_file_info.ScenarioInfo.ShortFileName );
+		//		debugprint( "ShortFileName is '%s'\n", net_file_info.ScenarioInfo.ShortFileName );
 		net_file_info.ScenarioInfo.FileLength = file_length;
 
-		for (int i=0 ; i<Session.RequestCount ; i++){
-			Ipx.Send_Global_Message (&net_file_info, sizeof (GlobalPacketType),
-				1, &(Session.Players[Session.ScenarioRequests[i]]->Address) );
+		for (int i = 0; i < Session.RequestCount; i++) {
+			Ipx.Send_Global_Message(&net_file_info, sizeof(GlobalPacketType), 1,
+						&(Session.Players[Session.ScenarioRequests[i]]->Address));
 		}
 
 		while (Ipx.Global_Num_Send() > 0 && response_timer) {
@@ -686,24 +652,21 @@ bool Send_Remote_File ( char *file_name, int gametype )
 		}
 	}
 
-
 	max_chunk_size = MAX_SEND_FILE_PACKET_SIZE;
-	total_blocks = (file_length + max_chunk_size-1) / max_chunk_size;
+	total_blocks = (file_length + max_chunk_size - 1) / max_chunk_size;
 	bytes_left = file_length;
 
-	send_file.Open ( READ );
-
+	send_file.Open(READ);
 
 	commands = &cancelbtn;
-	commands->Add_Tail (progress_meter);
+	commands->Add_Tail(progress_meter);
 
-	progress_meter.Set_Maximum(100);		// Max is 100%
-	progress_meter.Set_Value(0);			// Current is 0%
-
+	progress_meter.Set_Maximum(100); // Max is 100%
+	progress_meter.Set_Value(0);	 // Current is 0%
 
 	block_number = 0;
 
-	while ( process ){
+	while (process) {
 
 #ifdef WIN32
 		/*
@@ -711,22 +674,21 @@ bool Send_Remote_File ( char *file_name, int gametype )
 		** we need to redraw.
 		*/
 		if (AllSurfaces.SurfacesRestored) {
-			AllSurfaces.SurfacesRestored=FALSE;
+			AllSurfaces.SurfacesRestored = FALSE;
 			display = REDRAW_ALL;
 		}
 #endif
 
 #ifdef WOLAPI_INTEGRATION
-		if( Session.Type == GAME_INTERNET && pWolapi && ( ::timeGetTime() > pWolapi->dwTimeNextWolapiPump ) )
-		{
+		if (Session.Type == GAME_INTERNET && pWolapi && (::timeGetTime() > pWolapi->dwTimeNextWolapiPump)) {
 			pWolapi->pChat->PumpMessages();
 			pWolapi->dwTimeNextWolapiPump = ::timeGetTime() + WOLAPIPUMPWAIT;
 		}
 #endif
 
-		if (display){
+		if (display) {
 
-			if (display >= REDRAW_BACKGROUND){
+			if (display >= REDRAW_BACKGROUND) {
 
 				Hide_Mouse();
 				/*
@@ -740,118 +702,111 @@ bool Send_Remote_File ( char *file_name, int gametype )
 				/*
 				** Dialog & Field labels
 				*/
-				Draw_Caption (TXT_NONE, d_dialog_x, d_dialog_y, d_dialog_w);
+				Draw_Caption(TXT_NONE, d_dialog_x, d_dialog_y, d_dialog_w);
 
-				Fancy_Text_Print(info_string, d_dialog_cx-width/2, d_dialog_y + 25*factor,
-									GadgetClass::Get_Color_Scheme(), TBLACK,
-									TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
+				Fancy_Text_Print(info_string, d_dialog_cx - width / 2, d_dialog_y + 25 * factor,
+						 GadgetClass::Get_Color_Scheme(), TBLACK,
+						 TPF_6PT_GRAD | TPF_USE_GRAD_PAL | TPF_NOSHADOW);
 
 				Show_Mouse();
-
 			}
 
-			if (display >= REDRAW_BUTTONS){
+			if (display >= REDRAW_BUTTONS) {
 
 				commands->Draw_All();
-
 			}
 
-			if (display >= REDRAW_PROGRESS){
+			if (display >= REDRAW_PROGRESS) {
 				progress_meter.Draw_Me(true);
 			}
 
 			display = REDRAW_NONE;
 		}
 
-
-		if (!gametype){
+		if (!gametype) {
 			NullModem.Service();
 
+			if (block_number < total_blocks) {
 
-			if (block_number < total_blocks){
-
-				if ( NullModem.Num_Send() <2 ){
+				if (NullModem.Num_Send() < 2) {
 
 					send_packet.Command = SERIAL_FILE_CHUNK;
 					send_packet.BlockNumber = block_number;
-					send_packet.BlockLength = MIN (file_length, max_chunk_size);
+					send_packet.BlockLength = MIN(file_length, max_chunk_size);
 
 					file_length -= send_packet.BlockLength;
 
 					read_ptr = &send_packet.RawData[0];
 
-					if (send_file.Read (read_ptr , send_packet.BlockLength) == send_packet.BlockLength){
-						NullModem.Send_Message ((void*)&send_packet, sizeof(send_packet), 1);
+					if (send_file.Read(read_ptr, send_packet.BlockLength) ==
+					    send_packet.BlockLength) {
+						NullModem.Send_Message((void *)&send_packet, sizeof(send_packet), 1);
 					}
 
 					block_number++;
 
 					update_time++;
-					if (update_time >7){
-						progress_meter.Set_Value ( (block_number*100) / total_blocks );
+					if (update_time > 7) {
+						progress_meter.Set_Value((block_number * 100) / total_blocks);
 						display = REDRAW_PROGRESS;
-						update_time = 0;;
+						update_time = 0;
+						;
 					}
-
 				}
-			}else{
-				if (NullModem.Num_Send() == 0){
+			} else {
+				if (NullModem.Num_Send() == 0) {
 					process = false;
 					return_code = true;
-					progress_meter.Set_Value ( 100 );
+					progress_meter.Set_Value(100);
 					progress_meter.Draw_Me(true);
-
 				}
 			}
 
-
-		}else{
+		} else {
 			Ipx.Service();
 
-			if (block_number < total_blocks){
+			if (block_number < total_blocks) {
 
-				if ( Ipx.Global_Num_Send() == 0 ){
+				if (Ipx.Global_Num_Send() == 0) {
 
 					send_packet.Command = SERIAL_FILE_CHUNK;
 					send_packet.BlockNumber = block_number;
-					send_packet.BlockLength = MIN (file_length, max_chunk_size);
+					send_packet.BlockLength = MIN(file_length, max_chunk_size);
 
 					file_length -= send_packet.BlockLength;
 
 					read_ptr = &send_packet.RawData[0];
 
-					if (send_file.Read (read_ptr , send_packet.BlockLength) == send_packet.BlockLength){
-						for (int i=0 ; i<Session.RequestCount ; i++){
-							Ipx.Send_Global_Message (&send_packet, sizeof (send_packet),
-								1, &(Session.Players[Session.ScenarioRequests[i]]->Address) );
+					if (send_file.Read(read_ptr, send_packet.BlockLength) ==
+					    send_packet.BlockLength) {
+						for (int i = 0; i < Session.RequestCount; i++) {
+							Ipx.Send_Global_Message(
+							    &send_packet, sizeof(send_packet), 1,
+							    &(Session.Players[Session.ScenarioRequests[i]]->Address));
 						}
 					}
 
 					block_number++;
 
 					update_time++;
-					if (update_time >7){
-						progress_meter.Set_Value ( (block_number*100) / total_blocks );
+					if (update_time > 7) {
+						progress_meter.Set_Value((block_number * 100) / total_blocks);
 						display = REDRAW_PROGRESS;
-						update_time = 0;;
+						update_time = 0;
+						;
 					}
-
 				}
-			}else{
-				if (Ipx.Global_Num_Send() == 0){
+			} else {
+				if (Ipx.Global_Num_Send() == 0) {
 					process = false;
 					return_code = true;
-					progress_meter.Set_Value ( 100 );
+					progress_meter.Set_Value(100);
 					progress_meter.Draw_Me(true);
 				}
 			}
-
-
-
 		}
 
-
-		if (process){
+		if (process) {
 			input = cancelbtn.Input();
 
 			/*
@@ -859,17 +814,16 @@ bool Send_Remote_File ( char *file_name, int gametype )
 			*/
 			switch (input) {
 
-				/*
-				** Cancel. Just return to the main menu
-				*/
-				case (KN_ESC):
-				case (BUTTON_CANCEL | KN_BUTTON):
-					process = false;
-					return_code = false;
-					break;
+			/*
+			** Cancel. Just return to the main menu
+			*/
+			case (KN_ESC):
+			case (BUTTON_CANCEL | KN_BUTTON):
+				process = false;
+				return_code = false;
+				break;
 			}
 		}
-
 	}
 
 	return (return_code);

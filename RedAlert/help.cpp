@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/HELP.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -44,19 +44,16 @@
  *   HelpClass::Set_Text -- Determines the overlap list and draw coordinates.                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
+#include "function.h"
 
 /*
 **	This is the holding buffer for the text overlap list. This buffer must be in the near
 **	data segment. It will be filled in by the Set_Text() function.
 */
-//short const HelpClass::OverlapList[60] = {  // Can't be const - it's expected to be written to. ST - 2/7/2019 5:16PM		
-short HelpClass::OverlapList[60] = {
-	REFRESH_EOL
-};
+// short const HelpClass::OverlapList[60] = {  // Can't be const - it's expected to be written to. ST - 2/7/2019 5:16PM
+short HelpClass::OverlapList[60] = {REFRESH_EOL};
 
-char const * HelpClass::HelpText;
-
+char const *HelpClass::HelpText;
 
 /***********************************************************************************************
  * HelpClass::HelpClass -- Default constructor for the help processor.                         *
@@ -74,23 +71,9 @@ char const * HelpClass::HelpText;
  * HISTORY:                                                                                    *
  *   11/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-HelpClass::HelpClass(void) :
-	HelpX(0),
-	HelpY(0),
-	HelpWidth(0),
-	IsRight(false),
-	Cost(0),
-	X(0),
-	Y(0),
-	DrawX(0),
-	DrawY(0),
-	Width(0),
-	Text(TXT_NONE),
-	Color(LTGREY),
-	CountDownTimer(0)
-{
-}
-
+HelpClass::HelpClass(void)
+    : HelpX(0), HelpY(0), HelpWidth(0), IsRight(false), Cost(0), X(0), Y(0), DrawX(0), DrawY(0), Width(0),
+      Text(TXT_NONE), Color(LTGREY), CountDownTimer(0) {}
 
 /***********************************************************************************************
  * HelpClass::Init_Clear -- Sets help system to a known state.                                 *
@@ -104,13 +87,11 @@ HelpClass::HelpClass(void) :
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void HelpClass::Init_Clear(void)
-{
+void HelpClass::Init_Clear(void) {
 	TabClass::Init_Clear();
 
 	Set_Text(TXT_NONE);
 }
-
 
 /***********************************************************************************************
  * HelpClass::Overlap_List -- Returns with offset list for cells under help text.              *
@@ -128,14 +109,12 @@ void HelpClass::Init_Clear(void)
  * HISTORY:                                                                                    *
  *   11/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-short const * HelpClass::Overlap_List(void) const
-{
+short const *HelpClass::Overlap_List(void) const {
 	if (Text == TXT_NONE || CountDownTimer) {
 		((short &)(OverlapList[0])) = REFRESH_EOL;
 	}
-	return(OverlapList);
+	return (OverlapList);
 }
-
 
 /***********************************************************************************************
  * HelpClass::Help_AI -- Handles the help text logic.                                          *
@@ -158,8 +137,7 @@ short const * HelpClass::Overlap_List(void) const
  *   11/18/1994 JLB : Created.                                                                 *
  *   12/31/1994 JLB : Uses mouse coordinates as passed in.                                     *
  *=============================================================================================*/
-void HelpClass::AI(KeyNumType &key, int x, int y)
-{
+void HelpClass::AI(KeyNumType &key, int x, int y) {
 	if (!CountDownTimer && !IsRight && (x != X || y != Y)) {
 		Help_Text(TXT_NONE);
 	}
@@ -193,7 +171,6 @@ void HelpClass::AI(KeyNumType &key, int x, int y)
 	TabClass::AI(key, x, y);
 }
 
-
 /***********************************************************************************************
  * HelpClass::Help_Text -- Assigns text as the current help text.                              *
  *                                                                                             *
@@ -209,8 +186,7 @@ void HelpClass::AI(KeyNumType &key, int x, int y)
  * HISTORY:                                                                                    *
  *   11/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void HelpClass::Help_Text(int text, int x, int y, int color, bool quick)
-{
+void HelpClass::Help_Text(int text, int x, int y, int color, bool quick) {
 	if (text != Text) {
 
 		/*
@@ -226,9 +202,11 @@ void HelpClass::Help_Text(int text, int x, int y, int color, bool quick)
 		**	if the mouse has moved. A moving mouse prevents the help text from popping up.
 		*/
 		X = x;
-		if (x == -1) X = Get_Mouse_X();
+		if (x == -1)
+			X = Get_Mouse_X();
 		Y = y;
-		if (y == -1) Y = Get_Mouse_Y();
+		if (y == -1)
+			Y = Get_Mouse_Y();
 		IsRight = (y != -1) || (x != -1);
 
 		if (quick) {
@@ -240,14 +218,13 @@ void HelpClass::Help_Text(int text, int x, int y, int color, bool quick)
 		/*
 		** All help text prints in the same color for E3
 		*/
-		//Color = color;
+		// Color = color;
 		color = color;
 		Color = HELP_TEXT_COLOR;
 		Text = text;
 		Cost = 0;
 	}
 }
-
 
 /***********************************************************************************************
  * HelpClass::Draw_Help -- Display the help message (if necessary).                            *
@@ -265,31 +242,32 @@ void HelpClass::Help_Text(int text, int x, int y, int color, bool quick)
  * HISTORY:                                                                                    *
  *   11/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void HelpClass::Draw_It(bool forced)
-{
+void HelpClass::Draw_It(bool forced) {
 	TabClass::Draw_It(forced);
 
-	forced = false;		// TCTCTCTC
+	forced = false; // TCTCTCTC
 	if (Text != TXT_NONE && (forced || !CountDownTimer)) {
 
 		if (LogicPage->Lock()) {
-			Plain_Text_Print(Text, DrawX, DrawY, Color, BLACK, TPF_MAP|TPF_NOSHADOW);
-			LogicPage->Draw_Rect(DrawX-1, DrawY-1, DrawX+Width+1, DrawY+FontHeight, Color);
+			Plain_Text_Print(Text, DrawX, DrawY, Color, BLACK, TPF_MAP | TPF_NOSHADOW);
+			LogicPage->Draw_Rect(DrawX - 1, DrawY - 1, DrawX + Width + 1, DrawY + FontHeight, Color);
 
 			if (Cost) {
 				char buffer[15];
 				sprintf(buffer, "$%d", Cost);
 				int width = String_Pixel_Width(buffer);
 
-				Plain_Text_Print(buffer, DrawX, DrawY+FontHeight, Color, BLACK, TPF_MAP|TPF_NOSHADOW);
-				LogicPage->Draw_Rect(DrawX-1, DrawY+FontHeight, DrawX+width+1, DrawY+FontHeight+FontHeight-1, Color);
-				LogicPage->Draw_Line(DrawX, DrawY+FontHeight, DrawX+min(width+1, Width)-1, DrawY+FontHeight, BLACK);
+				Plain_Text_Print(buffer, DrawX, DrawY + FontHeight, Color, BLACK,
+						 TPF_MAP | TPF_NOSHADOW);
+				LogicPage->Draw_Rect(DrawX - 1, DrawY + FontHeight, DrawX + width + 1,
+						     DrawY + FontHeight + FontHeight - 1, Color);
+				LogicPage->Draw_Line(DrawX, DrawY + FontHeight, DrawX + min(width + 1, Width) - 1,
+						     DrawY + FontHeight, BLACK);
 			}
 			LogicPage->Unlock();
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * HelpClass::Set_Text -- Determines the overlap list and draw coordinates.                    *
@@ -307,35 +285,36 @@ void HelpClass::Draw_It(bool forced)
  *   11/18/1994 JLB : Created.                                                                 *
  *   12/11/1994 JLB : Won't draw past tactical map edges.                                      *
  *=============================================================================================*/
-void HelpClass::Set_Text(int text)
-{
+void HelpClass::Set_Text(int text) {
 	if (text != TXT_NONE) {
 		Text = text;
-		Plain_Text_Print(TXT_NONE, 0, 0, 0, 0, TPF_MAP|TPF_NOSHADOW);
+		Plain_Text_Print(TXT_NONE, 0, 0, 0, 0, TPF_MAP | TPF_NOSHADOW);
 		Width = String_Pixel_Width(Text_String(Text));
 		if (IsRight) {
 			DrawX = X - Width;
 			DrawY = Y;
 		} else {
-			int right = TacPixelX + Lepton_To_Pixel(TacLeptonWidth) - 3*RESFACTOR;
-			int bottom = TacPixelY + Lepton_To_Pixel(TacLeptonHeight) - 1*RESFACTOR;
+			int right = TacPixelX + Lepton_To_Pixel(TacLeptonWidth) - 3 * RESFACTOR;
+			int bottom = TacPixelY + Lepton_To_Pixel(TacLeptonHeight) - 1 * RESFACTOR;
 
-			DrawX = X+X_OFFSET;
-			DrawY = Y+Y_OFFSET;
+			DrawX = X + X_OFFSET;
+			DrawY = Y + Y_OFFSET;
 			if (DrawX + Width > right) {
-				DrawX -= (DrawX+Width) - right;
+				DrawX -= (DrawX + Width) - right;
 			}
-			if (DrawY + 10*RESFACTOR > bottom) {
-				DrawY -= (DrawY+10*RESFACTOR) - bottom;
+			if (DrawY + 10 * RESFACTOR > bottom) {
+				DrawY -= (DrawY + 10 * RESFACTOR) - bottom;
 			}
-			if (DrawX < TacPixelX+1) DrawX = TacPixelX+1;
-			if (DrawY < TacPixelY+1) DrawY = TacPixelY+1;
+			if (DrawX < TacPixelX + 1)
+				DrawX = TacPixelX + 1;
+			if (DrawY < TacPixelY + 1)
+				DrawY = TacPixelY + 1;
 		}
-		memcpy((void*)OverlapList, Text_Overlap_List(Text_String(Text), DrawX-1, DrawY), sizeof(OverlapList));
-		*(short *)&OverlapList[ARRAY_SIZE(OverlapList)-1] = REFRESH_EOL;
+		memcpy((void *)OverlapList, Text_Overlap_List(Text_String(Text), DrawX - 1, DrawY),
+		       sizeof(OverlapList));
+		*(short *)&OverlapList[ARRAY_SIZE(OverlapList) - 1] = REFRESH_EOL;
 	}
 }
-
 
 /***********************************************************************************************
  * HelpClass::Scroll_Map -- Makes sure scrolling doesn't leave text shards.                    *
@@ -357,14 +336,12 @@ void HelpClass::Set_Text(int text)
  * HISTORY:                                                                                    *
  *   12/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool HelpClass::Scroll_Map(DirType facing, int & distance, bool really)
-{
+bool HelpClass::Scroll_Map(DirType facing, int &distance, bool really) {
 	if (really) {
 		Help_Text(TXT_NONE);
 	}
-	return(TabClass::Scroll_Map(facing, distance, really));
+	return (TabClass::Scroll_Map(facing, distance, really));
 }
-
 
 /***********************************************************************************************
  * HelpClass::Set_Cost -- Initiates the second line of help text showing item cost.            *
@@ -383,11 +360,7 @@ bool HelpClass::Scroll_Map(DirType facing, int & distance, bool really)
  * HISTORY:                                                                                    *
  *   01/09/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void HelpClass::Set_Cost(int cost)
-{
-	Cost = cost;
-}
-
+void HelpClass::Set_Cost(int cost) { Cost = cost; }
 
 /***********************************************************************************************
  * HelpClass::Set_Tactical_Position -- Sets the position of the tactical map.                  *
@@ -405,8 +378,7 @@ void HelpClass::Set_Cost(int cost)
  * HISTORY:                                                                                    *
  *   09/22/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void HelpClass::Set_Tactical_Position(COORDINATE coord)
-{
+void HelpClass::Set_Tactical_Position(COORDINATE coord) {
 	if (TacticalCoord != coord) {
 		Help_Text(TXT_NONE);
 	}

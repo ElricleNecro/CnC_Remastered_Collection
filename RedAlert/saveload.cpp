@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /counterstrike/SAVELOAD.CPP 9     3/17/97 1:04a Steve_tall $ */
@@ -38,19 +38,19 @@
  *   Load_Misc_Values -- loads miscellaneous variables                                         *
  *   MPlayer_Save_Message -- pops up a "saving..." message                                     *
  *   Put_All -- Store all save game data to the pipe.                                          *
- *   Reconcile_Players -- Reconciles loaded data with the 'Players' vector							  *
- *   Save_Game -- saves a game to disk                                                         *
- *   Save_MPlayer_Values -- Saves multiplayer-specific values                                  *
- *   Save_Misc_Values -- saves miscellaneous variables                                         *
+ *   Reconcile_Players -- Reconciles loaded data with the 'Players' vector
+ ** Save_Game -- saves a game to disk                                                         * Save_MPlayer_Values --
+ *Saves multiplayer-specific values                                  * Save_Misc_Values -- saves miscellaneous variables
+ **
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"vortex.h"
+#include "function.h"
+#include "vortex.h"
 #ifdef WIN32
-#include "tcpip.h"
 #include "ccdde.h"
+#include "tcpip.h"
 
-//#include "WolDebug.h"
+// #include "WolDebug.h"
 
 extern bool DLLSave(Pipe &file);
 extern bool DLLLoad(Straw &file);
@@ -58,56 +58,30 @@ extern bool DLLLoad(Straw &file);
 extern bool SpawnedFromWChat;
 #endif
 
-//#define	SAVE_BLOCK_SIZE	512
-#define	SAVE_BLOCK_SIZE	4096
-//#define	SAVE_BLOCK_SIZE	1024
+// #define	SAVE_BLOCK_SIZE	512
+#define SAVE_BLOCK_SIZE 4096
+// #define	SAVE_BLOCK_SIZE	1024
 
 /*
 ********************************** Defines **********************************
 */
-#define	SAVEGAME_VERSION		(DESCRIP_MAX + \
-										0x01000006 + ( \
-										sizeof(AircraftClass) + \
-										sizeof(AircraftTypeClass) + \
-										sizeof(AnimClass) + \
-										sizeof(AnimTypeClass) + \
-										sizeof(BaseClass) + \
-										sizeof(BuildingClass) + \
-										sizeof(BuildingTypeClass) + \
-										sizeof(BulletClass) + \
-										sizeof(BulletTypeClass) + \
-										sizeof(CellClass) + \
-										sizeof(FactoryClass) + \
-										sizeof(HouseClass) + \
-										sizeof(HouseTypeClass) + \
-										sizeof(InfantryClass) + \
-										sizeof(InfantryTypeClass) + \
-										sizeof(LayerClass) + \
-										sizeof(MouseClass) + \
-										sizeof(OverlayClass) + \
-										sizeof(OverlayTypeClass) + \
-										sizeof(SmudgeClass) + \
-										sizeof(SmudgeTypeClass) + \
-										sizeof(TeamClass) + \
-										sizeof(TeamTypeClass) + \
-										sizeof(TemplateClass) + \
-										sizeof(TemplateTypeClass) + \
-										sizeof(TerrainClass) + \
-										sizeof(TerrainTypeClass) + \
-										sizeof(TriggerClass) + \
-										sizeof(TriggerTypeClass) + \
-										sizeof(UnitClass) + \
-										sizeof(UnitTypeClass) + \
-										sizeof(VesselClass) + \
-										sizeof(ScenarioClass) + \
-										sizeof(ChronalVortexClass)))
+#define SAVEGAME_VERSION                                                                                               \
+	(DESCRIP_MAX + 0x01000006 +                                                                                    \
+	 (sizeof(AircraftClass) + sizeof(AircraftTypeClass) + sizeof(AnimClass) + sizeof(AnimTypeClass) +              \
+	  sizeof(BaseClass) + sizeof(BuildingClass) + sizeof(BuildingTypeClass) + sizeof(BulletClass) +                \
+	  sizeof(BulletTypeClass) + sizeof(CellClass) + sizeof(FactoryClass) + sizeof(HouseClass) +                    \
+	  sizeof(HouseTypeClass) + sizeof(InfantryClass) + sizeof(InfantryTypeClass) + sizeof(LayerClass) +            \
+	  sizeof(MouseClass) + sizeof(OverlayClass) + sizeof(OverlayTypeClass) + sizeof(SmudgeClass) +                 \
+	  sizeof(SmudgeTypeClass) + sizeof(TeamClass) + sizeof(TeamTypeClass) + sizeof(TemplateClass) +                \
+	  sizeof(TemplateTypeClass) + sizeof(TerrainClass) + sizeof(TerrainTypeClass) + sizeof(TriggerClass) +         \
+	  sizeof(TriggerTypeClass) + sizeof(UnitClass) + sizeof(UnitTypeClass) + sizeof(VesselClass) +                 \
+	  sizeof(ScenarioClass) + sizeof(ChronalVortexClass)))
 //										sizeof(Waypoint)))
 
-
 static int Reconcile_Players(void);
-extern bool Is_Mission_Counterstrike (char *file_name);
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-extern bool Is_Mission_Aftermath (char *file_name);
+extern bool Is_Mission_Counterstrike(char *file_name);
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+extern bool Is_Mission_Aftermath(char *file_name);
 #endif
 
 /***********************************************************************************************
@@ -125,8 +99,7 @@ extern bool Is_Mission_Aftermath (char *file_name);
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-static void Put_All(Pipe & pipe, int save_net)
-{
+static void Put_All(Pipe &pipe, int save_net) {
 	/*
 	**	Save the scenario global information.
 	*/
@@ -135,52 +108,71 @@ static void Put_All(Pipe & pipe, int save_net)
 	/*
 	**	Save the map.  The map must be saved first, since it saves the Theater.
 	*/
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Map.Save(pipe);
 
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save all game objects.  This code saves every object that's stored in a
 	**	TFixedIHeap class.
 	*/
 	Houses.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	TeamTypes.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Teams.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	TriggerTypes.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Triggers.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Aircraft.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Anims.Save(pipe);
 
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	Buildings.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Bullets.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Infantry.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Overlays.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Smudges.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Templates.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Terrains.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Units.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Factories.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	Vessels.Save(pipe);
 
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save the Logic & Map layers
@@ -194,14 +186,16 @@ static void Put_All(Pipe & pipe, int save_net)
 		TARGET target = MapTriggers[index]->As_Target();
 		pipe.Put(&target, sizeof(target));
 	}
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	count = LogicTriggers.Count();
 	pipe.Put(&count, sizeof(count));
 	for (index = 0; index < LogicTriggers.Count(); index++) {
 		TARGET target = LogicTriggers[index]->As_Target();
 		pipe.Put(&target, sizeof(target));
 	}
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 	for (HousesType h = HOUSE_FIRST; h < HOUSE_COUNT; h++) {
 		count = HouseTriggers[h].Count();
 		pipe.Put(&count, sizeof(count));
@@ -210,73 +204,81 @@ static void Put_All(Pipe & pipe, int save_net)
 			pipe.Put(&target, sizeof(target));
 		}
 	}
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	for (int i = 0; i < LAYER_COUNT; i++) {
 		Map.Layer[i].Save(pipe);
 	}
 
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save the Score
 	*/
 	pipe.Put(&Score, sizeof(Score));
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save the AI Base
 	*/
 	Base.Save(pipe);
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save out the carry over list (if present). First see how
 	**	many carry over objects are in the list.
 	*/
 	int carry_count = 0;
-	CarryoverClass const * cptr = Carryover;
+	CarryoverClass const *cptr = Carryover;
 	while (cptr != NULL) {
 		carry_count++;
 		cptr = (CarryoverClass const *)cptr->Get_Next();
 	}
 
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save out the number of objects in the list.
 	*/
 	pipe.Put(&carry_count, sizeof(carry_count));
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Now write out the objects themselves.
 	*/
-	CarryoverClass const * object_to_write = Carryover;
+	CarryoverClass const *object_to_write = Carryover;
 	while (object_to_write != NULL) {
 		pipe.Put(object_to_write, sizeof(*object_to_write));
 		object_to_write = (CarryoverClass const *)object_to_write->Get_Next();
 	}
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save miscellaneous variables.
 	*/
 	Save_Misc_Values(pipe);
 
-	if (!save_net) Call_Back();
+	if (!save_net)
+		Call_Back();
 
 	/*
 	**	Save multiplayer values
 	*/
-	pipe.Put(&save_net, sizeof(save_net));		// Write out whether we saved the net values so we know if we have to load them again. ST - 10/22/2019 2:10PM
+	pipe.Put(&save_net, sizeof(save_net)); // Write out whether we saved the net values so we know if we have to
+					       // load them again. ST - 10/22/2019 2:10PM
 	if (save_net) {
 		Save_MPlayer_Values(pipe);
 	}
 
 	pipe.Flush();
 }
-
 
 /***************************************************************************
  * Save_Game -- saves a game to disk                                       *
@@ -317,17 +319,16 @@ static void Put_All(Pipe & pipe, int save_net)
  *   12/28/1994 BR : Created.                                              *
  *   02/27/1996 JLB : Uses simpler game control value save operation.      *
  *=========================================================================*/
-bool Save_Game(int id, char const * descr, bool )
-{
-	char name[_MAX_FNAME+_MAX_EXT];
+bool Save_Game(int id, char const *descr, bool) {
+	char name[_MAX_FNAME + _MAX_EXT];
 
 	/*
 	**	Generate the filename to save.  If 'id' is -1, it means save a
 	** network/modem game; otherwise, use 'id' as the file extension.
 	*/
-	if (id==-1) {
+	if (id == -1) {
 		strcpy(name, NET_SAVE_FILE_NAME);
-		//save_net = 1;
+		// save_net = 1;
 	} else {
 		sprintf(name, "SAVEGAME.%03d", id);
 	}
@@ -335,27 +336,24 @@ bool Save_Game(int id, char const * descr, bool )
 	return Save_Game(name, descr);
 }
 
-
-
 /*
 ** Version that takes file name. ST - 9/9/2019 11:10AM
 */
 bool NowSavingGame = false; // TEMP MBL: Need to discuss better solution with Steve
-bool Save_Game(const char *file_name, const char *descr)
-{
+bool Save_Game(const char *file_name, const char *descr) {
 	NowSavingGame = true; // TEMP MBL: Need to discuss better solution with Steve
 
-	int save_net = 0;									// 1 = save network/modem game
-	
-	if (Session.Type  == GAME_GLYPHX_MULTIPLAYER) {
+	int save_net = 0; // 1 = save network/modem game
+
+	if (Session.Type == GAME_GLYPHX_MULTIPLAYER) {
 		save_net = 1;
 	}
-	
+
 	unsigned scenario;
 	HousesType house;
 
-	scenario = Scen.Scenario;						// get current scenario #
-	house = PlayerPtr->Class->House;				// get current house
+	scenario = Scen.Scenario;	 // get current scenario #
+	house = PlayerPtr->Class->House; // get current house
 
 	/*
 	**	Code everybody's pointers
@@ -387,8 +385,8 @@ bool Save_Game(const char *file_name, const char *descr)
 	*/
 	char descr_buf[DESCRIP_MAX];
 	memset(descr_buf, '\0', sizeof(descr_buf));
-	sprintf(descr_buf, "%s\r\n", descr);			// put CR-LF after text
-	//descr_buf[strlen(descr_buf) + 1] = 26;		// put CTRL-Z after NULL
+	sprintf(descr_buf, "%s\r\n", descr); // put CR-LF after text
+	// descr_buf[strlen(descr_buf) + 1] = 26;		// put CTRL-Z after NULL
 	fpipe.Put(descr_buf, DESCRIP_MAX);
 
 	fpipe.Put(&scenario, sizeof(scenario));
@@ -399,7 +397,7 @@ bool Save_Game(const char *file_name, const char *descr)
 	**	Save the save-game version, for loading verification
 	*/
 	unsigned long version = SAVEGAME_VERSION;
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	version++;
 #endif
 	fpipe.Put(&version, sizeof(version));
@@ -412,7 +410,6 @@ bool Save_Game(const char *file_name, const char *descr)
 	char digest[20];
 	fpipe.Put(digest, sizeof(digest));
 
-
 	/*
 	**	Dump the save game data to the file. The data is compressed
 	**	and then encrypted. The message digest is calculated in the
@@ -421,8 +418,8 @@ bool Save_Game(const char *file_name, const char *descr)
 	SHAPipe sha;
 	BlowPipe bpipe(BlowPipe::ENCRYPT);
 	LZOPipe pipe(LZOPipe::COMPRESS, SAVE_BLOCK_SIZE);
-//	LZWPipe pipe(LZWPipe::COMPRESS, SAVE_BLOCK_SIZE);
-//	LCWPipe pipe(LCWPipe::COMPRESS, SAVE_BLOCK_SIZE);
+	//	LZWPipe pipe(LZWPipe::COMPRESS, SAVE_BLOCK_SIZE);
+	//	LCWPipe pipe(LCWPipe::COMPRESS, SAVE_BLOCK_SIZE);
 	bpipe.Key(&FastKey, BlowfishEngine::MAX_KEY_LENGTH);
 
 	sha.Put_To(fpipe);
@@ -445,9 +442,8 @@ bool Save_Game(const char *file_name, const char *descr)
 
 	NowSavingGame = false; // TEMP MBL: Need to discuss better solution with Steve
 
-	return(true);
+	return (true);
 }
-
 
 /***************************************************************************
  * Load_Game -- loads a saved game                                         *
@@ -486,12 +482,10 @@ bool Save_Game(const char *file_name, const char *descr)
  *      unknown state, so the scenario will have to be re-initialized.     *
  *                                                                         *
  * HISTORY:                                                                *
- *   12/28/1994 BR : Created. 						   								*
- *   1/20/97  V.Grippi Added expansion CD check                            *
+ *   12/28/1994 BR : Created. * 1/20/97  V.Grippi Added expansion CD check                            *
  *=========================================================================*/
-bool Load_Game(int id)
-{
-	char name[_MAX_FNAME+_MAX_EXT];
+bool Load_Game(int id) {
+	char name[_MAX_FNAME + _MAX_EXT];
 
 	/*
 	**	Generate the filename to load.  If 'id' is -1, it means save a
@@ -499,31 +493,29 @@ bool Load_Game(int id)
 	*/
 	if (id == -1) {
 		strcpy(name, NET_SAVE_FILE_NAME);
-		//load_net = 1;
+		// load_net = 1;
 	} else {
 		sprintf(name, "SAVEGAME.%03d", id);
 	}
 	return Load_Game(name);
 }
 
-
 /*
 ** Version that takes a file name instead. ST - 9/9/2019 11:13AM
 */
-bool Load_Game(const char *file_name)
-{		
+bool Load_Game(const char *file_name) {
 	int i;
 	unsigned scenario;
 	HousesType house;
 	char descr_buf[DESCRIP_MAX];
-	int load_net = 0;									// 1 = save network/modem game
-	
+	int load_net = 0; // 1 = save network/modem game
+
 	/*
 	**	Open the file
 	*/
 	RawFileClass file(file_name);
 	if (!file.Is_Available()) {
-		return(false);
+		return (false);
 	}
 
 	FileStraw fstraw(file);
@@ -541,15 +533,15 @@ bool Load_Game(const char *file_name)
 	**	Read & discard the save-game's header info
 	*/
 	if (fstraw.Get(descr_buf, DESCRIP_MAX) != DESCRIP_MAX) {
-		return(false);
+		return (false);
 	}
 
 	if (fstraw.Get(&scenario, sizeof(scenario)) != sizeof(scenario)) {
-		return(false);
+		return (false);
 	}
 
 	if (fstraw.Get(&house, sizeof(house)) != sizeof(house)) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -557,16 +549,16 @@ bool Load_Game(const char *file_name)
 	*/
 	unsigned long version;
 	if (fstraw.Get(&version, sizeof(version)) != sizeof(version)) {
-		return(false);
+		return (false);
 	}
 	GameVersion = version;
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-	if (version != SAVEGAME_VERSION && ((version-1) != SAVEGAME_VERSION) ) {
-	      	return(false);
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+	if (version != SAVEGAME_VERSION && ((version - 1) != SAVEGAME_VERSION)) {
+		return (false);
 	}
 #else
-	if (version != SAVEGAME_VERSION /*&& version != 0x0100616D*/){
-	      	return(false);
+	if (version != SAVEGAME_VERSION /*&& version != 0x0100616D*/) {
+		return (false);
 	}
 #endif
 	/*
@@ -588,7 +580,8 @@ bool Load_Game(const char *file_name)
 	SHAStraw sha;
 	sha.Get_From(fstraw);
 	for (;;) {
-		if (sha.Get(_staging_buffer, sizeof(_staging_buffer)) != sizeof(_staging_buffer)) break;
+		if (sha.Get(_staging_buffer, sizeof(_staging_buffer)) != sizeof(_staging_buffer))
+			break;
 	}
 	char actual[20];
 	sha.Result(actual);
@@ -601,7 +594,7 @@ bool Load_Game(const char *file_name)
 	**	before any damage could be done.
 	*/
 	if (memcmp(actual, digest, sizeof(digest)) != 0) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -610,8 +603,8 @@ bool Load_Game(const char *file_name)
 	file.Seek(pos, SEEK_SET);
 	BlowStraw bstraw(BlowStraw::DECRYPT);
 	LZOStraw straw(LZOStraw::DECOMPRESS, SAVE_BLOCK_SIZE);
-//	LZWStraw straw(LZWStraw::DECOMPRESS, SAVE_BLOCK_SIZE);
-//	LCWStraw straw(LCWStraw::DECOMPRESS, SAVE_BLOCK_SIZE);
+	//	LZWStraw straw(LZWStraw::DECOMPRESS, SAVE_BLOCK_SIZE);
+	//	LCWStraw straw(LCWStraw::DECOMPRESS, SAVE_BLOCK_SIZE);
 
 	bstraw.Key(&FastKey, BlowfishEngine::MAX_KEY_LENGTH);
 	bstraw.Get_From(fstraw);
@@ -639,32 +632,33 @@ bool Load_Game(const char *file_name)
 	**	Fixup the Sessionclass scenario info so we can work out which
 	** CD to request later
 	*/
-	if ( load_net ){
+	if (load_net) {
 
-		CCFileClass scenario_file (Scen.ScenarioName);
-		if ( !scenario_file.Is_Available() ){
+		CCFileClass scenario_file(Scen.ScenarioName);
+		if (!scenario_file.Is_Available()) {
 
 			int cd = -1;
-			if (Is_Mission_Counterstrike (Scen.ScenarioName)) {
+			if (Is_Mission_Counterstrike(Scen.ScenarioName)) {
 				cd = 2;
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 				if (Expansion_AM_Present()) {
 					int current_drive = CCFileClass::Get_CD_Drive();
-					int index = Get_CD_Index(current_drive, 1*60);
-					if (index == 3) cd = 3;
+					int index = Get_CD_Index(current_drive, 1 * 60);
+					if (index == 3)
+						cd = 3;
 				}
 #endif
 			}
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-			if (Is_Mission_Aftermath (Scen.ScenarioName)) {
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+			if (Is_Mission_Aftermath(Scen.ScenarioName)) {
 				cd = 3;
 #ifdef BOGUSCD
-	cd = -1;
+				cd = -1;
 #endif
 			}
 #endif
 			RequiredCD = cd;
-			if (!Force_CD_Available (RequiredCD)) {
+			if (!Force_CD_Available(RequiredCD)) {
 				Emergency_Exit(EXIT_FAILURE);
 			}
 
@@ -679,7 +673,7 @@ bool Load_Game(const char *file_name)
 			** in the drive.
 			*/
 			int current_drive = CCFileClass::Get_CD_Drive();
-			RequiredCD = Get_CD_Index(current_drive, 1*60);
+			RequiredCD = Get_CD_Index(current_drive, 1 * 60);
 		}
 	}
 
@@ -760,7 +754,7 @@ bool Load_Game(const char *file_name)
 	**	Load the Score
 	*/
 	straw.Get(&Score, sizeof(Score));
-	new(&Score) ScoreClass(NoInitClass());
+	new (&Score) ScoreClass(NoInitClass());
 
 	/*
 	**	Load the AI Base
@@ -771,7 +765,7 @@ bool Load_Game(const char *file_name)
 	**	Delete any carryover pseudo-saved game list.
 	*/
 	while (Carryover != NULL) {
-		CarryoverClass * cptr = (CarryoverClass *)Carryover->Get_Next();
+		CarryoverClass *cptr = (CarryoverClass *)Carryover->Get_Next();
 		Carryover->Remove();
 		delete Carryover;
 		Carryover = cptr;
@@ -783,7 +777,7 @@ bool Load_Game(const char *file_name)
 	int carry_count = 0;
 	straw.Get(&carry_count, sizeof(carry_count));
 	while (carry_count) {
-		CarryoverClass * cptr = new CarryoverClass;
+		CarryoverClass *cptr = new CarryoverClass;
 		assert(cptr != NULL);
 
 		straw.Get(cptr, sizeof(CarryoverClass));
@@ -828,7 +822,7 @@ bool Load_Game(const char *file_name)
 	** Re-init unit trackers. They will be garbage pointers after the load
 	*/
 	for (HousesType house = HOUSE_FIRST; house < HOUSE_COUNT; house++) {
-		HouseClass * hptr = HouseClass::As_Pointer(house);
+		HouseClass *hptr = HouseClass::As_Pointer(house);
 		if (hptr && hptr->IsActive) {
 			hptr->Init_Unit_Trackers();
 		}
@@ -847,15 +841,12 @@ bool Load_Game(const char *file_name)
 		**	Determines if this an ant mission. Since the ant mission looks no different from
 		**	a regular mission, examining of the scenario name is the only way to tell.
 		*/
-		if (toupper(Scen.ScenarioName[0]) == 'S' &&
-			toupper(Scen.ScenarioName[1]) == 'C' &&
-			toupper(Scen.ScenarioName[2]) == 'A' &&
-			toupper(Scen.ScenarioName[3]) == '0' &&
-			toupper(Scen.ScenarioName[5]) == 'E' &&
-			toupper(Scen.ScenarioName[6]) == 'A') {
+		if (toupper(Scen.ScenarioName[0]) == 'S' && toupper(Scen.ScenarioName[1]) == 'C' &&
+		    toupper(Scen.ScenarioName[2]) == 'A' && toupper(Scen.ScenarioName[3]) == '0' &&
+		    toupper(Scen.ScenarioName[5]) == 'E' && toupper(Scen.ScenarioName[6]) == 'A') {
 
 			AntsEnabled = true;
-		} else{
+		} else {
 			AntsEnabled = false;
 		}
 #endif
@@ -865,46 +856,46 @@ bool Load_Game(const char *file_name)
 		} else {
 #ifdef FIXIT_ANTS
 			if (Scen.Scenario > 19 || AntsEnabled) {
-			   RequiredCD = 2;
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-				if(Scen.Scenario >= 36) {
+				RequiredCD = 2;
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+				if (Scen.Scenario >= 36) {
 					RequiredCD = 3;
 #ifdef BOGUSCD
-	RequiredCD = -1;
+					RequiredCD = -1;
 #endif
 				}
 #endif
 			} else {
-#endif	//FIXIT_ANTS
-				if (PlayerPtr->Class->House != HOUSE_USSR  && PlayerPtr->Class->House != HOUSE_UKRAINE) {
+#endif // FIXIT_ANTS
+				if (PlayerPtr->Class->House != HOUSE_USSR && PlayerPtr->Class->House != HOUSE_UKRAINE) {
 					RequiredCD = 0;
 				} else {
 					RequiredCD = 1;
 				}
 #ifdef FIXIT_ANTS
 			}
-#endif	//FIXIT_ANTS
+#endif // FIXIT_ANTS
 		}
 
-	}else{
+	} else {
 
-		if ( load_net ){
+		if (load_net) {
 
-			CCFileClass scenario_file (Scen.ScenarioName);
+			CCFileClass scenario_file(Scen.ScenarioName);
 
 			/*
 			** Fix up the session class variables
 			*/
-			for ( int s=0 ; s<Session.Scenarios.Count() ; s++ ) {
-				if (Session.Scenarios[s]->Description() == Scen.Description){
+			for (int s = 0; s < Session.Scenarios.Count(); s++) {
+				if (Session.Scenarios[s]->Description() == Scen.Description) {
 
-					memcpy (Session.Options.ScenarioDescription, Scen.Description,
-								sizeof (Session.Options.ScenarioDescription));
-					memcpy (Session.ScenarioFileName, Scen.ScenarioName,
-								sizeof (Session.ScenarioFileName));
+					memcpy(Session.Options.ScenarioDescription, Scen.Description,
+					       sizeof(Session.Options.ScenarioDescription));
+					memcpy(Session.ScenarioFileName, Scen.ScenarioName,
+					       sizeof(Session.ScenarioFileName));
 					Session.ScenarioFileLength = scenario_file.Size();
-					memcpy (Session.ScenarioDigest, Session.Scenarios[s]->Get_Digest(),
-								sizeof (Session.ScenarioDigest));
+					memcpy(Session.ScenarioDigest, Session.Scenarios[s]->Get_Digest(),
+					       sizeof(Session.ScenarioDigest));
 					Session.ScenarioIsOfficial = Session.Scenarios[s]->Get_Official();
 					Scen.Scenario = s;
 					Session.Options.ScenarioIndex = s;
@@ -924,15 +915,15 @@ bool Load_Game(const char *file_name)
 	if (load_net) {
 
 		// Removed as this is ensured by the GlyphX & DLL save/load code. ST - 10/22/2019 5:20PM
-		//if (!Reconcile_Players()) {	// (must do after Decode pointers)
+		// if (!Reconcile_Players()) {	// (must do after Decode pointers)
 		//	return(false);
 		//}
-		
+
 		//!!!!!!!!!! put Fixup_Player_Units() here
 		Session.LoadGame = true;
 	}
 
-	Map.Reload_Sidebar();	// re-load sidebar art.
+	Map.Reload_Sidebar(); // re-load sidebar art.
 
 	/*
 	**	Rescan the scenario file for any rules updates.
@@ -952,7 +943,7 @@ bool Load_Game(const char *file_name)
 	Rule.IQ(RuleINI);
 	Rule.Objects(RuleINI);
 	Rule.Difficulty(RuleINI);
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98 - But does this incorporate *changes*? - NO.
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98 - But does this incorporate *changes*? - NO.
 	Rule.General(AftermathINI);
 	Rule.Recharge(AftermathINI);
 	Rule.AI(AftermathINI);
@@ -972,49 +963,50 @@ bool Load_Game(const char *file_name)
 	Rule.Recharge(ini);
 	Rule.AI(ini);
 	Rule.Powerups(ini);
-	Rule.Land_Types(ini);                               \
+	Rule.Land_Types(ini);
 	Rule.Themes(ini);
 	Rule.IQ(ini);
 	Rule.Objects(ini);
 	Rule.Difficulty(ini);
-#ifdef FIXIT_CSII	//	ajw - Added runtime check for Aftermath to skirmish mode.
+#ifdef FIXIT_CSII //	ajw - Added runtime check for Aftermath to skirmish mode.
 	if (load_net) {
 		bool readini = false;
-		switch(Session.Type) {
-			case GAME_NORMAL:
-				readini = false;
-				break;
-			case GAME_SKIRMISH:
-				readini = Is_Aftermath_Installed();
-				break;
-			default:
+		switch (Session.Type) {
+		case GAME_NORMAL:
+			readini = false;
+			break;
+		case GAME_SKIRMISH:
+			readini = Is_Aftermath_Installed();
+			break;
+		default:
 #ifdef FIXIT_VERSION_3
-				readini = bAftermathMultiplayer;
+			readini = bAftermathMultiplayer;
 #else
-				if (PlayingAgainstVersion >= VERSION_AFTERMATH_CS) {
-					readini = true;
-				}
+			if (PlayingAgainstVersion >= VERSION_AFTERMATH_CS) {
+				readini = true;
+			}
 #endif
-				break;
+			break;
 		}
-		if(readini) {
+		if (readini) {
 			/*
 			** Find out if the CD in the current drive is the Aftermath disc.
-		  	*/
-			if(Get_CD_Index(CCFileClass::Get_CD_Drive(), 1*60) != 3) {
+			*/
+			if (Get_CD_Index(CCFileClass::Get_CD_Drive(), 1 * 60) != 3) {
 				GamePalette.Set(FADE_PALETTE_FAST, Call_Back);
-				if (!Force_CD_Available(3)) {	// force Aftermath CD in drive.
+				if (!Force_CD_Available(3)) { // force Aftermath CD in drive.
 					Prog_End("Load_Game Force_CD_Available(3) failed", true);
-#ifndef FIXIT_VERSION_3			//	WChat eliminated.
+#ifndef FIXIT_VERSION_3 //	WChat eliminated.
 #ifdef WIN32
-if(Special.IsFromWChat || SpawnedFromWChat) {
-	char packet[10] = {"Hello"};
-	Send_Data_To_DDE_Server (packet, strlen(packet), DDEServerClass::DDE_CONNECTION_FAILED);
-}
+					if (Special.IsFromWChat || SpawnedFromWChat) {
+						char packet[10] = {"Hello"};
+						Send_Data_To_DDE_Server(packet, strlen(packet),
+									DDEServerClass::DDE_CONNECTION_FAILED);
+					}
 #endif
 #endif
 					Emergency_Exit(EXIT_FAILURE);
-		     	}
+				}
 			}
 			CCINIClass mpini;
 			if (mpini.Load(CCFileClass("MPLAYER.INI"), false)) {
@@ -1029,7 +1021,6 @@ if(Special.IsFromWChat || SpawnedFromWChat) {
 				Rule.Difficulty(mpini);
 			}
 		}
-
 	}
 #endif
 
@@ -1038,14 +1029,13 @@ if(Special.IsFromWChat || SpawnedFromWChat) {
 	} else {
 		Theme.Queue_Song(Scen.TransitTheme);
 	}
-	
+
 	if (Session.Type == GAME_GLYPHX_MULTIPLAYER) {
 		Rule.IsSmartDefense = true;
 	}
-	
-	return(true);
-}
 
+	return (true);
+}
 
 /***************************************************************************
  * Save_Misc_Values -- saves miscellaneous variables                       *
@@ -1063,11 +1053,10 @@ if(Special.IsFromWChat || SpawnedFromWChat) {
  *   12/29/1994 BR : Created.                                              *
  *   03/12/1996 JLB : Simplified.                                          *
  *=========================================================================*/
-bool Save_Misc_Values(Pipe & file)
-{
+bool Save_Misc_Values(Pipe &file) {
 	int i, j;
-	int count;								// # ptrs in 'CurrentObject'
-	ObjectClass * ptr;					// for saving 'CurrentObject' ptrs
+	int count;	  // # ptrs in 'CurrentObject'
+	ObjectClass *ptr; // for saving 'CurrentObject' ptrs
 
 	/*
 	**	Player's House.
@@ -1085,7 +1074,7 @@ bool Save_Misc_Values(Pipe & file)
 	**	Save the # of ptrs in the list.
 	*/
 	for (i = 0; i < SelectedObjectsType::COUNT; i++) {
-		DynamicVectorClass<ObjectClass *>& selection = CurrentObject.Raw(i);
+		DynamicVectorClass<ObjectClass *> &selection = CurrentObject.Raw(i);
 		count = selection.Count();
 		file.Put(&count, sizeof(count));
 
@@ -1109,9 +1098,8 @@ bool Save_Misc_Values(Pipe & file)
 	file.Put(&IsTanyaDead, sizeof(IsTanyaDead));
 	file.Put(&SaveTanya, sizeof(SaveTanya));
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * Load_Misc_Values -- Loads miscellaneous variables.                                          *
@@ -1126,16 +1114,15 @@ bool Save_Misc_Values(Pipe & file)
  *   06/24/1995 BRR : Created.                                                                 *
  *   03/12/1996 JLB : Simplified.                                                              *
  *=============================================================================================*/
-bool Load_Misc_Values(Straw & file)
-{
-	ObjectClass * ptr;					// for loading 'CurrentObject' ptrs
+bool Load_Misc_Values(Straw &file) {
+	ObjectClass *ptr; // for loading 'CurrentObject' ptrs
 
 	/*
 	**	Player's House.
 	*/
 	int x;
 	file.Get(&x, sizeof(x));
-//	file.Get(&PlayerPtr, sizeof(PlayerPtr));
+	//	file.Get(&PlayerPtr, sizeof(PlayerPtr));
 	PlayerPtr = HouseClass::As_Pointer((HousesType)x);
 
 	/*
@@ -1148,8 +1135,8 @@ bool Load_Misc_Values(Straw & file)
 		**	Load currently-selected objects list.
 		**	Load the # of ptrs in the list.
 		*/
-		DynamicVectorClass<ObjectClass *>& selection = CurrentObject.Raw(i);
-		int count;								// # ptrs in 'CurrentObject'
+		DynamicVectorClass<ObjectClass *> &selection = CurrentObject.Raw(i);
+		int count; // # ptrs in 'CurrentObject'
 		file.Get(&count, sizeof(count));
 
 		/*
@@ -1157,7 +1144,7 @@ bool Load_Misc_Values(Straw & file)
 		*/
 		for (int j = 0; j < count; j++) {
 			file.Get(&ptr, sizeof(ptr));
-			selection.Add(ptr);	// add to the list
+			selection.Add(ptr); // add to the list
 		}
 	}
 
@@ -1172,9 +1159,8 @@ bool Load_Misc_Values(Straw & file)
 	file.Get(&IsTanyaDead, sizeof(IsTanyaDead));
 	file.Get(&SaveTanya, sizeof(SaveTanya));
 
-	return(true);
+	return (true);
 }
-
 
 /***************************************************************************
  * Save_MPlayer_Values -- Saves multiplayer-specific values                *
@@ -1183,24 +1169,26 @@ bool Load_Misc_Values(Straw & file)
  * save game.  In addition to saving the random # seed for this scenario, 	*
  * it saves the contents of the actual random number generator; this 		*
  * ensures that the random # sequencer will pick up where it left off when	*
- * the game was saved.																		*
- * This routine also saves the header for a Recording file, so it must 		*
- * save some data not needed specifically by a save-game file (ie Seed).	*
+ * the game was saved.
+ ** This routine also saves the header for a Recording file, so it must 		* save some data not needed
+ *specifically by a save-game file (ie Seed).	*
  *                                                                         *
  * INPUT:                                                                  *
- *		file		file to save to															*
+ *		file		file to save to
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		true = success, false = failure													*
+ *		true = success, false = failure
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   09/28/1995 BRR : Created.                                             *
  *=========================================================================*/
-bool Save_MPlayer_Values(Pipe & file)
-{
+bool Save_MPlayer_Values(Pipe &file) {
 	Session.Save(file);
 	file.Put(&BuildLevel, sizeof(BuildLevel));
 	file.Put(&Debug_Unshroud, sizeof(Debug_Unshroud));
@@ -1212,24 +1200,25 @@ bool Save_MPlayer_Values(Pipe & file)
 	return (true);
 }
 
-
 /***************************************************************************
  * Load_MPlayer_Values -- Loads multiplayer-specific values                *
  *                                                                         *
  * INPUT:                                                                  *
- *		file			file to load from														*
+ *		file			file to load from
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		true = success, false = failure													*
+ *		true = success, false = failure
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   09/28/1995 BRR : Created.                                             *
  *=========================================================================*/
-bool Load_MPlayer_Values(Straw & file)
-{
+bool Load_MPlayer_Values(Straw &file) {
 	Session.Load(file);
 	file.Get(&BuildLevel, sizeof(BuildLevel));
 	file.Get(&Debug_Unshroud, sizeof(Debug_Unshroud));
@@ -1259,8 +1248,7 @@ extern void DLL_Decode_Pointers(void);
  * HISTORY:                                                                                    *
  *   06/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-void Code_All_Pointers(void)
-{
+void Code_All_Pointers(void) {
 	int i, j;
 
 	/*
@@ -1308,13 +1296,13 @@ void Code_All_Pointers(void)
 	/*
 	**	PlayerPtr.
 	*/
-//	PlayerPtr = (HouseClass *)(PlayerPtr->Class->House);
+	//	PlayerPtr = (HouseClass *)(PlayerPtr->Class->House);
 
 	/*
 	**	Currently-selected objects.
 	*/
 	for (i = 0; i < SelectedObjectsType::COUNT; i++) {
-		DynamicVectorClass<ObjectClass *>& selection = CurrentObject.Raw(i);
+		DynamicVectorClass<ObjectClass *> &selection = CurrentObject.Raw(i);
 		for (j = 0; j < selection.Count(); j++) {
 			selection[j] = (ObjectClass *)selection[j]->As_Target();
 		}
@@ -1333,7 +1321,6 @@ void Code_All_Pointers(void)
 	Houses.Code_Pointers();
 }
 
-
 /***********************************************************************************************
  * Decode_All_Pointers -- Decodes all pointers.                                                *
  *                                                                                             *
@@ -1346,8 +1333,7 @@ void Code_All_Pointers(void)
  * HISTORY:                                                                                    *
  *   06/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-void Decode_All_Pointers(void)
-{
+void Decode_All_Pointers(void) {
 	/*
 	**	The Map.
 	*/
@@ -1404,7 +1390,7 @@ void Decode_All_Pointers(void)
 	/*
 	**	PlayerPtr.
 	*/
-//	PlayerPtr = HouseClass::As_Pointer((HousesType)PlayerPtr);
+	//	PlayerPtr = HouseClass::As_Pointer((HousesType)PlayerPtr);
 	Whom = PlayerPtr->Class->House;
 	assert(PlayerPtr != NULL);
 
@@ -1412,7 +1398,7 @@ void Decode_All_Pointers(void)
 	**	Currently-selected objects.
 	*/
 	for (int index = 0; index < SelectedObjectsType::COUNT; index++) {
-		DynamicVectorClass<ObjectClass *>& selection = CurrentObject.Raw(index);
+		DynamicVectorClass<ObjectClass *> &selection = CurrentObject.Raw(index);
 		for (int j = 0; j < selection.Count(); j++) {
 			selection[j] = As_Object((TARGET)selection[j]);
 			assert(selection[j] != NULL);
@@ -1436,7 +1422,6 @@ void Decode_All_Pointers(void)
 	}
 }
 
-
 /***************************************************************************
  * Get_Savefile_Info -- gets description, scenario #, house                *
  *                                                                         *
@@ -1455,9 +1440,8 @@ void Decode_All_Pointers(void)
  * HISTORY:                                                                *
  *   01/12/1995 BR : Created.                                              *
  *=========================================================================*/
-bool Get_Savefile_Info(int id, char * buf, unsigned * scenp, HousesType * housep)
-{
-	char name[_MAX_FNAME+_MAX_EXT];
+bool Get_Savefile_Info(int id, char *buf, unsigned *scenp, HousesType *housep) {
+	char name[_MAX_FNAME + _MAX_EXT];
 	unsigned long version;
 	char descr_buf[DESCRIP_MAX];
 
@@ -1473,36 +1457,35 @@ bool Get_Savefile_Info(int id, char * buf, unsigned * scenp, HousesType * housep
 	**	Read in the description, scenario #, and the house
 	*/
 	if (straw.Get(descr_buf, DESCRIP_MAX) != DESCRIP_MAX) {
-		return(false);
+		return (false);
 	}
 
-	descr_buf[strlen(descr_buf) - 2] = '\0';	// trim off CR/LF
+	descr_buf[strlen(descr_buf) - 2] = '\0'; // trim off CR/LF
 	strcpy(buf, descr_buf);
 
 	if (straw.Get(scenp, sizeof(unsigned)) != sizeof(unsigned)) {
-		return(false);
+		return (false);
 	}
 
 	if (straw.Get(housep, sizeof(HousesType)) != sizeof(HousesType)) {
-		return(false);
+		return (false);
 	}
 
 	/*
 	**	Read & verify the save-game version #
 	*/
 	if (straw.Get(&version, sizeof(version)) != sizeof(version)) {
-		return(false);
+		return (false);
 	}
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-	if (version != SAVEGAME_VERSION && ((version-1 != SAVEGAME_VERSION)) ) {
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+	if (version != SAVEGAME_VERSION && ((version - 1 != SAVEGAME_VERSION))) {
 #else
 	if (version != SAVEGAME_VERSION) {
 #endif
-		return(false);
+		return (false);
 	}
-	return(true);
+	return (true);
 }
-
 
 /***************************************************************************
  * Reconcile_Players -- Reconciles loaded data with the 'Players' vector	*
@@ -1511,43 +1494,48 @@ bool Get_Savefile_Info(int id, char * buf, unsigned * scenp, HousesType * housep
  * When the game is loaded, we have to figure out which house goes with		*
  * which entry in the Players vector.  We also have to figure out if 		*
  * everyone who was originally in the game is still with us, and if not, 	*
- * turn their stuff over to the computer.												*
+ * turn their stuff over to the computer.
+ **
  *                                                                         *
- * So, this function does the following:												*
+ * So, this function does the following:
+ **
  * - For every name in 'Players', makes sure that name is in the House		*
- *   array; if not, it's a fatal error.												*
+ *   array; if not, it's a fatal error. *
  * - For every human-controlled house, makes sure there's a player	 		*
  *   with that name; if not, it turns that house over to the computer.		*
- * - Fills in the Player's house ID														*
+ * - Fills in the Player's house ID
+ **
  *                                                                         *
  * This assumes that each player MUST keep their name the same as it was	*
  * when the game was saved!  It's also assumed that the network 				*
  * connections have not been formed yet, since Player[i]->Player.ID will	*
- * be invalid until this routine has been called.									*
+ * be invalid until this routine has been called. *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		true = OK, false = error															*
+ *		true = OK, false = error
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   09/29/1995 BRR : Created.                                             *
  *=========================================================================*/
-static int Reconcile_Players(void)
-{
+static int Reconcile_Players(void) {
 	int i;
 	int found;
 	HousesType house;
-	HouseClass * housep;
+	HouseClass *housep;
 
 	/*
 	**	If there are no players, there's nothing to do.
 	*/
-	if (Session.Players.Count()==0)
+	if (Session.Players.Count() == 0)
 		return (true);
 
 	/*
@@ -1555,8 +1543,7 @@ static int Reconcile_Players(void)
 	*/
 	for (i = 0; i < Session.Players.Count(); i++) {
 		found = 0;
-		for (house = HOUSE_MULTI1; house < HOUSE_MULTI1 +
-			Session.MaxPlayers; house++) {
+		for (house = HOUSE_MULTI1; house < HOUSE_MULTI1 + Session.MaxPlayers; house++) {
 
 			housep = HouseClass::As_Pointer(house);
 			if (!housep) {
@@ -1576,8 +1563,7 @@ static int Reconcile_Players(void)
 	// Loop through all Houses; if we find a human-owned house that we're
 	// not connected to, turn it over to the computer.
 	//
-	for (house = HOUSE_MULTI1; house < HOUSE_MULTI1 +
-		Session.MaxPlayers; house++) {
+	for (house = HOUSE_MULTI1; house < HOUSE_MULTI1 + Session.MaxPlayers; house++) {
 		housep = HouseClass::As_Pointer(house);
 		if (!housep) {
 			continue;
@@ -1613,9 +1599,9 @@ static int Reconcile_Players(void)
 			*/
 			housep->IsHuman = false;
 			housep->IsStarted = true;
-//			housep->Smartness = IQ_MENSA;
+			//			housep->Smartness = IQ_MENSA;
 			housep->IQ = Rule.MaxIQ;
-			strcpy (housep->IniName, Text_String(TXT_COMPUTER));
+			strcpy(housep->IniName, Text_String(TXT_COMPUTER));
 
 			Session.NumPlayers--;
 		}
@@ -1632,23 +1618,24 @@ static int Reconcile_Players(void)
 	}
 }
 
-
 /***************************************************************************
  * MPlayer_Save_Message -- pops up a "saving..." message                   *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   10/30/1995 BRR : Created.                                             *
  *=========================================================================*/
-void MPlayer_Save_Message(void)
-{
-	//char *txt = Text_String(
+void MPlayer_Save_Message(void) {
+	// char *txt = Text_String(
 }

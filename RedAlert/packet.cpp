@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /***************************************************************************
@@ -32,30 +32,29 @@
  *   PacketClass::~PacketClass -- destroys a packet class be freeing list  *
  *   PacketClass::Add_Field -- Adds a FieldClass entry to head of packet li*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#if (0) //PG
+#if (0) // PG
 
-#include <stdlib.h>
 #include <mem.h>
+#include <stdlib.h>
 #include <string.h>
 
-enum {false=0,true=1};
+enum { false = 0, true = 1 };
 typedef int bool;
 
 #include "packet.h"
-
 
 /**************************************************************************
  * PACKETCLASS::~PACKETCLASS -- destroys a packet class be freeing list   *
  *                                                                        *
  * INPUT:		none                                                       *
  *                                                                        *
- * OUTPUT:     none																		  *
+ * OUTPUT:     none
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/24/1996 PWG : Created.                                            *
  *========================================================================*/
-PacketClass::~PacketClass(void)
-{
+PacketClass::~PacketClass(void) {
 	FieldClass *current;
 	FieldClass *next;
 	//
@@ -67,7 +66,6 @@ PacketClass::~PacketClass(void)
 	}
 }
 
-
 /**************************************************************************
  * PACKETCLASS::ADD_FIELD -- Adds a FieldClass entry to head of packet li *
  *                                                                        *
@@ -78,8 +76,7 @@ PacketClass::~PacketClass(void)
  * HISTORY:                                                               *
  *   04/24/1996 PWG : Created.                                            *
  *========================================================================*/
-void PacketClass::Add_Field(FieldClass *field)
-{
+void PacketClass::Add_Field(FieldClass *field) {
 	field->Next = Head;
 	Head = field;
 }
@@ -96,18 +93,17 @@ void PacketClass::Add_Field(FieldClass *field)
  * HISTORY:                                                               *
  *   04/22/1996 PWG : Created.                                            *
  *========================================================================*/
-PacketClass::PacketClass(char *curbuf)
-{
+PacketClass::PacketClass(char *curbuf) {
 	int remaining_size;
 	//
 	// Pull the size and packet ID out of the linear packet stream.
 	//
 	Size = *(unsigned short *)curbuf;
-	curbuf += sizeof (unsigned short);
+	curbuf += sizeof(unsigned short);
 	Size = ntohs(Size);
-	ID	  = *(short *)curbuf;
-	curbuf += sizeof (short);
-	ID   = ntohs(ID);
+	ID = *(short *)curbuf;
+	curbuf += sizeof(short);
+	ID = ntohs(ID);
 	Head = NULL;
 
 	//
@@ -128,22 +124,22 @@ PacketClass::PacketClass(char *curbuf)
 		//
 		memcpy(field, curbuf, FIELD_HEADER_SIZE);
 		curbuf += FIELD_HEADER_SIZE;
-		remaining_size   -= FIELD_HEADER_SIZE;
+		remaining_size -= FIELD_HEADER_SIZE;
 
 		//
 		// Copy the data into the buffer
 		//
-		int size			= ntohs(field->Size);
-		field->Data		= new char[size];
+		int size = ntohs(field->Size);
+		field->Data = new char[size];
 		memcpy(field->Data, curbuf, size);
-		curbuf			+= size;
-		remaining_size	-= size;
+		curbuf += size;
+		remaining_size -= size;
 		//
 		// Make sure we allow for the pad bytes.
 		//
 		int pad = (4 - (ntohs(field->Size) & 3)) & 3;
 		curbuf += pad;
-		remaining_size   -= pad;
+		remaining_size -= pad;
 
 		//
 		// Convert the field back to the host format
@@ -167,13 +163,13 @@ PacketClass::PacketClass(char *curbuf)
  * OUTPUT:     void * pointer to the linear packet data                   *
  *                                                                        *
  * WARNINGS: 	This routine allocates memory that the user is responsible *
- *  				for freeing.															  *
+ *  				for freeing.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/22/1996 PWG : Created.                                            *
  *========================================================================*/
-char *PacketClass::Create_Comms_Packet(int &size)
-{
+char *PacketClass::Create_Comms_Packet(int &size) {
 	FieldClass *current;
 
 	//
@@ -185,10 +181,10 @@ char *PacketClass::Create_Comms_Packet(int &size)
 	// Take a quick spin through and calculate the size of the packet we
 	//   are building.
 	//
-	for (current = Head; current; current=current->Next) {
-		size += (unsigned short)FIELD_HEADER_SIZE;			// add in packet header size
-		size += current->Size;				// add in data size
-		size += (4 - (size & 3)) & 3; 	// add in pad value to dword align next packet
+	for (current = Head; current; current = current->Next) {
+		size += (unsigned short)FIELD_HEADER_SIZE; // add in packet header size
+		size += current->Size;			   // add in data size
+		size += (4 - (size & 3)) & 3;		   // add in pad value to dword align next packet
 	}
 
 	//
@@ -202,9 +198,9 @@ char *PacketClass::Create_Comms_Packet(int &size)
 	// write the size into the packet header
 	//
 	*(unsigned short *)curbuf = (unsigned short)htons((unsigned short)size);
-	curbuf += sizeof (unsigned short);
+	curbuf += sizeof(unsigned short);
 	*(short *)curbuf = htons(ID);
-	curbuf += sizeof (short);
+	curbuf += sizeof(short);
 
 	//
 	// Ok now that the actual header information has been written we need to write out
@@ -245,9 +241,8 @@ char *PacketClass::Create_Comms_Packet(int &size)
 
 		current->Net_To_Host();
 	}
-	return(retval);
+	return (retval);
 }
-
 
 /**************************************************************************
  * PACKETCLASS::FIND_FIELD -- Finds a field if it exists in the packets   *
@@ -259,15 +254,13 @@ char *PacketClass::Create_Comms_Packet(int &size)
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-FieldClass *PacketClass::Find_Field(char *id)
-{
+FieldClass *PacketClass::Find_Field(char *id) {
 	for (FieldClass *current = Head; current; current = current->Next) {
-		if ( strncmp(id, current->ID, 4) == 0)
+		if (strncmp(id, current->ID, 4) == 0)
 			return current;
 	}
 	return NULL;
 }
-
 
 /**************************************************************************
  * GET_FIELD -- Find specified name and returns data                      *
@@ -278,20 +271,19 @@ FieldClass *PacketClass::Find_Field(char *id)
  * OUTPUT:		true if the field was found, false if it was not.			  *
  *                                                                        *
  * WARNINGS:	The data reference is not changed if the field is not		  *
- *					found.																	  *
+ *					found.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, char &data)
-{
+bool PacketClass::Get_Field(char *id, char &data) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
 		data = *((char *)field->Data);
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
-
 
 /**************************************************************************
  * GET_FIELD -- Find specified name and returns data                      *
@@ -302,20 +294,19 @@ bool PacketClass::Get_Field(char *id, char &data)
  * OUTPUT:		true if the field was found, false if it was not.			  *
  *                                                                        *
  * WARNINGS:	The data reference is not changed if the field is not		  *
- *					found.																	  *
+ *					found.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, unsigned char &data)
-{
+bool PacketClass::Get_Field(char *id, unsigned char &data) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
 		data = *((unsigned char *)field->Data);
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
-
 
 /**************************************************************************
  * GET_FIELD -- Find specified name and returns data                      *
@@ -326,20 +317,19 @@ bool PacketClass::Get_Field(char *id, unsigned char &data)
  * OUTPUT:		true if the field was found, false if it was not.			  *
  *                                                                        *
  * WARNINGS:	The data reference is not changed if the field is not		  *
- *					found.																	  *
+ *					found.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, short &data)
-{
+bool PacketClass::Get_Field(char *id, short &data) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
 		data = *((short *)field->Data);
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
-
 
 /**************************************************************************
  * GET_FIELD -- Find specified name and returns data                      *
@@ -350,20 +340,19 @@ bool PacketClass::Get_Field(char *id, short &data)
  * OUTPUT:		true if the field was found, false if it was not.			  *
  *                                                                        *
  * WARNINGS:	The data reference is not changed if the field is not		  *
- *					found.																	  *
+ *					found.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, unsigned short &data)
-{
+bool PacketClass::Get_Field(char *id, unsigned short &data) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
 		data = *((unsigned short *)field->Data);
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
-
 
 /**************************************************************************
  * GET_FIELD -- Find specified name and returns data                      *
@@ -374,42 +363,42 @@ bool PacketClass::Get_Field(char *id, unsigned short &data)
  * OUTPUT:		true if the field was found, false if it was not.			  *
  *                                                                        *
  * WARNINGS:	The data reference is not changed if the field is not		  *
- *					found.																	  *
+ *					found.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, long &data)
-{
+bool PacketClass::Get_Field(char *id, long &data) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
 		data = *((long *)field->Data);
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
 
 /**************************************************************************
  * GET_FIELD -- Find specified name and returns data as a string          *
  *                                                                        *
  * INPUT:		char *   - the id of the field that holds the data.		  *
- *					char *   - the string to store the data into					  *
+ *					char *   - the string to store the data into *
  *                                                                        *
  * OUTPUT:		true if the field was found, false if it was not.			  *
  *                                                                        *
  * WARNINGS:	The string is not changed if the field is not found.  It   *
  *					is assumed that the string variabled specified by the      *
- *					pointer is large enough to hold the data.						  *
+ *					pointer is large enough to hold the data.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, char *data)
-{
+bool PacketClass::Get_Field(char *id, char *data) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
 		strcpy(data, (char *)field->Data);
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
 
 /**************************************************************************
@@ -421,20 +410,19 @@ bool PacketClass::Get_Field(char *id, char *data)
  * OUTPUT:		true if the field was found, false if it was not.			  *
  *                                                                        *
  * WARNINGS:	The data reference is not changed if the field is not		  *
- *					found.																	  *
+ *					found.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   04/23/1996 PWG : Created.                                            *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, unsigned long &data)
-{
+bool PacketClass::Get_Field(char *id, unsigned long &data) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
 		data = *((unsigned long *)field->Data);
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
-
 
 /**************************************************************************
  * GET_FIELD -- Find specified name and returns data                      *
@@ -446,18 +434,18 @@ bool PacketClass::Get_Field(char *id, unsigned long &data)
  * OUTPUT:		true if the field was found, false if it was not.			 *
  *                                                                        *
  * WARNINGS:	The data reference is not changed if the field is not		    *
- *					found.																	 *
+ *					found.
+ **
  *                                                                        *
  * HISTORY:                                                               *
  *   6/4/96 4:46PM ST : Created                                           *
  *========================================================================*/
-bool PacketClass::Get_Field(char *id, void *data, int &length)
-{
+bool PacketClass::Get_Field(char *id, void *data, int &length) {
 	FieldClass *field = Find_Field(id);
 	if (field) {
-		memcpy (data, field->Data, min(field->Size, length));
-		length = (int) field->Size;
+		memcpy(data, field->Data, min(field->Size, length));
+		length = (int)field->Size;
 	}
-	return((field) ? true : false);
+	return ((field) ? true : false);
 }
 #endif

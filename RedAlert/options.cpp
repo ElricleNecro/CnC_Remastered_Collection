@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/OPTIONS.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -58,16 +58,14 @@
  *   OptionsClass::Set_Tint -- Sets the tint setting.                                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"options.h"
-
+#include "options.h"
+#include "function.h"
 
 #ifdef WIN32
-char const * const OptionsClass::HotkeyName = "WinHotkeys";
+char const *const OptionsClass::HotkeyName = "WinHotkeys";
 #else
-char const * const OptionsClass::HotkeyName = "DOSHotkeys";
+char const *const OptionsClass::HotkeyName = "DOSHotkeys";
 #endif
-
 
 /***********************************************************************************************
  * OptionsClass::OptionsClass -- The default constructor for the options class.                *
@@ -84,80 +82,30 @@ char const * const OptionsClass::HotkeyName = "DOSHotkeys";
  * HISTORY:                                                                                    *
  *   07/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-OptionsClass::OptionsClass(void) :
-	GameSpeed(3),
-	ScrollRate(3),
+OptionsClass::OptionsClass(void)
+    : GameSpeed(3), ScrollRate(3),
 #ifdef WIN32
-	Volume(".40"),			// was .295
-	ScoreVolume(".25"),
+      Volume(".40"), // was .295
+      ScoreVolume(".25"),
 #ifdef FIXIT_VERSION_3
-	MultiScoreVolume("0"),
+      MultiScoreVolume("0"),
 #endif
 #else
-	Volume(".8"),
-	ScoreVolume(".6"),
+      Volume(".8"), ScoreVolume(".6"),
 #endif
-	Brightness(fixed::_1_2),
-	Tint(fixed::_1_2),
-	Saturation(fixed::_1_2),
-	Contrast(fixed::_1_2),
-	AutoScroll(true),
-	IsScoreRepeat(false),
-	IsScoreShuffle(false),
-	IsPaletteScroll(true),
+      Brightness(fixed::_1_2), Tint(fixed::_1_2), Saturation(fixed::_1_2), Contrast(fixed::_1_2), AutoScroll(true),
+      IsScoreRepeat(false), IsScoreShuffle(false), IsPaletteScroll(true),
 
-	KeyForceMove1(KN_LALT),
-	KeyForceMove2(KN_RALT),
-	KeyForceAttack1(KN_LCTRL),
-	KeyForceAttack2(KN_RCTRL),
-	KeySelect1(KN_LSHIFT),
-	KeySelect2(KN_RSHIFT),
-	KeyScatter(KN_X),
-	KeyStop(KN_S),
-	KeyGuard(KN_G),
-	KeyNext(KN_N),
-	KeyPrevious(KN_B),
-	KeyFormation(KN_F),
-	KeyHome1(KN_HOME),
-	KeyHome2(KN_E_HOME),
-	KeyBase(KN_H),
-	KeyResign(KN_R),
-	KeyAlliance(KN_A),
-	KeyBookmark1(KN_F9),
-	KeyBookmark2(KN_F10),
-	KeyBookmark3(KN_F11),
-	KeyBookmark4(KN_F12),
-	KeySelectView(KN_E),
-	KeyRepair(KN_T),
-	KeyRepairOn(KN_NONE),
-	KeyRepairOff(KN_NONE),
-	KeySell(KN_Y),
-	KeySellOn(KN_NONE),
-	KeySellOff(KN_NONE),
-	KeyMap(KN_U),
-	KeySidebarUp(KN_UP),
-	KeySidebarDown(KN_DOWN),
-	KeyOption1(KN_ESC),
-	KeyOption2(KN_SPACE),
-	KeyScrollLeft(KN_NONE),
-	KeyScrollRight(KN_NONE),
-	KeyScrollUp(KN_NONE),
-	KeyScrollDown(KN_NONE),
-	KeyQueueMove1(KN_Q),
-	KeyQueueMove2(KN_Q),
-	KeyTeam1(KN_1),
-	KeyTeam2(KN_2),
-	KeyTeam3(KN_3),
-	KeyTeam4(KN_4),
-	KeyTeam5(KN_5),
-	KeyTeam6(KN_6),
-	KeyTeam7(KN_7),
-	KeyTeam8(KN_8),
-	KeyTeam9(KN_9),
-	KeyTeam10(KN_0)
-{
+      KeyForceMove1(KN_LALT), KeyForceMove2(KN_RALT), KeyForceAttack1(KN_LCTRL), KeyForceAttack2(KN_RCTRL),
+      KeySelect1(KN_LSHIFT), KeySelect2(KN_RSHIFT), KeyScatter(KN_X), KeyStop(KN_S), KeyGuard(KN_G), KeyNext(KN_N),
+      KeyPrevious(KN_B), KeyFormation(KN_F), KeyHome1(KN_HOME), KeyHome2(KN_E_HOME), KeyBase(KN_H), KeyResign(KN_R),
+      KeyAlliance(KN_A), KeyBookmark1(KN_F9), KeyBookmark2(KN_F10), KeyBookmark3(KN_F11), KeyBookmark4(KN_F12),
+      KeySelectView(KN_E), KeyRepair(KN_T), KeyRepairOn(KN_NONE), KeyRepairOff(KN_NONE), KeySell(KN_Y),
+      KeySellOn(KN_NONE), KeySellOff(KN_NONE), KeyMap(KN_U), KeySidebarUp(KN_UP), KeySidebarDown(KN_DOWN),
+      KeyOption1(KN_ESC), KeyOption2(KN_SPACE), KeyScrollLeft(KN_NONE), KeyScrollRight(KN_NONE), KeyScrollUp(KN_NONE),
+      KeyScrollDown(KN_NONE), KeyQueueMove1(KN_Q), KeyQueueMove2(KN_Q), KeyTeam1(KN_1), KeyTeam2(KN_2), KeyTeam3(KN_3),
+      KeyTeam4(KN_4), KeyTeam5(KN_5), KeyTeam6(KN_6), KeyTeam7(KN_7), KeyTeam8(KN_8), KeyTeam9(KN_9), KeyTeam10(KN_0) {
 }
-
 
 /***********************************************************************************************
  * OptionsClass::One_Time -- This performs any one time initialization for the options class.  *
@@ -175,11 +123,7 @@ OptionsClass::OptionsClass(void) :
  * HISTORY:                                                                                    *
  *   07/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::One_Time(void)
-{
-	Set_Score_Vol(ScoreVolume * 256);
-}
-
+void OptionsClass::One_Time(void) { Set_Score_Vol(ScoreVolume * 256); }
 
 /***********************************************************************************************
  * OptionsClass::Process -- Handles all the options graphic interface.                         *
@@ -196,10 +140,7 @@ void OptionsClass::One_Time(void)
  * HISTORY:                                                                                    *
  *   07/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Process(void)
-{
-}
-
+void OptionsClass::Process(void) {}
 
 /***********************************************************************************************
  * OptionsClass::Set_Shuffle -- Controls the play shuffle setting.                             *
@@ -216,11 +157,7 @@ void OptionsClass::Process(void)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Shuffle(int on)
-{
-	IsScoreShuffle = on;
-}
-
+void OptionsClass::Set_Shuffle(int on) { IsScoreShuffle = on; }
 
 /***********************************************************************************************
  * OptionsClass::Set_Repeat -- Controls the score repeat option.                               *
@@ -237,11 +174,7 @@ void OptionsClass::Set_Shuffle(int on)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Repeat(int on)
-{
-	IsScoreRepeat = on;
-}
-
+void OptionsClass::Set_Repeat(int on) { IsScoreRepeat = on; }
 
 /***********************************************************************************************
  * OptionsClass::Set_Score_Volume -- Sets the global score volume to that specified.           *
@@ -260,15 +193,13 @@ void OptionsClass::Set_Repeat(int on)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Score_Volume(fixed volume, bool feedback)
-{
+void OptionsClass::Set_Score_Volume(fixed volume, bool feedback) {
 	ScoreVolume = Sub_Saturate(volume, 1);
 	Set_Score_Vol(ScoreVolume * 256);
 	if (feedback && !Theme.Still_Playing()) {
 		Sound_Effect(VOC_BEEP, ScoreVolume);
 	}
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Set_Sound_Volume -- Sets the sound effects volume level.                      *
@@ -288,14 +219,12 @@ void OptionsClass::Set_Score_Volume(fixed volume, bool feedback)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Sound_Volume(fixed volume, bool feedback)
-{
+void OptionsClass::Set_Sound_Volume(fixed volume, bool feedback) {
 	Volume = Sub_Saturate(volume, 1);
 	if (feedback) {
 		Sound_Effect(VOC_BEEP);
 	}
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Set_Brightness -- Sets the brightness level to that specified.                *
@@ -312,13 +241,11 @@ void OptionsClass::Set_Sound_Volume(fixed volume, bool feedback)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Brightness(fixed brightness)
-{
+void OptionsClass::Set_Brightness(fixed brightness) {
 	Brightness = fixed::_1_4 + (fixed::_1_2 * brightness);
 	Adjust_Palette(OriginalPalette, InGamePalette, Brightness, Saturation, Tint, Contrast);
 	InGamePalette.Set();
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Get_Brightness -- Fetches the current brightness setting.                     *
@@ -335,11 +262,7 @@ void OptionsClass::Set_Brightness(fixed brightness)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Brightness(void) const
-{
-	return((Brightness - fixed::_1_4) / fixed::_1_2);
-}
-
+fixed OptionsClass::Get_Brightness(void) const { return ((Brightness - fixed::_1_4) / fixed::_1_2); }
 
 /***********************************************************************************************
  * OptionsClass::Set_Saturation -- Sets the color to the value specified.                      *
@@ -356,13 +279,11 @@ fixed OptionsClass::Get_Brightness(void) const
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Saturation(fixed color)
-{
+void OptionsClass::Set_Saturation(fixed color) {
 	Saturation = color;
 	Adjust_Palette(OriginalPalette, InGamePalette, Brightness, Saturation, Tint, Contrast);
 	InGamePalette.Set();
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Get_Saturation -- Fetches the current color setting.                          *
@@ -380,11 +301,7 @@ void OptionsClass::Set_Saturation(fixed color)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Saturation(void) const
-{
-	return(Saturation);
-}
-
+fixed OptionsClass::Get_Saturation(void) const { return (Saturation); }
 
 /***********************************************************************************************
  * OptionsClass::Set_Contrast -- Sets the contrast to the value specified.                     *
@@ -401,13 +318,11 @@ fixed OptionsClass::Get_Saturation(void) const
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Contrast(fixed contrast)
-{
+void OptionsClass::Set_Contrast(fixed contrast) {
 	Contrast = fixed::_1_4 + (fixed::_1_2 * contrast);
 	Adjust_Palette(OriginalPalette, InGamePalette, Brightness, Saturation, Tint, Contrast);
 	InGamePalette.Set();
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Get_Contrast -- Gets the current contrast setting.                            *
@@ -424,11 +339,7 @@ void OptionsClass::Set_Contrast(fixed contrast)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Contrast(void) const
-{
-	return((Contrast - fixed::_1_4) / fixed::_1_2);
-}
-
+fixed OptionsClass::Get_Contrast(void) const { return ((Contrast - fixed::_1_4) / fixed::_1_2); }
 
 /***********************************************************************************************
  * OptionsClass::Set_Tint -- Sets the tint setting.                                            *
@@ -444,13 +355,11 @@ fixed OptionsClass::Get_Contrast(void) const
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set_Tint(fixed tint)
-{
+void OptionsClass::Set_Tint(fixed tint) {
 	Tint = tint;
 	Adjust_Palette(OriginalPalette, InGamePalette, Brightness, Saturation, Tint, Contrast);
 	InGamePalette.Set();
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Get_Tint -- Fetches the current tint setting.                                 *
@@ -467,11 +376,7 @@ void OptionsClass::Set_Tint(fixed tint)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed OptionsClass::Get_Tint(void) const
-{
-	return(Tint);
-}
-
+fixed OptionsClass::Get_Tint(void) const { return (Tint); }
 
 /***********************************************************************************************
  * OptionsClass::Adjust_Palette -- Adjusts the palette according to the settings specified.    *
@@ -499,9 +404,9 @@ fixed OptionsClass::Get_Tint(void) const
  *   07/21/1994 JLB : Created.                                                                 *
  *   12/02/1995 JLB : Uses palette class objects.                                              *
  *=============================================================================================*/
-void OptionsClass::Adjust_Palette(PaletteClass const & oldpal, PaletteClass & newpal, fixed brightness, fixed color, fixed tint, fixed contrast) const
-{
-	//if (!oldpal || !newpal) return;	Can't be NULL... ST - 5/9/2019
+void OptionsClass::Adjust_Palette(PaletteClass const &oldpal, PaletteClass &newpal, fixed brightness, fixed color,
+				  fixed tint, fixed contrast) const {
+	// if (!oldpal || !newpal) return;	Can't be NULL... ST - 5/9/2019
 
 	/*
 	**	Adjust for palette.
@@ -521,16 +426,16 @@ void OptionsClass::Adjust_Palette(PaletteClass const & oldpal, PaletteClass & ne
 			**	percentage indicated.
 			*/
 			int temp;
-			temp = (hsv.Value_Component() * (brightness * 256)) / 0x80;		// Brightness
+			temp = (hsv.Value_Component() * (brightness * 256)) / 0x80; // Brightness
 			temp = Bound(temp, 0, 0xFF);
 			int v = temp;
-			temp = (((((int)v) - 0x80) * (contrast * 256)) / 0x80) + 0x80;	// Contrast
+			temp = (((((int)v) - 0x80) * (contrast * 256)) / 0x80) + 0x80; // Contrast
 			temp = Bound(temp, 0, 0xFF);
 			v = temp;
-			temp = (hsv.Saturation_Component() * (color * 256)) / 0x80;		// Color
+			temp = (hsv.Saturation_Component() * (color * 256)) / 0x80; // Color
 			temp = Bound(temp, 0, 0xFF);
 			int s = temp;
-			temp = (hsv.Hue_Component() * (tint * 256)) / 0x80;					// Tint
+			temp = (hsv.Hue_Component() * (tint * 256)) / 0x80; // Tint
 			temp = Bound(temp, 0, 0xFF);
 			int h = temp;
 
@@ -542,7 +447,6 @@ void OptionsClass::Adjust_Palette(PaletteClass const & oldpal, PaletteClass & ne
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Load_Settings -- reads options settings from the INI file                     *
@@ -561,8 +465,7 @@ void OptionsClass::Adjust_Palette(PaletteClass const & oldpal, PaletteClass & ne
  *   07/03/1996 JLB : Reworked to use new INI handler.                                         *
  *   07/30/1996 JLB : Handles hotkeys.                                                         *
  *=============================================================================================*/
-void OptionsClass::Load_Settings(void)
-{
+void OptionsClass::Load_Settings(void) {
 	/*
 	**	Create filename and read the file.
 	*/
@@ -573,7 +476,7 @@ void OptionsClass::Load_Settings(void)
 	/*
 	**	Read in the Options values
 	*/
-	static char const * const OPTIONS = "Options";
+	static char const *const OPTIONS = "Options";
 	GameSpeed = ini.Get_Int(OPTIONS, "GameSpeed", GameSpeed);
 	ScrollRate = ini.Get_Int(OPTIONS, "ScrollRate", ScrollRate);
 	Set_Brightness(ini.Get_Fixed(OPTIONS, "Brightness", Brightness));
@@ -612,35 +515,34 @@ void OptionsClass::Load_Settings(void)
 	KeyBookmark2 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyBookmark2", KeyBookmark2);
 	KeyBookmark3 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyBookmark3", KeyBookmark3);
 	KeyBookmark4 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyBookmark4", KeyBookmark4);
-	KeySelectView =  (KeyNumType)ini.Get_Int(HotkeyName, "KeySelectView", KeySelectView);
-	KeyRepair =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyRepairToggle", KeyRepair);
+	KeySelectView = (KeyNumType)ini.Get_Int(HotkeyName, "KeySelectView", KeySelectView);
+	KeyRepair = (KeyNumType)ini.Get_Int(HotkeyName, "KeyRepairToggle", KeyRepair);
 	KeyRepairOn = (KeyNumType)ini.Get_Int(HotkeyName, "KeyRepairOn", KeyRepairOn);
 	KeyRepairOff = (KeyNumType)ini.Get_Int(HotkeyName, "KeyRepairOff", KeyRepairOff);
-	KeySell =  (KeyNumType)ini.Get_Int(HotkeyName, "KeySellToggle", KeySell);
+	KeySell = (KeyNumType)ini.Get_Int(HotkeyName, "KeySellToggle", KeySell);
 	KeySellOn = (KeyNumType)ini.Get_Int(HotkeyName, "KeySellOn", KeySellOn);
 	KeySellOff = (KeyNumType)ini.Get_Int(HotkeyName, "KeySellOff", KeySellOff);
-	KeyMap =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyMapToggle", KeyMap);
-	KeySidebarUp =  (KeyNumType)ini.Get_Int(HotkeyName, "KeySidebarUp", KeySidebarUp);
-	KeySidebarDown =  (KeyNumType)ini.Get_Int(HotkeyName, "KeySidebarDown", KeySidebarDown);
-	KeyOption1 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyOption1", KeyOption1);
-	KeyOption2 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyOption2", KeyOption2);
-	KeyScrollLeft =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollLeft", KeyScrollLeft);
-	KeyScrollRight =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollRight", KeyScrollRight);
-	KeyScrollUp =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollUp", KeyScrollUp);
-	KeyScrollDown =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollDown", KeyScrollDown);
-	KeyQueueMove1 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyQueueMove1", KeyQueueMove1);
-	KeyQueueMove2 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyQueueMove2", KeyQueueMove2);
-	KeyTeam1 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam1", KeyTeam1);
-	KeyTeam2 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam2", KeyTeam2);
-	KeyTeam3 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam3", KeyTeam3);
-	KeyTeam4 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam4", KeyTeam4);
-	KeyTeam5 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam5", KeyTeam5);
-	KeyTeam6 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam6", KeyTeam6);
-	KeyTeam7 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam7", KeyTeam7);
-	KeyTeam8 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam8", KeyTeam8);
-	KeyTeam9 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam9", KeyTeam9);
-	KeyTeam10 =  (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam10", KeyTeam10);
-
+	KeyMap = (KeyNumType)ini.Get_Int(HotkeyName, "KeyMapToggle", KeyMap);
+	KeySidebarUp = (KeyNumType)ini.Get_Int(HotkeyName, "KeySidebarUp", KeySidebarUp);
+	KeySidebarDown = (KeyNumType)ini.Get_Int(HotkeyName, "KeySidebarDown", KeySidebarDown);
+	KeyOption1 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyOption1", KeyOption1);
+	KeyOption2 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyOption2", KeyOption2);
+	KeyScrollLeft = (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollLeft", KeyScrollLeft);
+	KeyScrollRight = (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollRight", KeyScrollRight);
+	KeyScrollUp = (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollUp", KeyScrollUp);
+	KeyScrollDown = (KeyNumType)ini.Get_Int(HotkeyName, "KeyScrollDown", KeyScrollDown);
+	KeyQueueMove1 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyQueueMove1", KeyQueueMove1);
+	KeyQueueMove2 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyQueueMove2", KeyQueueMove2);
+	KeyTeam1 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam1", KeyTeam1);
+	KeyTeam2 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam2", KeyTeam2);
+	KeyTeam3 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam3", KeyTeam3);
+	KeyTeam4 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam4", KeyTeam4);
+	KeyTeam5 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam5", KeyTeam5);
+	KeyTeam6 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam6", KeyTeam6);
+	KeyTeam7 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam7", KeyTeam7);
+	KeyTeam8 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam8", KeyTeam8);
+	KeyTeam9 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam9", KeyTeam9);
+	KeyTeam10 = (KeyNumType)ini.Get_Int(HotkeyName, "KeyTeam10", KeyTeam10);
 
 #ifdef WIN32
 	KeyForceMove1 = (KeyNumType)(KeyForceMove1 & ~WWKEY_VK_BIT);
@@ -695,7 +597,6 @@ void OptionsClass::Load_Settings(void)
 #endif
 }
 
-
 /***********************************************************************************************
  * OptionsClass::Save_Settings -- writes options settings to the INI file                      *
  *                                                                                             *
@@ -713,8 +614,7 @@ void OptionsClass::Load_Settings(void)
  *   07/03/1996 JLB : Revamped and tightened up.                                               *
  *   07/30/1996 JLB : Handles hotkeys.                                                         *
  *=============================================================================================*/
-void OptionsClass::Save_Settings (void)
-{
+void OptionsClass::Save_Settings(void) {
 	CCFileClass file(CONFIG_FILE_NAME);
 	INIClass ini;
 
@@ -730,13 +630,13 @@ void OptionsClass::Save_Settings (void)
 	/*
 	**	Save Options settings
 	*/
-	static char const * const OPTIONS = "Options";
+	static char const *const OPTIONS = "Options";
 	ini.Put_Int(OPTIONS, "GameSpeed", GameSpeed);
 	ini.Put_Int(OPTIONS, "ScrollRate", ScrollRate);
 	ini.Put_Fixed(OPTIONS, "Brightness", Brightness);
 	ini.Put_Fixed(OPTIONS, "Volume", Volume);
 #ifdef FIXIT_VERSION_3
-	if( Session.Type == GAME_NORMAL )		//	Save only when non-multiplayer.
+	if (Session.Type == GAME_NORMAL) //	Save only when non-multiplayer.
 		ini.Put_Fixed(OPTIONS, "ScoreVolume", ScoreVolume);
 #else
 	ini.Put_Fixed(OPTIONS, "ScoreVolume", ScoreVolume);
@@ -808,7 +708,6 @@ void OptionsClass::Save_Settings (void)
 	ini.Save(file);
 }
 
-
 /***********************************************************************************************
  * OptionsClass::Set -- Sets options based on current settings                                 *
  *                                                                                             *
@@ -824,8 +723,7 @@ void OptionsClass::Save_Settings (void)
  * HISTORY:                                                                                    *
  *   06/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Set(void)
-{
+void OptionsClass::Set(void) {
 	Set_Brightness(Brightness);
 	Set_Contrast(Contrast);
 	Set_Saturation(Saturation);
@@ -835,7 +733,6 @@ void OptionsClass::Set(void)
 	Set_Repeat(IsScoreRepeat);
 	Set_Shuffle(IsScoreShuffle);
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Normalize_Delay -- Normalizes delay factor to keep rate constant.             *
@@ -858,24 +755,18 @@ void OptionsClass::Set(void)
  *   06/18/1995 JLB : Created.                                                                 *
  *   06/30/1995 JLB : Handles low values in a more consistent manner.                          *
  *=============================================================================================*/
-int OptionsClass::Normalize_Delay(int delay) const
-{
+int OptionsClass::Normalize_Delay(int delay) const {
 	static int _adjust[][8] = {
-		{2,2,1,1,1,1,1,1},
-		{3,3,3,2,2,2,1,1},
-		{5,4,4,3,3,2,2,1},
-		{7,6,5,4,4,4,3,2}
-	};
+	    {2, 2, 1, 1, 1, 1, 1, 1}, {3, 3, 3, 2, 2, 2, 1, 1}, {5, 4, 4, 3, 3, 2, 2, 1}, {7, 6, 5, 4, 4, 4, 3, 2}};
 	if (delay) {
 		if (delay < 5) {
-			delay = _adjust[delay-1][GameSpeed];
+			delay = _adjust[delay - 1][GameSpeed];
 		} else {
-			delay = ((delay * 8) / (GameSpeed+1));
+			delay = ((delay * 8) / (GameSpeed + 1));
 		}
 	}
-	return(delay);
+	return (delay);
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Fixup_Palette -- Adjusts the real palette to match the palette sliders.       *
@@ -892,12 +783,10 @@ int OptionsClass::Normalize_Delay(int delay) const
  * HISTORY:                                                                                    *
  *   09/22/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OptionsClass::Fixup_Palette(void) const
-{
+void OptionsClass::Fixup_Palette(void) const {
 	Adjust_Palette(OriginalPalette, InGamePalette, Brightness, Saturation, Tint, Contrast);
 	CCPalette = InGamePalette;
 }
-
 
 /***********************************************************************************************
  * OptionsClass::Normalize_Volume -- Convert to a real volume value.                           *
@@ -914,7 +803,4 @@ void OptionsClass::Fixup_Palette(void) const
  * HISTORY:                                                                                    *
  *   09/22/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int OptionsClass::Normalize_Volume(int volume) const
-{
-	return(volume * Volume);
-}
+int OptionsClass::Normalize_Volume(int volume) const { return (volume * Volume); }

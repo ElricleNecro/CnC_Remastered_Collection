@@ -1,35 +1,31 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 #include "function.h"
 
 extern "C" {
-#include "soscomp.h"
-#include "itable.cpp"
 #include "dtable.cpp"
+#include "itable.cpp"
+#include "soscomp.h"
 
-
-void sosCODECInitStream(_SOS_COMPRESS_INFO* info)
-{
+void sosCODECInitStream(_SOS_COMPRESS_INFO *info) {
 	info->dwSampleIndex = 0;
 	info->dwPredicted = 0;
 }
 
-
-unsigned long sosCODECDecompressData(_SOS_COMPRESS_INFO* info, unsigned long numbytes)
-{
+unsigned long sosCODECDecompressData(_SOS_COMPRESS_INFO *info, unsigned long numbytes) {
 	unsigned long token;
 	long sample;
 	unsigned int fastindex;
@@ -67,14 +63,13 @@ unsigned long sosCODECDecompressData(_SOS_COMPRESS_INFO* info, unsigned long num
 		if (sample < -32768L)
 			sample = -32768L;
 		*outbuff++ = (unsigned short)sample;
-	} while(--numbytes);
+	} while (--numbytes);
 
 SkipLoop:
 
 	// Put local vars back
 	info->dwSampleIndex = (unsigned long)fastindex;
 	info->dwPredicted = sample;
-	return(numbytes << 2);
+	return (numbytes << 2);
 }
-
 }

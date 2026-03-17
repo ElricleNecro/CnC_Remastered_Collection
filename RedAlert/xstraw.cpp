@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/XSTRAW.CPP 1     3/03/97 10:26a Joe_bostic $ */
@@ -34,15 +34,14 @@
  *   FileStraw::Get -- Fetch data from the file.                                               *
  *   FileStraw::~FileStraw -- The destructor for the file straw.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#include "xstraw.h"
 #include "FUNCTION.H"
-#include	"xstraw.h"
-#include	<stddef.h>
-#include	<string.h>
+#include <stddef.h>
+#include <string.h>
 
 //---------------------------------------------------------------------------------------------------------
 // BufferStraw
 //---------------------------------------------------------------------------------------------------------
-
 
 /***********************************************************************************************
  * BufferStraw::Get -- Fetch data from the straw's buffer holding tank.                        *
@@ -62,8 +61,7 @@
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int BufferStraw::Get(void * source, int slen)
-{
+int BufferStraw::Get(void *source, int slen) {
 	int total = 0;
 
 	if (Is_Valid() && source != NULL && slen > 0) {
@@ -74,22 +72,20 @@ int BufferStraw::Get(void * source, int slen)
 		}
 
 		if (len > 0) {
-			memmove(source, ((char*)BufferPtr.Get_Buffer()) + Index, len);
+			memmove(source, ((char *)BufferPtr.Get_Buffer()) + Index, len);
 		}
 
 		Index += len;
-//		Length -= len;
-//		BufferPtr = ((char *)BufferPtr) + len;
+		//		Length -= len;
+		//		BufferPtr = ((char *)BufferPtr) + len;
 		total += len;
 	}
-	return(total);
+	return (total);
 }
-
 
 //---------------------------------------------------------------------------------------------------------
 // FileStraw
 //---------------------------------------------------------------------------------------------------------
-
 
 /***********************************************************************************************
  * FileStraw::Get -- Fetch data from the file.                                                 *
@@ -109,20 +105,20 @@ int BufferStraw::Get(void * source, int slen)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FileStraw::Get(void * source, int slen)
-{
+int FileStraw::Get(void *source, int slen) {
 	if (Valid_File() && source != NULL && slen > 0) {
 		if (!File->Is_Open()) {
 			HasOpened = true;
-			if (!File->Is_Available()) return(0);
-			if (!File->Open(READ)) return(0);
+			if (!File->Is_Available())
+				return (0);
+			if (!File->Open(READ))
+				return (0);
 		}
 
-		return(File->Read(source, slen));
+		return (File->Read(source, slen));
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * FileStraw::~FileStraw -- The destructor for the file straw.                                 *
@@ -138,8 +134,7 @@ int FileStraw::Get(void * source, int slen)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-FileStraw::~FileStraw(void)
-{
+FileStraw::~FileStraw(void) {
 	if (Valid_File() && HasOpened) {
 		File->Close();
 		HasOpened = false;

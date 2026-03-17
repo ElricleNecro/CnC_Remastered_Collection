@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/SEARCH.H 1     3/03/97 10:25a Joe_bostic $ */
@@ -47,7 +47,6 @@
  *   compfunc -- Support function for bsearch and bsort.                                       *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
 #ifndef SEARCH_H
 #define SEARCH_H
 
@@ -59,13 +58,13 @@
 #ifndef __BORLANDC__
 #ifndef TRUE_FALSE_DEFINED
 #define TRUE_FALSE_DEFINED
-enum {false=0,true=1};
+enum { false = 0, true = 1 };
 typedef int bool;
 #endif
 #endif
 
 #ifndef __BORLANDC__
-#define	_USERENTRY
+#define _USERENTRY
 #endif
 
 /*
@@ -81,115 +80,112 @@ typedef int bool;
 **	objects and doesn't use them until after the copy constructor is used to initialize them.
 */
 
-template<class T>
-class IndexClass
-{
-	public:
-		IndexClass(void);
-		~IndexClass(void);
+template <class T> class IndexClass {
+public:
+	IndexClass(void);
+	~IndexClass(void);
 
-		/*
-		**	Add element to index table.
-		*/
-		bool Add_Index(int id, T data);
+	/*
+	**	Add element to index table.
+	*/
+	bool Add_Index(int id, T data);
 
-		/*
-		**	Removes an index entry from the index table.
-		*/
-		bool Remove_Index(int id);
+	/*
+	**	Removes an index entry from the index table.
+	*/
+	bool Remove_Index(int id);
 
-		/*
-		**	Check to see if index is present.
-		*/
-		bool Is_Present(int id) const;
+	/*
+	**	Check to see if index is present.
+	*/
+	bool Is_Present(int id) const;
 
-		/*
-		**	Fetch number of indexes in the table.
-		*/
-		int Count(void) const;
+	/*
+	**	Fetch number of indexes in the table.
+	*/
+	int Count(void) const;
 
-		/*
-		**	Actually a fetch an index data element from the table.
-		*/
-		T Fetch_Index(int id) const;
+	/*
+	**	Actually a fetch an index data element from the table.
+	*/
+	T Fetch_Index(int id) const;
 
-		/*
-		**	Clear out the index table to null (empty) state.
-		*/
-		void Clear(void);
+	/*
+	**	Clear out the index table to null (empty) state.
+	*/
+	void Clear(void);
 
-	private:
-		/*
-		**	This node object is used to keep track of the connection between the data
-		**	object and the index identifier number.
-		*/
-		struct NodeElement {
-			int ID;			// ID number (must be first element in this structure).
-			T Data;			// Data element assigned to this ID number.
-		};
+private:
+	/*
+	**	This node object is used to keep track of the connection between the data
+	**	object and the index identifier number.
+	*/
+	struct NodeElement {
+		int ID; // ID number (must be first element in this structure).
+		T Data; // Data element assigned to this ID number.
+	};
 
-		/*
-		**	This is the pointer to the allocated index table. It contains all valid nodes in
-		**	a sorted order.
-		*/
-		NodeElement * IndexTable;
+	/*
+	**	This is the pointer to the allocated index table. It contains all valid nodes in
+	**	a sorted order.
+	*/
+	NodeElement *IndexTable;
 
-		/*
-		**	This records the number of valid nodes within the index table.
-		*/
-		int IndexCount;
+	/*
+	**	This records the number of valid nodes within the index table.
+	*/
+	int IndexCount;
 
-		/*
-		**	The total size (in nodes) of the index table is recorded here. If adding a node
-		**	would cause the index count to exceed this value, the index table must be resized
-		**	to make room.
-		*/
-		int IndexSize;
+	/*
+	**	The total size (in nodes) of the index table is recorded here. If adding a node
+	**	would cause the index count to exceed this value, the index table must be resized
+	**	to make room.
+	*/
+	int IndexSize;
 
-		/*
-		**	If the index table is sorted and ready for searching, this flag will be true. Sorting
-		**	of the table only occurs when absolutely necessary.
-		*/
-		bool IsSorted;
+	/*
+	**	If the index table is sorted and ready for searching, this flag will be true. Sorting
+	**	of the table only occurs when absolutely necessary.
+	*/
+	bool IsSorted;
 
-		/*
-		**	This records a pointer to the last element found by the Is_Present() function. Using
-		**	this last recorded value can allow quick fetches of data whenever possible.
-		*/
-		NodeElement const * Archive;
+	/*
+	**	This records a pointer to the last element found by the Is_Present() function. Using
+	**	this last recorded value can allow quick fetches of data whenever possible.
+	*/
+	NodeElement const *Archive;
 
-		//-------------------------------------------------------------------------------------
-		IndexClass(IndexClass const & rvalue);
-		IndexClass * operator = (IndexClass const & rvalue);
+	//-------------------------------------------------------------------------------------
+	IndexClass(IndexClass const &rvalue);
+	IndexClass *operator=(IndexClass const &rvalue);
 
-		/*
-		**	Increase size of internal index table by amount specified.
-		*/
-		bool Increase_Table_Size(int amount);
+	/*
+	**	Increase size of internal index table by amount specified.
+	*/
+	bool Increase_Table_Size(int amount);
 
-		/*
-		**	Check if archive pointer is the same as that requested.
-		*/
-		bool Is_Archive_Same(int id) const;
+	/*
+	**	Check if archive pointer is the same as that requested.
+	*/
+	bool Is_Archive_Same(int id) const;
 
-		/*
-		**	Invalidate the archive pointer.
-		*/
-		void Invalidate_Archive(void);
+	/*
+	**	Invalidate the archive pointer.
+	*/
+	void Invalidate_Archive(void);
 
-		/*
-		**	Set archive to specified value.
-		*/
-		void Set_Archive(NodeElement const * node);
+	/*
+	**	Set archive to specified value.
+	*/
+	void Set_Archive(NodeElement const *node);
 
-		/*
-		**	Search for the node in the index table.
-		*/
-		NodeElement const * Search_For_Node(int id) const;
+	/*
+	**	Search for the node in the index table.
+	*/
+	NodeElement const *Search_For_Node(int id) const;
 
-		static int _USERENTRY search_compfunc(void const * ptr, void const * ptr2);
+	static int _USERENTRY search_compfunc(void const *ptr, void const *ptr2);
 };
-
 
 /***********************************************************************************************
  * IndexClass<T>::IndexClass -- Constructor for index handler.                                 *
@@ -205,17 +201,10 @@ class IndexClass
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-IndexClass<T>::IndexClass(void) :
-	IndexTable(0),
-	IndexCount(0),
-	IndexSize(0),
-	IsSorted(false),
-	Archive(0)
-{
+template <class T>
+IndexClass<T>::IndexClass(void) : IndexTable(0), IndexCount(0), IndexSize(0), IsSorted(false), Archive(0) {
 	Invalidate_Archive();
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::~IndexClass -- Destructor for index handler object.                          *
@@ -231,12 +220,7 @@ IndexClass<T>::IndexClass(void) :
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-IndexClass<T>::~IndexClass(void)
-{
-	Clear();
-}
-
+template <class T> IndexClass<T>::~IndexClass(void) { Clear(); }
 
 /***********************************************************************************************
  * IndexClass<T>::Clear -- Clear index handler to empty state.                                 *
@@ -253,17 +237,14 @@ IndexClass<T>::~IndexClass(void)
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-void IndexClass<T>::Clear(void)
-{
-	delete [] IndexTable;
+template <class T> void IndexClass<T>::Clear(void) {
+	delete[] IndexTable;
 	IndexTable = 0;
 	IndexCount = 0;
 	IndexSize = 0;
 	IsSorted = false;
 	Invalidate_Archive();
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::Increase_Table_Size -- Increase the internal index table capacity.           *
@@ -281,15 +262,14 @@ void IndexClass<T>::Clear(void)
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-bool IndexClass<T>::Increase_Table_Size(int amount)
-{
+template <class T> bool IndexClass<T>::Increase_Table_Size(int amount) {
 	/*
 	**	Check size increase parameter for legality.
 	*/
-	if (amount < 0) return(false);
+	if (amount < 0)
+		return (false);
 
-	NodeElement * table = new NodeElement[IndexSize + amount];
+	NodeElement *table = new NodeElement[IndexSize + amount];
 	if (table != NULL) {
 
 		/*
@@ -302,7 +282,7 @@ bool IndexClass<T>::Increase_Table_Size(int amount)
 		/*
 		**	Make the new table the current one (and delete the old one).
 		*/
-		delete [] IndexTable;
+		delete[] IndexTable;
 		IndexTable = table;
 		IndexSize += amount;
 		Invalidate_Archive();
@@ -310,16 +290,15 @@ bool IndexClass<T>::Increase_Table_Size(int amount)
 		/*
 		**	Return with success flag.
 		*/
-		return(true);
+		return (true);
 	}
 
 	/*
 	**	Failure to allocate the memory results in a failure to increase
 	**	the size of the index table.
 	*/
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::Count -- Fetch the number of index entries recorded.                         *
@@ -336,12 +315,7 @@ bool IndexClass<T>::Increase_Table_Size(int amount)
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-int IndexClass<T>::Count(void) const
-{
-	return(IndexCount);
-}
-
+template <class T> int IndexClass<T>::Count(void) const { return (IndexCount); }
 
 /***********************************************************************************************
  * IndexClass<T>::Is_Present -- Checks for presense of index entry.                            *
@@ -358,16 +332,14 @@ int IndexClass<T>::Count(void) const
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-bool IndexClass<T>::Is_Present(int id) const
-{
+template <class T> bool IndexClass<T>::Is_Present(int id) const {
 	/*
 	**	If there are no data elements in the index table, then it can
 	**	never find the specified index. Check for and return failure
 	**	in this case.
 	*/
 	if (IndexCount == 0) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -376,29 +348,28 @@ bool IndexClass<T>::Is_Present(int id) const
 	**	again -- just return true.
 	*/
 	if (Is_Archive_Same(id)) {
-		return(true);
+		return (true);
 	}
 
 	/*
 	**	Perform a binary search on the index nodes in order to look for a
 	**	matching index value.
 	*/
-	NodeElement const * nodeptr = Search_For_Node(id);
+	NodeElement const *nodeptr = Search_For_Node(id);
 
 	/*
 	**	If a matching index was found, then record it for future reference and return success.
 	*/
 	if (nodeptr != 0) {
 		((IndexClass<T> *)this)->Set_Archive(nodeptr);
-		return(true);
+		return (true);
 	}
 
 	/*
 	**	Could not find element so return failure condition.
 	*/
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::Fetch_Index -- Fetch data from specified index.                              *
@@ -416,20 +387,17 @@ bool IndexClass<T>::Is_Present(int id) const
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-T IndexClass<T>::Fetch_Index(int id) const
-{
+template <class T> T IndexClass<T>::Fetch_Index(int id) const {
 	if (Is_Present(id)) {
 
 		/*
 		**	Count on the fact that the archive pointer is always valid after a call to Is_Present
 		**	that returns "true".
 		*/
-		return(Archive->Data);
+		return (Archive->Data);
 	}
-	return(T());
+	return (T());
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::Is_Archive_Same -- Checks to see if archive pointer is same as index.        *
@@ -446,15 +414,12 @@ T IndexClass<T>::Fetch_Index(int id) const
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-bool IndexClass<T>::Is_Archive_Same(int id) const
-{
+template <class T> bool IndexClass<T>::Is_Archive_Same(int id) const {
 	if (Archive != 0 && Archive->ID == id) {
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::Invalidate_Archive -- Invalidate the archive pointer.                        *
@@ -472,12 +437,7 @@ bool IndexClass<T>::Is_Archive_Same(int id) const
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-void IndexClass<T>::Invalidate_Archive(void)
-{
-	Archive = 0;
-}
-
+template <class T> void IndexClass<T>::Invalidate_Archive(void) { Archive = 0; }
 
 /***********************************************************************************************
  * IndexClass<T>::Set_Archive -- Records the node pointer into the archive.                    *
@@ -494,12 +454,7 @@ void IndexClass<T>::Invalidate_Archive(void)
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-void IndexClass<T>::Set_Archive(NodeElement const * node)
-{
-	Archive = node;
-}
-
+template <class T> void IndexClass<T>::Set_Archive(NodeElement const *node) { Archive = node; }
 
 /***********************************************************************************************
  * IndexClass<T>::Add_Index -- Add element to index tracking system.                           *
@@ -521,9 +476,7 @@ void IndexClass<T>::Set_Archive(NodeElement const * node)
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-bool IndexClass<T>::Add_Index(int id, T data)
-{
+template <class T> bool IndexClass<T>::Add_Index(int id, T data) {
 	/*
 	**	Ensure that there is enough room to add this index. If not, then increase the
 	**	capacity of the internal index table.
@@ -535,7 +488,7 @@ bool IndexClass<T>::Add_Index(int id, T data)
 			**	Failure to increase the size of the index table means failure to add
 			**	the index element.
 			*/
-			return(false);
+			return (false);
 		}
 	}
 
@@ -547,9 +500,8 @@ bool IndexClass<T>::Add_Index(int id, T data)
 	IndexCount++;
 	IsSorted = false;
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::Remove_Index -- Find matching index and remove it from system.               *
@@ -566,9 +518,7 @@ bool IndexClass<T>::Add_Index(int id, T data)
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-bool IndexClass<T>::Remove_Index(int id)
-{
+template <class T> bool IndexClass<T>::Remove_Index(int id) {
 	/*
 	**	Find the array index into the table that matches the specified id value.
 	*/
@@ -588,23 +538,22 @@ bool IndexClass<T>::Remove_Index(int id)
 	*/
 	if (found_index != -1) {
 
-		for (int index = found_index+1; index < IndexCount; index++) {
-			IndexTable[index-1] = IndexTable[index];
+		for (int index = found_index + 1; index < IndexCount; index++) {
+			IndexTable[index - 1] = IndexTable[index];
 		}
 		IndexCount--;
 
 		NodeElement fake;
 		fake.ID = 0;
 		fake.Data = T();
-		IndexTable[IndexCount] = fake;		// zap last (now unused) element
+		IndexTable[IndexCount] = fake; // zap last (now unused) element
 
 		Invalidate_Archive();
-		return(true);
+		return (true);
 	}
 
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * compfunc -- Support function for bsearch and bsort.                                         *
@@ -623,18 +572,15 @@ bool IndexClass<T>::Remove_Index(int id)
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T>
-int _USERENTRY IndexClass<T>::search_compfunc(void const * ptr1, void const * ptr2)
-{
+template <class T> int _USERENTRY IndexClass<T>::search_compfunc(void const *ptr1, void const *ptr2) {
 	if (*(int const *)ptr1 == *(int const *)ptr2) {
-		return(0);
+		return (0);
 	}
 	if (*(int const *)ptr1 < *(int const *)ptr2) {
-		return(-1);
+		return (-1);
 	}
-	return(1);
+	return (1);
 }
-
 
 /***********************************************************************************************
  * IndexClass<T>::Search_For_Node -- Perform a search for the specified node ID                *
@@ -652,14 +598,12 @@ int _USERENTRY IndexClass<T>::search_compfunc(void const * ptr1, void const * pt
  * HISTORY:                                                                                    *
  *   11/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T> 
-typename IndexClass<T>::NodeElement const * IndexClass<T>::Search_For_Node(int id) const
-{
+template <class T> typename IndexClass<T>::NodeElement const *IndexClass<T>::Search_For_Node(int id) const {
 	/*
 	**	If there are no elements in the list, then it certainly can't find any matches.
 	*/
 	if (IndexCount == 0) {
-		return(0);
+		return (0);
 	}
 
 	/*
@@ -677,10 +621,8 @@ typename IndexClass<T>::NodeElement const * IndexClass<T>::Search_For_Node(int i
 	*/
 	NodeElement node;
 	node.ID = id;
-	return((NodeElement const *)bsearch(&node, &IndexTable[0], IndexCount, sizeof(IndexTable[0]), search_compfunc));
+	return (
+	    (NodeElement const *)bsearch(&node, &IndexTable[0], IndexCount, sizeof(IndexTable[0]), search_compfunc));
 }
 
-
 #endif
-
-

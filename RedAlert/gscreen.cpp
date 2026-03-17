@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/GSCREEN.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -46,11 +46,9 @@
 
 #include "function.h"
 
+GadgetClass *GScreenClass::Buttons = 0;
 
-GadgetClass * GScreenClass::Buttons = 0;
-
-GraphicBufferClass * GScreenClass::ShadowPage = 0;
-
+GraphicBufferClass *GScreenClass::ShadowPage = 0;
 
 /***********************************************************************************************
  * GScreenClass::GScreenClass -- Default constructor for GScreenClass.                         *
@@ -67,12 +65,10 @@ GraphicBufferClass * GScreenClass::ShadowPage = 0;
  * HISTORY:                                                                                    *
  *   12/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-GScreenClass::GScreenClass(void)
-{
+GScreenClass::GScreenClass(void) {
 	IsToUpdate = true;
 	IsToRedraw = true;
 }
-
 
 /***********************************************************************************************
  * GScreenClass::One_Time -- Handles one time class setups.                                    *
@@ -98,8 +94,7 @@ GScreenClass::GScreenClass(void)
  * HISTORY:                                                                                    *
  *   12/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GScreenClass::One_Time(void)
-{
+void GScreenClass::One_Time(void) {
 	/*
 	**	Allocate the screen shadow page. This page is used to reduce access to the
 	**	actual screen memory. It contains a duplicate of what the SEENPAGE is.
@@ -111,7 +106,6 @@ void GScreenClass::One_Time(void)
 		HidPage.Clear();
 	}
 }
-
 
 /***********************************************************************************************
  * GScreenClass::Init -- Init's the entire display hierarchy by calling all Init routines.     *
@@ -132,13 +126,11 @@ void GScreenClass::One_Time(void)
  * HISTORY:                                                                                    *
  *   12/28/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-void GScreenClass::Init(TheaterType theater)
-{
+void GScreenClass::Init(TheaterType theater) {
 	Init_Clear();
 	Init_IO();
 	Init_Theater(theater);
 }
-
 
 /***********************************************************************************************
  * GScreenClass::Init_Clear -- Sets the map to a known state.                                  *
@@ -159,8 +151,7 @@ void GScreenClass::Init(TheaterType theater)
  * HISTORY:                                                                                    *
  *   12/28/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-void GScreenClass::Init_Clear(void)
-{
+void GScreenClass::Init_Clear(void) {
 	/*
 	** Clear the ShadowPage & HidPage to force a complete shadow blit.
 	*/
@@ -171,7 +162,6 @@ void GScreenClass::Init_Clear(void)
 
 	IsToRedraw = true;
 }
-
 
 /***********************************************************************************************
  * GScreenClass::Init_Theater -- Performs theater-specific initializations.                    *
@@ -192,10 +182,7 @@ void GScreenClass::Init_Clear(void)
  * HISTORY:                                                                                    *
  *   12/28/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-void GScreenClass::Init_Theater(TheaterType )
-{
-}
-
+void GScreenClass::Init_Theater(TheaterType) {}
 
 /***********************************************************************************************
  * GScreenClass::Init_IO -- Initializes the Button list ('Buttons').                           *
@@ -212,15 +199,13 @@ void GScreenClass::Init_Theater(TheaterType )
  * HISTORY:                                                                                    *
  *   12/28/1994 BR : Created.                                                                  *
  *=============================================================================================*/
-void GScreenClass::Init_IO(void)
-{
+void GScreenClass::Init_IO(void) {
 	/*
 	** Reset the button list.  This means that any other elements of the map that need
 	** buttons must attach them after this routine is called!
 	*/
 	Buttons = 0;
 }
-
 
 /***********************************************************************************************
  * GScreenClass::Flag_To_Redraw -- Flags the display to be redrawn.                            *
@@ -242,14 +227,12 @@ void GScreenClass::Init_IO(void)
  * HISTORY:                                                                                    *
  *   12/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GScreenClass::Flag_To_Redraw(bool complete)
-{
+void GScreenClass::Flag_To_Redraw(bool complete) {
 	IsToUpdate = true;
 	if (complete) {
 		IsToRedraw = true;
 	}
 }
-
 
 /***********************************************************************************************
  * GScreenClass::Input -- Fetches input and processes gadgets.                                 *
@@ -268,8 +251,7 @@ void GScreenClass::Flag_To_Redraw(bool complete)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GScreenClass::Input(KeyNumType & key, int & x, int & y)
-{
+void GScreenClass::Input(KeyNumType &key, int &x, int &y) {
 	key = Keyboard->Check();
 
 	x = Keyboard->Mouse_X();
@@ -287,9 +269,9 @@ void GScreenClass::Input(KeyNumType & key, int & x, int & y)
 		}
 
 #ifdef WIN32
-		GraphicViewPortClass * oldpage= Set_Logic_Page(HidPage);
+		GraphicViewPortClass *oldpage = Set_Logic_Page(HidPage);
 #else
-		GraphicBufferClass * oldpage= Set_Logic_Page(HidPage);
+		GraphicBufferClass *oldpage = Set_Logic_Page(HidPage);
 #endif
 
 		key = Buttons->Input();
@@ -306,7 +288,6 @@ void GScreenClass::Input(KeyNumType & key, int & x, int & y)
 	AI(key, x, y);
 }
 
-
 /***********************************************************************************************
  * GScreenClass::Add_A_Button -- Add a gadget to the game input system.                        *
  *                                                                                             *
@@ -322,8 +303,7 @@ void GScreenClass::Input(KeyNumType & key, int & x, int & y)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GScreenClass::Add_A_Button(GadgetClass & gadget)
-{
+void GScreenClass::Add_A_Button(GadgetClass &gadget) {
 	/*
 	**	If this gadget is already in the list, remove it before adding it in:
 	**	- If 1st gadget in list, use Remove_A_Button to remove it, to reset the
@@ -349,7 +329,6 @@ void GScreenClass::Add_A_Button(GadgetClass & gadget)
 	}
 }
 
-
 /***********************************************************************************************
  * GScreenClass::Remove_A_Button -- Removes a gadget from the game input system.               *
  *                                                                                             *
@@ -363,11 +342,7 @@ void GScreenClass::Add_A_Button(GadgetClass & gadget)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GScreenClass::Remove_A_Button(GadgetClass & gadget)
-{
-	Buttons = gadget.Remove();
-}
-
+void GScreenClass::Remove_A_Button(GadgetClass &gadget) { Buttons = gadget.Remove(); }
 
 /***********************************************************************************************
  * GScreenClass::Render -- General drawing dispatcher an display update function.              *
@@ -387,21 +362,19 @@ void GScreenClass::Remove_A_Button(GadgetClass & gadget)
  * HISTORY:                                                                                    *
  *   12/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void GScreenClass::Render(void)
-{
-	//This is unnessasary surely?	ST - 10/16/96 2:30PM
-	//if (Buttons && Buttons->Is_List_To_Redraw()) {
+void GScreenClass::Render(void) {
+	// This is unnessasary surely?	ST - 10/16/96 2:30PM
+	// if (Buttons && Buttons->Is_List_To_Redraw()) {
 	//	IsToRedraw = true;
-	//}
-
+	// }
 
 	if (IsToUpdate || IsToRedraw) {
 		BStart(BENCH_GSCREEN_RENDER);
 
 #ifdef WIN32
-		GraphicViewPortClass * oldpage= Set_Logic_Page(HidPage);
+		GraphicViewPortClass *oldpage = Set_Logic_Page(HidPage);
 #else
-		GraphicBufferClass * oldpage= Set_Logic_Page(HidPage);
+		GraphicBufferClass *oldpage = Set_Logic_Page(HidPage);
 
 		if (IsToRedraw) {
 			Hide_Mouse();
@@ -412,7 +385,8 @@ void GScreenClass::Render(void)
 
 		Draw_It(IsToRedraw);
 
-		if (Buttons) Buttons->Draw_All(false);
+		if (Buttons)
+			Buttons->Draw_All(false);
 
 #ifdef SCENARIO_EDITOR
 		/*
@@ -429,12 +403,12 @@ void GScreenClass::Render(void)
 		** This way, they'll Blit along with the rest of the map.
 		*/
 		if (Session.Messages.Num_Messages() > 0) {
-			Session.Messages.Set_Width(
-				Lepton_To_Cell(Map.TacLeptonWidth) * ICON_PIXEL_W);
+			Session.Messages.Set_Width(Lepton_To_Cell(Map.TacLeptonWidth) * ICON_PIXEL_W);
 		}
 		Session.Messages.Draw();
 
-		//Blit_Display(); // 5/19/20 SKY - Skip copying to scene page, we can get the data directly from hidden page
+		// Blit_Display(); // 5/19/20 SKY - Skip copying to scene page, we can get the data directly from hidden
+		// page
 		IsToUpdate = false;
 		IsToRedraw = false;
 
@@ -442,7 +416,6 @@ void GScreenClass::Render(void)
 		Set_Logic_Page(oldpage);
 	}
 }
-
 
 /***********************************************************************************************
  * GScreenClass::Blit_Display -- Redraw the display from the hidpage to the seenpage.          *
@@ -461,24 +434,21 @@ void GScreenClass::Render(void)
  *   05/01/1994 JLB : Converted to member function.                                            *
  *=============================================================================================*/
 extern "C" {
-	void ModeX_Blit (GraphicBufferClass * source);
+void ModeX_Blit(GraphicBufferClass *source);
 }
 
-void GScreenClass::Blit_Display(void)
-{
+void GScreenClass::Blit_Display(void) {
 	BStart(BENCH_BLIT_DISPLAY);
-	#ifdef WIN32
-		if (SeenBuff.Get_Width()!=320) {
-			WWMouse->Draw_Mouse(&HidPage);
-			HidPage.Blit(SeenBuff , 0 , 0 , 0 , 0 , HidPage.Get_Width() , HidPage.Get_Height() , (BOOL) FALSE );
-			WWMouse->Erase_Mouse(&HidPage, FALSE);
-		} else {
-			//PG ModeX_Blit(&HiddenPage);
-		}
-	#else
-		Shadow_Blit(0, 0, 320, 200, HidPage, SeenPage, ShadowPage->Get_Buffer());
-	#endif
+#ifdef WIN32
+	if (SeenBuff.Get_Width() != 320) {
+		WWMouse->Draw_Mouse(&HidPage);
+		HidPage.Blit(SeenBuff, 0, 0, 0, 0, HidPage.Get_Width(), HidPage.Get_Height(), (BOOL)FALSE);
+		WWMouse->Erase_Mouse(&HidPage, FALSE);
+	} else {
+		// PG ModeX_Blit(&HiddenPage);
+	}
+#else
+	Shadow_Blit(0, 0, 320, 200, HidPage, SeenPage, ShadowPage->Get_Buffer());
+#endif
 	BEnd(BENCH_BLIT_DISPLAY);
 }
-
-

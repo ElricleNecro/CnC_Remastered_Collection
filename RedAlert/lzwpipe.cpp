@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/LZWPIPE.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -36,13 +36,11 @@
  *   LZWPipe::~LZWPipe -- Deconstructor for the LZW pipe object.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"lzwpipe.h"
-#include	"lzw.h"
-#include	"buff.h"
-#include	<string.h>
-#include	<assert.h>
-
+#include "lzwpipe.h"
+#include "buff.h"
+#include "lzw.h"
+#include <assert.h>
+#include <string.h>
 
 /***********************************************************************************************
  * LZWPipe::LZWPipe -- Constructor for the LZW processor pipe.                                 *
@@ -61,20 +59,14 @@
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LZWPipe::LZWPipe(CompControl control, int blocksize) :
-		Control(control),
-		Counter(0),
-		Buffer(NULL),
-		Buffer2(NULL),
-		BlockSize(blocksize)
-{
+LZWPipe::LZWPipe(CompControl control, int blocksize)
+    : Control(control), Counter(0), Buffer(NULL), Buffer2(NULL), BlockSize(blocksize) {
 	SafetyMargin = BlockSize;
-//	SafetyMargin = BlockSize/128+1;
-	Buffer = new char[BlockSize+SafetyMargin];
-	Buffer2 = new char[BlockSize+SafetyMargin];
+	//	SafetyMargin = BlockSize/128+1;
+	Buffer = new char[BlockSize + SafetyMargin];
+	Buffer2 = new char[BlockSize + SafetyMargin];
 	BlockHeader.CompCount = 0xFFFF;
 }
-
 
 /***********************************************************************************************
  * LZWPipe::~LZWPipe -- Deconstructor for the LZW pipe object.                                 *
@@ -90,15 +82,13 @@ LZWPipe::LZWPipe(CompControl control, int blocksize) :
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LZWPipe::~LZWPipe(void)
-{
-	delete [] Buffer;
+LZWPipe::~LZWPipe(void) {
+	delete[] Buffer;
 	Buffer = NULL;
 
-	delete [] Buffer2;
+	delete[] Buffer2;
 	Buffer2 = NULL;
 }
-
 
 /***********************************************************************************************
  * LZWPipe::Put -- Send some data through the LZW processor pipe.                              *
@@ -119,10 +109,9 @@ LZWPipe::~LZWPipe(void)
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int LZWPipe::Put(void const * source, int slen)
-{
+int LZWPipe::Put(void const *source, int slen) {
 	if (source == NULL || slen < 1) {
-		return(Pipe::Put(source, slen));
+		return (Pipe::Put(source, slen));
 	}
 
 	assert(Buffer != NULL);
@@ -132,7 +121,7 @@ int LZWPipe::Put(void const * source, int slen)
 	/*
 	**	Copy as much as can fit into the buffer from the source data supplied.
 	*/
-	if (Control ==  DECOMPRESS) {
+	if (Control == DECOMPRESS) {
 
 		while (slen > 0) {
 
@@ -142,7 +131,9 @@ int LZWPipe::Put(void const * source, int slen)
 			**	data processing begin for the block.
 			*/
 			if (BlockHeader.CompCount == 0xFFFF) {
-				int len = (slen < ((int)sizeof(BlockHeader)-Counter)) ? slen : (sizeof(BlockHeader)-Counter);
+				int len = (slen < ((int)sizeof(BlockHeader) - Counter))
+					      ? slen
+					      : (sizeof(BlockHeader) - Counter);
 				memmove(&Buffer[Counter], source, len);
 				source = ((char *)source) + len;
 				slen -= len;
@@ -162,7 +153,9 @@ int LZWPipe::Put(void const * source, int slen)
 			**	data block.
 			*/
 			if (slen > 0) {
-				int len = (slen < (BlockHeader.CompCount-Counter)) ? slen : (BlockHeader.CompCount-Counter);
+				int len = (slen < (BlockHeader.CompCount - Counter))
+					      ? slen
+					      : (BlockHeader.CompCount - Counter);
 
 				memmove(&Buffer[Counter], source, len);
 				slen -= len;
@@ -189,7 +182,7 @@ int LZWPipe::Put(void const * source, int slen)
 		**	into the staging buffer until a full set has been accumulated.
 		*/
 		if (Counter > 0) {
-			int tocopy = (slen < (BlockSize-Counter)) ? slen : (BlockSize-Counter);
+			int tocopy = (slen < (BlockSize - Counter)) ? slen : (BlockSize - Counter);
 			memmove(&Buffer[Counter], source, tocopy);
 			source = ((char *)source) + tocopy;
 			slen -= tocopy;
@@ -211,7 +204,7 @@ int LZWPipe::Put(void const * source, int slen)
 		**	source data left for a whole data block.
 		*/
 		while (slen >= BlockSize) {
-			int len = LZW_Compress(::Buffer((void*)source, BlockSize), Buffer2);
+			int len = LZW_Compress(::Buffer((void *)source, BlockSize), Buffer2);
 
 			source = ((char *)source) + BlockSize;
 			slen -= BlockSize;
@@ -232,9 +225,8 @@ int LZWPipe::Put(void const * source, int slen)
 		}
 	}
 
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * LZWPipe::Flush -- Flushes any partially accumulated block.                                  *
@@ -255,8 +247,7 @@ int LZWPipe::Put(void const * source, int slen)
  * HISTORY:                                                                                    *
  *   07/04/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int LZWPipe::Flush(void)
-{
+int LZWPipe::Flush(void) {
 	assert(Buffer != NULL);
 
 	int total = 0;
@@ -307,6 +298,5 @@ int LZWPipe::Flush(void)
 	}
 
 	total += Pipe::Flush();
-	return(total);
+	return (total);
 }
-

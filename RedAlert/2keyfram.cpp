@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/2KEYFRAM.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -35,13 +35,11 @@
  *   Get_Build_Frame_Height -- Fetches the height of the shape image.                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
 #include "function.h"
 
-#define SUBFRAMEOFFS			7	// 3 1/2 frame offsets loaded (2 offsets/frame)
+#define SUBFRAMEOFFS 7 // 3 1/2 frame offsets loaded (2 offsets/frame)
 
-
-#define	Apply_Delta(buffer, delta)		Apply_XOR_Delta((char*)(buffer), (char*)(delta))
+#define Apply_Delta(buffer, delta) Apply_XOR_Delta((char *)(buffer), (char *)(delta))
 
 typedef struct {
 	unsigned short frames;
@@ -50,77 +48,69 @@ typedef struct {
 	unsigned short width;
 	unsigned short height;
 	unsigned short largest_frame_size;
-	short				flags;
+	short flags;
 } KeyFrameHeaderType;
 
-#define	INITIAL_BIG_SHAPE_BUFFER_SIZE	8000000
-#define	THEATER_BIG_SHAPE_BUFFER_SIZE 4000000
-#define	UNCOMPRESS_MAGIC_NUMBER			56789
+#define INITIAL_BIG_SHAPE_BUFFER_SIZE 8000000
+#define THEATER_BIG_SHAPE_BUFFER_SIZE 4000000
+#define UNCOMPRESS_MAGIC_NUMBER 56789
 
-unsigned	BigShapeBufferLength = INITIAL_BIG_SHAPE_BUFFER_SIZE;
-unsigned	TheaterShapeBufferLength = THEATER_BIG_SHAPE_BUFFER_SIZE;
-extern "C"{
-	char		*BigShapeBufferStart = NULL;
-	char		*TheaterShapeBufferStart = NULL;
-	BOOL		UseBigShapeBuffer = FALSE;
-	bool		IsTheaterShape = false;
+unsigned BigShapeBufferLength = INITIAL_BIG_SHAPE_BUFFER_SIZE;
+unsigned TheaterShapeBufferLength = THEATER_BIG_SHAPE_BUFFER_SIZE;
+extern "C" {
+char *BigShapeBufferStart = NULL;
+char *TheaterShapeBufferStart = NULL;
+BOOL UseBigShapeBuffer = FALSE;
+bool IsTheaterShape = false;
 }
 #ifdef FIXIT_SCORE_CRASH
 /*
 ** Global required to fix the score screen crash bug by allowing disabling of uncompressed shapes.
 */
-bool		OriginalUseBigShapeBuffer = false;
-#endif	//FIXIT
-char		*BigShapeBufferPtr = NULL;
-int			TotalBigShapes=0;
-BOOL		ReallocShapeBufferFlag = FALSE;
+bool OriginalUseBigShapeBuffer = false;
+#endif // FIXIT
+char *BigShapeBufferPtr = NULL;
+int TotalBigShapes = 0;
+BOOL ReallocShapeBufferFlag = FALSE;
 
-char		*TheaterShapeBufferPtr = NULL;
-int			TotalTheaterShapes = 0;
-
+char *TheaterShapeBufferPtr = NULL;
+int TotalTheaterShapes = 0;
 
 #define MAX_SLOTS 1500
 #define THEATER_SLOT_START 1000
 
-char	**KeyFrameSlots [MAX_SLOTS];
-int 	TotalSlotsUsed=0;
-int		TheaterSlotsUsed = THEATER_SLOT_START;
+char **KeyFrameSlots[MAX_SLOTS];
+int TotalSlotsUsed = 0;
+int TheaterSlotsUsed = THEATER_SLOT_START;
 
-
-
-typedef struct tShapeHeaderType{
+typedef struct tShapeHeaderType {
 	unsigned draw_flags;
-	char		*shape_data;
-	int		shape_buffer;		//1 if shape is in theater buffer
+	char *shape_data;
+	int shape_buffer; // 1 if shape is in theater buffer
 } ShapeHeaderType;
 
 static int Length;
 
-void *Get_Shape_Header_Data(void *ptr)
-{
+void *Get_Shape_Header_Data(void *ptr) {
 	if (UseBigShapeBuffer) {
 
-		ShapeHeaderType *header = (ShapeHeaderType*) ptr;
-		return ((void*)  (header->shape_data + (long)(header->shape_buffer ? TheaterShapeBufferStart : BigShapeBufferStart) ) );
+		ShapeHeaderType *header = (ShapeHeaderType *)ptr;
+		return ((void *)(header->shape_data +
+				 (long)(header->shape_buffer ? TheaterShapeBufferStart : BigShapeBufferStart)));
 
 	} else {
 		return (ptr);
 	}
 }
 
-int Get_Last_Frame_Length(void)
-{
-	return(Length);
-}
+int Get_Last_Frame_Length(void) { return (Length); }
 
-
-void Reset_Theater_Shapes (void)
-{
+void Reset_Theater_Shapes(void) {
 	/*
 	** Delete any previously allocated slots
 	*/
-	for (int i=THEATER_SLOT_START ; i<TheaterSlotsUsed ; i++) {
-		delete [] KeyFrameSlots [i];
+	for (int i = THEATER_SLOT_START; i < TheaterSlotsUsed; i++) {
+		delete[] KeyFrameSlots[i];
 	}
 
 	TheaterShapeBufferPtr = TheaterShapeBufferStart;
@@ -128,14 +118,12 @@ void Reset_Theater_Shapes (void)
 	TheaterSlotsUsed = THEATER_SLOT_START;
 }
 
-
-void Reallocate_Big_Shape_Buffer(void)
-{
+void Reallocate_Big_Shape_Buffer(void) {
 	if (ReallocShapeBufferFlag) {
-		BigShapeBufferLength += 2000000;							//Extra 2 Mb of uncompressed shape space
+		BigShapeBufferLength += 2000000; // Extra 2 Mb of uncompressed shape space
 		BigShapeBufferPtr -= (unsigned)BigShapeBufferStart;
 		Memory_Error = NULL;
-		BigShapeBufferStart = (char*)Resize_Alloc(BigShapeBufferStart, BigShapeBufferLength);
+		BigShapeBufferStart = (char *)Resize_Alloc(BigShapeBufferStart, BigShapeBufferLength);
 		Memory_Error = &Memory_Error_Handler;
 		/*
 		** If we have run out of memory then disable the uncompressed shapes
@@ -150,8 +138,7 @@ void Reallocate_Big_Shape_Buffer(void)
 	}
 }
 
-
-//#ifdef FIXIT_SCORE_CRASH
+// #ifdef FIXIT_SCORE_CRASH
 /***********************************************************************************************
  * Disable_Uncompressed_Shapes -- Temporarily turns off shape decompression                    *
  *                                                                                             *
@@ -166,12 +153,7 @@ void Reallocate_Big_Shape_Buffer(void)
  * HISTORY:                                                                                    *
  *    11/19/96 2:37PM ST : Created                                                             *
  *=============================================================================================*/
-void Disable_Uncompressed_Shapes (void)
-{
-	UseBigShapeBuffer = false;
-}
-
-
+void Disable_Uncompressed_Shapes(void) { UseBigShapeBuffer = false; }
 
 /***********************************************************************************************
  * Enable_Uncompressed_Shapes -- Restores state of shape decompression before it was disabled  *
@@ -187,48 +169,39 @@ void Disable_Uncompressed_Shapes (void)
  * HISTORY:                                                                                    *
  *    11/19/96 2:37PM ST : Created                                                             *
  *=============================================================================================*/
-void Enable_Uncompressed_Shapes (void)
-{
-	UseBigShapeBuffer = OriginalUseBigShapeBuffer;
-}
-//#endif	//FIXIT
+void Enable_Uncompressed_Shapes(void) { UseBigShapeBuffer = OriginalUseBigShapeBuffer; }
+// #endif	//FIXIT
 
-void Check_Use_Compressed_Shapes (void)
-{
-#if (1)	// Uncompressed shapes enabled for performance reasons. We don't need to worry about memory. 
-			// Uncompressed shapes don't seem to work in RA for rotated/scaled objects so wherever scale/rotate is used, 
-			// we will need to disable it (like in Techno_Draw_Object). ST - 11/6/2019 2:09PM
+void Check_Use_Compressed_Shapes(void) {
+#if (1) // Uncompressed shapes enabled for performance reasons. We don't need to worry about memory.
+	// Uncompressed shapes don't seem to work in RA for rotated/scaled objects so wherever scale/rotate is used,
+	// we will need to disable it (like in Techno_Draw_Object). ST - 11/6/2019 2:09PM
 	UseBigShapeBuffer = true;
 	OriginalUseBigShapeBuffer = true;
 
 #else
-	MEMORYSTATUS	mem_info;
+	MEMORYSTATUS mem_info;
 
-	mem_info.dwLength=sizeof(mem_info);
+	mem_info.dwLength = sizeof(mem_info);
 	GlobalMemoryStatus(&mem_info);
 
-	UseBigShapeBuffer = (mem_info.dwTotalPhys > 16*1024*1024) ? TRUE : FALSE;
+	UseBigShapeBuffer = (mem_info.dwTotalPhys > 16 * 1024 * 1024) ? TRUE : FALSE;
 #ifdef FIXIT_SCORE_CRASH
 	/*
 	** Keep track of our original decision about whether to use cached shapes.
 	** This is needed for the score screen crash fix.
 	*/
 	OriginalUseBigShapeBuffer = UseBigShapeBuffer;
-#endif	//FIXIT
+#endif // FIXIT
 #endif
 }
 
-
-
-
-
-unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void *buffptr)
-{
+unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void *buffptr) {
 #ifdef FIXIT_SCORE_CRASH
 	char *ptr;
 	unsigned long offcurr, offdiff;
 #else
-	char *ptr, *lockptr;//, *uncomp_ptr;
+	char *ptr, *lockptr; //, *uncomp_ptr;
 	unsigned long offcurr, off16, offdiff;
 #endif
 	unsigned long offset[SUBFRAMEOFFS];
@@ -243,20 +216,19 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 	// valid pointer??
 	//
 	Length = 0;
-	if ( !dataptr || !buffptr ) {
-		return(0);
+	if (!dataptr || !buffptr) {
+		return (0);
 	}
 
 	//
 	// look at header then check that frame to build is not greater
 	// than total frames
 	//
-	keyfr = (KeyFrameHeaderType *) dataptr;
+	keyfr = (KeyFrameHeaderType *)dataptr;
 
-	if ( framenumber >= keyfr->frames ) {
-		return(0);
+	if (framenumber >= keyfr->frames) {
+		return (0);
 	}
-
 
 	if (UseBigShapeBuffer) {
 		/*
@@ -264,13 +236,13 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 		**
 		*/
 		if (!BigShapeBufferStart) {
-			BigShapeBufferStart = (char*)Alloc(BigShapeBufferLength, MEM_NORMAL);
+			BigShapeBufferStart = (char *)Alloc(BigShapeBufferLength, MEM_NORMAL);
 			BigShapeBufferPtr = BigShapeBufferStart;
 
 			/*
 			** Allocate memory for theater specific uncompressed shapes
 			*/
-			TheaterShapeBufferStart = (char*) Alloc (TheaterShapeBufferLength, MEM_NORMAL);
+			TheaterShapeBufferStart = (char *)Alloc(TheaterShapeBufferLength, MEM_NORMAL);
 			TheaterShapeBufferPtr = TheaterShapeBufferStart;
 		}
 
@@ -278,7 +250,7 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 		** If we are running out of memory (<10k left) for uncompressed shapes
 		** then allocate some more.
 		*/
-		if (( (unsigned)BigShapeBufferStart + BigShapeBufferLength) - (unsigned)BigShapeBufferPtr < 128000) {
+		if (((unsigned)BigShapeBufferStart + BigShapeBufferLength) - (unsigned)BigShapeBufferPtr < 128000) {
 			ReallocShapeBufferFlag = TRUE;
 		}
 
@@ -299,19 +271,21 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 			/*
 			** Allocate and clear the memory for the shape info
 			*/
-			KeyFrameSlots[keyfr->y]= new char *[keyfr->frames];
-			memset (KeyFrameSlots[keyfr->y] , 0 , keyfr->frames*4);
+			KeyFrameSlots[keyfr->y] = new char *[keyfr->frames];
+			memset(KeyFrameSlots[keyfr->y], 0, keyfr->frames * 4);
 		}
 
 		/*
 		** If this frame was previously uncompressed then just return
 		** a pointer to the raw data
 		*/
-		if (*(KeyFrameSlots[keyfr->y]+framenumber)) {
+		if (*(KeyFrameSlots[keyfr->y] + framenumber)) {
 			if (IsTheaterShape) {
-				return ((unsigned long)TheaterShapeBufferStart + (unsigned long)*(KeyFrameSlots[keyfr->y]+framenumber));
+				return ((unsigned long)TheaterShapeBufferStart +
+					(unsigned long)*(KeyFrameSlots[keyfr->y] + framenumber));
 			} else {
-				return ((unsigned long)BigShapeBufferStart + (unsigned long)*(KeyFrameSlots[keyfr->y]+framenumber));
+				return ((unsigned long)BigShapeBufferStart +
+					(unsigned long)*(KeyFrameSlots[keyfr->y] + framenumber));
 			}
 		}
 	}
@@ -320,26 +294,26 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 	buffsize = keyfr->width * keyfr->height;
 
 	// get offset into data
-	ptr = (char *)Add_Long_To_Pointer( dataptr, (((unsigned long)framenumber << 3) + sizeof(KeyFrameHeaderType)) );
-	Mem_Copy( ptr, &offset[0], 12L );
+	ptr = (char *)Add_Long_To_Pointer(dataptr, (((unsigned long)framenumber << 3) + sizeof(KeyFrameHeaderType)));
+	Mem_Copy(ptr, &offset[0], 12L);
 	frameflags = (char)(offset[0] >> 24);
 
+	if ((frameflags & KF_KEYFRAME)) {
 
-	if ( (frameflags & KF_KEYFRAME) ) {
+		ptr = (char *)Add_Long_To_Pointer(dataptr, (offset[0] & 0x00FFFFFFL));
 
-		ptr = (char *)Add_Long_To_Pointer( dataptr, (offset[0] & 0x00FFFFFFL) );
-
-		if (keyfr->flags & 1 ) {
-			ptr = (char *)Add_Long_To_Pointer( ptr, 768L );
+		if (keyfr->flags & 1) {
+			ptr = (char *)Add_Long_To_Pointer(ptr, 768L);
 		}
-		length = LCW_Uncompress( ptr, buffptr, buffsize );
-	} else {	// key delta or delta
+		length = LCW_Uncompress(ptr, buffptr, buffsize);
+	} else { // key delta or delta
 
-		if ( (frameflags & KF_DELTA) ) {
+		if ((frameflags & KF_DELTA)) {
 			currframe = (unsigned short)offset[1];
 
-			ptr = (char *)Add_Long_To_Pointer( dataptr, (((unsigned long)currframe << 3) + sizeof(KeyFrameHeaderType)) );
-			Mem_Copy( ptr, &offset[0], (long)(SUBFRAMEOFFS * sizeof(unsigned long)) );
+			ptr = (char *)Add_Long_To_Pointer(
+			    dataptr, (((unsigned long)currframe << 3) + sizeof(KeyFrameHeaderType)));
+			Mem_Copy(ptr, &offset[0], (long)(SUBFRAMEOFFS * sizeof(unsigned long)));
 		}
 
 		// key frame
@@ -348,26 +322,26 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 		// key delta
 		offdiff = (offset[0] & 0x00FFFFFFL) - offcurr;
 
-		ptr = (char *)Add_Long_To_Pointer( dataptr, offcurr );
+		ptr = (char *)Add_Long_To_Pointer(dataptr, offcurr);
 
-		if (keyfr->flags & 1 ) {
-			ptr = (char *)Add_Long_To_Pointer( ptr, 768L );
+		if (keyfr->flags & 1) {
+			ptr = (char *)Add_Long_To_Pointer(ptr, 768L);
 		}
 
 #ifndef FIXIT_SCORE_CRASH
 		off16 = (unsigned long)lockptr & 0x00003FFFL;
 #endif
 
-		length = LCW_Uncompress( ptr, buffptr, buffsize );
+		length = LCW_Uncompress(ptr, buffptr, buffsize);
 
 		if (length > buffsize) {
-			return(0);
+			return (0);
 		}
 
 #ifndef FIXIT_SCORE_CRASH
-		if ( ((offset[2] & 0x00FFFFFFL) - offcurr) >= (0x00010000L - off16) ) {
+		if (((offset[2] & 0x00FFFFFFL) - offcurr) >= (0x00010000L - off16)) {
 
-			ptr = (char *)Add_Long_To_Pointer( ptr, offdiff );
+			ptr = (char *)Add_Long_To_Pointer(ptr, offdiff);
 			off16 = (unsigned long)ptr & 0x00003FFFL;
 
 			offcurr += offdiff;
@@ -378,7 +352,7 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 		length = buffsize;
 		Apply_Delta(buffptr, Add_Long_To_Pointer(ptr, offdiff));
 
-		if ( (frameflags & KF_DELTA) ) {
+		if ((frameflags & KF_DELTA)) {
 			// adjust to delta after the keydelta
 
 			currframe++;
@@ -388,9 +362,9 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 				offdiff = (offset[subframe] & 0x00FFFFFFL) - offcurr;
 
 #ifndef FIXIT_SCORE_CRASH
-				if ( ((offset[subframe+2] & 0x00FFFFFFL) - offcurr) >= (0x00010000L - off16) ) {
+				if (((offset[subframe + 2] & 0x00FFFFFFL) - offcurr) >= (0x00010000L - off16)) {
 
-					ptr = (char *)Add_Long_To_Pointer( ptr, offdiff );
+					ptr = (char *)Add_Long_To_Pointer(ptr, offdiff);
 					off16 = (unsigned long)lockptr & 0x00003FFFL;
 
 					offcurr += offdiff;
@@ -404,18 +378,15 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 				currframe++;
 				subframe += 2;
 
-				if ( subframe >= (SUBFRAMEOFFS - 1) &&
-					currframe <= framenumber ) {
-					Mem_Copy( Add_Long_To_Pointer( dataptr,
-									(((unsigned long)currframe << 3) +
-									sizeof(KeyFrameHeaderType)) ),
-						&offset[0], (long)(SUBFRAMEOFFS * sizeof(unsigned long)) );
+				if (subframe >= (SUBFRAMEOFFS - 1) && currframe <= framenumber) {
+					Mem_Copy(Add_Long_To_Pointer(dataptr, (((unsigned long)currframe << 3) +
+									       sizeof(KeyFrameHeaderType))),
+						 &offset[0], (long)(SUBFRAMEOFFS * sizeof(unsigned long)));
 					subframe = 0;
 				}
 			}
 		}
 	}
-
 
 	if (UseBigShapeBuffer) {
 		/*
@@ -429,21 +400,24 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 			/*
 			** Shape is a theater specific shape
 			*/
-			return_value = (unsigned long) TheaterShapeBufferPtr;
-			temp_shape_ptr = TheaterShapeBufferPtr + keyfr->height+sizeof(ShapeHeaderType);
+			return_value = (unsigned long)TheaterShapeBufferPtr;
+			temp_shape_ptr = TheaterShapeBufferPtr + keyfr->height + sizeof(ShapeHeaderType);
 			/*
 			** align the actual shape data
 			*/
 			if (3 & (unsigned)temp_shape_ptr) {
-				temp_shape_ptr = (char *) ((unsigned)(temp_shape_ptr + 3) & 0xfffffffc);
+				temp_shape_ptr = (char *)((unsigned)(temp_shape_ptr + 3) & 0xfffffffc);
 			}
 
-			memcpy (temp_shape_ptr , buffptr , length);
-			((ShapeHeaderType *)TheaterShapeBufferPtr)->draw_flags = -1;						//Flag that headers need to be generated
-			((ShapeHeaderType *)TheaterShapeBufferPtr)->shape_data = temp_shape_ptr - (unsigned)TheaterShapeBufferStart;		//pointer to old raw shape data
-			((ShapeHeaderType *)TheaterShapeBufferPtr)->shape_buffer = 1;	//Theater buffer
-			*(KeyFrameSlots[keyfr->y]+framenumber) = TheaterShapeBufferPtr - (unsigned)TheaterShapeBufferStart;
-			TheaterShapeBufferPtr = (char*)(length + (unsigned)temp_shape_ptr);
+			memcpy(temp_shape_ptr, buffptr, length);
+			((ShapeHeaderType *)TheaterShapeBufferPtr)->draw_flags =
+			    -1; // Flag that headers need to be generated
+			((ShapeHeaderType *)TheaterShapeBufferPtr)->shape_data =
+			    temp_shape_ptr - (unsigned)TheaterShapeBufferStart;	      // pointer to old raw shape data
+			((ShapeHeaderType *)TheaterShapeBufferPtr)->shape_buffer = 1; // Theater buffer
+			*(KeyFrameSlots[keyfr->y] + framenumber) =
+			    TheaterShapeBufferPtr - (unsigned)TheaterShapeBufferStart;
+			TheaterShapeBufferPtr = (char *)(length + (unsigned)temp_shape_ptr);
 			/*
 			** Align the next shape
 			*/
@@ -455,21 +429,22 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 
 		} else {
 
-
-			return_value=(unsigned long)BigShapeBufferPtr;
-			temp_shape_ptr = BigShapeBufferPtr + keyfr->height+sizeof(ShapeHeaderType);
+			return_value = (unsigned long)BigShapeBufferPtr;
+			temp_shape_ptr = BigShapeBufferPtr + keyfr->height + sizeof(ShapeHeaderType);
 			/*
 			** align the actual shape data
 			*/
 			if (3 & (unsigned)temp_shape_ptr) {
-				temp_shape_ptr = (char *) ((unsigned)(temp_shape_ptr + 3) & 0xfffffffc);
+				temp_shape_ptr = (char *)((unsigned)(temp_shape_ptr + 3) & 0xfffffffc);
 			}
-			memcpy (temp_shape_ptr , buffptr , length);
-			((ShapeHeaderType *)BigShapeBufferPtr)->draw_flags = -1;						//Flag that headers need to be generated
-			((ShapeHeaderType *)BigShapeBufferPtr)->shape_data = temp_shape_ptr - (unsigned)BigShapeBufferStart;		//pointer to old raw shape data
-			((ShapeHeaderType *)BigShapeBufferPtr)->shape_buffer = 0;	//Normal Big Shape Buffer
-			*(KeyFrameSlots[keyfr->y]+framenumber) = BigShapeBufferPtr - (unsigned)BigShapeBufferStart;
-			BigShapeBufferPtr = (char*)(length + (unsigned)temp_shape_ptr);
+			memcpy(temp_shape_ptr, buffptr, length);
+			((ShapeHeaderType *)BigShapeBufferPtr)->draw_flags =
+			    -1; // Flag that headers need to be generated
+			((ShapeHeaderType *)BigShapeBufferPtr)->shape_data =
+			    temp_shape_ptr - (unsigned)BigShapeBufferStart;	  // pointer to old raw shape data
+			((ShapeHeaderType *)BigShapeBufferPtr)->shape_buffer = 0; // Normal Big Shape Buffer
+			*(KeyFrameSlots[keyfr->y] + framenumber) = BigShapeBufferPtr - (unsigned)BigShapeBufferStart;
+			BigShapeBufferPtr = (char *)(length + (unsigned)temp_shape_ptr);
 			// Align the next shape
 			if (3 & (unsigned)BigShapeBufferPtr) {
 				BigShapeBufferPtr = (char *)((unsigned)(BigShapeBufferPtr + 3) & 0xfffffffc);
@@ -482,7 +457,6 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
 		return ((unsigned long)buffptr);
 	}
 }
-
 
 /***********************************************************************************************
  * Get_Build_Frame_Count -- Fetches the number of frames in data block.                        *
@@ -498,32 +472,26 @@ unsigned long Build_Frame(void const *dataptr, unsigned short framenumber, void 
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Commented.                                                               *
  *=============================================================================================*/
-unsigned short Get_Build_Frame_Count(void const *dataptr)
-{
+unsigned short Get_Build_Frame_Count(void const *dataptr) {
 	if (dataptr) {
-		return(((KeyFrameHeaderType const *)dataptr)->frames);
+		return (((KeyFrameHeaderType const *)dataptr)->frames);
 	}
-	return(0);
+	return (0);
 }
 
-
-unsigned short Get_Build_Frame_X(void const *dataptr)
-{
+unsigned short Get_Build_Frame_X(void const *dataptr) {
 	if (dataptr) {
-		return(((KeyFrameHeaderType const *)dataptr)->x);
+		return (((KeyFrameHeaderType const *)dataptr)->x);
 	}
-	return(0);
+	return (0);
 }
 
-
-unsigned short Get_Build_Frame_Y(void const *dataptr)
-{
+unsigned short Get_Build_Frame_Y(void const *dataptr) {
 	if (dataptr) {
-		return(((KeyFrameHeaderType const *)dataptr)->y);
+		return (((KeyFrameHeaderType const *)dataptr)->y);
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * Get_Build_Frame_Width -- Fetches the width of the shape image.                              *
@@ -540,14 +508,12 @@ unsigned short Get_Build_Frame_Y(void const *dataptr)
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Commented                                                                *
  *=============================================================================================*/
-unsigned short Get_Build_Frame_Width(void const *dataptr)
-{
+unsigned short Get_Build_Frame_Width(void const *dataptr) {
 	if (dataptr) {
-		return(((KeyFrameHeaderType const *)dataptr)->width);
+		return (((KeyFrameHeaderType const *)dataptr)->width);
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * Get_Build_Frame_Height -- Fetches the height of the shape image.                            *
@@ -564,25 +530,21 @@ unsigned short Get_Build_Frame_Width(void const *dataptr)
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Commented                                                                *
  *=============================================================================================*/
-unsigned short Get_Build_Frame_Height(void const *dataptr)
-{
+unsigned short Get_Build_Frame_Height(void const *dataptr) {
 	if (dataptr) {
-		return(((KeyFrameHeaderType const *)dataptr)->height);
+		return (((KeyFrameHeaderType const *)dataptr)->height);
 	}
-	return(0);
+	return (0);
 }
 
-
-bool Get_Build_Frame_Palette(void const * dataptr, void * palette)
-{
+bool Get_Build_Frame_Palette(void const *dataptr, void *palette) {
 	if (dataptr && (((KeyFrameHeaderType const *)dataptr)->flags & 1)) {
-		char const * ptr = (char const *)Add_Long_To_Pointer( dataptr,
-							( (( (long)sizeof(unsigned long) << 1) *
-								((KeyFrameHeaderType *) dataptr)->frames ) +
-							16 + sizeof(KeyFrameHeaderType) ) );
+		char const *ptr = (char const *)Add_Long_To_Pointer(
+		    dataptr, ((((long)sizeof(unsigned long) << 1) * ((KeyFrameHeaderType *)dataptr)->frames) + 16 +
+			      sizeof(KeyFrameHeaderType)));
 
 		memcpy(palette, ptr, 768L);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }

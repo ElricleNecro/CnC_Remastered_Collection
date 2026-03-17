@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/MAPEDTM.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -40,7 +40,6 @@
 
 #ifdef SCENARIO_EDITOR
 
-
 /***************************************************************************
  * MapEditClass::Handle_Teams -- main team-dialog-handling function        *
  *                                                                         *
@@ -56,8 +55,7 @@
  * HISTORY:                                                                *
  *   12/08/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Handle_Teams(char const * caption)
-{
+void MapEditClass::Handle_Teams(char const *caption) {
 	int rc;
 
 	/*
@@ -132,11 +130,11 @@ void MapEditClass::Handle_Teams(char const * caption)
 					/*
 					**	'Delete'
 					*/
-					if (rc==3) {
+					if (rc == 3) {
 						if (CurTeam) {
 							Detach_This_From_All(CurTeam->As_Target(), true);
 							delete CurTeam;
-							//CurTeam->Remove();
+							// CurTeam->Remove();
 							CurTeam = NULL;
 						}
 					}
@@ -145,7 +143,6 @@ void MapEditClass::Handle_Teams(char const * caption)
 		}
 	}
 }
-
 
 /***************************************************************************
  * MapEditClass::Select_Team -- user selects a team from a list            *
@@ -180,32 +177,32 @@ void MapEditClass::Handle_Teams(char const * caption)
  *   12/08/1994 BR : Created.                                              *
  *   05/07/1996 JLB : Streamlined and sorted team list.                    *
  *=========================================================================*/
-int MapEditClass::Select_Team(char const * )
-{
+int MapEditClass::Select_Team(char const *) {
 	/*
 	**	Dialog & button dimensions
 	*/
 	enum {
-		D_DIALOG_W = 400,											// dialog width
-		D_DIALOG_H = 250,											// dialog height
-		D_DIALOG_X = 0,				// centered x-coord
-		D_DIALOG_Y = 0,				// centered y-coord
-//		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),		// coord of x-center
+		D_DIALOG_W = 400, // dialog width
+		D_DIALOG_H = 250, // dialog height
+		D_DIALOG_X = 0,	  // centered x-coord
+		D_DIALOG_Y =
+		    0, // centered y-coord
+		       //		D_DIALOG_CX = D_DIALOG_X + (D_DIALOG_W / 2),		// coord of x-center
 
-		D_TXT8_H = 11,												// ht of 8-pt text
-		D_MARGIN = 25,												// margin width/height
+		D_TXT8_H = 11, // ht of 8-pt text
+		D_MARGIN = 25, // margin width/height
 
-		D_LIST_W = (D_DIALOG_W-(D_MARGIN*2))-20,
-		D_LIST_X = D_DIALOG_X + (D_DIALOG_W-D_LIST_W)/2,
+		D_LIST_W = (D_DIALOG_W - (D_MARGIN * 2)) - 20,
+		D_LIST_X = D_DIALOG_X + (D_DIALOG_W - D_LIST_W) / 2,
 		D_LIST_Y = D_DIALOG_Y + 20,
-		D_LIST_H = (D_DIALOG_H-50)-D_LIST_Y,
+		D_LIST_H = (D_DIALOG_H - 50) - D_LIST_Y,
 
 		BUTTON_W = 45,
 		BUTTON_H = 9,
 
 		D_EDIT_W = BUTTON_W,
 		D_EDIT_H = BUTTON_H,
-		D_EDIT_X = D_DIALOG_X + D_DIALOG_W - (((D_EDIT_W+10)*4)+25),
+		D_EDIT_X = D_DIALOG_X + D_DIALOG_W - (((D_EDIT_W + 10) * 4) + 25),
 		D_EDIT_Y = D_DIALOG_Y + D_DIALOG_H - 20 - D_EDIT_H,
 
 		D_NEW_W = BUTTON_W,
@@ -223,14 +220,14 @@ int MapEditClass::Select_Team(char const * )
 		D_OK_X = D_DELETE_X + D_DELETE_W + 10,
 		D_OK_Y = D_DIALOG_Y + D_DIALOG_H - 20 - D_OK_H,
 
-		TEAMTXT_LEN = 43,				// max length of a team entry
+		TEAMTXT_LEN = 43, // max length of a team entry
 	};
 
 	/*
 	**	Button enumerations:
 	*/
 	enum {
-		TEAM_LIST=100,
+		TEAM_LIST = 100,
 		BUTTON_EDIT,
 		BUTTON_NEW,
 		BUTTON_DELETE,
@@ -240,27 +237,25 @@ int MapEditClass::Select_Team(char const * )
 	/*
 	**	Dialog variables
 	*/
-	bool edit_team = false;						// true = user wants to edit
-	bool new_team = false;						// true = user wants to new
-	bool del_team = false;						// true = user wants to new
-	static int tabs[] = {35, 60, 80, 100};	// list box tab stops
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+	bool edit_team = false;		       // true = user wants to edit
+	bool new_team = false;		       // true = user wants to new
+	bool del_team = false;		       // true = user wants to new
+	static int tabs[] = {35, 60, 80, 100}; // list box tab stops
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
 	**	Buttons
 	*/
-	GadgetClass * commands = NULL;				// the button list
+	GadgetClass *commands = NULL; // the button list
 
-	TListClass<CCPtr<TeamTypeClass> > teamlist (TEAM_LIST,
-		D_LIST_X, D_LIST_Y, D_LIST_W, D_LIST_H,
-		TPF_EFNT | TPF_NOSHADOW,
-		MFCD::Retrieve("EBTN-UP.SHP"),
-		MFCD::Retrieve("EBTN-DN.SHP"));
+	TListClass<CCPtr<TeamTypeClass>> teamlist(TEAM_LIST, D_LIST_X, D_LIST_Y, D_LIST_W, D_LIST_H,
+						  TPF_EFNT | TPF_NOSHADOW, MFCD::Retrieve("EBTN-UP.SHP"),
+						  MFCD::Retrieve("EBTN-DN.SHP"));
 
-	TextButtonClass editbtn (BUTTON_EDIT, "Edit", TPF_EBUTTON, D_EDIT_X, D_EDIT_Y, D_EDIT_W);
-	TextButtonClass newbtn (BUTTON_NEW, "New", TPF_EBUTTON, D_NEW_X, D_NEW_Y, D_NEW_W);
-	TextButtonClass deletebtn (BUTTON_DELETE, "Delete", TPF_EBUTTON, D_DELETE_X, D_DELETE_Y, D_DELETE_W);
-	TextButtonClass okbtn (BUTTON_OK, "OK", TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W);
+	TextButtonClass editbtn(BUTTON_EDIT, "Edit", TPF_EBUTTON, D_EDIT_X, D_EDIT_Y, D_EDIT_W);
+	TextButtonClass newbtn(BUTTON_NEW, "New", TPF_EBUTTON, D_NEW_X, D_NEW_Y, D_NEW_W);
+	TextButtonClass deletebtn(BUTTON_DELETE, "Delete", TPF_EBUTTON, D_DELETE_X, D_DELETE_Y, D_DELETE_W);
+	TextButtonClass okbtn(BUTTON_OK, "OK", TPF_EBUTTON, D_OK_X, D_OK_Y, D_OK_W);
 
 	/*
 	**	Initialize
@@ -276,7 +271,8 @@ int MapEditClass::Select_Team(char const * )
 
 	PNBubble_Sort(&teamlist[0], teamlist.Count());
 
-	if (!CurTeam || !CurTeam->IsActive) CurTeam = NULL;
+	if (!CurTeam || !CurTeam->IsActive)
+		CurTeam = NULL;
 
 	if (CurTeam) {
 		teamlist.Set_Selected_Index(CurTeam);
@@ -324,7 +320,7 @@ int MapEditClass::Select_Team(char const * )
 			commands->Draw_All();
 			Show_Mouse();
 			display = false;
-//			LogicPage->Unlock();
+			//			LogicPage->Unlock();
 		}
 
 		/*
@@ -336,31 +332,31 @@ int MapEditClass::Select_Team(char const * )
 		**	Process input
 		*/
 		switch (input) {
-			case (TEAM_LIST | KN_BUTTON):
-				CurTeam = teamlist.Current_Item();
-				break;
+		case (TEAM_LIST | KN_BUTTON):
+			CurTeam = teamlist.Current_Item();
+			break;
 
-			case (BUTTON_EDIT | KN_BUTTON):
-				if (teamlist.Count()) {
-					process = false;
-					edit_team = true;
-				}
-				break;
-
-			case (BUTTON_NEW | KN_BUTTON):
+		case (BUTTON_EDIT | KN_BUTTON):
+			if (teamlist.Count()) {
 				process = false;
-				new_team = true;
-				break;
+				edit_team = true;
+			}
+			break;
 
-			case (BUTTON_DELETE | KN_BUTTON):
-				process = false;
-				del_team = true;
-				break;
+		case (BUTTON_NEW | KN_BUTTON):
+			process = false;
+			new_team = true;
+			break;
 
-			case (KN_RETURN):
-			case (BUTTON_OK | KN_BUTTON):
-				process = false;
-				break;
+		case (BUTTON_DELETE | KN_BUTTON):
+			process = false;
+			del_team = true;
+			break;
+
+		case (KN_RETURN):
+		case (BUTTON_OK | KN_BUTTON):
+			process = false;
+			break;
 		}
 	}
 
@@ -371,12 +367,14 @@ int MapEditClass::Select_Team(char const * )
 	Flag_To_Redraw(true);
 	Render();
 
-	if (edit_team) return(1);
-	if (new_team) return(2);
-	if (del_team) return(3);
-	return(0);
+	if (edit_team)
+		return (1);
+	if (new_team)
+		return (2);
+	if (del_team)
+		return (3);
+	return (0);
 }
-
 
 /***************************************************************************
  * MapEditClass::Team_Members -- user picks makeup of a team               *
@@ -422,7 +420,7 @@ int MapEditClass::Select_Team(char const * )
  * HISTORY:                                                                *
  *   12/07/1994 BR : Created.                                              *
  *=========================================================================*/
-//#define TEENSY_WEENSY
+// #define TEENSY_WEENSY
 /*
 **	Dialog & button dimensions
 */
@@ -455,8 +453,7 @@ enum {
 
 };
 
-int MapEditClass::Team_Members(HousesType house)
-{
+int MapEditClass::Team_Members(HousesType house) {
 	/*
 	**	Button enumerations:
 	*/
@@ -471,42 +468,37 @@ int MapEditClass::Team_Members(HousesType house)
 	**	the requested redraw level to see if it's supposed to draw; if it's
 	**	>= its level, it redraws.
 	*/
-	typedef enum {
-		REDRAW_NONE = 0,
-		REDRAW_BUTTONS,
-		REDRAW_BACKGROUND,
-		REDRAW_ALL = REDRAW_BACKGROUND
-	} RedrawType;
-	RedrawType display;							// requested redraw level
-	bool process;									// loop while true
+	typedef enum { REDRAW_NONE = 0, REDRAW_BUTTONS, REDRAW_BACKGROUND, REDRAW_ALL = REDRAW_BACKGROUND } RedrawType;
+	RedrawType display; // requested redraw level
+	bool process;	    // loop while true
 
 	/*
 	**	Dialog variables
 	*/
-	KeyNumType input;								// user input
-	bool cancel = false;							// true = user cancels
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+	KeyNumType input;    // user input
+	bool cancel = false; // true = user cancels
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
 	**	Team display variables
 	*/
-	const TechnoTypeClass **teamclass;		// array of team classes
-	int *teamcount;								// array of class counts
-	int numcols;									// # units displayed horizontally
-	int numrows;									// # units displayed vertically
+	const TechnoTypeClass **teamclass; // array of team classes
+	int *teamcount;			   // array of class counts
+	int numcols;			   // # units displayed horizontally
+	int numrows;			   // # units displayed vertically
 
 	/*
 	**	Dialog dimensions.
 	*/
 	int dlg_y;
-	int dlg_h;										// dialog height
-	int msg_y;										// y-coord for object names
+	int dlg_h; // dialog height
+	int msg_y; // y-coord for object names
 
-	int curclass = -1;			// current index into 'teamclass'; can be invalid!
-										// (is based on current mouse position)
-	int numclasses;				// current # classes in the team (limited to <=5)
-	int maxclasses;				// max # classes available
-	int i,j;
+	int curclass = -1; // current index into 'teamclass'; can be invalid!
+			   // (is based on current mouse position)
+	int numclasses;	   // current # classes in the team (limited to <=5)
+	int maxclasses;	   // max # classes available
+	int i, j;
 
 	/*
 	**	Values for timing when mouse held down.
@@ -520,20 +512,21 @@ int MapEditClass::Team_Members(HousesType house)
 	/*
 	**	Buttons.
 	*/
-	ControlClass * commands;
+	ControlClass *commands;
 
-	TextButtonClass okbtn (BUTTON_OK, TXT_OK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
-	TextButtonClass cancelbtn (BUTTON_CANCEL, TXT_CANCEL, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW, D_CANCEL_X, D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
+	TextButtonClass okbtn(BUTTON_OK, TXT_OK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW, D_OK_X, D_OK_Y, D_OK_W, D_OK_H);
+	TextButtonClass cancelbtn(BUTTON_CANCEL, TXT_CANCEL, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW, D_CANCEL_X,
+				  D_CANCEL_Y, D_CANCEL_W, D_CANCEL_H);
 
 	/*
 	**	Set up the team data arrays (ObjectTypeClass pointers & count)
 	*/
 #ifdef WIN32
 	teamclass = (const TechnoTypeClass **)SysMemPage.Get_Buffer();
-	teamcount = (int *)SysMemPage.Get_Buffer() + MAX_TEAM_CLASSES * sizeof (ObjectTypeClass *);
+	teamcount = (int *)SysMemPage.Get_Buffer() + MAX_TEAM_CLASSES * sizeof(ObjectTypeClass *);
 #else
 	teamclass = (const TechnoTypeClass **)HidPage.Get_Buffer();
-	teamcount = (int *)HidPage.Get_Buffer() + MAX_TEAM_CLASSES * sizeof (ObjectTypeClass *);
+	teamcount = (int *)HidPage.Get_Buffer() + MAX_TEAM_CLASSES * sizeof(ObjectTypeClass *);
 #endif
 
 	/*
@@ -611,7 +604,7 @@ int MapEditClass::Team_Members(HousesType house)
 	*/
 	dlg_h = 400;
 	dlg_y = 0;
-	msg_y = dlg_y+dlg_h - 26 - 15;
+	msg_y = dlg_y + dlg_h - 26 - 15;
 
 	okbtn.Y = dlg_y + dlg_h - D_MARGIN - D_OK_H - 15;
 	cancelbtn.Y = dlg_y + dlg_h - D_MARGIN - D_CANCEL_H - 15;
@@ -624,14 +617,14 @@ int MapEditClass::Team_Members(HousesType house)
 	/*
 	**	Make sure 'house' is valid.
 	*/
-//	if (house!=HOUSE_GOOD && house!=HOUSE_BAD && house != HOUSE_MULTI1 &&
-//		house != HOUSE_MULTI2 && house != HOUSE_MULTI3 && house != HOUSE_MULTI4 ) {
-//		if (Scen.ScenPlayer == SCEN_PLAYER_MPLAYER) {
-//			house = HOUSE_MULTI1;
-//		} else {
-//			house = HOUSE_GOOD;
-//		}
-//	}
+	//	if (house!=HOUSE_GOOD && house!=HOUSE_BAD && house != HOUSE_MULTI1 &&
+	//		house != HOUSE_MULTI2 && house != HOUSE_MULTI3 && house != HOUSE_MULTI4 ) {
+	//		if (Scen.ScenPlayer == SCEN_PLAYER_MPLAYER) {
+	//			house = HOUSE_MULTI1;
+	//		} else {
+	//			house = HOUSE_GOOD;
+	//		}
+	//	}
 
 	/*
 	**	Create the list.
@@ -680,10 +673,9 @@ int MapEditClass::Team_Members(HousesType house)
 				}
 
 				if ((unsigned)curclass < maxclasses) {
-					Fancy_Text_Print(teamclass[curclass]->Full_Name(),
-						D_DIALOG_X + D_DIALOG_W / 2, msg_y,
-						&ColorRemaps[PCOLOR_BROWN], TBLACK,
-						TPF_CENTER|TPF_EFNT|TPF_NOSHADOW);
+					Fancy_Text_Print(teamclass[curclass]->Full_Name(), D_DIALOG_X + D_DIALOG_W / 2,
+							 msg_y, &ColorRemaps[PCOLOR_BROWN], TBLACK,
+							 TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
 				}
 			}
 
@@ -707,81 +699,82 @@ int MapEditClass::Team_Members(HousesType house)
 		*/
 		switch (input) {
 
+		/*
+		**	Mouse buttons set or clear 'held' values
+		*/
+		case (KN_LMOUSE):
+			if (curclass >= 0 && curclass < maxclasses) {
+				lheld = 1;
+				tindex = 2;
+				heldtime = 0;
+			}
+			break;
+
+		case (KN_RMOUSE):
+			if (curclass >= 0 && curclass < maxclasses) {
+				rheld = 1;
+				tindex = 2;
+				heldtime = 0;
+			}
+			break;
+
+		case ((int)KN_LMOUSE | (int)KN_RLSE_BIT):
+			lheld = 0;
+			break;
+
+		case ((int)KN_RMOUSE | (int)KN_RLSE_BIT):
+			rheld = 0;
+			break;
+
+		/*
+		**	OK: save values & return.
+		*/
+		case (BUTTON_OK | KN_BUTTON):
+			process = false;
+			break;
+
+		/*
+		**	Cancel: abort & return.
+		*/
+		case (BUTTON_CANCEL | KN_BUTTON):
+			cancel = true;
+			process = false;
+			break;
+
+		default:
 			/*
-			**	Mouse buttons set or clear 'held' values
+			**	Compute new 'curclass' based on mouse position.
 			*/
-			case (KN_LMOUSE):
-				if (curclass >= 0 && curclass < maxclasses) {
-					lheld = 1;
-					tindex = 2;
-					heldtime = 0;
-				}
-				break;
+			i = (Get_Mouse_X() - 32 - D_DIALOG_X) / D_PICTURE_W +
+			    ((Get_Mouse_Y() - (dlg_y + 8 + 11)) / D_ROW_H) * numcols;
 
-			case (KN_RMOUSE):
-				if (curclass >= 0 && curclass < maxclasses) {
-					rheld = 1;
-					tindex = 2;
-					heldtime = 0;
-				}
-				break;
+			/*
+			**	If it's changed, update class label.
+			*/
+			if (i != curclass) {
 
-			case ((int)KN_LMOUSE | (int)KN_RLSE_BIT):
+				curclass = i;
+
+				/*
+				**	Clear out the previously printed name of the item.
+				*/
+				Hide_Mouse();
+				LogicPage->Fill_Rect(D_DIALOG_X + 32, msg_y, D_DIALOG_X + D_DIALOG_W - 64,
+						     msg_y + D_TXT6_H, BLACK);
+
+				if ((unsigned)curclass < maxclasses) {
+					Fancy_Text_Print(teamclass[curclass]->Full_Name(), D_DIALOG_X + D_DIALOG_W / 2,
+							 msg_y, scheme, TBLACK, TPF_CENTER | TPF_EFNT | TPF_NOSHADOW);
+				}
+
+				/*
+				**	Force buttons to not be held.
+				*/
 				lheld = 0;
-				break;
-
-			case ((int)KN_RMOUSE | (int)KN_RLSE_BIT):
 				rheld = 0;
-				break;
-
-			/*
-			**	OK: save values & return.
-			*/
-			case (BUTTON_OK | KN_BUTTON):
-				process = false;
-				break;
-
-			/*
-			**	Cancel: abort & return.
-			*/
-			case (BUTTON_CANCEL | KN_BUTTON):
-				cancel = true;
-				process = false;
-				break;
-
-			default:
-				/*
-				**	Compute new 'curclass' based on mouse position.
-				*/
-				i = (Get_Mouse_X() - 32 - D_DIALOG_X) / D_PICTURE_W +
-					((Get_Mouse_Y() - (dlg_y+8+11)) / D_ROW_H) * numcols;
-
-				/*
-				**	If it's changed, update class label.
-				*/
-				if (i != curclass) {
-
-					curclass = i;
-
-					/*
-					**	Clear out the previously printed name of the item.
-					*/
-					Hide_Mouse();
-					LogicPage->Fill_Rect(D_DIALOG_X + 32, msg_y, D_DIALOG_X + D_DIALOG_W - 64, msg_y + D_TXT6_H, BLACK);
-
-					if ((unsigned)curclass < maxclasses) {
-						Fancy_Text_Print(teamclass[curclass]->Full_Name(),
-							D_DIALOG_X + D_DIALOG_W / 2, msg_y, scheme, TBLACK, TPF_CENTER|TPF_EFNT|TPF_NOSHADOW);
-					}
-
-					/*
-					**	Force buttons to not be held.
-					*/
-					lheld = 0;
-					rheld = 0;
-					Show_Mouse();
-				}
-				break;
+				Show_Mouse();
+			}
+			break;
 		}
 
 		/*
@@ -806,7 +799,7 @@ int MapEditClass::Team_Members(HousesType house)
 				/*
 				**	Detect addition of a new class.
 				*/
-				if (teamcount[curclass]==0) {
+				if (teamcount[curclass] == 0) {
 
 					/*
 					**	Don't allow more classes than we can handle.
@@ -865,7 +858,7 @@ int MapEditClass::Team_Members(HousesType house)
 	*/
 	if (!cancel) {
 		CurTeam->ClassCount = numclasses;
-		i = 0;		// current team class index
+		i = 0; // current team class index
 		for (j = 0; j < maxclasses; j++) {
 			if (teamcount[j] > 0) {
 				CurTeam->Members[i].Quantity = teamcount[j];
@@ -882,10 +875,10 @@ int MapEditClass::Team_Members(HousesType house)
 	Flag_To_Redraw(true);
 	Render();
 
-	if (cancel) return(-1);
-	return(0);
+	if (cancel)
+		return (-1);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * MapEditClass::Draw_Member -- Draws a member of the team dialog box.                         *
@@ -909,15 +902,14 @@ int MapEditClass::Team_Members(HousesType house)
  * HISTORY:                                                                                    *
  *   07/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void MapEditClass::Draw_Member(TechnoTypeClass const * ptr, int index, int quant, HousesType house)
-{
+void MapEditClass::Draw_Member(TechnoTypeClass const *ptr, int index, int quant, HousesType house) {
 	int numcols = (D_DIALOG_W - 64) / D_PICTURE_W;
 	int col = index % numcols;
 	int row = index / numcols;
 	int dlg_y = 0;
 	int x = D_DIALOG_X + 32 + col * D_PICTURE_W;
 	int y = dlg_y + 8 + 13 + row * D_ROW_H;
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
 	/*
 	**	Change the window to this box.
@@ -930,13 +922,13 @@ void MapEditClass::Draw_Member(TechnoTypeClass const * ptr, int index, int quant
 
 	Hide_Mouse();
 	Draw_Box(x, y, D_PICTURE_W, D_PICTURE_H, BOXSTYLE_DOWN, true);
-	ptr->Display(WinW/2, WinH>>1, WINDOW_EDITOR, house);
+	ptr->Display(WinW / 2, WinH >> 1, WINDOW_EDITOR, house);
 	if (quant > 0) {
-		Fancy_Text_Print("%d", x+1, y+1, scheme, TBLACK, TPF_8POINT|TPF_DROPSHADOW, quant);
-//		Fancy_Text_Print("%d", x+1, y+D_PICTURE_H-8, scheme, TBLACK, TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_DROPSHADOW, quant);
+		Fancy_Text_Print("%d", x + 1, y + 1, scheme, TBLACK, TPF_8POINT | TPF_DROPSHADOW, quant);
+		//		Fancy_Text_Print("%d", x+1, y+D_PICTURE_H-8, scheme, TBLACK,
+		// TPF_6PT_GRAD|TPF_USE_GRAD_PAL|TPF_DROPSHADOW, quant);
 	}
 	Show_Mouse();
 }
-
 
 #endif

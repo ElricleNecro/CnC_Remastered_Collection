@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/CREDITS.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -35,8 +35,7 @@
  *   CreditClass::Graphic_Logic -- Handles the credit redraw logic.                            *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * CreditClass::CreditClass -- Default constructor for the credit class object.                *
@@ -53,16 +52,8 @@
  * HISTORY:                                                                                    *
  *   03/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-CreditClass::CreditClass(void) :
-	Credits(0),
-	Current(0),
-	IsToRedraw(false),
-	IsUp(false),
-	IsAudible(false),
-	Countdown(0)
-{
-}
-
+CreditClass::CreditClass(void)
+    : Credits(0), Current(0), IsToRedraw(false), IsUp(false), IsAudible(false), Countdown(0) {}
 
 /***********************************************************************************************
  * CreditClass::Graphic_Logic -- Handles the credit redraw logic.                              *
@@ -81,10 +72,9 @@ CreditClass::CreditClass(void) :
  * HISTORY:                                                                                    *
  *   03/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-//#define	XX (320-120)
-//#define	WW	50
-void CreditClass::Graphic_Logic(bool forced)
-{
+// #define	XX (320-120)
+// #define	WW	50
+void CreditClass::Graphic_Logic(bool forced) {
 	if (forced || IsToRedraw) {
 		BStart(BENCH_TABS);
 
@@ -104,7 +94,7 @@ void CreditClass::Graphic_Logic(bool forced)
 		if (IsAudible) {
 			if (IsUp) {
 				Sound_Effect(VOC_MONEY_UP, fixed(1, 2));
-			} else  {
+			} else {
 				Sound_Effect(VOC_MONEY_DOWN, fixed(1, 2));
 			}
 		}
@@ -114,10 +104,12 @@ void CreditClass::Graphic_Logic(bool forced)
 		*/
 		// PG TabClass::Draw_Credits_Tab();
 #ifdef WIN32
-		//PG Fancy_Text_Print("%ld", xx, 0, &MetalScheme, TBLACK, TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL, Current);
+		// PG Fancy_Text_Print("%ld", xx, 0, &MetalScheme, TBLACK, TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL,
+		// Current);
 #else
-		Fancy_Text_Print("%ld", xx, 0, &ColorRemaps[PCOLOR_GREY], TBLACK, TPF_NOSHADOW|TPF_6PT_GRAD|TPF_CENTER|TPF_BRIGHT_COLOR, Current);
-#endif	//WIN32
+		Fancy_Text_Print("%ld", xx, 0, &ColorRemaps[PCOLOR_GREY], TBLACK,
+				 TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR, Current);
+#endif // WIN32
 
 		if (Scen.MissionTimer.Is_Active()) {
 			long secs = Scen.MissionTimer / TICKS_PER_SECOND;
@@ -125,40 +117,55 @@ void CreditClass::Graphic_Logic(bool forced)
 			long hours = mins / 60;
 			secs %= 60;
 			mins %= 60;
-#if (0) //Moved to LOGIC.CPP
+#if (0) // Moved to LOGIC.CPP
 			/*
 			**	Speak mission timer reminders.
 			*/
 			VoxType vox = VOX_NONE;
-			if (Scen.MissionTimer == (1 * TICKS_PER_MINUTE)) vox = VOX_TIME_1;
-			if (Scen.MissionTimer == (2 * TICKS_PER_MINUTE)) vox = VOX_TIME_2;
-			if (Scen.MissionTimer == (3 * TICKS_PER_MINUTE)) vox = VOX_TIME_3;
-			if (Scen.MissionTimer == (4 * TICKS_PER_MINUTE)) vox = VOX_TIME_4;
-			if (Scen.MissionTimer == (5 * TICKS_PER_MINUTE)) vox = VOX_TIME_5;
-			if (Scen.MissionTimer == (10 * TICKS_PER_MINUTE)) vox = VOX_TIME_10;
-			if (Scen.MissionTimer == (20 * TICKS_PER_MINUTE)) vox = VOX_TIME_20;
-			if (Scen.MissionTimer == (30 * TICKS_PER_MINUTE)) vox = VOX_TIME_30;
-			if (Scen.MissionTimer == (40 * TICKS_PER_MINUTE)) vox = VOX_TIME_40;
+			if (Scen.MissionTimer == (1 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_1;
+			if (Scen.MissionTimer == (2 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_2;
+			if (Scen.MissionTimer == (3 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_3;
+			if (Scen.MissionTimer == (4 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_4;
+			if (Scen.MissionTimer == (5 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_5;
+			if (Scen.MissionTimer == (10 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_10;
+			if (Scen.MissionTimer == (20 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_20;
+			if (Scen.MissionTimer == (30 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_30;
+			if (Scen.MissionTimer == (40 * TICKS_PER_MINUTE))
+				vox = VOX_TIME_40;
 			if (vox != VOX_NONE) {
 				Speak(vox);
 				Map.FlasherTimer = 7;
 			}
 #endif
 #ifdef WIN32
-#if (0) //PG
+#if (0) // PG
 			if (hours) {
-				Fancy_Text_Print(TXT_TIME_FORMAT_HOURS, 200 * RESFACTOR, 0, &MetalScheme, TBLACK, TPF_METAL12|TPF_CENTER|TPF_USE_GRAD_PAL, hours, mins, secs);
+				Fancy_Text_Print(TXT_TIME_FORMAT_HOURS, 200 * RESFACTOR, 0, &MetalScheme, TBLACK,
+						 TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL, hours, mins, secs);
 			} else {
-				Fancy_Text_Print(TXT_TIME_FORMAT_NO_HOURS, 200 * RESFACTOR, 0, &MetalScheme, TBLACK, TPF_METAL12|TPF_CENTER|TPF_USE_GRAD_PAL, mins, secs);
+				Fancy_Text_Print(TXT_TIME_FORMAT_NO_HOURS, 200 * RESFACTOR, 0, &MetalScheme, TBLACK,
+						 TPF_METAL12 | TPF_CENTER | TPF_USE_GRAD_PAL, mins, secs);
 			}
 #endif
 #else
 			if (hours) {
-				Fancy_Text_Print("%02d:%02d:%02d", 120 * RESFACTOR, 0, &ColorRemaps[PCOLOR_GREY], TBLACK, TPF_NOSHADOW|TPF_6PT_GRAD|TPF_CENTER|TPF_BRIGHT_COLOR, hours, mins, secs);
+				Fancy_Text_Print("%02d:%02d:%02d", 120 * RESFACTOR, 0, &ColorRemaps[PCOLOR_GREY],
+						 TBLACK, TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR,
+						 hours, mins, secs);
 			} else {
-				Fancy_Text_Print("%02d:%02d", 120 * RESFACTOR, 0, &ColorRemaps[PCOLOR_GREY], TBLACK, TPF_NOSHADOW|TPF_6PT_GRAD|TPF_CENTER|TPF_BRIGHT_COLOR, mins, secs);
+				Fancy_Text_Print("%02d:%02d", 120 * RESFACTOR, 0, &ColorRemaps[PCOLOR_GREY], TBLACK,
+						 TPF_NOSHADOW | TPF_6PT_GRAD | TPF_CENTER | TPF_BRIGHT_COLOR, mins,
+						 secs);
 			}
-#endif	//WIN32
+#endif // WIN32
 		}
 
 		IsToRedraw = false;
@@ -166,7 +173,6 @@ void CreditClass::Graphic_Logic(bool forced)
 		BEnd(BENCH_TABS);
 	}
 }
-
 
 /***********************************************************************************************
  * CreditClass::AI -- Handles updating the credit display.                                     *
@@ -189,11 +195,11 @@ void CreditClass::Graphic_Logic(bool forced)
  *   03/13/1995 JLB : Created.                                                                 *
  *   10/16/2019  ST : Added house and logic parameters so we can call this from HouseClass::AI *
  *=============================================================================================*/
-void CreditClass::AI(bool forced, HouseClass *player_ptr, bool logic_only)
-{
+void CreditClass::AI(bool forced, HouseClass *player_ptr, bool logic_only) {
 	static int _last = 0;
 
-	if (!forced && !logic_only && Frame == _last) return;
+	if (!forced && !logic_only && Frame == _last)
+		return;
 	if (!logic_only) {
 		_last = Frame;
 	}
@@ -214,15 +220,18 @@ void CreditClass::AI(bool forced, HouseClass *player_ptr, bool logic_only)
 		Map.Flag_To_Redraw(false);
 	}
 
-	if (Current == Credits) return;
+	if (Current == Credits)
+		return;
 
 	if (forced) {
 		IsAudible = false;
 		Current = Credits;
 	} else {
 
-		if (Countdown) Countdown--;
-		if (Countdown) return;
+		if (Countdown)
+			Countdown--;
+		if (Countdown)
+			return;
 
 		/*
 		**	Determine the amount to change the display toward the
@@ -238,12 +247,13 @@ void CreditClass::AI(bool forced, HouseClass *player_ptr, bool logic_only)
 
 		adder = ABS(adder);
 		adder >>= 3;
-//		adder >>= 4;
-//		adder >>= 5;
-		adder = Bound(adder, 1, 71+72);
-		if (Current > Credits) adder = -adder;
+		//		adder >>= 4;
+		//		adder >>= 5;
+		adder = Bound(adder, 1, 71 + 72);
+		if (Current > Credits)
+			adder = -adder;
 		Current += adder;
-		if (Current-adder != Current) {
+		if (Current - adder != Current) {
 			IsAudible = true;
 			IsUp = (adder > 0);
 		}

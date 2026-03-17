@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/RANDOM.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -57,15 +57,12 @@ extern long Frame;
  * HISTORY:                                                                                    *
  *   02/27/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-RandomClass::RandomClass(unsigned seed) :
-	Seed(seed)
-{
+RandomClass::RandomClass(unsigned seed) : Seed(seed) {
 #ifdef RANDOM_COUNT
 	Count1 = 0;
 	Count2 = 0;
 #endif
 }
-
 
 /***********************************************************************************************
  * RandomClass::operator() -- Fetches the next random number in the sequence.                  *
@@ -83,11 +80,10 @@ RandomClass::RandomClass(unsigned seed) :
  * HISTORY:                                                                                    *
  *   02/27/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int RandomClass::operator ()(void)
-{
+int RandomClass::operator()(void) {
 #ifdef RANDOM_COUNT
 	Count1++;
-	printf("Frame %d: Random Count1:%d Count2:%d (%x)\n",Frame,Count1,Count2,Seed);
+	printf("Frame %d: Random Count1:%d Count2:%d (%x)\n", Frame, Count1, Count2, Seed);
 #endif
 
 	/*
@@ -99,9 +95,8 @@ int RandomClass::operator ()(void)
 	**	Extract the 'random' bits from the seed and return that value as the
 	**	random number result.
 	*/
-	return((Seed >> THROW_AWAY_BITS) & (~((~0) << SIGNIFICANT_BITS)));
+	return ((Seed >> THROW_AWAY_BITS) & (~((~0) << SIGNIFICANT_BITS)));
 }
-
 
 /***********************************************************************************************
  * RandomClass::operator() -- Ranged random number generator.                                  *
@@ -122,11 +117,10 @@ int RandomClass::operator ()(void)
  * HISTORY:                                                                                    *
  *   02/27/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int RandomClass::operator() (int minval, int maxval)
-{
+int RandomClass::operator()(int minval, int maxval) {
 #ifdef RANDOM_COUNT
 	Count2++;
-	printf("Frame %d: Random Count1:%d Count2:%d (%x)\n",Frame,Count1,Count2,Seed);
+	printf("Frame %d: Random Count1:%d Count2:%d (%x)\n", Frame, Count1, Count2, Seed);
 #endif
 
 	/*
@@ -134,7 +128,8 @@ int RandomClass::operator() (int minval, int maxval)
 	**	the number to return is actually implicit from the
 	**	parameters.
 	*/
-	if (minval == maxval) return(minval);
+	if (minval == maxval)
+		return (minval);
 
 	/*
 	**	Ensure that the min and max range values are in proper order.
@@ -152,7 +147,7 @@ int RandomClass::operator() (int minval, int maxval)
 	**	random number algorithm.
 	*/
 	int magnitude = maxval - minval;
-	int highbit = SIGNIFICANT_BITS-1;
+	int highbit = SIGNIFICANT_BITS - 1;
 	while ((magnitude & (1 << highbit)) == 0 && highbit > 0) {
 		highbit--;
 	}
@@ -161,12 +156,12 @@ int RandomClass::operator() (int minval, int maxval)
 	**	Create a full bit mask pattern that has all bits set that just
 	**	barely covers the magnitude of the number range desired.
 	*/
-	int mask = ~( (~0L) << (highbit+1) );
+	int mask = ~((~0L) << (highbit + 1));
 
 	/*
 	**	Keep picking random numbers until it fits within the magnitude desired.
 	*/
-	int pick = magnitude+1;
+	int pick = magnitude + 1;
 	while (pick > magnitude) {
 		pick = operator()() & mask;
 	}
@@ -175,6 +170,5 @@ int RandomClass::operator() (int minval, int maxval)
 	**	Finally, bias the random number pick to the start of the range
 	**	requested.
 	*/
-	return(pick + minval);
+	return (pick + minval);
 }
-

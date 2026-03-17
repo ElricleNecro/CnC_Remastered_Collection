@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/CHECKBOX.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -34,9 +34,8 @@
  *   CheckBoxClass::Draw_Me -- Draws the checkbox imagery.                                     *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"checkbox.h"
-
+#include "checkbox.h"
+#include "function.h"
 
 /***********************************************************************************************
  * CheckBoxClass::Draw_Me -- Draws the checkbox imagery.                                       *
@@ -52,22 +51,20 @@
  * HISTORY:                                                                                    *
  *   07/01/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int CheckBoxClass::Draw_Me(int forced)
-{
+int CheckBoxClass::Draw_Me(int forced) {
 	if (ToggleClass::Draw_Me(forced)) {
 
 		Hide_Mouse();
 		Draw_Box(X, Y, Width, Height, BOXSTYLE_DOWN, false);
-		LogicPage->Fill_Rect(X+1, Y+1, X+Width-2, Y+Height-2, DKGREY);
+		LogicPage->Fill_Rect(X + 1, Y + 1, X + Width - 2, Y + Height - 2, DKGREY);
 		if (IsOn) {
-			LogicPage->Fill_Rect(X+1, Y+1, X+Width-2, Y+Height-2, LTGREEN);
+			LogicPage->Fill_Rect(X + 1, Y + 1, X + Width - 2, Y + Height - 2, LTGREEN);
 		}
 		Show_Mouse();
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * CheckBoxClass::Action -- Handles a button action on a checkbox object.                      *
@@ -86,8 +83,7 @@ int CheckBoxClass::Draw_Me(int forced)
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int CheckBoxClass::Action(unsigned flags, KeyNumType & key)
-{
+int CheckBoxClass::Action(unsigned flags, KeyNumType &key) {
 	if (flags & LEFTRELEASE) {
 		if (IsOn) {
 			Turn_Off();
@@ -95,5 +91,5 @@ int CheckBoxClass::Action(unsigned flags, KeyNumType & key)
 			Turn_On();
 		}
 	}
-	return(ToggleClass::Action(flags, key));
+	return (ToggleClass::Action(flags, key));
 }

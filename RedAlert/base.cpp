@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/BASE.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -47,7 +47,6 @@
 
 #include "function.h"
 
-
 /***********************************************************************************************
  * BaseNodeClass::operator == -- equality operator                                             *
  *                                                                                             *
@@ -63,11 +62,7 @@
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-int BaseNodeClass::operator == (BaseNodeClass const & node)
-{
-	return(Type == node.Type && Cell == node.Cell);
-}
-
+int BaseNodeClass::operator==(BaseNodeClass const &node) { return (Type == node.Type && Cell == node.Cell); }
 
 /***********************************************************************************************
  * BaseNodeClass::operator != -- inequality operator                                           *
@@ -84,11 +79,7 @@ int BaseNodeClass::operator == (BaseNodeClass const & node)
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-int BaseNodeClass::operator !=(BaseNodeClass const & node)
-{
-	return(!(*this == node));
-}
-
+int BaseNodeClass::operator!=(BaseNodeClass const &node) { return (!(*this == node)); }
 
 /***********************************************************************************************
  * BaseNodeClass::operator > -- greater-than operator                                          *
@@ -105,11 +96,7 @@ int BaseNodeClass::operator !=(BaseNodeClass const & node)
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-int BaseNodeClass::operator > (BaseNodeClass const & )
-{
-	return(true);
-}
-
+int BaseNodeClass::operator>(BaseNodeClass const &) { return (true); }
 
 /***********************************************************************************************
  * BaseClass::Load -- loads from a saved game file                                             *
@@ -127,8 +114,7 @@ int BaseNodeClass::operator > (BaseNodeClass const & )
  *   03/24/1995 BRR : Created.                                                                 *
  *   07/04/1996 JLB : Converted to demand driven data source.                                  *
  *=============================================================================================*/
-bool BaseClass::Load(Straw & file)
-{
+bool BaseClass::Load(Straw &file) {
 	int num_struct;
 	int i;
 	BaseNodeClass node;
@@ -137,22 +123,22 @@ bool BaseClass::Load(Straw & file)
 	** Read in & check the size of this class
 	*/
 	if (file.Get(&i, sizeof(i)) != sizeof(i)) {
-		return(false);
+		return (false);
 	}
 
 	if (i != sizeof(*this)) {
-		return(false);
+		return (false);
 	}
 
 	/*
 	** Read in the House & the number of structures in the base
 	*/
 	if (file.Get(&House, sizeof(House)) != sizeof(House)) {
-		return(false);
+		return (false);
 	}
 
 	if (file.Get(&num_struct, sizeof(num_struct)) != sizeof(num_struct)) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -160,14 +146,13 @@ bool BaseClass::Load(Straw & file)
 	*/
 	for (i = 0; i < num_struct; i++) {
 		if (file.Get(&node, sizeof(node)) != sizeof(node)) {
-			return(false);
+			return (false);
 		}
 		Nodes.Add(node);
 	}
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * BaseClass::Save -- saves to a saved game file                                               *
@@ -185,8 +170,7 @@ bool BaseClass::Load(Straw & file)
  *   03/24/1995 BRR : Created.                                                                 *
  *   07/04/1996 JLB : Converted to supply driven data output.                                  *
  *=============================================================================================*/
-bool BaseClass::Save(Pipe & file) const
-{
+bool BaseClass::Save(Pipe &file) const {
 	int num_struct;
 	int i;
 	BaseNodeClass node;
@@ -213,9 +197,8 @@ bool BaseClass::Save(Pipe & file) const
 		file.Put(&node, sizeof(node));
 	}
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * BaseClass::Is_Built -- Tells if given item in the list has been built yet                   *
@@ -232,15 +215,13 @@ bool BaseClass::Save(Pipe & file) const
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-bool BaseClass::Is_Built(int index) const
-{
+bool BaseClass::Is_Built(int index) const {
 	if (Get_Building(index) != NULL) {
-		return(true);
+		return (true);
 	} else {
-		return(false);
+		return (false);
 	}
 }
-
 
 /***********************************************************************************************
  * BaseClass::Get_Building -- Returns ptr to the built building for the given node             *
@@ -258,9 +239,8 @@ bool BaseClass::Is_Built(int index) const
  *   03/24/1995 BRR : Created.                                                                 *
  *   07/30/1996 JLB : Handle arbitrary overlapper list length.                                 *
  *=============================================================================================*/
-BuildingClass * BaseClass::Get_Building(int index) const
-{
-	ObjectClass * obj[1 + ARRAY_SIZE(Map[(CELL)0].Overlapper)];
+BuildingClass *BaseClass::Get_Building(int index) const {
+	ObjectClass *obj[1 + ARRAY_SIZE(Map[(CELL)0].Overlapper)];
 
 	/*
 	** Check the location on the map where this building should be; if it's
@@ -276,21 +256,18 @@ BuildingClass * BaseClass::Get_Building(int index) const
 		}
 	}
 
-	BuildingClass * bldg = NULL;
+	BuildingClass *bldg = NULL;
 	for (int i = 0; i < count; i++) {
-		if (obj[i] &&
-			Coord_Cell(obj[i]->Coord) == Nodes[index].Cell &&
-			obj[i]->What_Am_I() == RTTI_BUILDING &&
-			((BuildingClass *)obj[i])->Class->Type == Nodes[index].Type) {
+		if (obj[i] && Coord_Cell(obj[i]->Coord) == Nodes[index].Cell && obj[i]->What_Am_I() == RTTI_BUILDING &&
+		    ((BuildingClass *)obj[i])->Class->Type == Nodes[index].Type) {
 
-				bldg = (BuildingClass *)obj[i];
-				break;
+			bldg = (BuildingClass *)obj[i];
+			break;
 		}
 	}
 
-	return(bldg);
+	return (bldg);
 }
-
 
 /***********************************************************************************************
  * BaseClass::Is_Node -- Tells if the given building is part of our base list                  *
@@ -307,15 +284,13 @@ BuildingClass * BaseClass::Get_Building(int index) const
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-bool BaseClass::Is_Node(BuildingClass const * obj)
-{
+bool BaseClass::Is_Node(BuildingClass const *obj) {
 	if (Get_Node(obj) != NULL) {
-		return(true);
+		return (true);
 	} else {
-		return(false);
+		return (false);
 	}
 }
-
 
 /***********************************************************************************************
  * BaseClass::Get_Node -- Returns ptr to the node corresponding to given object                *
@@ -332,16 +307,14 @@ bool BaseClass::Is_Node(BuildingClass const * obj)
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-BaseNodeClass * BaseClass::Get_Node(BuildingClass const * obj)
-{
+BaseNodeClass *BaseClass::Get_Node(BuildingClass const *obj) {
 	for (int i = 0; i < Nodes.Count(); i++) {
 		if (obj->Class->Type == Nodes[i].Type && Coord_Cell(obj->Coord) == Nodes[i].Cell) {
-			return(&Nodes[i]);
+			return (&Nodes[i]);
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * BaseClass::Get_Node -- Finds the node that matches the cell specified.                      *
@@ -358,16 +331,14 @@ BaseNodeClass * BaseClass::Get_Node(BuildingClass const * obj)
  * HISTORY:                                                                                    *
  *   03/12/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-BaseNodeClass * BaseClass::Get_Node(CELL cell)
-{
+BaseNodeClass *BaseClass::Get_Node(CELL cell) {
 	for (int index = 0; index < Nodes.Count(); index++) {
 		if (cell == Nodes[index].Cell) {
-			return(&Nodes[index]);
+			return (&Nodes[index]);
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * BaseClass::Next_Buildable -- returns ptr to the next node that needs to be built            *
@@ -387,8 +358,7 @@ BaseNodeClass * BaseClass::Get_Node(CELL cell)
  * HISTORY:                                                                                    *
  *   03/24/1995 BRR : Created.                                                                 *
  *=============================================================================================*/
-BaseNodeClass * BaseClass::Next_Buildable(StructType type)
-{
+BaseNodeClass *BaseClass::Next_Buildable(StructType type) {
 	/*
 	** Loop through all node entries, returning a pointer to the first
 	** un-built one that matches the requested type.
@@ -400,7 +370,7 @@ BaseNodeClass * BaseClass::Next_Buildable(StructType type)
 		*/
 		if (type == STRUCT_NONE) {
 			if (!Is_Built(i)) {
-				return(&Nodes[i]);
+				return (&Nodes[i]);
 			}
 
 		} else {
@@ -408,20 +378,18 @@ BaseNodeClass * BaseClass::Next_Buildable(StructType type)
 			/*
 			** For a "real" building type, return the first hold for that type
 			*/
-			if (Nodes[i].Type==type && !Is_Built(i)) {
-				return(&Nodes[i]);
+			if (Nodes[i].Type == type && !Is_Built(i)) {
+				return (&Nodes[i]);
 			}
 		}
 	}
 
+	// If no entry could be found, then create a fake one that will allow
+	// placement of the building. Make it static and reuse the next time this
+	// routine is called.
 
-// If no entry could be found, then create a fake one that will allow
-// placement of the building. Make it static and reuse the next time this
-// routine is called.
-
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * BaseClass::Read_INI -- INI reading routine                                                  *
@@ -444,12 +412,11 @@ BaseNodeClass * BaseClass::Next_Buildable(StructType type)
  *   03/24/1995 BRR : Created.                                                                 *
  *   02/20/1996 JLB : Fixed to know what house to build base from.                             *
  *=============================================================================================*/
-void BaseClass::Read_INI(CCINIClass & ini)
-{
+void BaseClass::Read_INI(CCINIClass &ini) {
 	char buf[128];
 	char uname[10];
-	BaseNodeClass node;						// node to add to list
-	
+	BaseNodeClass node; // node to add to list
+
 	Mono_Clear_Screen();
 	/*
 	**	First, determine the house of the human player, and set the Base's house
@@ -470,18 +437,18 @@ void BaseClass::Read_INI(CCINIClass & ini)
 		/*
 		** Get an INI entry
 		*/
-		sprintf(uname,"%03d",i);
+		sprintf(uname, "%03d", i);
 		ini.Get_String(INI_Name(), uname, NULL, buf, sizeof(buf));
 
 		/*
 		** Set the node's building type
 		*/
-		node.Type = BuildingTypeClass::From_Name(strtok(buf,","));
+		node.Type = BuildingTypeClass::From_Name(strtok(buf, ","));
 
 		/*
 		** Read & set the node's coordinate
 		*/
-		node.Cell = atoi(strtok(NULL,","));
+		node.Cell = atoi(strtok(NULL, ","));
 
 		/*
 		** Add this node to the Base's list
@@ -489,7 +456,6 @@ void BaseClass::Read_INI(CCINIClass & ini)
 		Nodes.Add(node);
 	}
 }
-
 
 /***********************************************************************************************
  * BaseClass::Write_INI -- Writes all the base information to the INI database.                *
@@ -506,8 +472,7 @@ void BaseClass::Read_INI(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BaseClass::Write_INI(CCINIClass & ini)
-{
+void BaseClass::Write_INI(CCINIClass &ini) {
 	/*
 	**	Clear out all existing base data from the ini file.
 	*/
@@ -534,10 +499,8 @@ void BaseClass::Write_INI(CCINIClass & ini)
 			char buf[128];
 			char uname[10];
 
-			sprintf(uname,"%03d",i);
-			sprintf(buf,"%s,%d",
-				BuildingTypeClass::As_Reference(Nodes[i].Type).IniName,
-				Nodes[i].Cell);
+			sprintf(uname, "%03d", i);
+			sprintf(buf, "%s,%d", BuildingTypeClass::As_Reference(Nodes[i].Type).IniName, Nodes[i].Cell);
 
 			ini.Put_String(INI_Name(), uname, buf);
 		}

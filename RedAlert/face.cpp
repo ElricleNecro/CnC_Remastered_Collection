@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/FACE.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -36,7 +36,6 @@
 
 #include "function.h"
 
-
 /***********************************************************************************************
  * Desired_Facing8 -- Determines facing from one coordinate to another.                        *
  *                                                                                             *
@@ -59,15 +58,14 @@
  * HISTORY:                                                                                    *
  *   03/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-DirType Desired_Facing8(int x1, int y1, int x2, int y2)
-{
-	int index = 0;				// Facing composite value.
+DirType Desired_Facing8(int x1, int y1, int x2, int y2) {
+	int index = 0; // Facing composite value.
 
 	/*
 	**	Figure the absolute X difference. This determines
 	**	if the facing is leftward or not.
 	*/
-	int xdiff = x2-x1;
+	int xdiff = x2 - x1;
 	if (xdiff < 0) {
 		index |= 0x00C0;
 		xdiff = -xdiff;
@@ -78,7 +76,7 @@ DirType Desired_Facing8(int x1, int y1, int x2, int y2)
 	**	if the facing is downward or not. This also clarifies
 	**	exactly which quadrant the facing lies.
 	*/
-	int ydiff = y1-y2;
+	int ydiff = y1 - y2;
 	if (ydiff < 0) {
 		index ^= 0x0040;
 		ydiff = -ydiff;
@@ -103,9 +101,9 @@ DirType Desired_Facing8(int x1, int y1, int x2, int y2)
 	**	If on the diagonal, then incorporate this into the facing
 	**	and then bail. The facing is known.
 	*/
-	if (((bigger+1)/2) <= smaller) {
+	if (((bigger + 1) / 2) <= smaller) {
 		index += 0x0020;
-		return(DirType(index));
+		return (DirType(index));
 	}
 
 	/*
@@ -118,9 +116,8 @@ DirType Desired_Facing8(int x1, int y1, int x2, int y2)
 	}
 	index += adder;
 
-	return(DirType(index));
+	return (DirType(index));
 }
-
 
 /***********************************************************************************************
  * Desired_Facing256 -- Determines facing from one coordinate to another.                      *
@@ -144,9 +141,8 @@ DirType Desired_Facing8(int x1, int y1, int x2, int y2)
  * HISTORY:                                                                                    *
  *   03/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-DirType Desired_Facing256(int srcx, int srcy, int dstx, int dsty)
-{
-	int composite=0;		// Facing built from intermediate calculations.
+DirType Desired_Facing256(int srcx, int srcy, int dstx, int dsty) {
+	int composite = 0; // Facing built from intermediate calculations.
 
 	/*
 	**	Fetch the absolute X difference. This also gives a clue as
@@ -173,7 +169,8 @@ DirType Desired_Facing256(int srcx, int srcy, int dstx, int dsty)
 	**	has the added bonus of ensuring that checking for division
 	**	by zero is not needed in the following section.
 	*/
-	if (xdiff == 0 && ydiff == 0) return(DirType(0xFF));
+	if (xdiff == 0 && ydiff == 0)
+		return (DirType(0xFF));
 
 	/*
 	**	Determine which of the two direction offsets it bigger. The
@@ -196,7 +193,7 @@ DirType Desired_Facing256(int srcx, int srcy, int dstx, int dsty)
 	**	is calculated as a ratio from 0 (matches orthogonal) to 31
 	**	(matches diagonal).
 	*/
-	//lint -e414		Division by zero cannot occur here.
+	// lint -e414		Division by zero cannot occur here.
 	int frac = (smaller * 32U) / bigger;
 
 	/*
@@ -209,7 +206,7 @@ DirType Desired_Facing256(int srcx, int srcy, int dstx, int dsty)
 		adder ^= 0x0040;
 	}
 	if (adder) {
-		frac = (adder - frac)-1;
+		frac = (adder - frac) - 1;
 	}
 
 	/*
@@ -220,5 +217,5 @@ DirType Desired_Facing256(int srcx, int srcy, int dstx, int dsty)
 	/*
 	**	Return with the final facing value.
 	*/
-	return(DirType(composite & 0x00FF));
+	return (DirType(composite & 0x00FF));
 }

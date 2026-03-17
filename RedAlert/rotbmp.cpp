@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/ROTBMP.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -32,16 +32,15 @@
  * Functions:                                                                                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#if (0)//PG
-//#include	"function.h"
-#include	"watcom.h"
+#if (0) // PG
+// #include	"function.h"
 #include "rotbmp.h"
+#include "watcom.h"
 #define FILE_H
 #define WWMEM_H
-#include	<wwlib32.h>
+#include <wwlib32.h>
 
-
-int Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int angle);
+int Rotate_Bitmap(GraphicViewPortClass *srcvp, GraphicViewPortClass *destvp, int angle);
 
 struct WPPOINT {
 	int x;
@@ -63,25 +62,24 @@ struct WPPOINT {
  * HISTORY:                                                                *
  *   01/02/1996  BP : Created.                                             *
  *=========================================================================*/
-Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a)
-{
+Rotate_Bitmap(GraphicViewPortClass *srcvp, GraphicViewPortClass *destvp, int a) {
 	int shift = 7;
 	int fixpoint1 = 1 << shift; // this is a fixed point 1
 	int Deltax;
 	int Deltay;
-	int sx,sy,dx,dy;
+	int sx, sy, dx, dy;
 	int Error = 0;
 	int Decimal = 0;
 	// this is used if I walk in Y
 	int buffwidth = srcvp->Get_Width() + srcvp->Get_XAdd();
 	int buffwid2 = destvp->Get_Width() + destvp->Get_XAdd();
-	char * dest;
-	char * src;
-	int sa,ca;
+	char *dest;
+	char *src;
+	int sa, ca;
 	int t;
-	int x,y;
-	int rx,ry;
-	int w,h;
+	int x, y;
+	int rx, ry;
+	int w, h;
 	int dw = destvp->Get_Width();
 	int dh = destvp->Get_Height();
 	WPPOINT sp[4];
@@ -99,7 +97,6 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 	int halfwd = dw >> 1;
 	int halfhd = dh >> 1;
 
-
 	// make the src rectangle
 	sp[0].x = x;
 	sp[0].y = y;
@@ -108,16 +105,16 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 	sp[1].y = y;
 
 	// now calculate the rotated rectangle
-	dp[0].x = ( ((sp[0].x - halfws) * ca) - ((sp[0].y - halfhs) * sa) ) >> shift;
+	dp[0].x = (((sp[0].x - halfws) * ca) - ((sp[0].y - halfhs) * sa)) >> shift;
 	dp[0].x += halfwd;
 
-	dp[0].y = ( ((sp[0].x - halfws) * sa) + ((sp[0].y - halfhs) * ca) ) >> shift;
+	dp[0].y = (((sp[0].x - halfws) * sa) + ((sp[0].y - halfhs) * ca)) >> shift;
 	dp[0].y += halfhd;
 
-	dp[1].x = ( ((sp[1].x - halfws) * ca) - ((sp[1].y - halfhs) * sa) ) >> shift;
+	dp[1].x = (((sp[1].x - halfws) * ca) - ((sp[1].y - halfhs) * sa)) >> shift;
 	dp[1].x += halfwd;
 
-	dp[1].y = ( ((sp[1].x - halfws) * sa) + ((sp[1].y - halfhs) * ca) ) >> shift;
+	dp[1].y = (((sp[1].x - halfws) * sa) + ((sp[1].y - halfhs) * ca)) >> shift;
 	dp[1].y += halfhd;
 
 	rx = dp[0].x;
@@ -144,13 +141,13 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 			x = 0;
 			dy = 0;
 			dx = 0;
-			for (t = 0; t< h; t++) {
+			for (t = 0; t < h; t++) {
 				x = 0;
 				src = MAKE_PTR(srcvp, x, y);
 				dest = MAKE_PTR(destvp, rx + dx, ry - dy);
-				for (r = 0; r< w; r++) {
+				for (r = 0; r < w; r++) {
 					// transparency
-					if (* src)
+					if (*src)
 						*dest = *src;
 					src++;
 					dest -= buffwid2;
@@ -165,11 +162,11 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 			x = 0;
 			dy = 0;
 			dx = 0;
-			for (t = 0; t< h; t++) {
+			for (t = 0; t < h; t++) {
 				x = 0;
 				src = MAKE_PTR(srcvp, x, y);
 				dest = MAKE_PTR(destvp, rx - dx, ry + dy);
-				for (r = 0; r< w; r++) {
+				for (r = 0; r < w; r++) {
 					// transparency
 					if (*src)
 						*dest = *src;
@@ -187,11 +184,11 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 	if (!Deltay) { // must be 0 or 180 degree transpose !
 		if (Deltax < 0) {
 			y = 0;
-			for (y = 0; y< h; y++) {
+			for (y = 0; y < h; y++) {
 				x = 0;
 				src = MAKE_PTR(srcvp, x, y);
-				dest = MAKE_PTR(destvp, rx - x , ry - y);
-				for (x = 0 ; x< w; x++) {
+				dest = MAKE_PTR(destvp, rx - x, ry - y);
+				for (x = 0; x < w; x++) {
 					// transparency
 					if (*src)
 						*dest = *src;
@@ -200,11 +197,11 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 				}
 			}
 		} else {
-			for (y = 0; y< h; y++) {
+			for (y = 0; y < h; y++) {
 				x = 0;
 				src = MAKE_PTR(srcvp, x, y);
 				dest = MAKE_PTR(destvp, rx + x, ry + y);
-				for (x = 0 ; x< w; x++) {
+				for (x = 0; x < w; x++) {
 					// transparency
 					if (*src)
 						*dest = *src;
@@ -216,11 +213,10 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 		return 0;
 	}
 
-
 	// ok now the hard part
 
 	// make them 16.16
-	if ( ABS(Deltax) < ABS(Deltay)) { // ok this means we want to walk in y
+	if (ABS(Deltax) < ABS(Deltay)) { // ok this means we want to walk in y
 
 		// walk in  + x in the src and
 		// walk in  + y in the dest
@@ -247,10 +243,10 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 		int yinc = 1;
 		int yinc1 = 1;
 		if (Deltay < 0) {
-			Deltay = - Deltay;
-			buffwid2 = - buffwid2;
+			Deltay = -Deltay;
+			buffwid2 = -buffwid2;
 		}
-		Decimal = ( Deltax << shift) / Deltay ;
+		Decimal = (Deltax << shift) / Deltay;
 		// walk in X
 
 		int Deltax2 = Deltax << shift;
@@ -261,20 +257,20 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 		int DeltaH = (w << shift) / Deltay;
 		int Error2 = 0;
 		sy = 0;
-		for (int r = 0; r< h ;r++) {
+		for (int r = 0; r < h; r++) {
 			// now we walk across the top calculating each rotated point
 			// along the side
 			// the use delta formula to walk in x and y in destination space
 			// always walking in the x in the source!
 			// figure out rotated location to start in dest
-			rx = ( ( (sx - halfws) * ca) - ( (sy - halfhs) * sa) ) >> shift;
+			rx = (((sx - halfws) * ca) - ((sy - halfhs) * sa)) >> shift;
 			rx += halfwd;
-			ry = ( ( (sx - halfws) * sa) + ( (sy - halfhs) * ca) ) >> shift;
+			ry = (((sx - halfws) * sa) + ((sy - halfhs) * ca)) >> shift;
 			ry += halfhd;
 
 			// this is the end point of the line
 
-			int y2 = ( ( ((w) - halfws) * sa) + ( (sy - halfhs) * ca) ) >> shift;
+			int y2 = ((((w)-halfws) * sa) + ((sy - halfhs) * ca)) >> shift;
 			y2 += halfhd;
 
 			// length of line
@@ -289,7 +285,7 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 
 			Error = 0;
 			Error2 = 0;
-			char * baseptr = src;
+			char *baseptr = src;
 			// while walking line
 			while (diff--) {
 				char c = *src;
@@ -299,7 +295,7 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 				Error2 += DeltaH;
 				dest += buffwid2;
 				Error += Decimal;
-				src = baseptr + (Error2 >> shift) ;
+				src = baseptr + (Error2 >> shift);
 				// this is time to inc x in src y in dest
 				if (Error >= fixpoint1) {
 					Error -= fixpoint1;
@@ -335,14 +331,13 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 		}
 		int yinc = 1;
 		if (Deltay < 0) {
-			Deltay = - Deltay;
-			buffwid2 = - buffwid2;
+			Deltay = -Deltay;
+			buffwid2 = -buffwid2;
 			sy = sy + h - 1;
 			yinc = -1;
 		}
 
-
-		Decimal = ( Deltay << shift) / Deltax ;
+		Decimal = (Deltay << shift) / Deltax;
 		// walk in X
 
 		int Deltax2 = Deltax << shift;
@@ -353,7 +348,7 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 
 		int DeltaW = (w << shift) / Deltax;
 		int Error2 = 0;
-		for (int r = 0; r< h ;r++) {
+		for (int r = 0; r < h; r++) {
 			sx = 0;
 
 			// now we walk across the side calculating each rotated point
@@ -362,18 +357,17 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 			// always walking in the x in the source!
 			// figure out rotated location to start
 
-			rx = ( ( (sx - halfws) * ca) - ( (sy - halfhs) * sa) ) >> shift;
+			rx = (((sx - halfws) * ca) - ((sy - halfhs) * sa)) >> shift;
 			rx += halfwd;
-			ry = ( ( (sx - halfws) * sa) + ( (sy - halfhs) * ca) ) >> shift;
+			ry = (((sx - halfws) * sa) + ((sy - halfhs) * ca)) >> shift;
 			ry += halfhd;
 			// this is the other side of the box
 
-			int x2 = ( ( ((sx + w) - halfws) * ca) - ( (sy - halfhs) * sa) ) >> shift;
+			int x2 = ((((sx + w) - halfws) * ca) - ((sy - halfhs) * sa)) >> shift;
 
 			x2 += halfwd;
 
 			int diff = x2 - rx;
-
 
 			dx = 0;
 			dy = 0;
@@ -387,7 +381,7 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 			dest = MAKE_PTR(destvp, rx + dx, ry + dy);
 			Error = 0;
 			Error2 = 0;
-			char * baseptr = src;
+			char *baseptr = src;
 
 			while (diff--) {
 				char c = *src;
@@ -395,7 +389,7 @@ Rotate_Bitmap(GraphicViewPortClass * srcvp, GraphicViewPortClass * destvp, int a
 				if (c)
 					*dest = *src;
 				Error2 += DeltaW;
- 				rx++;
+				rx++;
 				dest += xinc;
 				Error += Decimal;
 				src = baseptr + (Error2 >> shift);

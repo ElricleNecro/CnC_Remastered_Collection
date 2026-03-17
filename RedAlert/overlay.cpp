@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/OVERLAY.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -38,13 +38,10 @@
  *   OverlayClass::new -- Allocates a overlay object from pool                                 *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"overlay.h"
-
+#include "overlay.h"
+#include "function.h"
 
 HousesType OverlayClass::ToOwn = HOUSE_NONE;
-
-
 
 /***********************************************************************************************
  * OverlayClass::Init -- Resets the overlay object system.                                     *
@@ -61,11 +58,7 @@ HousesType OverlayClass::ToOwn = HOUSE_NONE;
  * HISTORY:                                                                                    *
  *   05/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OverlayClass::Init(void)
-{
-	Overlays.Free_All();
-}
-
+void OverlayClass::Init(void) { Overlays.Free_All(); }
 
 /***********************************************************************************************
  * OverlayClass::new -- Allocates a overlay object from pool                                   *
@@ -82,15 +75,13 @@ void OverlayClass::Init(void)
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * OverlayClass::operator new(size_t )
-{
-	void * ptr = Overlays.Allocate();
+void *OverlayClass::operator new(size_t) {
+	void *ptr = Overlays.Allocate();
 	if (ptr) {
 		((OverlayClass *)ptr)->Set_Active();
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***********************************************************************************************
  * OverlayClass::delete -- Returns a overlay object to the pool.                               *
@@ -107,14 +98,12 @@ void * OverlayClass::operator new(size_t )
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void OverlayClass::operator delete(void * ptr)
-{
+void OverlayClass::operator delete(void *ptr) {
 	if (ptr) {
 		((OverlayClass *)ptr)->IsActive = false;
 	}
 	Overlays.Free((OverlayClass *)ptr);
 }
-
 
 /***********************************************************************************************
  * OverlayClass::OverlayClass -- Overlay object constructor.                                   *
@@ -132,17 +121,14 @@ void OverlayClass::operator delete(void * ptr)
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-OverlayClass::OverlayClass(OverlayType type, CELL pos, HousesType house) :
-	ObjectClass(RTTI_OVERLAY, Overlays.ID(this)),
-	Class(OverlayTypes.Ptr((int)type))
-{
+OverlayClass::OverlayClass(OverlayType type, CELL pos, HousesType house)
+    : ObjectClass(RTTI_OVERLAY, Overlays.ID(this)), Class(OverlayTypes.Ptr((int)type)) {
 	if (pos != -1) {
 		ToOwn = house;
 		Unlimbo(Cell_Coord(pos));
 		ToOwn = HOUSE_NONE;
 	}
 }
-
 
 /***********************************************************************************************
  * OverlayClass::Mark -- Marks the overlay down on the map.                                    *
@@ -161,15 +147,14 @@ OverlayClass::OverlayClass(OverlayType type, CELL pos, HousesType house) :
  *   09/24/1994 JLB : Created.                                                                 *
  *   12/23/1994 JLB : Checks low level legality before proceeding.                             *
  *=============================================================================================*/
-bool OverlayClass::Mark(MarkType mark)
-{
+bool OverlayClass::Mark(MarkType mark) {
 	assert(Overlays.ID(this) == ID);
 	assert(IsActive);
 
 	if (ObjectClass::Mark(mark)) {
 		if (mark == MARK_DOWN) {
-			CELL	cell = Coord_Cell(Coord);
-			CellClass * cellptr = &Map[cell];
+			CELL cell = Coord_Cell(Coord);
+			CellClass *cellptr = &Map[cell];
 
 			/*
 			**	Walls have special logic when they are marked down.
@@ -180,11 +165,12 @@ bool OverlayClass::Mark(MarkType mark)
 					cellptr->OverlayData = 0;
 					cellptr->Redraw_Objects();
 					cellptr->Wall_Update();
-					Map.Zone_Reset(Class->IsCrushable ? MZONE_NORMAL : MZONE_NORMAL|MZONE_CRUSHER);
+					Map.Zone_Reset(Class->IsCrushable ? MZONE_NORMAL
+									  : MZONE_NORMAL | MZONE_CRUSHER);
 
 					/*
-					**	Flag ownership of the cell if the 'global' ownership flag indicates that this
-					**	is necessary for the overlay.
+					**	Flag ownership of the cell if the 'global' ownership flag indicates that
+					*this *	is necessary for the overlay.
 					*/
 					if (ToOwn != HOUSE_NONE) {
 						cellptr->Owner = ToOwn;
@@ -192,7 +178,7 @@ bool OverlayClass::Mark(MarkType mark)
 
 				} else {
 					delete this;
-					return(false);
+					return (false);
 				}
 			} else {
 
@@ -201,7 +187,8 @@ bool OverlayClass::Mark(MarkType mark)
 					if (Class->Type == OVERLAY_WATER_CRATE) {
 						clear = cellptr->Is_Clear_To_Move(SPEED_FLOAT, false, false);
 					} else {
-						if (Class->Type == OVERLAY_STEEL_CRATE || Class->Type == OVERLAY_WOOD_CRATE) {
+						if (Class->Type == OVERLAY_STEEL_CRATE ||
+						    Class->Type == OVERLAY_WOOD_CRATE) {
 							clear = cellptr->Is_Clear_To_Move(SPEED_TRACK, false, false);
 						} else {
 							clear = cellptr->Is_Clear_To_Move(SPEED_TRACK, true, true);
@@ -237,12 +224,11 @@ bool OverlayClass::Mark(MarkType mark)
 			IsInLimbo = true;
 
 			delete this;
-			return(true);
+			return (true);
 		}
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * OverlayClass::Read_INI -- Reads the overlay data from an INI file.                          *
@@ -260,8 +246,7 @@ bool OverlayClass::Mark(MarkType mark)
  *   09/01/1994 JLB : Created.                                                                 *
  *   07/24/1995 JLB : Specifically forbid manual crates in multiplayer scenarios.              *
  *=============================================================================================*/
-void OverlayClass::Read_INI(CCINIClass & ini)
-{
+void OverlayClass::Read_INI(CCINIClass &ini) {
 	if (NewINIFormat > 1) {
 		int len = ini.Get_UUBlock("OverlayPack", _staging_buffer, sizeof(_staging_buffer));
 
@@ -277,7 +262,8 @@ void OverlayClass::Read_INI(CCINIClass & ini)
 
 				if (classid != OVERLAY_NONE) {
 
-					if (Session.Type == GAME_NORMAL || !OverlayTypeClass::As_Reference(classid).IsCrate) {
+					if (Session.Type == GAME_NORMAL ||
+					    !OverlayTypeClass::As_Reference(classid).IsCrate) {
 
 						/*
 						**	Don't allow placement of overlays on the top or bottom rows of
@@ -290,9 +276,11 @@ void OverlayClass::Read_INI(CCINIClass & ini)
 							if (OverlayTypeClass::As_Reference(classid).IsWall) {
 								HousesType owner = HOUSE_NONE;
 								int distance = 0x7FFFFFFF;
-								for (int index = 0; index < Buildings.Count(); index++) {
-									BuildingClass * building = Buildings.Ptr(index);
-									int newdist = ::Distance(building->Center_Coord(), Cell_Coord(cell));
+								for (int index = 0; index < Buildings.Count();
+								     index++) {
+									BuildingClass *building = Buildings.Ptr(index);
+									int newdist = ::Distance(
+									    building->Center_Coord(), Cell_Coord(cell));
 									if (newdist < distance) {
 										distance = newdist;
 										owner = building->Owner();
@@ -310,14 +298,15 @@ void OverlayClass::Read_INI(CCINIClass & ini)
 	if (NewINIFormat < 2 || ini.Is_Present("Overlay")) {
 		int len = ini.Entry_Count(INI_Name());
 		for (int index = 0; index < len; index++) {
-			char const * entry = ini.Get_Entry(INI_Name(), index);
+			char const *entry = ini.Get_Entry(INI_Name(), index);
 			CELL cell = atoi(entry);
 			OverlayType classid = ini.Get_OverlayType(INI_Name(), entry, OVERLAY_NONE);
 
 			/*
 			**	Don't allow placement of crates in the multiplayer scenarios.
 			*/
-			if (classid != OVERLAY_NONE && (Session.Type == GAME_NORMAL || !OverlayTypeClass::As_Reference(classid).IsCrate)) {
+			if (classid != OVERLAY_NONE &&
+			    (Session.Type == GAME_NORMAL || !OverlayTypeClass::As_Reference(classid).IsCrate)) {
 
 				/*
 				**	Don't allow placement of overlays on the top or bottom rows of
@@ -331,8 +320,9 @@ void OverlayClass::Read_INI(CCINIClass & ini)
 						HousesType owner = HOUSE_NONE;
 						int distance = 0x7FFFFFFF;
 						for (int index = 0; index < Buildings.Count(); index++) {
-							BuildingClass * building = Buildings.Ptr(index);
-							int newdist = ::Distance(building->Center_Coord(), Cell_Coord(cell));
+							BuildingClass *building = Buildings.Ptr(index);
+							int newdist =
+							    ::Distance(building->Center_Coord(), Cell_Coord(cell));
 							if (newdist < distance) {
 								distance = newdist;
 								owner = building->Owner();
@@ -346,9 +336,7 @@ void OverlayClass::Read_INI(CCINIClass & ini)
 	}
 }
 
-
-void OverlayClass::Write_INI(CCINIClass & ini)
-{
+void OverlayClass::Write_INI(CCINIClass &ini) {
 	/*
 	**	First, clear out all existing unit data from the ini file.
 	*/
@@ -361,7 +349,7 @@ void OverlayClass::Write_INI(CCINIClass & ini)
 	comppipe.Put_To(&bpipe);
 
 	int total = 0;
-	CellClass * cellptr = &Map[(CELL)0];
+	CellClass *cellptr = &Map[(CELL)0];
 	for (CELL index = 0; index < MAP_CELL_TOTAL; index++) {
 		total += comppipe.Put(&cellptr->Overlay, sizeof(cellptr->Overlay));
 		cellptr++;
@@ -370,12 +358,12 @@ void OverlayClass::Write_INI(CCINIClass & ini)
 		ini.Put_UUBlock("OverlayPack", _staging_buffer, total);
 	}
 
-//	for (CELL index = 0; index < MAP_CELL_TOTAL; index++) {
-//		CellClass * cellptr = &Map[index];
-//		if (cellptr->Overlay != OVERLAY_NONE) {
-//			char	uname[10];
-//			sprintf(uname, "%d", index);
-//			ini.Put_Overlay(INI_Name(), uname, cellptr->Overlay);
-//		}
-//	}
+	//	for (CELL index = 0; index < MAP_CELL_TOTAL; index++) {
+	//		CellClass * cellptr = &Map[index];
+	//		if (cellptr->Overlay != OVERLAY_NONE) {
+	//			char	uname[10];
+	//			sprintf(uname, "%d", index);
+	//			ini.Put_Overlay(INI_Name(), uname, cellptr->Overlay);
+	//		}
+	//	}
 }

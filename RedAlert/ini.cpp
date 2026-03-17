@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/INI.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -61,28 +61,24 @@
  *   INIClass::~INIClass -- Destructor for INI handler.                                        *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	<string.h>
-#include	<stdlib.h>
-#include	<stddef.h>
-#include	<stdio.h>
-#include	<ctype.h>
-#include	"ini.h"
-#include	"readline.h"
-#include	"xpipe.h"
-#include	"b64pipe.h"
-#include	"xstraw.h"
-#include	"b64straw.h"
-
+#include "ini.h"
+#include "b64pipe.h"
+#include "b64straw.h"
+#include "readline.h"
+#include "xpipe.h"
+#include "xstraw.h"
+#include <ctype.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifdef FIXIT_FAST_LOAD
-#include	"cstraw.h"
+#include "cstraw.h"
 #endif
 
-
-
 // Disable the "temporary object used to initialize a non-constant reference" warning.
-//#pragma warning 665 9
-
+// #pragma warning 665 9
 
 /***********************************************************************************************
  * INIClass::~INIClass -- Destructor for INI handler.                                          *
@@ -99,11 +95,7 @@
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-INIClass::~INIClass(void)
-{
-	Clear();
-}
-
+INIClass::~INIClass(void) { Clear(); }
 
 /***********************************************************************************************
  * INIClass::Clear -- Clears out a section (or all sections) of the INI data.                  *
@@ -127,16 +119,15 @@ INIClass::~INIClass(void)
  *   08/21/1996 JLB : Optionally clears section too.                                           *
  *   11/02/1996 JLB : Updates the index list.                                                  *
  *=============================================================================================*/
-bool INIClass::Clear(char const * section, char const * entry)
-{
+bool INIClass::Clear(char const *section, char const *entry) {
 	if (section == NULL) {
 		SectionList.Delete();
 		SectionIndex.Clear();
 	} else {
-		INISection * secptr = Find_Section(section);
+		INISection *secptr = Find_Section(section);
 		if (secptr != NULL) {
 			if (entry != NULL) {
-				INIEntry * entptr = secptr->Find_Entry(entry);
+				INIEntry *entptr = secptr->Find_Entry(entry);
 				if (entptr != NULL) {
 					/*
 					**	Remove the entry from the entry index list.
@@ -155,9 +146,8 @@ bool INIClass::Clear(char const * section, char const * entry)
 			}
 		}
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * INIClass::Load -- Load INI data from the file specified.                                    *
@@ -173,11 +163,7 @@ bool INIClass::Clear(char const * section, char const * entry)
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Load(FileClass & file)
-{
-	return(Load(FileStraw(file)));
-}
-
+bool INIClass::Load(FileClass &file) { return (Load(FileStraw(file))); }
 
 /***********************************************************************************************
  * INIClass::Load -- Load the INI data from the data stream (straw).                           *
@@ -194,9 +180,9 @@ bool INIClass::Load(FileClass & file)
  *   07/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 #ifdef FIXIT_FAST_LOAD
-bool INIClass::Load(Straw & ffile)
+bool INIClass::Load(Straw &ffile)
 #else
-bool INIClass::Load(Straw & file)
+bool INIClass::Load(Straw &file)
 #endif
 {
 	bool end_of_file = false;
@@ -212,8 +198,10 @@ bool INIClass::Load(Straw & file)
 	*/
 	while (!end_of_file) {
 		Read_Line(file, buffer, sizeof(buffer), end_of_file);
-		if (end_of_file) return(false);
-		if (buffer[0] == '[' && strchr(buffer, ']') != NULL) break;
+		if (end_of_file)
+			return (false);
+		if (buffer[0] == '[' && strchr(buffer, ']') != NULL)
+			break;
 	}
 
 	/*
@@ -222,13 +210,14 @@ bool INIClass::Load(Straw & file)
 	while (!end_of_file) {
 
 		buffer[0] = ' ';
-		char * ptr = strchr(buffer, ']');
-		if (ptr) *ptr = '\0';
+		char *ptr = strchr(buffer, ']');
+		if (ptr)
+			*ptr = '\0';
 		strtrim(buffer);
-		INISection * secptr = new INISection(strdup(buffer));
+		INISection *secptr = new INISection(strdup(buffer));
 		if (secptr == NULL) {
 			Clear();
-			return(false);
+			return (false);
 		}
 
 		/*
@@ -242,20 +231,23 @@ bool INIClass::Load(Straw & file)
 			**	care of it.
 			*/
 			int len = Read_Line(file, buffer, sizeof(buffer), end_of_file);
-			if (buffer[0] == '[' && strchr(buffer, ']') != NULL) break;
+			if (buffer[0] == '[' && strchr(buffer, ']') != NULL)
+				break;
 
 			/*
 			**	Determine if this line is a comment or blank line. Throw it out if it is.
 			*/
 			Strip_Comments(buffer);
-			if (len == 0 || buffer[0] == ';' || buffer[0] == '=') continue;
+			if (len == 0 || buffer[0] == ';' || buffer[0] == '=')
+				continue;
 
 			/*
 			**	The line isn't an obvious comment. Make sure that there is the "=" character
 			**	at an appropriate spot.
 			*/
-			char * divider = strchr(buffer, '=');
-			if (!divider) continue;
+			char *divider = strchr(buffer, '=');
+			if (!divider)
+				continue;
 
 			/*
 			**	Split the line into entry and value sections. Be sure to catch the
@@ -263,16 +255,18 @@ bool INIClass::Load(Straw & file)
 			*/
 			*divider++ = '\0';
 			strtrim(buffer);
-			if (!strlen(buffer)) continue;
+			if (!strlen(buffer))
+				continue;
 
 			strtrim(divider);
-			if (!strlen(divider)) continue;
+			if (!strlen(divider))
+				continue;
 
-			INIEntry * entryptr = new INIEntry(strdup(buffer), strdup(divider));
+			INIEntry *entryptr = new INIEntry(strdup(buffer), strdup(divider));
 			if (entryptr == NULL) {
 				delete secptr;
 				Clear();
-				return(false);
+				return (false);
 			}
 
 			secptr->EntryIndex.Add_Index(entryptr->Index_ID(), entryptr);
@@ -290,9 +284,8 @@ bool INIClass::Load(Straw & file)
 			SectionList.Add_Tail(secptr);
 		}
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * INIClass::Save -- Save the ini data to the file specified.                                  *
@@ -309,11 +302,7 @@ bool INIClass::Load(Straw & file)
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int INIClass::Save(FileClass & file) const
-{
-	return(Save(FilePipe(file)));
-}
-
+int INIClass::Save(FileClass &file) const { return (Save(FilePipe(file))); }
 
 /***********************************************************************************************
  * INIClass::Save -- Saves the INI data to a pipe stream.                                      *
@@ -329,11 +318,10 @@ int INIClass::Save(FileClass & file) const
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int INIClass::Save(Pipe & pipe) const
-{
+int INIClass::Save(Pipe &pipe) const {
 	int total = 0;
 
-	INISection * secptr = SectionList.First();
+	INISection *secptr = SectionList.First();
 	while (secptr && secptr->Is_Valid()) {
 
 		/*
@@ -347,7 +335,7 @@ int INIClass::Save(Pipe & pipe) const
 		/*
 		**	Output all the entries and values in this section.
 		*/
-		INIEntry * entryptr = secptr->EntryList.First();
+		INIEntry *entryptr = secptr->EntryList.First();
 		while (entryptr && entryptr->Is_Valid()) {
 			total += pipe.Put(entryptr->Entry, strlen(entryptr->Entry));
 			total += pipe.Put("=", 1);
@@ -367,9 +355,8 @@ int INIClass::Save(Pipe & pipe) const
 	}
 	total += pipe.End();
 
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * INIClass::Find_Section -- Find the specified section within the INI data.                   *
@@ -389,19 +376,17 @@ int INIClass::Save(Pipe & pipe) const
  *   07/02/1996 JLB : Created.                                                                 *
  *   11/02/1996 JLB : Uses index manager.                                                      *
  *=============================================================================================*/
-INIClass::INISection * INIClass::Find_Section(char const * section) const
-{
+INIClass::INISection *INIClass::Find_Section(char const *section) const {
 	if (section != NULL) {
 
 		long crc = CRCEngine()(section, strlen(section));
 
 		if (SectionIndex.Is_Present(crc)) {
-			return(SectionIndex.Fetch_Index(crc));
+			return (SectionIndex.Fetch_Index(crc));
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * INIClass::Section_Count -- Counts the number of sections in the INI data.                   *
@@ -419,11 +404,7 @@ INIClass::INISection * INIClass::Find_Section(char const * section) const
  *   07/02/1996 JLB : Created.                                                                 *
  *   11/02/1996 JLB : Uses index manager.                                                      *
  *=============================================================================================*/
-int INIClass::Section_Count(void) const
-{
-	return(SectionIndex.Count());
-}
-
+int INIClass::Section_Count(void) const { return (SectionIndex.Count()); }
 
 /***********************************************************************************************
  * INIClass::Entry_Count -- Fetches the number of entries in a specified section.              *
@@ -441,15 +422,13 @@ int INIClass::Section_Count(void) const
  *   07/02/1996 JLB : Created.                                                                 *
  *   11/02/1996 JLB : Uses index manager.                                                      *
  *=============================================================================================*/
-int INIClass::Entry_Count(char const * section) const
-{
-	INISection * secptr = Find_Section(section);
+int INIClass::Entry_Count(char const *section) const {
+	INISection *secptr = Find_Section(section);
 	if (secptr != NULL) {
-		return(secptr->EntryIndex.Count());
+		return (secptr->EntryIndex.Count());
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * INIClass::Find_Entry -- Find specified entry within section.                                *
@@ -469,15 +448,13 @@ int INIClass::Entry_Count(char const * section) const
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-INIClass::INIEntry * INIClass::Find_Entry(char const * section, char const * entry) const
-{
-	INISection * secptr = Find_Section(section);
+INIClass::INIEntry *INIClass::Find_Entry(char const *section, char const *entry) const {
+	INISection *secptr = Find_Section(section);
 	if (secptr != NULL) {
-		return(secptr->Find_Entry(entry));
+		return (secptr->Find_Entry(entry));
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_Entry -- Get the entry identifier name given ordinal number and section name. *
@@ -497,22 +474,21 @@ INIClass::INIEntry * INIClass::Find_Entry(char const * section, char const * ent
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-char const * INIClass::Get_Entry(char const * section, int index) const
-{
-	INISection * secptr = Find_Section(section);
+char const *INIClass::Get_Entry(char const *section, int index) const {
+	INISection *secptr = Find_Section(section);
 
 	if (secptr != NULL && index < secptr->EntryIndex.Count()) {
-		INIEntry * entryptr = secptr->EntryList.First();
+		INIEntry *entryptr = secptr->EntryList.First();
 
 		while (entryptr != NULL && entryptr->Is_Valid()) {
-			if (index == 0) return(entryptr->Entry);
+			if (index == 0)
+				return (entryptr->Entry);
 			index--;
 			entryptr = entryptr->Next();
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_UUBlock -- Store a binary encoded data block into the INI database.           *
@@ -535,9 +511,9 @@ char const * INIClass::Get_Entry(char const * section, int index) const
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Put_UUBlock(char const * section, void const * block, int len)
-{
-	if (section == NULL || block == NULL || len < 1) return(false);
+bool INIClass::Put_UUBlock(char const *section, void const *block, int len) {
+	if (section == NULL || block == NULL || len < 1)
+		return (false);
 
 	Clear(section);
 
@@ -551,17 +527,17 @@ bool INIClass::Put_UUBlock(char const * section, void const * block, int len)
 		char buffer[71];
 		char sbuffer[32];
 
-		int length = bstraw.Get(buffer, sizeof(buffer)-1);
+		int length = bstraw.Get(buffer, sizeof(buffer) - 1);
 		buffer[length] = '\0';
-		if (length == 0) break;
+		if (length == 0)
+			break;
 
 		sprintf(sbuffer, "%d", counter);
 		Put_String(section, sbuffer, buffer);
 		counter++;
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_UUBlock -- Fetch an encoded block from the section specified.                 *
@@ -587,9 +563,9 @@ bool INIClass::Put_UUBlock(char const * section, void const * block, int len)
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int INIClass::Get_UUBlock(char const * section, void * block, int len) const
-{
-	if (section == NULL) return(0);
+int INIClass::Get_UUBlock(char const *section, void *block, int len) const {
+	if (section == NULL)
+		return (0);
 
 	Base64Pipe b64pipe(Base64Pipe::DECODE);
 	BufferPipe bpipe(block, len);
@@ -606,9 +582,8 @@ int INIClass::Get_UUBlock(char const * section, void * block, int len) const
 		total += outcount;
 	}
 	total += b64pipe.End();
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_TextBlock -- Stores a block of text into an INI section.                      *
@@ -631,9 +606,9 @@ int INIClass::Get_UUBlock(char const * section, void * block, int len) const
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Put_TextBlock(char const * section, char const * text)
-{
-	if (section == NULL) return(false);
+bool INIClass::Put_TextBlock(char const *section, char const *text) {
+	if (section == NULL)
+		return (false);
 
 	Clear(section);
 
@@ -657,7 +632,8 @@ bool INIClass::Put_TextBlock(char const * section, char const * text)
 				while (count) {
 					char c = buffer[count];
 
-					if (isspace(c)) break;
+					if (isspace(c))
+						break;
 					count--;
 				}
 
@@ -671,14 +647,13 @@ bool INIClass::Put_TextBlock(char const * section, char const * text)
 			strtrim(buffer);
 			Put_String(section, b, buffer);
 			index++;
-			text = ((char  *)text) + count;
+			text = ((char *)text) + count;
 		} else {
 			break;
 		}
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_TextBlock -- Fetch a block of normal text.                                    *
@@ -703,12 +678,13 @@ bool INIClass::Put_TextBlock(char const * section, char const * text)
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int INIClass::Get_TextBlock(char const * section, char * buffer, int len) const
-{
-	if (len <= 0) return(0);
+int INIClass::Get_TextBlock(char const *section, char *buffer, int len) const {
+	if (len <= 0)
+		return (0);
 
 	buffer[0] = '\0';
-	if (len <= 1) return(0);
+	if (len <= 1)
+		return (0);
 
 	int elen = Entry_Count(section);
 	int total = 0;
@@ -729,11 +705,11 @@ int INIClass::Get_TextBlock(char const * section, char * buffer, int len) const
 		total += partial;
 		buffer += partial;
 		len -= partial;
-		if (len <= 1) break;
+		if (len <= 1)
+			break;
 	}
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_Int -- Stores a signed integer into the INI data base.                        *
@@ -762,27 +738,25 @@ int INIClass::Get_TextBlock(char const * section, char * buffer, int len) const
  *   07/03/1996 JLB : Created.                                                                 *
  *   07/10/1996 JLB : Handles multiple integer formats.                                        *
  *=============================================================================================*/
-bool INIClass::Put_Int(char const * section, char const * entry, int number, int format)
-{
+bool INIClass::Put_Int(char const *section, char const *entry, int number, int format) {
 	char buffer[MAX_LINE_LENGTH];
 
 	switch (format) {
-		default:
-		case 0:
-			sprintf(buffer, "%d", number);
-			break;
+	default:
+	case 0:
+		sprintf(buffer, "%d", number);
+		break;
 
-		case 1:
-			sprintf(buffer, "%Xh", number);
-			break;
+	case 1:
+		sprintf(buffer, "%Xh", number);
+		break;
 
-		case 2:
-			sprintf(buffer, "$%X", number);
-			break;
+	case 2:
+		sprintf(buffer, "$%X", number);
+		break;
 	}
-	return(Put_String(section, entry, buffer));
+	return (Put_String(section, entry, buffer));
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_Int -- Fetch an integer entry from the specified section.                     *
@@ -805,29 +779,28 @@ bool INIClass::Put_Int(char const * section, char const * entry, int number, int
  *   07/02/1996 JLB : Created.                                                                 *
  *   07/10/1996 JLB : Handles multiple integer formats.                                        *
  *=============================================================================================*/
-int INIClass::Get_Int(char const * section, char const * entry, int defvalue) const
-{
+int INIClass::Get_Int(char const *section, char const *entry, int defvalue) const {
 	/*
 	**	Verify that the parameters are nominally correct.
 	*/
-	if (section == NULL || entry == NULL) return(defvalue);
+	if (section == NULL || entry == NULL)
+		return (defvalue);
 
-	INIEntry * entryptr = Find_Entry(section, entry);
+	INIEntry *entryptr = Find_Entry(section, entry);
 	if (entryptr && entryptr->Value != NULL) {
 
 		if (*entryptr->Value == '$') {
 			sscanf(entryptr->Value, "$%x", &defvalue);
 		} else {
-			if (tolower(entryptr->Value[strlen(entryptr->Value)-1]) == 'h') {
+			if (tolower(entryptr->Value[strlen(entryptr->Value) - 1]) == 'h') {
 				sscanf(entryptr->Value, "%xh", &defvalue);
 			} else {
 				defvalue = atoi(entryptr->Value);
 			}
 		}
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_Hex -- Store an integer into the INI database, but use a hex format.          *
@@ -849,14 +822,12 @@ int INIClass::Get_Int(char const * section, char const * entry, int defvalue) co
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Put_Hex(char const * section, char const * entry, int number)
-{
+bool INIClass::Put_Hex(char const *section, char const *entry, int number) {
 	char buffer[MAX_LINE_LENGTH];
 
 	sprintf(buffer, "%X", number);
-	return(Put_String(section, entry, buffer));
+	return (Put_String(section, entry, buffer));
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_Hex -- Fetches integer [hex format] from the section and entry specified.     *
@@ -879,20 +850,19 @@ bool INIClass::Put_Hex(char const * section, char const * entry, int number)
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int INIClass::Get_Hex(char const * section, char const * entry, int defvalue) const
-{
+int INIClass::Get_Hex(char const *section, char const *entry, int defvalue) const {
 	/*
 	**	Verify that the parameters are nominally correct.
 	*/
-	if (section == NULL || entry == NULL) return(defvalue);
+	if (section == NULL || entry == NULL)
+		return (defvalue);
 
-	INIEntry * entryptr = Find_Entry(section, entry);
+	INIEntry *entryptr = Find_Entry(section, entry);
 	if (entryptr && entryptr->Value != NULL) {
 		sscanf(entryptr->Value, "%x", &defvalue);
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_String -- Output a string to the section and entry specified.                 *
@@ -914,15 +884,16 @@ int INIClass::Get_Hex(char const * section, char const * entry, int defvalue) co
  *   07/02/1996 JLB : Created.                                                                 *
  *   11/02/1996 JLB : Uses index handler.                                                      *
  *=============================================================================================*/
-bool INIClass::Put_String(char const * section, char const * entry, char const * string)
-{
-	if (section == NULL || entry == NULL) return(false);
+bool INIClass::Put_String(char const *section, char const *entry, char const *string) {
+	if (section == NULL || entry == NULL)
+		return (false);
 
-	INISection * secptr = Find_Section(section);
+	INISection *secptr = Find_Section(section);
 
 	if (secptr == NULL) {
 		secptr = new INISection(strdup(section));
-		if (secptr == NULL) return(false);
+		if (secptr == NULL)
+			return (false);
 		SectionList.Add_Tail(secptr);
 		SectionIndex.Add_Index(secptr->Index_ID(), secptr);
 	}
@@ -930,7 +901,7 @@ bool INIClass::Put_String(char const * section, char const * entry, char const *
 	/*
 	**	Remove the old entry if found.
 	*/
-	INIEntry * entryptr = secptr->Find_Entry(entry);
+	INIEntry *entryptr = secptr->Find_Entry(entry);
 	if (entryptr != NULL) {
 		secptr->EntryIndex.Remove_Index(entryptr->Index_ID());
 		delete entryptr;
@@ -943,14 +914,13 @@ bool INIClass::Put_String(char const * section, char const * entry, char const *
 		entryptr = new INIEntry(strdup(entry), strdup(string));
 
 		if (entryptr == NULL) {
-			return(false);
+			return (false);
 		}
 		secptr->EntryList.Add_Tail(entryptr);
 		secptr->EntryIndex.Add_Index(entryptr->Index_ID(), entryptr);
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_String -- Fetch the value of a particular entry in a specified section.       *
@@ -978,8 +948,7 @@ bool INIClass::Put_String(char const * section, char const * entry, char const *
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int INIClass::Get_String(char const * section, char const * entry, char const * defvalue, char * buffer, int size) const
-{
+int INIClass::Get_String(char const *section, char const *entry, char const *defvalue, char *buffer, int size) const {
 	/*
 	**	Verify that the parameters are nominally legal.
 	*/
@@ -987,14 +956,14 @@ int INIClass::Get_String(char const * section, char const * entry, char const * 
 		if (buffer != NULL && size > 0) {
 			buffer[0] = '\0';
 		}
-		return(0);
+		return (0);
 	}
 
 	/*
 	**	Fetch the entry string if it is present. If not, then the normal default
 	**	value will be used as the entry value.
 	*/
-	INIEntry * entryptr = Find_Entry(section, entry);
+	INIEntry *entryptr = Find_Entry(section, entry);
 	if (entryptr) {
 		if (entryptr->Value) {
 			defvalue = entryptr->Value;
@@ -1005,20 +974,19 @@ int INIClass::Get_String(char const * section, char const * entry, char const * 
 	**	Fill in the buffer with the entry value and return with the length of the string.
 	*/
 	if (buffer == NULL || !size) {
-		return(0);
+		return (0);
 	} else if (defvalue == NULL) {
 		buffer[0] = '\0';
-		return(0);
+		return (0);
 	} else if (buffer == defvalue) {
-		return(strlen(buffer));
+		return (strlen(buffer));
 	} else {
 		strncpy(buffer, defvalue, size);
-		buffer[size-1] = '\0';
+		buffer[size - 1] = '\0';
 		strtrim(buffer);
-		return(strlen(buffer));
+		return (strlen(buffer));
 	}
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_Bool -- Store a boolean value into the INI database.                          *
@@ -1039,15 +1007,13 @@ int INIClass::Get_String(char const * section, char const * entry, char const * 
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Put_Bool(char const * section, char const * entry, bool value)
-{
+bool INIClass::Put_Bool(char const *section, char const *entry, bool value) {
 	if (value) {
-		return(Put_String(section, entry, "yes"));
+		return (Put_String(section, entry, "yes"));
 	} else {
-		return(Put_String(section, entry, "no"));
+		return (Put_String(section, entry, "no"));
 	}
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_Bool -- Fetch a boolean value for the section and entry specified.            *
@@ -1072,30 +1038,29 @@ bool INIClass::Put_Bool(char const * section, char const * entry, bool value)
  * HISTORY:                                                                                    *
  *   07/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Get_Bool(char const * section, char const * entry, bool defvalue) const
-{
+bool INIClass::Get_Bool(char const *section, char const *entry, bool defvalue) const {
 	/*
 	**	Verify that the parameters are nominally correct.
 	*/
-	if (section == NULL || entry == NULL) return(defvalue);
+	if (section == NULL || entry == NULL)
+		return (defvalue);
 
-	INIEntry * entryptr = Find_Entry(section, entry);
+	INIEntry *entryptr = Find_Entry(section, entry);
 	if (entryptr && entryptr->Value != NULL) {
 		switch (toupper(*entryptr->Value)) {
-			case 'Y':
-			case 'T':
-			case '1':
-				return(true);
+		case 'Y':
+		case 'T':
+		case '1':
+			return (true);
 
-			case 'N':
-			case 'F':
-			case '0':
-				return(false);
+		case 'N':
+		case 'F':
+		case '0':
+			return (false);
 		}
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * INIClass::INISection::Find_Entry -- Finds a specified entry and returns pointer to it.      *
@@ -1114,17 +1079,15 @@ bool INIClass::Get_Bool(char const * section, char const * entry, bool defvalue)
  *   07/03/1996 JLB : Created.                                                                 *
  *   11/02/1996 JLB : Uses index handler.                                                      *
  *=============================================================================================*/
-INIClass::INIEntry * INIClass::INISection::Find_Entry(char const * entry) const
-{
+INIClass::INIEntry *INIClass::INISection::Find_Entry(char const *entry) const {
 	if (entry != NULL) {
 		int crc = CRCEngine()(entry, strlen(entry));
 		if (EntryIndex.Is_Present(crc)) {
-			return(EntryIndex.Fetch_Index(crc));
+			return (EntryIndex.Fetch_Index(crc));
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_PKey -- Stores the key to the INI database.                                   *
@@ -1146,8 +1109,7 @@ INIClass::INIEntry * INIClass::INISection::Find_Entry(char const * entry) const
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Put_PKey(PKey const & key)
-{
+bool INIClass::Put_PKey(PKey const &key) {
 	char buffer[512];
 
 	int len = key.Encode_Modulus(buffer);
@@ -1155,9 +1117,8 @@ bool INIClass::Put_PKey(PKey const & key)
 
 	len = key.Encode_Exponent(buffer);
 	Put_UUBlock("PrivateKey", buffer, len);
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_PKey -- Fetch a key from the ini database.                                    *
@@ -1175,8 +1136,7 @@ bool INIClass::Put_PKey(PKey const & key)
  * HISTORY:                                                                                    *
  *   07/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-PKey INIClass::Get_PKey(bool fast) const
-{
+PKey INIClass::Get_PKey(bool fast) const {
 	PKey key;
 	char buffer[512];
 
@@ -1196,9 +1156,8 @@ PKey INIClass::Get_PKey(bool fast) const
 	Get_UUBlock("PublicKey", buffer, sizeof(buffer));
 	key.Decode_Modulus(buffer);
 
-	return(key);
+	return (key);
 }
-
 
 /***********************************************************************************************
  * INIClass::Get_Fixed -- Fetch a fixed point number from the section & entry.                 *
@@ -1222,17 +1181,15 @@ PKey INIClass::Get_PKey(bool fast) const
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed INIClass::Get_Fixed(char const * section, char const * entry, fixed defvalue) const
-{
+fixed INIClass::Get_Fixed(char const *section, char const *entry, fixed defvalue) const {
 	char buffer[128];
 	fixed retval = defvalue;
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
 		retval = fixed(buffer);
 	}
-	return(retval);
+	return (retval);
 }
-
 
 /***********************************************************************************************
  * INIClass::Put_Fixed -- Store a fixed point number to the INI database.                      *
@@ -1254,11 +1211,9 @@ fixed INIClass::Get_Fixed(char const * section, char const * entry, fixed defval
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool INIClass::Put_Fixed(char const * section, char const * entry, fixed value)
-{
-	return(Put_String(section, entry, value.As_ASCII()));
+bool INIClass::Put_Fixed(char const *section, char const *entry, fixed value) {
+	return (Put_String(section, entry, value.As_ASCII()));
 }
-
 
 /***********************************************************************************************
  * INIClass::Strip_Comments -- Strips comments of the specified text line.                     *
@@ -1275,10 +1230,9 @@ bool INIClass::Put_Fixed(char const * section, char const * entry, fixed value)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void INIClass::Strip_Comments(char * buffer)
-{
+void INIClass::Strip_Comments(char *buffer) {
 	if (buffer != NULL) {
-		char * comment = strchr(buffer, ';');
+		char *comment = strchr(buffer, ';');
 		if (comment) {
 			*comment = '\0';
 			strtrim(buffer);

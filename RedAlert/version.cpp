@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/VERSION.CPP 14    3/16/97 10:16p Joe_b $ */
@@ -41,11 +41,11 @@
  *   VersionClass::Min_Version -- returns lowest version # to connect to   *
  *   VersionClass::Max_Version -- returns highest version # to connect to  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#if (0)//PG
+#if (0) // PG
 #include "function.h"
 
 #ifdef FIXIT_VERSION_3
-#include "rawolapi.h"		//	For version number.
+#include "rawolapi.h" //	For version number.
 #endif
 
 /****************************** Globals ************************************/
@@ -62,77 +62,76 @@
 // the table is the default protocol for this version.
 //---------------------------------------------------------------------------
 static VersionProtocolType VersionProtocol[] = {
-	{0x00001000,COMM_PROTOCOL_SINGLE_NO_COMP},	// (obsolete)
-	{0x00002000,COMM_PROTOCOL_SINGLE_E_COMP},		// (obsolete)
-	{0x00010000,COMM_PROTOCOL_MULTI_E_COMP},
+    {0x00001000, COMM_PROTOCOL_SINGLE_NO_COMP}, // (obsolete)
+    {0x00002000, COMM_PROTOCOL_SINGLE_E_COMP},	// (obsolete)
+    {0x00010000, COMM_PROTOCOL_MULTI_E_COMP},
 };
-
 
 /***************************************************************************
  * VersionClass::VersionClass -- Class constructor                         *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *   09/17/1996 JLB : Converted to used initializer list.                  *
  *=========================================================================*/
-VersionClass::VersionClass(void) :
-	Version(0),
-	MajorVer(0),
-	MinorVer(0),
-	MinClipVer(0),
-	MaxClipVer(0),
-	VersionInit(false),
-	MajorInit(false),
-	MinorInit(false),
-	TextInit(false)
-{
+VersionClass::VersionClass(void)
+    : Version(0), MajorVer(0), MinorVer(0), MinClipVer(0), MaxClipVer(0), VersionInit(false), MajorInit(false),
+      MinorInit(false), TextInit(false) {
 	VersionText[0] = '\0';
 	VersionName[0] = '\0';
 }
 
-
 /***************************************************************************
  * VersionClass::Version_Number -- Returns program version number          *
  *                                                                         *
- * Version Number Format:																	*
- * Non-CHEAT format:																			*
- *   Byte 3,2: major version (printed to the left of a decimal)				*
- *   Byte 1,0: minor version (printed to the right of a decimal)				*
- *   Thus, version 1.07 would appear as 0x0001 0700								*
+ * Version Number Format:
+ ** Non-CHEAT format:
+ ** Byte 3,2: major version (printed to the left of a decimal)				* Byte 1,0: minor version
+ *(printed to the right of a decimal)				* Thus, version 1.07 would appear as 0x0001 0700
+ **
  *                                                                         *
  *   This format guarantees that a greater-than or less-than comparison		*
- *   will work on version numbers.														*
+ *   will work on version numbers.
+ **
  *                                                                         *
- * CHEAT format:																				*
- *   Byte 3: Month #																			*
- *   Byte 2: Day #																			*
- *   Byte 1: Hour #																			*
- *   Byte 0: Minute #																		*
+ * CHEAT format:
+ ** Byte 3: Month #
+ ** Byte 2: Day #
+ ** Byte 1: Hour #
+ ** Byte 0: Minute #
+ **
  *                                                                         *
  * This format guarantees a unique version number for each compile (as		*
  * long as they're a minute or more apart), with increasing version #'s		*
- * for later times.																			*
+ * for later times.
+ **
  *                                                                         *
  * Either format should be printed in hex.                                 *
  *                                                                         *
  * This routine also fills in a text string (retrieved with Version_Text), *
  * which may contain a custom string (such as "Beta"); this string is		*
- * read from the file VERSION.TXT.														*
+ * read from the file VERSION.TXT.
+ **
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		Version number																			*
+ *		Version number
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		Don't call this function until the file system has been init'd!		*
@@ -141,14 +140,13 @@ VersionClass::VersionClass(void) :
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
 
-//ajw Note: This function is no longer called. MIN_VERSION is now incorrect, but I don't have time
+// ajw Note: This function is no longer called. MIN_VERSION is now incorrect, but I don't have time
 //	for a full rebuild (3 hrs!), and as MIN_VERSION is no longer referred to, I'm going to leave it.
 //	Really, it should be deleted or commented out.
 //	Version number used is now GAME_VERSION.
 //	Note also that VERSION_RA_300 is wrong, but not used.
 
-unsigned long VersionClass::Version_Number(void)
-{
+unsigned long VersionClass::Version_Number(void) {
 	//------------------------------------------------------------------------
 	// Read the text description, if there is one
 	//------------------------------------------------------------------------
@@ -172,17 +170,18 @@ unsigned long VersionClass::Version_Number(void)
 
 	return (Version);
 
-}	/* end of Version_Number */
-
+} /* end of Version_Number */
 
 /***************************************************************************
  * VersionClass::Major_Version -- returns major version #                  *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		Major Version number																	*
+ *		Major Version number
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		Don't call this function until the file system has been init'd!		*
@@ -190,14 +189,13 @@ unsigned long VersionClass::Version_Number(void)
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-unsigned short VersionClass::Major_Version(void)
-{
+unsigned short VersionClass::Major_Version(void) {
 #ifdef DEV_VERSION
-	static char * date = __DATE__;		// format: Mmm dd yyyy
-	static char const * months = "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC";
+	static char *date = __DATE__; // format: Mmm dd yyyy
+	static char const *months = "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC";
 	char buf[10];
-	char * ptr;
-	char * tok;
+	char *ptr;
+	char *tok;
 	int monthnum;
 	int daynum;
 #endif
@@ -238,8 +236,8 @@ unsigned short VersionClass::Major_Version(void)
 	// Convert the month number to a hex counterpart (so, when it's printed
 	// in hex, it will read correctly.)
 	//........................................................................
-	sprintf(buf,"%d",monthnum);
-	sscanf(buf,"%x",&monthnum);
+	sprintf(buf, "%d", monthnum);
+	sscanf(buf, "%x", &monthnum);
 
 	//........................................................................
 	//	Fetch the date and place that in the low byte.
@@ -254,8 +252,8 @@ unsigned short VersionClass::Major_Version(void)
 	//........................................................................
 	// Convert the day number to a hex counterpart
 	//........................................................................
-	sprintf(buf,"%d",daynum);
-	sscanf(buf,"%x",&daynum);
+	sprintf(buf, "%d", daynum);
+	sscanf(buf, "%x", &daynum);
 
 	MajorVer = ((monthnum << 8) | daynum);
 
@@ -270,17 +268,18 @@ unsigned short VersionClass::Major_Version(void)
 
 	return (MajorVer);
 
-}	/* end of Major_Version */
-
+} /* end of Major_Version */
 
 /***************************************************************************
  * VersionClass::Minor_Version -- returns minor version (revision) number  *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		Minor Version number																	*
+ *		Minor Version number
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		Don't call this function until the file system has been init'd!		*
@@ -288,11 +287,10 @@ unsigned short VersionClass::Major_Version(void)
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-unsigned short VersionClass::Minor_Version(void)
-{
+unsigned short VersionClass::Minor_Version(void) {
 #ifdef DEV_VERSION
-	static char * time = __TIME__;		// format: hh:mm:ss
-	char * tok;
+	static char *time = __TIME__; // format: hh:mm:ss
+	char *tok;
 	char buf[10];
 	int hournum;
 	int minnum;
@@ -332,8 +330,8 @@ unsigned short VersionClass::Minor_Version(void)
 	// Convert the hour number to a hex counterpart (so, when it's printed
 	// in hex, it will read correctly.)
 	//........................................................................
-	sprintf(buf,"%d",hournum);
-	sscanf(buf,"%x",&hournum);
+	sprintf(buf, "%d", hournum);
+	sscanf(buf, "%x", &hournum);
 
 	//........................................................................
 	//	Fetch the minute and place that in the last two digit positions.
@@ -348,8 +346,8 @@ unsigned short VersionClass::Minor_Version(void)
 	//........................................................................
 	// Convert the minute number to a hex counterpart
 	//........................................................................
-	sprintf(buf,"%d",minnum);
-	sscanf(buf,"%x",&minnum);
+	sprintf(buf, "%d", minnum);
+	sscanf(buf, "%x", &minnum);
 
 	MinorVer = ((hournum << 8) | minnum);
 
@@ -358,11 +356,11 @@ unsigned short VersionClass::Minor_Version(void)
 	//------------------------------------------------------------------------
 #else
 
-#ifdef FIXIT_VERSION_3			//	Insanity. CS installation should not have affected version number. ajw
+#ifdef FIXIT_VERSION_3 //	Insanity. CS installation should not have affected version number. ajw
 
 	MinorVer = MINOR_VERSION;
 
-#else	//	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 
 #ifdef FIXIT_CSII
 	MinorVer = MINOR_VERSION;
@@ -370,7 +368,7 @@ unsigned short VersionClass::Minor_Version(void)
 		MinorVer = MINOR_VERSION - 1;
 	}
 #else
-	#ifdef FIXIT_VERSION
+#ifdef FIXIT_VERSION
 	/* If counterstrike is not installed then we report version 1.06
 	 * otherwise we report ourselves as 1.08
 	 */
@@ -379,12 +377,12 @@ unsigned short VersionClass::Minor_Version(void)
 	} else {
 		MinorVer = MINOR_VERSION;
 	}
-	#else
+#else
 	MinorVer = MINOR_VERSION;
-	#endif
+#endif
 #endif
 
-#endif	//	FIXIT_VERSION_3
+#endif //	FIXIT_VERSION_3
 
 #endif
 
@@ -392,26 +390,27 @@ unsigned short VersionClass::Minor_Version(void)
 
 	return (MinorVer);
 
-}	/* end of Minor_Version */
-
+} /* end of Minor_Version */
 
 /***************************************************************************
  * VersionClass::Version_Name -- returns version # as char string          *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		ptr to name																				*
+ *		ptr to name
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   10/30/1995 BRR : Created.                                             *
  *=========================================================================*/
-char * VersionClass::Version_Name(void)
-{
+char *VersionClass::Version_Name(void) {
 	//------------------------------------------------------------------------
 	// For developmental versions, just use the major & minor version #'s
 	//------------------------------------------------------------------------
@@ -427,7 +426,7 @@ char * VersionClass::Version_Name(void)
 
 	adjusted_minor = Minor_Version();
 	for (i = 0; i < 4; i++) {
-		if ( (adjusted_minor & 0x000f) != 0) {
+		if ((adjusted_minor & 0x000f) != 0) {
 			break;
 		}
 		adjusted_minor >>= 4;
@@ -438,17 +437,18 @@ char * VersionClass::Version_Name(void)
 
 	return (VersionName);
 
-}	/* end of Version_Name */
-
+} /* end of Version_Name */
 
 /***************************************************************************
  * VersionClass::Read_Text_String -- reads version # text string from disk *
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		Don't call this function until the file system has been init'd!		*
@@ -456,46 +456,46 @@ char * VersionClass::Version_Name(void)
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-void VersionClass::Read_Text_String(void)
-{
+void VersionClass::Read_Text_String(void) {
 	RawFileClass file("VERSION.TXT");
 
 	if (file.Is_Available()) {
 		file.Read(VersionText, sizeof(VersionText));
-		VersionText[sizeof(VersionText)-1] = '\0';
-		while (VersionText[strlen(VersionText)-1] == '\r') {
-			VersionText[strlen(VersionText)-1] = '\0';
+		VersionText[sizeof(VersionText) - 1] = '\0';
+		while (VersionText[strlen(VersionText) - 1] == '\r') {
+			VersionText[strlen(VersionText) - 1] = '\0';
 		}
 	} else {
 		VersionText[0] = '\0';
 	}
 
-}	/* end of Read_Text_String */
-
+} /* end of Read_Text_String */
 
 /***************************************************************************
  * VersionClass::Version_Protocol -- returns default protocol for version  *
  *                                                                         *
  * INPUT:                                                                  *
- *		version		version # to look up													*
+ *		version		version # to look up
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		protocol value to use for that version #										*
+ *		protocol value to use for that version #
+ **
  *                                                                         *
  * WARNINGS:                                                               *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-CommProtocolType VersionClass::Version_Protocol(unsigned long version)
-{
-	int i,j;
+CommProtocolType VersionClass::Version_Protocol(unsigned long version) {
+	int i, j;
 
 	//------------------------------------------------------------------------
 	// Compute # entries in the VersionProtocol table
 	//------------------------------------------------------------------------
-	j = sizeof (VersionProtocol) / sizeof(VersionProtocolType);
+	j = sizeof(VersionProtocol) / sizeof(VersionProtocolType);
 
 	//------------------------------------------------------------------------
 	// Search backwards through the table, finding the first entry for which
@@ -513,23 +513,25 @@ CommProtocolType VersionClass::Version_Protocol(unsigned long version)
 	// possible protocol.  (If version clipping is being done properly, this
 	// case should never happen, but never say never.)
 	//------------------------------------------------------------------------
-	return (VersionProtocol[j-1].Protocol);
+	return (VersionProtocol[j - 1].Protocol);
 
-}	/* end of Version_Protocol */
-
+} /* end of Version_Protocol */
 
 /***************************************************************************
  * VersionClass::Init_Clipping -- Initializes version clipping             *
  *                                                                         *
  * Initializes the Min & Max clip version #'s to the min & max values		*
  * defined for this program.  This sets the initial range for use by			*
- * the Clip_Version routine.																*
+ * the Clip_Version routine.
+ **
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		The DEV_VERSION version of this routine calls Version_Number(), so 	*
@@ -538,13 +540,11 @@ CommProtocolType VersionClass::Version_Protocol(unsigned long version)
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-void VersionClass::Init_Clipping(void)
-{
+void VersionClass::Init_Clipping(void) {
 	MinClipVer = Min_Version();
 	MaxClipVer = Max_Version();
 
-}	/* end of Init_Clipping */
-
+} /* end of Init_Clipping */
 
 /***************************************************************************
  * VersionClass::Clip_Version -- "clips" the given version range           *
@@ -553,33 +553,34 @@ void VersionClass::Init_Clipping(void)
  * range with the range currently defined by 'MinClipVer' and 'MaxClipVer'.*
  * If there is overlap in the two ranges, Min & MaxClipVer are adjusted		*
  * to the bounds of the overlap. The routine returns the largest version	*
- * number shared by the ranges (MaxClipVer).											*
+ * number shared by the ranges (MaxClipVer). *
  *																									*
  * Thus, by calling Init_Clipping(), then a series of Clip_Version() calls,*
  * a mutually-acceptable range of version #'s may be negotiated between		*
  * different versions of this program.  The max shared version may then		*
  * be used to decide upon a communications protocol that all programs		*
- * support.																						*
+ * support.
+ **
  *                                                                         *
  * INPUT:                                                                  *
- *		minver		min version to clip to												*
- *		maxver		max version to clip to												*
+ *		minver		min version to clip to
+ ** maxver		max version to clip to
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		highest clipped version #															*
- *		0 = given range is below our current range									*
+ *		highest clipped version #
+ ** 0 = given range is below our current range									*
  *		0xFFFFFFFF = given range is above our current range						*
  *                                                                         *
  * WARNINGS:                                                               *
  *		Be sure Init_Clipping() was called before performing a clipping		*
- *		session.																					*
+ *		session.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-unsigned long VersionClass::Clip_Version(unsigned long minver,
-	unsigned long maxver)
-{
+unsigned long VersionClass::Clip_Version(unsigned long minver, unsigned long maxver) {
 	//------------------------------------------------------------------------
 	// If the given range is outside & above our own, return an error.
 	//------------------------------------------------------------------------
@@ -609,8 +610,7 @@ unsigned long VersionClass::Clip_Version(unsigned long minver,
 	//------------------------------------------------------------------------
 	return (MaxClipVer);
 
-}	/* end of Clip_Version */
-
+} /* end of Clip_Version */
 
 /***************************************************************************
  * VersionClass::Min_Version -- returns lowest version # to connect to     *
@@ -621,10 +621,12 @@ unsigned long VersionClass::Clip_Version(unsigned long minver,
  * this program will only connect to an exact copy of itself.					*
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		min version #																			*
+ *		min version #
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		The DEV_VERSION version of this routine calls Version_Number(), so 	*
@@ -633,8 +635,7 @@ unsigned long VersionClass::Clip_Version(unsigned long minver,
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-unsigned long VersionClass::Min_Version(void)
-{
+unsigned long VersionClass::Min_Version(void) {
 #ifdef DEV_VERSION
 	return (Version_Number());
 #else
@@ -645,27 +646,26 @@ unsigned long VersionClass::Min_Version(void)
 	//	But no time to do three full rebuilds right now, so I'm not deleting them from the header file...   ajw
 	return GAME_VERSION;
 
-#else	//	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 
 #ifdef FIXIT_VERSION
-	if ( Is_Counterstrike_Installed() ) {
+	if (Is_Counterstrike_Installed()) {
 		return (MIN_VERSION - 1);
 	}
 	return (MIN_VERSION);
 #else
-	if ( Is_Counterstrike_Installed() ){
+	if (Is_Counterstrike_Installed()) {
 		return (MIN_VERSION - CS_MINOR_VERSION_MODIFIER);
-	}else{
+	} else {
 		return (MIN_VERSION);
 	}
 #endif
 
-#endif	//	FIXIT_VERSION_3
+#endif //	FIXIT_VERSION_3
 
 #endif
 
-}	/* end of Min_Version */
-
+} /* end of Min_Version */
 
 /***************************************************************************
  * VersionClass::Max_Version -- returns highest version # to connect to    *
@@ -676,10 +676,12 @@ unsigned long VersionClass::Min_Version(void)
  * this program will only connect to an exact copy of itself.					*
  *                                                                         *
  * INPUT:                                                                  *
- *		none.																						*
+ *		none.
+ **
  *                                                                         *
  * OUTPUT:                                                                 *
- *		max version #																			*
+ *		max version #
+ **
  *                                                                         *
  * WARNINGS:                                                               *
  *		The DEV_VERSION version of this routine calls Version_Number(), so 	*
@@ -688,8 +690,7 @@ unsigned long VersionClass::Min_Version(void)
  * HISTORY:                                                                *
  *   10/26/1995 BRR : Created.                                             *
  *=========================================================================*/
-unsigned long VersionClass::Max_Version(void)
-{
+unsigned long VersionClass::Max_Version(void) {
 #ifdef DEV_VERSION
 	return (Version_Number());
 #else
@@ -702,32 +703,30 @@ unsigned long VersionClass::Max_Version(void)
 
 #else
 
-#ifdef FIXIT_CSII	//	checked - ajw
+#ifdef FIXIT_CSII //	checked - ajw
 	return (MAX_VERSION);
 #else
- #ifdef FIXIT_VERSION
+#ifdef FIXIT_VERSION
 	if (Is_Counterstrike_Installed() == false) {
 		return (MAX_VERSION - CS_MINOR_VERSION_MODIFIER);
 	} else {
 		return (MAX_VERSION);
 	}
- #else
-	if ( Is_Counterstrike_Installed() ){
+#else
+	if (Is_Counterstrike_Installed()) {
 		return (MAX_VERSION + CS_MINOR_VERSION_MODIFIER);
-	}else{
+	} else {
 		return (MAX_VERSION);
 	}
- #endif
 #endif
 #endif
+#endif
 
-#endif	//	FIXIT_VERSION_3
+#endif //	FIXIT_VERSION_3
 
-}	/* end of Max_Version */
+} /* end of Max_Version */
 
-
-char const * Version_Name(void)
-{
+char const *Version_Name(void) {
 #ifdef NEVER
 	static char buffer[32];
 
@@ -735,11 +734,11 @@ char const * Version_Name(void)
 	**	Fetch the day and month components from the current
 	**	build date.
 	*/
-	static char * date = __DATE__;		// format: Mmm dd yyyy
+	static char *date = __DATE__; // format: Mmm dd yyyy
 	strupr(date);
-	char const * tok = strtok(date, " ");
-	static char const * months = "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC";
-	char const * ptr = strstr(months, tok);
+	char const *tok = strtok(date, " ");
+	static char const *months = "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC";
+	char const *ptr = strstr(months, tok);
 	int monthnum = 0;
 	if (ptr != NULL) {
 		monthnum = (((ptr - months) / 3) + 1);
@@ -754,7 +753,7 @@ char const * Version_Name(void)
 	/*
 	**	Fetch the time components from the current build time.
 	*/
-	static char * time = __TIME__;		// format: hh:mm:ss
+	static char *time = __TIME__; // format: hh:mm:ss
 	tok = strtok(time, ": ");
 	int hournum = 0;
 	if (tok != NULL) {
@@ -767,8 +766,8 @@ char const * Version_Name(void)
 		minnum = atoi(tok);
 	}
 
-	sprintf(buffer, "%02d%02d%02d", monthnum, daynum, (hournum*4) + (minnum / 15));
-	return(buffer);
+	sprintf(buffer, "%02d%02d%02d", monthnum, daynum, (hournum * 4) + (minnum / 15));
+	return (buffer);
 #else
 
 	static char buffer[128];
@@ -776,47 +775,47 @@ char const * Version_Name(void)
 	memset(buffer, '\0', sizeof(buffer));
 
 #ifdef FIXIT_VERSION_3
-	strcpy( buffer, "3.03" );
+	strcpy(buffer, "3.03");
 
-	#ifdef ENGLISH
+#ifdef ENGLISH
 	strcat(buffer, "E");
-	#else
-		#ifdef GERMAN
-		strcat(buffer, "G");
-		#else
-			#ifdef FRENCH
-			strcat(buffer, "F");
-			#endif
-		#endif
-	#endif
+#else
+#ifdef GERMAN
+	strcat(buffer, "G");
+#else
+#ifdef FRENCH
+	strcat(buffer, "F");
+#endif
+#endif
+#endif
 
-#else	//	FIXIT_VERSION_3
+#else //	FIXIT_VERSION_3
 
 #ifdef FIXIT_PATCH_108
-	//strcpy(buffer, "1.08PE");
-    strcpy(buffer, "1.08P");
+	// strcpy(buffer, "1.08PE");
+	strcpy(buffer, "1.08P");
 
 #ifdef FIXIT_CSII
-	strcpy(buffer,"2.00");
+	strcpy(buffer, "2.00");
 #ifdef DEV_VERSION
-	strcpy(buffer,VerNum.Version_Name());
+	strcpy(buffer, VerNum.Version_Name());
 #endif
 #ifdef DEV_VER_NAME
-	strcpy(buffer,__DATE__);		// format: Mmm dd yyyy
+	strcpy(buffer, __DATE__); // format: Mmm dd yyyy
 #endif
 #endif
 
-	#ifdef ENGLISH
+#ifdef ENGLISH
 	strcat(buffer, "E");
-	#else
-		#ifdef GERMAN
-		strcat(buffer, "G");
-		#else
-			#ifdef FRENCH
-			strcat(buffer, "F");
-			#endif
-		#endif
-	#endif
+#else
+#ifdef GERMAN
+	strcat(buffer, "G");
+#else
+#ifdef FRENCH
+	strcat(buffer, "F");
+#endif
+#endif
+#endif
 
 #else
 	strcpy(buffer, "1.07E");
@@ -824,19 +823,19 @@ char const * Version_Name(void)
 
 #endif //	FIXIT_VERSION_3
 
-	if (Is_Counterstrike_Installed ()){
-		strcat (buffer, "CS");
+	if (Is_Counterstrike_Installed()) {
+		strcat(buffer, "CS");
 	}
 	if (Is_Aftermath_Installed()) {
-		strcat (buffer, "AM");
+		strcat(buffer, "AM");
 	}
 
-#if(TEN)
-	strcat(buffer, "Ten");		// Ten version
+#if (TEN)
+	strcat(buffer, "Ten"); // Ten version
 #endif
 
-#if(MPATH)
-	strcat(buffer, "MPath");	// MPath version
+#if (MPATH)
+	strcat(buffer, "MPath"); // MPath version
 #endif
 
 	RawFileClass file("VERSION.TXT");
@@ -844,7 +843,7 @@ char const * Version_Name(void)
 		strcat(buffer, "\r");
 		file.Read(&buffer[strlen(buffer)], 25);
 	}
-	return(buffer);
+	return (buffer);
 #endif
 }
 #endif

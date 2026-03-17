@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/DOOR.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -37,9 +37,7 @@
  *   DoorClass::Open_Door -- Opens the door for this unit.                                     *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"function.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * DoorClass::DoorClass -- Constructor for the DoorClass object.                               *
@@ -55,13 +53,11 @@
  * HISTORY:                                                                                    *
  *   06/14/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-DoorClass::DoorClass(void)
-{
+DoorClass::DoorClass(void) {
 	State = IS_CLOSED;
 	IsToRedraw = false;
 	Stages = 0;
 }
-
 
 /***********************************************************************************************
  * DoorClass::AI -- Handles the door processing logic.                                         *
@@ -78,25 +74,23 @@ DoorClass::DoorClass(void)
  * HISTORY:                                                                                    *
  *   06/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void DoorClass::AI(void)
-{
+void DoorClass::AI(void) {
 	if (Control.Graphic_Logic()) {
 		if (Control.Fetch_Stage() >= Stages) {
 			Control.Set_Rate(0);
 			switch (State) {
-				case IS_OPENING:
-					State = IS_OPEN;
-					break;
+			case IS_OPENING:
+				State = IS_OPEN;
+				break;
 
-				case IS_CLOSING:
-					State = IS_CLOSED;
-					break;
+			case IS_CLOSING:
+				State = IS_CLOSED;
+				break;
 			}
 		}
 		IsToRedraw = true;
 	}
 }
-
 
 /***********************************************************************************************
  * DoorClass::Open_Door -- Opens the door for this unit.                                       *
@@ -115,20 +109,18 @@ void DoorClass::AI(void)
  * HISTORY:                                                                                    *
  *   05/08/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool DoorClass::Open_Door(int rate, int stages)
-{
+bool DoorClass::Open_Door(int rate, int stages) {
 	switch (State) {
-		case IS_CLOSED:
-		case IS_CLOSING:
-			State = IS_OPENING;
-			Stages = stages-1;
-			Control.Set_Stage(0);
-			Control.Set_Rate(rate);
-			return(true);
+	case IS_CLOSED:
+	case IS_CLOSING:
+		State = IS_OPENING;
+		Stages = stages - 1;
+		Control.Set_Stage(0);
+		Control.Set_Rate(rate);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * DoorClass::Close_Door -- Try to close the unit's door.                                      *
@@ -147,20 +139,18 @@ bool DoorClass::Open_Door(int rate, int stages)
  * HISTORY:                                                                                    *
  *   05/08/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool DoorClass::Close_Door(int rate, int stages)
-{
+bool DoorClass::Close_Door(int rate, int stages) {
 	switch (State) {
-		case IS_OPEN:
-		case IS_OPENING:
-			State = IS_CLOSING;
-			Stages = stages-1;
-			Control.Set_Stage(0);
-			Control.Set_Rate(rate);
-			return(true);
+	case IS_OPEN:
+	case IS_OPENING:
+		State = IS_CLOSING;
+		Stages = stages - 1;
+		Control.Set_Stage(0);
+		Control.Set_Rate(rate);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * DoorClass::Door_Stage -- Fetches the current door animation frame.                          *
@@ -180,20 +170,19 @@ bool DoorClass::Close_Door(int rate, int stages)
  * HISTORY:                                                                                    *
  *   06/14/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int DoorClass::Door_Stage(void) const
-{
+int DoorClass::Door_Stage(void) const {
 	switch (State) {
-		case IS_CLOSING:
-			return((Stages-1) - Control.Fetch_Stage());
+	case IS_CLOSING:
+		return ((Stages - 1) - Control.Fetch_Stage());
 
-		case IS_CLOSED:
-			return(0);
+	case IS_CLOSED:
+		return (0);
 
-		case IS_OPENING:
-			return(Control.Fetch_Stage());
+	case IS_OPENING:
+		return (Control.Fetch_Stage());
 
-		case IS_OPEN:
-			return(Stages-1);
+	case IS_OPEN:
+		return (Stages - 1);
 	}
-	return(0);
+	return (0);
 }

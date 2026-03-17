@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/BASE64.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -34,9 +34,8 @@
  *   Base64_Encode -- Encode data into Base 64 format.                                         *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
 #include "base64.h"
-#include	<stddef.h>
+#include <stddef.h>
 
 /*
 **	This is the magic padding character used to fill out the encoded data to a multiple of
@@ -44,40 +43,34 @@
 **	The pad character lets the decoder know of this condition and it will compensate
 **	accordingly.
 */
-static char const * const _pad = "=";
+static char const *const _pad = "=";
 
 /*
 **	This encoder translation table will convert a 6 bit number into an ASCII character.
 */
-static char const * const _encoder = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static char const *const _encoder = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /*
 **	The decoder translation table takes an ASCII character and converts it into a
 **	6 bit number.
 */
-#define	BAD	0xFE			// Ignore this character in source data.
-#define	END	0xFF			// Signifies premature end of input data.
+#define BAD 0xFE // Ignore this character in source data.
+#define END 0xFF // Signifies premature end of input data.
 static unsigned char const _decoder[256] = {
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,62,BAD,BAD,BAD,63,
-	52,53,54,55,56,57,58,59,60,61,BAD,BAD,BAD,END,BAD,BAD,
-	BAD,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,
-	15,16,17,18,19,20,21,22,23,24,25,BAD,BAD,BAD,BAD,BAD,
-	BAD,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,
-	41,42,43,44,45,46,47,48,49,50,51,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,
-	BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD,BAD
-};
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, 62,
+    BAD, BAD, BAD, 63,	52,  53,  54,  55,  56,	 57,  58,  59,	60,  61,  BAD, BAD, BAD, END, BAD, BAD, BAD, 0,
+    1,	 2,   3,   4,	5,   6,	  7,   8,   9,	 10,  11,  12,	13,  14,  15,  16,  17,	 18,  19,  20,	21,  22,
+    23,	 24,  25,  BAD, BAD, BAD, BAD, BAD, BAD, 26,  27,  28,	29,  30,  31,  32,  33,	 34,  35,  36,	37,  38,
+    39,	 40,  41,  42,	43,  44,  45,  46,  47,	 48,  49,  50,	51,  BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD,
+    BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD, BAD};
 
 int const PacketChars = 4;
-
 
 /*
 **	The packet type is used to construct and disect the Base64 data blocks. The data
@@ -98,21 +91,20 @@ typedef union {
 	} Char;
 	struct {
 #ifdef BIG_ENDIAN
-		unsigned O1:6;
-		unsigned O2:6;
-		unsigned O3:6;
-		unsigned O4:6;
+		unsigned O1 : 6;
+		unsigned O2 : 6;
+		unsigned O3 : 6;
+		unsigned O4 : 6;
 #else
-		unsigned O4:6;
-		unsigned O3:6;
-		unsigned O2:6;
-		unsigned O1:6;
+		unsigned O4 : 6;
+		unsigned O3 : 6;
+		unsigned O2 : 6;
+		unsigned O1 : 6;
 #endif
-		unsigned pad:8;
+		unsigned pad : 8;
 	} SubCode;
 	unsigned int Raw;
-}	PacketType;
-
+} PacketType;
 
 /***********************************************************************************************
  * Base64_Encode -- Encode data into Base 64 format.                                           *
@@ -137,13 +129,12 @@ typedef union {
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int Base64_Encode(void const * source, int slen, void * dest, int dlen)
-{
+int Base64_Encode(void const *source, int slen, void *dest, int dlen) {
 	/*
 	**	Check the parameters for legality.
 	*/
 	if (source == NULL || slen == 0 || dest == NULL || dlen == 0) {
-		return(0);
+		return (0);
 	}
 
 	/*
@@ -152,8 +143,8 @@ int Base64_Encode(void const * source, int slen, void * dest, int dlen)
 	**	during the decode process).
 	*/
 	int total = 0;
-	unsigned char const * sptr = (unsigned char const *)source;
-	unsigned char * dptr = (unsigned char *)dest;
+	unsigned char const *sptr = (unsigned char const *)source;
+	unsigned char *dptr = (unsigned char *)dest;
 	while (slen > 0 && dlen >= PacketChars) {
 
 		/*
@@ -209,9 +200,8 @@ int Base64_Encode(void const * source, int slen, void * dest, int dlen)
 	/*
 	**	Return with the total number of characters in the output buffer.
 	*/
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * Base64_Decode -- Decodes Base 64 data into its original data form.                          *
@@ -238,18 +228,17 @@ int Base64_Encode(void const * source, int slen, void * dest, int dlen)
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int Base64_Decode(void const * source, int slen, void * dest, int dlen)
-{
+int Base64_Decode(void const *source, int slen, void *dest, int dlen) {
 	/*
 	**	Check the parameters for legality.
 	*/
 	if (source == NULL || slen == 0 || dest == NULL || dlen == 0) {
-		return(0);
+		return (0);
 	}
 
 	int total = 0;
-	unsigned char const * sptr = (unsigned char const *)source;
-	unsigned char * dptr = (unsigned char *)dest;
+	unsigned char const *sptr = (unsigned char const *)source;
+	unsigned char *dptr = (unsigned char *)dest;
 	while (slen > 0 && dlen > 0) {
 
 		PacketType packet;
@@ -269,7 +258,8 @@ int Base64_Decode(void const * source, int slen, void * dest, int dlen)
 			/*
 			**	An unrecognized character is skipped.
 			*/
-			if (code == BAD) continue;
+			if (code == BAD)
+				continue;
 
 			/*
 			**	The "=" character signifies the end of data regardless of what
@@ -285,18 +275,18 @@ int Base64_Decode(void const * source, int slen, void * dest, int dlen)
 			**	data.
 			*/
 			switch (pcount) {
-				case 0:
-					packet.SubCode.O1 = code;
-					break;
-				case 1:
-					packet.SubCode.O2 = code;
-					break;
-				case 2:
-					packet.SubCode.O3 = code;
-					break;
-				case 3:
-					packet.SubCode.O4 = code;
-					break;
+			case 0:
+				packet.SubCode.O1 = code;
+				break;
+			case 1:
+				packet.SubCode.O2 = code;
+				break;
+			case 2:
+				packet.SubCode.O3 = code;
+				break;
+			case 3:
+				packet.SubCode.O4 = code;
+				break;
 			}
 			pcount++;
 		}
@@ -323,9 +313,8 @@ int Base64_Decode(void const * source, int slen, void * dest, int dlen)
 	**	Return with the total number of characters decoded into the
 	**	output buffer.
 	*/
-	return(total);
+	return (total);
 }
-
 
 /*
 Base64 Content-Transfer-Encoding

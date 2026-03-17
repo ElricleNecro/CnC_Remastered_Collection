@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/LZW.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -37,27 +37,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include	"xstraw.h"
-#include	"xpipe.h"
-#include	"buff.h"
-#include	"lzw.h"
+#include "buff.h"
+#include "lzw.h"
+#include "xpipe.h"
+#include "xstraw.h"
 
+LZWEngine::LZWEngine(void) { Reset(); }
 
-LZWEngine::LZWEngine(void)
-{
-	Reset();
-}
-
-
-void LZWEngine::Reset(void)
-{
+void LZWEngine::Reset(void) {
 	for (int i = 0; i < TABLE_SIZE; i++) {
 		dict[i].Make_Unused();
 	}
 }
 
-int LZWEngine::Compress(Buffer const & input, Buffer const & output)
-{
+int LZWEngine::Compress(Buffer const &input, Buffer const &output) {
 	BufferStraw instraw(input);
 	BufferPipe outpipe(output);
 
@@ -78,7 +71,8 @@ int LZWEngine::Compress(Buffer const & input, Buffer const & output)
 		**	can be written out.
 		*/
 		unsigned char character;
-		if (instraw.Get(&character, sizeof(character)) == 0) break;
+		if (instraw.Get(&character, sizeof(character)) == 0)
+			break;
 
 		/*
 		**	See if there is a match for the current code and current
@@ -126,19 +120,17 @@ int LZWEngine::Compress(Buffer const & input, Buffer const & output)
 		outcount += outpipe.Put(&string_code, sizeof(string_code));
 	}
 
-	return(outcount);
+	return (outcount);
 }
 
-
-int LZWEngine::Uncompress(Buffer const & input, Buffer const & output)
-{
+int LZWEngine::Uncompress(Buffer const &input, Buffer const &output) {
 	int outcount = 0;
 	BufferStraw instraw(input);
 	BufferPipe outpipe(output);
 
 	CodeType old_code;
 	if (instraw.Get(&old_code, sizeof(old_code)) == 0) {
-		return(outcount);
+		return (outcount);
 	}
 
 	unsigned char character = (unsigned char)old_code;
@@ -148,9 +140,11 @@ int LZWEngine::Uncompress(Buffer const & input, Buffer const & output)
 	CodeType new_code;
 	CodeType next_code = FIRST_CODE;
 	for (;;) {
-		if (instraw.Get(&new_code, sizeof(new_code)) == 0) break;
+		if (instraw.Get(&new_code, sizeof(new_code)) == 0)
+			break;
 
-		if (new_code == END_OF_STREAM) break;
+		if (new_code == END_OF_STREAM)
+			break;
 
 		/*
 		** This code checks for the CHARACTER+STRING+CHARACTER+STRING+CHARACTER
@@ -165,7 +159,7 @@ int LZWEngine::Uncompress(Buffer const & input, Buffer const & output)
 			count = Decode_String(decode_stack, new_code);
 		}
 
-		character = decode_stack[count-1];
+		character = decode_stack[count - 1];
 		while (count > 0) {
 			--count;
 			outcount += outpipe.Put(&decode_stack[count], sizeof(decode_stack[0]));
@@ -182,18 +176,14 @@ int LZWEngine::Uncompress(Buffer const & input, Buffer const & output)
 		old_code = new_code;
 	}
 
-	return(outcount);
+	return (outcount);
 }
 
-
-int LZWEngine::Make_LZW_Hash(CodeType code, char character)
-{
-	return((((int)(unsigned char)character) << ( BITS - 8 ) ) ^ (int)code);
+int LZWEngine::Make_LZW_Hash(CodeType code, char character) {
+	return ((((int)(unsigned char)character) << (BITS - 8)) ^ (int)code);
 }
 
-
-int LZWEngine::Find_Child_Node(CodeType parent_code, char child_character)
-{
+int LZWEngine::Find_Child_Node(CodeType parent_code, char child_character) {
 	/*
 	**	Fetch the first try index for the code and character.
 	*/
@@ -219,7 +209,8 @@ int LZWEngine::Find_Child_Node(CodeType parent_code, char child_character)
 		**	Stop searching if an unused index is found since this means that
 		**	a match doesn't exist in the table at all.
 		*/
-		if (dict[hash_index].Is_Unused()) break;
+		if (dict[hash_index].Is_Unused())
+			break;
 
 		/*
 		**	Bump the hash index to another value such that sequential bumps
@@ -241,12 +232,10 @@ int LZWEngine::Find_Child_Node(CodeType parent_code, char child_character)
 			break;
 		}
 	}
-	return(hash_index);
+	return (hash_index);
 }
 
-
-int LZWEngine::Decode_String(char * ptr, CodeType code)
-{
+int LZWEngine::Decode_String(char *ptr, CodeType code) {
 	int count = 0;
 	while (code > 255) {
 		*ptr++ = dict[code].CharValue;
@@ -255,41 +244,32 @@ int LZWEngine::Decode_String(char * ptr, CodeType code)
 	}
 	*ptr = (char)code;
 	count++;
-	return(count);
+	return (count);
 }
 
-
-int LZW_Uncompress(Buffer const & inbuff, Buffer const & outbuff)
-{
+int LZW_Uncompress(Buffer const &inbuff, Buffer const &outbuff) {
 	LZWEngine lzw;
-	return(lzw.Uncompress(inbuff, outbuff));
+	return (lzw.Uncompress(inbuff, outbuff));
 }
 
-
-int LZW_Compress(Buffer const & inbuff, Buffer const & outbuff)
-{
+int LZW_Compress(Buffer const &inbuff, Buffer const &outbuff) {
 	LZWEngine lzw;
-	return(lzw.Compress(inbuff, outbuff));
+	return (lzw.Compress(inbuff, outbuff));
 }
-
-
-
-
 
 #ifdef NEVER
-
 
 /*
  * Constants used throughout the program.  BITS defines how many bits
  * will be in a code.  TABLE_SIZE defines the size of the dictionary
  * table.
  */
-#define BITS                       12
-#define MAX_CODE                   ( ( 1 << BITS ) - 1 )
-#define TABLE_SIZE                 5021
-#define END_OF_STREAM              256
-#define FIRST_CODE                 257
-#define UNUSED                     -1
+#define BITS 12
+#define MAX_CODE ((1 << BITS) - 1)
+#define TABLE_SIZE 5021
+#define END_OF_STREAM 256
+#define FIRST_CODE 257
+#define UNUSED -1
 
 typedef unsigned short CodeType;
 
@@ -300,8 +280,7 @@ typedef unsigned short CodeType;
  * character.  Code values of less than 256 are actually plain
  * text codes.
  */
-struct CodeClass
-{
+struct CodeClass {
 	CodeType CodeValue;
 	CodeType ParentCode;
 	char CharValue;
@@ -309,19 +288,17 @@ struct CodeClass
 	CodeClass(void) {}
 	CodeClass(CodeType code, CodeType parent, char c) : CodeValue(code), ParentCode(parent), CharValue(c) {}
 
-	void Make_Unused(void) {CodeValue = UNUSED;}
-	bool Is_Unused(void) const {return(CodeValue == UNUSED);}
-	bool Is_Matching(CodeType code, char c) const {return(ParentCode == code && CharValue == c);}
+	void Make_Unused(void) { CodeValue = UNUSED; }
+	bool Is_Unused(void) const { return (CodeValue == UNUSED); }
+	bool Is_Matching(CodeType code, char c) const { return (ParentCode == code && CharValue == c); }
 };
 CodeClass dict[TABLE_SIZE];
 
 char decode_stack[TABLE_SIZE];
 
-inline int Make_LZW_Hash(CodeType code, char character)
-{
-	return((((int)(unsigned char)character) << ( BITS - 8 ) ) ^ (int)code);
+inline int Make_LZW_Hash(CodeType code, char character) {
+	return ((((int)(unsigned char)character) << (BITS - 8)) ^ (int)code);
 }
-
 
 /***********************************************************************************************
  * Find_Child_Node -- Find a matching dictionary entry.                                        *
@@ -345,8 +322,7 @@ inline int Make_LZW_Hash(CodeType code, char character)
  * HISTORY:                                                                                    *
  *   08/28/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-static int Find_Child_Node(CodeType parent_code, char child_character)
-{
+static int Find_Child_Node(CodeType parent_code, char child_character) {
 	/*
 	**	Fetch the first try index for the code and character.
 	*/
@@ -372,7 +348,8 @@ static int Find_Child_Node(CodeType parent_code, char child_character)
 		**	Stop searching if an unused index is found since this means that
 		**	a match doesn't exist in the table at all.
 		*/
-		if (dict[hash_index].Is_Unused()) break;
+		if (dict[hash_index].Is_Unused())
+			break;
 
 		/*
 		**	Bump the hash index to another value such that sequential bumps
@@ -394,17 +371,15 @@ static int Find_Child_Node(CodeType parent_code, char child_character)
 			break;
 		}
 	}
-	return(hash_index);
+	return (hash_index);
 }
-
 
 /*
  * This routine decodes a string from the dictionary, and stores it
  * in the decode_stack data structure.  It returns a count to the
  * calling program of how many characters were placed in the stack.
  */
-static int Decode_String(char * ptr, CodeType code)
-{
+static int Decode_String(char *ptr, CodeType code) {
 	int count = 0;
 	while (code > 255) {
 		*ptr++ = dict[code].CharValue;
@@ -413,9 +388,8 @@ static int Decode_String(char * ptr, CodeType code)
 	}
 	*ptr = (char)code;
 	count++;
-	return(count);
+	return (count);
 }
-
 
 /*
  * The compressor is short and simple.  It reads in new symbols one
@@ -427,14 +401,13 @@ static int Decode_String(char * ptr, CodeType code)
  * our new code.
  */
 
-int LZW_Compress(Buffer & inbuff, Buffer & outbuff)
-{
+int LZW_Compress(Buffer &inbuff, Buffer &outbuff) {
 	BufferStraw input(inbuff);
 	BufferPipe output(outbuff);
 
 	for (int i = 0; i < TABLE_SIZE; i++) {
 		dict[i].Make_Unused();
-//		dict[i].code_value = UNUSED;
+		//		dict[i].code_value = UNUSED;
 	}
 
 	int outcount = 0;
@@ -443,7 +416,8 @@ int LZW_Compress(Buffer & inbuff, Buffer & outbuff)
 	for (;;) {
 		char character;
 
-		if (input.Get(&character, sizeof(character)) == 0) break;
+		if (input.Get(&character, sizeof(character)) == 0)
+			break;
 
 		int index = Find_Child_Node(string_code, character);
 
@@ -453,7 +427,7 @@ int LZW_Compress(Buffer & inbuff, Buffer & outbuff)
 		} else {
 
 			if (dict[index].CodeValue != -1) {
-				string_code = dict[ index ].CodeValue;
+				string_code = dict[index].CodeValue;
 			} else {
 				if (next_code <= MAX_CODE) {
 					dict[index] = CodeClass(next_code++, string_code, character);
@@ -468,9 +442,8 @@ int LZW_Compress(Buffer & inbuff, Buffer & outbuff)
 	string_code = END_OF_STREAM;
 	outcount += output.Put(&string_code, sizeof(string_code));
 
-	return(outcount);
+	return (outcount);
 }
-
 
 /*
  * The file expander operates much like the encoder.  It has to
@@ -480,15 +453,14 @@ int LZW_Compress(Buffer & inbuff, Buffer & outbuff)
  * occurs, the encoder outputs a code that is not presently defined
  * in the table.  This is handled as an exception.
  */
-int LZW_Uncompress(Buffer & inbuff, Buffer & outbuff)
-{
+int LZW_Uncompress(Buffer &inbuff, Buffer &outbuff) {
 	int outcount = 0;
 	BufferStraw input(inbuff);
 	BufferPipe output(outbuff);
 
 	CodeType old_code;
 	if (input.Get(&old_code, sizeof(old_code)) == 0) {
-		return(outcount);
+		return (outcount);
 	}
 
 	char character = (char)old_code;
@@ -498,7 +470,8 @@ int LZW_Uncompress(Buffer & inbuff, Buffer & outbuff)
 	CodeType new_code;
 	CodeType next_code = FIRST_CODE;
 	for (;;) {
-		if (input.Get(&new_code, sizeof(new_code)) == 0) break;
+		if (input.Get(&new_code, sizeof(new_code)) == 0)
+			break;
 
 		/*
 		** This code checks for the CHARACTER+STRING+CHARACTER+STRING+CHARACTER
@@ -513,7 +486,7 @@ int LZW_Uncompress(Buffer & inbuff, Buffer & outbuff)
 			count = Decode_String(decode_stack, new_code);
 		}
 
-		character = decode_stack[count-1];
+		character = decode_stack[count - 1];
 		while (count > 0) {
 			--count;
 			outcount += output.Put(&decode_stack[count], sizeof(decode_stack[0]));
@@ -530,7 +503,7 @@ int LZW_Uncompress(Buffer & inbuff, Buffer & outbuff)
 		old_code = new_code;
 	}
 
-	return(outcount);
+	return (outcount);
 }
 
 #endif

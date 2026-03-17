@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/MAPEDSEL.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -40,10 +40,9 @@
  *   MapEditClass::Select_Object -- selects an object for processing       *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
+#include "function.h"
 
 #ifdef SCENARIO_EDITOR
-
 
 /***************************************************************************
  * Select_Object -- selects an object for processing                       *
@@ -60,12 +59,11 @@
  * HISTORY:                                                                *
  *   11/04/1994 BR : Created.                                              *
  *=========================================================================*/
-int MapEditClass::Select_Object(void)
-{
-	ObjectClass	* object=NULL;		// Generic object clicked on.
-	int			x,y;
-	CELL			cell;					// Cell that was selected.
-	int			rc=0;
+int MapEditClass::Select_Object(void) {
+	ObjectClass *object = NULL; // Generic object clicked on.
+	int x, y;
+	CELL cell; // Cell that was selected.
+	int rc = 0;
 
 	/*
 	**	See if an object was clicked on
@@ -81,8 +79,8 @@ int MapEditClass::Select_Object(void)
 	/*
 	**	Convert x,y to offset from cell upper-left
 	*/
-	x = (x-TacPixelX) % ICON_PIXEL_W;
-	y = (y-TacPixelY) % ICON_PIXEL_H;
+	x = (x - TacPixelX) % ICON_PIXEL_W;
+	y = (y - TacPixelY) % ICON_PIXEL_H;
 
 	/*
 	**	Get object at that x,y
@@ -138,9 +136,8 @@ int MapEditClass::Select_Object(void)
 	HidPage.Clear();
 	Flag_To_Redraw(true);
 
-	return(rc);
+	return (rc);
 }
-
 
 /***************************************************************************
  * MapEditClass::Select_Next -- selects next object on the map             *
@@ -157,16 +154,15 @@ int MapEditClass::Select_Object(void)
  * HISTORY:                                                                *
  *   11/22/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Select_Next(void)
-{
-	ObjectClass * obj;
+void MapEditClass::Select_Next(void) {
+	ObjectClass *obj;
 	CELL obj_cell;
-	int smap_w;						// screen map width in icons
-	int smap_h;						// screen map height in icons
-	int cell_x;						// cell-x of next object
-	int cell_y;						// cell-y of next object
-	int tcell_x;					// cell-x of TacticalCell
-	int tcell_y;					// cell-y of TacticalCell
+	int smap_w;  // screen map width in icons
+	int smap_h;  // screen map height in icons
+	int cell_x;  // cell-x of next object
+	int cell_y;  // cell-y of next object
+	int tcell_x; // cell-x of TacticalCell
+	int tcell_y; // cell-y of TacticalCell
 
 	/*
 	**	Get next object on the map
@@ -179,7 +175,7 @@ void MapEditClass::Select_Next(void)
 		*/
 		Unselect_All();
 
-	 	/*
+		/*
 		**	Select this object
 		*/
 		obj->Select();
@@ -244,7 +240,6 @@ void MapEditClass::Select_Next(void)
 	Flag_To_Redraw(true);
 }
 
-
 /***************************************************************************
  * MapEditClass::Popup_Controls -- shows/hides the pop-up object controls  *
  *                                                                         *
@@ -266,12 +261,11 @@ void MapEditClass::Select_Next(void)
  *   11/22/1994 BR : Created.                                              *
  *   04/30/1996 JLB : Revamped for new buttons and stuff.                  *
  *=========================================================================*/
-void MapEditClass::Popup_Controls(void)
-{
-	const TechnoTypeClass * objtype = NULL;
-	HousesType owner;							// object's current owner
-	int mission_index;						// object's current mission
-	int strength;								// object's 0-255 strength value
+void MapEditClass::Popup_Controls(void) {
+	const TechnoTypeClass *objtype = NULL;
+	HousesType owner;  // object's current owner
+	int mission_index; // object's current mission
+	int strength;	   // object's 0-255 strength value
 	int i;
 
 	/*
@@ -326,55 +320,55 @@ void MapEditClass::Popup_Controls(void)
 			mission_index = i;
 		}
 	}
-	strength = CurrentObject[0]->Health_Ratio()*256;
+	strength = CurrentObject[0]->Health_Ratio() * 256;
 
 	switch (objtype->What_Am_I()) {
-		case RTTI_VESSELTYPE:
-		case RTTI_UNITTYPE:
-		case RTTI_INFANTRYTYPE:
-		case RTTI_AIRCRAFTTYPE:
-			MissionList->Set_Selected_Index(mission_index);
-			HealthGauge->Set_Value(strength);
-			sprintf(HealthBuf, "%d", CurrentObject[0]->Strength);
+	case RTTI_VESSELTYPE:
+	case RTTI_UNITTYPE:
+	case RTTI_INFANTRYTYPE:
+	case RTTI_AIRCRAFTTYPE:
+		MissionList->Set_Selected_Index(mission_index);
+		HealthGauge->Set_Value(strength);
+		sprintf(HealthBuf, "%d", CurrentObject[0]->Strength);
+		FacingDial->Set_Direction(((TechnoClass *)CurrentObject[0])->PrimaryFacing);
+
+		/*
+		**	Make the list.
+		*/
+		Add_A_Button(*HealthGauge);
+		Add_A_Button(*HouseList);
+		HouseList->Set_Selected_Index(owner);
+		Add_A_Button(*MissionList);
+		Add_A_Button(*HealthText);
+		Add_A_Button(*FacingDial);
+		break;
+
+	case RTTI_BUILDINGTYPE:
+		HealthGauge->Set_Value(strength);
+		sprintf(HealthBuf, "%d", CurrentObject[0]->Strength);
+		Add_A_Button(*HealthGauge);
+		Add_A_Button(*HouseList);
+		HouseList->Set_Selected_Index(owner);
+		Add_A_Button(*HealthText);
+
+		Add_A_Button(*Sellable);
+		if (((BuildingClass *)CurrentObject[0])->IsAllowedToSell) {
+			Sellable->Turn_On();
+		} else {
+			Sellable->Turn_Off();
+		}
+		Add_A_Button(*Rebuildable);
+		if (((BuildingClass *)CurrentObject[0])->IsToRebuild) {
+			Rebuildable->Turn_On();
+		} else {
+			Rebuildable->Turn_Off();
+		}
+
+		if (objtype->IsTurretEquipped) {
 			FacingDial->Set_Direction(((TechnoClass *)CurrentObject[0])->PrimaryFacing);
-
-			/*
-			**	Make the list.
-			*/
-			Add_A_Button(*HealthGauge);
-			Add_A_Button(*HouseList);
-			HouseList->Set_Selected_Index(owner);
-			Add_A_Button(*MissionList);
-			Add_A_Button(*HealthText);
 			Add_A_Button(*FacingDial);
-			break;
-
-		case RTTI_BUILDINGTYPE:
-			HealthGauge->Set_Value(strength);
-			sprintf(HealthBuf, "%d", CurrentObject[0]->Strength);
-			Add_A_Button(*HealthGauge);
-			Add_A_Button(*HouseList);
-			HouseList->Set_Selected_Index(owner);
-			Add_A_Button(*HealthText);
-
-			Add_A_Button(*Sellable);
-			if (((BuildingClass*)CurrentObject[0])->IsAllowedToSell) {
-				Sellable->Turn_On();
-			} else {
-				Sellable->Turn_Off();
-			}
-			Add_A_Button(*Rebuildable);
-			if (((BuildingClass*)CurrentObject[0])->IsToRebuild) {
-				Rebuildable->Turn_On();
-			} else {
-				Rebuildable->Turn_Off();
-			}
-
-			if (objtype->IsTurretEquipped) {
-				FacingDial->Set_Direction(((TechnoClass *) CurrentObject[0])->PrimaryFacing);
-				Add_A_Button(*FacingDial);
-			}
-			break;
+		}
+		break;
 	}
 
 	/*
@@ -385,7 +379,6 @@ void MapEditClass::Popup_Controls(void)
 	Add_A_Button(*BaseLabel);
 	Add_A_Button(*MapArea);
 }
-
 
 /***************************************************************************
  * MapEditClass::Grab_Object -- grabs the current object                   *
@@ -402,8 +395,7 @@ void MapEditClass::Popup_Controls(void)
  * HISTORY:                                                                *
  *   11/07/1994 BR : Created.                                              *
  *=========================================================================*/
-void MapEditClass::Grab_Object(void)
-{
+void MapEditClass::Grab_Object(void) {
 	CELL cell;
 
 	if (CurrentObject.Count()) {
@@ -416,7 +408,6 @@ void MapEditClass::Grab_Object(void)
 		GrabOffset = cell - ZoneCell;
 	}
 }
-
 
 /***************************************************************************
  * MapEditClass::Move_Grabbed_Object -- moves the grabbed object           *
@@ -433,8 +424,7 @@ void MapEditClass::Grab_Object(void)
  * HISTORY:                                                                *
  *   11/07/1994 BR : Created.                                              *
  *=========================================================================*/
-int MapEditClass::Move_Grabbed_Object(void)
-{
+int MapEditClass::Move_Grabbed_Object(void) {
 	COORDINATE new_coord = 0;
 	int retval = -1;
 
@@ -466,8 +456,7 @@ int MapEditClass::Move_Grabbed_Object(void)
 		*/
 		new_coord = Cell_Coord(ZoneCell + GrabOffset);
 
-		if (GrabbedObject->What_Am_I() == RTTI_BUILDING ||
-			GrabbedObject->What_Am_I() == RTTI_TERRAIN) {
+		if (GrabbedObject->What_Am_I() == RTTI_BUILDING || GrabbedObject->What_Am_I() == RTTI_TERRAIN) {
 
 			new_coord = Coord_Whole(new_coord);
 		}
@@ -485,9 +474,8 @@ int MapEditClass::Move_Grabbed_Object(void)
 		** If this object is part of the AI's Base list, change the coordinate
 		** in the Base's Node list.
 		*/
-		if (GrabbedObject->What_Am_I()==RTTI_BUILDING &&
-			Base.Get_Node((BuildingClass *)GrabbedObject))
-				Base.Get_Node((BuildingClass *)GrabbedObject)->Cell = Coord_Cell(new_coord);
+		if (GrabbedObject->What_Am_I() == RTTI_BUILDING && Base.Get_Node((BuildingClass *)GrabbedObject))
+			Base.Get_Node((BuildingClass *)GrabbedObject)->Cell = Coord_Cell(new_coord);
 
 		GrabbedObject->Coord = new_coord;
 		retval = 0;
@@ -509,9 +497,8 @@ int MapEditClass::Move_Grabbed_Object(void)
 
 	Flag_To_Redraw(true);
 
-	return(retval);
+	return (retval);
 }
-
 
 /***************************************************************************
  * MapEditClass::Change_House -- changes CurrentObject's house             *
@@ -528,44 +515,43 @@ int MapEditClass::Move_Grabbed_Object(void)
  * HISTORY:                                                                *
  *   11/17/1994 BR : Created.                                              *
  *=========================================================================*/
-bool MapEditClass::Change_House(HousesType newhouse)
-{
+bool MapEditClass::Change_House(HousesType newhouse) {
 	TechnoClass *tp;
 
 	/*
 	**	Return if no current object
 	*/
 	if (!CurrentObject.Count()) {
-		return(false);
+		return (false);
 	}
 
 	/*
 	**	Only techno objects can be owned by a house; return if not a techno
 	*/
 	if (!CurrentObject[0]->Is_Techno()) {
-		return(false);
+		return (false);
 	}
 
 	/*
 	**	You can't change the house if the object is part of the AI's Base.
 	*/
-	if (CurrentObject[0]->What_Am_I()==RTTI_BUILDING && Base.Is_Node((BuildingClass *)CurrentObject[0])) {
-		return(false);
+	if (CurrentObject[0]->What_Am_I() == RTTI_BUILDING && Base.Is_Node((BuildingClass *)CurrentObject[0])) {
+		return (false);
 	}
 
 	/*
 	**	Verify that the target house exists
 	*/
-	if (HouseClass::As_Pointer(newhouse)==NULL) {
-		return(false);
+	if (HouseClass::As_Pointer(newhouse) == NULL) {
+		return (false);
 	}
 
 	/*
 	**	Verify that this is a valid owner
 	*/
-//	if (!Verify_House(newhouse, &CurrentObject[0]->Class_Of())) {
-//		return(false);
-//	}
+	//	if (!Verify_House(newhouse, &CurrentObject[0]->Class_Of())) {
+	//		return(false);
+	//	}
 
 	/*
 	**	Change the house
@@ -578,8 +564,7 @@ bool MapEditClass::Change_House(HousesType newhouse)
 		tp->IsOwnedByPlayer = true;
 	}
 
-	return(true);
+	return (true);
 }
-
 
 #endif

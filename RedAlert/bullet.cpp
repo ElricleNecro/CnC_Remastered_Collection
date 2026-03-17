@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/BULLET.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -49,8 +49,7 @@
  *   BulletClass::~BulletClass -- Destructor for bullet objects.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * BulletClass::BulletClass -- Bullet constructor.                                             *
@@ -73,22 +72,14 @@
  *   12/23/1994 JLB : Fixed scatter algorithm for non-homing projectiles.                      *
  *   12/31/1994 JLB : Removed range parameter (not needed).                                    *
  *=============================================================================================*/
-BulletClass::BulletClass(BulletType id, TARGET target, TechnoClass * payback, int strength, WarheadType warhead, int speed) :
-	ObjectClass(RTTI_BULLET, Bullets.ID(this)),
-	Class(BulletTypes.Ptr((int)id)),
-	Payback(payback),
-	PrimaryFacing(DIR_N),
-	IsInaccurate(false),
-	IsToAnimate(false),
-	IsLocked(true),
-	TarCom(target),
-	MaxSpeed(speed),
-	Warhead(warhead)
-{
+BulletClass::BulletClass(BulletType id, TARGET target, TechnoClass *payback, int strength, WarheadType warhead,
+			 int speed)
+    : ObjectClass(RTTI_BULLET, Bullets.ID(this)), Class(BulletTypes.Ptr((int)id)), Payback(payback),
+      PrimaryFacing(DIR_N), IsInaccurate(false), IsToAnimate(false), IsLocked(true), TarCom(target), MaxSpeed(speed),
+      Warhead(warhead) {
 	Strength = strength;
 	Height = FLIGHT_LEVEL;
 }
-
 
 /***********************************************************************************************
  * BulletClass::~BulletClass -- Destructor for bullet objects.                                 *
@@ -106,8 +97,7 @@ BulletClass::BulletClass(BulletType id, TARGET target, TechnoClass * payback, in
  * HISTORY:                                                                                    *
  *   07/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-BulletClass::~BulletClass(void)
-{
+BulletClass::~BulletClass(void) {
 	if (GameActive) {
 
 		/*
@@ -116,9 +106,10 @@ BulletClass::~BulletClass(void)
 		**	destroyed, the dog must come back out of limbo at the closest location possible to
 		**	the bullet.
 		*/
-		if (Payback != NULL && Payback->What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)Payback)->Class->IsDog) {
+		if (Payback != NULL && Payback->What_Am_I() == RTTI_INFANTRY &&
+		    ((InfantryClass *)Payback)->Class->IsDog) {
 
-			InfantryClass * dog = (InfantryClass *)Payback;
+			InfantryClass *dog = (InfantryClass *)Payback;
 			if (dog) {
 				bool unlimbo = false;
 				DirType dogface = dog->PrimaryFacing;
@@ -168,10 +159,9 @@ BulletClass::~BulletClass(void)
 		BulletClass::Limbo();
 	}
 
-	Class=0;
-	Payback=0;
+	Class = 0;
+	Payback = 0;
 }
-
 
 /***********************************************************************************************
  * BulletClass::new -- Allocates memory for bullet object.                                     *
@@ -188,15 +178,13 @@ BulletClass::~BulletClass(void)
  * HISTORY:                                                                                    *
  *   05/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * BulletClass::operator new(size_t )
-{
-	void * ptr = Bullets.Allocate();
+void *BulletClass::operator new(size_t) {
+	void *ptr = Bullets.Allocate();
 	if (ptr) {
 		((BulletClass *)ptr)->Set_Active();
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***********************************************************************************************
  * BulletClass::delete -- Bullet memory delete.                                                *
@@ -213,14 +201,12 @@ void * BulletClass::operator new(size_t )
  * HISTORY:                                                                                    *
  *   05/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BulletClass::operator delete(void * ptr)
-{
+void BulletClass::operator delete(void *ptr) {
 	if (ptr) {
 		((BulletClass *)ptr)->IsActive = false;
 	}
 	Bullets.Free((BulletClass *)ptr);
 }
-
 
 /***********************************************************************************************
  * BulletClass::Occupy_List -- Determines the bullet occupation list.                          *
@@ -240,8 +226,7 @@ void BulletClass::operator delete(void * ptr)
  *   06/20/1994 JLB : Created.                                                                 *
  *   01/05/1995 JLB : Handles projectiles with altitude.                                       *
  *=============================================================================================*/
-short const * BulletClass::Occupy_List(bool) const
-{
+short const *BulletClass::Occupy_List(bool) const {
 	assert(Bullets.ID(this) == ID);
 	assert(IsActive);
 
@@ -249,17 +234,27 @@ short const * BulletClass::Occupy_List(bool) const
 	**	Super-gigundo units use the >= 64 coord spillage list logic.
 	*/
 	if (Class->IsGigundo) {
-		static short _list[] = {
-			-1, 0, 1,
-			MAP_CELL_W*1-1, MAP_CELL_W*1, MAP_CELL_W*1+1,
-			-MAP_CELL_W*1-1, -MAP_CELL_W*1, -MAP_CELL_W*1+1,
-			MAP_CELL_W*2-1, MAP_CELL_W*2, MAP_CELL_W*2+1,
-			-MAP_CELL_W*2-1, -MAP_CELL_W*2, -MAP_CELL_W*2+1,
-			-MAP_CELL_W*3-1, -MAP_CELL_W*3, -MAP_CELL_W*3+1,
-			REFRESH_EOL
-		};
-		return(_list);
-//		return(Coord_Spillage_List(Coord, 64));
+		static short _list[] = {-1,
+					0,
+					1,
+					MAP_CELL_W * 1 - 1,
+					MAP_CELL_W * 1,
+					MAP_CELL_W * 1 + 1,
+					-MAP_CELL_W * 1 - 1,
+					-MAP_CELL_W * 1,
+					-MAP_CELL_W * 1 + 1,
+					MAP_CELL_W * 2 - 1,
+					MAP_CELL_W * 2,
+					MAP_CELL_W * 2 + 1,
+					-MAP_CELL_W * 2 - 1,
+					-MAP_CELL_W * 2,
+					-MAP_CELL_W * 2 + 1,
+					-MAP_CELL_W * 3 - 1,
+					-MAP_CELL_W * 3,
+					-MAP_CELL_W * 3 + 1,
+					REFRESH_EOL};
+		return (_list);
+		//		return(Coord_Spillage_List(Coord, 64));
 	}
 
 	/*
@@ -268,7 +263,7 @@ short const * BulletClass::Occupy_List(bool) const
 	*/
 	if (Height > 0) {
 		static short _list[25];
-		const short * ptr = Coord_Spillage_List(Coord, 5);
+		const short *ptr = Coord_Spillage_List(Coord, 5);
 		int index = 0;
 		CELL cell1 = Coord_Cell(Coord);
 
@@ -285,12 +280,11 @@ short const * BulletClass::Occupy_List(bool) const
 			ptr++;
 		}
 		_list[index] = REFRESH_EOL;
-		return(_list);
+		return (_list);
 	}
 
-	return(Coord_Spillage_List(Coord, 10));
+	return (Coord_Spillage_List(Coord, 10));
 }
-
 
 /***********************************************************************************************
  * BulletClass::Mark -- Performs related map refreshing under bullet.                          *
@@ -308,8 +302,7 @@ short const * BulletClass::Occupy_List(bool) const
  * HISTORY:                                                                                    *
  *   05/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool BulletClass::Mark(MarkType mark)
-{
+bool BulletClass::Mark(MarkType mark) {
 	assert(Bullets.ID(this) == ID);
 	assert(IsActive);
 
@@ -317,11 +310,10 @@ bool BulletClass::Mark(MarkType mark)
 		if (!Class->IsInvisible) {
 			Map.Refresh_Cells(Coord_Cell(Coord), Occupy_List());
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * BulletClass::AI -- Logic processing for bullet.                                             *
@@ -339,21 +331,21 @@ bool BulletClass::Mark(MarkType mark)
  * HISTORY:                                                                                    *
  *   05/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BulletClass::AI(void)
-{
+void BulletClass::AI(void) {
 	assert(Bullets.ID(this) == ID);
 	assert(IsActive);
 
-	COORDINATE	coord;
+	COORDINATE coord;
 
 	ObjectClass::AI();
 
-	if (!IsActive) return;
+	if (!IsActive)
+		return;
 
 	/*
 	**	Ballistic objects are handled here.
 	*/
-	bool forced = false;			// Forced explosion.
+	bool forced = false; // Forced explosion.
 	if ((Class->IsArcing || Class->IsDropping) && !IsFalling) {
 		forced = true;
 	}
@@ -391,112 +383,112 @@ void BulletClass::AI(void)
 		PrimaryFacing.Rotation_Adjust(Class->ROT);
 	}
 	switch (Physics(coord, PrimaryFacing)) {
-		/*
-		**	When a projectile reaches the edge of the world, it
-		**	vanishes from existence -- presumed to explode off
-		**	map.
-		*/
-		case IMPACT_EDGE:
-			Mark();
-			if (Payback != NULL && Class->Type == BULLET_GPS_SATELLITE) {
-				
-				bool reveal = false;
-				if (Session.Type != GAME_GLYPHX_MULTIPLAYER) {
-					if (Payback->House == PlayerPtr) {
-						reveal = true;
-					}
-				} else {
-					if (Payback->House->IsHuman) {
-						reveal = true;
-					}
-				}
-				if (reveal) {
-					if (!Map.Is_Radar_Active()) {
-						Map.Radar_Activate(1);
-					}
-					for (CELL cell = 0; cell < MAP_CELL_TOTAL; cell++) {
-						Map.Map_Cell(cell, Payback->House);
-					}
-					Map.RadarClass::Flag_To_Redraw(true);
-				}
-				Payback->House->IsGPSActive = true;
-				Payback->House->IsVisionary = true;
-			}
-#ifdef OBSOLETE
-			/*
-			** Hack: If it's the artificial nukes, don't let the bullets come down (as
-			** they're the only ones that blow up).  We know it's artificial if you're
-			** at tech level 10 or below, because you can't build the nuclear silo until
-			** tech level 15 or so.
-			*/
-			if (Payback != NULL && Class->Type == BULLET_NUKE_UP && Payback->House->Control.TechLevel <= 10) {
-				BulletClass * bullet = new BulletClass(BULLET_NUKE_DOWN, ::As_Target(Payback->House->NukeDest), Payback, 200, WARHEAD_NUKE, MPH_VERY_FAST);
-				if (bullet) {
-					int celly = Cell_Y(Payback->House->NukeDest);
-					celly -= 15;
-					if (celly < 1) celly = 1;
-					COORDINATE start = Cell_Coord(XY_Cell(Cell_X(Payback->House->NukeDest), celly));
-					if (!bullet->Unlimbo(start, DIR_S)) {
-						delete bullet;
-					}
-				}
-			}
-#endif
-			delete this;
-			break;
+	/*
+	**	When a projectile reaches the edge of the world, it
+	**	vanishes from existence -- presumed to explode off
+	**	map.
+	*/
+	case IMPACT_EDGE:
+		Mark();
+		if (Payback != NULL && Class->Type == BULLET_GPS_SATELLITE) {
 
-		default:
-		case IMPACT_NONE:
-
-		/*
-		**	The projectile has moved. Check its fuse. If detonation
-		**	is signaled, then do so. Otherwise, just move.
-		*/
-		case IMPACT_NORMAL:
-			Mark();
-//			if(Class->Type == BULLET_NUKE_DOWN) {
-//				Render(true);
-//			}
-			if (Class->Type == BULLET_NUKE_UP) {
-				if (Payback != NULL) {
-					if (Distance(Payback->As_Target()) > 0x0C00) {
-						delete this;
-						return;
-					}
+			bool reveal = false;
+			if (Session.Type != GAME_GLYPHX_MULTIPLAYER) {
+				if (Payback->House == PlayerPtr) {
+					reveal = true;
 				}
-			}
-			Coord = coord;
-
-			/*
-			**	See if the bullet should be forced to explode now in spite of what
-			**	the fuse would otherwise indicate. Maybe the bullet hit a wall?
-			*/
-			if (!forced) {
-				forced = Is_Forced_To_Explode(Coord);
-			}
-
-			/*
-			**	If the bullet is not to explode, then perform normal flight
-			**	maintenance (usually nothing). Otherwise, explode and then
-			**	delete the bullet.
-			*/
-			if (!forced && (Class->IsDropping || !Fuse_Checkup(Coord))) {
-				/*
-				**	Certain projectiles lose strength when they travel.
-				*/
-				if (Class->IsDegenerate && Strength > 5) {
-					Strength--;
-				}
-
 			} else {
-				Bullet_Explodes(forced);
-				delete this;
+				if (Payback->House->IsHuman) {
+					reveal = true;
+				}
 			}
-			break;
+			if (reveal) {
+				if (!Map.Is_Radar_Active()) {
+					Map.Radar_Activate(1);
+				}
+				for (CELL cell = 0; cell < MAP_CELL_TOTAL; cell++) {
+					Map.Map_Cell(cell, Payback->House);
+				}
+				Map.RadarClass::Flag_To_Redraw(true);
+			}
+			Payback->House->IsGPSActive = true;
+			Payback->House->IsVisionary = true;
+		}
+#ifdef OBSOLETE
+		/*
+		** Hack: If it's the artificial nukes, don't let the bullets come down (as
+		** they're the only ones that blow up).  We know it's artificial if you're
+		** at tech level 10 or below, because you can't build the nuclear silo until
+		** tech level 15 or so.
+		*/
+		if (Payback != NULL && Class->Type == BULLET_NUKE_UP && Payback->House->Control.TechLevel <= 10) {
+			BulletClass *bullet = new BulletClass(BULLET_NUKE_DOWN, ::As_Target(Payback->House->NukeDest),
+							      Payback, 200, WARHEAD_NUKE, MPH_VERY_FAST);
+			if (bullet) {
+				int celly = Cell_Y(Payback->House->NukeDest);
+				celly -= 15;
+				if (celly < 1)
+					celly = 1;
+				COORDINATE start = Cell_Coord(XY_Cell(Cell_X(Payback->House->NukeDest), celly));
+				if (!bullet->Unlimbo(start, DIR_S)) {
+					delete bullet;
+				}
+			}
+		}
+#endif
+		delete this;
+		break;
+
+	default:
+	case IMPACT_NONE:
+
+	/*
+	**	The projectile has moved. Check its fuse. If detonation
+	**	is signaled, then do so. Otherwise, just move.
+	*/
+	case IMPACT_NORMAL:
+		Mark();
+		//			if(Class->Type == BULLET_NUKE_DOWN) {
+		//				Render(true);
+		//			}
+		if (Class->Type == BULLET_NUKE_UP) {
+			if (Payback != NULL) {
+				if (Distance(Payback->As_Target()) > 0x0C00) {
+					delete this;
+					return;
+				}
+			}
+		}
+		Coord = coord;
+
+		/*
+		**	See if the bullet should be forced to explode now in spite of what
+		**	the fuse would otherwise indicate. Maybe the bullet hit a wall?
+		*/
+		if (!forced) {
+			forced = Is_Forced_To_Explode(Coord);
+		}
+
+		/*
+		**	If the bullet is not to explode, then perform normal flight
+		**	maintenance (usually nothing). Otherwise, explode and then
+		**	delete the bullet.
+		*/
+		if (!forced && (Class->IsDropping || !Fuse_Checkup(Coord))) {
+			/*
+			**	Certain projectiles lose strength when they travel.
+			*/
+			if (Class->IsDegenerate && Strength > 5) {
+				Strength--;
+			}
+
+		} else {
+			Bullet_Explodes(forced);
+			delete this;
+		}
+		break;
 	}
-
 }
-
 
 /***********************************************************************************************
  * BulletClass::Shape_Number -- Fetches the shape number for the bullet object.                *
@@ -512,8 +504,7 @@ void BulletClass::AI(void)
  * HISTORY:                                                                                    *
  *   08/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int BulletClass::Shape_Number(void) const
-{
+int BulletClass::Shape_Number(void) const {
 	int shapenum = 0;
 
 	if (!Class->IsFaceless) {
@@ -527,9 +518,8 @@ int BulletClass::Shape_Number(void) const
 		shapenum += (long)Frame % Class->Tumble;
 	}
 
-	return(shapenum);
+	return (shapenum);
 }
-
 
 /***********************************************************************************************
  * BulletClass::Draw_It -- Displays the bullet at location specified.                          *
@@ -549,8 +539,7 @@ int BulletClass::Shape_Number(void) const
  *   06/27/1994 JLB : Takes a window clipping parameter.                                       *
  *   01/08/1995 JLB : Handles translucent colors if necessary.                                 *
  *=============================================================================================*/
-void BulletClass::Draw_It(int x, int y, WindowNumberType window) const
-{
+void BulletClass::Draw_It(int x, int y, WindowNumberType window) const {
 	assert(Bullets.ID(this) == ID);
 	assert(IsActive);
 
@@ -558,14 +547,16 @@ void BulletClass::Draw_It(int x, int y, WindowNumberType window) const
 	**	Certain projectiles aren't visible. This includes small bullets (which are actually
 	**	invisible) and flame thrower flames (which are rendered as an animation instead of a projectile).
 	*/
-	if (Class->IsInvisible) return;
+	if (Class->IsInvisible)
+		return;
 
 	/*
 	**	If there is no shape loaded for this object, then
 	**	it obviously can't be rendered -- just bail.
 	*/
-	void const * shapeptr = Get_Image_Data();
-	if (shapeptr == NULL) return;
+	void const *shapeptr = Get_Image_Data();
+	if (shapeptr == NULL)
+		return;
 
 	/*
 	**	Get the basic shape number for this projectile.
@@ -580,10 +571,15 @@ void BulletClass::Draw_It(int x, int y, WindowNumberType window) const
 
 		if (Class->IsParachuted) {
 			// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-			CC_Draw_Shape(this, AnimTypeClass::As_Reference(ANIM_PARA_BOMB).Get_Image_Data(), 1, x+Lepton_To_Pixel(Height/2), y+10, window, SHAPE_PREDATOR|SHAPE_CENTER|SHAPE_WIN_REL|SHAPE_FADING, NULL, DisplayClass::UnitShadow);
+			CC_Draw_Shape(this, AnimTypeClass::As_Reference(ANIM_PARA_BOMB).Get_Image_Data(), 1,
+				      x + Lepton_To_Pixel(Height / 2), y + 10, window,
+				      SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING, NULL,
+				      DisplayClass::UnitShadow);
 		} else {
 			// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-			CC_Draw_Shape(this, shapeptr, shapenum, x, y, window, SHAPE_PREDATOR|SHAPE_CENTER|SHAPE_WIN_REL|SHAPE_FADING, NULL, DisplayClass::UnitShadow);
+			CC_Draw_Shape(this, shapeptr, shapenum, x, y, window,
+				      SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING, NULL,
+				      DisplayClass::UnitShadow);
 		}
 		y -= Lepton_To_Pixel(Height);
 	}
@@ -595,16 +591,17 @@ void BulletClass::Draw_It(int x, int y, WindowNumberType window) const
 	if (Class->IsTranslucent) {
 		flags = SHAPE_GHOST;
 	}
-	if (Class->IsSubSurface) 
-	{
+	if (Class->IsSubSurface) {
 		// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-		CC_Draw_Shape(this, shapeptr, shapenum, x, y, window, flags|SHAPE_PREDATOR|SHAPE_CENTER|SHAPE_WIN_REL|SHAPE_FADING, NULL, DisplayClass::FadingShade);
+		CC_Draw_Shape(this, shapeptr, shapenum, x, y, window,
+			      flags | SHAPE_PREDATOR | SHAPE_CENTER | SHAPE_WIN_REL | SHAPE_FADING, NULL,
+			      DisplayClass::FadingShade);
 	} else {
 		// Add 'this' parameter to call new shape draw intercept. ST - 5/22/2019
-		CC_Draw_Shape(this, shapeptr, shapenum, x, y, window, flags|SHAPE_CENTER|SHAPE_WIN_REL, NULL, DisplayClass::UnitShadow);
+		CC_Draw_Shape(this, shapeptr, shapenum, x, y, window, flags | SHAPE_CENTER | SHAPE_WIN_REL, NULL,
+			      DisplayClass::UnitShadow);
 	}
 }
-
 
 /***********************************************************************************************
  * BulletClass::Init -- Clears the bullets array for scenario preparation.                     *
@@ -622,11 +619,7 @@ void BulletClass::Draw_It(int x, int y, WindowNumberType window) const
  * HISTORY:                                                                                    *
  *   08/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BulletClass::Init(void)
-{
-	Bullets.Free_All();
-}
-
+void BulletClass::Init(void) { Bullets.Free_All(); }
 
 /***********************************************************************************************
  * BulletClass::Detach -- Removes specified target from this bullet's targeting system.        *
@@ -647,12 +640,11 @@ void BulletClass::Init(void)
  * HISTORY:                                                                                    *
  *   09/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BulletClass::Detach(TARGET target, bool all)
-{
+void BulletClass::Detach(TARGET target, bool all) {
 	assert(Bullets.ID(this) == ID);
 	assert(IsActive);
 
-	ObjectClass * obj = As_Object(target);
+	ObjectClass *obj = As_Object(target);
 	if (Payback != NULL && obj == Payback) {
 
 		/*
@@ -668,7 +660,6 @@ void BulletClass::Detach(TARGET target, bool all)
 		TarCom = TARGET_NONE;
 	}
 }
-
 
 /***********************************************************************************************
  * BulletClass::Unlimbo -- Transitions a bullet object into the game render/logic system.      *
@@ -688,8 +679,7 @@ void BulletClass::Detach(TARGET target, bool all)
  * HISTORY:                                                                                    *
  *   01/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
-{
+bool BulletClass::Unlimbo(COORDINATE coord, DirType dir) {
 	assert(Bullets.ID(this) == ID);
 	assert(IsActive);
 
@@ -721,7 +711,8 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
 		**	fire is inherently inaccurate.
 		*/
 		if (IsInaccurate || Class->IsInaccurate ||
-			((Is_Target_Cell(TarCom) || Is_Target_Infantry(TarCom)) && (Warhead == WARHEAD_AP || Class->IsFueled))) {
+		    ((Is_Target_Cell(TarCom) || Is_Target_Infantry(TarCom)) &&
+		     (Warhead == WARHEAD_AP || Class->IsFueled))) {
 
 			/*
 			**	Inaccuracy for low velocity or homing projectiles manifests itself as a standard
@@ -729,14 +720,14 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
 			**	just overshoot the target by extending the straight line flight.
 			*/
 			if (/*Class->ROT != 0 ||*/ Class->IsArcing) {
-				int scatterdist = (::Distance(coord, tcoord)/16)-0x0040;
+				int scatterdist = (::Distance(coord, tcoord) / 16) - 0x0040;
 				scatterdist = min(scatterdist, Rule.HomingScatter);
 				scatterdist = max(scatterdist, 0);
 
-				dir = (DirType)((dir + (Random_Pick(0, 10)-5)) & 0x00FF);
+				dir = (DirType)((dir + (Random_Pick(0, 10) - 5)) & 0x00FF);
 				tcoord = Coord_Scatter(tcoord, Random_Pick(0, scatterdist));
 			} else {
-				int scatterdist = (::Distance(coord, tcoord)/16)-0x0040;
+				int scatterdist = (::Distance(coord, tcoord) / 16) - 0x0040;
 				scatterdist = min(scatterdist, Rule.BallisticScatter);
 				scatterdist = max(scatterdist, 0);
 				tcoord = Coord_Move(tcoord, dir, Random_Pick(0, scatterdist));
@@ -766,7 +757,8 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
 		**	target.
 		*/
 		int speed = MaxSpeed;
-		if (speed == MPH_LIGHT_SPEED) speed = MPH_IMMOBILE;
+		if (speed == MPH_LIGHT_SPEED)
+			speed = MPH_IMMOBILE;
 		if (Class->IsArcing) {
 			speed = MaxSpeed + (Distance(tcoord) / 32);
 
@@ -782,7 +774,7 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
 		/*
 		**	Arm the fuse.
 		*/
-		Arm_Fuse(Coord, tcoord, range, ((As_Aircraft(TarCom)!=0) ? 0 : Class->Arming));
+		Arm_Fuse(Coord, tcoord, range, ((As_Aircraft(TarCom) != 0) ? 0 : Class->Arming));
 
 		/*
 		**	Projectiles that make a ballistic flight to impact point must determine a
@@ -798,17 +790,18 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
 		if (Class->IsArcing) {
 			IsFalling = true;
 			Height = 1;
-			Riser = ((Distance(tcoord)/2) / (speed+1)) * Rule.Gravity;
+			Riser = ((Distance(tcoord) / 2) / (speed + 1)) * Rule.Gravity;
 			Riser = max(Riser, 10);
 		}
 		if (Class->IsDropping) {
 			IsFalling = true;
 			Height = FLIGHT_LEVEL;
-//			Height = Pixel_To_Lepton(24);
+			//			Height = Pixel_To_Lepton(24);
 			Riser = 0;
 			if (Class->IsParachuted) {
-				AnimClass * anim = new AnimClass(ANIM_PARA_BOMB, Target_Coord());
-//				AnimClass * anim = new AnimClass(ANIM_PARACHUTE, Target_Coord());
+				AnimClass *anim = new AnimClass(ANIM_PARA_BOMB, Target_Coord());
+				//				AnimClass * anim = new AnimClass(ANIM_PARACHUTE,
+				// Target_Coord());
 				if (anim) {
 					anim->Attach_To(this);
 				}
@@ -817,11 +810,10 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
 		Map.Submit(this, In_Which_Layer());
 
 		PrimaryFacing = dir;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * BulletClass::Target_Coord -- Fetches coordinate to use when firing on this object.          *
@@ -836,14 +828,12 @@ bool BulletClass::Unlimbo(COORDINATE coord, DirType dir)
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-COORDINATE BulletClass::Target_Coord(void) const
-{
+COORDINATE BulletClass::Target_Coord(void) const {
 	assert(Bullets.ID(this) == ID);
 	assert(IsActive);
 
-	return(Coord_Add(XY_Coord(0, -Height), Coord));
+	return (Coord_Add(XY_Coord(0, -Height), Coord));
 }
-
 
 /***********************************************************************************************
  * BulletClass::Sort_Y -- Sort coordinate for bullet rendering.                                *
@@ -862,14 +852,12 @@ COORDINATE BulletClass::Target_Coord(void) const
  * HISTORY:                                                                                    *
  *   10/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-COORDINATE BulletClass::Sort_Y(void) const
-{
+COORDINATE BulletClass::Sort_Y(void) const {
 	assert(this != 0);
 	assert(IsActive);
 
-	return(Coord_Move(Coord, DIR_S, CELL_LEPTON_H/2));
+	return (Coord_Move(Coord, DIR_S, CELL_LEPTON_H / 2));
 }
-
 
 /***********************************************************************************************
  * BulletClass::In_Which_Layer -- Fetches the layer that the bullet resides in.                *
@@ -887,14 +875,12 @@ COORDINATE BulletClass::Sort_Y(void) const
  * HISTORY:                                                                                    *
  *   10/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LayerType BulletClass::In_Which_Layer(void) const
-{
+LayerType BulletClass::In_Which_Layer(void) const {
 	if (Class->IsSubSurface) {
-		return(LAYER_SURFACE);
+		return (LAYER_SURFACE);
 	}
-	return(ObjectClass::In_Which_Layer());
+	return (ObjectClass::In_Which_Layer());
 }
-
 
 /***********************************************************************************************
  * BulletClass::Is_Forced_To_Explode -- Checks if bullet should explode NOW.                   *
@@ -914,17 +900,17 @@ LayerType BulletClass::In_Which_Layer(void) const
  * HISTORY:                                                                                    *
  *   10/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool BulletClass::Is_Forced_To_Explode(COORDINATE & coord) const
-{
+bool BulletClass::Is_Forced_To_Explode(COORDINATE &coord) const {
 	coord = Coord;
-	CellClass const * cellptr = &Map[coord];
+	CellClass const *cellptr = &Map[coord];
 
 	/*
 	**	Check for impact on a wall or other high obstacle.
 	*/
-	if (!Class->IsHigh && cellptr->Overlay != OVERLAY_NONE && OverlayTypeClass::As_Reference(cellptr->Overlay).IsHigh) {
+	if (!Class->IsHigh && cellptr->Overlay != OVERLAY_NONE &&
+	    OverlayTypeClass::As_Reference(cellptr->Overlay).IsHigh) {
 		coord = Cell_Coord(Coord_Cell(coord));
-		return(true);
+		return (true);
 	}
 
 	/*
@@ -932,8 +918,9 @@ bool BulletClass::Is_Forced_To_Explode(COORDINATE & coord) const
 	**	travel in anything but water.
 	*/
 	if (Class->IsSubSurface) {
-		int d = ::Distance(Coord_Fraction(coord), XY_Coord(CELL_LEPTON_W/2, CELL_LEPTON_W/2));
-		if (cellptr->Land_Type() != LAND_WATER || (d < CELL_LEPTON_W/3 && cellptr->Cell_Techno() != NULL && cellptr->Cell_Techno() != Payback)) {
+		int d = ::Distance(Coord_Fraction(coord), XY_Coord(CELL_LEPTON_W / 2, CELL_LEPTON_W / 2));
+		if (cellptr->Land_Type() != LAND_WATER ||
+		    (d < CELL_LEPTON_W / 3 && cellptr->Cell_Techno() != NULL && cellptr->Cell_Techno() != Payback)) {
 
 			/*
 			**	Force explosion to be at center of techno object if one is present.
@@ -950,7 +937,7 @@ bool BulletClass::Is_Forced_To_Explode(COORDINATE & coord) const
 				coord = Coord_Snap(coord);
 			}
 
-			return(true);
+			return (true);
 		}
 	}
 
@@ -958,16 +945,15 @@ bool BulletClass::Is_Forced_To_Explode(COORDINATE & coord) const
 	**	Bullets are generally more effective when they are fired at aircraft.
 	*/
 	if (Class->IsAntiAircraft && As_Aircraft(TarCom) && Distance(TarCom) < 0x0080) {
-		return(true);
+		return (true);
 	}
 
 	/*
 	**	No reason for forced explosion was detected, so return 'false' to
 	**	indicate that no forced explosion is required.
 	*/
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * BulletClass::Bullet_Explodes -- Performs bullet explosion logic.                            *
@@ -984,8 +970,7 @@ bool BulletClass::Is_Forced_To_Explode(COORDINATE & coord) const
  * HISTORY:                                                                                    *
  *   10/10/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void BulletClass::Bullet_Explodes(bool forced)
-{
+void BulletClass::Bullet_Explodes(bool forced) {
 	/*
 	**	When the target is reached, explode and do the damage
 	**	required of it. For homing objects, don't force the explosion to
@@ -993,8 +978,8 @@ void BulletClass::Bullet_Explodes(bool forced)
 	**	that they hit the target. This compensates for the error in line of
 	**	flight logic.
 	*/
-	if ( (Payback != NULL && Payback->What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)Payback)->Class->IsDog) ||
-		(!forced && !Class->IsArcing && Class->ROT == 0 && Fuse_Target())) {
+	if ((Payback != NULL && Payback->What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)Payback)->Class->IsDog) ||
+	    (!forced && !Class->IsArcing && Class->ROT == 0 && Fuse_Target())) {
 		Coord = Fuse_Target();
 	}
 
@@ -1003,7 +988,8 @@ void BulletClass::Bullet_Explodes(bool forced)
 	*/
 	if (!Is_Target_Aircraft(TarCom) || As_Aircraft(TarCom)->In_Which_Layer() == LAYER_GROUND) {
 		Explosion_Damage(Coord, Strength, Payback, Warhead);
-		if (!IsActive) return;
+		if (!IsActive)
+			return;
 
 	} else {
 
@@ -1012,10 +998,11 @@ void BulletClass::Bullet_Explodes(bool forced)
 		**	damage affects the aircraft target.
 		*/
 		if (Distance(TarCom) < 0x0080) {
-			AircraftClass * object = As_Aircraft(TarCom);
+			AircraftClass *object = As_Aircraft(TarCom);
 
 			int str = Strength;
-			if (object) object->Take_Damage(str, 0, Warhead, Payback);
+			if (object)
+				object->Take_Damage(str, 0, Warhead, Payback);
 		}
 	}
 
@@ -1031,7 +1018,7 @@ void BulletClass::Bullet_Explodes(bool forced)
 	**	Fetch the land type that the explosion will be upon. Special case for
 	**	flying aircraft targets, their land type will be LAND_NONE.
 	*/
-	CellClass const * cellptr = &Map[Coord];
+	CellClass const *cellptr = &Map[Coord];
 	LandType land = cellptr->Land_Type();
 	if (Is_Target_Aircraft(TarCom) && As_Aircraft(TarCom)->In_Which_Layer() == LAYER_TOP) {
 		land = LAND_NONE;
@@ -1045,12 +1032,12 @@ void BulletClass::Bullet_Explodes(bool forced)
 	*/
 	if (anim >= ANIM_WATER_EXP1 && anim <= ANIM_WATER_EXP3 && Is_Target_Vessel(TarCom)) {
 		if (Coord_Cell(Coord) == Coord_Cell(As_Vessel(TarCom)->Center_Coord())) {
-			anim = (AnimType) (ANIM_VEH_HIT1 + (anim - ANIM_WATER_EXP1));
+			anim = (AnimType)(ANIM_VEH_HIT1 + (anim - ANIM_WATER_EXP1));
 		}
 	}
 
 	if (anim != ANIM_NONE) {
-		AnimClass * aptr = new AnimClass(anim, Coord);
+		AnimClass *aptr = new AnimClass(anim, Coord);
 		if (aptr) {
 			aptr->Sort_Above(TarCom);
 		}
@@ -1070,8 +1057,8 @@ void BulletClass::Bullet_Explodes(bool forced)
 		}
 
 		// MBL 05.20.2020
-		// Fix for Nuke or Atom Bomb killing structures and units during animation sequence and not getting kills tracked
-		// Per https://jaas.ea.com/browse/TDRA-6610
+		// Fix for Nuke or Atom Bomb killing structures and units during animation sequence and not getting
+		// kills tracked Per https://jaas.ea.com/browse/TDRA-6610
 		//
 		else if (aptr && anim == ANIM_ATOM_BLAST && aptr->OwnerHouse == HOUSE_NONE) {
 			if (Payback && Payback->House && Payback->House->Class) {
@@ -1080,9 +1067,10 @@ void BulletClass::Bullet_Explodes(bool forced)
 		}
 	}
 
-//				if (Payback && Payback->House == PlayerPtr && stricmp(Class->Name(), "GPSSATELLITE") == 0) {
+	//				if (Payback && Payback->House == PlayerPtr && stricmp(Class->Name(),
+	//"GPSSATELLITE") == 0) {
 	if (Payback && Class->Type == BULLET_GPS_SATELLITE) {
-		
+
 		bool reveal = false;
 		if (Session.Type != GAME_GLYPHX_MULTIPLAYER) {
 			if (Payback->House == PlayerPtr) {
@@ -1093,7 +1081,7 @@ void BulletClass::Bullet_Explodes(bool forced)
 				reveal = true;
 			}
 		}
-		
+
 		if (reveal) {
 			if (!Map.Is_Radar_Active()) {
 				Map.Radar_Activate(1);
@@ -1103,7 +1091,7 @@ void BulletClass::Bullet_Explodes(bool forced)
 			}
 			Map.RadarClass::Flag_To_Redraw(true);
 		}
-//					Sound_Effect(VOC_SATTACT2);
+		//					Sound_Effect(VOC_SATTACT2);
 		Payback->House->IsGPSActive = true;
 		Payback->House->IsVisionary = true;
 	}

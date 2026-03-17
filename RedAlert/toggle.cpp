@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/TOGGLE.CPP 1     3/03/97 10:26a Joe_bostic $ */
@@ -35,9 +35,8 @@
  *   ToggleClass::Turn_On -- Turns the toggle button to the "ON" state.                        *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"toggle.h"
-
+#include "toggle.h"
+#include "function.h"
 
 /***********************************************************************************************
  * ToggleClass::ToggleClass -- Normal constructor for toggle button gadgets.                   *
@@ -59,14 +58,8 @@
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ToggleClass::ToggleClass(unsigned id, int x, int y, int w, int h) :
-	ControlClass(id, x, y, w, h, LEFTPRESS|LEFTRELEASE, true),
-	IsPressed(false),
-	IsOn(false),
-	IsToggleType(false)
-{
-}
-
+ToggleClass::ToggleClass(unsigned id, int x, int y, int w, int h)
+    : ControlClass(id, x, y, w, h, LEFTPRESS | LEFTRELEASE, true), IsPressed(false), IsOn(false), IsToggleType(false) {}
 
 /***********************************************************************************************
  * ToggleClass::Turn_On -- Turns the toggle button to the "ON" state.                          *
@@ -83,12 +76,10 @@ ToggleClass::ToggleClass(unsigned id, int x, int y, int w, int h) :
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void ToggleClass::Turn_On(void)
-{
+void ToggleClass::Turn_On(void) {
 	IsOn = true;
 	Flag_To_Redraw();
 }
-
 
 /***********************************************************************************************
  * ToggleClass::Turn_Off -- Turns the toggle button to the "OFF" state.                        *
@@ -105,12 +96,10 @@ void ToggleClass::Turn_On(void)
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void ToggleClass::Turn_Off(void)
-{
+void ToggleClass::Turn_Off(void) {
 	IsOn = false;
 	Flag_To_Redraw();
 }
-
 
 /***********************************************************************************************
  * ToggleClass::Action -- Handles mouse clicks on a text button.                               *
@@ -134,14 +123,13 @@ void ToggleClass::Turn_Off(void)
  *   01/14/1995 JLB : Created.                                                                 *
  *   02/02/1995 JLB : Left press doesn't get passed to other buttons now                       *
  *=============================================================================================*/
-int ToggleClass::Action(unsigned flags, KeyNumType &key)
-{
+int ToggleClass::Action(unsigned flags, KeyNumType &key) {
 	/*
 	**	If there are no action flag bits set, then this must be a forced call. A forced call
 	**	must never actually function like a real call, but rather only performs any necessary
 	**	graphic updating.
 	*/
-	bool overbutton = ((Get_Mouse_X() - X) < Width && (Get_Mouse_Y() - Y) < Height );
+	bool overbutton = ((Get_Mouse_X() - X) < Width && (Get_Mouse_Y() - Y) < Height);
 	if (!flags) {
 		if (overbutton) {
 			if (!IsPressed) {
@@ -172,8 +160,8 @@ int ToggleClass::Action(unsigned flags, KeyNumType &key)
 		Flag_To_Redraw();
 		flags &= ~LEFTPRESS;
 		ControlClass::Action(flags, key);
-		key = KN_NONE;				// erase the event
-		return(true);		// stop processing other buttons now
+		key = KN_NONE; // erase the event
+		return (true); // stop processing other buttons now
 	}
 
 	if (flags & LEFTRELEASE) {
@@ -192,7 +180,5 @@ int ToggleClass::Action(unsigned flags, KeyNumType &key)
 	**	Do normal button processing. This ends up causing the button's ID number to
 	**	be returned from the controlling Input() function.
 	*/
-	return(ControlClass::Action(flags, key));
+	return (ControlClass::Action(flags, key));
 }
-
-

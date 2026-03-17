@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/FOOT.CPP 2     3/06/97 1:46p Joe_bostic $ */
@@ -78,8 +78,7 @@
  *   FootClass::Unlimbo -- Unlimbos object and performs special fixups.                        *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * FootClass::FootClass -- Default constructor for foot class objects.                         *
@@ -96,44 +95,19 @@
  * HISTORY:                                                                                    *
  *   11/23/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-FootClass::FootClass(RTTIType rtti, int id, HousesType house) :
-	TechnoClass(rtti, id, house),
-	IsScanLimited(false),
-	IsInitiated(false),
-	IsNewNavCom(false),
-	IsPlanningToLook(false),
-	IsDeploying(false),
-	IsFiring(false),
-	IsRotating(false),
-	IsDriving(false),
-	IsUnloading(false),
-	IsFormationMove(false),
-	IsNavQueueLoop(false),
-	IsScattering(false),
-	IsMovingOntoBridge(false),
-	Speed(0),
-	SpeedBias(1),
-	XFormOffset(0x80000000),
-	YFormOffset(0x80000000),
-	NavCom(TARGET_NONE),
-	SuspendedNavCom(TARGET_NONE),
-	Team(0),
-	Group(255),
-	Member(0),
-	PathThreshhold(MOVE_CLOAK),
-	PathDelay(0),
-	TryTryAgain(PATH_RETRY),
-	BaseAttackTimer(0),
-	FormationSpeed(SPEED_FOOT),
-	FormationMaxSpeed(MPH_IMMOBILE),
-	HeadToCoord(0)
-{
+FootClass::FootClass(RTTIType rtti, int id, HousesType house)
+    : TechnoClass(rtti, id, house), IsScanLimited(false), IsInitiated(false), IsNewNavCom(false),
+      IsPlanningToLook(false), IsDeploying(false), IsFiring(false), IsRotating(false), IsDriving(false),
+      IsUnloading(false), IsFormationMove(false), IsNavQueueLoop(false), IsScattering(false), IsMovingOntoBridge(false),
+      Speed(0), SpeedBias(1), XFormOffset(0x80000000), YFormOffset(0x80000000), NavCom(TARGET_NONE),
+      SuspendedNavCom(TARGET_NONE), Team(0), Group(255), Member(0), PathThreshhold(MOVE_CLOAK), PathDelay(0),
+      TryTryAgain(PATH_RETRY), BaseAttackTimer(0), FormationSpeed(SPEED_FOOT), FormationMaxSpeed(MPH_IMMOBILE),
+      HeadToCoord(0) {
 	Path[0] = FACING_NONE;
 	for (int index = 0; index < ARRAY_SIZE(NavQueue); index++) {
 		NavQueue[index] = TARGET_NONE;
 	}
 }
-
 
 #ifdef CHEAT_KEYS
 /***********************************************************************************************
@@ -152,8 +126,7 @@ FootClass::FootClass(RTTIType rtti, int id, HousesType house) :
  *   06/02/1994 JLB : Created.                                                                 *
  *   07/04/1995 JLB : Handles aircraft special case.                                           *
  *=============================================================================================*/
-void FootClass::Debug_Dump(MonoClass * mono) const
-{
+void FootClass::Debug_Dump(MonoClass *mono) const {
 	assert(IsActive);
 
 	mono->Fill_Attrib(53, 13, 12, 1, IsInitiated ? MonoClass::INVERSE : MonoClass::NORMAL);
@@ -165,7 +138,8 @@ void FootClass::Debug_Dump(MonoClass * mono) const
 	mono->Fill_Attrib(53, 18, 12, 1, IsUnloading ? MonoClass::INVERSE : MonoClass::NORMAL);
 	mono->Fill_Attrib(27, 18, 12, 1, IsFormationMove ? MonoClass::INVERSE : MonoClass::NORMAL);
 
-	mono->Set_Cursor(45, 1);mono->Printf("%02X", Speed);
+	mono->Set_Cursor(45, 1);
+	mono->Printf("%02X", Speed);
 	if (NavCom) {
 		mono->Set_Cursor(29, 5);
 		mono->Printf("%08X", NavCom);
@@ -175,27 +149,32 @@ void FootClass::Debug_Dump(MonoClass * mono) const
 		mono->Printf("%08X", SuspendedNavCom);
 	}
 
-	if (Team) Team->Debug_Dump(mono);
+	if (Team)
+		Team->Debug_Dump(mono);
 	if (Group != 255) {
-		mono->Set_Cursor(59, 1);mono->Printf("%d", Group);
+		mono->Set_Cursor(59, 1);
+		mono->Printf("%d", Group);
 	}
 
-	static char	const * _p2c[9] = {"-","0","1","2","3","4","5","6","7"};
+	static char const *_p2c[9] = {"-", "0", "1", "2", "3", "4", "5", "6", "7"};
 	for (int index = 0; index < min(12, ARRAY_SIZE(Path)); index++) {
-		mono->Set_Cursor(54+index, 3);
-		mono->Printf("%s", _p2c[((ABS((int)Path[index]+1)) % ARRAY_SIZE(_p2c))]);
+		mono->Set_Cursor(54 + index, 3);
+		mono->Printf("%s", _p2c[((ABS((int)Path[index] + 1)) % ARRAY_SIZE(_p2c))]);
 	}
-	mono->Set_Cursor(54, 5);mono->Printf("%2d", PathThreshhold);
-	mono->Set_Cursor(72, 3);mono->Printf("%4d", (long)PathDelay);
-	mono->Set_Cursor(67, 3);mono->Printf("%3d", TryTryAgain);
+	mono->Set_Cursor(54, 5);
+	mono->Printf("%2d", PathThreshhold);
+	mono->Set_Cursor(72, 3);
+	mono->Printf("%4d", (long)PathDelay);
+	mono->Set_Cursor(67, 3);
+	mono->Printf("%3d", TryTryAgain);
 	if (HeadToCoord) {
-		mono->Set_Cursor(60, 5);mono->Printf("%08X", HeadToCoord);
+		mono->Set_Cursor(60, 5);
+		mono->Printf("%08X", HeadToCoord);
 	}
 
 	TechnoClass::Debug_Dump(mono);
 }
 #endif
-
 
 /***********************************************************************************************
  * FootClass::Set_Speed -- Initiate unit movement physics.                                     *
@@ -219,14 +198,12 @@ void FootClass::Debug_Dump(MonoClass * mono) const
  *   04/15/1994 JLB : Converted to member function.                                            *
  *   07/21/1994 JLB : Simplified.                                                              *
  *=============================================================================================*/
-void FootClass::Set_Speed(int speed)
-{
+void FootClass::Set_Speed(int speed) {
 	assert(IsActive);
 
 	speed &= 0xFF;
 	((unsigned char &)Speed) = speed;
 }
-
 
 /***********************************************************************************************
  * FootClass::Mark -- Unit interface to map rendering system.                                  *
@@ -250,17 +227,17 @@ void FootClass::Set_Speed(int speed)
  *   04/15/1994 JLB : Converted to member function.                                            *
  *   12/23/1994 JLB : Performs low level check before processing.                              *
  *=============================================================================================*/
-bool FootClass::Mark(MarkType mark)
-{
+bool FootClass::Mark(MarkType mark) {
 	assert(this != 0);
 	assert(IsActive);
 
 	if (TechnoClass::Mark(mark)) {
-//		short list[32];
+		//		short list[32];
 		CELL cell = Coord_Cell(Coord);
 
 #ifndef PARTIAL
-		if (In_Which_Layer() != LAYER_GROUND && (mark == MARK_UP || mark == MARK_DOWN)) mark = MARK_CHANGE;
+		if (In_Which_Layer() != LAYER_GROUND && (mark == MARK_UP || mark == MARK_DOWN))
+			mark = MARK_CHANGE;
 #endif
 
 		/*
@@ -268,29 +245,28 @@ bool FootClass::Mark(MarkType mark)
 		**	request.
 		*/
 		switch (mark) {
-			case MARK_UP:
-				Map.Pick_Up(cell, this);
-				break;
+		case MARK_UP:
+			Map.Pick_Up(cell, this);
+			break;
 
-			case MARK_DOWN:
-				Map.Place_Down(cell, this);
-				break;
+		case MARK_DOWN:
+			Map.Place_Down(cell, this);
+			break;
 
-			case MARK_CHANGE_REDRAW:
-				Map.Refresh_Cells(cell, Overlap_List(true));
-				Map.Refresh_Cells(cell, Occupy_List());
-				break;
+		case MARK_CHANGE_REDRAW:
+			Map.Refresh_Cells(cell, Overlap_List(true));
+			Map.Refresh_Cells(cell, Occupy_List());
+			break;
 
-			default:
-				Map.Refresh_Cells(cell, Overlap_List());
-				Map.Refresh_Cells(cell, Occupy_List());
-				break;
+		default:
+			Map.Refresh_Cells(cell, Overlap_List());
+			Map.Refresh_Cells(cell, Occupy_List());
+			break;
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FootClass::Basic_Path -- Finds the basic path for a ground object.                          *
@@ -308,13 +284,12 @@ bool FootClass::Mark(MarkType mark)
  * HISTORY:                                                                                    *
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FootClass::Basic_Path(void)
-{
+bool FootClass::Basic_Path(void) {
 	assert(IsActive);
 
-	PathType		* path;			// Pointer to path control structure.
-	CELL			cell;
-	int 			skip_path = false;
+	PathType *path; // Pointer to path control structure.
+	CELL cell;
+	int skip_path = false;
 
 	Path[0] = FACING_NONE;
 
@@ -329,19 +304,22 @@ bool FootClass::Basic_Path(void)
 		int dist = Distance(NavCom);
 		int checkdist = Team.Is_Valid() ? Rule.StrayDistance : Rule.CloseEnoughDistance;
 		if (Can_Enter_Cell(cell) > MOVE_CLOAK && dist > checkdist) {
-			CELL cell2 = Map.Nearby_Location(cell, Techno_Type_Class()->Speed, Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone);
-			if (cell2 != 0 && ::Distance(Cell_Coord(cell), Cell_Coord(cell2)) < dist) cell = cell2;
+			CELL cell2 = Map.Nearby_Location(cell, Techno_Type_Class()->Speed,
+							 Map[Coord].Zones[Techno_Type_Class()->MZone],
+							 Techno_Type_Class()->MZone);
+			if (cell2 != 0 && ::Distance(Cell_Coord(cell), Cell_Coord(cell2)) < dist)
+				cell = cell2;
 		}
 
 		if (What_Am_I() == RTTI_INFANTRY) {
 			CELL mycell = Coord_Cell(Center_Coord());
-			ObjectClass * obj = Map[mycell].Cell_Occupier();
+			ObjectClass *obj = Map[mycell].Cell_Occupier();
 			while (obj) {
 				if (obj != this && obj->What_Am_I() == RTTI_INFANTRY) {
-					InfantryClass * inf = (InfantryClass *)obj;
+					InfantryClass *inf = (InfantryClass *)obj;
 					if (inf->NavCom == NavCom && inf->Path[0] != FACING_NONE) {
 						if (Coord_Cell(inf->Head_To_Coord()) == Coord_Cell(inf->Coord)) {
-							Mem_Copy(&inf->Path[1], Path, sizeof(Path)-sizeof(Path[0]));
+							Mem_Copy(&inf->Path[1], Path, sizeof(Path) - sizeof(Path[0]));
 						} else {
 							Mem_Copy(inf->Path, Path, sizeof(Path));
 						}
@@ -357,21 +335,22 @@ bool FootClass::Basic_Path(void)
 
 		if (!skip_path) {
 			Mark(MARK_UP);
-			Path[0] = FACING_NONE;		// Probably not necessary, but...
+			Path[0] = FACING_NONE; // Probably not necessary, but...
 
 			/*
 			**	Try to find a path to the destination. If a failure occurs, then keep trying
 			**	with greater determination until either a complete failure occurs, or a decent
 			**	path was found.
 			*/
-			bool			found1=false;		// Found a best path yet?
-			PathType	   path1;
-			FacingType	workpath1[200];	// Staging area for path list.
-//			FacingType	workpath2[200];	// Staging area for path list.
-			MoveType		maxtype = MOVE_TEMP;
+			bool found1 = false; // Found a best path yet?
+			PathType path1;
+			FacingType workpath1[200]; // Staging area for path list.
+						   //			FacingType	workpath2[200];	// Staging area
+						   //for path list.
+			MoveType maxtype = MOVE_TEMP;
 			if (!House->IsHuman) {
 				maxtype = MOVE_TEMP;
-//				maxtype = MOVE_DESTROYABLE;
+				//				maxtype = MOVE_DESTROYABLE;
 			} else {
 
 				/*
@@ -405,7 +384,8 @@ bool FootClass::Basic_Path(void)
 				**	a total failure.
 				*/
 				PathThreshhold++;
-				if (PathThreshhold > maxtype) break;
+				if (PathThreshhold > maxtype)
+					break;
 			}
 
 #ifdef NEVER
@@ -425,19 +405,22 @@ bool FootClass::Basic_Path(void)
 				**	go with the best (easiest) path method.
 				*/
 				path = Find_Path(cell, &workpath2[0], sizeof(workpath2), MOVE_CLOAK);
-				if (path && path->Cost && path->Cost < max((path1.Cost + (path1.Cost/2)), 3)) {
+				if (path && path->Cost && path->Cost < max((path1.Cost + (path1.Cost / 2)), 3)) {
 					memcpy(&path1, path, sizeof(path1));
 					memcpy(workpath1, workpath2, sizeof(workpath1));
 				} else {
 
 					/*
-					**	The easiest path method didn't result in a satisfactory path. Scan through
-					**	the rest of the path options, looking for the best one.
+					**	The easiest path method didn't result in a satisfactory path. Scan
+					*through *	the rest of the path options, looking for the best one.
 					*/
-					for (MoveType move = (MoveType)(MOVE_CLOAK+1); move < (MoveType)(maxtype-1); move++) {
-//					for (MoveType move = MOVE_MOVING_BLOCK; move < maxtype-1; move++) {
+					for (MoveType move = (MoveType)(MOVE_CLOAK + 1); move < (MoveType)(maxtype - 1);
+					     move++) {
+						//					for (MoveType move =
+						// MOVE_MOVING_BLOCK; move < maxtype-1; move++) {
 						path = Find_Path(cell, &workpath2[0], sizeof(workpath2), move);
-						if (path && path->Cost && path->Cost < max((path1.Cost + (path1.Cost/2)), 3)) {
+						if (path && path->Cost &&
+						    path->Cost < max((path1.Cost + (path1.Cost / 2)), 3)) {
 							memcpy(&path1, path, sizeof(path1));
 							memcpy(workpath1, workpath2, sizeof(workpath1));
 						}
@@ -459,16 +442,16 @@ bool FootClass::Basic_Path(void)
 		}
 
 		PathDelay = Rule.PathDelay * TICKS_PER_MINUTE;
-		if (Path[0] != FACING_NONE) return(true);
+		if (Path[0] != FACING_NONE)
+			return (true);
 
 		/*
 		**	If a basic path couldn't be determined, then abort the navigation process.
 		*/
 		Stop_Driver();
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Move -- AI process for moving a vehicle to its destination.              *
@@ -487,21 +470,20 @@ bool FootClass::Basic_Path(void)
  *   07/18/1994 JLB : Created.                                                                 *
  *   10/02/1996 JLB : Player controlled or human owned units don't scan for targets.           *
  *=============================================================================================*/
-int FootClass::Mission_Move(void)
-{
+int FootClass::Mission_Move(void) {
 	assert(IsActive);
 
 	if (!Target_Legal(NavCom) && !IsDriving && MissionQueue == MISSION_NONE) {
 		Enter_Idle_Mode();
-		return(1);
+		return (1);
 	}
-//	if (!Target_Legal(TarCom) && !House->IsPlayerControl && !House->IsHuman) {
-	if (!Target_Legal(TarCom) && !House->IsPlayerControl && !House->IsHuman && (!Team.Is_Valid() || !Team->Class->IsSuicide)) {
+	//	if (!Target_Legal(TarCom) && !House->IsPlayerControl && !House->IsHuman) {
+	if (!Target_Legal(TarCom) && !House->IsPlayerControl && !House->IsHuman &&
+	    (!Team.Is_Valid() || !Team->Class->IsSuicide)) {
 		Target_Something_Nearby(THREAT_RANGE);
 	}
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Capture -- Handles the capture mission.                                  *
@@ -520,14 +502,14 @@ int FootClass::Mission_Move(void)
  * HISTORY:                                                                                    *
  *   03/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FootClass::Mission_Capture(void)
-{
+int FootClass::Mission_Capture(void) {
 	assert(IsActive);
 
 	/*
 	**	If there is a valid TarCom but the NavCom isn't set, then set the NavCom accordingly.
 	*/
-	if (Is_Target_Building(TarCom) && !Target_Legal(NavCom) && What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber) {
+	if (Is_Target_Building(TarCom) && !Target_Legal(NavCom) && What_Am_I() == RTTI_INFANTRY &&
+	    ((InfantryClass *)this)->Class->IsBomber) {
 		Assign_Destination(TarCom);
 	}
 
@@ -537,9 +519,8 @@ int FootClass::Mission_Capture(void)
 			Scatter(0, true);
 		}
 	}
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Attack -- AI for heading towards and firing upon target.                 *
@@ -557,17 +538,15 @@ int FootClass::Mission_Capture(void)
  * HISTORY:                                                                                    *
  *   07/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FootClass::Mission_Attack(void)
-{
+int FootClass::Mission_Attack(void) {
 	assert(IsActive);
 	if (Target_Legal(TarCom)) {
 		Approach_Target();
 	} else {
 		Enter_Idle_Mode();
 	}
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Guard -- Handles the AI for guarding in place.                           *
@@ -584,8 +563,7 @@ int FootClass::Mission_Attack(void)
  * HISTORY:                                                                                    *
  *   07/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FootClass::Mission_Guard(void)
-{
+int FootClass::Mission_Guard(void) {
 	assert(IsActive);
 
 	/*
@@ -606,17 +584,17 @@ int FootClass::Mission_Guard(void)
 	int dtime = MissionControl[Mission].Normal_Delay();
 	if (What_Am_I() == RTTI_VESSEL) {
 		switch (((VesselClass *)this)->Class->Type) {
-			case VESSEL_DD:
-			case VESSEL_PT:
-				dtime = MissionControl[Mission].AA_Delay();
-				break;
+		case VESSEL_DD:
+		case VESSEL_PT:
+			dtime = MissionControl[Mission].AA_Delay();
+			break;
 
-			case VESSEL_CA:
-				dtime *= 2;
-				break;
+		case VESSEL_CA:
+			dtime *= 2;
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 	if (What_Am_I() == RTTI_INFANTRY) {
@@ -625,24 +603,24 @@ int FootClass::Mission_Guard(void)
 		**	If this is a bomber type infantry and the current target is a building, then go into
 		**	sabotage mode if not already.
 		*/
-		if (!House->IsHuman && Is_Target_Building(TarCom) && ((InfantryClass *)this)->Class->IsBomber && Mission != MISSION_SABOTAGE) {
+		if (!House->IsHuman && Is_Target_Building(TarCom) && ((InfantryClass *)this)->Class->IsBomber &&
+		    Mission != MISSION_SABOTAGE) {
 			Assign_Mission(MISSION_SABOTAGE);
 		}
 
 		switch (((InfantryClass *)this)->Class->Type) {
-			case INFANTRY_E1:
-			case INFANTRY_E3:
-				dtime = MissionControl[Mission].AA_Delay();
-				break;
+		case INFANTRY_E1:
+		case INFANTRY_E3:
+			dtime = MissionControl[Mission].AA_Delay();
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 
-	return((Arm != 0) ? (int)Arm : (dtime+Random_Pick(0, 2)));
+	return ((Arm != 0) ? (int)Arm : (dtime + Random_Pick(0, 2)));
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Hunt -- Handles the default hunt order.                                  *
@@ -660,47 +638,50 @@ int FootClass::Mission_Guard(void)
  * HISTORY:                                                                                    *
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FootClass::Mission_Hunt(void)
-{
+int FootClass::Mission_Hunt(void) {
 	assert(IsActive);
 	if (!Target_Something_Nearby(THREAT_NORMAL)) {
-#if(0)
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-	if (What_Am_I() == RTTI_INFANTRY && *(InfantryClass *)this == INFANTRY_GENERAL && House->Class->House==HOUSE_UKRAINE && Scen.Scenario==47) {
-		for(int index=0; index < Buildings.Count(); index++) {
-			if(Buildings.Ptr(index)->IsOwnedByPlayer) {
-				Assign_Target(Buildings.Ptr(index)->As_Target());
-				break;
+#if (0)
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+		if (What_Am_I() == RTTI_INFANTRY && *(InfantryClass *)this == INFANTRY_GENERAL &&
+		    House->Class->House == HOUSE_UKRAINE && Scen.Scenario == 47) {
+			for (int index = 0; index < Buildings.Count(); index++) {
+				if (Buildings.Ptr(index)->IsOwnedByPlayer) {
+					Assign_Target(Buildings.Ptr(index)->As_Target());
+					break;
+				}
+			}
+			for (index = 0; index < Units.Count(); index++) {
+				if (Units.Ptr(index)->IsOwnedByPlayer) {
+					Assign_Target(Units.Ptr(index)->As_Target());
+					break;
+				}
+			}
+			for (index = 0; index < Infantry.Count(); index++) {
+				if (Infantry.Ptr(index)->IsOwnedByPlayer) {
+					Assign_Target(Infantry.Ptr(index)->As_Target());
+					break;
+				}
+			}
+			for (index = 0; index < Aircraft.Count(); index++) {
+				if (Aircraft.Ptr(index)->IsOwnedByPlayer) {
+					Assign_Target(Aircraft.Ptr(index)->As_Target());
+					break;
+				}
 			}
 		}
-		for(index=0; index < Units.Count(); index++) {
-			if(Units.Ptr(index)->IsOwnedByPlayer) {
-				Assign_Target(Units.Ptr(index)->As_Target());
-				break;
-			}
-		}
-		for(index=0; index < Infantry.Count(); index++) {
-			if(Infantry.Ptr(index)->IsOwnedByPlayer) {
-				Assign_Target(Infantry.Ptr(index)->As_Target());
-				break;
-			}
-		}
-		for(index=0; index < Aircraft.Count(); index++) {
-			if(Aircraft.Ptr(index)->IsOwnedByPlayer) {
-				Assign_Target(Aircraft.Ptr(index)->As_Target());
-				break;
-			}
-		}
-	}
 #endif
 #endif
 		Random_Animate();
 	} else {
-		if (What_Am_I() == RTTI_INFANTRY && ( ((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_RENOVATOR || ((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_THIEF) ) {
+		if (What_Am_I() == RTTI_INFANTRY &&
+		    (((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_RENOVATOR ||
+		     ((InfantryTypeClass const &)Class_Of()).Type == INFANTRY_THIEF)) {
 			Assign_Destination(TarCom);
 			Assign_Mission(MISSION_CAPTURE);
 		} else {
-			if (What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber && Is_Target_Building(TarCom)) {
+			if (What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber &&
+			    Is_Target_Building(TarCom)) {
 				Assign_Destination(TarCom);
 				Assign_Mission(MISSION_SABOTAGE);
 			} else {
@@ -708,9 +689,8 @@ int FootClass::Mission_Hunt(void)
 			}
 		}
 	}
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }
-
 
 /***********************************************************************************************
  * FootClass::Stop_Driver -- This routine clears the driving state of the object.              *
@@ -728,8 +708,7 @@ int FootClass::Mission_Hunt(void)
  *   10/17/1994 JLB : Created.                                                                 *
  *   12/12/1994 JLB : Greatly simplified.                                                      *
  *=============================================================================================*/
-bool FootClass::Stop_Driver(void)
-{
+bool FootClass::Stop_Driver(void) {
 	assert(IsActive);
 
 	if (HeadToCoord) {
@@ -737,11 +716,10 @@ bool FootClass::Stop_Driver(void)
 		Set_Speed(0);
 		IsDriving = false;
 		IsMovingOntoBridge = false;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FootClass::Start_Driver -- This starts the driver heading to the destination desired.       *
@@ -760,8 +738,7 @@ bool FootClass::Stop_Driver(void)
  *   10/17/1994 JLB : Created.                                                                 *
  *   12/12/1994 JLB : Uses simple spot index finder.                                           *
  *=============================================================================================*/
-bool FootClass::Start_Driver(COORDINATE &headto)
-{
+bool FootClass::Start_Driver(COORDINATE &headto) {
 	assert(IsActive);
 
 	Stop_Driver();
@@ -769,24 +746,25 @@ bool FootClass::Start_Driver(COORDINATE &headto)
 		HeadToCoord = headto;
 		IsDriving = true;
 
-		CellClass * cellptr = &Map[headto];
+		CellClass *cellptr = &Map[headto];
 		TemplateType ttype = cellptr->TType;
-		IsMovingOntoBridge = (ttype >= TEMPLATE_BRIDGE1 && ttype <= TEMPLATE_BRIDGE2D) || (ttype >= TEMPLATE_BRIDGE_1A && ttype <= TEMPLATE_BRIDGE_3F);
+		IsMovingOntoBridge = (ttype >= TEMPLATE_BRIDGE1 && ttype <= TEMPLATE_BRIDGE2D) ||
+				     (ttype >= TEMPLATE_BRIDGE_1A && ttype <= TEMPLATE_BRIDGE_3F);
 
 		/*
 		**	Check for crate goodie finder here.
 		*/
 		if (Map[headto].Goodie_Check(this)) {
-			return(true);
+			return (true);
 		}
-		if (!IsActive) return(false);
+		if (!IsActive)
+			return (false);
 
 		HeadToCoord = NULL;
 		IsDriving = false;
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FootClass::Sort_Y -- Determine the sort coordinate for foot class objects.                  *
@@ -806,19 +784,17 @@ bool FootClass::Start_Driver(COORDINATE &headto)
  *   10/17/1994 JLB : Created.                                                                 *
  *   11/04/1994 JLB : Sort value is different when unloading from aircraft.                    *
  *=============================================================================================*/
-COORDINATE FootClass::Sort_Y(void) const
-{
+COORDINATE FootClass::Sort_Y(void) const {
 	assert(IsActive);
 
 	if (IsUnloading) {
-		return(Coord_Add(Coord, 0x01000000L));
+		return (Coord_Add(Coord, 0x01000000L));
 	}
 	if (In_Radio_Contact() && IsTethered && Contact_With_Whom()->What_Am_I() == RTTI_UNIT) {
-		return(Coord_Add(Coord, 0x01000000L));
+		return (Coord_Add(Coord, 0x01000000L));
 	}
-	return(Coord_Add(Coord, 0x00300000L));
+	return (Coord_Add(Coord, 0x00300000L));
 }
-
 
 /***********************************************************************************************
  * FootClass::Stun -- Prepares a ground travelling object for removal.                         *
@@ -837,8 +813,7 @@ COORDINATE FootClass::Sort_Y(void) const
  * HISTORY:                                                                                    *
  *   12/23/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Stun(void)
-{
+void FootClass::Stun(void) {
 	assert(IsActive);
 
 	Assign_Destination(TARGET_NONE);
@@ -846,7 +821,6 @@ void FootClass::Stun(void)
 	Stop_Driver();
 	TechnoClass::Stun();
 }
-
 
 /***********************************************************************************************
  * FootClass::Approach_Target -- Sets the navigation computer to approach target object.       *
@@ -867,8 +841,7 @@ void FootClass::Stun(void)
  *   12/22/1994 JLB : Enhanced search algorithm.                                               *
  *   05/20/1995 JLB : Always approaches if the object is off the map.                          *
  *=============================================================================================*/
-void FootClass::Approach_Target(void)
-{
+void FootClass::Approach_Target(void) {
 	assert(IsActive);
 
 	/*
@@ -882,17 +855,17 @@ void FootClass::Approach_Target(void)
 		**	If the target is too far away then head toward it.
 		*/
 		int maxrange = Weapon_Range(primary);
-//		int maxrange = max(Weapon_Range(0), Weapon_Range(1));
+		//		int maxrange = max(Weapon_Range(0), Weapon_Range(1));
 
 		if (!Target_Legal(NavCom) && (!In_Range(TarCom, primary) || !IsLocked)) {
-//		if (!Target_Legal(NavCom) && (Distance(TarCom) > maxrange || !IsLocked)) {
+			//		if (!Target_Legal(NavCom) && (Distance(TarCom) > maxrange || !IsLocked)) {
 
 			/*
 			** If the object that we are attacking is a building adjust the unit's
 			** max range so that people can stand far away from the buildings and
 			** hit them.
 			*/
-			BuildingClass * obj = As_Building(TarCom);
+			BuildingClass *obj = As_Building(TarCom);
 			if (obj) {
 				maxrange += ((obj->Class->Width() + obj->Class->Height()) * (0x100 / 4));
 			}
@@ -928,19 +901,26 @@ void FootClass::Approach_Target(void)
 			for (int range = maxrange; range > 0x0080; range -= 0x0100) {
 				static int _angles[] = {0, 8, -8, 16, -16, 24, -24, 32, -32, 48, -48, 64, -64};
 
-				for (int index = 0; index < (sizeof(_angles)/sizeof(_angles[0])); index++) {
+				for (int index = 0; index < (sizeof(_angles) / sizeof(_angles[0])); index++) {
 					trycoord = Coord_Move(tcoord, (DirType)(dir + _angles[index]), range);
 
 					if (::Distance(trycoord, tcoord) < range) {
 						trycell = Coord_Cell(trycoord);
-						if (Map.In_Radar(trycell) && Map[trycell].Is_Clear_To_Move(Techno_Type_Class()->Speed, false, false, Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone)) {
-//						if (Can_Enter_Cell(trycell) <= MOVE_CLOAK && Map.In_Radar(trycell)) {
+						if (Map.In_Radar(trycell) &&
+						    Map[trycell].Is_Clear_To_Move(
+							Techno_Type_Class()->Speed, false, false,
+							Map[Coord].Zones[Techno_Type_Class()->MZone],
+							Techno_Type_Class()->MZone)) {
+							//						if
+							//(Can_Enter_Cell(trycell) <= MOVE_CLOAK &&
+							// Map.In_Radar(trycell)) {
 							found = true;
 							break;
 						}
 					}
 				}
-				if (found) break;
+				if (found)
+					break;
 			}
 
 			/*
@@ -955,14 +935,15 @@ void FootClass::Approach_Target(void)
 				Assign_Destination(::As_Target(trycell));
 			} else {
 
-				trycell = Map.Nearby_Location(trycell, Techno_Type_Class()->Speed, Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone);
+				trycell = Map.Nearby_Location(trycell, Techno_Type_Class()->Speed,
+							      Map[Coord].Zones[Techno_Type_Class()->MZone],
+							      Techno_Type_Class()->MZone);
 				Assign_Destination(::As_Target(trycell));
-//				Assign_Destination(TarCom);
+				//				Assign_Destination(TarCom);
 			}
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Guard_Area -- Causes unit to guard an area about twice weapon range.     *
@@ -982,8 +963,7 @@ void FootClass::Approach_Target(void)
  *   12/23/1994 JLB : Created.                                                                 *
  *   07/27/1995 JLB : Greatly simplified.                                                      *
  *=============================================================================================*/
-int FootClass::Mission_Guard_Area(void)
-{
+int FootClass::Mission_Guard_Area(void) {
 	assert(IsActive);
 
 	/*
@@ -999,7 +979,7 @@ int FootClass::Mission_Guard_Area(void)
 
 	if (What_Am_I() == RTTI_UNIT && ((UnitClass *)this)->Class->IsToHarvest) {
 		Assign_Mission(MISSION_HARVEST);
-		return(1+Random_Pick(1, 10));
+		return (1 + Random_Pick(1, 10));
 	}
 
 	/*
@@ -1016,7 +996,8 @@ int FootClass::Mission_Guard_Area(void)
 		CELL cell = As_Cell(NavCom);
 		int x = Cell_X(cell);
 		int y = Cell_Y(cell);
-		if (x < Map.MapCellX || y < Map.MapCellY || x >= (Map.MapCellX + Map.MapCellWidth) || y >= (Map.MapCellY + Map.MapCellHeight)) {
+		if (x < Map.MapCellX || y < Map.MapCellY || x >= (Map.MapCellX + Map.MapCellWidth) ||
+		    y >= (Map.MapCellY + Map.MapCellHeight)) {
 			Assign_Target(TARGET_NONE);
 			Assign_Destination(TARGET_NONE);
 			ArchiveTarget = ::As_Target(Coord);
@@ -1027,16 +1008,17 @@ int FootClass::Mission_Guard_Area(void)
 	**	If this is a bomber type infantry and the current target is a building, then go into
 	**	sabotage mode if not already.
 	*/
-	if (!House->IsHuman && What_Am_I() ==  RTTI_INFANTRY && Is_Target_Building(TarCom) && ((InfantryClass *)this)->Class->IsBomber && Mission != MISSION_SABOTAGE) {
+	if (!House->IsHuman && What_Am_I() == RTTI_INFANTRY && Is_Target_Building(TarCom) &&
+	    ((InfantryClass *)this)->Class->IsBomber && Mission != MISSION_SABOTAGE) {
 		Assign_Mission(MISSION_SABOTAGE);
-		return(1);
+		return (1);
 	}
 
 	/*
 	**	Make sure that the unit has not strayed too far from the home position.
 	**	If it has, then race back to it.
 	*/
-	int maxrange = Threat_Range(1)/2;
+	int maxrange = Threat_Range(1) / 2;
 
 	if (!IsFiring && !Target_Legal(NavCom) && Distance(ArchiveTarget) > maxrange) {
 		Assign_Target(TARGET_NONE);
@@ -1049,7 +1031,7 @@ int FootClass::Mission_Guard_Area(void)
 		Target_Something_Nearby(THREAT_AREA);
 		Coord = old;
 		if (Target_Legal(TarCom)) {
-			return(1);
+			return (1);
 		}
 		Random_Animate();
 	} else {
@@ -1060,9 +1042,8 @@ int FootClass::Mission_Guard_Area(void)
 	if (What_Am_I() == RTTI_AIRCRAFT) {
 		dtime *= 2;
 	}
-	return(dtime + Random_Pick(1, 5));
+	return (dtime + Random_Pick(1, 5));
 }
-
 
 /***********************************************************************************************
  * FootClass::Unlimbo -- Unlimbos object and performs special fixups.                          *
@@ -1082,8 +1063,7 @@ int FootClass::Mission_Guard_Area(void)
  * HISTORY:                                                                                    *
  *   12/23/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FootClass::Unlimbo(COORDINATE coord, DirType dir)
-{
+bool FootClass::Unlimbo(COORDINATE coord, DirType dir) {
 	assert(IsActive);
 
 	/*
@@ -1100,11 +1080,10 @@ bool FootClass::Unlimbo(COORDINATE coord, DirType dir)
 		**	Start in a still (non-moving) state.
 		*/
 		Path[0] = FACING_NONE;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FootClass::Take_Damage -- Handles taking damage to this object.                             *
@@ -1129,8 +1108,7 @@ bool FootClass::Unlimbo(COORDINATE coord, DirType dir)
  * HISTORY:                                                                                    *
  *   12/30/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-ResultType FootClass::Take_Damage(int & damage, int distance, WarheadType warhead, TechnoClass * source, bool forced)
-{
+ResultType FootClass::Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source, bool forced) {
 	assert(IsActive);
 
 	ResultType result = TechnoClass::Take_Damage(damage, distance, warhead, source, forced);
@@ -1148,10 +1126,11 @@ ResultType FootClass::Take_Damage(int & damage, int distance, WarheadType warhea
 			**	do harm to a ground based unit. This information is needed so that an appropriate
 			**	response will occur when damage is taken.
 			*/
-//			bool tweap = false;
-//			if (As_Techno(TarCom)) {
-//				tweap = (As_Techno(TarCom)->Techno_Type_Class()->PrimaryWeapon != NULL);
-//			}
+			//			bool tweap = false;
+			//			if (As_Techno(TarCom)) {
+			//				tweap = (As_Techno(TarCom)->Techno_Type_Class()->PrimaryWeapon
+			//!= NULL);
+			//			}
 
 			/*
 			**	This ensures that if a unit is in sticky mode, then it will snap out of
@@ -1189,7 +1168,9 @@ ResultType FootClass::Take_Damage(int & damage, int distance, WarheadType warhea
 				/*
 				**	If this object isn't doing anything important, then scatter.
 				*/
-				if (MissionControl[Mission].IsScatter && !IsTethered && !IsDriving && !Target_Legal(TarCom) && !Target_Legal(NavCom) && What_Am_I() != RTTI_AIRCRAFT && What_Am_I() != RTTI_VESSEL) {
+				if (MissionControl[Mission].IsScatter && !IsTethered && !IsDriving &&
+				    !Target_Legal(TarCom) && !Target_Legal(NavCom) && What_Am_I() != RTTI_AIRCRAFT &&
+				    What_Am_I() != RTTI_VESSEL) {
 					if (!House->IsHuman || Rule.IsScatter) {
 						Scatter(0, true);
 					}
@@ -1197,9 +1178,8 @@ ResultType FootClass::Take_Damage(int & damage, int distance, WarheadType warhea
 			}
 		}
 	}
-	return(result);
+	return (result);
 }
-
 
 /***********************************************************************************************
  * FootClass::Active_Click_With -- Initiates attack or move according to target clicked on.    *
@@ -1216,88 +1196,91 @@ ResultType FootClass::Take_Damage(int & damage, int distance, WarheadType warhea
  * HISTORY:                                                                                    *
  *   01/06/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Active_Click_With(ActionType action, ObjectClass * object)
-{
+void FootClass::Active_Click_With(ActionType action, ObjectClass *object) {
 	assert(IsActive);
 	assert(object != NULL);
 
 	switch (action) {
-		case ACTION_GUARD_AREA:
-			if (Can_Player_Fire() && Can_Player_Move()) {
-				if (What_Am_I() == RTTI_INFANTRY &&
-						((InfantryClass *)this)->Class->IsBomber &&
-						object->What_Am_I() == RTTI_BUILDING &&
-						!House->Is_Ally(object)) {
+	case ACTION_GUARD_AREA:
+		if (Can_Player_Fire() && Can_Player_Move()) {
+			if (What_Am_I() == RTTI_INFANTRY && ((InfantryClass *)this)->Class->IsBomber &&
+			    object->What_Am_I() == RTTI_BUILDING && !House->Is_Ally(object)) {
 
-					Player_Assign_Mission(MISSION_SABOTAGE, TARGET_NONE, object->As_Target());
-				} else {
-					Player_Assign_Mission(MISSION_GUARD_AREA, object->As_Target());
-				}
-			}
-			break;
-
-		case ACTION_SELF:
-			Player_Assign_Mission(MISSION_UNLOAD);
-			break;
-
-		case ACTION_ATTACK:
-			if (Can_Player_Fire()) {
-				Player_Assign_Mission(MISSION_ATTACK, object->As_Target());
-			}
-			break;
-
-		case ACTION_ENTER:
-			if (Can_Player_Move() && object && object->Is_Techno() /*&& !((RadioClass *)object)->In_Radio_Contact()*/) {
-				Player_Assign_Mission(MISSION_ENTER, TARGET_NONE, object->As_Target());
-			}
-			break;
-
-		case ACTION_CAPTURE:
-			if (Can_Player_Move()) {
-				Player_Assign_Mission(MISSION_CAPTURE, TARGET_NONE, object->As_Target());
-			}
-			break;
-
-		case ACTION_SABOTAGE:
-			if (Can_Player_Move()) {
 				Player_Assign_Mission(MISSION_SABOTAGE, TARGET_NONE, object->As_Target());
+			} else {
+				Player_Assign_Mission(MISSION_GUARD_AREA, object->As_Target());
 			}
-			break;
+		}
+		break;
 
-		case ACTION_NOMOVE:
-		case ACTION_MOVE:
-			if (Can_Player_Move()) {
+	case ACTION_SELF:
+		Player_Assign_Mission(MISSION_UNLOAD);
+		break;
 
-				TARGET targ = object->As_Target();
+	case ACTION_ATTACK:
+		if (Can_Player_Fire()) {
+			Player_Assign_Mission(MISSION_ATTACK, object->As_Target());
+		}
+		break;
 
-				/*
-				**	If the destination object is not the same zone, then pick a nearby location.
-				*/
-				if (object->What_Am_I() != RTTI_AIRCRAFT && Techno_Type_Class()->Speed != SPEED_WINGED && Map[Coord].Zones[Techno_Type_Class()->MZone] != Map[object->Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
+	case ACTION_ENTER:
+		if (Can_Player_Move() && object &&
+		    object->Is_Techno() /*&& !((RadioClass *)object)->In_Radio_Contact()*/) {
+			Player_Assign_Mission(MISSION_ENTER, TARGET_NONE, object->As_Target());
+		}
+		break;
+
+	case ACTION_CAPTURE:
+		if (Can_Player_Move()) {
+			Player_Assign_Mission(MISSION_CAPTURE, TARGET_NONE, object->As_Target());
+		}
+		break;
+
+	case ACTION_SABOTAGE:
+		if (Can_Player_Move()) {
+			Player_Assign_Mission(MISSION_SABOTAGE, TARGET_NONE, object->As_Target());
+		}
+		break;
+
+	case ACTION_NOMOVE:
+	case ACTION_MOVE:
+		if (Can_Player_Move()) {
+
+			TARGET targ = object->As_Target();
+
+			/*
+			**	If the destination object is not the same zone, then pick a nearby location.
+			*/
+			if (object->What_Am_I() != RTTI_AIRCRAFT && Techno_Type_Class()->Speed != SPEED_WINGED &&
+			    Map[Coord].Zones[Techno_Type_Class()->MZone] !=
+				Map[object->Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
 
 #ifdef FIXIT_MINE_PASSABLE
-					// Fixes units not driving onto mines.
-					if (Can_Enter_Cell(Coord_Cell(object->Center_Coord())) > MOVE_OK) {
-						targ = ::As_Target(Map.Nearby_Location(Coord_Cell(object->Center_Coord()), Techno_Type_Class()->Speed, Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone));
-					}
-#else
-					targ = ::As_Target(Map.Nearby_Location(Coord_Cell(object->Center_Coord()), Techno_Type_Class()->Speed, Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone));
-#endif
+				// Fixes units not driving onto mines.
+				if (Can_Enter_Cell(Coord_Cell(object->Center_Coord())) > MOVE_OK) {
+					targ = ::As_Target(Map.Nearby_Location(
+					    Coord_Cell(object->Center_Coord()), Techno_Type_Class()->Speed,
+					    Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone));
 				}
-
-				Player_Assign_Mission(MISSION_MOVE, TARGET_NONE, targ);
+#else
+				targ = ::As_Target(Map.Nearby_Location(
+				    Coord_Cell(object->Center_Coord()), Techno_Type_Class()->Speed,
+				    Map[Coord].Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone));
+#endif
 			}
-			break;
 
-		case ACTION_NO_DEPLOY:
-			Speak(VOX_DEPLOY);
-			break;
+			Player_Assign_Mission(MISSION_MOVE, TARGET_NONE, targ);
+		}
+		break;
 
-		default:
-			break;
+	case ACTION_NO_DEPLOY:
+		Speak(VOX_DEPLOY);
+		break;
+
+	default:
+		break;
 	}
 }
-
 
 /***********************************************************************************************
  * FootClass::Active_Click_With -- Performs action as a result of left mouse click.            *
@@ -1316,79 +1299,82 @@ void FootClass::Active_Click_With(ActionType action, ObjectClass * object)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Active_Click_With(ActionType action, CELL cell)
-{
+void FootClass::Active_Click_With(ActionType action, CELL cell) {
 	assert(IsActive);
 
 	action = What_Action(cell);
 	switch (action) {
-		case ACTION_HARVEST:
-			Player_Assign_Mission(MISSION_HARVEST, TARGET_NONE, ::As_Target(cell));
-			break;
+	case ACTION_HARVEST:
+		Player_Assign_Mission(MISSION_HARVEST, TARGET_NONE, ::As_Target(cell));
+		break;
 
-		case ACTION_MOVE:
-			if (AllowVoice) {
-				COORDINATE coord = Map.Pixel_To_Coord(Get_Mouse_X(), Get_Mouse_Y());
-				OutList.Add(EventClass(ANIM_MOVE_FLASH, PlayerPtr->Class->House, coord, 1 << PlayerPtr->Class->House));
-			}
-			// Fall into next case.
+	case ACTION_MOVE:
+		if (AllowVoice) {
+			COORDINATE coord = Map.Pixel_To_Coord(Get_Mouse_X(), Get_Mouse_Y());
+			OutList.Add(
+			    EventClass(ANIM_MOVE_FLASH, PlayerPtr->Class->House, coord, 1 << PlayerPtr->Class->House));
+		}
+		// Fall into next case.
 
-		case ACTION_NOMOVE:
-			//using function for IsVisible so we have different results for different players - JAS 2019/09/30
-			if (What_Am_I() != RTTI_AIRCRAFT || Map[cell].Is_Visible(PlayerPtr)) {
+	case ACTION_NOMOVE:
+		// using function for IsVisible so we have different results for different players - JAS 2019/09/30
+		if (What_Am_I() != RTTI_AIRCRAFT || Map[cell].Is_Visible(PlayerPtr)) {
 
-				/*
-				** Find the closest same-zoned cell to where the unit currently is.
-				** This will allow the unit to come as close to the destination cell
-				** as is reasonably possible, when clicking on an impassable cell
-				** (as is likely when clicking in the shroud.)  It looks for the
-				** nearest cell using an expanding-radius box, and ignores cells
-				** off the edge of the map.
-				*/
-				CellClass const * cellptr = &Map[::As_Cell(::As_Target(Center_Coord()))];
-				if (What_Am_I() != RTTI_AIRCRAFT) {
+			/*
+			** Find the closest same-zoned cell to where the unit currently is.
+			** This will allow the unit to come as close to the destination cell
+			** as is reasonably possible, when clicking on an impassable cell
+			** (as is likely when clicking in the shroud.)  It looks for the
+			** nearest cell using an expanding-radius box, and ignores cells
+			** off the edge of the map.
+			*/
+			CellClass const *cellptr = &Map[::As_Cell(::As_Target(Center_Coord()))];
+			if (What_Am_I() != RTTI_AIRCRAFT) {
 
-					if (Can_Enter_Cell(Coord_Cell(Center_Coord())) == MOVE_OK) {
-						cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed, cellptr->Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone);
-					} else {
-						cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed);
-					}
-#ifdef OBSOLETE
-					cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed, cellptr->Zones[Techno_Type_Class()->MZone], Techno_Type_Class()->MZone);
-#endif
+				if (Can_Enter_Cell(Coord_Cell(Center_Coord())) == MOVE_OK) {
+					cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed,
+								   cellptr->Zones[Techno_Type_Class()->MZone],
+								   Techno_Type_Class()->MZone);
+				} else {
+					cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed);
 				}
-
-				Player_Assign_Mission(MISSION_MOVE, TARGET_NONE, ::As_Target(cell));
+#ifdef OBSOLETE
+				cell = Map.Nearby_Location(cell, Techno_Type_Class()->Speed,
+							   cellptr->Zones[Techno_Type_Class()->MZone],
+							   Techno_Type_Class()->MZone);
+#endif
 			}
-			break;
 
-		case ACTION_ATTACK:
-			Player_Assign_Mission(MISSION_ATTACK, ::As_Target(cell));
-			break;
+			Player_Assign_Mission(MISSION_MOVE, TARGET_NONE, ::As_Target(cell));
+		}
+		break;
 
-		/*
-		** Engineer attempting to capture bridge to repair it
-		*/
-		case ACTION_CAPTURE:
-			if (Can_Player_Move()) {
-				Player_Assign_Mission(MISSION_CAPTURE, TARGET_NONE, ::As_Target(cell));
-			}
-			break;
+	case ACTION_ATTACK:
+		Player_Assign_Mission(MISSION_ATTACK, ::As_Target(cell));
+		break;
 
-		case ACTION_SABOTAGE:
-			Player_Assign_Mission(MISSION_SABOTAGE, TARGET_NONE, ::As_Target(cell) );
-			break;
+	/*
+	** Engineer attempting to capture bridge to repair it
+	*/
+	case ACTION_CAPTURE:
+		if (Can_Player_Move()) {
+			Player_Assign_Mission(MISSION_CAPTURE, TARGET_NONE, ::As_Target(cell));
+		}
+		break;
 
-		// MBL 05.15.2020 - Adding support for CTRL+ALT clicking the ground to have units move to an area and guard it
-		case ACTION_GUARD_AREA:
-			if (Can_Player_Fire() && Can_Player_Move()) {
-				Player_Assign_Mission(MISSION_GUARD_AREA, ::As_Target(cell));
-			}
-			break;
-		// END MBL 05.15.2020 
+	case ACTION_SABOTAGE:
+		Player_Assign_Mission(MISSION_SABOTAGE, TARGET_NONE, ::As_Target(cell));
+		break;
+
+	// MBL 05.15.2020 - Adding support for CTRL+ALT clicking the ground to have units move to an area and guard it
+	case ACTION_GUARD_AREA:
+		if (Can_Player_Fire() && Can_Player_Move()) {
+			Player_Assign_Mission(MISSION_GUARD_AREA, ::As_Target(cell));
+		}
+		break;
+		// END MBL 05.15.2020
 	}
 }
-
 
 /***********************************************************************************************
  * FootClass::Per_Cell_Process -- Perform action based on once-per-cell condition.             *
@@ -1409,8 +1395,7 @@ void FootClass::Active_Click_With(ActionType action, CELL cell)
  *   07/08/1995 JLB : Handles generic enter trigger event.                                     *
  *   07/16/1995 JLB : If next to a scanner and cloaked, then shimmer.                          *
  *=============================================================================================*/
-void FootClass::Per_Cell_Process(PCPType why)
-{
+void FootClass::Per_Cell_Process(PCPType why) {
 	assert(IsActive);
 
 	if (why == PCP_END) {
@@ -1431,9 +1416,10 @@ void FootClass::Per_Cell_Process(PCPType why)
 				CELL cell = Adjacent_Cell(Coord_Cell(Coord), face);
 
 				if (Map.In_Radar(cell)) {
-					TechnoClass const * techno = Map[cell].Cell_Techno();
+					TechnoClass const *techno = Map[cell].Cell_Techno();
 
-					if (techno && !techno->House->Is_Ally(this) && techno->Techno_Type_Class()->IsScanner) {
+					if (techno && !techno->House->Is_Ally(this) &&
+					    techno->Techno_Type_Class()->IsScanner) {
 						Do_Shimmer();
 						break;
 					}
@@ -1449,15 +1435,18 @@ void FootClass::Per_Cell_Process(PCPType why)
 		if (Target_Legal(TarCom) && (What_Am_I() != RTTI_INFANTRY || !((InfantryClass *)this)->Class->IsDog)) {
 			int primary = What_Weapon_Should_I_Use(TarCom);
 			bool inrange = In_Range(TarCom, primary);
-			TechnoClass const * techno = As_Techno(TarCom);
+			TechnoClass const *techno = As_Techno(TarCom);
 			if (techno != NULL && techno->Is_Foot()) {
-				FootClass const * foot = (FootClass const *)techno;
+				FootClass const *foot = (FootClass const *)techno;
 				MPHType speed = ((TechnoTypeClass const &)techno->Class_Of()).MaxSpeed;
-				COORDINATE rangecoord = (speed > MPH_SLOW) ? foot->Likely_Coord() : foot->Target_Coord();
+				COORDINATE rangecoord =
+				    (speed > MPH_SLOW) ? foot->Likely_Coord() : foot->Target_Coord();
 				inrange = In_Range(rangecoord, primary);
 			}
 
-			if ((Mission == MISSION_RESCUE || Mission == MISSION_GUARD_AREA || Mission == MISSION_ATTACK || Mission == MISSION_HUNT) && inrange) {
+			if ((Mission == MISSION_RESCUE || Mission == MISSION_GUARD_AREA || Mission == MISSION_ATTACK ||
+			     Mission == MISSION_HUNT) &&
+			    inrange) {
 				Assign_Destination(TARGET_NONE);
 				Path[0] = FACING_NONE;
 			}
@@ -1467,10 +1456,11 @@ void FootClass::Per_Cell_Process(PCPType why)
 		**	Trigger event associated with the player entering the cell.
 		*/
 		if (Cloak != CLOAKED) {
-			TriggerClass * trigger = Map[Coord].Trigger;
+			TriggerClass *trigger = Map[Coord].Trigger;
 			if (trigger != NULL) {
 				trigger->Spring(TEVENT_PLAYER_ENTERED, this, Coord_Cell(Coord));
-				if (!IsActive) return;
+				if (!IsActive)
+					return;
 			}
 
 			/*
@@ -1480,11 +1470,14 @@ void FootClass::Per_Cell_Process(PCPType why)
 			int y = Cell_Y(Coord_Cell(Coord));
 			int index;
 			for (index = 0; index < Map.MapCellWidth; index++) {
-				trigger = Map[XY_Cell(index+Map.MapCellX, y)].Trigger;
+				trigger = Map[XY_Cell(index + Map.MapCellX, y)].Trigger;
 				if (trigger != NULL) {
-					if (trigger->Class->Event1.Event == TEVENT_CROSS_HORIZONTAL || (trigger->Class->EventControl != MULTI_ONLY && trigger->Class->Event2.Event == TEVENT_CROSS_HORIZONTAL)) {
+					if (trigger->Class->Event1.Event == TEVENT_CROSS_HORIZONTAL ||
+					    (trigger->Class->EventControl != MULTI_ONLY &&
+					     trigger->Class->Event2.Event == TEVENT_CROSS_HORIZONTAL)) {
 						trigger->Spring(TEVENT_CROSS_HORIZONTAL, this, Coord_Cell(Coord));
-						if (!IsActive) return;
+						if (!IsActive)
+							return;
 					}
 				}
 			}
@@ -1493,11 +1486,14 @@ void FootClass::Per_Cell_Process(PCPType why)
 			**	Check for vertical trigger crossing.
 			*/
 			for (index = 0; index < Map.MapCellHeight; index++) {
-				trigger = Map[XY_Cell(x, index+Map.MapCellY)].Trigger;
+				trigger = Map[XY_Cell(x, index + Map.MapCellY)].Trigger;
 				if (trigger != NULL) {
-					if (trigger->Class->Event1.Event == TEVENT_CROSS_VERTICAL || (trigger->Class->EventControl != MULTI_ONLY && trigger->Class->Event2.Event == TEVENT_CROSS_VERTICAL)) {
+					if (trigger->Class->Event1.Event == TEVENT_CROSS_VERTICAL ||
+					    (trigger->Class->EventControl != MULTI_ONLY &&
+					     trigger->Class->Event2.Event == TEVENT_CROSS_VERTICAL)) {
 						trigger->Spring(TEVENT_CROSS_VERTICAL, this, Coord_Cell(Coord));
-						if (!IsActive) return;
+						if (!IsActive)
+							return;
 					}
 				}
 			}
@@ -1507,10 +1503,14 @@ void FootClass::Per_Cell_Process(PCPType why)
 			*/
 			for (MapTriggerID = 0; MapTriggerID < MapTriggers.Count(); MapTriggerID++) {
 				trigger = MapTriggers[MapTriggerID];
-				if (trigger->Class->Event1.Event == TEVENT_ENTERS_ZONE || (trigger->Class->EventControl != MULTI_ONLY && trigger->Class->Event2.Event == TEVENT_ENTERS_ZONE)) {
-					if (Map[trigger->Cell].Zones[Techno_Type_Class()->MZone] == Map[Coord].Zones[Techno_Type_Class()->MZone]) {
+				if (trigger->Class->Event1.Event == TEVENT_ENTERS_ZONE ||
+				    (trigger->Class->EventControl != MULTI_ONLY &&
+				     trigger->Class->Event2.Event == TEVENT_ENTERS_ZONE)) {
+					if (Map[trigger->Cell].Zones[Techno_Type_Class()->MZone] ==
+					    Map[Coord].Zones[Techno_Type_Class()->MZone]) {
 						trigger->Spring(TEVENT_ENTERS_ZONE, this, Coord_Cell(Coord));
-						if (!IsActive) return;
+						if (!IsActive)
+							return;
 					}
 				}
 			}
@@ -1519,30 +1519,29 @@ void FootClass::Per_Cell_Process(PCPType why)
 			**	If any of these triggers cause this unit to be destroyed, then
 			**	stop all further processing for this unit.
 			*/
-			if (!IsActive) return;
+			if (!IsActive)
+				return;
 		}
 
 #ifdef OBSOLETE
 		/*
 		** Flag any gap generators to re-draw
 		*/
-		for (int index = 0; index <Buildings.Count(); index++) {
-			BuildingClass * obj = Buildings.Ptr(index);
+		for (int index = 0; index < Buildings.Count(); index++) {
+			BuildingClass *obj = Buildings.Ptr(index);
 			if (obj && *obj == STRUCT_GAP && !obj->IsInLimbo && (HouseClass *)obj->House != PlayerPtr) {
 				int dist = Distance(obj) / CELL_LEPTON_W;
-				if (dist < (6 + Rule.GapShroudRadius) ) {
-	//			if (dist < (6 + obj->Class->SightRange) ) {
-					obj->IsJamming = false;	// lie so it'll re-jam now
+				if (dist < (6 + Rule.GapShroudRadius)) {
+					//			if (dist < (6 + obj->Class->SightRange) ) {
+					obj->IsJamming = false; // lie so it'll re-jam now
 				}
 			}
 		}
 #endif
-
 	}
 
 	TechnoClass::Per_Cell_Process(why);
 }
-
 
 /***************************************************************************
  * FootClass::Override_Mission -- temporarily overrides a units mission    *
@@ -1556,21 +1555,20 @@ void FootClass::Per_Cell_Process(PCPType why)
  * OUTPUT:		none                                                        *
  *                                                                         *
  * WARNINGS:   If a mission is already overridden, the current mission is  *
- *					just re-assigned.															*
+ *					just re-assigned.
+ **
  *                                                                         *
  * HISTORY:                                                                *
  *   04/28/1995 PWG : Created.                                             *
  *=========================================================================*/
-void FootClass::Override_Mission(MissionType mission, TARGET tarcom, TARGET navcom)
-{
+void FootClass::Override_Mission(MissionType mission, TARGET tarcom, TARGET navcom) {
 	assert(IsActive);
 
- 	SuspendedNavCom = NavCom;
+	SuspendedNavCom = NavCom;
 	TechnoClass::Override_Mission(mission, tarcom, navcom);
 
 	Assign_Destination(navcom);
 }
-
 
 /***************************************************************************
  * FootClass::Restore_Mission -- Restores an overridden mission            *
@@ -1584,17 +1582,15 @@ void FootClass::Override_Mission(MissionType mission, TARGET tarcom, TARGET navc
  * HISTORY:                                                                *
  *   04/28/1995 PWG : Created.                                             *
  *=========================================================================*/
-bool FootClass::Restore_Mission(void)
-{
+bool FootClass::Restore_Mission(void) {
 	assert(IsActive);
 
 	if (TechnoClass::Restore_Mission()) {
 		Assign_Destination(SuspendedNavCom);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FootClass::Receive_Message -- Movement related radio messages are handled here.             *
@@ -1616,97 +1612,96 @@ bool FootClass::Restore_Mission(void)
  * HISTORY:                                                                                    *
  *   05/14/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-RadioMessageType FootClass::Receive_Message(RadioClass * from, RadioMessageType message, long & param)
-{
+RadioMessageType FootClass::Receive_Message(RadioClass *from, RadioMessageType message, long &param) {
 	assert(IsActive);
 
 	switch (message) {
 
-		/*
-		**	Answers if this object is located on top of a service depot.
-		*/
-		case RADIO_ON_DEPOT:
-			if (Map[Center_Coord()].Cell_Building() != NULL) {
-				BuildingClass const * building = Map[Center_Coord()].Cell_Building();
-				if (*building == STRUCT_REPAIR) {
-					return(RADIO_ROGER);
+	/*
+	**	Answers if this object is located on top of a service depot.
+	*/
+	case RADIO_ON_DEPOT:
+		if (Map[Center_Coord()].Cell_Building() != NULL) {
+			BuildingClass const *building = Map[Center_Coord()].Cell_Building();
+			if (*building == STRUCT_REPAIR) {
+				return (RADIO_ROGER);
+			}
+		}
+		return (RADIO_NEGATIVE);
+
+	/*
+	**	Intercept the repair request and if this object is moving, then no repair
+	**	is possible.
+	*/
+	case RADIO_REPAIR:
+		if (Target_Legal(NavCom))
+			return (RADIO_NEGATIVE);
+		break;
+
+	/*
+	**	Something bad has happened to the object in contact with. Abort any coordinated
+	**	activity with this object. Basically, ... run away! Run away!
+	*/
+	case RADIO_RUN_AWAY:
+		if (In_Radio_Contact()) {
+			if (NavCom == Contact_With_Whom()->As_Target()) {
+				Assign_Destination(TARGET_NONE);
+			}
+		}
+		if (Mission == MISSION_SLEEP) {
+			Assign_Mission(MISSION_GUARD);
+			Commence();
+		}
+		if (Mission == MISSION_ENTER) {
+			Assign_Mission(MISSION_GUARD);
+		}
+		if (!IsRotating && !Target_Legal(NavCom)) {
+			Scatter(0, true, true);
+		}
+		break;
+
+	/*
+	**	Checks to see if this unit needs to move somewhere. If it is already in motion,
+	**	then it doesn't need further movement instructions.
+	*/
+	case RADIO_NEED_TO_MOVE:
+		param = (long)NavCom;
+		if (!Target_Legal(NavCom)) {
+			return (RADIO_ROGER);
+		}
+		return (RADIO_NEGATIVE);
+
+	/*
+	**	Radio request to move to location specified. Typically this is used
+	**	for complex loading and unloading missions.
+	*/
+	case RADIO_MOVE_HERE:
+		if (NavCom != (TARGET)param) {
+			if (::As_Target(Coord_Cell(Coord)) == (TARGET)param) {
+				return (RADIO_YEA_NOW_WHAT);
+			} else {
+				if (Mission == MISSION_GUARD && MissionQueue == MISSION_NONE) {
+					Assign_Mission(MISSION_MOVE);
 				}
+				Assign_Destination((TARGET)param);
+				Shorten_Mission_Timer();
 			}
-			return(RADIO_NEGATIVE);
+		}
+		return (RADIO_ROGER);
 
-		/*
-		**	Intercept the repair request and if this object is moving, then no repair
-		**	is possible.
-		*/
-		case RADIO_REPAIR:
-			if (Target_Legal(NavCom)) return(RADIO_NEGATIVE);
-			break;
-
-		/*
-		**	Something bad has happened to the object in contact with. Abort any coordinated
-		**	activity with this object. Basically, ... run away! Run away!
-		*/
-		case RADIO_RUN_AWAY:
-			if (In_Radio_Contact()) {
-				if (NavCom == Contact_With_Whom()->As_Target()) {
-					Assign_Destination(TARGET_NONE);
-				}
-			}
-			if (Mission == MISSION_SLEEP) {
-				Assign_Mission(MISSION_GUARD);
-				Commence();
-			}
-			if (Mission == MISSION_ENTER) {
-				Assign_Mission(MISSION_GUARD);
-			}
-			if (!IsRotating && !Target_Legal(NavCom)) {
-				Scatter(0, true, true);
-			}
-			break;
-
-		/*
-		**	Checks to see if this unit needs to move somewhere. If it is already in motion,
-		**	then it doesn't need further movement instructions.
-		*/
-		case RADIO_NEED_TO_MOVE:
-			param = (long)NavCom;
-			if (!Target_Legal(NavCom)) {
-				return(RADIO_ROGER);
-			}
-			return(RADIO_NEGATIVE);
-
-		/*
-		**	Radio request to move to location specified. Typically this is used
-		**	for complex loading and unloading missions.
-		*/
-		case RADIO_MOVE_HERE:
-			if (NavCom != (TARGET)param) {
-				if (::As_Target(Coord_Cell(Coord)) == (TARGET)param) {
-					return(RADIO_YEA_NOW_WHAT);
-				} else {
-					if (Mission == MISSION_GUARD && MissionQueue == MISSION_NONE) {
-						Assign_Mission(MISSION_MOVE);
-					}
-					Assign_Destination((TARGET)param);
-					Shorten_Mission_Timer();
-				}
-			}
-			return(RADIO_ROGER);
-
-		/*
-		** Requests if this unit is trying to cooperatively load up. Typically, this occurs
-		**	for passengers and when vehicles need to be repaired.
-		*/
-		case RADIO_TRYING_TO_LOAD:
-			if (Mission == MISSION_ENTER || MissionQueue == MISSION_ENTER) {
-				TechnoClass::Receive_Message(from, message, param);
-				return(RADIO_ROGER);
-			}
-			break;
+	/*
+	** Requests if this unit is trying to cooperatively load up. Typically, this occurs
+	**	for passengers and when vehicles need to be repaired.
+	*/
+	case RADIO_TRYING_TO_LOAD:
+		if (Mission == MISSION_ENTER || MissionQueue == MISSION_ENTER) {
+			TechnoClass::Receive_Message(from, message, param);
+			return (RADIO_ROGER);
+		}
+		break;
 	}
-	return(TechnoClass::Receive_Message(from, message, param));
+	return (TechnoClass::Receive_Message(from, message, param));
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Enter -- Enter (cooperatively) mission handler.                          *
@@ -1725,8 +1720,7 @@ RadioMessageType FootClass::Receive_Message(RadioClass * from, RadioMessageType 
  *   05/15/1995 JLB : Created.                                                                 *
  *   09/22/1995 JLB : Modified to handle the "on hold" condition.                              *
  *=============================================================================================*/
-int FootClass::Mission_Enter(void)
-{
+int FootClass::Mission_Enter(void) {
 	assert(IsActive);
 
 	/*
@@ -1734,7 +1728,7 @@ int FootClass::Mission_Enter(void)
 	**	defined. If not in radio contact, then try the archive target value to see if that
 	**	is suitable.
 	*/
-	TechnoClass * contact = Contact_With_Whom();
+	TechnoClass *contact = Contact_With_Whom();
 	if (contact == NULL) {
 		contact = As_Techno(ArchiveTarget);
 	}
@@ -1764,7 +1758,7 @@ int FootClass::Mission_Enter(void)
 			**	If this is a harvester, then return to harvesting.
 			**	Set a hacky target so we know to skip to the proper state.
 			*/
-			if (What_Am_I() == RTTI_UNIT && ((UnitClass*)this)->Class->IsToHarvest) {
+			if (What_Am_I() == RTTI_UNIT && ((UnitClass *)this)->Class->IsToHarvest) {
 				Assign_Mission(MISSION_HARVEST);
 				Assign_Target(As_Target());
 				Assign_Destination(TARGET_NONE);
@@ -1774,9 +1768,8 @@ int FootClass::Mission_Enter(void)
 		}
 	}
 
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }
-
 
 /***********************************************************************************************
  * FootClass::Assign_Destination -- Assigns specified destination to NavCom.                   *
@@ -1793,8 +1786,7 @@ int FootClass::Mission_Enter(void)
  * HISTORY:                                                                                    *
  *   07/08/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Assign_Destination(TARGET target)
-{
+void FootClass::Assign_Destination(TARGET target) {
 	assert(IsActive);
 
 	NavCom = target;
@@ -1806,7 +1798,6 @@ void FootClass::Assign_Destination(TARGET target)
 	*/
 	PathThreshhold = MOVE_CLOAK;
 }
-
 
 /***********************************************************************************************
  * FootClass::Detach_All -- Removes this object from the game system.                          *
@@ -1824,8 +1815,7 @@ void FootClass::Assign_Destination(TARGET target)
  * HISTORY:                                                                                    *
  *   07/08/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Detach_All(bool all)
-{
+void FootClass::Detach_All(bool all) {
 	assert(IsActive);
 
 	if (Team && !ScenarioInit) {
@@ -1835,7 +1825,6 @@ void FootClass::Detach_All(bool all)
 
 	TechnoClass::Detach_All(all);
 }
-
 
 /***********************************************************************************************
  * FootClass::Rescue_Mission -- Calls this unit to the rescue.                                 *
@@ -1856,15 +1845,15 @@ void FootClass::Detach_All(bool all)
  * HISTORY:                                                                                    *
  *   07/08/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FootClass::Rescue_Mission(TARGET tarcom)
-{
+int FootClass::Rescue_Mission(TARGET tarcom) {
 	assert(IsActive);
 
 	/*
 	**	If the target specified is not legal, then it cannot be attacked. Always return
 	**	zero in this case.
 	*/
-	if (!Target_Legal(tarcom)) return(0);
+	if (!Target_Legal(tarcom))
+		return (0);
 
 	/*
 	** If the unit is already assigned to destroy the tarcom then we need
@@ -1872,7 +1861,7 @@ int FootClass::Rescue_Mission(TARGET tarcom)
 	** desired threat rating.
 	*/
 	if (TarCom == tarcom) {
-		return(-Risk());
+		return (-Risk());
 	}
 
 	/*
@@ -1880,9 +1869,9 @@ int FootClass::Rescue_Mission(TARGET tarcom)
 	** cannot abandon it as it will destroy us if we return to base.
 	*/
 	if (Target_Legal(TarCom)) {
-		TechnoClass * techno = As_Techno(TarCom);
+		TechnoClass *techno = As_Techno(TarCom);
 		if (techno != NULL && techno->Is_Weapon_Equipped()) {
-			return(0);
+			return (0);
 		}
 	}
 
@@ -1892,7 +1881,7 @@ int FootClass::Rescue_Mission(TARGET tarcom)
 	** at all.
 	*/
 	if (Team.Is_Valid() || Mission == MISSION_HARVEST || !Risk()) {
-		return(0);
+		return (0);
 	}
 
 	/*
@@ -1915,11 +1904,10 @@ int FootClass::Rescue_Mission(TARGET tarcom)
 		/*
 		** Finally modify the threat by the distance the unit is away.
 		*/
-		threat = max(threat/ratio, 1);
+		threat = max(threat / ratio, 1);
 	}
-	return(threat);
+	return (threat);
 }
-
 
 /***********************************************************************************************
  * FootClass::Death_Announcement -- Announces the death of a unit.                             *
@@ -1935,12 +1923,12 @@ int FootClass::Rescue_Mission(TARGET tarcom)
  * HISTORY:                                                                                    *
  *   07/01/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Death_Announcement(TechnoClass const * ) const
-{
+void FootClass::Death_Announcement(TechnoClass const *) const {
 	assert(IsActive);
 
-	//if (IsOwnedByPlayer) {
-	if ((Session.Type == GAME_GLYPHX_MULTIPLAYER && House->IsHuman) || (Session.Type != GAME_GLYPHX_MULTIPLAYER && IsOwnedByPlayer)) {
+	// if (IsOwnedByPlayer) {
+	if ((Session.Type == GAME_GLYPHX_MULTIPLAYER && House->IsHuman) ||
+	    (Session.Type != GAME_GLYPHX_MULTIPLAYER && IsOwnedByPlayer)) {
 		if (What_Am_I() == RTTI_VESSEL) {
 			// Speak(VOX_SHIP_LOST); // MBL 02.06.2020
 			Speak(VOX_SHIP_LOST, House, Center_Coord());
@@ -1950,7 +1938,6 @@ void FootClass::Death_Announcement(TechnoClass const * ) const
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * FootClass::Greatest_Threat -- Fetches the greatest threat to this object.                   *
@@ -1970,8 +1957,7 @@ void FootClass::Death_Announcement(TechnoClass const * ) const
  *   07/08/1995 JLB : Created.                                                                 *
  *   07/10/1996 JLB : Handles scan range limitation.                                           *
  *=============================================================================================*/
-TARGET FootClass::Greatest_Threat(ThreatType method) const
-{
+TARGET FootClass::Greatest_Threat(ThreatType method) const {
 	assert(IsActive);
 
 	/*
@@ -1986,14 +1972,15 @@ TARGET FootClass::Greatest_Threat(ThreatType method) const
 	**	If this object can cloak, then it won't select a target automatically.
 	*/
 	if (House->IsHuman && IsCloakable && Mission == MISSION_GUARD) {
-		return(TARGET_NONE);
+		return (TARGET_NONE);
 	}
 
-	if (!(method & (THREAT_INFANTRY|THREAT_VEHICLES|THREAT_BUILDINGS|THREAT_TIBERIUM|THREAT_BOATS|THREAT_CIVILIANS|THREAT_POWER|THREAT_FAKES|THREAT_FACTORIES|THREAT_BASE_DEFENSE))) {
+	if (!(method & (THREAT_INFANTRY | THREAT_VEHICLES | THREAT_BUILDINGS | THREAT_TIBERIUM | THREAT_BOATS |
+			THREAT_CIVILIANS | THREAT_POWER | THREAT_FAKES | THREAT_FACTORIES | THREAT_BASE_DEFENSE))) {
 		if (What_Am_I() != RTTI_VESSEL) {
 			method = method | THREAT_GROUND;
 		} else {
-			method = method | THREAT_BOATS|THREAT_GROUND;
+			method = method | THREAT_BOATS | THREAT_GROUND;
 		}
 	}
 
@@ -2007,15 +1994,14 @@ TARGET FootClass::Greatest_Threat(ThreatType method) const
 	**	restrictions, then this restriction must be lifted now.
 	*/
 	if (IsScanLimited && target == TARGET_NONE) {
-		const_cast<FootClass*>(this)->IsScanLimited = false;		// const_cast ST - 5/8/2019
+		const_cast<FootClass *>(this)->IsScanLimited = false; // const_cast ST - 5/8/2019
 	}
 
 	/*
 	**	Return with final target found.
 	*/
-	return(target);
+	return (target);
 }
-
 
 /***********************************************************************************************
  * FootClass::Detach -- Detaches a target from tracking systems.                               *
@@ -2036,8 +2022,7 @@ TARGET FootClass::Greatest_Threat(ThreatType method) const
  *   07/18/1995 JLB : Created.                                                                 *
  *   07/24/1996 JLB : Removes target from NavQueue list.                                       *
  *=============================================================================================*/
-void FootClass::Detach(TARGET target, bool all)
-{
+void FootClass::Detach(TARGET target, bool all) {
 	assert(IsActive);
 
 	TechnoClass::Detach(target, all);
@@ -2070,9 +2055,10 @@ void FootClass::Detach(TARGET target, bool all)
 	for (int index = 0; index < ARRAY_SIZE(NavQueue); index++) {
 		if (NavQueue[index] == target) {
 			NavQueue[index] = TARGET_NONE;
-			if (index < ARRAY_SIZE(NavQueue)-1) {
-				memmove(&NavQueue[index], &NavQueue[index+1], ((ARRAY_SIZE(NavQueue)-index)-1) * sizeof(NavQueue[0]));
-				NavQueue[ARRAY_SIZE(NavQueue)-1] = TARGET_NONE;
+			if (index < ARRAY_SIZE(NavQueue) - 1) {
+				memmove(&NavQueue[index], &NavQueue[index + 1],
+					((ARRAY_SIZE(NavQueue) - index) - 1) * sizeof(NavQueue[0]));
+				NavQueue[ARRAY_SIZE(NavQueue) - 1] = TARGET_NONE;
 				index--;
 			}
 		}
@@ -2094,7 +2080,6 @@ void FootClass::Detach(TARGET target, bool all)
 	}
 }
 
-
 /***********************************************************************************************
  * FootClass::Offload_Tiberium_Bail -- Fetches the Tiberium to offload per step.               *
  *                                                                                             *
@@ -2112,13 +2097,11 @@ void FootClass::Detach(TARGET target, bool all)
  * HISTORY:                                                                                    *
  *   07/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FootClass::Offload_Tiberium_Bail(void)
-{
+int FootClass::Offload_Tiberium_Bail(void) {
 	assert(IsActive);
 
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * FootClass::Can_Enter_Cell -- Checks to see if the object can enter cell specified.          *
@@ -2142,13 +2125,11 @@ int FootClass::Offload_Tiberium_Bail(void)
  * HISTORY:                                                                                    *
  *   07/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-MoveType FootClass::Can_Enter_Cell(CELL , FacingType) const
-{
+MoveType FootClass::Can_Enter_Cell(CELL, FacingType) const {
 	assert(IsActive);
 
 	return MOVE_OK;
 }
-
 
 /***********************************************************************************************
  * FootClass::Can_Demolish -- Checks to see if this object can be sold back.                   *
@@ -2165,32 +2146,28 @@ MoveType FootClass::Can_Enter_Cell(CELL , FacingType) const
  * HISTORY:                                                                                    *
  *   08/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FootClass::Can_Demolish(void) const
-{
+bool FootClass::Can_Demolish(void) const {
 	assert(IsActive);
 
 	StructType sell_struct = STRUCT_NONE;
 	switch (What_Am_I()) {
-		case RTTI_UNIT:
-			sell_struct = STRUCT_REPAIR;
-			break;
-		case RTTI_AIRCRAFT:
-			sell_struct = STRUCT_AIRSTRIP;
-			break;
-		default:
-			break;
+	case RTTI_UNIT:
+		sell_struct = STRUCT_REPAIR;
+		break;
+	case RTTI_AIRCRAFT:
+		sell_struct = STRUCT_AIRSTRIP;
+		break;
+	default:
+		break;
 	}
 	if (sell_struct != STRUCT_NONE) {
-		if (In_Radio_Contact() &&
-			Contact_With_Whom()->What_Am_I() == RTTI_BUILDING &&
-			*((BuildingClass *)Contact_With_Whom()) == sell_struct &&
-			Distance(Contact_With_Whom()) < 0x0080) {
-			return(true);
+		if (In_Radio_Contact() && Contact_With_Whom()->What_Am_I() == RTTI_BUILDING &&
+		    *((BuildingClass *)Contact_With_Whom()) == sell_struct && Distance(Contact_With_Whom()) < 0x0080) {
+			return (true);
 		}
 	}
-	return(TechnoClass::Can_Demolish());
+	return (TechnoClass::Can_Demolish());
 }
-
 
 /***********************************************************************************************
  * FootClass::Sell_Back -- Causes this object to be sold back.                                 *
@@ -2208,8 +2185,7 @@ bool FootClass::Can_Demolish(void) const
  * HISTORY:                                                                                    *
  *   08/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Sell_Back(int control)
-{
+void FootClass::Sell_Back(int control) {
 	assert(IsActive);
 
 	if (control != 0) {
@@ -2223,7 +2199,6 @@ void FootClass::Sell_Back(int control)
 		delete this;
 	}
 }
-
 
 /***********************************************************************************************
  * FootClass::Likely_Coord -- Fetches the coordinate the object will be at shortly.            *
@@ -2241,16 +2216,14 @@ void FootClass::Sell_Back(int control)
  * HISTORY:                                                                                    *
  *   08/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-COORDINATE FootClass::Likely_Coord(void) const
-{
+COORDINATE FootClass::Likely_Coord(void) const {
 	assert(IsActive);
 
 	if (Head_To_Coord()) {
-		return(Head_To_Coord());
+		return (Head_To_Coord());
 	}
-	return(Target_Coord());
+	return (Target_Coord());
 }
-
 
 /***********************************************************************************************
  * FootClass::Adjust_Dest -- Adjust candidate movement cell to account for formation.          *
@@ -2270,22 +2243,20 @@ COORDINATE FootClass::Likely_Coord(void) const
  * HISTORY:                                                                                    *
  *   03/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-CELL FootClass::Adjust_Dest(CELL cell) const
-{
+CELL FootClass::Adjust_Dest(CELL cell) const {
 	assert(IsActive);
 
 	if (IsFormationMove) {
 		int xdest = Cell_X(cell);
 		int ydest = Cell_Y(cell);
 
-		int newx = Bound(XFormOffset + xdest, Map.MapCellX, Map.MapCellX + Map.MapCellWidth -1);
-		int newy = Bound(YFormOffset + ydest, Map.MapCellY, Map.MapCellY + Map.MapCellHeight -1);
+		int newx = Bound(XFormOffset + xdest, Map.MapCellX, Map.MapCellX + Map.MapCellWidth - 1);
+		int newy = Bound(YFormOffset + ydest, Map.MapCellY, Map.MapCellY + Map.MapCellHeight - 1);
 
 		cell = XY_Cell(newx, newy);
 	}
-	return(cell);
+	return (cell);
 }
-
 
 /***********************************************************************************************
  * FootClass::Handle_Navigation_List -- Processes the navigation queue.                        *
@@ -2304,8 +2275,7 @@ CELL FootClass::Adjust_Dest(CELL cell) const
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Handle_Navigation_List(void)
-{
+void FootClass::Handle_Navigation_List(void) {
 	/*
 	**	The navigation queue only needs to be processed if there is
 	**	currently no navigation target for this object.
@@ -2320,8 +2290,8 @@ void FootClass::Handle_Navigation_List(void)
 		*/
 		if (Target_Legal(target)) {
 			Assign_Destination(target);
-			memmove(&NavQueue[0], &NavQueue[1], sizeof(NavQueue)-sizeof(NavQueue[0]));
-			NavQueue[ARRAY_SIZE(NavQueue)-1] = TARGET_NONE;
+			memmove(&NavQueue[0], &NavQueue[1], sizeof(NavQueue) - sizeof(NavQueue[0]));
+			NavQueue[ARRAY_SIZE(NavQueue) - 1] = TARGET_NONE;
 
 			/*
 			**	If the navigation queue is to loop (indefinately), then append the
@@ -2338,7 +2308,6 @@ void FootClass::Handle_Navigation_List(void)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * FootClass::Queue_Navigation_List -- Add a target to the objects navigation list.            *
@@ -2360,12 +2329,12 @@ void FootClass::Handle_Navigation_List(void)
  * HISTORY:                                                                                    *
  *   07/18/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Queue_Navigation_List(TARGET target)
-{
+void FootClass::Queue_Navigation_List(TARGET target) {
 	if (Target_Legal(target)) {
 		int count;
 		for (count = 0; count < ARRAY_SIZE(NavQueue); count++) {
-			if (!Target_Legal(NavQueue[count])) break;
+			if (!Target_Legal(NavQueue[count]))
+				break;
 		}
 
 		/*
@@ -2394,7 +2363,6 @@ void FootClass::Queue_Navigation_List(TARGET target)
 	}
 }
 
-
 /***********************************************************************************************
  * FootClass::Clear_Navigation_List -- Clears out the navigation queue.                        *
  *                                                                                             *
@@ -2412,13 +2380,11 @@ void FootClass::Queue_Navigation_List(TARGET target)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::Clear_Navigation_List(void)
-{
+void FootClass::Clear_Navigation_List(void) {
 	for (int index = 0; index < ARRAY_SIZE(NavQueue); index++) {
 		NavQueue[index] = TARGET_NONE;
 	}
 }
-
 
 /***********************************************************************************************
  * FootClass::Is_Allowed_To_Leave_Map -- Checks to see if it can leave the map and the game.   *
@@ -2437,22 +2403,22 @@ void FootClass::Clear_Navigation_List(void)
  * HISTORY:                                                                                    *
  *   08/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FootClass::Is_Allowed_To_Leave_Map(void) const
-{
+bool FootClass::Is_Allowed_To_Leave_Map(void) const {
 	/*
 	**	If the unit hasn't entered the map yet, then don't allow leave the game.
 	*/
-	if (!IsLocked) return(false);
+	if (!IsLocked)
+		return (false);
 
 	/*
 	**	A unit that isn't marked as a loaner is a gift to the player. Such objects can never
 	**	leave the map unless they are part of a team that gives it special permision.
 	*/
-	if (!IsALoaner && Mission != MISSION_RETREAT && (!Team.Is_Valid() || !Team->Is_Leaving_Map())) return(false);
+	if (!IsALoaner && Mission != MISSION_RETREAT && (!Team.Is_Valid() || !Team->Is_Leaving_Map()))
+		return (false);
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * FootClass::Is_Recruitable -- Determine if this object is recruitable as a team members.     *
@@ -2469,20 +2435,19 @@ bool FootClass::Is_Allowed_To_Leave_Map(void) const
  * HISTORY:                                                                                    *
  *   09/14/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FootClass::Is_Recruitable(HouseClass const * house) const
-{
+bool FootClass::Is_Recruitable(HouseClass const *house) const {
 	/*
 	**	If not of the correct house presuasion, then recruitment is not allowed.
 	*/
 	if (house != NULL && house != House) {
-		return(false);
+		return (false);
 	}
 
 	/*
 	**	If the object is not a playing member of the game, then don't consider it available.
 	*/
 	if (IsInLimbo) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -2490,7 +2455,7 @@ bool FootClass::Is_Recruitable(HouseClass const * house) const
 	**	general recruitment.
 	*/
 	if (Team.Is_Valid()) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -2498,16 +2463,15 @@ bool FootClass::Is_Recruitable(HouseClass const * house) const
 	**	return with this information.
 	*/
 	if (!Is_Recruitable_Mission(Mission)) {
-		return(false);
+		return (false);
 	}
 
 	/*
 	**	It was not disqualified for general team recruitment, so return that
 	**	it is available.
 	*/
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * FootClass::AI -- Handle general movement AI.                                                *
@@ -2525,20 +2489,19 @@ bool FootClass::Is_Recruitable(HouseClass const * house) const
  * HISTORY:                                                                                    *
  *   09/17/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FootClass::AI(void)
-{
+void FootClass::AI(void) {
 	TechnoClass::AI();
 
 // FootClass::Per_Cell_Process does this function already.
 #ifdef OBSOLETE
 	if (IsActive) {
-		if (!IsScattering && !IsTethered && !IsInLimbo && What_Am_I() != RTTI_AIRCRAFT && Target_Legal(TarCom) && In_Range(TarCom)) {
+		if (!IsScattering && !IsTethered && !IsInLimbo && What_Am_I() != RTTI_AIRCRAFT &&
+		    Target_Legal(TarCom) && In_Range(TarCom)) {
 			Assign_Destination(TARGET_NONE);
 		}
 	}
 #endif
 }
-
 
 /***********************************************************************************************
  * FootClass::Is_On_Priority_Mission -- Checks to see if this object should be given priority. *
@@ -2555,12 +2518,11 @@ void FootClass::AI(void)
  * HISTORY:                                                                                    *
  *   09/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FootClass::Is_On_Priority_Mission(void) const
-{
-	if (Mission == MISSION_ENTER) return(true);
-	return(false);
+bool FootClass::Is_On_Priority_Mission(void) const {
+	if (Mission == MISSION_ENTER)
+		return (true);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FootClass::Mission_Retreat -- Handle reatreat from map mission for mobile objects.          *
@@ -2578,59 +2540,57 @@ bool FootClass::Is_On_Priority_Mission(void) const
  * HISTORY:                                                                                    *
  *   10/05/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FootClass::Mission_Retreat(void)
-{
+int FootClass::Mission_Retreat(void) {
 	assert(IsActive);
 
-	enum {
-		FIND_EDGE,
-		TRAVELLING
-	};
+	enum { FIND_EDGE, TRAVELLING };
 
 	switch (Status) {
 
-		/*
-		**	Find a suitable edge to travel to and then assign destination there.
-		*/
-		case FIND_EDGE:
-			if (Target_Legal(NavCom)) {
-				Status = TRAVELLING;
-			} else {
+	/*
+	**	Find a suitable edge to travel to and then assign destination there.
+	*/
+	case FIND_EDGE:
+		if (Target_Legal(NavCom)) {
+			Status = TRAVELLING;
+		} else {
 
-				CELL cell = 0;
+			CELL cell = 0;
 
-				/*
-				**	If this is part of a team, then pick the edge where the team as likely
-				**	entered from.
-				*/
-				if (Team.Is_Valid() && Team->Class->Origin != -1) {
-					cell = Map.Calculated_Cell(House->Control.Edge, Team->Class->Origin, Coord_Cell(Center_Coord()), Techno_Type_Class()->Speed);
-				}
-
-				/*
-				**	If an edge hasn't been found, then try to find one that is not based on any
-				**	team information.
-				*/
-				if (cell == 0) {
-					cell = Map.Calculated_Cell(House->Control.Edge, -1, Coord_Cell(Center_Coord()), Techno_Type_Class()->Speed);
-				}
-
-				assert(cell == 0);		// An edge cell must be found!
-
-				Assign_Destination(::As_Target(cell));
-				Status = TRAVELLING;
+			/*
+			**	If this is part of a team, then pick the edge where the team as likely
+			**	entered from.
+			*/
+			if (Team.Is_Valid() && Team->Class->Origin != -1) {
+				cell = Map.Calculated_Cell(House->Control.Edge, Team->Class->Origin,
+							   Coord_Cell(Center_Coord()), Techno_Type_Class()->Speed);
 			}
-			break;
 
-		/*
-		**	While travelling, monitor that all is proceeding according to plan.
-		*/
-		case TRAVELLING:
-			if (!Target_Legal(NavCom)) {
-				Status = FIND_EDGE;
+			/*
+			**	If an edge hasn't been found, then try to find one that is not based on any
+			**	team information.
+			*/
+			if (cell == 0) {
+				cell = Map.Calculated_Cell(House->Control.Edge, -1, Coord_Cell(Center_Coord()),
+							   Techno_Type_Class()->Speed);
 			}
-			break;
+
+			assert(cell == 0); // An edge cell must be found!
+
+			Assign_Destination(::As_Target(cell));
+			Status = TRAVELLING;
+		}
+		break;
+
+	/*
+	**	While travelling, monitor that all is proceeding according to plan.
+	*/
+	case TRAVELLING:
+		if (!Target_Legal(NavCom)) {
+			Status = FIND_EDGE;
+		}
+		break;
 	}
 
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }

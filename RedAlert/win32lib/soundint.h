@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /***************************************************************************
@@ -42,18 +42,18 @@
 ** did, there might be too much temptation to call another library function.
 ** this would be bad, because then that function would not be locked.
 */
-#define	FALSE		0
-#define	TRUE		1
+#define FALSE 0
+#define TRUE 1
 
 /*
 ** Define the different type of sound compression avaliable to the westwood
 ** library.
 */
 typedef enum {
-	SCOMP_NONE=0,			// No compression -- raw data.
-	SCOMP_WESTWOOD=1,		// Special sliding window delta compression.
-	SCOMP_SONARC=33,		// Sonarc frame compression.
-	SCOMP_SOS=99			// SOS frame compression.
+	SCOMP_NONE = 0,	    // No compression -- raw data.
+	SCOMP_WESTWOOD = 1, // Special sliding window delta compression.
+	SCOMP_SONARC = 33,  // Sonarc frame compression.
+	SCOMP_SOS = 99	    // SOS frame compression.
 } SCompressType;
 
 /*
@@ -62,8 +62,7 @@ typedef enum {
 **	the maximum number of bytes per sample.  It should be evenly divisible
 **	by 16 to aid paragraph alignment.
 */
-#define	SONARC_MARGIN				32
-
+#define SONARC_MARGIN 32
 
 /*
 ** Define the sample control structure which helps us to handle feeding
@@ -75,12 +74,12 @@ typedef struct {
 	**	This flags whether this sample structure is active or not.
 	*/
 	unsigned Active;
-	//unsigned Active:1;
+	// unsigned Active:1;
 
 	/*
 	**	This flags whether the sample is loading or has been started.
 	*/
-	//unsigned Loading:1;
+	// unsigned Loading:1;
 	unsigned Loading;
 
 	/*
@@ -88,7 +87,7 @@ typedef struct {
 	**	occur.  This is necessary since both interrupt and regular code can modify
 	**	this structure.
 	*/
-	//unsigned DontTouch:1;
+	// unsigned DontTouch:1;
 	unsigned DontTouch;
 
 	/*
@@ -96,7 +95,7 @@ typedef struct {
 	**	a sound effect, then special rules apply.  These largely fall into
 	**	the area of volume control.
 	*/
-	//unsigned IsScore:1;
+	// unsigned IsScore:1;
 	unsigned IsScore;
 
 	/*
@@ -119,17 +118,17 @@ typedef struct {
 	/*
 	** Variable to keep track of the playback rate of this buffer
 	*/
-	int	PlaybackRate;
+	int PlaybackRate;
 
 	/*
 	** Variable to keep track of the sample type ( 8 or 16 bit ) of this buffer
 	*/
-	int	BitSize;
+	int BitSize;
 
 	/*
 	** Variable to keep track of the stereo ability of this buffer
 	*/
-	int	Stereo;
+	int Stereo;
 
 	/*
 	**	The number of bytes in the buffer that has been filled but is not
@@ -143,7 +142,7 @@ typedef struct {
 	**	has been filled with data but not yet being
 	**	played.
 	*/
-//	short int Index;
+	//	short int Index;
 
 	/*
 	**	Pointer into the play buffer for writing the next
@@ -200,15 +199,14 @@ typedef struct {
 	**	This is the current volume of the sample as it is being played.
 	*/
 	int Volume;
-	int Reducer;		// Amount to reduce volume per tick.
+	int Reducer; // Amount to reduce volume per tick.
 
 	/*
 	**	This is the compression that the sound data is using.
 	*/
 	SCompressType Compression;
-	short int TrailerLen;						// Number of trailer bytes in buffer.
-	BYTE Trailer[SONARC_MARGIN];		// Maximum number of 'order' samples needed.
-
+	short int TrailerLen;	     // Number of trailer bytes in buffer.
+	BYTE Trailer[SONARC_MARGIN]; // Maximum number of 'order' samples needed.
 
 	DWORD Pitch;
 	WORD Flags;
@@ -230,18 +228,18 @@ typedef struct {
 	**	Streaming control handlers.
 	*/
 	BOOL (*Callback)(short int id, short int *odd, VOID **buffer, LONG *size);
-	VOID	*QueueBuffer;	// Pointer to continued sample data.
-	LONG	QueueSize;		// Size of queue buffer attached.
-	short int	Odd;				// Block number tracker (0..StreamBufferCount-1).
-	int	FilePending;	// Number of buffers already filled ahead.
-	long	FilePendingSize;	// Number of bytes in last filled buffer.
+	VOID *QueueBuffer;    // Pointer to continued sample data.
+	LONG QueueSize;	      // Size of queue buffer attached.
+	short int Odd;	      // Block number tracker (0..StreamBufferCount-1).
+	int FilePending;      // Number of buffers already filled ahead.
+	long FilePendingSize; // Number of bytes in last filled buffer.
 
 	/*
 	**	The file variables are used when streaming directly off of the
 	**	hard drive.
 	*/
-	int	FileHandle;		// Streaming file handle (ERROR = not in use).
-	VOID	*FileBuffer;	// Temporary streaming buffer (allowed to be freed).
+	int FileHandle;	  // Streaming file handle (ERROR = not in use).
+	VOID *FileBuffer; // Temporary streaming buffer (allowed to be freed).
 	/*
 	** The following structure is used if the sample if compressed using
 	** the sos 16 bit compression Codec.
@@ -249,41 +247,40 @@ typedef struct {
 
 	_SOS_COMPRESS_INFO sosinfo;
 
-
 } SampleTrackerType;
 
-
 typedef struct LockedData {
-	unsigned int 		DigiHandle; 			// = -1;
-	BOOL 					ServiceSomething;		// = FALSE;
-	long 					MagicNumber; 			// = 0xDEAF;
-	VOID 					*UncompBuffer;			// = NULL;
-	long 					StreamBufferSize; 	// = (2*SECONDARY_BUFFER_SIZE)+128;
-	short 				StreamBufferCount; 	// = 32;
+	unsigned int DigiHandle; // = -1;
+	BOOL ServiceSomething;	 // = FALSE;
+	long MagicNumber;	 // = 0xDEAF;
+	VOID *UncompBuffer;	 // = NULL;
+	long StreamBufferSize;	 // = (2*SECONDARY_BUFFER_SIZE)+128;
+	short StreamBufferCount; // = 32;
 	SampleTrackerType SampleTracker[MAX_SFX];
-	unsigned int		SoundVolume;
-	unsigned int		ScoreVolume;
-	BOOL					_int;
+	unsigned int SoundVolume;
+	unsigned int ScoreVolume;
+	BOOL _int;
 } LockedDataType;
 
 extern LockedDataType LockedData;
 #pragma pack(4);
 
 void Init_Locked_Data(void);
-long Simple_Copy(void ** source, long * ssize, void ** alternate, long * altsize, void **dest, long size);
-long Sample_Copy(SampleTrackerType *st, void ** source, long * ssize, void ** alternate, long * altsize, void * dest, long size, SCompressType scomp, void * trailer, short int *trailersize);
+long Simple_Copy(void **source, long *ssize, void **alternate, long *altsize, void **dest, long size);
+long Sample_Copy(SampleTrackerType *st, void **source, long *ssize, void **alternate, long *altsize, void *dest,
+		 long size, SCompressType scomp, void *trailer, short int *trailersize);
 VOID far __cdecl maintenance_callback(VOID);
 VOID __cdecl far DigiCallback(unsigned int driverhandle, unsigned int callsource, unsigned int sampleid);
 void far HMI_TimerCallback(void);
 void *Audio_Add_Long_To_Pointer(void const *ptr, long size);
-void	DPMI_Unlock(VOID const *ptr, long const size);
+void DPMI_Unlock(VOID const *ptr, long const size);
 extern "C" {
-	void __cdecl Audio_Mem_Set(void const *ptr, unsigned char value, long size);
+void __cdecl Audio_Mem_Set(void const *ptr, unsigned char value, long size);
 //	void	Mem_Copy(void *source, void *dest, unsigned long bytes_to_copy);
-	long  __cdecl Decompress_Frame(void * source, void * dest, long size);
-	int	__cdecl Decompress_Frame_Lock(void);
-	int	__cdecl Decompress_Frame_Unlock(void);
-	int	__cdecl sosCODEC_Lock(void);
-	int	__cdecl sosCODEC_Unlock(void);
-	void	__GETDS(void);
+long __cdecl Decompress_Frame(void *source, void *dest, long size);
+int __cdecl Decompress_Frame_Lock(void);
+int __cdecl Decompress_Frame_Unlock(void);
+int __cdecl sosCODEC_Lock(void);
+int __cdecl sosCODEC_Unlock(void);
+void __GETDS(void);
 }

@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/UNIT.CPP 1     3/03/97 10:26a Joe_bostic $ */
@@ -97,34 +97,18 @@
  *   UnitClass::~UnitClass -- Destructor for unit objects.                                     *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
 #include "COORDA.h"
-
+#include "function.h"
 
 extern void Logic_Switch_Player_Context(ObjectClass *object);
 extern void Logic_Switch_Player_Context(HouseClass *object);
-extern void On_Special_Weapon_Targetting(const HouseClass* player_ptr, SpecialWeaponType weapon_type);
+extern void On_Special_Weapon_Targetting(const HouseClass *player_ptr, SpecialWeaponType weapon_type);
 extern bool Is_Legacy_Render_Enabled(void);
 
-
-static int _GapShroudXTable[]={
-		-1, 0, 1,
-	-2,-1, 0, 1, 2,
-	-2,-1, 0, 1, 2,
-	-2,-1, 0, 1, 2,
-	-2,-1, 0, 1, 2,
-	-2,-1, 0, 1, 2,
-		-1, 0, 1
-};
-static int _GapShroudYTable[]={
-		-3,-3,-3,
-	-2,-2,-2,-2,-2,
-	-1,-1,-1,-1,-1,
-	 0, 0, 0, 0, 0,
-	 1, 1, 1, 1, 1,
-	 2, 2, 2, 2, 2,
-		 3, 3, 3
-};
+static int _GapShroudXTable[] = {-1, 0, 1,  -2, -1, 0, 1, 2,  -2, -1, 0, 1, 2,	-2, -1, 0,
+				 1,  2, -2, -1, 0,  1, 2, -2, -1, 0,  1, 2, -1, 0,  1};
+static int _GapShroudYTable[] = {-3, -3, -3, -2, -2, -2, -2, -2, -1, -1, -1, -1, -1, 0, 0, 0,
+				 0,  0,	 1,  1,	 1,  1,	 1,  2,	 2,  2,	 2,  2,	 3,  3, 3};
 
 /***********************************************************************************************
  * Recoil_Adjust -- Adjust pixel values in direction specified.                                *
@@ -145,50 +129,23 @@ static int _GapShroudYTable[]={
  * HISTORY:                                                                                    *
  *   05/08/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Recoil_Adjust(DirType dir, int &x, int &y)
-{
+void Recoil_Adjust(DirType dir, int &x, int &y) {
 	static struct {
-		signed char X,Y;
-	} _adjust[32] = {
-		{0,	1},	// N
-		{0,	1},
-		{0,	1},
-		{-1,	1},
-		{-1,	1},	// NE
-		{-1,	1},
-		{-1,	0},
-		{-1,	0},
-		{-1,	0},	// E
-		{-1,	0},
-		{-1,	-1},
-		{-1,	-1},
-		{-1,	-1},	// SE
-		{-1,	-1},
-		{-1,	-1},
-		{0,	-1},
-		{0,	-1},	// S
-		{0,	-1},
-		{0,	-1},
-		{1,	-1},
-		{1,	-1},	// SW
-		{1,	-1},
-		{1,	0},
-		{1,	0},
-		{1,	0},	// W
-		{1,	0},
-		{1,	1},
-		{1,	1},
-		{1,	1},	// NW
-		{1,	1},
-		{0,	1},
-		{0,	1}
-	};
+		signed char X, Y;
+	} _adjust[32] = {{0, 1},				 // N
+			 {0, 1},   {0, 1},   {-1, 1},  {-1, 1},	 // NE
+			 {-1, 1},  {-1, 0},  {-1, 0},  {-1, 0},	 // E
+			 {-1, 0},  {-1, -1}, {-1, -1}, {-1, -1}, // SE
+			 {-1, -1}, {-1, -1}, {0, -1},  {0, -1},	 // S
+			 {0, -1},  {0, -1},  {1, -1},  {1, -1},	 // SW
+			 {1, -1},  {1, 0},   {1, 0},   {1, 0},	 // W
+			 {1, 0},   {1, 1},   {1, 1},   {1, 1},	 // NW
+			 {1, 1},   {0, 1},   {0, 1}};
 
 	int index = Dir_To_32(dir);
 	x += _adjust[index].X;
 	y += _adjust[index].Y;
 }
-
 
 /***********************************************************************************************
  * UnitClass::new -- Allocate a unit slot and adjust access arrays.                            *
@@ -208,15 +165,13 @@ void Recoil_Adjust(DirType dir, int &x, int &y)
  *   04/11/1994 JLB : Created.                                                                 *
  *   04/21/1994 JLB : Converted to operator new.                                               *
  *=============================================================================================*/
-void * UnitClass::operator new(size_t)
-{
-	void * ptr = Units.Alloc();
+void *UnitClass::operator new(size_t) {
+	void *ptr = Units.Alloc();
 	if (ptr != NULL) {
 		((UnitClass *)ptr)->Set_Active();
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***********************************************************************************************
  * UnitClass::delete -- Deletion operator for units.                                           *
@@ -234,14 +189,12 @@ void * UnitClass::operator new(size_t)
  * HISTORY:                                                                                    *
  *   04/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::operator delete(void * ptr)
-{
+void UnitClass::operator delete(void *ptr) {
 	if (ptr != NULL) {
 		((UnitClass *)ptr)->IsActive = false;
 	}
 	Units.Free((UnitClass *)ptr);
 }
-
 
 /***********************************************************************************************
  * UnitClass::~UnitClass -- Destructor for unit objects.                                       *
@@ -258,8 +211,7 @@ void UnitClass::operator delete(void * ptr)
  * HISTORY:                                                                                    *
  *   08/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-UnitClass::~UnitClass(void)
-{
+UnitClass::~UnitClass(void) {
 	if (GameActive && Class.Is_Valid()) {
 
 		/*
@@ -285,7 +237,6 @@ UnitClass::~UnitClass(void)
 	ID = -1;
 }
 
-
 /***********************************************************************************************
  * UnitClass::UnitClass -- Constructor for units.                                              *
  *                                                                                             *
@@ -304,26 +255,16 @@ UnitClass::~UnitClass(void)
  * HISTORY:                                                                                    *
  *   04/21/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-UnitClass::UnitClass(UnitType classid, HousesType house) :
-	DriveClass(RTTI_UNIT, Units.ID(this), house),
-	Class(UnitTypes.Ptr((int)classid)),
-	Flagged(HOUSE_NONE),
-	IsDumping(false),
-	Gems(0),
-	Gold(0),
-	Tiberium(0),
-	IsToScatter(false),
-	ShroudBits(0xFFFFFFFFUL),
-	ShroudCenter(0),
-	Reload(0),
-	SecondaryFacing(PrimaryFacing),
-	TiberiumUnloadRefinery(TARGET_NONE)
-{
+UnitClass::UnitClass(UnitType classid, HousesType house)
+    : DriveClass(RTTI_UNIT, Units.ID(this), house), Class(UnitTypes.Ptr((int)classid)), Flagged(HOUSE_NONE),
+      IsDumping(false), Gems(0), Gold(0), Tiberium(0), IsToScatter(false), ShroudBits(0xFFFFFFFFUL), ShroudCenter(0),
+      Reload(0), SecondaryFacing(PrimaryFacing), TiberiumUnloadRefinery(TARGET_NONE) {
 	Reload = 0;
 	House->Tracking_Add(this);
 	Ammo = Class->MaxAmmo;
 	IsCloakable = Class->IsCloakable;
-	if (Class->IsAnimating) Set_Rate(Options.Normalize_Delay(3));
+	if (Class->IsAnimating)
+		Set_Rate(Options.Normalize_Delay(3));
 
 	/*
 	**	For two shooters, clear out the second shot flag -- it will be set the first time
@@ -337,11 +278,10 @@ UnitClass::UnitClass(UnitType classid, HousesType house) :
 	/*
 	** Keep count of the number of units created.
 	*/
-//	if (Session.Type == GAME_INTERNET) {
-//		House->UnitTotals->Increment_Unit_Total((int)classid);
-//	}
+	//	if (Session.Type == GAME_INTERNET) {
+	//		House->UnitTotals->Increment_Unit_Total((int)classid);
+	//	}
 }
-
 
 #ifdef CHEAT_KEYS
 /***********************************************************************************************
@@ -359,24 +299,25 @@ UnitClass::UnitClass(UnitType classid, HousesType house) :
  * HISTORY:                                                                                    *
  *   06/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Debug_Dump(MonoClass * mono) const
-{
+void UnitClass::Debug_Dump(MonoClass *mono) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	mono->Set_Cursor(0, 0);
 	mono->Print(Text_String(TXT_DEBUG_VEHICLE));
-	mono->Set_Cursor(47, 5);mono->Printf("%02X:%02X", SecondaryFacing.Current(), SecondaryFacing.Desired());
+	mono->Set_Cursor(47, 5);
+	mono->Printf("%02X:%02X", SecondaryFacing.Current(), SecondaryFacing.Desired());
 
-	mono->Set_Cursor(1, 11);mono->Printf("%03", Gems);
-	mono->Set_Cursor(7, 11);mono->Printf("%03", Gold);
+	mono->Set_Cursor(1, 11);
+	mono->Printf("%03", Gems);
+	mono->Set_Cursor(7, 11);
+	mono->Printf("%03", Gold);
 
 	mono->Fill_Attrib(66, 13, 12, 1, IsDumping ? MonoClass::INVERSE : MonoClass::NORMAL);
 
 	DriveClass::Debug_Dump(mono);
 }
 #endif
-
 
 /***********************************************************************************************
  * UnitClass::Sort_Y -- Give Y coordinate sort value for unit.                                 *
@@ -394,14 +335,12 @@ void UnitClass::Debug_Dump(MonoClass * mono) const
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-COORDINATE UnitClass::Sort_Y(void) const
-{
+COORDINATE UnitClass::Sort_Y(void) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	return(Coord_Add(Coord, 0x00800000L));
+	return (Coord_Add(Coord, 0x00800000L));
 }
-
 
 /***********************************************************************************************
  * UnitClass::AI -- AI processing for the unit.                                                *
@@ -418,15 +357,14 @@ COORDINATE UnitClass::Sort_Y(void) const
  * HISTORY:                                                                                    *
  *   05/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::AI(void)
-{
+void UnitClass::AI(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 	/*
 	**	Act on new orders if the unit is at a good position to do so.
 	*/
 	if (Height == 0 && !IsDumping && !IsDriving && Is_Door_Closed() /*&& Mission != MISSION_UNLOAD*/) {
-//		if (MissionQueue == MISSION_NONE) Enter_Idle_Mode();
+		//		if (MissionQueue == MISSION_NONE) Enter_Idle_Mode();
 		Commence();
 	}
 	DriveClass::AI();
@@ -447,7 +385,7 @@ void UnitClass::AI(void)
 	**	unit will fire upon its target.
 	*/
 	Firing_AI();
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	if (!IsActive) {
 		return;
 	}
@@ -463,7 +401,9 @@ void UnitClass::AI(void)
 	/*
 	**	Scatter units off buildings in guard modes.
 	*/
-	if (!IsTethered && !IsFiring && !IsDriving && !IsRotating && (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA) && MissionQueue == MISSION_NONE && Map[Coord].Cell_Building() != NULL) {
+	if (!IsTethered && !IsFiring && !IsDriving && !IsRotating &&
+	    (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA) && MissionQueue == MISSION_NONE &&
+	    Map[Coord].Cell_Building() != NULL) {
 		Scatter(0, true, true);
 	}
 
@@ -491,7 +431,8 @@ void UnitClass::AI(void)
 		**	Double check that there is a passenger that is trying to load or unload.
 		**	If not, then close the door.
 		*/
-		if (!Is_Door_Closed() && Mission != MISSION_UNLOAD && Transmit_Message(RADIO_TRYING_TO_LOAD) != RADIO_ROGER) {
+		if (!Is_Door_Closed() && Mission != MISSION_UNLOAD &&
+		    Transmit_Message(RADIO_TRYING_TO_LOAD) != RADIO_ROGER) {
 			APC_Close_Door();
 		}
 	}
@@ -500,7 +441,7 @@ void UnitClass::AI(void)
 	**	Don't start a new mission unless the vehicle is in the center of
 	**	a cell (not driving) and the door (if any) is closed.
 	*/
-	if (!IsDumping && !IsDriving && Is_Door_Closed()/*&& Mission != MISSION_UNLOAD*/) {
+	if (!IsDumping && !IsDriving && Is_Door_Closed() /*&& Mission != MISSION_UNLOAD*/) {
 		Commence();
 	}
 
@@ -519,7 +460,6 @@ void UnitClass::AI(void)
 	}
 }
 
-
 /***********************************************************************************************
  * UnitClass::Rotation_AI -- Process any turret or body rotation.                              *
  *                                                                                             *
@@ -535,8 +475,7 @@ void UnitClass::AI(void)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Rotation_AI(void)
-{
+void UnitClass::Rotation_AI(void) {
 	if (Target_Legal(TarCom) && !IsRotating) {
 		DirType dir = Direction(TarCom);
 
@@ -550,7 +489,8 @@ void UnitClass::Rotation_AI(void)
 			**	applies only to tracked vehicles. Wheeled vehicles never rotate to face the
 			**	target, since they aren't maneuverable enough.
 			*/
-			if ((Class->Speed == SPEED_TRACK /* || *this == UNIT_BIKE */ ) && !Target_Legal(NavCom) && !IsDriving && PrimaryFacing.Difference(dir)) {
+			if ((Class->Speed == SPEED_TRACK /* || *this == UNIT_BIKE */) && !Target_Legal(NavCom) &&
+			    !IsDriving && PrimaryFacing.Difference(dir)) {
 				PrimaryFacing.Set_Desired(dir);
 			}
 		}
@@ -570,7 +510,7 @@ void UnitClass::Rotation_AI(void)
 
 			if (SecondaryFacing.Is_Rotating()) {
 				Mark(MARK_CHANGE_REDRAW);
-				if (SecondaryFacing.Rotation_Adjust(Class->ROT+1)) {
+				if (SecondaryFacing.Rotation_Adjust(Class->ROT + 1)) {
 					Mark(MARK_CHANGE_REDRAW);
 				}
 
@@ -594,7 +534,6 @@ void UnitClass::Rotation_AI(void)
 	}
 }
 
-
 /***********************************************************************************************
  * UnitClass::Edge_Of_World_AI -- Check for falling off the edge of the world.                 *
  *                                                                                             *
@@ -612,17 +551,16 @@ void UnitClass::Rotation_AI(void)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Edge_Of_World_AI(void)
-{
+bool UnitClass::Edge_Of_World_AI(void) {
 	if (Mission == MISSION_GUARD && !Map.In_Radar(Coord_Cell(Coord)) && IsLocked) {
-		if (Team.Is_Valid()) Team->IsLeaveMap = true;
+		if (Team.Is_Valid())
+			Team->IsLeaveMap = true;
 		Stun();
 		delete this;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Reload_AI -- Perform reload logic for this unit.                                 *
@@ -639,8 +577,7 @@ bool UnitClass::Edge_Of_World_AI(void)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Reload_AI(void)
-{
+void UnitClass::Reload_AI(void) {
 	if (*this == UNIT_V2_LAUNCHER && Ammo < Class->MaxAmmo) {
 		if (IsDriving) {
 			Reload = Reload + 1;
@@ -648,14 +585,13 @@ void UnitClass::Reload_AI(void)
 			if (Reload == 0) {
 				Ammo++;
 				if (Ammo < Class->MaxAmmo) {
-					Reload = TICKS_PER_SECOND*30;
+					Reload = TICKS_PER_SECOND * 30;
 				}
 				Mark(MARK_CHANGE);
 			}
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Firing_AI -- Handle firing logic for this unit.                                  *
@@ -671,8 +607,7 @@ void UnitClass::Reload_AI(void)
  * HISTORY:                                                                                    *
  *   07/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Firing_AI(void)
-{
+void UnitClass::Firing_AI(void) {
 	if (Target_Legal(TarCom) && Class->PrimaryWeapon != NULL) {
 
 		/*
@@ -683,41 +618,40 @@ void UnitClass::Firing_AI(void)
 		int primary = What_Weapon_Should_I_Use(TarCom);
 		FireErrorType ok = Can_Fire(TarCom, primary);
 		switch (ok) {
-			case FIRE_OK:
-				if (!((UnitClass *)this)->Class->IsFireAnim) {
-					Mark(MARK_OVERLAP_UP);
-					IsFiring = false;
-					Mark(MARK_OVERLAP_DOWN);
-				}
-
-				Fire_At(TarCom, primary);
-				break;
-
-			case FIRE_FACING:
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-				if (Class->IsLockTurret || Class->Type == UNIT_DEMOTRUCK) {
-#else
-				if (Class->IsLockTurret) {
-#endif
-					if (!Target_Legal(NavCom) && !IsDriving) {
-						PrimaryFacing.Set_Desired(Direction(TarCom));
-						SecondaryFacing.Set_Desired(PrimaryFacing.Desired());
-					}
-				} else {
-					SecondaryFacing.Set_Desired(Direction(TarCom));
-				}
-				break;
-
-			case FIRE_CLOAKED:
+		case FIRE_OK:
+			if (!((UnitClass *)this)->Class->IsFireAnim) {
 				Mark(MARK_OVERLAP_UP);
 				IsFiring = false;
 				Mark(MARK_OVERLAP_DOWN);
-				Do_Uncloak();
-				break;
+			}
+
+			Fire_At(TarCom, primary);
+			break;
+
+		case FIRE_FACING:
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+			if (Class->IsLockTurret || Class->Type == UNIT_DEMOTRUCK) {
+#else
+			if (Class->IsLockTurret) {
+#endif
+				if (!Target_Legal(NavCom) && !IsDriving) {
+					PrimaryFacing.Set_Desired(Direction(TarCom));
+					SecondaryFacing.Set_Desired(PrimaryFacing.Desired());
+				}
+			} else {
+				SecondaryFacing.Set_Desired(Direction(TarCom));
+			}
+			break;
+
+		case FIRE_CLOAKED:
+			Mark(MARK_OVERLAP_UP);
+			IsFiring = false;
+			Mark(MARK_OVERLAP_DOWN);
+			Do_Uncloak();
+			break;
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Receive_Message -- Handles receiving a radio message.                            *
@@ -740,209 +674,212 @@ void UnitClass::Firing_AI(void)
  * HISTORY:                                                                                    *
  *   05/22/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-RadioMessageType UnitClass::Receive_Message(RadioClass * from, RadioMessageType message, long & param)
-{
+RadioMessageType UnitClass::Receive_Message(RadioClass *from, RadioMessageType message, long &param) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	switch (message) {
-		/*
-		**	Checks to see if this object is in need of service depot processing.
-		*/
-		case RADIO_NEED_REPAIR:
-			if (!IsDriving && !Target_Legal(NavCom) && (Health_Ratio() >= 1 && (*this != UNIT_MINELAYER || Ammo >= Class->MaxAmmo))) return(RADIO_NEGATIVE);
-			break;
-//			return(RADIO_ROGER);
+	/*
+	**	Checks to see if this object is in need of service depot processing.
+	*/
+	case RADIO_NEED_REPAIR:
+		if (!IsDriving && !Target_Legal(NavCom) &&
+		    (Health_Ratio() >= 1 && (*this != UNIT_MINELAYER || Ammo >= Class->MaxAmmo)))
+			return (RADIO_NEGATIVE);
+		break;
+		//			return(RADIO_ROGER);
 
-		/*
-		**	Asks if the passenger can load on this transport.
-		*/
-		case RADIO_CAN_LOAD:
-			if (Class->Max_Passengers() == 0 || from == NULL || !House->Is_Ally(from->Owner())) return(RADIO_STATIC);
-			if (How_Many() < Class->Max_Passengers()) {
-				return(RADIO_ROGER);
-			}
-			return(RADIO_NEGATIVE);
+	/*
+	**	Asks if the passenger can load on this transport.
+	*/
+	case RADIO_CAN_LOAD:
+		if (Class->Max_Passengers() == 0 || from == NULL || !House->Is_Ally(from->Owner()))
+			return (RADIO_STATIC);
+		if (How_Many() < Class->Max_Passengers()) {
+			return (RADIO_ROGER);
+		}
+		return (RADIO_NEGATIVE);
 
-		/*
-		**	The refinery has told this harvester that it should begin the backup procedure
-		**	so that proper unloading may take place.
-		*/
-		case RADIO_BACKUP_NOW:
-			DriveClass::Receive_Message(from, message, param);
-			if (!IsRotating && PrimaryFacing != DIR_W) {
-				Do_Turn(DIR_W);
-			} else {
-				if (!IsDriving) {
-					TechnoClass	* whom = Contact_With_Whom();
-					if (IsTethered && whom != NULL) {
-						if (whom->What_Am_I() == RTTI_BUILDING && Mission == MISSION_ENTER) {
-							if (Transmit_Message(RADIO_IM_IN, whom) == RADIO_ROGER) {
-								Transmit_Message(RADIO_UNLOADED, whom);
-							}
+	/*
+	**	The refinery has told this harvester that it should begin the backup procedure
+	**	so that proper unloading may take place.
+	*/
+	case RADIO_BACKUP_NOW:
+		DriveClass::Receive_Message(from, message, param);
+		if (!IsRotating && PrimaryFacing != DIR_W) {
+			Do_Turn(DIR_W);
+		} else {
+			if (!IsDriving) {
+				TechnoClass *whom = Contact_With_Whom();
+				if (IsTethered && whom != NULL) {
+					if (whom->What_Am_I() == RTTI_BUILDING && Mission == MISSION_ENTER) {
+						if (Transmit_Message(RADIO_IM_IN, whom) == RADIO_ROGER) {
+							Transmit_Message(RADIO_UNLOADED, whom);
 						}
 					}
 				}
 			}
-			return(RADIO_ROGER);
+		}
+		return (RADIO_ROGER);
+
+	/*
+	**	This message is sent by the passenger when it determines that it has
+	**	entered the transport.
+	*/
+	case RADIO_IM_IN:
+		if (How_Many() == Class->Max_Passengers()) {
+			APC_Close_Door();
+		}
+		return (RADIO_ATTACH);
+
+	/*
+	**	Docking maintenance message received. Check to see if new orders should be given
+	**	to the impatient unit.
+	*/
+	case RADIO_DOCKING:
 
 		/*
-		**	This message is sent by the passenger when it determines that it has
-		**	entered the transport.
+		**	If this transport is moving, then always abort the docking request.
 		*/
-		case RADIO_IM_IN:
-			if (How_Many() == Class->Max_Passengers()) {
-				APC_Close_Door();
-			}
-			return(RADIO_ATTACH);
+		if (IsDriving || Target_Legal(NavCom)) {
+			return (RADIO_NEGATIVE);
+		}
 
 		/*
-		**	Docking maintenance message received. Check to see if new orders should be given
-		**	to the impatient unit.
+		**	Check for the case of a docking message arriving from a unit that does not
+		**	have formal radio contact established. This might be a unit that is standing
+		**	by. If this transport is free to proceed with normal docking operation, then
+		**	establish formal contact now. If the transport is completely full, then break
+		**	off contact. In all other cases, just tell the pending unit to stand by.
 		*/
-		case RADIO_DOCKING:
+		if (Contact_With_Whom() != from) {
 
 			/*
-			**	If this transport is moving, then always abort the docking request.
+			**	Can't ever load up so tell the passenger to bug off.
 			*/
-			if (IsDriving || Target_Legal(NavCom)) {
-				return(RADIO_NEGATIVE);
+			if (How_Many() >= Class->Max_Passengers()) {
+				return (RADIO_NEGATIVE);
 			}
 
 			/*
-			**	Check for the case of a docking message arriving from a unit that does not
-			**	have formal radio contact established. This might be a unit that is standing
-			**	by. If this transport is free to proceed with normal docking operation, then
-			**	establish formal contact now. If the transport is completely full, then break
-			**	off contact. In all other cases, just tell the pending unit to stand by.
+			**	Establish contact and let the loading process proceed normally.
 			*/
-			if (Contact_With_Whom() != from) {
+			if (!In_Radio_Contact()) {
+				Transmit_Message(RADIO_HELLO, from);
+			} else {
 
 				/*
-				**	Can't ever load up so tell the passenger to bug off.
+				**	This causes the potential passenger to think that all is ok and to
+				**	hold on for a bit.
 				*/
-				if (How_Many() >= Class->Max_Passengers()) {
-					return(RADIO_NEGATIVE);
-				}
-
-				/*
-				**	Establish contact and let the loading process proceed normally.
-				*/
-				if (!In_Radio_Contact()) {
-					Transmit_Message(RADIO_HELLO, from);
-				} else {
-
-					/*
-					**	This causes the potential passenger to think that all is ok and to
-					**	hold on for a bit.
-					*/
-					return(RADIO_ROGER);
-				}
+				return (RADIO_ROGER);
 			}
+		}
 
-			if (Class->Max_Passengers() > 0 && How_Many() < Class->Max_Passengers()) {
-				DriveClass::Receive_Message(from, message, param);
+		if (Class->Max_Passengers() > 0 && How_Many() < Class->Max_Passengers()) {
+			DriveClass::Receive_Message(from, message, param);
 
-				if (!IsDriving && !IsRotating && !IsTethered) {
+			if (!IsDriving && !IsRotating && !IsTethered) {
+
+				/*
+				**	If the potential passenger needs someplace to go, then figure out a good
+				**	spot and tell it to go.
+				*/
+				if (Transmit_Message(RADIO_NEED_TO_MOVE, from) == RADIO_ROGER) {
+
+					CELL cell;
+					DirType dir = Desired_Load_Dir(from, cell);
 
 					/*
-					**	If the potential passenger needs someplace to go, then figure out a good
-					**	spot and tell it to go.
+					**	If no adjacent free cells are detected, then passenger loading
+					**	cannot occur. Break radio contact.
 					*/
-					if (Transmit_Message(RADIO_NEED_TO_MOVE, from) == RADIO_ROGER) {
-
-						CELL cell;
-						DirType dir = Desired_Load_Dir(from, cell);
+					if (cell == 0) {
+						Transmit_Message(RADIO_OVER_OUT, from);
+					} else {
+						param = (long)::As_Target(cell);
+						Do_Turn(dir);
 
 						/*
-						**	If no adjacent free cells are detected, then passenger loading
-						**	cannot occur. Break radio contact.
+						**	If it is now facing the correct direction, then open the
+						**	transport doors. Close the doors if the transport is or needs
+						**	to rotate.
 						*/
-						if (cell == 0) {
-							Transmit_Message(RADIO_OVER_OUT, from);
-						} else {
-							param = (long)::As_Target(cell);
-							Do_Turn(dir);
-
-							/*
-							**	If it is now facing the correct direction, then open the
-							**	transport doors. Close the doors if the transport is or needs
-							**	to rotate.
-							*/
-#ifdef FIXIT_PHASETRANSPORT	//	checked - ajw 9/28/98
-							if (*this == UNIT_APC || *this == UNIT_PHASE) {
+#ifdef FIXIT_PHASETRANSPORT //	checked - ajw 9/28/98
+						if (*this == UNIT_APC || *this == UNIT_PHASE) {
 #else
-							if (*this == UNIT_APC) {
+						if (*this == UNIT_APC) {
 #endif
-								if (IsRotating) {
-									if (!Is_Door_Closed()) {
-										APC_Close_Door();
-									}
-								} else {
-									if (!Is_Door_Open()) {
-										APC_Open_Door();
-									}
+							if (IsRotating) {
+								if (!Is_Door_Closed()) {
+									APC_Close_Door();
+								}
+							} else {
+								if (!Is_Door_Open()) {
+									APC_Open_Door();
 								}
 							}
+						}
 
-							/*
-							**	Tell the potential passenger where it should go. If the passenger is
-							**	already at the staging location, then tell it to move onto the transport
-							**	directly.
-							*/
-							if (Transmit_Message(RADIO_MOVE_HERE, param, from) == RADIO_YEA_NOW_WHAT) {
-#ifdef FIXIT_PHASETRANSPORT	//	checked - ajw 9/28/98
-								if ( (*this != UNIT_APC && *this != UNIT_PHASE) || Is_Door_Open()) {
+						/*
+						**	Tell the potential passenger where it should go. If the
+						*passenger is *	already at the staging location, then tell it to move
+						*onto the transport *	directly.
+						*/
+						if (Transmit_Message(RADIO_MOVE_HERE, param, from) ==
+						    RADIO_YEA_NOW_WHAT) {
+#ifdef FIXIT_PHASETRANSPORT //	checked - ajw 9/28/98
+							if ((*this != UNIT_APC && *this != UNIT_PHASE) ||
+							    Is_Door_Open()) {
 #else
-								if (*this != UNIT_APC || Is_Door_Open()) {
+							if (*this != UNIT_APC || Is_Door_Open()) {
 #endif
-									param = (long)As_Target();
-									Transmit_Message(RADIO_TETHER);
-									if (Transmit_Message(RADIO_MOVE_HERE, param, from) != RADIO_ROGER) {
-										Transmit_Message(RADIO_OVER_OUT, from);
-									} else {
-										Contact_With_Whom()->Unselect();
-									}
+								param = (long)As_Target();
+								Transmit_Message(RADIO_TETHER);
+								if (Transmit_Message(RADIO_MOVE_HERE, param, from) !=
+								    RADIO_ROGER) {
+									Transmit_Message(RADIO_OVER_OUT, from);
+								} else {
+									Contact_With_Whom()->Unselect();
 								}
 							}
 						}
 					}
 				}
-				return(RADIO_ROGER);
 			}
-			break;
+			return (RADIO_ROGER);
+		}
+		break;
 
-		/*
-		**	Something bad has happened to the object in contact with. Abort any coordinated
-		**	activity with this object. Basically, ... run away! Run away!
-		*/
-		case RADIO_RUN_AWAY:
-			if (Class->IsToHarvest && In_Radio_Contact() && Mission == MISSION_ENTER) {
-				TechnoClass * contact = Contact_With_Whom();
-				if (contact->What_Am_I() == RTTI_BUILDING && *((BuildingClass*)contact) == STRUCT_REFINERY) {
-					// Slight hack; set a target so the harvest mission knows to skip to finding home state
-					Assign_Mission(MISSION_HARVEST);
-					TarCom = As_Target();
-					return(RADIO_ROGER);
-				}
+	/*
+	**	Something bad has happened to the object in contact with. Abort any coordinated
+	**	activity with this object. Basically, ... run away! Run away!
+	*/
+	case RADIO_RUN_AWAY:
+		if (Class->IsToHarvest && In_Radio_Contact() && Mission == MISSION_ENTER) {
+			TechnoClass *contact = Contact_With_Whom();
+			if (contact->What_Am_I() == RTTI_BUILDING && *((BuildingClass *)contact) == STRUCT_REFINERY) {
+				// Slight hack; set a target so the harvest mission knows to skip to finding home state
+				Assign_Mission(MISSION_HARVEST);
+				TarCom = As_Target();
+				return (RADIO_ROGER);
 			}
-			return(DriveClass::Receive_Message(from, message, param));
+		}
+		return (DriveClass::Receive_Message(from, message, param));
 
-		/*
-		**	When this message is received, it means that the other object
-		**	has already turned its radio off. Turn this radio off as well.
-		*/
-		case RADIO_OVER_OUT:
-			if (Mission == MISSION_RETURN) {
-				Assign_Mission(MISSION_GUARD);
-			}
-			DriveClass::Receive_Message(from, message, param);
-			return(RADIO_ROGER);
-
+	/*
+	**	When this message is received, it means that the other object
+	**	has already turned its radio off. Turn this radio off as well.
+	*/
+	case RADIO_OVER_OUT:
+		if (Mission == MISSION_RETURN) {
+			Assign_Mission(MISSION_GUARD);
+		}
+		DriveClass::Receive_Message(from, message, param);
+		return (RADIO_ROGER);
 	}
-	return(DriveClass::Receive_Message(from, message, param));
+	return (DriveClass::Receive_Message(from, message, param));
 }
-
 
 /***********************************************************************************************
  * UnitClass::Unlimbo -- Removes unit from stasis.                                             *
@@ -963,8 +900,7 @@ RadioMessageType UnitClass::Receive_Message(RadioClass * from, RadioMessageType 
  * HISTORY:                                                                                    *
  *   05/22/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Unlimbo(COORDINATE coord, DirType dir)
-{
+bool UnitClass::Unlimbo(COORDINATE coord, DirType dir) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -985,7 +921,8 @@ bool UnitClass::Unlimbo(COORDINATE coord, DirType dir)
 		/*
 		**	If it starts off the edge of the map, then it already starts cloaked.
 		*/
-		if (IsCloakable && !IsLocked) Cloak = CLOAKED;
+		if (IsCloakable && !IsLocked)
+			Cloak = CLOAKED;
 
 		/*
 		**	Units default to no special animation.
@@ -993,11 +930,10 @@ bool UnitClass::Unlimbo(COORDINATE coord, DirType dir)
 		Set_Rate(0);
 		Set_Stage(0);
 
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Take_Damage -- Inflicts damage points on a unit.                                 *
@@ -1032,8 +968,7 @@ bool UnitClass::Unlimbo(COORDINATE coord, DirType dir)
  *   06/30/1995 JLB : Lasers do maximum damage against gunboat.                                *
  *   08/16/1995 JLB : Harvester crushing doesn't occur on early missions.                      *
  *=============================================================================================*/
-ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhead, TechnoClass * source, bool forced)
-{
+ResultType UnitClass::Take_Damage(int &damage, int distance, WarheadType warhead, TechnoClass *source, bool forced) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -1043,8 +978,8 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 	**	Remember if this object was selected. If it was and it gets destroyed and it has
 	**	passengers that pop out, then the passengers will inherit the select state.
 	*/
-	//bool select = (IsSelected && House->IsPlayerControl);
-	bool select = (Is_Selected_By_Player() );//&& House->IsPlayerControl);
+	// bool select = (IsSelected && House->IsPlayerControl);
+	bool select = (Is_Selected_By_Player()); //&& House->IsPlayerControl);
 
 	/*
 	**	In order for a this to be damaged, it must either be a unit
@@ -1054,7 +989,7 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 
 	if (res == RESULT_DESTROYED) {
 		Death_Announcement(source);
-		Shroud_Regen();	// remove the shroud if it's a gap generator
+		Shroud_Regen(); // remove the shroud if it's a gap generator
 		if (Class->Explosion != ANIM_NONE) {
 			AnimType anim = Class->Explosion;
 
@@ -1073,7 +1008,8 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 			**	Tiberium they are carrying.
 			*/
 			if (Tiberium > 0 && Rule.IsExplosiveHarvester) {
-				Wide_Area_Damage(Coord, CELL_LEPTON_W + CELL_LEPTON_W/2, Credit_Load()+Class->MaxStrength, this, WARHEAD_HE);
+				Wide_Area_Damage(Coord, CELL_LEPTON_W + CELL_LEPTON_W / 2,
+						 Credit_Load() + Class->MaxStrength, this, WARHEAD_HE);
 			}
 
 			/*
@@ -1096,24 +1032,26 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 
 		if (Class->IsCrew && Class->Max_Passengers() == 0) {
 			if (Percent_Chance(50)) {
-				InfantryClass * i = 0;
+				InfantryClass *i = 0;
 
 				if (Class->PrimaryWeapon == NULL) {
 					i = new InfantryClass(INFANTRY_C1, House->Class->House);
-					if (i != NULL) i->IsTechnician = true;
+					if (i != NULL)
+						i->IsTechnician = true;
 				} else {
 					i = new InfantryClass(INFANTRY_E1, House->Class->House);
 				}
 				if (i != NULL) {
 					if (i->Unlimbo(Coord, DIR_N)) {
-						i->Strength = Random_Pick(5, (int)i->Class->MaxStrength/2);
+						i->Strength = Random_Pick(5, (int)i->Class->MaxStrength / 2);
 						i->Scatter(0, true);
 						if (!House->IsHuman) {
 							i->Assign_Mission(MISSION_HUNT);
 						} else {
 							i->Assign_Mission(MISSION_GUARD);
 						}
-						if (select) i->Select();
+						if (select)
+							i->Select();
 					} else {
 						delete i;
 					}
@@ -1121,9 +1059,10 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 			}
 		} else {
 			while (Is_Something_Attached()) {
-				FootClass * object = Detach_Object();
+				FootClass *object = Detach_Object();
 
-				if (object == NULL) break;		// How can this happen?
+				if (object == NULL)
+					break; // How can this happen?
 
 				/*
 				**	Only infantry can run from a destroyed vehicle. Even then, it is not a sure
@@ -1132,7 +1071,8 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 				if (object->Is_Infantry() && object->Unlimbo(Coord, DIR_N)) {
 					object->Look(false);
 					object->Scatter(0, true);
-					if (select) object->Select();
+					if (select)
+						object->Select();
 				} else {
 					object->Record_The_Kill(source);
 					delete object;
@@ -1170,20 +1110,22 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 		*/
 		if (Health_Ratio() <= Rule.ConditionYellow && !IsAnimAttached) {
 #ifdef FIXIT_ANTS
-			if (*this != UNIT_ANT1 && *this != UNIT_ANT2 && *this != UNIT_ANT3)  {
+			if (*this != UNIT_ANT1 && *this != UNIT_ANT2 && *this != UNIT_ANT3) {
 #endif
-				AnimClass * anim = new AnimClass(ANIM_SMOKE_M, Coord_Add(Coord, XYP_Coord(0, -8)));
-				if (anim) anim->Attach_To(this);
+				AnimClass *anim = new AnimClass(ANIM_SMOKE_M, Coord_Add(Coord, XYP_Coord(0, -8)));
+				if (anim)
+					anim->Attach_To(this);
 #ifdef FIXIT_ANTS
 			}
 #endif
-		   }
+		}
 
 		/*
 		**	Try to crush anyone that fires on this unit if possible. The harvester
 		**	typically is the only one that will qualify here.
 		*/
-		if (!Team.Is_Valid() && source != NULL && !IsTethered && !House->Is_Ally(source) && (!House->IsHuman || Rule.IsAutoCrush)) {
+		if (!Team.Is_Valid() && source != NULL && !IsTethered && !House->Is_Ally(source) &&
+		    (!House->IsHuman || Rule.IsAutoCrush)) {
 
 			/*
 			**	Try to crush the attacker if it can be crushed by this unit and this unit is
@@ -1205,13 +1147,14 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 					/*
 					**	Find nearby refinery and head to it?
 					*/
-					BuildingClass * building = Find_Docking_Bay(STRUCT_REFINERY, false);
+					BuildingClass *building = Find_Docking_Bay(STRUCT_REFINERY, false);
 
 					/*
 					**	Since the refinery said it was ok to load, establish radio
 					**	contact with the refinery and then await docking orders.
 					*/
-					if (building != NULL && Transmit_Message(RADIO_HELLO, building) == RADIO_ROGER) {
+					if (building != NULL &&
+					    Transmit_Message(RADIO_HELLO, building) == RADIO_ROGER) {
 						Assign_Mission(MISSION_ENTER);
 					}
 				}
@@ -1225,9 +1168,8 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
 			Base_Is_Attacked(source);
 		}
 	}
-	return(res);
+	return (res);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Active_Click_With -- Intercepts the active click to see if deployment is possible*
@@ -1248,25 +1190,24 @@ ResultType UnitClass::Take_Damage(int & damage, int distance, WarheadType warhea
  * HISTORY:                                                                                    *
  *   03/10/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Active_Click_With(ActionType action, ObjectClass * object)
-{
+void UnitClass::Active_Click_With(ActionType action, ObjectClass *object) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (action != What_Action(object)) {
 		action = What_Action(object);
 		switch (action) {
-			case ACTION_SABOTAGE:
-			case ACTION_CAPTURE:
-				action = ACTION_ATTACK;
-				break;
+		case ACTION_SABOTAGE:
+		case ACTION_CAPTURE:
+			action = ACTION_ATTACK;
+			break;
 
-			case ACTION_ENTER:
-				action = ACTION_MOVE;
-				break;
+		case ACTION_ENTER:
+			action = ACTION_MOVE;
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 
@@ -1279,7 +1220,7 @@ void UnitClass::Active_Click_With(ActionType action, ObjectClass * object)
 	if (object == this && action == ACTION_NOMOVE) {
 		return;
 	}
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	if (*this == UNIT_MAD && (IsDumping || Gold)) {
 	} else {
 		DriveClass::Active_Click_With(action, object);
@@ -1288,7 +1229,6 @@ void UnitClass::Active_Click_With(ActionType action, ObjectClass * object)
 	DriveClass::Active_Click_With(action, object);
 #endif
 }
-
 
 /***********************************************************************************************
  * UnitClass::Active_Click_With -- Performs specified action on specified cell.                *
@@ -1310,12 +1250,11 @@ void UnitClass::Active_Click_With(ActionType action, ObjectClass * object)
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Active_Click_With(ActionType action, CELL cell)
-{
+void UnitClass::Active_Click_With(ActionType action, CELL cell) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	if (*this == UNIT_MAD && (IsDumping || Gold)) {
 	} else {
 		DriveClass::Active_Click_With(action, cell);
@@ -1325,23 +1264,20 @@ void UnitClass::Active_Click_With(ActionType action, CELL cell)
 #endif
 }
 
-
-void UnitClass::Player_Assign_Mission(MissionType mission, TARGET target, TARGET destination)
-{
+void UnitClass::Player_Assign_Mission(MissionType mission, TARGET target, TARGET destination) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (mission == MISSION_HARVEST) {
 		ArchiveTarget = TARGET_NONE;
 	} else if (mission == MISSION_ENTER) {
-		BuildingClass* building = As_Building(destination);
+		BuildingClass *building = As_Building(destination);
 		if (building != NULL && *building == STRUCT_REFINERY && building->In_Radio_Contact()) {
 			building->Transmit_Message(RADIO_OVER_OUT);
 		}
 	}
 	DriveClass::Player_Assign_Mission(mission, target, destination);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Enter_Idle_Mode -- Unit enters idle mode state.                                  *
@@ -1363,12 +1299,11 @@ void UnitClass::Player_Assign_Mission(MissionType mission, TARGET target, TARGET
  *   06/03/1994 JLB : Fixed to handle non-combat vehicles.                                     *
  *   06/18/1995 JLB : Allows a harvester to stop harvesting.                                   *
  *=============================================================================================*/
-void UnitClass::Enter_Idle_Mode(bool initial)
-{
+void UnitClass::Enter_Idle_Mode(bool initial) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	MissionType	order = MISSION_GUARD;
+	MissionType order = MISSION_GUARD;
 
 	if (IsToScatter) {
 		IsToScatter = false;
@@ -1390,7 +1325,8 @@ void UnitClass::Enter_Idle_Mode(bool initial)
 
 		if (!Is_Weapon_Equipped()) {
 			if (Class->IsToHarvest) {
-				if (!In_Radio_Contact() && Mission != MISSION_HARVEST && MissionQueue != MISSION_HARVEST) {
+				if (!In_Radio_Contact() && Mission != MISSION_HARVEST &&
+				    MissionQueue != MISSION_HARVEST) {
 					if (initial || !House->IsHuman || Map[Coord].Land_Type() == LAND_TIBERIUM) {
 						order = MISSION_HARVEST;
 					} else {
@@ -1402,25 +1338,27 @@ void UnitClass::Enter_Idle_Mode(bool initial)
 					return;
 				}
 			} else {
-				if (IsALoaner && Class->Max_Passengers() > 0 && Is_Something_Attached() && !Team.Is_Valid()) {
+				if (IsALoaner && Class->Max_Passengers() > 0 && Is_Something_Attached() &&
+				    !Team.Is_Valid()) {
 					order = MISSION_UNLOAD;
 				} else {
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-	if(*this == UNIT_MAD && Mission == MISSION_UNLOAD) {
-		order = MISSION_UNLOAD;
-	} else {
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+					if (*this == UNIT_MAD && Mission == MISSION_UNLOAD) {
+						order = MISSION_UNLOAD;
+					} else {
 #endif
-					order = MISSION_GUARD;
-					Assign_Target(TARGET_NONE);
-					Assign_Destination(TARGET_NONE);
+						order = MISSION_GUARD;
+						Assign_Target(TARGET_NONE);
+						Assign_Destination(TARGET_NONE);
+					}
 				}
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 			}
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-	}
 #endif
 		} else {
 
-			if (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA || MissionControl[Mission].IsParalyzed || MissionControl[Mission].IsZombie) {
+			if (Mission == MISSION_GUARD || Mission == MISSION_GUARD_AREA ||
+			    MissionControl[Mission].IsParalyzed || MissionControl[Mission].IsZombie) {
 				return;
 			}
 
@@ -1433,7 +1371,6 @@ void UnitClass::Enter_Idle_Mode(bool initial)
 	}
 	Assign_Mission(order);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Goto_Clear_Spot -- Finds a clear spot to deploy.                                 *
@@ -1451,15 +1388,15 @@ void UnitClass::Enter_Idle_Mode(bool initial)
  * HISTORY:                                                                                    *
  *   06/27/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Goto_Clear_Spot(void)
-{
+bool UnitClass::Goto_Clear_Spot(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	Mark(MARK_UP);
-	if (!Target_Legal(NavCom) && BuildingTypeClass::As_Reference(STRUCT_CONST).Legal_Placement(Adjacent_Cell(Coord_Cell(Center_Coord()), FACING_NW))) {
+	if (!Target_Legal(NavCom) && BuildingTypeClass::As_Reference(STRUCT_CONST)
+					 .Legal_Placement(Adjacent_Cell(Coord_Cell(Center_Coord()), FACING_NW))) {
 		Mark(MARK_DOWN);
-		return(true);
+		return (true);
 	}
 
 	if (!Target_Legal(NavCom)) {
@@ -1468,48 +1405,26 @@ bool UnitClass::Goto_Clear_Spot(void)
 		**	probably be converted to a more flexible method.
 		*/
 		static int _offsets[] = {
-			-MAP_CELL_W*1,
-			-MAP_CELL_W*2,
-			-(MAP_CELL_W*2)+1,
-			-(MAP_CELL_W*2)-1,
-			-MAP_CELL_W*3,
-			-(MAP_CELL_W*3)+1,
-			-(MAP_CELL_W*3)-1,
-			-(MAP_CELL_W*3)+2,
-			-(MAP_CELL_W*3)-2,
-			-MAP_CELL_W*4,
-			-(MAP_CELL_W*4)+1,
-			-(MAP_CELL_W*4)-1,
-			-(MAP_CELL_W*4)+2,
-			-(MAP_CELL_W*4)-2,
-//BG: Added south scanning
-			MAP_CELL_W*1,
-			MAP_CELL_W*2,
-			(MAP_CELL_W*2)+1,
-			(MAP_CELL_W*2)-1,
-			MAP_CELL_W*3,
-			(MAP_CELL_W*3)+1,
-			(MAP_CELL_W*3)-1,
-			(MAP_CELL_W*3)+2,
-			(MAP_CELL_W*3)-2,
-			MAP_CELL_W*4,
-			(MAP_CELL_W*4)+1,
-			(MAP_CELL_W*4)-1,
-			(MAP_CELL_W*4)+2,
-			(MAP_CELL_W*4)-2,
+		    -MAP_CELL_W * 1, -MAP_CELL_W * 2, -(MAP_CELL_W * 2) + 1, -(MAP_CELL_W * 2) - 1, -MAP_CELL_W * 3,
+		    -(MAP_CELL_W * 3) + 1, -(MAP_CELL_W * 3) - 1, -(MAP_CELL_W * 3) + 2, -(MAP_CELL_W * 3) - 2,
+		    -MAP_CELL_W * 4, -(MAP_CELL_W * 4) + 1, -(MAP_CELL_W * 4) - 1, -(MAP_CELL_W * 4) + 2,
+		    -(MAP_CELL_W * 4) - 2,
+		    // BG: Added south scanning
+		    MAP_CELL_W * 1, MAP_CELL_W * 2, (MAP_CELL_W * 2) + 1, (MAP_CELL_W * 2) - 1, MAP_CELL_W * 3,
+		    (MAP_CELL_W * 3) + 1, (MAP_CELL_W * 3) - 1, (MAP_CELL_W * 3) + 2, (MAP_CELL_W * 3) - 2,
+		    MAP_CELL_W * 4, (MAP_CELL_W * 4) + 1, (MAP_CELL_W * 4) - 1, (MAP_CELL_W * 4) + 2,
+		    (MAP_CELL_W * 4) - 2,
 
-//BG: Added some token east/west scanning
-			-1,-2,-3,-4,
+		    // BG: Added some token east/west scanning
+		    -1, -2, -3, -4,
 
-			 1, 2, 3, 4,
-			0
-		};
-		int * ptr;
+		    1, 2, 3, 4, 0};
+		int *ptr;
 
 		ptr = &_offsets[0];
 		while (*ptr) {
-			CELL	cell = Coord_Cell(Coord)+*ptr++;
-			CELL	check_cell = Adjacent_Cell(cell, FACING_NW);
+			CELL cell = Coord_Cell(Coord) + *ptr++;
+			CELL check_cell = Adjacent_Cell(cell, FACING_NW);
 			if (BuildingTypeClass::As_Reference(STRUCT_CONST).Legal_Placement(check_cell)) {
 				Assign_Destination(::As_Target(cell));
 				break;
@@ -1522,13 +1437,12 @@ bool UnitClass::Goto_Clear_Spot(void)
 	** If we couldn't find a destination to go to, let's try random movement
 	** to see if that brings us to a better spot.
 	*/
-	if(!Target_Legal(NavCom) && !House->IsHuman) {
+	if (!Target_Legal(NavCom) && !House->IsHuman) {
 		Scatter(0);
 	}
 
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Try_To_Deploy -- The unit attempts to "deploy" at current location.              *
@@ -1549,8 +1463,7 @@ bool UnitClass::Goto_Clear_Spot(void)
  * HISTORY:                                                                                    *
  *   06/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Try_To_Deploy(void)
-{
+bool UnitClass::Try_To_Deploy(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -1572,7 +1485,7 @@ bool UnitClass::Try_To_Deploy(void)
 				}
 				Mark(MARK_DOWN);
 				IsDeploying = false;
-				return(false);
+				return (false);
 			}
 			Mark(MARK_DOWN);
 
@@ -1583,9 +1496,9 @@ bool UnitClass::Try_To_Deploy(void)
 			*/
 			if (PrimaryFacing.Current() != DIR_SW) {
 				Do_Turn(DIR_SW);
-//				PrimaryFacing.Set_Desired(DIR_SW);
+				//				PrimaryFacing.Set_Desired(DIR_SW);
 				IsDeploying = true;
-				return(true);
+				return (true);
 			}
 
 			/*
@@ -1594,7 +1507,7 @@ bool UnitClass::Try_To_Deploy(void)
 			**	unit, just mark it as not deploying.
 			*/
 			Mark(MARK_UP);
-			BuildingClass * building = new BuildingClass(STRUCT_CONST, House->Class->House);
+			BuildingClass *building = new BuildingClass(STRUCT_CONST, House->Class->House);
 			if (building != NULL) {
 				if (building->Unlimbo(Adjacent_Cell(Coord, FACING_NW))) {
 
@@ -1646,7 +1559,7 @@ bool UnitClass::Try_To_Deploy(void)
 						Scen.FadeTimer = GRAYFADETIME;
 					}
 					delete this;
-					return(true);
+					return (true);
 				} else {
 
 					/*
@@ -1660,9 +1573,8 @@ bool UnitClass::Try_To_Deploy(void)
 			IsDeploying = false;
 		}
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Per_Cell_Process -- Performs operations necessary on a per cell basis.           *
@@ -1682,12 +1594,11 @@ bool UnitClass::Try_To_Deploy(void)
  *   06/17/1995 JLB : Handles case when building says "NO!"                                    *
  *   06/30/1995 JLB : Gunboats head back and forth now.                                        *
  *=============================================================================================*/
-void UnitClass::Per_Cell_Process(PCPType why)
-{
+void UnitClass::Per_Cell_Process(PCPType why) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	CELL	cell = Coord_Cell(Coord);
+	CELL cell = Coord_Cell(Coord);
 	HousesType house;
 
 	if (why == PCP_END || why == PCP_ROTATION) {
@@ -1697,7 +1608,8 @@ void UnitClass::Per_Cell_Process(PCPType why)
 		*/
 		if (IsDeploying) {
 			Try_To_Deploy();
-			if (!IsActive) return;			// Unit no longer exists -- bail.
+			if (!IsActive)
+				return; // Unit no longer exists -- bail.
 		}
 	}
 
@@ -1707,20 +1619,20 @@ void UnitClass::Per_Cell_Process(PCPType why)
 		**	If this is a unit that is driving onto a building then the unit must enter
 		**	the building as the final step.
 		*/
-		TechnoClass	* whom = Contact_With_Whom();
+		TechnoClass *whom = Contact_With_Whom();
 		if (IsTethered && whom != NULL) {
 			if (whom->What_Am_I() == RTTI_BUILDING && Mission == MISSION_ENTER) {
-				if (whom == Map[CELL(cell-MAP_CELL_W)].Cell_Building()) {
+				if (whom == Map[CELL(cell - MAP_CELL_W)].Cell_Building()) {
 					switch (Transmit_Message(RADIO_IM_IN, whom)) {
-						case RADIO_ROGER:
-							break;
+					case RADIO_ROGER:
+						break;
 
-						case RADIO_ATTACH:
-							break;
+					case RADIO_ATTACH:
+						break;
 
-						default:
-							Scatter(0, true);
-							break;
+					default:
+						Scatter(0, true);
+						break;
 					}
 				}
 			}
@@ -1730,8 +1642,9 @@ void UnitClass::Per_Cell_Process(PCPType why)
 		**	Unit entering a transport vehicle will break radio contact
 		**	and attach itself to the transporter.
 		*/
-		TechnoClass * techno = Contact_With_Whom();
-		if (Mission == MISSION_ENTER && techno && Coord_Cell(Coord) == Coord_Cell(techno->Coord) && techno == As_Techno(NavCom)) {
+		TechnoClass *techno = Contact_With_Whom();
+		if (Mission == MISSION_ENTER && techno && Coord_Cell(Coord) == Coord_Cell(techno->Coord) &&
+		    techno == As_Techno(NavCom)) {
 			if (Transmit_Message(RADIO_IM_IN) == RADIO_ATTACH) {
 				Limbo();
 				techno->Attach(this);
@@ -1744,22 +1657,24 @@ void UnitClass::Per_Cell_Process(PCPType why)
 		**	When breaking away from a transport object or building, possibly
 		**	scatter or otherwise begin normal unit operations.
 		*/
-		if (IsTethered && (Mission != MISSION_ENTER ||
-				(As_Techno(NavCom) != NULL && Contact_With_Whom() != As_Techno(NavCom))
-				) &&
-				Mission != MISSION_UNLOAD) {
+		if (IsTethered &&
+		    (Mission != MISSION_ENTER ||
+		     (As_Techno(NavCom) != NULL && Contact_With_Whom() != As_Techno(NavCom))) &&
+		    Mission != MISSION_UNLOAD) {
 
 			/*
 			**	Special hack check to make sure that even though it has moved one
 			**	cell, if it is still on the building (e.g., service depot), have
 			**	it scatter again.
 			*/
-			if	(Map[Coord].Cell_Building() != NULL && !Target_Legal(NavCom)) {
+			if (Map[Coord].Cell_Building() != NULL && !Target_Legal(NavCom)) {
 				Scatter(0, true, true);
 			} else {
-				TechnoClass * contact = Contact_With_Whom();
+				TechnoClass *contact = Contact_With_Whom();
 				if (Transmit_Message(RADIO_UNLOADED) == RADIO_RUN_AWAY) {
-					if (*this == UNIT_HARVESTER && contact && contact->What_Am_I() == RTTI_BUILDING && *((BuildingClass*)contact) != STRUCT_REPAIR) {
+					if (*this == UNIT_HARVESTER && contact &&
+					    contact->What_Am_I() == RTTI_BUILDING &&
+					    *((BuildingClass *)contact) != STRUCT_REPAIR) {
 						Assign_Mission(MISSION_HARVEST);
 					} else if (!Target_Legal(NavCom)) {
 						Scatter(0, true);
@@ -1770,7 +1685,7 @@ void UnitClass::Per_Cell_Process(PCPType why)
 						**	onto a transport (or other situation) if the destination
 						**	so indicates.
 						*/
-						TechnoClass * techno = As_Techno(NavCom);
+						TechnoClass *techno = As_Techno(NavCom);
 						if (techno != NULL) {
 							Transmit_Message(RADIO_DOCKING, techno);
 						}
@@ -1839,7 +1754,7 @@ void UnitClass::Per_Cell_Process(PCPType why)
 		*/
 		if (!Target_Legal(NavCom) && Path[0] == FACING_NONE) {
 			if (Class->IsNoFireWhileMoving) {
-				Arm = Rearm_Delay(true)/4;
+				Arm = Rearm_Delay(true) / 4;
 			}
 		}
 
@@ -1882,8 +1797,9 @@ void UnitClass::Per_Cell_Process(PCPType why)
 		/*
 		** If entering a cell with a land mine in it, blow up the mine.
 		*/
-		BuildingClass * bldng = Map[cell].Cell_Building();
-		if (bldng != NULL && (*bldng == STRUCT_AVMINE || *bldng == STRUCT_APMINE) && !bldng->House->Is_Ally(this)) {
+		BuildingClass *bldng = Map[cell].Cell_Building();
+		if (bldng != NULL && (*bldng == STRUCT_AVMINE || *bldng == STRUCT_APMINE) &&
+		    !bldng->House->Is_Ally(this)) {
 
 			/*
 			** Special case: if it's a land mine deployer, and it ran over the
@@ -1895,7 +1811,8 @@ void UnitClass::Per_Cell_Process(PCPType why)
 				COORDINATE blcoord = bldng->Center_Coord();
 
 				new AnimClass(ANIM_MINE_EXP1, blcoord);
-//				new AnimClass(Combat_Anim(Rule.AVMineDamage, WARHEAD_HE, Map[cell].Land_Type()), blcoord);
+				//				new AnimClass(Combat_Anim(Rule.AVMineDamage, WARHEAD_HE,
+				// Map[cell].Land_Type()), blcoord);
 
 				/*
 				** Vehicles blow up both mines, but they only take significant damage from AV mines.
@@ -1922,7 +1839,8 @@ void UnitClass::Per_Cell_Process(PCPType why)
 		**	anyway, so blow it up now.
 		*/
 		LandType land = Map[Coord].Land_Type();
-		if (!IsDriving && IsMovingOntoBridge && (land == LAND_ROCK || land == LAND_WATER || land == LAND_RIVER)) {
+		if (!IsDriving && IsMovingOntoBridge &&
+		    (land == LAND_ROCK || land == LAND_WATER || land == LAND_RIVER)) {
 			new AnimClass(Combat_Anim(Strength, WARHEAD_AP, land), Coord);
 			int damage = Strength;
 			Take_Damage(damage, 0, WARHEAD_AP, NULL, true);
@@ -1933,10 +1851,10 @@ void UnitClass::Per_Cell_Process(PCPType why)
 	/*
 	**	Destroy any crushable wall that is driven over by a tracked vehicle.
 	*/
-	CellClass * cellptr = &Map[cell];
+	CellClass *cellptr = &Map[cell];
 	if (Class->IsCrusher && cellptr->Overlay != OVERLAY_NONE) {
-//	if (Class->Speed == SPEED_TRACK && cellptr->Overlay != OVERLAY_NONE) {
-		OverlayTypeClass const * optr = &OverlayTypeClass::As_Reference(cellptr->Overlay);
+		//	if (Class->Speed == SPEED_TRACK && cellptr->Overlay != OVERLAY_NONE) {
+		OverlayTypeClass const *optr = &OverlayTypeClass::As_Reference(cellptr->Overlay);
 
 		if (optr->IsCrushable) {
 			if (optr->Type == OVERLAY_SANDBAG_WALL) {
@@ -1961,7 +1879,6 @@ void UnitClass::Per_Cell_Process(PCPType why)
 	BEnd(BENCH_PCP);
 }
 
-
 /***********************************************************************************************
  * UnitClass::Shape_Number -- Fetch the shape number to use for this unit.                     *
  *                                                                                             *
@@ -1977,95 +1894,98 @@ void UnitClass::Per_Cell_Process(PCPType why)
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Shape_Number(void) const
-{
+int UnitClass::Shape_Number(void) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	int			shapenum;		// Working shape number.
-	int			facing = Dir_To_32(PrimaryFacing);
-	int			tfacing = Dir_To_32(SecondaryFacing);
-	DirType		rotation = DIR_N;
+	int shapenum; // Working shape number.
+	int facing = Dir_To_32(PrimaryFacing);
+	int tfacing = Dir_To_32(SecondaryFacing);
+	DirType rotation = DIR_N;
 
 #ifdef FIXIT_ANTS
 	/*
 	**	This handles the ant case.
 	*/
-	if (Class->Rotation == 8)  {
+	if (Class->Rotation == 8) {
 
 		/*
 		**	The starting frame is based on the facing of the unit.
 		*/
-		shapenum = ((UnitClass::BodyShape[facing]+2)/4) & 0x07;
+		shapenum = ((UnitClass::BodyShape[facing] + 2) / 4) & 0x07;
 
 		/*
 		**	If the unit is driving, then it has an animation adjustment to the frame number.
 		*/
-		if (IsDriving)  {
-			shapenum = 8 + (shapenum * 8) + ((::Frame+ID)/2) % 8;
+		if (IsDriving) {
+			shapenum = 8 + (shapenum * 8) + ((::Frame + ID) / 2) % 8;
 		} else {
 
 			/*
 			**	If in combat, then do combat anims.
 			*/
-			if (Arm > 0)  {
-				shapenum = 8 + 64 + (shapenum * 4) + ((::Frame+ID)/2) % 4;
+			if (Arm > 0) {
+				shapenum = 8 + 64 + (shapenum * 4) + ((::Frame + ID) / 2) % 4;
 			}
 		}
 	} else {
 #endif
 
-	/*
-	**	Fetch the harvesting animation stage as appropriate.
-	*/
-	if (IsHarvesting && !PrimaryFacing.Is_Rotating() && !NavCom && !IsDriving) {
-//			static char _hstage[] = {0, 1, 2, 3, 4, 5, 6, 7, 0};
-		unsigned stage = Fetch_Stage();
-		if (stage >= ARRAY_SIZE(Class->Harvester_Load_List)) stage = ARRAY_SIZE(Class->Harvester_Load_List)-1;
-		shapenum = 32 + (((UnitClass::BodyShape[facing]+2)/4)*Class->Harvester_Load_Count)+Class->Harvester_Load_List[stage];
-	} else {
 		/*
-		** If the harvester's dumping a load of ore, show that animation
+		**	Fetch the harvesting animation stage as appropriate.
 		*/
-		if (IsDumping) {
+		if (IsHarvesting && !PrimaryFacing.Is_Rotating() && !NavCom && !IsDriving) {
+			//			static char _hstage[] = {0, 1, 2, 3, 4, 5, 6, 7, 0};
 			unsigned stage = Fetch_Stage();
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-			if (*this == UNIT_MAD) {
-				if (stage >= 8) {
-					stage = 7;
-				}
-				shapenum = 32 + stage + (UnitClass::BodyShape[facing]/4)*8;
-			} else {
-				if (stage >= ARRAY_SIZE(Class->Harvester_Dump_List)) stage = ARRAY_SIZE(Class->Harvester_Dump_List)-1;
-				shapenum = Class->Harvester_Dump_List[stage]+96;
-			}
-#else
-			if (stage >= ARRAY_SIZE(Class->Harvester_Dump_List)) stage = ARRAY_SIZE(Class->Harvester_Dump_List)-1;
-			shapenum = Class->Harvester_Dump_List[stage]+96;
-#endif
+			if (stage >= ARRAY_SIZE(Class->Harvester_Load_List))
+				stage = ARRAY_SIZE(Class->Harvester_Load_List) - 1;
+			shapenum = 32 + (((UnitClass::BodyShape[facing] + 2) / 4) * Class->Harvester_Load_Count) +
+				   Class->Harvester_Load_List[stage];
 		} else {
-			shapenum = UnitClass::BodyShape[facing];
-
-			if (Class->IsAnimating) {
-				shapenum = Fetch_Stage();
-			}
-
 			/*
-			**	Door opening and closing animation must be handled carefully. There are only
-			**	certain directions where this door animation will work.
+			** If the harvester's dumping a load of ore, show that animation
 			*/
-			if (!Is_Door_Closed() && (PrimaryFacing == DIR_NW || PrimaryFacing == DIR_NE)) {
-				if (PrimaryFacing == DIR_NE) {
-					shapenum = 32;
-				} else {
-					if (PrimaryFacing == DIR_NW) {
-						shapenum = 35;
+			if (IsDumping) {
+				unsigned stage = Fetch_Stage();
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+				if (*this == UNIT_MAD) {
+					if (stage >= 8) {
+						stage = 7;
 					}
+					shapenum = 32 + stage + (UnitClass::BodyShape[facing] / 4) * 8;
+				} else {
+					if (stage >= ARRAY_SIZE(Class->Harvester_Dump_List))
+						stage = ARRAY_SIZE(Class->Harvester_Dump_List) - 1;
+					shapenum = Class->Harvester_Dump_List[stage] + 96;
 				}
-				shapenum += Door_Stage();
+#else
+			if (stage >= ARRAY_SIZE(Class->Harvester_Dump_List))
+				stage = ARRAY_SIZE(Class->Harvester_Dump_List) - 1;
+			shapenum = Class->Harvester_Dump_List[stage] + 96;
+#endif
+			} else {
+				shapenum = UnitClass::BodyShape[facing];
+
+				if (Class->IsAnimating) {
+					shapenum = Fetch_Stage();
+				}
+
+				/*
+				**	Door opening and closing animation must be handled carefully. There are only
+				**	certain directions where this door animation will work.
+				*/
+				if (!Is_Door_Closed() && (PrimaryFacing == DIR_NW || PrimaryFacing == DIR_NE)) {
+					if (PrimaryFacing == DIR_NE) {
+						shapenum = 32;
+					} else {
+						if (PrimaryFacing == DIR_NW) {
+							shapenum = 35;
+						}
+					}
+					shapenum += Door_Stage();
+				}
 			}
 		}
-	}
 
 #ifdef FIXIT_ANTS
 	}
@@ -2076,12 +1996,12 @@ int UnitClass::Shape_Number(void) const
 	**	or not.
 	*/
 	if (*this == UNIT_V2_LAUNCHER) {
-		if (Ammo == 0) shapenum += 32;
+		if (Ammo == 0)
+			shapenum += 32;
 	}
 
-	return(shapenum);
+	return (shapenum);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Draw_It -- Draws a unit object.                                                  *
@@ -2104,23 +2024,23 @@ int UnitClass::Shape_Number(void) const
  *   01/07/1995 JLB : Harvester animation support.                                             *
  *   07/08/1995 JLB : Uses general purpose draw routine.                                       *
  *=============================================================================================*/
-void UnitClass::Draw_It(int x, int y, WindowNumberType window) const
-{
+void UnitClass::Draw_It(int x, int y, WindowNumberType window) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	int			shapenum;		// Working shape number.
-	void const	* shapefile;		// Working shape file pointer.
-	int			facing = Dir_To_32(PrimaryFacing);
-	int			tfacing = Dir_To_32(SecondaryFacing);
-	DirType		rotation = DIR_N;
-	int			scale = 0x0100;
+	int shapenum;	       // Working shape number.
+	void const *shapefile; // Working shape file pointer.
+	int facing = Dir_To_32(PrimaryFacing);
+	int tfacing = Dir_To_32(SecondaryFacing);
+	DirType rotation = DIR_N;
+	int scale = 0x0100;
 
 	/*
 	**	Verify the legality of the unit class.
 	*/
 	shapefile = Get_Image_Data();
-	if (shapefile == NULL) return;
+	if (shapefile == NULL)
+		return;
 
 	/*
 	**	If drawing of this unit is not explicitly prohibited, then proceed
@@ -2152,23 +2072,23 @@ void UnitClass::Draw_It(int x, int y, WindowNumberType window) const
 				Class->Turret_Adjust(PrimaryFacing, x2, y2);
 				Techno_Draw_Object(shapefile, shapenum, x2, y2, window);
 			} else {
-//#ifdef FIXIT_PHASETRANSPORT	//	checked - ajw 9/28/98
-//				if (*this == UNIT_PHASE) {
-//					shapenum = 38 + (Frame & 7);
-//				} else {
-//					shapenum = 32 + (Frame % 32);
-//				}
-//#else
+				// #ifdef FIXIT_PHASETRANSPORT	//	checked - ajw 9/28/98
+				//				if (*this == UNIT_PHASE) {
+				//					shapenum = 38 + (Frame & 7);
+				//				} else {
+				//					shapenum = 32 + (Frame % 32);
+				//				}
+				// #else
 				shapenum = 32 + (Frame % 32);
-//#endif
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+// #endif
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 				if (*this == UNIT_TESLATANK) {
 					Techno_Draw_Object(shapefile, shapenum, x, y, window);
 				} else {
-					Techno_Draw_Object(shapefile, shapenum, x, y-5, window);
+					Techno_Draw_Object(shapefile, shapenum, x, y - 5, window);
 				}
 #else
-				Techno_Draw_Object(shapefile, shapenum, x, y-5, window);
+				Techno_Draw_Object(shapefile, shapenum, x, y - 5, window);
 #endif
 			}
 		}
@@ -2185,8 +2105,8 @@ void UnitClass::Draw_It(int x, int y, WindowNumberType window) const
 			**	Determine which turret shape to use. This depends on if there
 			**	is any firing animation in progress.
 			*/
-			shapenum = TechnoClass::BodyShape[tfacing]+32;
-#ifdef FIXIT_PHASETRANSPORT	//	checked - ajw 9/28/98
+			shapenum = TechnoClass::BodyShape[tfacing] + 32;
+#ifdef FIXIT_PHASETRANSPORT //	checked - ajw 9/28/98
 			if (*this == UNIT_PHASE) {
 				shapenum += 6;
 			}
@@ -2214,12 +2134,14 @@ void UnitClass::Draw_It(int x, int y, WindowNumberType window) const
 		shapefile = MFCD::Retrieve("FLAGFLY.SHP");
 		int flag_x = x + (ICON_PIXEL_W / 2) - 2;
 		int flag_y = y + (3 * ICON_PIXEL_H / 4) - Get_Build_Frame_Height(shapefile);
-		CC_Draw_Shape(this, "FLAGFLY", shapefile, Frame % 14, flag_x, flag_y, window, SHAPE_CENTER|SHAPE_FADING|SHAPE_GHOST, HouseClass::As_Pointer(Flagged)->Remap_Table(false, Class->Remap), Map.UnitShadow, DIR_N, 0x0100, Flagged);
+		CC_Draw_Shape(this, "FLAGFLY", shapefile, Frame % 14, flag_x, flag_y, window,
+			      SHAPE_CENTER | SHAPE_FADING | SHAPE_GHOST,
+			      HouseClass::As_Pointer(Flagged)->Remap_Table(false, Class->Remap), Map.UnitShadow, DIR_N,
+			      0x0100, Flagged);
 	}
 
 	DriveClass::Draw_It(x, y, window);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Tiberium_Check -- Search for and head toward nearest available Tiberium patch.   *
@@ -2240,8 +2162,7 @@ void UnitClass::Draw_It(int x, int y, WindowNumberType window) const
  * HISTORY:                                                                                    *
  *   07/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Tiberium_Check(CELL & center, int x, int y)
-{
+int UnitClass::Tiberium_Check(CELL &center, int x, int y) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -2249,37 +2170,41 @@ int UnitClass::Tiberium_Check(CELL & center, int x, int y)
 	**	If the specified offset from the origin will cause it
 	**	to spill past the map edge, then abort this cell check.
 	*/
-	if (Cell_X(center)+x < Map.MapCellX) return(0);
-	if (Cell_X(center)+x >= Map.MapCellX+Map.MapCellWidth) return(0);
-	if (Cell_Y(center)+y < Map.MapCellY) return(0);
-	if (Cell_Y(center)+y >= Map.MapCellY+Map.MapCellHeight) return(0);
+	if (Cell_X(center) + x < Map.MapCellX)
+		return (0);
+	if (Cell_X(center) + x >= Map.MapCellX + Map.MapCellWidth)
+		return (0);
+	if (Cell_Y(center) + y < Map.MapCellY)
+		return (0);
+	if (Cell_Y(center) + y >= Map.MapCellY + Map.MapCellHeight)
+		return (0);
 
-	center = XY_Cell(Cell_X(center)+x, Cell_Y(center)+y);
+	center = XY_Cell(Cell_X(center) + x, Cell_Y(center) + y);
 
 	if ((Session.Type != GAME_NORMAL || (!IsOwnedByPlayer || Map[center].Is_Mapped(PlayerPtr)))) {
-		if (Map[Coord].Zones[Class->MZone] != Map[center].Zones[Class->MZone]) return(0);
+		if (Map[Coord].Zones[Class->MZone] != Map[center].Zones[Class->MZone])
+			return (0);
 		if (!Map[center].Cell_Techno() && Map[center].Land_Type() == LAND_TIBERIUM) {
 			int value = 0;
 			switch (Map[center].Overlay) {
-				case OVERLAY_GOLD1:
-				case OVERLAY_GOLD2:
-				case OVERLAY_GOLD3:
-				case OVERLAY_GOLD4:
-					value = Rule.GoldValue;
-					break;
-				case OVERLAY_GEMS1:
-				case OVERLAY_GEMS2:
-				case OVERLAY_GEMS3:
-				case OVERLAY_GEMS4:
-					value = Rule.GemValue*4;
-					break;
+			case OVERLAY_GOLD1:
+			case OVERLAY_GOLD2:
+			case OVERLAY_GOLD3:
+			case OVERLAY_GOLD4:
+				value = Rule.GoldValue;
+				break;
+			case OVERLAY_GEMS1:
+			case OVERLAY_GEMS2:
+			case OVERLAY_GEMS3:
+			case OVERLAY_GEMS4:
+				value = Rule.GemValue * 4;
+				break;
 			}
-			return((Map[center].OverlayData+1)*value);
+			return ((Map[center].OverlayData + 1) * value);
 		}
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Goto_Tiberium -- Searches for and heads toward tiberium.                         *
@@ -2298,15 +2223,14 @@ int UnitClass::Tiberium_Check(CELL & center, int x, int y)
  * HISTORY:                                                                                    *
  *   09/22/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Goto_Tiberium(int rad)
-{
+bool UnitClass::Goto_Tiberium(int rad) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (!Target_Legal(NavCom)) {
 		CELL center = Coord_Cell(Center_Coord());
 		if (Map[center].Land_Type() == LAND_TIBERIUM) {
-			return(true);
+			return (true);
 		} else {
 
 			/*
@@ -2323,12 +2247,7 @@ bool UnitClass::Goto_Tiberium(int rad)
 					**	Randomize the corners.
 					*/
 					int corner[2];
-					int corners[4][2] = {
-						{x, -radius},
-						{x, +radius},
-						{-radius, x},
-						{+radius, x}
-					};
+					int corners[4][2] = {{x, -radius}, {x, +radius}, {-radius, x}, {+radius, x}};
 					for (int i = 0; i < 3; i++) {
 						int j = i + rand() / (RAND_MAX / (4 - i) + 1);
 						memcpy(&corner, &corners[j], sizeof(corner));
@@ -2366,15 +2285,14 @@ bool UnitClass::Goto_Tiberium(int rad)
 				}
 				if (bestcell) {
 					Assign_Destination(::As_Target(bestcell));
-					return(false);
+					return (false);
 				}
 			}
 		}
 	}
 
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Harvesting -- Harvests tiberium at the current location.                         *
@@ -2391,18 +2309,18 @@ bool UnitClass::Goto_Tiberium(int rad)
  * HISTORY:                                                                                    *
  *   07/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Harvesting(void)
-{
+bool UnitClass::Harvesting(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	CELL	cell = Coord_Cell(Coord);
-	CellClass * ptr = &Map[cell];
+	CELL cell = Coord_Cell(Coord);
+	CellClass *ptr = &Map[cell];
 
 	/*
 	**	Keep waiting if still heading toward a spot to harvest.
 	*/
-	if (Target_Legal(NavCom)) return(true);
+	if (Target_Legal(NavCom))
+		return (true);
 
 	if (Tiberium_Load() < 1 && ptr->Land_Type() == LAND_TIBERIUM) {
 
@@ -2412,31 +2330,40 @@ bool UnitClass::Harvesting(void)
 		**	is a partial level, then lift that instead. Never lift more
 		**	than the harvester can carry.
 		*/
-//		int reducer = (ptr->OverlayData % 6) + 1;
+		//		int reducer = (ptr->OverlayData % 6) + 1;
 		int reducer = 1;
 		OverlayType overlay = ptr->Overlay;
-		reducer = ptr->Reduce_Tiberium(min(reducer, Rule.BailCount-Tiberium));
+		reducer = ptr->Reduce_Tiberium(min(reducer, Rule.BailCount - Tiberium));
 		Tiberium += reducer;
 		switch (overlay) {
-			case OVERLAY_GOLD1:
-			case OVERLAY_GOLD2:
-			case OVERLAY_GOLD3:
-			case OVERLAY_GOLD4:
-				Gold += reducer;
-				break;
+		case OVERLAY_GOLD1:
+		case OVERLAY_GOLD2:
+		case OVERLAY_GOLD3:
+		case OVERLAY_GOLD4:
+			Gold += reducer;
+			break;
 
-			case OVERLAY_GEMS1:
-			case OVERLAY_GEMS2:
-			case OVERLAY_GEMS3:
-			case OVERLAY_GEMS4:
-				Gems += reducer;
-				if (Rule.BailCount > Tiberium) {Gems++;Tiberium++;}
-				if (Rule.BailCount > Tiberium) {Gems++;Tiberium++;}
-				if (Rule.BailCount > Tiberium) {Gems++;Tiberium++;}
-				break;
+		case OVERLAY_GEMS1:
+		case OVERLAY_GEMS2:
+		case OVERLAY_GEMS3:
+		case OVERLAY_GEMS4:
+			Gems += reducer;
+			if (Rule.BailCount > Tiberium) {
+				Gems++;
+				Tiberium++;
+			}
+			if (Rule.BailCount > Tiberium) {
+				Gems++;
+				Tiberium++;
+			}
+			if (Rule.BailCount > Tiberium) {
+				Gems++;
+				Tiberium++;
+			}
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 		Set_Stage(0);
 		Set_Rate(Rule.OreDumpRate);
@@ -2451,11 +2378,10 @@ bool UnitClass::Harvesting(void)
 		*/
 		Set_Stage(0);
 		Set_Rate(0);
-		return(false);
+		return (false);
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Mission_Unload -- Handles unloading cargo.                                       *
@@ -2472,398 +2398,395 @@ bool UnitClass::Harvesting(void)
  * HISTORY:                                                                                    *
  *   07/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Mission_Unload(void)
-{
+int UnitClass::Mission_Unload(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	enum {
-		INITIAL_CHECK,
-		MANEUVERING,
-		OPENING_DOOR,
-		UNLOADING,
-		CLOSING_DOOR
-	};
-	DirType	dir;
-	CELL		cell;
+	enum { INITIAL_CHECK, MANEUVERING, OPENING_DOOR, UNLOADING, CLOSING_DOOR };
+	DirType dir;
+	CELL cell;
 
 	switch (Class->Type) {
-		case UNIT_HARVESTER:
-			if (PrimaryFacing != DIR_W) {
-				if (!IsRotating) {
-					Do_Turn(DIR_W);
-				}
-				return(5);
+	case UNIT_HARVESTER:
+		if (PrimaryFacing != DIR_W) {
+			if (!IsRotating) {
+				Do_Turn(DIR_W);
 			}
+			return (5);
+		}
 
-			if (!IsDumping) {
-				IsDumping = true;
-				Set_Stage(0);
-				Set_Rate(Rule.OreDumpRate);
-				break;
-			}
-			if (Fetch_Stage() < ARRAY_SIZE(Class->Harvester_Dump_List)-1) break;
-
-			IsDumping = false;
-			if (Tiberium) {
-				Tiberium = 0;
-				int credits = Credit_Load();
-				House->Harvested(credits);
-				Tiberium = Gold = Gems = 0;
-			}
-			Transmit_Message(RADIO_OVER_OUT);
-
-			Assign_Mission(MISSION_HARVEST);
+		if (!IsDumping) {
+			IsDumping = true;
+			Set_Stage(0);
+			Set_Rate(Rule.OreDumpRate);
+			break;
+		}
+		if (Fetch_Stage() < ARRAY_SIZE(Class->Harvester_Dump_List) - 1)
 			break;
 
-		case UNIT_TRUCK:
-			switch (Status) {
-				case INITIAL_CHECK:
-					dir = Desired_Load_Dir(NULL, cell);
-					if (How_Many() && cell != 0) {
-						Do_Turn(dir);
-						Status = MANEUVERING;
-						return(1);
-					} else {
-						Assign_Mission(MISSION_GUARD);
-					}
-					break;
+		IsDumping = false;
+		if (Tiberium) {
+			Tiberium = 0;
+			int credits = Credit_Load();
+			House->Harvested(credits);
+			Tiberium = Gold = Gems = 0;
+		}
+		Transmit_Message(RADIO_OVER_OUT);
 
-				case MANEUVERING:
-					if (!IsRotating) {
-						Status = UNLOADING;
-						return(1);
-					}
-					break;
+		Assign_Mission(MISSION_HARVEST);
+		break;
 
-				case UNLOADING:
-					if (How_Many()) {
-						FootClass * passenger = Detach_Object();
-
-						if (passenger != NULL) {
-							DirType toface = DIR_S + PrimaryFacing;
-							bool placed = false;
-
-							for (FacingType face = FACING_N; face < FACING_COUNT; face++) {
-								DirType newface = toface + Facing_Dir(face);
-								CELL newcell = Adjacent_Cell(Coord_Cell(Coord), newface);
-
-								if (passenger->Can_Enter_Cell(newcell) == MOVE_OK) {
-									ScenarioInit++;
-									passenger->Unlimbo(Coord_Move(Coord, newface, 0x0080), newface);
-									ScenarioInit--;
-									passenger->Assign_Mission(MISSION_MOVE);
-									passenger->Assign_Destination(::As_Target(newcell));
-									placed = true;
-									break;
-								}
-							}
-
-							/*
-							** If the attached unit could NOT be deployed, then re-attach
-							**	it and then bail out of this deploy process.
-							*/
-							if (!placed) {
-								Attach(passenger);
-								Status = CLOSING_DOOR;
-							}
-							else {
-								passenger->Look(false);
-							}
-						}
-					} else {
-						Status = CLOSING_DOOR;
-					}
-					break;
-
-				/*
-				**	Close APC door in preparation for normal operation.
-				*/
-				case CLOSING_DOOR:
-					Assign_Mission(MISSION_GUARD);
-					break;
+	case UNIT_TRUCK:
+		switch (Status) {
+		case INITIAL_CHECK:
+			dir = Desired_Load_Dir(NULL, cell);
+			if (How_Many() && cell != 0) {
+				Do_Turn(dir);
+				Status = MANEUVERING;
+				return (1);
+			} else {
+				Assign_Mission(MISSION_GUARD);
 			}
 			break;
 
-		case UNIT_APC:
-#ifdef FIXIT_PHASETRANSPORT	//	checked - ajw 9/28/98
-		case UNIT_PHASE:
-#endif
-			switch (Status) {
-				case INITIAL_CHECK:
-					dir = Desired_Load_Dir(NULL, cell);
-					if (How_Many() && cell != 0) {
-						Do_Turn(dir);
-						Status = MANEUVERING;
-						return(1);
-					} else {
-						Assign_Mission(MISSION_GUARD);
-					}
-					break;
-
-				case MANEUVERING:
-					if (!IsRotating) {
-						APC_Open_Door();
-						if (Is_Door_Opening()) {
-							Status = OPENING_DOOR;
-							return(1);
-						}
-					}
-					break;
-
-				case OPENING_DOOR:
-					if (Is_Door_Open()) {
-						Status = UNLOADING;
-						return(1);
-					} else {
-						if (!Is_Door_Opening()) {
-							Status = INITIAL_CHECK;
-						}
-					}
-					break;
-
-				case UNLOADING:
-					if (How_Many()) {
-						FootClass * passenger = Detach_Object();
-
-						if (passenger != NULL) {
-							DirType toface = DIR_S + PrimaryFacing;
-							bool placed = false;
-
-							for (FacingType face = FACING_N; face < FACING_COUNT; face++) {
-								DirType newface = toface + Facing_Dir(face);
-								CELL newcell = Adjacent_Cell(Coord_Cell(Coord), newface);
-
-								if (passenger->Can_Enter_Cell(newcell) == MOVE_OK) {
-									ScenarioInit++;
-									passenger->Unlimbo(Coord_Move(Coord, newface, 0x0080), newface);
-									ScenarioInit--;
-									passenger->Assign_Mission(MISSION_MOVE);
-									passenger->Assign_Destination(::As_Target(newcell));
-									placed = true;
-									break;
-								}
-							}
-
-							/*
-							** If the attached unit could NOT be deployed, then re-attach
-							**	it and then bail out of this deploy process.
-							*/
-							if (!placed) {
-								Attach(passenger);
-								Status = CLOSING_DOOR;
-							}
-							else {
-								passenger->Look(false);
-							}
-						}
-					} else {
-						Status = CLOSING_DOOR;
-					}
-					break;
-
-				/*
-				**	Close APC door in preparation for normal operation.
-				*/
-				case CLOSING_DOOR:
-					if (Is_Door_Open()) {
-						APC_Close_Door();
-					}
-					if (Is_Door_Closed()) {
-						Assign_Mission(MISSION_GUARD);
-					}
-					break;
+		case MANEUVERING:
+			if (!IsRotating) {
+				Status = UNLOADING;
+				return (1);
 			}
 			break;
 
-		case UNIT_MCV:
-			switch (Status) {
-				case 0:
-					Path[0] = FACING_NONE;
-					Status = 1;
-					break;
+		case UNLOADING:
+			if (How_Many()) {
+				FootClass *passenger = Detach_Object();
 
-				case 1:
-					if (!IsDriving) {
-						Try_To_Deploy();
-						if (IsActive) {
-							if (IsDeploying) {
-								Status = 2;
-							} else {
-								if (!House->IsHuman && Session.Type != GAME_NORMAL) {
-									Assign_Mission(MISSION_HUNT);
-								} else {
-									Assign_Mission(MISSION_GUARD);
-								}
-							}
-						}
-					}
-					break;
-
-				case 2:
-					if (!IsDeploying) {
-						Assign_Mission(MISSION_GUARD);
-					}
-					break;
-			}
-			return(1);
-
-		case UNIT_MINELAYER:
-			switch (Status) {
-				case INITIAL_CHECK:
-					dir = DIR_NE;
-					if (Ammo > 0) {
-						Do_Turn(dir);
-						Status = MANEUVERING;
-						return(1);
-					} else {
-						Assign_Mission(MISSION_GUARD);
-					}
-					break;
-
-				case MANEUVERING:
-					if (!IsRotating) {
-						APC_Open_Door();
-						if (Is_Door_Opening()) {
-							Status = OPENING_DOOR;
-							return(1);
-						}
-					}
-					break;
-
-				case OPENING_DOOR:
-					if (Is_Door_Open()) {
-						Status = UNLOADING;
-						return(1);
-					} else {
-						if (!Is_Door_Opening()) {
-							Status = INITIAL_CHECK;
-						}
-					}
-					break;
-
-				case UNLOADING:
-					if (Ammo > 0) {
-						if (!Map[Center_Coord()].Cell_Building()) {
-							Mark(MARK_UP);
-							BuildingClass * building = new BuildingClass((House->ActLike == HOUSE_USSR || House->ActLike == HOUSE_UKRAINE || House->ActLike == HOUSE_BAD) ? STRUCT_APMINE : STRUCT_AVMINE, House->Class->House);
-							if (building != NULL) {
-								ScenarioInit = true;
-								if (building->Unlimbo(Coord)) {
-									Sound_Effect(VOC_MINELAY1, Coord);
-									ScenarioInit = false;
-									building->Revealed(House);
-									Ammo--;
-								}
-								ScenarioInit = false;
-							}
-							Status = CLOSING_DOOR;
-							Mark(MARK_DOWN);
-						} else {
-							Status = CLOSING_DOOR;
-						}
-					} else {
-						Status = CLOSING_DOOR;
-					}
-					break;
-
-				/*
-				**	Close APC door in preparation for normal operation.
-				*/
-				case CLOSING_DOOR:
-					if (Is_Door_Open()) {
-						APC_Close_Door();
-					}
-					if (Is_Door_Closed()) {
-						Assign_Mission(MISSION_GUARD);
-					}
-					break;
-			}
-			break;
-
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-		case UNIT_MAD:
-			if (!Gems && !IsDumping) {
-				Gems = 1;
-				Gold = 0;
-				Arm = QuakeDelay * House->ROFBias;
-#ifdef ENGLISH
-				Speak(VOX_MADTANK_DEPLOYED);	// this voice only exists in English
-#else
-				Sound_Effect(VOC_BUZZY1,Center_Coord());
-#endif
-				Set_Stage(0);
-				Set_Rate(Rule.OreDumpRate*2);
-				IsDumping = true;
-
-#if 1
-				InfantryClass *crew = new InfantryClass(INFANTRY_C1, House->Class->House);
-				if (crew != NULL) crew->IsTechnician = true;
-
-				if (crew != NULL) {
+				if (passenger != NULL) {
 					DirType toface = DIR_S + PrimaryFacing;
+					bool placed = false;
 
 					for (FacingType face = FACING_N; face < FACING_COUNT; face++) {
 						DirType newface = toface + Facing_Dir(face);
 						CELL newcell = Adjacent_Cell(Coord_Cell(Coord), newface);
-						if (crew->Can_Enter_Cell(newcell) == MOVE_OK) {
+
+						if (passenger->Can_Enter_Cell(newcell) == MOVE_OK) {
 							ScenarioInit++;
-							crew->Unlimbo(Coord_Move(Coord, newface, 0x0080), newface);
+							passenger->Unlimbo(Coord_Move(Coord, newface, 0x0080), newface);
 							ScenarioInit--;
-							crew->Assign_Mission(MISSION_MOVE);
-							crew->Assign_Destination(::As_Target(newcell));
+							passenger->Assign_Mission(MISSION_MOVE);
+							passenger->Assign_Destination(::As_Target(newcell));
+							placed = true;
 							break;
 						}
 					}
+
+					/*
+					** If the attached unit could NOT be deployed, then re-attach
+					**	it and then bail out of this deploy process.
+					*/
+					if (!placed) {
+						Attach(passenger);
+						Status = CLOSING_DOOR;
+					} else {
+						passenger->Look(false);
+					}
 				}
-#endif
+			} else {
+				Status = CLOSING_DOOR;
 			}
-
-			if ( (Arm && !Gold) || IronCurtainCountDown) {
-				Set_Stage(Fetch_Stage() & 1);
-				return(1);
-			}
-
-			if (!Gold) {
-				Sound_Effect(VOC_MAD_CHARGE, Center_Coord());
-				Set_Stage(0);
-				Gold = 1;
-				return(1);
-			}
-
-			if (Fetch_Stage() < 7) {
-				return(1);
-			}
-
-			IsDumping = false;
-
-			Sound_Effect(VOC_MAD_EXPLODE, Center_Coord());
-
-			Strength = 1;			// assure destruction
-			PendingTimeQuake = true;		// trigger a time quake
-			TimeQuakeCenter = ::As_Target(Center_Coord());
 			break;
 
-		case UNIT_CHRONOTANK:
-			if (IsOwnedByPlayer) {
-				Map.IsTargettingMode = SPC_CHRONO2;
-				HouseClass* old_player_ptr = PlayerPtr;
-				Logic_Switch_Player_Context(this);
-				Unselect_All();
-				On_Special_Weapon_Targetting(PlayerPtr, Map.IsTargettingMode);
-				Logic_Switch_Player_Context(old_player_ptr);
-			}
-			House->UnitToTeleport = As_Target();
-
+		/*
+		**	Close APC door in preparation for normal operation.
+		*/
+		case CLOSING_DOOR:
 			Assign_Mission(MISSION_GUARD);
 			break;
-#endif
-		default:
-			break;
-	}
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
-}
+		}
+		break;
 
+	case UNIT_APC:
+#ifdef FIXIT_PHASETRANSPORT //	checked - ajw 9/28/98
+	case UNIT_PHASE:
+#endif
+		switch (Status) {
+		case INITIAL_CHECK:
+			dir = Desired_Load_Dir(NULL, cell);
+			if (How_Many() && cell != 0) {
+				Do_Turn(dir);
+				Status = MANEUVERING;
+				return (1);
+			} else {
+				Assign_Mission(MISSION_GUARD);
+			}
+			break;
+
+		case MANEUVERING:
+			if (!IsRotating) {
+				APC_Open_Door();
+				if (Is_Door_Opening()) {
+					Status = OPENING_DOOR;
+					return (1);
+				}
+			}
+			break;
+
+		case OPENING_DOOR:
+			if (Is_Door_Open()) {
+				Status = UNLOADING;
+				return (1);
+			} else {
+				if (!Is_Door_Opening()) {
+					Status = INITIAL_CHECK;
+				}
+			}
+			break;
+
+		case UNLOADING:
+			if (How_Many()) {
+				FootClass *passenger = Detach_Object();
+
+				if (passenger != NULL) {
+					DirType toface = DIR_S + PrimaryFacing;
+					bool placed = false;
+
+					for (FacingType face = FACING_N; face < FACING_COUNT; face++) {
+						DirType newface = toface + Facing_Dir(face);
+						CELL newcell = Adjacent_Cell(Coord_Cell(Coord), newface);
+
+						if (passenger->Can_Enter_Cell(newcell) == MOVE_OK) {
+							ScenarioInit++;
+							passenger->Unlimbo(Coord_Move(Coord, newface, 0x0080), newface);
+							ScenarioInit--;
+							passenger->Assign_Mission(MISSION_MOVE);
+							passenger->Assign_Destination(::As_Target(newcell));
+							placed = true;
+							break;
+						}
+					}
+
+					/*
+					** If the attached unit could NOT be deployed, then re-attach
+					**	it and then bail out of this deploy process.
+					*/
+					if (!placed) {
+						Attach(passenger);
+						Status = CLOSING_DOOR;
+					} else {
+						passenger->Look(false);
+					}
+				}
+			} else {
+				Status = CLOSING_DOOR;
+			}
+			break;
+
+		/*
+		**	Close APC door in preparation for normal operation.
+		*/
+		case CLOSING_DOOR:
+			if (Is_Door_Open()) {
+				APC_Close_Door();
+			}
+			if (Is_Door_Closed()) {
+				Assign_Mission(MISSION_GUARD);
+			}
+			break;
+		}
+		break;
+
+	case UNIT_MCV:
+		switch (Status) {
+		case 0:
+			Path[0] = FACING_NONE;
+			Status = 1;
+			break;
+
+		case 1:
+			if (!IsDriving) {
+				Try_To_Deploy();
+				if (IsActive) {
+					if (IsDeploying) {
+						Status = 2;
+					} else {
+						if (!House->IsHuman && Session.Type != GAME_NORMAL) {
+							Assign_Mission(MISSION_HUNT);
+						} else {
+							Assign_Mission(MISSION_GUARD);
+						}
+					}
+				}
+			}
+			break;
+
+		case 2:
+			if (!IsDeploying) {
+				Assign_Mission(MISSION_GUARD);
+			}
+			break;
+		}
+		return (1);
+
+	case UNIT_MINELAYER:
+		switch (Status) {
+		case INITIAL_CHECK:
+			dir = DIR_NE;
+			if (Ammo > 0) {
+				Do_Turn(dir);
+				Status = MANEUVERING;
+				return (1);
+			} else {
+				Assign_Mission(MISSION_GUARD);
+			}
+			break;
+
+		case MANEUVERING:
+			if (!IsRotating) {
+				APC_Open_Door();
+				if (Is_Door_Opening()) {
+					Status = OPENING_DOOR;
+					return (1);
+				}
+			}
+			break;
+
+		case OPENING_DOOR:
+			if (Is_Door_Open()) {
+				Status = UNLOADING;
+				return (1);
+			} else {
+				if (!Is_Door_Opening()) {
+					Status = INITIAL_CHECK;
+				}
+			}
+			break;
+
+		case UNLOADING:
+			if (Ammo > 0) {
+				if (!Map[Center_Coord()].Cell_Building()) {
+					Mark(MARK_UP);
+					BuildingClass *building = new BuildingClass((House->ActLike == HOUSE_USSR ||
+										     House->ActLike == HOUSE_UKRAINE ||
+										     House->ActLike == HOUSE_BAD)
+											? STRUCT_APMINE
+											: STRUCT_AVMINE,
+										    House->Class->House);
+					if (building != NULL) {
+						ScenarioInit = true;
+						if (building->Unlimbo(Coord)) {
+							Sound_Effect(VOC_MINELAY1, Coord);
+							ScenarioInit = false;
+							building->Revealed(House);
+							Ammo--;
+						}
+						ScenarioInit = false;
+					}
+					Status = CLOSING_DOOR;
+					Mark(MARK_DOWN);
+				} else {
+					Status = CLOSING_DOOR;
+				}
+			} else {
+				Status = CLOSING_DOOR;
+			}
+			break;
+
+		/*
+		**	Close APC door in preparation for normal operation.
+		*/
+		case CLOSING_DOOR:
+			if (Is_Door_Open()) {
+				APC_Close_Door();
+			}
+			if (Is_Door_Closed()) {
+				Assign_Mission(MISSION_GUARD);
+			}
+			break;
+		}
+		break;
+
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+	case UNIT_MAD:
+		if (!Gems && !IsDumping) {
+			Gems = 1;
+			Gold = 0;
+			Arm = QuakeDelay * House->ROFBias;
+#ifdef ENGLISH
+			Speak(VOX_MADTANK_DEPLOYED); // this voice only exists in English
+#else
+			Sound_Effect(VOC_BUZZY1, Center_Coord());
+#endif
+			Set_Stage(0);
+			Set_Rate(Rule.OreDumpRate * 2);
+			IsDumping = true;
+
+#if 1
+			InfantryClass *crew = new InfantryClass(INFANTRY_C1, House->Class->House);
+			if (crew != NULL)
+				crew->IsTechnician = true;
+
+			if (crew != NULL) {
+				DirType toface = DIR_S + PrimaryFacing;
+
+				for (FacingType face = FACING_N; face < FACING_COUNT; face++) {
+					DirType newface = toface + Facing_Dir(face);
+					CELL newcell = Adjacent_Cell(Coord_Cell(Coord), newface);
+					if (crew->Can_Enter_Cell(newcell) == MOVE_OK) {
+						ScenarioInit++;
+						crew->Unlimbo(Coord_Move(Coord, newface, 0x0080), newface);
+						ScenarioInit--;
+						crew->Assign_Mission(MISSION_MOVE);
+						crew->Assign_Destination(::As_Target(newcell));
+						break;
+					}
+				}
+			}
+#endif
+		}
+
+		if ((Arm && !Gold) || IronCurtainCountDown) {
+			Set_Stage(Fetch_Stage() & 1);
+			return (1);
+		}
+
+		if (!Gold) {
+			Sound_Effect(VOC_MAD_CHARGE, Center_Coord());
+			Set_Stage(0);
+			Gold = 1;
+			return (1);
+		}
+
+		if (Fetch_Stage() < 7) {
+			return (1);
+		}
+
+		IsDumping = false;
+
+		Sound_Effect(VOC_MAD_EXPLODE, Center_Coord());
+
+		Strength = 1;		 // assure destruction
+		PendingTimeQuake = true; // trigger a time quake
+		TimeQuakeCenter = ::As_Target(Center_Coord());
+		break;
+
+	case UNIT_CHRONOTANK:
+		if (IsOwnedByPlayer) {
+			Map.IsTargettingMode = SPC_CHRONO2;
+			HouseClass *old_player_ptr = PlayerPtr;
+			Logic_Switch_Player_Context(this);
+			Unselect_All();
+			On_Special_Weapon_Targetting(PlayerPtr, Map.IsTargettingMode);
+			Logic_Switch_Player_Context(old_player_ptr);
+		}
+		House->UnitToTeleport = As_Target();
+
+		Assign_Mission(MISSION_GUARD);
+		break;
+#endif
+	default:
+		break;
+	}
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+}
 
 /***********************************************************************************************
  * UnitClass::Mission_Harvest -- Handles the harvesting process used by harvesters.            *
@@ -2883,8 +2806,7 @@ int UnitClass::Mission_Unload(void)
  *   06/21/1995 JLB : Force guard mode if no Tiberium found.                                   *
  *   09/28/1995 JLB : Aborts harvesting if there are no more refineries.                       *
  *=============================================================================================*/
-int UnitClass::Mission_Harvest(void)
-{
+int UnitClass::Mission_Harvest(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -2900,167 +2822,169 @@ int UnitClass::Mission_Harvest(void)
 	**	A non-harvesting type unit will just sit still if it is given the harvest mission. This
 	**	allows combat units to act "brain dead".
 	*/
-	if (!Class->IsToHarvest) return(TICKS_PER_SECOND*30);
+	if (!Class->IsToHarvest)
+		return (TICKS_PER_SECOND * 30);
 
 	/*
 	**	If there are no more refineries, then drop into guard mode.
 	*/
 	if (!(House->ActiveBScan & STRUCTF_REFINERY)) {
 		Assign_Mission(MISSION_GUARD);
-		return(1);
+		return (1);
 	}
 
 	switch (Status) {
 
+	/*
+	**	Go and find a Tiberium field to harvest.
+	*/
+	case LOOKING:
 		/*
-		**	Go and find a Tiberium field to harvest.
+		**	Slightly hacky; if TarCom is set then skip to finding home state.
 		*/
-		case LOOKING:
+		if (Target_Legal(TarCom)) {
+			Assign_Target(TARGET_NONE);
+			Status = FINDHOME;
+			return (1);
+		}
+
+		/*
+		** Look for ore where we last found some - mine the same patch
+		*/
+		if (Target_Legal(ArchiveTarget)) {
+			Assign_Destination(ArchiveTarget);
+			ArchiveTarget = 0;
+		}
+		IsHarvesting = false;
+		if (Goto_Tiberium(Rule.TiberiumLongScan / CELL_LEPTON_W)) {
+			IsHarvesting = true;
+			Set_Rate(2);
+			Set_Stage(0);
+			Status = HARVESTING;
+			ArchiveTarget = ::As_Target(Coord_Cell(Coord));
+			return (1);
+		} else {
+
 			/*
-			**	Slightly hacky; if TarCom is set then skip to finding home state.
+			**	If the harvester isn't on Tiberium and it is not heading toward Tiberium, then
+			**	force it to go into guard mode. This will prevent the harvester from repeatedly
+			**	searching for Tiberium.
 			*/
-			if (Target_Legal(TarCom)) {
-				Assign_Target(TARGET_NONE);
-				Status = FINDHOME;
-				return(1);
-			}
-
-			/*
-			** Look for ore where we last found some - mine the same patch
-			*/
-			if (Target_Legal(ArchiveTarget)) {
-				Assign_Destination(ArchiveTarget);
-				ArchiveTarget = 0;
-			}
-			IsHarvesting = false;
-			if (Goto_Tiberium(Rule.TiberiumLongScan / CELL_LEPTON_W)) {
-				IsHarvesting = true;
-				Set_Rate(2);
-				Set_Stage(0);
-				Status = HARVESTING;
-				ArchiveTarget = ::As_Target(Coord_Cell(Coord));
-				return(1);
-			} else {
-
-				/*
-				**	If the harvester isn't on Tiberium and it is not heading toward Tiberium, then
-				**	force it to go into guard mode. This will prevent the harvester from repeatedly
-				**	searching for Tiberium.
-				*/
-				if (!Target_Legal(NavCom)) {
-
-					/*
-					**	If the archive target is legal, then head there since it is presumed
-					**	that the archive target points to the last place it harvested at. This might
-					**	solve the case where the harvester gets stuck and can't find Tiberium just because
-					**	it is greater than 32 squares away.
-					*/
-					if (Target_Legal(ArchiveTarget)) {
-						Assign_Destination(ArchiveTarget);
-					} else {
-						Status = GOINGTOIDLE;
-						IsUseless = true;
-						House->IsTiberiumShort = true;
-						return(TICKS_PER_SECOND*7);
-					}
-				} else {
-					IsUseless = false;
-				}
-			}
-			break;
-
-		/*
-		**	Harvest at current location until full or Tiberium exhausted.
-		*/
-		case HARVESTING:
-//			if (Fetch_Stage() > ARRAY_SIZE(Class->Harvester_Load_List)) {
-//				Set_Stage(0);
-//			}
-			if (Fetch_Rate() == 0) {
-				Set_Stage(0);
-				Set_Rate(Rule.OreDumpRate);
-			}
-
-			if (Fetch_Stage() < ARRAY_SIZE(Class->Harvester_Load_List)) return(1);
-			if (!Harvesting()) {
-				IsHarvesting = false;
-				if (Tiberium_Load() == 1) {
-					Status = FINDHOME;
-				} else {
-					if (!Goto_Tiberium(Rule.TiberiumShortScan / CELL_LEPTON_W) && !Target_Legal(NavCom))	{
-					  	ArchiveTarget = TARGET_NONE;
-						Status = FINDHOME;
-					} else {
-						Status = HARVESTING;
-						IsHarvesting = true;
-					}
-				}
-				return(1);
-			} else if (!Target_Legal(NavCom) && ArchiveTarget == TARGET_NONE) {
-				ArchiveTarget = ::As_Target(Coord_Cell(Coord));
-			}
-			return(1);
-//			return(TICKS_PER_SECOND*Rule.OreDumpRate);
-
-		/*
-		**	Find and head to refinery.
-		*/
-		case FINDHOME:
 			if (!Target_Legal(NavCom)) {
 
 				/*
-				**	Find best refinery.
+				**	If the archive target is legal, then head there since it is presumed
+				**	that the archive target points to the last place it harvested at. This might
+				**	solve the case where the harvester gets stuck and can't find Tiberium just
+				*because *	it is greater than 32 squares away.
 				*/
-				BuildingClass * nearest = Find_Best_Refinery();
-
-				/*
-				**	Since the refinery said it was ok to load, establish radio
-				**	contact with the refinery and then await docking orders.
-				*/
-				if (nearest != NULL && Transmit_Message(RADIO_HELLO, nearest) == RADIO_ROGER) {
-					Status = HEADINGHOME;
-					if (nearest->House == PlayerPtr && (PlayerPtr->Capacity - PlayerPtr->Tiberium) < 300 && PlayerPtr->Capacity > 500 && (PlayerPtr->ActiveBScan & (STRUCTF_REFINERY | STRUCTF_CONST))) {
-						Speak(VOX_NEED_MO_CAPACITY);
-					}
+				if (Target_Legal(ArchiveTarget)) {
+					Assign_Destination(ArchiveTarget);
 				} else {
-					ScenarioInit++;
-					nearest = Find_Best_Refinery();
-					ScenarioInit--;
-					if (nearest != NULL) {
-						Assign_Destination(::As_Target(Nearby_Location(nearest)));
-					}
+					Status = GOINGTOIDLE;
+					IsUseless = true;
+					House->IsTiberiumShort = true;
+					return (TICKS_PER_SECOND * 7);
+				}
+			} else {
+				IsUseless = false;
+			}
+		}
+		break;
+
+	/*
+	**	Harvest at current location until full or Tiberium exhausted.
+	*/
+	case HARVESTING:
+		//			if (Fetch_Stage() > ARRAY_SIZE(Class->Harvester_Load_List)) {
+		//				Set_Stage(0);
+		//			}
+		if (Fetch_Rate() == 0) {
+			Set_Stage(0);
+			Set_Rate(Rule.OreDumpRate);
+		}
+
+		if (Fetch_Stage() < ARRAY_SIZE(Class->Harvester_Load_List))
+			return (1);
+		if (!Harvesting()) {
+			IsHarvesting = false;
+			if (Tiberium_Load() == 1) {
+				Status = FINDHOME;
+			} else {
+				if (!Goto_Tiberium(Rule.TiberiumShortScan / CELL_LEPTON_W) && !Target_Legal(NavCom)) {
+					ArchiveTarget = TARGET_NONE;
+					Status = FINDHOME;
+				} else {
+					Status = HARVESTING;
+					IsHarvesting = true;
 				}
 			}
-			break;
+			return (1);
+		} else if (!Target_Legal(NavCom) && ArchiveTarget == TARGET_NONE) {
+			ArchiveTarget = ::As_Target(Coord_Cell(Coord));
+		}
+		return (1);
+		//			return(TICKS_PER_SECOND*Rule.OreDumpRate);
 
-		/*
-		**	In communication with refinery so that it will successfully dock and
-		**	unload. If, for some reason, radio contact was lost, then hunt for
-		**	another refinery to unload at.
-		*/
-		case HEADINGHOME:
-			Assign_Mission(MISSION_ENTER);
-			return(1);
+	/*
+	**	Find and head to refinery.
+	*/
+	case FINDHOME:
+		if (!Target_Legal(NavCom)) {
 
-		/*
-		**	The harvester has nothing to do. There is no Tiberium nearby and
-		**	no where to go.
-		*/
-		case GOINGTOIDLE:
-			if (IsUseless) {
-				if (House->ActiveBScan & STRUCTF_REPAIR) {
-					Assign_Mission(MISSION_REPAIR);
-				} else {
-					Assign_Mission(MISSION_HUNT);
+			/*
+			**	Find best refinery.
+			*/
+			BuildingClass *nearest = Find_Best_Refinery();
+
+			/*
+			**	Since the refinery said it was ok to load, establish radio
+			**	contact with the refinery and then await docking orders.
+			*/
+			if (nearest != NULL && Transmit_Message(RADIO_HELLO, nearest) == RADIO_ROGER) {
+				Status = HEADINGHOME;
+				if (nearest->House == PlayerPtr && (PlayerPtr->Capacity - PlayerPtr->Tiberium) < 300 &&
+				    PlayerPtr->Capacity > 500 &&
+				    (PlayerPtr->ActiveBScan & (STRUCTF_REFINERY | STRUCTF_CONST))) {
+					Speak(VOX_NEED_MO_CAPACITY);
+				}
+			} else {
+				ScenarioInit++;
+				nearest = Find_Best_Refinery();
+				ScenarioInit--;
+				if (nearest != NULL) {
+					Assign_Destination(::As_Target(Nearby_Location(nearest)));
 				}
 			}
-			Assign_Mission(MISSION_GUARD);
-			break;
+		}
+		break;
 
+	/*
+	**	In communication with refinery so that it will successfully dock and
+	**	unload. If, for some reason, radio contact was lost, then hunt for
+	**	another refinery to unload at.
+	*/
+	case HEADINGHOME:
+		Assign_Mission(MISSION_ENTER);
+		return (1);
+
+	/*
+	**	The harvester has nothing to do. There is no Tiberium nearby and
+	**	no where to go.
+	*/
+	case GOINGTOIDLE:
+		if (IsUseless) {
+			if (House->ActiveBScan & STRUCTF_REPAIR) {
+				Assign_Mission(MISSION_REPAIR);
+			} else {
+				Assign_Mission(MISSION_HUNT);
+			}
+		}
+		Assign_Mission(MISSION_GUARD);
+		break;
 	}
-	return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }
-
 
 /***********************************************************************************************
  * UnitClass::Mission_Hunt -- This is the AI process for aggressive enemy units.               *
@@ -3078,49 +3002,44 @@ int UnitClass::Mission_Harvest(void)
  * HISTORY:                                                                                    *
  *   07/18/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Mission_Hunt(void)
-{
+int UnitClass::Mission_Hunt(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (*this == UNIT_MCV) {
-		enum {
-			FIND_SPOT,
-			WAITING
-		};
+		enum { FIND_SPOT, WAITING };
 
 		switch (Status) {
 
-			/*
-			**	This stage handles locating a convenient spot, rotating to face the correct
-			**	direction and then commencing the deployment operation.
-			*/
-			case FIND_SPOT:
-				if (Goto_Clear_Spot()) {
-					if (Try_To_Deploy()) {
-						Status = WAITING;
-					}
+		/*
+		**	This stage handles locating a convenient spot, rotating to face the correct
+		**	direction and then commencing the deployment operation.
+		*/
+		case FIND_SPOT:
+			if (Goto_Clear_Spot()) {
+				if (Try_To_Deploy()) {
+					Status = WAITING;
 				}
-				break;
+			}
+			break;
 
-			/*
-			**	This stage watchdogs the deployment operation and if for some reason, the deployment
-			**	is aborted (the IsDeploying flag becomes false), then it reverts back to hunting for
-			**	a convenient spot to deploy.
-			*/
-			case WAITING:
-				if (!IsDeploying) {
-					Status = FIND_SPOT;
-				}
-				break;
+		/*
+		**	This stage watchdogs the deployment operation and if for some reason, the deployment
+		**	is aborted (the IsDeploying flag becomes false), then it reverts back to hunting for
+		**	a convenient spot to deploy.
+		*/
+		case WAITING:
+			if (!IsDeploying) {
+				Status = FIND_SPOT;
+			}
+			break;
 		}
 	} else {
 
-		return(DriveClass::Mission_Hunt());
+		return (DriveClass::Mission_Hunt());
 	}
-	return(MissionControl[Mission].Normal_Delay()+Random_Pick(0, 2));
+	return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 }
-
 
 /***********************************************************************************************
  * UnitClass::Overlap_List -- Determines overlap list for units.                               *
@@ -3140,8 +3059,7 @@ int UnitClass::Mission_Hunt(void)
  *   05/26/1994 JLB : Created.                                                                 *
  *   06/19/1994 JLB : Uses Coord_Spillable_List function.                                      *
  *=============================================================================================*/
-short const * UnitClass::Overlap_List(bool redraw) const
-{
+short const *UnitClass::Overlap_List(bool redraw) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -3163,7 +3081,7 @@ short const * UnitClass::Overlap_List(bool redraw) const
 			rect = Union(rect, Rect(-15, -15, 30, 30));
 		}
 
-		return(Coord_Spillage_List(Coord, rect, true));
+		return (Coord_Spillage_List(Coord, rect, true));
 	}
 #else
 	redraw = redraw;
@@ -3175,12 +3093,11 @@ short const * UnitClass::Overlap_List(bool redraw) const
 		size += 24;
 	}
 	if (Class->IsGigundo || IsAnimAttached) {
-		size = ICON_PIXEL_W*2;
+		size = ICON_PIXEL_W * 2;
 	}
 
-	return(Coord_Spillage_List(Coord, size)+1);
+	return (Coord_Spillage_List(Coord, size) + 1);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Can_Enter_Cell -- Determines cell entry legality.                                *
@@ -3205,23 +3122,23 @@ short const * UnitClass::Overlap_List(bool redraw) const
  *   04/16/1994 JLB : Converted to member function.                                            *
  *   07/04/1995 JLB : Allowed to drive on building trying to enter it.                         *
  *=============================================================================================*/
-MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
-{
+MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	bool cancrush = false;
 
-	CellClass const * cellptr = &Map[cell];
+	CellClass const *cellptr = &Map[cell];
 
-	if ((unsigned)cell >= MAP_CELL_TOTAL) return(MOVE_NO);
+	if ((unsigned)cell >= MAP_CELL_TOTAL)
+		return (MOVE_NO);
 
 	/*
 	**	Moving off the edge of the map is not allowed unless
 	**	this is a loaner vehicle.
 	*/
 	if (!ScenarioInit && !Map.In_Radar(cell) && !Is_Allowed_To_Leave_Map() && IsLocked) {
-		return(MOVE_NO);
+		return (MOVE_NO);
 	}
 
 	MoveType retval = MOVE_OK;
@@ -3231,10 +3148,11 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 	**	and return the appropriate flag. Other units treat walls as impassable.
 	*/
 	if (cellptr->Overlay != OVERLAY_NONE) {
-		OverlayTypeClass const * optr = &OverlayTypeClass::As_Reference(cellptr->Overlay);
+		OverlayTypeClass const *optr = &OverlayTypeClass::As_Reference(cellptr->Overlay);
 
-		if (optr->IsCrate && !((Session.Type == GAME_NORMAL) ? House->IsPlayerControl : House->IsHuman) && Session.Type == GAME_NORMAL) {
-			return(MOVE_NO);
+		if (optr->IsCrate && !((Session.Type == GAME_NORMAL) ? House->IsPlayerControl : House->IsHuman) &&
+		    Session.Type == GAME_NORMAL) {
+			return (MOVE_NO);
 		}
 
 		if (optr->IsWall) {
@@ -3249,16 +3167,18 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 			}
 
 			if (!cancrush && Is_Weapon_Equipped()) {
-				WarheadTypeClass const * whead = Class->PrimaryWeapon->WarheadPtr;
+				WarheadTypeClass const *whead = Class->PrimaryWeapon->WarheadPtr;
 
 				if (whead->IsWallDestroyer || (whead->IsWoodDestroyer && optr->IsWooden)) {
-//					if (!House->IsHuman && !House->Is_Ally(cellptr->Owner)) {
-						if (retval < MOVE_DESTROYABLE) retval = MOVE_DESTROYABLE;
-//					} else {
-//						return(MOVE_NO);
-//					}
+					//					if (!House->IsHuman &&
+					//! House->Is_Ally(cellptr->Owner)) {
+					if (retval < MOVE_DESTROYABLE)
+						retval = MOVE_DESTROYABLE;
+					//					} else {
+					//						return(MOVE_NO);
+					//					}
 				} else {
-					return(MOVE_NO);
+					return (MOVE_NO);
 				}
 			}
 		}
@@ -3269,7 +3189,7 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 	** for how they affect movement.
 	*/
 	bool crushable = false;
-	ObjectClass * obj = cellptr->Cell_Occupier();
+	ObjectClass *obj = cellptr->Cell_Occupier();
 	while (obj != NULL) {
 
 		if (obj != this) {
@@ -3277,17 +3197,21 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 			/*
 			** If object is a land mine, allow movement if possible.
 			*/
-			if (obj->What_Am_I() == RTTI_BUILDING && (!Rule.IsMineAware || !((BuildingClass *)obj)->House->Is_Ally(House))) {
-				if ((*(BuildingClass *)obj) == STRUCT_APMINE) return(MOVE_OK);
-				if ((*(BuildingClass *)obj) == STRUCT_AVMINE) return(MOVE_OK);
+			if (obj->What_Am_I() == RTTI_BUILDING &&
+			    (!Rule.IsMineAware || !((BuildingClass *)obj)->House->Is_Ally(House))) {
+				if ((*(BuildingClass *)obj) == STRUCT_APMINE)
+					return (MOVE_OK);
+				if ((*(BuildingClass *)obj) == STRUCT_AVMINE)
+					return (MOVE_OK);
 			}
 
 			/*
 			**	Always allow entry if trying to move on a cell with
 			**	authorization from the occupier.
 			*/
-			if (obj == Contact_With_Whom() && (IsTethered || (obj->What_Am_I() ==  RTTI_BUILDING && *((BuildingClass *)obj) == STRUCT_REPAIR))) {
-				return(MOVE_OK);
+			if (obj == Contact_With_Whom() && (IsTethered || (obj->What_Am_I() == RTTI_BUILDING &&
+									  *((BuildingClass *)obj) == STRUCT_REPAIR))) {
+				return (MOVE_OK);
 			}
 
 			/*
@@ -3295,7 +3219,7 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 			**	is trying to enter.
 			*/
 			if (Mission == MISSION_ENTER && obj->As_Target() == NavCom && IsTethered) {
-				return(MOVE_OK);
+				return (MOVE_OK);
 			}
 
 			/*
@@ -3303,33 +3227,41 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 			**	guarded unit.
 			*/
 			if (Mission == MISSION_GUARD_AREA && ArchiveTarget == obj->As_Target()) {
-				return(MOVE_NO);
+				return (MOVE_NO);
 			}
 
-			bool is_moving = obj->Is_Foot() &&
-						(Target_Legal(((FootClass *)obj)->NavCom) || ((FootClass *)obj)->PrimaryFacing.Is_Rotating() || ((FootClass *)obj)->IsDriving);
-//						(((FootClass *)obj)->PrimaryFacing.Is_Rotating() || ((FootClass *)obj)->IsDriving);
-//						(((FootClass *)obj)->IsRotating || ((FootClass *)obj)->IsDriving);
-//						(Target_Legal(((FootClass *)obj)->NavCom) || ((FootClass *)obj)->IsDriving);
+			bool is_moving = obj->Is_Foot() && (Target_Legal(((FootClass *)obj)->NavCom) ||
+							    ((FootClass *)obj)->PrimaryFacing.Is_Rotating() ||
+							    ((FootClass *)obj)->IsDriving);
+			//						(((FootClass *)obj)->PrimaryFacing.Is_Rotating()
+			//|| ((FootClass *)obj)->IsDriving);
+			//						(((FootClass *)obj)->IsRotating || ((FootClass
+			//*)obj)->IsDriving); 						(Target_Legal(((FootClass
+			//*)obj)->NavCom) || ((FootClass
+			//*)obj)->IsDriving);
 
 			if (House->Is_Ally(obj)) {
 				if (is_moving) {
-					int face 		= Dir_Facing(PrimaryFacing);
-					int techface	= Dir_Facing(((FootClass const *)obj)->PrimaryFacing) ^4;
+					int face = Dir_Facing(PrimaryFacing);
+					int techface = Dir_Facing(((FootClass const *)obj)->PrimaryFacing) ^ 4;
 					if (face == techface && Distance((AbstractClass const *)obj) <= 0x1FF) {
-						return(MOVE_NO);
+						return (MOVE_NO);
 					}
-					if (retval < MOVE_MOVING_BLOCK) retval = MOVE_MOVING_BLOCK;
+					if (retval < MOVE_MOVING_BLOCK)
+						retval = MOVE_MOVING_BLOCK;
 				} else {
-					if (obj->What_Am_I() == RTTI_BUILDING) return(MOVE_NO);
+					if (obj->What_Am_I() == RTTI_BUILDING)
+						return (MOVE_NO);
 
 					/*
 					**	If the blocking object is not in the same zone, then it certainly
 					**	isn't a temporary block, it is a permanent one.
 					*/
-					if (Map[Coord].Zones[Class->MZone] != cellptr->Zones[Class->MZone]) return(MOVE_NO);
+					if (Map[Coord].Zones[Class->MZone] != cellptr->Zones[Class->MZone])
+						return (MOVE_NO);
 
-					if (retval < MOVE_TEMP) retval = MOVE_TEMP;
+					if (retval < MOVE_TEMP)
+						retval = MOVE_TEMP;
 				}
 			} else {
 
@@ -3351,38 +3283,42 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 						**	Any non-allied blockage is considered impassable if the unit
 						**	is not equipped with a weapon.
 						*/
-						if (Class->PrimaryWeapon == NULL) return(MOVE_NO);
+						if (Class->PrimaryWeapon == NULL)
+							return (MOVE_NO);
 
 						/*
-						**	Some kinds of terrain are considered destroyable if the unit is equipped
-						**	with the weapon that can destroy it. Otherwise, the terrain is considered
-						**	impassable.
+						**	Some kinds of terrain are considered destroyable if the unit is
+						*equipped *	with the weapon that can destroy it. Otherwise, the
+						*terrain is considered *	impassable.
 						*/
 						switch (obj->What_Am_I()) {
-							case RTTI_TERRAIN:
+						case RTTI_TERRAIN:
 
 #ifdef TOFIX
-								if (((TerrainClass *)obj)->Class->Armor == ARMOR_WOOD &&
-										Class->PrimaryWeapon->WarheadPtr->IsWoodDestroyer) {
+							if (((TerrainClass *)obj)->Class->Armor == ARMOR_WOOD &&
+							    Class->PrimaryWeapon->WarheadPtr->IsWoodDestroyer) {
 
-									if (retval < MOVE_DESTROYABLE) retval = MOVE_DESTROYABLE;
-								} else {
-									return(MOVE_NO);
-								}
-								break;
+								if (retval < MOVE_DESTROYABLE)
+									retval = MOVE_DESTROYABLE;
+							} else {
+								return (MOVE_NO);
+							}
+							break;
 #else
-								return(MOVE_NO);
+							return (MOVE_NO);
 #endif
 
-							default:
-								if (retval < MOVE_DESTROYABLE) retval = MOVE_DESTROYABLE;
-								break;
+						default:
+							if (retval < MOVE_DESTROYABLE)
+								retval = MOVE_DESTROYABLE;
+							break;
 						}
 					} else {
 						crushable = true;
 					}
 				} else {
-					if (retval < MOVE_CLOAK) retval = MOVE_CLOAK;
+					if (retval < MOVE_CLOAK)
+						retval = MOVE_CLOAK;
 				}
 			}
 		}
@@ -3398,7 +3334,7 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 	**	return this immutable fact.
 	*/
 	if (!cancrush && retval != MOVE_DESTROYABLE && Ground[cellptr->Land_Type()].Cost[Class->Speed] == 0) {
-		return(MOVE_NO);
+		return (MOVE_NO);
 	}
 
 	/*
@@ -3424,10 +3360,11 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 				**	this vehicle should avoid the cell altogether.
 				*/
 				if (!Class->IsCrusher) {
-					if (Class->PrimaryWeapon != NULL && Class->PrimaryWeapon->Bullet->IsAntiGround) {
+					if (Class->PrimaryWeapon != NULL &&
+					    Class->PrimaryWeapon->Bullet->IsAntiGround) {
 						retval = MOVE_DESTROYABLE;
 					} else {
-						return(MOVE_NO);
+						return (MOVE_NO);
 					}
 				}
 			}
@@ -3447,16 +3384,15 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
 		**	cell, then allow entry.
 		*/
 		if (!cellptr->Cell_Unit() || !cellptr->Cell_Unit()->Class->IsCrushable) {
-			return(MOVE_MOVING_BLOCK);
+			return (MOVE_MOVING_BLOCK);
 		}
 	}
 
 	/*
 	**	Return with the most severe reason why this cell would be impassable.
 	*/
-	return(retval);
+	return (retval);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Init -- Clears all units for scenario preparation.                               *
@@ -3474,11 +3410,7 @@ MoveType UnitClass::Can_Enter_Cell(CELL cell, FacingType ) const
  * HISTORY:                                                                                    *
  *   08/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Init(void)
-{
-	Units.Free_All();
-}
-
+void UnitClass::Init(void) { Units.Free_All(); }
 
 /***********************************************************************************************
  * UnitClass::Start_Driver -- Starts driving and reserves destination cell.                    *
@@ -3497,18 +3429,16 @@ void UnitClass::Init(void)
  * HISTORY:                                                                                    *
  *   12/22/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Start_Driver(COORDINATE & headto)
-{
+bool UnitClass::Start_Driver(COORDINATE &headto) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	if (DriveClass::Start_Driver(headto) && IsActive) {//BG IsActive can be cleared by Start_Driver
+	if (DriveClass::Start_Driver(headto) && IsActive) { // BG IsActive can be cleared by Start_Driver
 		Mark_Track(headto, MARK_DOWN);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::What_Action -- Determines what action would occur if clicked on object.          *
@@ -3527,8 +3457,7 @@ bool UnitClass::Start_Driver(COORDINATE & headto)
  * HISTORY:                                                                                    *
  *   01/11/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ActionType UnitClass::What_Action(ObjectClass const * object) const
-{
+ActionType UnitClass::What_Action(ObjectClass const *object) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -3539,7 +3468,8 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 	*/
 	if (action == ACTION_NONE && object->What_Am_I() == RTTI_BUILDING) {
 		StructType blah = *((BuildingClass *)object);
-		if (blah == STRUCT_AVMINE || blah == STRUCT_APMINE) return(ACTION_MOVE);
+		if (blah == STRUCT_AVMINE || blah == STRUCT_APMINE)
+			return (ACTION_MOVE);
 	}
 
 	/*
@@ -3565,7 +3495,8 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 			**	deploy at its current location.
 			*/
 			((ObjectClass &)(*this)).Mark(MARK_UP);
-			if (!BuildingTypeClass::As_Reference(STRUCT_CONST).Legal_Placement(Coord_Cell(Adjacent_Cell(Center_Coord(), FACING_NW)))) {
+			if (!BuildingTypeClass::As_Reference(STRUCT_CONST)
+				 .Legal_Placement(Coord_Cell(Adjacent_Cell(Center_Coord(), FACING_NW)))) {
 				action = ACTION_NO_DEPLOY;
 			}
 			((ObjectClass &)(*this)).Mark(MARK_DOWN);
@@ -3577,35 +3508,39 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 			**	sitting on top of a mine and it still has mines available.
 			*/
 			if (*this == UNIT_MINELAYER) {
-				if (!Ammo || Map[Center_Coord()].Cell_Building() || (Map[Center_Coord()].Smudge != SMUDGE_NONE && SmudgeTypeClass::As_Reference(Map[Center_Coord()].Smudge).IsBib)) {
+				if (!Ammo || Map[Center_Coord()].Cell_Building() ||
+				    (Map[Center_Coord()].Smudge != SMUDGE_NONE &&
+				     SmudgeTypeClass::As_Reference(Map[Center_Coord()].Smudge).IsBib)) {
 					action = ACTION_NO_DEPLOY;
 				}
 			} else {
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 				if (*this == UNIT_CHRONOTANK || *this == UNIT_MAD) {
 					if (*this == UNIT_CHRONOTANK) {
-// If the chrono tank's counter is still charging up, don't allow deploy.  Or,
-// if it's a player-controlled chrono tank, and the player's currently trying
-// to teleport a different unit, don't allow teleporting this unit.
-						if(MoebiusCountDown || (IsOwnedByPlayer && House->UnitToTeleport && Map.IsTargettingMode == SPC_CHRONO2)) {
+						// If the chrono tank's counter is still charging up, don't allow
+						// deploy.  Or, if it's a player-controlled chrono tank, and the
+						// player's currently trying to teleport a different unit, don't allow
+						// teleporting this unit.
+						if (MoebiusCountDown || (IsOwnedByPlayer && House->UnitToTeleport &&
+									 Map.IsTargettingMode == SPC_CHRONO2)) {
 							action = ACTION_NO_DEPLOY;
 						}
 					}
 				} else {
 #endif
-				/*
-				**	All other units can "deploy" their passengers if they in-fact have
-				**	passengers and are a transport vehicle. Otherwise, they cannot
-				**	perform any self action.
-				*/
-				if (Class->Max_Passengers() > 0) {
-					if (How_Many() == 0) {
-						action = ACTION_NO_DEPLOY;
+					/*
+					**	All other units can "deploy" their passengers if they in-fact have
+					**	passengers and are a transport vehicle. Otherwise, they cannot
+					**	perform any self action.
+					*/
+					if (Class->Max_Passengers() > 0) {
+						if (How_Many() == 0) {
+							action = ACTION_NO_DEPLOY;
+						}
+					} else {
+						action = ACTION_NONE;
 					}
-				} else {
-					action = ACTION_NONE;
-				}
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 				}
 #endif
 			}
@@ -3616,9 +3551,11 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 	**	Special return to friendly refinery action.
 	*/
 	bool is_player_controlled = (Session.Type == GAME_NORMAL)
-		? (House->IsPlayerControl && object->Owner() != HOUSE_NONE && HouseClass::As_Pointer(object->Owner())->IsPlayerControl)
-		: (Is_Owned_By_Player() && House->Class->House == object->Owner());
-	if (is_player_controlled && object->What_Am_I() == RTTI_BUILDING && ((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, (TechnoClass*)object) == RADIO_ROGER) {
+					? (House->IsPlayerControl && object->Owner() != HOUSE_NONE &&
+					   HouseClass::As_Pointer(object->Owner())->IsPlayerControl)
+					: (Is_Owned_By_Player() && House->Class->House == object->Owner());
+	if (is_player_controlled && object->What_Am_I() == RTTI_BUILDING &&
+	    ((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, (TechnoClass *)object) == RADIO_ROGER) {
 		action = ACTION_ENTER;
 	}
 
@@ -3626,8 +3563,10 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 	**	Special return to friendly repair factory action.
 	*/
 	if (is_player_controlled && action == ACTION_SELECT && object->What_Am_I() == RTTI_BUILDING) {
-		BuildingClass * building = (BuildingClass *)object;
-		if (building->Class->Type == STRUCT_REPAIR && ((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, building) == RADIO_ROGER && !building->In_Radio_Contact() && !building->Is_Something_Attached()) {
+		BuildingClass *building = (BuildingClass *)object;
+		if (building->Class->Type == STRUCT_REPAIR &&
+		    ((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, building) == RADIO_ROGER &&
+		    !building->In_Radio_Contact() && !building->Is_Something_Attached()) {
 			action = ACTION_MOVE;
 		}
 	}
@@ -3635,13 +3574,12 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 	/*
 	**	Check to see if it can enter a transporter.
 	*/
-	if (
-		House->Is_Ally(object) &&
-		House->IsPlayerControl && object->Is_Techno() && object->What_Am_I() == RTTI_VESSEL) {
-#ifdef FIXIT_CARRIER	//	checked - ajw 9/28/98
- if( *(VesselClass *)object != VESSEL_CARRIER) {
+	if (House->Is_Ally(object) && House->IsPlayerControl && object->Is_Techno() &&
+	    object->What_Am_I() == RTTI_VESSEL) {
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
+		if (*(VesselClass *)object != VESSEL_CARRIER) {
 #endif
-		switch (((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, (TechnoClass*)object)) {
+			switch (((UnitClass *)this)->Transmit_Message(RADIO_CAN_LOAD, (TechnoClass *)object)) {
 			case RADIO_ROGER:
 				action = ACTION_ENTER;
 				break;
@@ -3653,13 +3591,13 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 			default:
 				action = ACTION_NONE;
 				break;
+			}
+#ifdef FIXIT_CARRIER //	checked - ajw 9/28/98
 		}
-#ifdef FIXIT_CARRIER	//	checked - ajw 9/28/98
- }
 #endif
 	}
 
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	if (*this == UNIT_MAD && (IsDumping || Gold)) {
 		action = ACTION_NONE;
 	}
@@ -3668,11 +3606,11 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
 	**	If it doesn't know what to do with the object, then just
 	**	say it can't move there.
 	*/
-	if (action == ACTION_NONE) action = ACTION_NOMOVE;
+	if (action == ACTION_NONE)
+		action = ACTION_NOMOVE;
 
-	return(action);
+	return (action);
 }
-
 
 /***********************************************************************************************
  * UnitClass::What_Action -- Determines action to perform on specified cell.                   *
@@ -3691,23 +3629,21 @@ ActionType UnitClass::What_Action(ObjectClass const * object) const
  * HISTORY:                                                                                    *
  *   09/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ActionType UnitClass::What_Action(CELL cell) const
-{
+ActionType UnitClass::What_Action(CELL cell) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	ActionType action = DriveClass::What_Action(cell);
 	if (action == ACTION_MOVE && Map[cell].Land_Type() == LAND_TIBERIUM && Class->IsToHarvest) {
-		return(ACTION_HARVEST);
+		return (ACTION_HARVEST);
 	}
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	if (*this == UNIT_MAD && (IsDumping || Gold)) {
 		action = ACTION_NOMOVE;
 	}
 #endif
-	return(action);
+	return (action);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Exit_Repair -- Drive the unit off the repair facility.                           *
@@ -3721,44 +3657,36 @@ ActionType UnitClass::What_Action(CELL cell) const
  * HISTORY:                                                                                    *
  *   04/03/1995 BWG : Created.                                                                 *
  *=============================================================================================*/
-#define XYCELL(x, y)	(y*MAP_CELL_W+x)
-void UnitClass::Exit_Repair(void)
-{
+#define XYCELL(x, y) (y * MAP_CELL_W + x)
+void UnitClass::Exit_Repair(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	int	i;
-	CELL	cell;
-	bool	found = false;
-	static short const ExitRepair[] = {
-		XYCELL(0,	-2),
-		XYCELL(1,	-1),
-		XYCELL(2,	0),
-		XYCELL(1,	1),
-		XYCELL(0,	2),
-		XYCELL(-1,	1),
-		XYCELL(-2,	0),
-		XYCELL(-1,	-1)
-	};
+	int i;
+	CELL cell;
+	bool found = false;
+	static short const ExitRepair[] = {XYCELL(0, -2), XYCELL(1, -1), XYCELL(2, 0),	XYCELL(1, 1),
+					   XYCELL(0, 2),  XYCELL(-1, 1), XYCELL(-2, 0), XYCELL(-1, -1)};
 
 	cell = Coord_Cell(Coord) + ExitRepair[Dir_Facing(PrimaryFacing.Current())];
-	if (Can_Enter_Cell(cell) == MOVE_OK) found = true;
+	if (Can_Enter_Cell(cell) == MOVE_OK)
+		found = true;
 
-	if (!found) for (i=0; i<8; i++) {
-		cell = Coord_Cell(Coord) + ExitRepair[i];
-		if (Can_Enter_Cell(cell) == MOVE_OK) {
-			found = true;
-			break;
+	if (!found)
+		for (i = 0; i < 8; i++) {
+			cell = Coord_Cell(Coord) + ExitRepair[i];
+			if (Can_Enter_Cell(cell) == MOVE_OK) {
+				found = true;
+				break;
+			}
 		}
-	}
 	if (found) {
-//		DirType	dir = Direction(cell);
+		//		DirType	dir = Direction(cell);
 
 		Assign_Mission(MISSION_MOVE);
 		Assign_Destination(::As_Target(cell));
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Mission_Guard -- Special guard mission override processor.                       *
@@ -3776,23 +3704,22 @@ void UnitClass::Exit_Repair(void)
  *   05/08/1995 JLB : Created.                                                                 *
  *   05/08/1995 JLB : Fixes gunboat problems.                                                  *
  *=============================================================================================*/
-int UnitClass::Mission_Guard(void)
-{
+int UnitClass::Mission_Guard(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
-	if (/*House->IsBaseBuilding &&*/ !House->IsHuman && Class->IsToHarvest && House->Get_Quantity(STRUCT_REFINERY) > 0 && !House->IsTiberiumShort) {
+	if (/*House->IsBaseBuilding &&*/ !House->IsHuman && Class->IsToHarvest &&
+	    House->Get_Quantity(STRUCT_REFINERY) > 0 && !House->IsTiberiumShort) {
 		Assign_Mission(MISSION_HARVEST);
-		return(1);
-//		return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+		return (1);
+		//		return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 	}
 
 	if (*this == UNIT_MCV && House->IsBaseBuilding) {
 		Assign_Mission(MISSION_UNLOAD);
-		return(MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
+		return (MissionControl[Mission].Normal_Delay() + Random_Pick(0, 2));
 	}
-	return(DriveClass::Mission_Guard());
+	return (DriveClass::Mission_Guard());
 }
-
 
 /***********************************************************************************************
  * UnitClass::Mission_Move -- Handles special move mission overrides.                          *
@@ -3811,8 +3738,7 @@ int UnitClass::Mission_Guard(void)
  *   05/09/1995 JLB : Created.                                                                 *
  *   09/28/1995 JLB : Harvester stick in guard mode if no more refineries.                     *
  *=============================================================================================*/
-int UnitClass::Mission_Move(void)
-{
+int UnitClass::Mission_Move(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -3825,30 +3751,26 @@ int UnitClass::Mission_Move(void)
 		APC_Close_Door();
 	}
 
-	return(DriveClass::Mission_Move());
+	return (DriveClass::Mission_Move());
 }
 
-
-int UnitClass::Mission_Enter(void)
-{
+int UnitClass::Mission_Enter(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (Class->IsToHarvest) {
-		TechnoClass * contact = Contact_With_Whom();
+		TechnoClass *contact = Contact_With_Whom();
 		if (contact == NULL) {
 			contact = As_Techno(ArchiveTarget);
 		}
-		if (contact != NULL &&
-			contact->What_Am_I() == RTTI_BUILDING &&
-			*((BuildingClass*)contact) == STRUCT_REFINERY) {
+		if (contact != NULL && contact->What_Am_I() == RTTI_BUILDING &&
+		    *((BuildingClass *)contact) == STRUCT_REFINERY) {
 			TiberiumUnloadRefinery = contact->As_Target();
 		}
 	}
 
-	return(DriveClass::Mission_Enter());
+	return (DriveClass::Mission_Enter());
 }
-
 
 /***********************************************************************************************
  * UnitClass::Desired_Load_Dir -- Determines the best cell and facing for loading.             *
@@ -3870,8 +3792,7 @@ int UnitClass::Mission_Enter(void)
  * HISTORY:                                                                                    *
  *   05/23/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-DirType UnitClass::Desired_Load_Dir(ObjectClass * passenger, CELL & moveto) const
-{
+DirType UnitClass::Desired_Load_Dir(ObjectClass *passenger, CELL &moveto) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -3901,10 +3822,15 @@ DirType UnitClass::Desired_Load_Dir(ObjectClass * passenger, CELL & moveto) cons
 		**	cell so that it is prevented from ever choosing that cell for load/unload.
 		*/
 		if (passenger != NULL) {
-			value = (passenger->Can_Enter_Cell(cellnum) == MOVE_OK || Coord_Cell(passenger->Coord) == cellnum) ? 128 : -128;
+			value =
+			    (passenger->Can_Enter_Cell(cellnum) == MOVE_OK || Coord_Cell(passenger->Coord) == cellnum)
+				? 128
+				: -128;
 		} else {
-			CellClass * cell = &Map[cellnum];
-			if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 || cell->Flag.Occupy.Building || cell->Flag.Occupy.Vehicle || cell->Flag.Occupy.Monolith || (cell->Flag.Composite & 0x01F) == 0x01F) {
+			CellClass *cell = &Map[cellnum];
+			if (Ground[cell->Land_Type()].Cost[SPEED_FOOT] == 0 || cell->Flag.Occupy.Building ||
+			    cell->Flag.Occupy.Vehicle || cell->Flag.Occupy.Monolith ||
+			    (cell->Flag.Composite & 0x01F) == 0x01F) {
 				value = -128;
 			} else {
 				if (cell->Cell_Techno() && !House->Is_Ally(cell->Cell_Techno())) {
@@ -3923,7 +3849,8 @@ DirType UnitClass::Desired_Load_Dir(ObjectClass * passenger, CELL & moveto) cons
 		if (face == FACING_S) {
 			value -= 100;
 		}
-		if (face == FACING_SW || face == FACING_SE) value += 64;
+		if (face == FACING_SW || face == FACING_SE)
+			value += 64;
 
 		/*
 		**	If the value for the potential cell is greater than the last recorded potential
@@ -3940,14 +3867,14 @@ DirType UnitClass::Desired_Load_Dir(ObjectClass * passenger, CELL & moveto) cons
 	*/
 	moveto = 0;
 	if (bestval > 0) {
-		static DirType _desired_to_actual[FACING_COUNT] = {DIR_S, DIR_SW, DIR_NW, DIR_NW, DIR_NE, DIR_NE, DIR_NE, DIR_SE};
+		static DirType _desired_to_actual[FACING_COUNT] = {DIR_S,  DIR_SW, DIR_NW, DIR_NW,
+								   DIR_NE, DIR_NE, DIR_NE, DIR_SE};
 
 		moveto = Adjacent_Cell(Coord_Cell(Coord), bestdir);
-		return(_desired_to_actual[bestdir]);
+		return (_desired_to_actual[bestdir]);
 	}
-	return(DIR_S);
+	return (DIR_S);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Flag_Attach -- Attaches a house flag to this unit.                               *
@@ -3964,19 +3891,17 @@ DirType UnitClass::Desired_Load_Dir(ObjectClass * passenger, CELL & moveto) cons
  * HISTORY:                                                                                    *
  *   05/23/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Flag_Attach(HousesType house)
-{
+bool UnitClass::Flag_Attach(HousesType house) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	if (house != HOUSE_NONE && Flagged == HOUSE_NONE)	{
+	if (house != HOUSE_NONE && Flagged == HOUSE_NONE) {
 		Flagged = house;
 		Mark(MARK_CHANGE);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Flag_Remove -- Removes the house flag from this unit.                            *
@@ -3993,19 +3918,17 @@ bool UnitClass::Flag_Attach(HousesType house)
  * HISTORY:                                                                                    *
  *   05/23/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Flag_Remove(void)
-{
+bool UnitClass::Flag_Remove(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (Flagged != HOUSE_NONE) {
 		Flagged = HOUSE_NONE;
 		Mark(MARK_CHANGE);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Pip_Count -- Fetches the number of pips to display on unit.                      *
@@ -4023,37 +3946,36 @@ bool UnitClass::Flag_Remove(void)
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Pip_Count(void) const
-{
+int UnitClass::Pip_Count(void) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (Class->Max_Passengers() > 0) {
-		return(How_Many());
+		return (How_Many());
 	}
 
 	if (*this == UNIT_MINELAYER) {
 		int retval = 0;
 		if (Ammo > 0) {
 			retval = Class->Max_Pips() * fixed(Ammo, Class->MaxAmmo);
-			if (!retval) retval = 1;
+			if (!retval)
+				retval = 1;
 		}
-		return(retval);
+		return (retval);
 	}
 
 	if (*this == UNIT_HARVESTER) {
-		return((Gold + Gems) / 4);
+		return ((Gold + Gems) / 4);
 	}
 
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
 	if (*this == UNIT_CHRONOTANK) {
 		int fulldur = ChronoTankDuration * TICKS_PER_MINUTE;
-		return( (fulldur - MoebiusCountDown) / (fulldur / 5));
+		return ((fulldur - MoebiusCountDown) / (fulldur / 5));
 	}
 #endif
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * UnitClass::APC_Close_Door -- Closes an APC door.                                            *
@@ -4069,14 +3991,12 @@ int UnitClass::Pip_Count(void) const
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::APC_Close_Door(void)
-{
+void UnitClass::APC_Close_Door(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	Close_Door(10, 2);
 }
-
 
 /***********************************************************************************************
  * UnitClass::APC_Open_Door -- Opens an APC door.                                              *
@@ -4092,8 +4012,7 @@ void UnitClass::APC_Close_Door(void)
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::APC_Open_Door(void)
-{
+void UnitClass::APC_Open_Door(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -4105,7 +4024,6 @@ void UnitClass::APC_Open_Door(void)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Crew_Type -- Fetches the kind of crew that this object produces.                 *
@@ -4123,21 +4041,19 @@ void UnitClass::APC_Open_Door(void)
  * HISTORY:                                                                                    *
  *   08/13/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-InfantryType UnitClass::Crew_Type(void) const
-{
+InfantryType UnitClass::Crew_Type(void) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (Class->PrimaryWeapon == NULL) {
 		if (Percent_Chance(50)) {
-			return(INFANTRY_C1);
+			return (INFANTRY_C1);
 		} else {
-			return(INFANTRY_C7);
+			return (INFANTRY_C7);
 		}
 	}
-	return(DriveClass::Crew_Type());
+	return (DriveClass::Crew_Type());
 }
-
 
 /***********************************************************************************************
  * UnitClass::Mission_Repair -- Handles finding and proceeding on a repair mission.            *
@@ -4155,12 +4071,11 @@ InfantryType UnitClass::Crew_Type(void) const
  * HISTORY:                                                                                    *
  *   10/02/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Mission_Repair(void)
-{
+int UnitClass::Mission_Repair(void) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	BuildingClass * nearest = Find_Docking_Bay(STRUCT_REFINERY, true);
+	BuildingClass *nearest = Find_Docking_Bay(STRUCT_REFINERY, true);
 
 	IsHarvesting = false;
 
@@ -4182,7 +4097,7 @@ int UnitClass::Mission_Repair(void)
 		*/
 		if (Transmit_Message(RADIO_HELLO, nearest) == RADIO_ROGER) {
 			Assign_Mission(MISSION_ENTER);
-			return(1);
+			return (1);
 		}
 	}
 
@@ -4190,9 +4105,8 @@ int UnitClass::Mission_Repair(void)
 	**	If no action could be performed at this time, then wait
 	**	around for a bit before trying again.
 	*/
-	return(MissionControl[Mission].Normal_Delay());
+	return (MissionControl[Mission].Normal_Delay());
 }
-
 
 /***********************************************************************************************
  * UnitClass::Fire_Direction -- Determines the direction of firing.                            *
@@ -4211,8 +4125,7 @@ int UnitClass::Mission_Repair(void)
  * HISTORY:                                                                                    *
  *   06/25/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-DirType UnitClass::Fire_Direction(void) const
-{
+DirType UnitClass::Fire_Direction(void) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
@@ -4223,19 +4136,18 @@ DirType UnitClass::Fire_Direction(void) const
 			diff1 = ABS(diff1);
 			diff2 = ABS(diff2);
 			int diff = min(diff1, diff2);
-			int adj = Fixed_To_Cardinal(ABS(SecondaryFacing.Difference(DIR_N)), 64-diff);
+			int adj = Fixed_To_Cardinal(ABS(SecondaryFacing.Difference(DIR_N)), 64 - diff);
 			if (SecondaryFacing.Difference(DIR_N) < 0) {
-				return(DirType)(SecondaryFacing - (DirType)adj);
+				return (DirType)(SecondaryFacing - (DirType)adj);
 			} else {
-				return(DirType)(SecondaryFacing + (DirType)adj);
+				return (DirType)(SecondaryFacing + (DirType)adj);
 			}
 		}
-		return(SecondaryFacing.Current());
+		return (SecondaryFacing.Current());
 	}
 
-	return(DriveClass::Fire_Direction());
+	return (DriveClass::Fire_Direction());
 }
-
 
 /***********************************************************************************************
  * UnitClass::Ok_To_Move -- Queries whether the vehicle can move.                              *
@@ -4256,24 +4168,22 @@ DirType UnitClass::Fire_Direction(void) const
  * HISTORY:                                                                                    *
  *   05/12/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Ok_To_Move(DirType dir) const
-{
+bool UnitClass::Ok_To_Move(DirType dir) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
 	if (Class->IsLockTurret) {
 		if (IsRotating) {
-			return(false);
+			return (false);
 		} else {
 			if (SecondaryFacing.Difference(dir)) {
 				((UnitClass *)this)->SecondaryFacing.Set_Desired(dir);
-				return(false);
+				return (false);
 			}
 		}
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Can_Fire -- Determines if turret can fire upon target.                           *
@@ -4294,23 +4204,23 @@ bool UnitClass::Ok_To_Move(DirType dir) const
  *   04/26/1994 JLB : Created.                                                                 *
  *   06/01/1994 JLB : Returns reason why it can't fire.                                        *
  *=============================================================================================*/
-FireErrorType UnitClass::Can_Fire(TARGET target, int which) const
-{
+FireErrorType UnitClass::Can_Fire(TARGET target, int which) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	DirType			dir;					// The facing to impart upon the projectile.
-	int				diff;
-	FireErrorType	fire = DriveClass::Can_Fire(target, which);
+	DirType dir; // The facing to impart upon the projectile.
+	int diff;
+	FireErrorType fire = DriveClass::Can_Fire(target, which);
 
 	if (fire == FIRE_OK) {
-		WeaponTypeClass const * weapon = (which == 0) ? Class->PrimaryWeapon : Class->SecondaryWeapon;
+		WeaponTypeClass const *weapon = (which == 0) ? Class->PrimaryWeapon : Class->SecondaryWeapon;
 
 		/*
 		**	If this unit cannot fire while moving, then bail.
 		*/
-		if ((Class->IsNoFireWhileMoving /*!Class->IsTurretEquipped || Class->IsLockTurret*/) && Target_Legal(NavCom)) {
-			return(FIRE_MOVING);
+		if ((Class->IsNoFireWhileMoving /*!Class->IsTurretEquipped || Class->IsLockTurret*/) &&
+		    Target_Legal(NavCom)) {
+			return (FIRE_MOVING);
 		}
 
 		/*
@@ -4318,7 +4228,7 @@ FireErrorType UnitClass::Can_Fire(TARGET target, int which) const
 		**	firing must be delayed until the rotation stops.
 		*/
 		if (!IsFiring && IsRotating && weapon->Bullet->ROT == 0) {
-			return(FIRE_ROTATING);
+			return (FIRE_ROTATING);
 		}
 
 		dir = Direction(target);
@@ -4337,13 +4247,12 @@ FireErrorType UnitClass::Can_Fire(TARGET target, int which) const
 			diff >>= 2;
 		}
 		if (diff < 8) {
-			return(DriveClass::Can_Fire(target, which));
+			return (DriveClass::Can_Fire(target, which));
 		}
-		return(FIRE_FACING);
+		return (FIRE_FACING);
 	}
-	return(fire);
+	return (fire);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Fire_At -- Try to fire upon the target specified.                                *
@@ -4364,21 +4273,22 @@ FireErrorType UnitClass::Can_Fire(TARGET target, int which) const
  * HISTORY:                                                                                    *
  *   04/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-BulletClass * UnitClass::Fire_At(TARGET target, int which)
-{
+BulletClass *UnitClass::Fire_At(TARGET target, int which) {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	BulletClass * bullet = NULL;
-	WeaponTypeClass const * weap = (which == 0) ? Class->PrimaryWeapon : Class->SecondaryWeapon;
-	if (weap == NULL) return(NULL);
+	BulletClass *bullet = NULL;
+	WeaponTypeClass const *weap = (which == 0) ? Class->PrimaryWeapon : Class->SecondaryWeapon;
+	if (weap == NULL)
+		return (NULL);
 
 	if (Can_Fire(target, which) == FIRE_OK) {
 		bullet = DriveClass::Fire_At(target, which);
 
 		if (bullet != NULL) {
-#ifdef FIXIT_CSII	//	checked - ajw 9/28/98
-if(Class->Type == UNIT_DEMOTRUCK && IsActive) delete this;
+#ifdef FIXIT_CSII //	checked - ajw 9/28/98
+			if (Class->Type == UNIT_DEMOTRUCK && IsActive)
+				delete this;
 #endif
 			/*
 			**	Possible reload timer set.
@@ -4389,9 +4299,8 @@ if(Class->Type == UNIT_DEMOTRUCK && IsActive) delete this;
 		}
 	}
 
-	return(bullet);
+	return (bullet);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Class_Of -- Fetches a reference to the class type for this object.               *
@@ -4407,14 +4316,12 @@ if(Class->Type == UNIT_DEMOTRUCK && IsActive) delete this;
  * HISTORY:                                                                                    *
  *   07/29/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-ObjectTypeClass const & UnitClass::Class_Of(void) const
-{
+ObjectTypeClass const &UnitClass::Class_Of(void) const {
 	assert(Units.ID(this) == ID);
 	assert(IsActive);
 
-	return(*Class);
+	return (*Class);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Tiberium_Load -- Determine the Tiberium load as a percentage.                    *
@@ -4430,30 +4337,25 @@ ObjectTypeClass const & UnitClass::Class_Of(void) const
  * HISTORY:                                                                                    *
  *   03/17/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-fixed UnitClass::Tiberium_Load(void) const
-{
+fixed UnitClass::Tiberium_Load(void) const {
 	assert(IsActive);
 
 	if (*this == UNIT_HARVESTER) {
-		return(fixed(Tiberium, Rule.BailCount));
+		return (fixed(Tiberium, Rule.BailCount));
 	}
-	return(0);
+	return (0);
 }
 
-
-BuildingClass* UnitClass::Find_Best_Refinery(void) const
-{
+BuildingClass *UnitClass::Find_Best_Refinery(void) const {
 	/*
 	**	Remember our last refinery and prefer that one, if still available and valid.
 	*/
 	if (Target_Legal(TiberiumUnloadRefinery)) {
-		BuildingClass * refinery = As_Building(TiberiumUnloadRefinery);
-		if (refinery != NULL &&
-			refinery->House == House &&
-			!refinery->IsInLimbo &&
-			refinery->Mission != MISSION_DECONSTRUCTION &&
-			*refinery == STRUCT_REFINERY &&
-			Map[refinery->Center_Coord()].Zones[Techno_Type_Class()->MZone] == Map[Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
+		BuildingClass *refinery = As_Building(TiberiumUnloadRefinery);
+		if (refinery != NULL && refinery->House == House && !refinery->IsInLimbo &&
+		    refinery->Mission != MISSION_DECONSTRUCTION && *refinery == STRUCT_REFINERY &&
+		    Map[refinery->Center_Coord()].Zones[Techno_Type_Class()->MZone] ==
+			Map[Center_Coord()].Zones[Techno_Type_Class()->MZone]) {
 			return refinery;
 		} else {
 			TiberiumUnloadRefinery = TARGET_NONE;
@@ -4465,7 +4367,6 @@ BuildingClass* UnitClass::Find_Best_Refinery(void) const
 	*/
 	return Find_Docking_Bay(STRUCT_REFINERY, false);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Offload_Tiberium_Bail -- Offloads one Tiberium quantum from the object.          *
@@ -4483,26 +4384,25 @@ BuildingClass* UnitClass::Find_Best_Refinery(void) const
  * HISTORY:                                                                                    *
  *   07/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Offload_Tiberium_Bail(void)
-{
+int UnitClass::Offload_Tiberium_Bail(void) {
 	assert(IsActive);
 
 	if (Tiberium) {
 		Tiberium--;
 
-// MBL 05.15.2020: Note, if the below code is ever reeanbled for some ready, make sure to see fix in 
-// Tiberian Dawn's DriveClass::Offload_Tiberium_Bail() for AI players
+		// MBL 05.15.2020: Note, if the below code is ever reeanbled for some ready, make sure to see fix in
+		// Tiberian Dawn's DriveClass::Offload_Tiberium_Bail() for AI players
 
 #ifdef TOFIX
 		if (House->IsHuman) {
-			return(UnitTypeClass::FULL_LOAD_CREDITS/UnitTypeClass::STEP_COUNT);
+			return (UnitTypeClass::FULL_LOAD_CREDITS / UnitTypeClass::STEP_COUNT);
 		}
-		return(UnitTypeClass::FULL_LOAD_CREDITS+(UnitTypeClass::FULL_LOAD_CREDITS/3)/UnitTypeClass::STEP_COUNT);
+		return (UnitTypeClass::FULL_LOAD_CREDITS +
+			(UnitTypeClass::FULL_LOAD_CREDITS / 3) / UnitTypeClass::STEP_COUNT);
 #endif
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Approach_Target -- Handles approaching the target in order to attack it.         *
@@ -4522,8 +4422,7 @@ int UnitClass::Offload_Tiberium_Bail(void)
  *   03/17/1995 JLB : Created.                                                                 *
  *   07/12/1995 JLB : Flamethrower tanks don't overrun -- their weapon is better.              *
  *=============================================================================================*/
-void UnitClass::Approach_Target(void)
-{
+void UnitClass::Approach_Target(void) {
 	assert(IsActive);
 
 	/*
@@ -4537,8 +4436,9 @@ void UnitClass::Approach_Target(void)
 		**	infantry, AND the infantry is pretty darn close, then just try
 		**	to drive over the infantry instead of firing on it.
 		*/
-		TechnoClass * target = As_Techno(TarCom);
-		if (Class->IsCrusher && Distance(TarCom) < Rule.CrushDistance && target && ((TechnoTypeClass const &)(target->Class_Of())).IsCrushable) {
+		TechnoClass *target = As_Techno(TarCom);
+		if (Class->IsCrusher && Distance(TarCom) < Rule.CrushDistance && target &&
+		    ((TechnoTypeClass const &)(target->Class_Of())).IsCrushable) {
 			Assign_Destination(TarCom);
 			return;
 		}
@@ -4550,7 +4450,6 @@ void UnitClass::Approach_Target(void)
 	*/
 	DriveClass::Approach_Target();
 }
-
 
 /***********************************************************************************************
  * DriveClass::Overrun_Square -- Handles vehicle overrun of a cell.                            *
@@ -4572,11 +4471,10 @@ void UnitClass::Approach_Target(void)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Overrun_Square(CELL cell, bool threaten)
-{
+void UnitClass::Overrun_Square(CELL cell, bool threaten) {
 	assert(IsActive);
 
-	CellClass * cellptr = &Map[cell];
+	CellClass *cellptr = &Map[cell];
 
 	if (Class->IsCrusher) {
 		if (threaten) {
@@ -4593,25 +4491,28 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten)
 				cellptr->Incoming(0, true);
 			}
 		} else {
-			ObjectClass * object = cellptr->Cell_Occupier();
+			ObjectClass *object = cellptr->Cell_Occupier();
 			int crushed = false;
 			while (object != NULL) {
-				if (object->Class_Of().IsCrushable && !House->Is_Ally(object) && Distance(object->Center_Coord()) < CELL_LEPTON_W/2) {
+				if (object->Class_Of().IsCrushable && !House->Is_Ally(object) &&
+				    Distance(object->Center_Coord()) < CELL_LEPTON_W / 2) {
 
 #ifdef OBSOLETE
 					/*
 					** If we're running over infantry, let's see if the infantry we're
 					** squashing is a thief trying to capture us.  If so, let him succeed.
 					*/
-					if (object->What_Am_I() == RTTI_INFANTRY && *((InfantryClass *)object) == INFANTRY_THIEF && ((InfantryClass *)object)->NavCom == As_Target()) {
-						ObjectClass * next = object->Next;
+					if (object->What_Am_I() == RTTI_INFANTRY &&
+					    *((InfantryClass *)object) == INFANTRY_THIEF &&
+					    ((InfantryClass *)object)->NavCom == As_Target()) {
+						ObjectClass *next = object->Next;
 						IsOwnedByPlayer = ((InfantryClass *)object)->IsOwnedByPlayer;
 						House = ((InfantryClass *)object)->House;
 						delete object;
 						object = next;
 					} else {
 #endif
-						ObjectClass * next = object->Next;
+						ObjectClass *next = object->Next;
 						crushed = true;
 
 						/*
@@ -4619,7 +4520,8 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten)
 						*/
 						Sound_Effect(VOC_SQUISH, Coord);
 						if (object->Height == 0) {
-							AnimClass* anim = new AnimClass(ANIM_CORPSE1, object->Center_Coord());
+							AnimClass *anim =
+							    new AnimClass(ANIM_CORPSE1, object->Center_Coord());
 							if (anim != NULL) {
 								anim->Set_Owner(object->Owner());
 							}
@@ -4628,7 +4530,7 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten)
 						object->Mark(MARK_UP);
 						object->Limbo();
 						delete object;
-						//new OverlayClass(OVERLAY_SQUISH, Coord_Cell(Coord));
+						// new OverlayClass(OVERLAY_SQUISH, Coord_Cell(Coord));
 
 						object = next;
 #ifdef OBSOLETE
@@ -4638,11 +4540,11 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten)
 					object = object->Next;
 				}
 			}
-			if (crushed) Do_Uncloak();
+			if (crushed)
+				Do_Uncloak();
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Assign_Destination -- Assign a destination to a unit.                            *
@@ -4659,15 +4561,15 @@ void UnitClass::Overrun_Square(CELL cell, bool threaten)
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Assign_Destination(TARGET target)
-{
+void UnitClass::Assign_Destination(TARGET target) {
 	assert(IsActive);
 
 	/*
 	**	Abort early if there is anything wrong with the parameters
 	**	or the unit already is assigned the specified destination.
 	*/
-	if (target == NavCom) return;
+	if (target == NavCom)
+		return;
 
 	/*
 	**	Transport vehicles must tell all passengers that are about to load, that they
@@ -4677,7 +4579,7 @@ void UnitClass::Assign_Destination(TARGET target)
 		Transmit_Message(RADIO_OVER_OUT);
 	}
 
-	BuildingClass * b = As_Building(target);
+	BuildingClass *b = As_Building(target);
 
 	/*
 	**	Handle entry logic here.
@@ -4697,16 +4599,18 @@ void UnitClass::Assign_Destination(TARGET target)
 				**	toward the transport and try to establish contact at a later time.
 				*/
 				if (b->In_Radio_Contact()) {
-// TCTCTC -- call for an update from the transport to get a good rendezvous position.
+					// TCTCTC -- call for an update from the transport to get a good rendezvous
+					// position.
 					ArchiveTarget = target;
 
-/*
-**	HACK ALERT: The repair bay is counting on the assignment of the NavCom by this routine.
-**	The refinery must NOT have the navcom assigned by this routine.
-*/
-if (*b != STRUCT_REPAIR) {
-	target = TARGET_NONE;
-}
+					/*
+					**	HACK ALERT: The repair bay is counting on the assignment of the NavCom
+					*by this routine. *	The refinery must NOT have the navcom assigned by this
+					*routine.
+					*/
+					if (*b != STRUCT_REPAIR) {
+						target = TARGET_NONE;
+					}
 				} else {
 					if (Transmit_Message(RADIO_DOCKING, b) != RADIO_ROGER) {
 						Transmit_Message(RADIO_OVER_OUT);
@@ -4714,21 +4618,22 @@ if (*b != STRUCT_REPAIR) {
 							ArchiveTarget = target;
 						}
 					}
-if (*b != STRUCT_REPAIR) {
-	ArchiveTarget = target;
-	target = TARGET_NONE;
-}
+					if (*b != STRUCT_REPAIR) {
+						ArchiveTarget = target;
+						target = TARGET_NONE;
+					}
 				}
 			} else {
-				TechnoClass * techno = As_Techno(target);
+				TechnoClass *techno = As_Techno(target);
 				if (techno != NULL) {
 
 					/*
-					**	Determine if the transport is already in radio contact. If so, then just move
-					**	toward the transport and try to establish contact at a later time.
+					**	Determine if the transport is already in radio contact. If so, then just
+					*move *	toward the transport and try to establish contact at a later time.
 					*/
 					if (techno->In_Radio_Contact()) {
-	// TCTCTC -- call for an update from the transport to get a good rendezvous position.
+						// TCTCTC -- call for an update from the transport to get a good
+						// rendezvous position.
 
 						ArchiveTarget = target;
 					} else {
@@ -4736,13 +4641,12 @@ if (*b != STRUCT_REPAIR) {
 							if (Transmit_Message(RADIO_DOCKING) != RADIO_ROGER) {
 								Transmit_Message(RADIO_OVER_OUT);
 							} else {
-								//BG: keep retransmitted navcom from radio-move-here.
+								// BG: keep retransmitted navcom from radio-move-here.
 								return;
 							}
 						}
 					}
 				}
-
 			}
 		} else {
 			Path[0] = FACING_NONE;
@@ -4756,11 +4660,11 @@ if (*b != STRUCT_REPAIR) {
 	**	facility is currently not involved with some other unit (radio or unloading).
 	*/
 	if (b != NULL && *b == STRUCT_REPAIR) {
-		if (b->In_Radio_Contact() && (b->Contact_With_Whom() != this) ) {
-//			if (target != NULL) {
-				ArchiveTarget = target;
-//			}
-//			target = TARGET_NONE;
+		if (b->In_Radio_Contact() && (b->Contact_With_Whom() != this)) {
+			//			if (target != NULL) {
+			ArchiveTarget = target;
+			//			}
+			//			target = TARGET_NONE;
 		} else {
 
 			/*
@@ -4773,7 +4677,7 @@ if (*b != STRUCT_REPAIR) {
 				**	Last check to make sure that the loading square is free from permanent
 				**	occupation (such as a building).
 				*/
-				CELL cell = (CELL)(Coord_Cell(b->Center_Coord()) + (MAP_CELL_W-1));
+				CELL cell = (CELL)(Coord_Cell(b->Center_Coord()) + (MAP_CELL_W - 1));
 				if (Ground[Map[cell].Land_Type()].Cost[Techno_Type_Class()->Speed] > 0) {
 					if (Transmit_Message(RADIO_DOCKING) == RADIO_ROGER) {
 						FootClass::Assign_Destination(target);
@@ -4794,7 +4698,6 @@ if (*b != STRUCT_REPAIR) {
 	DriveClass::Assign_Destination(target);
 }
 
-
 /***********************************************************************************************
  * UnitClass::Greatest_Threat -- Fetches the greatest threat for this unit.                    *
  *                                                                                             *
@@ -4811,8 +4714,7 @@ if (*b != STRUCT_REPAIR) {
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-TARGET UnitClass::Greatest_Threat(ThreatType threat) const
-{
+TARGET UnitClass::Greatest_Threat(ThreatType threat) const {
 	assert(IsActive);
 	if (Class->PrimaryWeapon != NULL) {
 		threat = threat | Class->PrimaryWeapon->Allowed_Threats();
@@ -4827,9 +4729,8 @@ TARGET UnitClass::Greatest_Threat(ThreatType threat) const
 	}
 #endif
 
-	return(FootClass::Greatest_Threat(threat));
+	return (FootClass::Greatest_Threat(threat));
 }
-
 
 /***********************************************************************************************
  * UnitClass::Read_INI -- Reads units from scenario INI file.                                  *
@@ -4850,17 +4751,16 @@ TARGET UnitClass::Greatest_Threat(ThreatType threat) const
  * HISTORY:                                                                                    *
  *   05/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Read_INI(CCINIClass & ini)
-{
-	UnitClass	* unit;			// Working unit pointer.
-	HousesType	inhouse;			// Unit house.
-	UnitType		classid;			// Unit class.
-	char			buf[128];
+void UnitClass::Read_INI(CCINIClass &ini) {
+	UnitClass *unit;    // Working unit pointer.
+	HousesType inhouse; // Unit house.
+	UnitType classid;   // Unit class.
+	char buf[128];
 
 	int len = ini.Entry_Count(INI_Name());
 
 	for (int index = 0; index < len; index++) {
-		char const * entry = ini.Get_Entry(INI_Name(), index);
+		char const *entry = ini.Get_Entry(INI_Name(), index);
 
 		ini.Get_String(INI_Name(), entry, NULL, buf, sizeof(buf));
 
@@ -4884,12 +4784,14 @@ void UnitClass::Read_INI(CCINIClass & ini)
 						COORDINATE coord = Cell_Coord(cell);
 
 						DirType dir = (DirType)atoi(strtok(NULL, ",\r\n"));
-						MissionType mission = MissionClass::Mission_From_Name(strtok(NULL, ",\n\r"));
+						MissionType mission =
+						    MissionClass::Mission_From_Name(strtok(NULL, ",\n\r"));
 
 						unit->Trigger = NULL;
-						TriggerTypeClass * tp = TriggerTypeClass::From_Name(strtok(NULL,",\r\n"));
+						TriggerTypeClass *tp =
+						    TriggerTypeClass::From_Name(strtok(NULL, ",\r\n"));
 						if (tp != NULL) {
-							TriggerClass * tt = Find_Or_Make(tp);
+							TriggerClass *tt = Find_Or_Make(tp);
 							if (tt != NULL) {
 								tt->AttachCount++;
 								unit->Trigger = tt;
@@ -4897,8 +4799,10 @@ void UnitClass::Read_INI(CCINIClass & ini)
 						}
 
 						if (unit->Unlimbo(coord, dir)) {
-							unit->Strength = (int)unit->Class->MaxStrength * fixed(strength, 256);
-							if (unit->Strength > unit->Class->MaxStrength-3) unit->Strength = unit->Class->MaxStrength;
+							unit->Strength =
+							    (int)unit->Class->MaxStrength * fixed(strength, 256);
+							if (unit->Strength > unit->Class->MaxStrength - 3)
+								unit->Strength = unit->Class->MaxStrength;
 							if (Session.Type == GAME_NORMAL || unit->House->IsHuman) {
 								unit->Assign_Mission(mission);
 								unit->Commence();
@@ -4909,8 +4813,8 @@ void UnitClass::Read_INI(CCINIClass & ini)
 						} else {
 
 							/*
-							**	If the unit could not be unlimboed, then this is a catastrophic error
-							**	condition. Delete the unit.
+							**	If the unit could not be unlimboed, then this is a
+							*catastrophic error *	condition. Delete the unit.
 							*/
 							delete unit;
 						}
@@ -4920,7 +4824,6 @@ void UnitClass::Read_INI(CCINIClass & ini)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Write_INI -- Store the units to the INI database.                                *
@@ -4936,8 +4839,7 @@ void UnitClass::Read_INI(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Write_INI(CCINIClass & ini)
-{
+void UnitClass::Write_INI(CCINIClass &ini) {
 	/*
 	**	First, clear out all existing unit data from the ini file.
 	*/
@@ -4947,26 +4849,20 @@ void UnitClass::Write_INI(CCINIClass & ini)
 	**	Write the unit data out.
 	*/
 	for (int index = 0; index < Units.Count(); index++) {
-		UnitClass * unit = Units.Ptr(index);
+		UnitClass *unit = Units.Ptr(index);
 		if (unit != NULL && !unit->IsInLimbo && unit->IsActive) {
-			char	uname[10];
-			char	buf[128];
+			char uname[10];
+			char buf[128];
 
 			sprintf(uname, "%d", index);
-			sprintf(buf, "%s,%s,%d,%u,%d,%s,%s",
-				unit->House->Class->IniName,
-				unit->Class->IniName,
-				unit->Health_Ratio()*256,
-				Coord_Cell(unit->Coord),
-				unit->PrimaryFacing.Current(),
+			sprintf(buf, "%s,%s,%d,%u,%d,%s,%s", unit->House->Class->IniName, unit->Class->IniName,
+				unit->Health_Ratio() * 256, Coord_Cell(unit->Coord), unit->PrimaryFacing.Current(),
 				MissionClass::Mission_Name(unit->Mission),
-				unit->Trigger.Is_Valid() ? unit->Trigger->Class->IniName : "None"
-				);
+				unit->Trigger.Is_Valid() ? unit->Trigger->Class->IniName : "None");
 			ini.Put_String(INI_Name(), uname, buf);
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Credit_Load -- Fetch the full credit value of cargo carried.                     *
@@ -4983,11 +4879,7 @@ void UnitClass::Write_INI(CCINIClass & ini)
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Credit_Load(void) const
-{
-	return((Gold * Rule.GoldValue) + (Gems * Rule.GemValue));
-}
-
+int UnitClass::Credit_Load(void) const { return ((Gold * Rule.GoldValue) + (Gems * Rule.GemValue)); }
 
 /***********************************************************************************************
  * UnitClass::Should_Crush_It -- Determines if this unit should crush an object.               *
@@ -5006,50 +4898,53 @@ int UnitClass::Credit_Load(void) const
  * HISTORY:                                                                                    *
  *   07/29/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Should_Crush_It(TechnoClass const * it) const
-{
+bool UnitClass::Should_Crush_It(TechnoClass const *it) const {
 	assert(IsActive);
 
 	/*
 	**	If this unit cannot crush anything or the candidate object cannot be crushed,
 	**	then it obviously should not try to crush it -- return negative answer.
 	*/
-	if (!Class->IsCrusher || it == NULL || !it->Techno_Type_Class()->IsCrushable) return(false);
+	if (!Class->IsCrusher || it == NULL || !it->Techno_Type_Class()->IsCrushable)
+		return (false);
 
 	/*
 	**	Objects that are far away should really be fired upon rather than crushed.
 	*/
-	if (Distance(it) > Rule.CrushDistance) return(false);
+	if (Distance(it) > Rule.CrushDistance)
+		return (false);
 
 	/*
 	**	Human controlled units don't automatically crush. Neither do computer controlled ones
 	**	if they are at difficult setting.
 	*/
-	if (House->IsHuman || House->Difficulty == DIFF_HARD) return(false);
+	if (House->IsHuman || House->Difficulty == DIFF_HARD)
+		return (false);
 
 	/*
 	**	If the weapon this unit is equipped with is very good against crushable objects then
 	**	fire the weapon instead. It is presumed that a wood destroying weapon is good against
 	**	most crushable object types (infantry).
 	*/
-	if (Class->PrimaryWeapon != NULL && Class->PrimaryWeapon->WarheadPtr->IsWoodDestroyer) return(false);
+	if (Class->PrimaryWeapon != NULL && Class->PrimaryWeapon->WarheadPtr->IsWoodDestroyer)
+		return (false);
 
 	/*
 	**	If the house IQ indicates that crushing should not be allowed, then don't
 	**	suggest that crushing be done.
 	*/
-	if (House->IQ < Rule.IQCrush) return(false);
+	if (House->IQ < Rule.IQCrush)
+		return (false);
 
 	/*
 	** Don't allow crushing of spies by computer-controlled vehicles.
 	*/
 	if (it->What_Am_I() == RTTI_INFANTRY && *(InfantryClass *)it == INFANTRY_SPY) {
-		return(false);
+		return (false);
 	}
 
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * UnitClass::Scatter -- Causes the unit to scatter to a nearby location.                      *
@@ -5074,22 +4969,25 @@ bool UnitClass::Should_Crush_It(TechnoClass const * it) const
  * HISTORY:                                                                                    *
  *   10/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void UnitClass::Scatter(COORDINATE threat, bool forced, bool nokidding)
-{
+void UnitClass::Scatter(COORDINATE threat, bool forced, bool nokidding) {
 	assert(IsActive);
 
-	if (Mission == MISSION_SLEEP || Mission == MISSION_STICKY || Mission == MISSION_UNLOAD) return;
+	if (Mission == MISSION_SLEEP || Mission == MISSION_STICKY || Mission == MISSION_UNLOAD)
+		return;
 
 	/*
 	**	Certain missions prevent scattering regardless of whether it would be
 	**	a good idea or not.
 	*/
-	if (!MissionControl[Mission].IsScatter && !forced) return;
+	if (!MissionControl[Mission].IsScatter && !forced)
+		return;
 
-	if (PrimaryFacing.Is_Rotating()) return;
-//	if (IsRotating) return;
+	if (PrimaryFacing.Is_Rotating())
+		return;
+	//	if (IsRotating) return;
 
-	if (Target_Legal(NavCom) && !nokidding) return;
+	if (Target_Legal(NavCom) && !nokidding)
+		return;
 
 	if (threat == 0) {
 		Assign_Destination(::As_Target(Map.Nearby_Location(Coord_Cell(Coord), Class->Speed)));
@@ -5097,7 +4995,6 @@ void UnitClass::Scatter(COORDINATE threat, bool forced, bool nokidding)
 		DriveClass::Scatter(threat, forced, nokidding);
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Limbo -- Limbo this unit.                                                        *
@@ -5114,19 +5011,16 @@ void UnitClass::Scatter(COORDINATE threat, bool forced, bool nokidding)
  * HISTORY:                                                                                    *
  *   10/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool UnitClass::Limbo(void)
-{
+bool UnitClass::Limbo(void) {
 	if (DriveClass::Limbo()) {
 		if (Flagged != HOUSE_NONE) {
 			HouseClass::As_Pointer(Flagged)->Flag_Attach(Coord_Cell(Coord));
 			Flagged = HOUSE_NONE;
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
-
 
 /***********************************************************************************************
  * UnitClass::Apply_Temporary_Jamming_Shroud -- Apply a temporary gap generator shroud effect  *
@@ -5143,8 +5037,7 @@ bool UnitClass::Limbo(void)
  * HISTORY:                                                                                    *
  *   8/19/2020 12:13PM ST : Created.                                                           *
  *=============================================================================================*/
-unsigned int UnitClass::Apply_Temporary_Jamming_Shroud(HouseClass *house_to_apply_for)
-{
+unsigned int UnitClass::Apply_Temporary_Jamming_Shroud(HouseClass *house_to_apply_for) {
 	unsigned int shroud_bits_applied = 0;
 
 	if (!IsActive || !Strength) {
@@ -5172,12 +5065,10 @@ unsigned int UnitClass::Apply_Temporary_Jamming_Shroud(HouseClass *house_to_appl
 	if (shroud_bits_applied) {
 		Map.Constrained_Look(Coord, 5 * CELL_LEPTON_W, house_to_apply_for);
 	}
-	
+
 	return shroud_bits_applied;
-}	
-	
-	
-			  
+}
+
 /***********************************************************************************************
  * UnitClass::Unapply_Temporary_Jamming_Shroud -- Remove temporary gap generator shroud effect *
  *                                                                                             *
@@ -5193,8 +5084,7 @@ unsigned int UnitClass::Apply_Temporary_Jamming_Shroud(HouseClass *house_to_appl
  * HISTORY:                                                                                    *
  *   8/19/2020 12:16PM ST : Created.                                                           *
  *=============================================================================================*/
-void UnitClass::Unapply_Temporary_Jamming_Shroud(HouseClass *house_to_unapply_for, unsigned int shroud_bits_applied)
-{
+void UnitClass::Unapply_Temporary_Jamming_Shroud(HouseClass *house_to_unapply_for, unsigned int shroud_bits_applied) {
 	if (!IsActive || !Strength) {
 		return;
 	}
@@ -5216,17 +5106,14 @@ void UnitClass::Unapply_Temporary_Jamming_Shroud(HouseClass *house_to_unapply_fo
 		}
 		shroud_bits_applied >>= 1;
 	}
-}	
-
-
+}
 
 /*
 ** Updated for client/server multiplayer - ST 8/12/2019 11:46AM
 */
-void UnitClass::Shroud_Regen(void)
-{
-	if (Class->IsGapper/*KO && !House->IsPlayerControl*/) {
-		
+void UnitClass::Shroud_Regen(void) {
+	if (Class->IsGapper /*KO && !House->IsPlayerControl*/) {
+
 		int index;
 		int centerx, centery;
 		CELL trycell;
@@ -5238,19 +5125,20 @@ void UnitClass::Shroud_Regen(void)
 				centery = Cell_Y(ShroudCenter);
 				for (index = 30; index >= 0 && ShroudBits; index--) {
 					if (ShroudBits & 1) {
-						trycell = XY_Cell(centerx + _GapShroudXTable[index], centery + _GapShroudYTable[index]);
-	#if(0)
+						trycell = XY_Cell(centerx + _GapShroudXTable[index],
+								  centery + _GapShroudYTable[index]);
+#if (0)
 						Map.Map_Cell(trycell, PlayerPtr);
-	#else
-					Map.UnJam_Cell(trycell, House);
-					Map.Map_Cell(trycell, House);
-	#endif
+#else
+						Map.UnJam_Cell(trycell, House);
+						Map.Map_Cell(trycell, House);
+#endif
 					}
 					ShroudBits >>= 1;
 				}
 			}
 
-			if(IsActive && Strength) {
+			if (IsActive && Strength) {
 				// Now shroud around the new center
 				ShroudBits = 0L;
 				ShroudCenter = Coord_Cell(Center_Coord());
@@ -5258,7 +5146,8 @@ void UnitClass::Shroud_Regen(void)
 				centery = Cell_Y(ShroudCenter);
 				for (index = 0; index < 31; index++) {
 					ShroudBits <<= 1;
-					trycell = XY_Cell(centerx + _GapShroudXTable[index], centery + _GapShroudYTable[index]);
+					trycell = XY_Cell(centerx + _GapShroudXTable[index],
+							  centery + _GapShroudYTable[index]);
 					if (Map[trycell].Is_Mapped(House)) {
 						Map.Jam_Cell(trycell, House);
 						ShroudBits |= 1;
@@ -5274,12 +5163,13 @@ void UnitClass::Shroud_Regen(void)
 			if (House->IsPlayerControl) {
 				Map.Constrained_Look(Coord, 5 * CELL_LEPTON_W, PlayerPtr);
 			}
-		
+
 		} else {
-		
+
 			if (Is_Legacy_Render_Enabled()) {
 				for (int i = 0; i < Session.Players.Count(); i++) {
-					HouseClass *player_house = HouseClass::As_Pointer(Session.Players[i]->Player.ID);
+					HouseClass *player_house =
+					    HouseClass::As_Pointer(Session.Players[i]->Player.ID);
 					if (player_house->IsHuman && player_house != House) {
 						Map.Constrained_Look(Coord, 5 * CELL_LEPTON_W, player_house);
 					}
@@ -5288,7 +5178,6 @@ void UnitClass::Shroud_Regen(void)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * UnitClass::Mission_Guard_Area -- Guard area logic for units.                                *
@@ -5306,8 +5195,7 @@ void UnitClass::Shroud_Regen(void)
  * HISTORY:                                                                                    *
  *   11/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int UnitClass::Mission_Guard_Area(void)
-{
+int UnitClass::Mission_Guard_Area(void) {
 	assert(IsActive);
 
 	/*
@@ -5315,32 +5203,24 @@ int UnitClass::Mission_Guard_Area(void)
 	**	Such an APC should load up with infantry.
 	*/
 	if (Session.Type != GAME_NORMAL &&
-#ifdef FIXIT_PHASETRANSPORT	//	checked - ajw 9/28/98
-			(*this == UNIT_APC || *this == UNIT_PHASE ) &&
+#ifdef FIXIT_PHASETRANSPORT //	checked - ajw 9/28/98
+	    (*this == UNIT_APC || *this == UNIT_PHASE) &&
 #else
-			*this == UNIT_APC &&
+	    *this == UNIT_APC &&
 #endif
-			!Target_Legal(TarCom) &&
-			!In_Radio_Contact() &&
-			House->Which_Zone(this) != ZONE_NONE &&
-			!House->IsHuman) {
-
+	    !Target_Legal(TarCom) && !In_Radio_Contact() && House->Which_Zone(this) != ZONE_NONE && !House->IsHuman) {
 
 		int needed = Class->Max_Passengers() - How_Many();
 		for (int index = 0; index < Infantry.Count(); index++) {
-			if (needed == 0) break;
+			if (needed == 0)
+				break;
 
-			InfantryClass * infantry = Infantry.Ptr(index);
+			InfantryClass *infantry = Infantry.Ptr(index);
 
-			if (infantry != NULL &&
-					infantry->IsActive &&
-					!infantry->IsInLimbo &&
-					infantry->Strength > 0 &&
-					infantry->House == House &&
-					!Target_Legal(infantry->TarCom) &&
-					!Target_Legal(infantry->NavCom) &&
-					Distance(infantry) < 7 * CELL_LEPTON_W &&
-					(infantry->Mission == MISSION_GUARD || infantry->Mission == MISSION_GUARD_AREA)) {
+			if (infantry != NULL && infantry->IsActive && !infantry->IsInLimbo && infantry->Strength > 0 &&
+			    infantry->House == House && !Target_Legal(infantry->TarCom) &&
+			    !Target_Legal(infantry->NavCom) && Distance(infantry) < 7 * CELL_LEPTON_W &&
+			    (infantry->Mission == MISSION_GUARD || infantry->Mission == MISSION_GUARD_AREA)) {
 
 				infantry->Assign_Mission(MISSION_ENTER);
 				infantry->ArchiveTarget = As_Target();
@@ -5348,5 +5228,5 @@ int UnitClass::Mission_Guard_Area(void)
 			}
 		}
 	}
-	return(DriveClass::Mission_Guard_Area());
+	return (DriveClass::Mission_Guard_Area());
 }

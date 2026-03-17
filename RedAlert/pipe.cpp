@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/PIPE.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -36,11 +36,9 @@
  *   Pipe::~Pipe -- Destructor for pipe class object.                                          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"pipe.h"
-#include	<stddef.h>
-#include	<string.h>
-
+#include "pipe.h"
+#include <stddef.h>
+#include <string.h>
 
 /***********************************************************************************************
  * Pipe::~Pipe -- Destructor for pipe class object.                                            *
@@ -57,8 +55,7 @@
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-Pipe::~Pipe(void)
-{
+Pipe::~Pipe(void) {
 	if (ChainTo != NULL) {
 		ChainTo->ChainFrom = ChainFrom;
 	}
@@ -69,7 +66,6 @@ Pipe::~Pipe(void)
 	ChainFrom = NULL;
 	ChainTo = NULL;
 }
-
 
 /***********************************************************************************************
  * Pipe::Put_To -- Connect a pipe to flow data into from this pipe.                            *
@@ -86,8 +82,7 @@ Pipe::~Pipe(void)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Pipe::Put_To(Pipe * pipe)
-{
+void Pipe::Put_To(Pipe *pipe) {
 	if (ChainTo != pipe) {
 		if (pipe != NULL && pipe->ChainFrom != NULL) {
 			pipe->ChainFrom->Put_To(NULL);
@@ -105,7 +100,6 @@ void Pipe::Put_To(Pipe * pipe)
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * Pipe::Put -- Feed some data through the pipe.                                               *
@@ -125,14 +119,12 @@ void Pipe::Put_To(Pipe * pipe)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int Pipe::Put(void const * source, int length)
-{
+int Pipe::Put(void const *source, int length) {
 	if (ChainTo != NULL) {
-		return(ChainTo->Put(source, length));
+		return (ChainTo->Put(source, length));
 	}
-	return(length);
+	return (length);
 }
-
 
 /***********************************************************************************************
  * Pipe::Flush -- Flush all pending data out the pipe.                                         *
@@ -152,12 +144,9 @@ int Pipe::Put(void const * source, int length)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int Pipe::Flush(void)
-{
+int Pipe::Flush(void) {
 	if (ChainTo != NULL) {
-		return(ChainTo->Flush());
+		return (ChainTo->Flush());
 	}
-	return(0);
+	return (0);
 }
-
-

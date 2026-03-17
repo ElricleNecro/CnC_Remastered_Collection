@@ -66,7 +66,7 @@ typedef int bool;
 #endif
 
 class FileClass {
-      public:
+public:
 	virtual ~FileClass(void) {};
 	virtual char const *File_Name(void) const = 0;
 	virtual char const *Set_Name(char const *filename) = 0;

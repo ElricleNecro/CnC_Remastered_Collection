@@ -1,92 +1,83 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /*
-** 
-** 
+**
+**
 **  Misc asm functions from ww lib
 **  ST - 12/19/2018 1:20PM
-** 
-** 
-** 
-** 
-** 
-** 
-** 
-** 
-** 
-** 
-** 
+**
+**
+**
+**
+**
+**
+**
+**
+**
+**
+**
 */
 
-#include "gbuffer.h"
 #include "MISC.H"
 #include "WSA.H"
+#include "gbuffer.h"
 
-IconCacheClass::IconCacheClass (void)
-{
-	IsCached			=FALSE;
-	SurfaceLost		=FALSE;
-	DrawFrequency	=0;
-	CacheSurface	=NULL;
-	IconSource		=NULL;
+IconCacheClass::IconCacheClass(void) {
+	IsCached = FALSE;
+	SurfaceLost = FALSE;
+	DrawFrequency = 0;
+	CacheSurface = NULL;
+	IconSource = NULL;
 }
 
-IconCacheClass::~IconCacheClass (void)
-{
-}		  
+IconCacheClass::~IconCacheClass(void) {}
 
-IconCacheClass	CachedIcons[MAX_CACHED_ICONS];
+IconCacheClass CachedIcons[MAX_CACHED_ICONS];
 
-extern "C"{
-IconSetType		IconSetList[MAX_ICON_SETS];
-short				IconCacheLookup[MAX_LOOKUP_ENTRIES];
+extern "C" {
+IconSetType IconSetList[MAX_ICON_SETS];
+short IconCacheLookup[MAX_LOOKUP_ENTRIES];
 }
 
-int		CachedIconsDrawn=0;		//Counter of number of cache hits
-int		UnCachedIconsDrawn=0;	//Counter of number of cache misses
-BOOL	CacheMemoryExhausted;	//Flag set if we have run out of video RAM
+int CachedIconsDrawn = 0;   // Counter of number of cache hits
+int UnCachedIconsDrawn = 0; // Counter of number of cache misses
+BOOL CacheMemoryExhausted;  // Flag set if we have run out of video RAM
 
-
-void Invalidate_Cached_Icons (void) {}
-void Restore_Cached_Icons (void) {}
-void Register_Icon_Set (void *icon_data , BOOL pre_cache) {};
+void Invalidate_Cached_Icons(void) {}
+void Restore_Cached_Icons(void) {}
+void Register_Icon_Set(void *icon_data, BOOL pre_cache) {};
 
 //
 // Prototypes for assembly language procedures in STMPCACH.ASM
 //
-extern "C" void __cdecl Clear_Icon_Pointers (void) {};
-extern "C" void __cdecl Cache_Copy_Icon (void const *icon_ptr ,void * , int) {};
-extern "C" int __cdecl Is_Icon_Cached (void const *icon_data , int icon) {return -1;};
-extern "C" int __cdecl Get_Icon_Index (void *icon_ptr) {return 0;};
-extern "C" int __cdecl Get_Free_Index (void) {return 0;};
-extern "C" BOOL __cdecl Cache_New_Icon (int icon_index, void *icon_ptr) {return -1;};
-extern "C" int __cdecl Get_Free_Cache_Slot(void) {return -1;}
+extern "C" void __cdecl Clear_Icon_Pointers(void){};
+extern "C" void __cdecl Cache_Copy_Icon(void const *icon_ptr, void *, int){};
+extern "C" int __cdecl Is_Icon_Cached(void const *icon_data, int icon) { return -1; };
+extern "C" int __cdecl Get_Icon_Index(void *icon_ptr) { return 0; };
+extern "C" int __cdecl Get_Free_Index(void) { return 0; };
+extern "C" BOOL __cdecl Cache_New_Icon(int icon_index, void *icon_ptr) { return -1; };
+extern "C" int __cdecl Get_Free_Cache_Slot(void) { return -1; }
 
-void IconCacheClass::Draw_It (LPDIRECTDRAWSURFACE dest_surface , int x_pixel, int y_pixel, int window_left , int window_top , int window_width , int window_height) {}
+void IconCacheClass::Draw_It(LPDIRECTDRAWSURFACE dest_surface, int x_pixel, int y_pixel, int window_left,
+			     int window_top, int window_width, int window_height) {}
 
+extern int CachedIconsDrawn;
+extern int UnCachedIconsDrawn;
 
-
-extern	int	CachedIconsDrawn;
-extern	int	UnCachedIconsDrawn;
-
-
-extern "C" void __cdecl Set_Font_Palette_Range(void const *palette, INT start_idx, INT end_idx)
-{
-}		  
-
+extern "C" void __cdecl Set_Font_Palette_Range(void const *palette, INT start_idx, INT end_idx) {}
 
 /*
 ;***************************************************************************
@@ -109,8 +100,7 @@ extern "C" void __cdecl Set_Font_Palette_Range(void const *palette, INT start_id
 	USES	eax,ebx,ecx,edx,esi,edi
 */
 
-void __cdecl Buffer_Draw_Line(void *this_object, int sx, int sy, int dx, int dy, unsigned char color)
-{
+void __cdecl Buffer_Draw_Line(void *this_object, int sx, int sy, int dx, int dy, unsigned char color) {
 	unsigned int clip_min_x;
 	unsigned int clip_max_x;
 	unsigned int clip_min_y;
@@ -118,21 +108,21 @@ void __cdecl Buffer_Draw_Line(void *this_object, int sx, int sy, int dx, int dy,
 	unsigned int clip_var;
 	unsigned int accum;
 	unsigned int bpr;
-	
+
 	static int _one_time_init = 0;
 
-	//clip_tbl	DD	nada,a_up,a_dwn,nada
+	// clip_tbl	DD	nada,a_up,a_dwn,nada
 	//		DD	a_lft,a_lft,a_dwn,nada
 	//		DD	a_rgt,a_up,a_rgt,nada
 	//		DD	nada,nada,nada,nada
 
-	static void *_clip_table [4*4] = {0};
+	static void *_clip_table[4 * 4] = {0};
 
 	unsigned int int_color = color;
-	unsigned int x1_pixel = (unsigned int) sx;
-	unsigned int y1_pixel = (unsigned int) sy;
-	unsigned int x2_pixel = (unsigned int) dx;
-	unsigned int y2_pixel = (unsigned int) dy;
+	unsigned int x1_pixel = (unsigned int)sx;
+	unsigned int y1_pixel = (unsigned int)sy;
+	unsigned int x2_pixel = (unsigned int)dx;
+	unsigned int y2_pixel = (unsigned int)dy;
 
 	__asm {		  
 		mov	eax,_one_time_init
@@ -142,10 +132,10 @@ void __cdecl Buffer_Draw_Line(void *this_object, int sx, int sy, int dx, int dy,
 		call	do_init
 
 init_done:
-		
-		//;*==================================================================
-		//;* Take care of find the clip minimum and maximums
-		//;*==================================================================
+
+	       //;*==================================================================
+	       //;* Take care of find the clip minimum and maximums
+	       //;*==================================================================
 		mov	ebx,[this_object]
 		xor	eax,eax
 		mov	[clip_min_x],eax
@@ -158,29 +148,29 @@ init_done:
 		mov	eax,[ebx]GraphicViewPortClass.Height
 		mov	[clip_max_y],eax
 
-		//;*==================================================================
-		//;* Adjust max pixels as they are tested inclusively.
-		//;*==================================================================
+		   //;*==================================================================
+		   //;* Adjust max pixels as they are tested inclusively.
+		   //;*==================================================================
 		dec	[clip_max_x]
 		dec	[clip_max_y]
 
-		//;*==================================================================
-		//;* Set the registers with the data for drawing the line
-		//;*==================================================================
-		mov	eax,[x1_pixel]		//; eax = start x pixel position
-		mov	ebx,[y1_pixel]		//; ebx = start y pixel position
-		mov	ecx,[x2_pixel]		//; ecx = dest x pixel position
-		mov	edx,[y2_pixel]		//; edx = dest y pixel position
+	       //;*==================================================================
+	       //;* Set the registers with the data for drawing the line
+	       //;*==================================================================
+		mov	eax,[x1_pixel] //; eax = start x pixel position
+		mov	ebx,[y1_pixel] //; ebx = start y pixel position
+		mov	ecx,[x2_pixel] //; ecx = dest x pixel position
+		mov	edx,[y2_pixel] //; edx = dest y pixel position
 
-		//;*==================================================================
-		//;* This is the section that "pushes" the line into bounds.
-		//;* I have marked the section with PORTABLE start and end to signify
-		//;* how much of this routine is 100% portable between graphics modes.
-		//;* It was just as easy to have variables as it would be for constants
-		//;* so the global vars ClipMaxX,ClipMinY,ClipMaxX,ClipMinY are used
-		//;* to clip the line (default is the screen)
-		//;* PORTABLE start
-		//;*==================================================================
+	       //;*==================================================================
+	       //;* This is the section that "pushes" the line into bounds.
+	       //;* I have marked the section with PORTABLE start and end to signify
+	       //;* how much of this routine is 100% portable between graphics modes.
+	       //;* It was just as easy to have variables as it would be for constants
+	       //;* so the global vars ClipMaxX,ClipMinY,ClipMaxX,ClipMinY are used
+	       //;* to clip the line (default is the screen)
+	       //;* PORTABLE start
+	       //;*==================================================================
 
 		cmp	eax,[clip_min_x]
 		jl	short clip_it
@@ -199,9 +189,9 @@ init_done:
 		cmp	edx,[clip_max_y]
 		jle	short on_screen
 
-		//;*==================================================================
-		//;* Takes care off clipping the line.
-		//;*==================================================================
+		   //;*==================================================================
+		   //;* Takes care off clipping the line.
+		   //;*==================================================================
 	clip_it:
 		call	set_bits
 		xchg	eax,ecx
@@ -214,13 +204,13 @@ init_done:
 		test	edi,esi
 		jne	short off_screen
 		shl	esi,2
-		//call	[clip_tbl+esi]
+		// call	[clip_tbl+esi]
 		call	[_clip_table+esi]
 		jc	clip_it
 		xchg	eax,ecx
 		xchg	ebx,edx
 		shl	edi,2
-		//call	[clip_tbl+edi]
+		// call	[clip_tbl+edi]
 		call	[_clip_table+edi]
 		jmp	clip_it
 
@@ -230,13 +220,13 @@ init_done:
 	off_screen:
 		jmp	and_out
 
-		//;*==================================================================
-		//;* Jump table for clipping conditions
-		//;*==================================================================
-	//clip_tbl	DD	nada,a_up,a_dwn,nada
-	//		DD	a_lft,a_lft,a_dwn,nada
-	//		DD	a_rgt,a_up,a_rgt,nada
-	//		DD	nada,nada,nada,nada
+		   //;*==================================================================
+		   //;* Jump table for clipping conditions
+		   //;*==================================================================
+		   // clip_tbl	DD	nada,a_up,a_dwn,nada
+		   //		DD	a_lft,a_lft,a_dwn,nada
+		   //		DD	a_rgt,a_up,a_rgt,nada
+		   //		DD	nada,nada,nada,nada
 
 	nada:
 		clc
@@ -259,18 +249,18 @@ init_done:
 		stc
 		ret
 
-		//;*==================================================================
-		//;* xa'=xa+[(miny-ya)(xb-xa)/(yb-ya)]
-		//;*==================================================================
+		    //;*==================================================================
+		    //;* xa'=xa+[(miny-ya)(xb-xa)/(yb-ya)]
+		    //;*==================================================================
 	clip_vert:
 		push	edx
 		push	eax
-		mov	[clip_var],edx		//; clip_var = yb
-		sub	[clip_var],ebx		//; clip_var = (yb-ya)
-		neg	eax			//; eax=-xa
-		add	eax,ecx			//; (ebx-xa)
-		mov	edx,esi			//; edx=miny
-		sub	edx,ebx			//; edx=(miny-ya)
+		mov	[clip_var],edx //; clip_var = yb
+		sub	[clip_var],ebx //; clip_var = (yb-ya)
+		neg	eax //; eax=-xa
+		add	eax,ecx //; (ebx-xa)
+		mov	edx,esi //; edx=miny
+		sub	edx,ebx //; edx=(miny-ya)
 		imul	edx
 		idiv	[clip_var]
 		pop	edx
@@ -296,64 +286,64 @@ init_done:
 		stc
 		ret
 
-		//;*==================================================================
-		//;* ya'=ya+[(minx-xa)(yb-ya)/(xb-xa)]
-		//;*==================================================================
+		    //;*==================================================================
+		    //;* ya'=ya+[(minx-xa)(yb-ya)/(xb-xa)]
+		    //;*==================================================================
 	clip_horiz:
 		push	edx
-		mov	[clip_var],ecx		//; clip_var = xb
-		sub	[clip_var],eax		//; clip_var = (xb-xa)
-		sub	edx,ebx			//; edx = (yb-ya)
-		neg	eax			//; eax = -xa
-		add	eax,esi			//; eax = (minx-xa)
-		imul	edx			//; eax = (minx-xa)(yb-ya)
-		idiv	[clip_var]		//; eax = (minx-xa)(yb-ya)/(xb-xa)
-		add	ebx,eax			//; ebx = xa+[(minx-xa)(yb-ya)/(xb-xa)]
+		mov	[clip_var],ecx //; clip_var = xb
+		sub	[clip_var],eax //; clip_var = (xb-xa)
+		sub	edx,ebx //; edx = (yb-ya)
+		neg	eax //; eax = -xa
+		add	eax,esi //; eax = (minx-xa)
+		imul	edx //; eax = (minx-xa)(yb-ya)
+		idiv	[clip_var] //; eax = (minx-xa)(yb-ya)/(xb-xa)
+		add	ebx,eax //; ebx = xa+[(minx-xa)(yb-ya)/(xb-xa)]
 		pop	edx
 		mov	eax,esi
 		ret
 
-		//;*==================================================================
-		//;* Sets the condition bits
-		//;*==================================================================
+		    //;*==================================================================
+		    //;* Sets the condition bits
+		    //;*==================================================================
 	set_bits:
 		xor	esi,esi
-		cmp	ebx,[clip_min_y]	//; if y >= top its not up
+		cmp	ebx,[clip_min_y] //; if y >= top its not up
 		jge	short a_not_up
 		or	esi,1
 
 	a_not_up:
-		cmp	ebx,[clip_max_y]	//; if y <= bottom its not down
+		cmp	ebx,[clip_max_y] //; if y <= bottom its not down
 		jle	short a_not_down
 		or	esi,2
 
 	a_not_down:
-		cmp	eax,[clip_min_x]   	//; if x >= left its not left
+		cmp	eax,[clip_min_x] //; if x >= left its not left
 		jge	short a_not_left
 		or	esi,4
 
 	a_not_left:
-		cmp	eax,[clip_max_x]	//; if x <= right its not right
+		cmp	eax,[clip_max_x] //; if x <= right its not right
 		jle	short a_not_right
 		or	esi,8
 
 	a_not_right:
 		ret
 
-		//;*==================================================================
-		//;* Draw the line to the screen.
-		//;* PORTABLE end
-		//;*==================================================================
+		   //;*==================================================================
+		   //;* Draw the line to the screen.
+		   //;* PORTABLE end
+		   //;*==================================================================
 	draw_it:
-		sub	edx,ebx			//; see if line is being draw down
-		jnz	short not_hline	//; if not then its not a hline
-		jmp	short hline		//; do special case h line
+		sub	edx,ebx //; see if line is being draw down
+		jnz	short not_hline //; if not then its not a hline
+		jmp	short hline //; do special case h line
 
 	not_hline:
-		jg	short down		//; if so there is no need to rev it
-		neg	edx			//; negate for actual pixel length
-		xchg	eax,ecx			//; swap x's to rev line draw
-		sub	ebx,edx			//; get old edx
+		jg	short down //; if so there is no need to rev it
+		neg	edx //; negate for actual pixel length
+		xchg	eax,ecx //; swap x's to rev line draw
+		sub	ebx,edx //; get old edx
 
 	down:
 		push	edx
@@ -366,26 +356,26 @@ init_done:
 		pop	eax
 		pop	edx
 
-		mov	esi,1			//; assume a right mover
-		sub	ecx,eax			//; see if line is right
-		jnz	short not_vline	//; see if its a vertical line
+		mov	esi,1 //; assume a right mover
+		sub	ecx,eax //; see if line is right
+		jnz	short not_vline //; see if its a vertical line
 		jmp	vline
 
 	not_vline:
-		jg	short right		//; if so, the difference = length
+		jg	short right //; if so, the difference = length
 
-	//left:
-		neg	ecx			//; else negate for actual pixel length
-		neg	esi			//; negate counter to move left
+		   // left:
+		neg	ecx //; else negate for actual pixel length
+		neg	esi //; negate counter to move left
 
 	right:
-		cmp	ecx,edx			//; is it a horiz or vert line
-		jge	short horiz		//; if ecx > edx then |x|>|y| or horiz
+		cmp	ecx,edx //; is it a horiz or vert line
+		jge	short horiz //; if ecx > edx then |x|>|y| or horiz
 
-	//vert:
-		xchg	ecx,edx			//; make ecx greater and edx lesser
-		mov	edi,ecx			//; set greater
-		mov	[accum],ecx		//; set accumulator to 1/2 greater
+			// vert:
+		xchg	ecx,edx //; make ecx greater and edx lesser
+		mov	edi,ecx //; set greater
+		mov	[accum],ecx //; set accumulator to 1/2 greater
 		shr	[accum],1
 
 		//;*==================================================================
@@ -394,7 +384,7 @@ init_done:
 		//;* esi=adder; accum=accumulator
 		//;* in a vertical loop the adder is conditional and the inc constant
 		//;*==================================================================
-	//vert_loop:
+		// vert_loop:
 		add	ebx,eax
 		mov	eax,[int_color]
 
@@ -403,15 +393,15 @@ init_done:
 		dec	ecx
 		jl	and_out
 		add	ebx,[bpr]
-		sub	[accum],edx		//; sub the lesser
-		jge	v_midloop		//; any line could be new
-		add	[accum],edi		//; add greater for new accum
-		add	ebx,esi			//; next pixel over
+		sub	[accum],edx //; sub the lesser
+		jge	v_midloop //; any line could be new
+		add	[accum],edi //; add greater for new accum
+		add	ebx,esi //; next pixel over
 		jmp	v_midloop
 
 	horiz:
-		mov	edi,ecx			//; set greater
-		mov	[accum],ecx		//; set accumulator to 1/2 greater
+		mov	edi,ecx //; set greater
+		mov	[accum],ecx //; set accumulator to 1/2 greater
 		shr	[accum],1
 
 		//;*==================================================================
@@ -420,31 +410,31 @@ init_done:
 		//;* esi=adder; accum=accumulator
 		//;* in a vertical loop the adder is conditional and the inc constant
 		//;*==================================================================
-	//horiz_loop:
+		// horiz_loop:
 		add	ebx,eax
 		mov	eax,[int_color]
 
 	h_midloop:
 		mov	[ebx],al
-		dec	ecx				//; dec counter
-		jl	and_out				//; end of line
+		dec	ecx //; dec counter
+		jl	and_out //; end of line
 		add	ebx,esi
-		sub     [accum],edx			//; sub the lesser
+		sub     [accum],edx //; sub the lesser
 		jge	h_midloop
-		add	[accum],edi			//; add greater for new accum
-		add	ebx,[bpr]			//; goto next line
+		add	[accum],edi //; add greater for new accum
+		add	ebx,[bpr] //; goto next line
 		jmp	h_midloop
 
-		//;*==================================================================
-		//;* Special case routine for horizontal line draws
-		//;*==================================================================
+		    //;*==================================================================
+		    //;* Special case routine for horizontal line draws
+		    //;*==================================================================
 	hline:
-		cmp	eax,ecx			//; make eax < ecx
+		cmp	eax,ecx //; make eax < ecx
 		jl	short hl_ac
 		xchg	eax,ecx
 
 	hl_ac:
-		sub	ecx,eax			//; get len
+		sub	ecx,eax //; get len
 		inc	ecx
 
 		push	edx
@@ -461,8 +451,8 @@ init_done:
 		cmp	ecx,15
 		jg	big_line
 		mov	al,[color]
-		rep	stosb			//; write as many words as possible
-		jmp	short and_out		//; get outt
+		rep	stosb //; write as many words as possible
+		jmp	short and_out //; get outt
 
 
 	big_line:
@@ -496,18 +486,17 @@ init_done:
 		rep	stosb
 		jmp	and_out
 
-
-		//;*==================================================================
-		//;* a special case routine for vertical line draws
-		//;*==================================================================
+		    //;*==================================================================
+		    //;* a special case routine for vertical line draws
+		    //;*==================================================================
 	vline:
-		mov	ecx,edx			//; get length of line to draw
+		mov	ecx,edx //; get length of line to draw
 		inc	ecx
 		add	ebx,eax
 		mov	eax,[int_color]
 
 	vl_loop:
-		mov	[ebx],al		//; store bit
+		mov	[ebx],al //; store bit
 		add	ebx,[bpr]
 		dec	ecx
 		jnz	vl_loop
@@ -560,10 +549,6 @@ do_init:
 	}
 }
 
-
-
-
-
 /*
 ;***************************************************************************
 ;**   C O N F I D E N T I A L --- W E S T W O O D   A S S O C I A T E S   **
@@ -596,7 +581,6 @@ INCLUDE ".\gbuffer.inc"
 
 CODESEG
 */
-
 
 /*
 ;***************************************************************************
@@ -1013,20 +997,6 @@ CODESEG
 
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 
 ;***************************************************************************
@@ -1046,7 +1016,7 @@ CODESEG
 ;* HISTORY:                                                                *
 ;*   06/07/1994 PWG : Created.                                             *
 ;*=========================================================================*
-*/ 
+*/
 
 /*
 ;******************************************************************************
@@ -1054,46 +1024,44 @@ CODESEG
 ; being copied does it speed the time it takes to do copies in this algorithm.
 ; For this reason and because 1 and 2 byte copies crash, is the special case
 ; used.  SKB 4/21/94.  Tested on 486 66mhz.  Copied by PWG 6/7/04.
-*/ 
-#define OPTIMAL_BYTE_COPY	14
-
-
-void __cdecl Buffer_Fill_Rect(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color)
-{
-/*
-	;*===================================================================
-	;* define the arguements that our function takes.
-	;*===================================================================
-	ARG    	this_object:DWORD			; this is a member function
-	ARG	x1_pixel:WORD
-	ARG	y1_pixel:WORD
-	ARG	x2_pixel:WORD
-	ARG	y2_pixel:WORD
-	ARG    	color:BYTE			; what color should we clear to
 */
-	
+#define OPTIMAL_BYTE_COPY 14
+
+void __cdecl Buffer_Fill_Rect(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color) {
+	/*
+		;*===================================================================
+		;* define the arguements that our function takes.
+		;*===================================================================
+		ARG    	this_object:DWORD			; this is a member function
+		ARG	x1_pixel:WORD
+		ARG	y1_pixel:WORD
+		ARG	x2_pixel:WORD
+		ARG	y2_pixel:WORD
+		ARG    	color:BYTE			; what color should we clear to
+	*/
+
 	void *this_object = thisptr;
 	int x1_pixel = sx;
 	int y1_pixel = sy;
 	int x2_pixel = dx;
 	int y2_pixel = dy;
-	
-/*
-	;*===================================================================
-	; Define some locals so that we can handle things quickly
-	;*===================================================================
-	LOCAL	VPwidth:DWORD		; the width of the viewport
-	LOCAL	VPheight:DWORD		; the height of the viewport
-	LOCAL	VPxadd:DWORD		; the additional x offset of viewport
-	LOCAL	VPbpr:DWORD		; the number of bytes per row of viewport
-*/
+
+	/*
+		;*===================================================================
+		; Define some locals so that we can handle things quickly
+		;*===================================================================
+		LOCAL	VPwidth:DWORD		; the width of the viewport
+		LOCAL	VPheight:DWORD		; the height of the viewport
+		LOCAL	VPxadd:DWORD		; the additional x offset of viewport
+		LOCAL	VPbpr:DWORD		; the number of bytes per row of viewport
+	*/
 
 	int VPwidth;
 	int VPheight;
 	int VPxadd;
 	int VPbpr;
 
-	int local_ebp;	                      // Can't use ebp
+	int local_ebp; // Can't use ebp
 
 	__asm {
 
@@ -1286,9 +1254,6 @@ void __cdecl Buffer_Fill_Rect(void *thisptr, int sx, int sy, int dx, int dy, uns
 	}
 }
 
-
-
-
 /*
 ;***************************************************************************
 ;* VVPC::CLEAR -- Clears a virtual viewport instance                       *
@@ -1305,8 +1270,7 @@ void __cdecl Buffer_Fill_Rect(void *thisptr, int sx, int sy, int dx, int dy, uns
 ;*   08/23/1994 SKB : Clear the direction flag to always go forward.       *
 ;*=========================================================================*
 */
-void	__cdecl Buffer_Clear(void *this_object, unsigned char color)
-{
+void __cdecl Buffer_Clear(void *this_object, unsigned char color) {
 	unsigned int local_color = color;
 
 	__asm {
@@ -1379,57 +1343,44 @@ void	__cdecl Buffer_Clear(void *this_object, unsigned char color)
 	}
 }
 
+BOOL __cdecl Linear_Blit_To_Linear(void *this_object, void *dest, int x_pixel, int y_pixel, int dest_x0, int dest_y0,
+				   int pixel_width, int pixel_height, BOOL trans) {
+	/*
+		;*===================================================================
+		;* define the arguements that our function takes.
+		;*===================================================================
+		ARG    	this_object :DWORD		; this is a member function
+		ARG	dest        :DWORD		; what are we blitting to
+		ARG	x_pixel     :DWORD		; x pixel position in source
+		ARG	y_pixel     :DWORD		; y pixel position in source
+		ARG	dest_x0     :dword
+		ARG	dest_y0     :dword
+		ARG	pixel_width :DWORD		; width of rectangle to blit
+		ARG	pixel_height:DWORD		; height of rectangle to blit
+		ARG	trans       :DWORD			; do we deal with transparents?
 
+		;*===================================================================
+		; Define some locals so that we can handle things quickly
+		;*===================================================================
+		LOCAL 	x1_pixel :dword
+		LOCAL	y1_pixel :dword
+		LOCAL	dest_x1 : dword
+		LOCAL	dest_y1 : dword
+		LOCAL	scr_ajust_width:DWORD
+		LOCAL	dest_ajust_width:DWORD
+		LOCAL	source_area :  dword
+		LOCAL	dest_area :  dword
+	*/
 
+	int x1_pixel;
+	int y1_pixel;
+	int dest_x1;
+	int dest_y1;
+	int scr_adjust_width;
+	int dest_adjust_width;
+	int source_area;
+	int dest_area;
 
-
-
-
-
-
-
-
-
-
-
-BOOL __cdecl Linear_Blit_To_Linear(	void *this_object, void * dest, int x_pixel, int y_pixel, int dest_x0, int dest_y0, int pixel_width, int pixel_height, BOOL trans)
-{
-/*
-	;*===================================================================
-	;* define the arguements that our function takes.
-	;*===================================================================
-	ARG    	this_object :DWORD		; this is a member function
-	ARG	dest        :DWORD		; what are we blitting to
-	ARG	x_pixel     :DWORD		; x pixel position in source
-	ARG	y_pixel     :DWORD		; y pixel position in source
-	ARG	dest_x0     :dword
-	ARG	dest_y0     :dword
-	ARG	pixel_width :DWORD		; width of rectangle to blit
-	ARG	pixel_height:DWORD		; height of rectangle to blit
-	ARG	trans       :DWORD			; do we deal with transparents?
-
-	;*===================================================================
-	; Define some locals so that we can handle things quickly
-	;*===================================================================
-	LOCAL 	x1_pixel :dword
-	LOCAL	y1_pixel :dword
-	LOCAL	dest_x1 : dword
-	LOCAL	dest_y1 : dword
-	LOCAL	scr_ajust_width:DWORD
-	LOCAL	dest_ajust_width:DWORD
-        LOCAL	source_area :  dword
-        LOCAL	dest_area :  dword
-*/
-	
-	int	x1_pixel;
-	int	y1_pixel;
-	int	dest_x1;
-	int	dest_y1;
-	int	scr_adjust_width;
-	int	dest_adjust_width;
-	int	source_area;
-	int	dest_area;
-	
 	__asm {	
 	
 		;This Clipping algorithm is a derivation of the very well known
@@ -1842,17 +1793,6 @@ BOOL __cdecl Linear_Blit_To_Linear(	void *this_object, void * dest, int x_pixel,
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /*
 ;***************************************************************************
 ;* VVC::SCALE -- Scales a virtual viewport to another virtual viewport     *
@@ -1871,55 +1811,56 @@ BOOL __cdecl Linear_Blit_To_Linear(	void *this_object, void * dest, int x_pixel,
 */
 
 // Ran out of registers so had to use ebp. ST - 12/19/2018 6:22PM
-#pragma warning (push)
-#pragma warning (disable : 4731)
+#pragma warning(push)
+#pragma warning(disable : 4731)
 
-BOOL __cdecl Linear_Scale_To_Linear(void *this_object, void *dest, int src_x, int src_y, int dst_x, int dst_y, int src_width, int src_height, int dst_width, int dst_height, BOOL trans, char *remap)
-{
-/*			  
+BOOL __cdecl Linear_Scale_To_Linear(void *this_object, void *dest, int src_x, int src_y, int dst_x, int dst_y,
+				    int src_width, int src_height, int dst_width, int dst_height, BOOL trans,
+				    char *remap) {
+	/*
 
-	;*===================================================================
-	;* Define the arguements that our function takes.
-	;*===================================================================
-	ARG	this_object:DWORD		; pointer to source view port
-	ARG	dest:DWORD		; pointer to destination view port
-	ARG	src_x:DWORD		; source x offset into view port
-	ARG	src_y:DWORD		; source y offset into view port
-	ARG	dst_x:DWORD		; dest x offset into view port
-	ARG	dst_y:DWORD		; dest y offset into view port
-	ARG	src_width:DWORD		; width of source rectangle
-	ARG	src_height:DWORD	; height of source rectangle
-	ARG	dst_width:DWORD		; width of dest rectangle
-	ARG	dst_height:DWORD	; width of dest height
-	ARG	trans:DWORD		; is this transparent?
-	ARG	remap:DWORD		; pointer to table to remap source
+		;*===================================================================
+		;* Define the arguements that our function takes.
+		;*===================================================================
+		ARG	this_object:DWORD		; pointer to source view port
+		ARG	dest:DWORD		; pointer to destination view port
+		ARG	src_x:DWORD		; source x offset into view port
+		ARG	src_y:DWORD		; source y offset into view port
+		ARG	dst_x:DWORD		; dest x offset into view port
+		ARG	dst_y:DWORD		; dest y offset into view port
+		ARG	src_width:DWORD		; width of source rectangle
+		ARG	src_height:DWORD	; height of source rectangle
+		ARG	dst_width:DWORD		; width of dest rectangle
+		ARG	dst_height:DWORD	; width of dest height
+		ARG	trans:DWORD		; is this transparent?
+		ARG	remap:DWORD		; pointer to table to remap source
 
-	;*===================================================================
-	;* Define local variables to hold the viewport characteristics
-	;*===================================================================
-	local	src_x0 : dword
-	local	src_y0 : dword
-	local	src_x1 : dword
-	local	src_y1 : dword
+		;*===================================================================
+		;* Define local variables to hold the viewport characteristics
+		;*===================================================================
+		local	src_x0 : dword
+		local	src_y0 : dword
+		local	src_x1 : dword
+		local	src_y1 : dword
 
-	local	dst_x0 : dword
-	local	dst_y0 : dword
-	local	dst_x1 : dword
-	local	dst_y1 : dword
+		local	dst_x0 : dword
+		local	dst_y0 : dword
+		local	dst_x1 : dword
+		local	dst_y1 : dword
 
-	local	src_win_width : dword
-	local	dst_win_width : dword
-	local	dy_intr : dword
-	local	dy_frac : dword
-	local	dy_acc  : dword
-	local	dx_frac : dword
+		local	src_win_width : dword
+		local	dst_win_width : dword
+		local	dy_intr : dword
+		local	dy_frac : dword
+		local	dy_acc  : dword
+		local	dx_frac : dword
 
-	local	counter_x     : dword
-	local	counter_y     : dword
-	local	remap_counter :dword
-	local	entry : dword
-*/
-	
+		local	counter_x     : dword
+		local	counter_y     : dword
+		local	remap_counter :dword
+		local	entry : dword
+	*/
+
 	int src_x0;
 	int src_y0;
 	int src_x1;
@@ -1941,8 +1882,7 @@ BOOL __cdecl Linear_Scale_To_Linear(void *this_object, void *dest, int src_x, in
 	int counter_y;
 	int remap_counter;
 	int entry;
-	
-	
+
 	__asm {
 		
 		;*===================================================================
@@ -2619,77 +2559,55 @@ rept_loop3:
 	}
 }
 
-
-#pragma warning (pop)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#pragma warning(pop)
 
 unsigned int LastIconset = 0;
-unsigned int StampPtr = 0;	//	DD	0	; Pointer to icon data.
+unsigned int StampPtr = 0; //	DD	0	; Pointer to icon data.
 
-unsigned int IsTrans = 0;	//		DD	0	; Pointer to transparent icon flag table.
+unsigned int IsTrans = 0; //		DD	0	; Pointer to transparent icon flag table.
 
-unsigned int MapPtr = 0;	//		DD	0	; Pointer to icon map.
-unsigned int IconWidth = 0;	//	DD	0	; Width of icon in pixels.
-unsigned int IconHeight = 0;	//	DD	0	; Height of icon in pixels.
-unsigned int IconSize = 0;		//	DD	0	; Number of bytes for each icon data.
-unsigned int IconCount = 0;	//	DD	0	; Number of icons in the set.
-
-
+unsigned int MapPtr = 0;     //		DD	0	; Pointer to icon map.
+unsigned int IconWidth = 0;  //	DD	0	; Width of icon in pixels.
+unsigned int IconHeight = 0; //	DD	0	; Height of icon in pixels.
+unsigned int IconSize = 0;   //	DD	0	; Number of bytes for each icon data.
+unsigned int IconCount = 0;  //	DD	0	; Number of icons in the set.
 
 #if (0)
-LastIconset	DD	0	; Pointer to last iconset initialized.
-StampPtr	DD	0	; Pointer to icon data.
+LastIconset DD 0;
+Pointer to last iconset initialized.StampPtr DD 0;
+Pointer to icon data.
 
-IsTrans		DD	0	; Pointer to transparent icon flag table.
+    IsTrans DD 0;
+Pointer to transparent icon flag table.
 
-MapPtr		DD	0	; Pointer to icon map.
-IconWidth	DD	0	; Width of icon in pixels.
-IconHeight	DD	0	; Height of icon in pixels.
-IconSize	DD	0	; Number of bytes for each icon data.
-IconCount	DD	0	; Number of icons in the set.
+    MapPtr DD 0;
+Pointer to icon map.IconWidth DD 0;
+Width of icon in pixels.IconHeight DD 0;
+Height of icon in pixels.IconSize DD 0; Number of bytes for each icon data.
+IconCount	DD	0	;
+Number of icons in the set.
 
+    GLOBAL C Buffer_Draw_Stamp : near GLOBAL C Buffer_Draw_Stamp_Clip : near
 
-GLOBAL C	Buffer_Draw_Stamp:near
-GLOBAL C	Buffer_Draw_Stamp_Clip:near
-
-; 256 color icon system.
+    ;
+256 color icon system.
 #endif
 
-
-/*
-;***********************************************************
-; INIT_STAMPS
-;
-; VOID cdecl Init_Stamps(VOID *icondata);
-;
-; This routine initializes the stamp data.
-; Bounds Checking: NONE
-;
-;*
-*/ 
-extern "C" void __cdecl Init_Stamps(unsigned int icondata)
-{
+    /*
+    ;***********************************************************
+    ; INIT_STAMPS
+    ;
+    ; VOID cdecl Init_Stamps(VOID *icondata);
+    ;
+    ; This routine initializes the stamp data.
+    ; Bounds Checking: NONE
+    ;
+    ;*
+    */
+    extern "C" void __cdecl Init_Stamps(unsigned int icondata) {
 
 	__asm {
-		pushad										// ST - 12/20/2018 10:30AM
+		pushad // ST - 12/20/2018 10:30AM
 		
 		; Verify legality of parameter.
 		cmp	[icondata],0
@@ -2722,7 +2640,7 @@ extern "C" void __cdecl Init_Stamps(unsigned int icondata)
 		add	eax,edi
 		mov	[MapPtr],eax
 
-//nomap:
+	       // nomap:
 		; Record hard pointer to icon data.
 		mov	eax,edi
 		add	eax,[edi]IControl_Type.Icons
@@ -2734,11 +2652,10 @@ extern "C" void __cdecl Init_Stamps(unsigned int icondata)
 		mov	[IsTrans],eax
 
 fini:
-		popad										// ST - 12/20/2018 10:30AM
+		popad // ST - 12/20/2018 10:30AM
 
 	}
 }
-
 
 /*
 ;***********************************************************
@@ -2757,28 +2674,27 @@ fini:
 ;*
 */
 
-void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap)
-{
-	unsigned int	modulo = 0;
-	unsigned int	iwidth = 0;
-	unsigned char	doremap = 0;
+void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel,
+			       void const *remap) {
+	unsigned int modulo = 0;
+	unsigned int iwidth = 0;
+	unsigned char doremap = 0;
 
+	/*
+			PROC	Buffer_Draw_Stamp C near
 
-/*
-		PROC	Buffer_Draw_Stamp C near
+			ARG	this_object:DWORD		; this is a member function
+			ARG	icondata:DWORD		; Pointer to icondata.
+			ARG	icon:DWORD		; Icon number to draw.
+			ARG	x_pixel:DWORD		; X coordinate of icon.
+			ARG	y_pixel:DWORD		; Y coordinate of icon.
+			ARG	remap:DWORD 		; Remap table.
 
-		ARG	this_object:DWORD		; this is a member function
-		ARG	icondata:DWORD		; Pointer to icondata.
-		ARG	icon:DWORD		; Icon number to draw.
-		ARG	x_pixel:DWORD		; X coordinate of icon.
-		ARG	y_pixel:DWORD		; Y coordinate of icon.
-		ARG	remap:DWORD 		; Remap table.
+			LOCAL	modulo:DWORD		; Modulo to get to next row.
+			LOCAL	iwidth:DWORD		; Icon width (here for speedy access).
+			LOCAL	doremap:BYTE		; Should remapping occur?
+	*/
 
-		LOCAL	modulo:DWORD		; Modulo to get to next row.
-		LOCAL	iwidth:DWORD		; Icon width (here for speedy access).
-		LOCAL	doremap:BYTE		; Should remapping occur?
-*/
-		
 	__asm {
 
 			pushad
@@ -2943,14 +2859,12 @@ proc_out:
 	}
 }
 
-
-
-
 /*
 ;***********************************************************
 ; DRAW_STAMP_CLIP
 ;
-; VOID cdecl MCGA_Draw_Stamp_Clip(VOID *icondata, WORD icon, WORD x_pixel, WORD y_pixel, VOID *remap, LONG min_x, LONG min_y, LONG max_x, LONG max_y);
+; VOID cdecl MCGA_Draw_Stamp_Clip(VOID *icondata, WORD icon, WORD x_pixel, WORD y_pixel, VOID *remap, LONG min_x, LONG
+min_y, LONG max_x, LONG max_y);
 ;
 ; This routine renders the icon at the given coordinate.
 ;
@@ -2959,34 +2873,32 @@ proc_out:
 ; remap valid colors to be invisible (for special effect reasons).
 ; This routine is fastest when no remap table is passed in.
 ;*
-*/	
-void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap, int min_x, int min_y, int max_x, int max_y)
-{
-	
-	
-	unsigned int	modulo = 0;
-	unsigned int	iwidth = 0;
-	unsigned int	skip = 0;
-	unsigned char	doremap = 0;
-	
-		
-/*		
-	ARG	this_object:DWORD	; this is a member function
-	ARG	icondata:DWORD		; Pointer to icondata.
-	ARG	icon:DWORD		; Icon number to draw.
-	ARG	x_pixel:DWORD		; X coordinate of icon.
-	ARG	y_pixel:DWORD		; Y coordinate of icon.
-	ARG	remap:DWORD 		; Remap table.
-	ARG	min_x:DWORD		; Clipping rectangle boundary
-	ARG	min_y:DWORD		; Clipping rectangle boundary
-	ARG	max_x:DWORD		; Clipping rectangle boundary
-	ARG	max_y:DWORD		; Clipping rectangle boundary
-
-	LOCAL	modulo:DWORD		; Modulo to get to next row.
-	LOCAL	iwidth:DWORD		; Icon width (here for speedy access).
-	LOCAL	skip:DWORD		; amount to skip per row of icon data
-	LOCAL	doremap:BYTE		; Should remapping occur?
 */
+void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel,
+				    void const *remap, int min_x, int min_y, int max_x, int max_y) {
+
+	unsigned int modulo = 0;
+	unsigned int iwidth = 0;
+	unsigned int skip = 0;
+	unsigned char doremap = 0;
+
+	/*
+		ARG	this_object:DWORD	; this is a member function
+		ARG	icondata:DWORD		; Pointer to icondata.
+		ARG	icon:DWORD		; Icon number to draw.
+		ARG	x_pixel:DWORD		; X coordinate of icon.
+		ARG	y_pixel:DWORD		; Y coordinate of icon.
+		ARG	remap:DWORD 		; Remap table.
+		ARG	min_x:DWORD		; Clipping rectangle boundary
+		ARG	min_y:DWORD		; Clipping rectangle boundary
+		ARG	max_x:DWORD		; Clipping rectangle boundary
+		ARG	max_y:DWORD		; Clipping rectangle boundary
+
+		LOCAL	modulo:DWORD		; Modulo to get to next row.
+		LOCAL	iwidth:DWORD		; Icon width (here for speedy access).
+		LOCAL	skip:DWORD		; amount to skip per row of icon data
+		LOCAL	doremap:BYTE		; Should remapping occur?
+	*/
 	__asm {
 			pushad
 			cmp	[icondata],0
@@ -3245,29 +3157,16 @@ proc_out:
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	 VOID __cdecl Buffer_Draw_Line(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color);
-	 VOID __cdecl Buffer_Fill_Rect(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color);
-	 VOID __cdecl Buffer_Remap(void * thisptr, int sx, int sy, int width, int height, void *remap);
-	 VOID __cdecl Buffer_Fill_Quad(void * thisptr, VOID *span_buff, int x0, int y0, int x1, int y1,
-							 	int x2, int y2, int x3, int y3, int color);
-	 void __cdecl Buffer_Draw_Stamp(void const *thisptr, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap);
-	 void __cdecl Buffer_Draw_Stamp_Clip(void const *thisptr, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap, int ,int,int,int);
-	 void * __cdecl Get_Font_Palette_Ptr ( void );
-
+VOID __cdecl Buffer_Draw_Line(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color);
+VOID __cdecl Buffer_Fill_Rect(void *thisptr, int sx, int sy, int dx, int dy, unsigned char color);
+VOID __cdecl Buffer_Remap(void *thisptr, int sx, int sy, int width, int height, void *remap);
+VOID __cdecl Buffer_Fill_Quad(void *thisptr, VOID *span_buff, int x0, int y0, int x1, int y1, int x2, int y2, int x3,
+			      int y3, int color);
+void __cdecl Buffer_Draw_Stamp(void const *thisptr, void const *icondata, int icon, int x_pixel, int y_pixel,
+			       void const *remap);
+void __cdecl Buffer_Draw_Stamp_Clip(void const *thisptr, void const *icondata, int icon, int x_pixel, int y_pixel,
+				    void const *remap, int, int, int, int);
+void *__cdecl Get_Font_Palette_Ptr(void);
 
 /*
 ;***************************************************************************
@@ -3289,36 +3188,34 @@ proc_out:
 ;* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *
 */
 
+VOID __cdecl Buffer_Remap(void *this_object, int sx, int sy, int width, int height, void *remap) {
+	/*
+		PROC	Buffer_Remap C NEAR
+		USES	eax,ebx,ecx,edx,esi,edi
 
-VOID __cdecl Buffer_Remap(void * this_object, int sx, int sy, int width, int height, void *remap)
-{
-/*
-	PROC	Buffer_Remap C NEAR
-	USES	eax,ebx,ecx,edx,esi,edi
+		;*===================================================================
+		;* Define the arguements that our function takes.
+		;*===================================================================
+		ARG	this_object:DWORD
+		ARG	x0_pixel:DWORD
+		ARG	y0_pixel:DWORD
+		ARG	region_width:DWORD
+		ARG	region_height:DWORD
+		ARG	remap	:DWORD
 
-	;*===================================================================
-	;* Define the arguements that our function takes.
-	;*===================================================================
-	ARG	this_object:DWORD
-	ARG	x0_pixel:DWORD
-	ARG	y0_pixel:DWORD
-	ARG	region_width:DWORD
-	ARG	region_height:DWORD
-	ARG	remap	:DWORD
+		;*===================================================================
+		; Define some locals so that we can handle things quickly
+		;*===================================================================
+		local	x1_pixel  : DWORD
+		local	y1_pixel  : DWORD
+		local	win_width : dword
+		local	counter_x : dword
+	*/
 
-	;*===================================================================
-	; Define some locals so that we can handle things quickly
-	;*===================================================================
-	local	x1_pixel  : DWORD
-	local	y1_pixel  : DWORD
-	local	win_width : dword
-	local	counter_x : dword
-*/
-
-	unsigned int x0_pixel = (unsigned int) sx;
-	unsigned int y0_pixel = (unsigned int) sy;
-	unsigned int region_width = (unsigned int) width;
-	unsigned int region_height = (unsigned int) height;
+	unsigned int x0_pixel = (unsigned int)sx;
+	unsigned int y0_pixel = (unsigned int)sy;
+	unsigned int region_width = (unsigned int)width;
+	unsigned int region_height = (unsigned int)height;
 
 	unsigned int x1_pixel = 0;
 	unsigned int y1_pixel = 0;
@@ -3428,23 +3325,9 @@ inner_loop:
 
 
 real_out:
-//		ret
+		//		ret
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 ; **************************************************************************
@@ -3472,7 +3355,6 @@ P386
 MODEL USE32 FLAT
 */
 
-
 /*
 LOCALS ??
 
@@ -3498,14 +3380,13 @@ GLOBAL 	C Apply_XOR_Delta:NEAR
 GLOBAL 	C Apply_XOR_Delta_To_Page_Or_Viewport:NEAR
 */
 
-#define DO_XOR			0
-#define DO_COPY		1
-#define TO_VIEWPORT	0
-#define TO_PAGE		2
+#define DO_XOR 0
+#define DO_COPY 1
+#define TO_VIEWPORT 0
+#define TO_PAGE 2
 
 void __cdecl XOR_Delta_Buffer(int nextrow);
 void __cdecl Copy_Delta_Buffer(int nextrow);
-
 
 /*
 ;***************************************************************************
@@ -3523,15 +3404,14 @@ void __cdecl Copy_Delta_Buffer(int nextrow);
 ;*   05/23/1994 SKB : Created.                                             *
 ;*=========================================================================*
 */
-unsigned int __cdecl Apply_XOR_Delta(char *target, char *delta)
-{
-/* 
-PROC	Apply_XOR_Delta C near
-	USES 	ebx,ecx,edx,edi,esi
-	ARG	target:DWORD 		; pointers.
-	ARG	delta:DWORD		; pointers.
-*/
-	
+unsigned int __cdecl Apply_XOR_Delta(char *target, char *delta) {
+	/*
+	PROC	Apply_XOR_Delta C near
+		USES 	ebx,ecx,edx,edi,esi
+		ARG	target:DWORD 		; pointers.
+		ARG	delta:DWORD		; pointers.
+	*/
+
 	__asm {
 		
 			; Optimized for 486/pentium by rearanging instructions.
@@ -3631,7 +3511,6 @@ PROC	Apply_XOR_Delta C near
 	}
 }
 
-
 /*
 ;----------------------------------------------------------------------------
 
@@ -3659,8 +3538,7 @@ PROC	Apply_XOR_Delta C near
 ;*=========================================================================*
 */
 
-void __cdecl Apply_XOR_Delta_To_Page_Or_Viewport(void *target, void *delta, int width, int nextrow, int copy)
-{
+void __cdecl Apply_XOR_Delta_To_Page_Or_Viewport(void *target, void *delta, int width, int nextrow, int copy) {
 	/*
 	USES 	ebx,ecx,edx,edi,esi
 	ARG	target:DWORD		; pointer to the destination buffer.
@@ -3669,7 +3547,7 @@ void __cdecl Apply_XOR_Delta_To_Page_Or_Viewport(void *target, void *delta, int 
 	ARG	nextrow:DWORD		; Page/Buffer width - anim width.
 	ARG	copy:DWORD		; should it be copied or xor'd?
 	*/
-	
+
 	__asm {
 
 		mov	edi,[target]		; Get the target pointer.
@@ -3701,7 +3579,6 @@ void __cdecl Apply_XOR_Delta_To_Page_Or_Viewport(void *target, void *delta, int 
 	}
 }
 
-
 /*
 ;----------------------------------------------------------------------------
 
@@ -3725,12 +3602,11 @@ void __cdecl Apply_XOR_Delta_To_Page_Or_Viewport(void *target, void *delta, int 
 ;*   03/09/1992  SB : Created.                                             *
 ;*=========================================================================*
 */
-void __cdecl XOR_Delta_Buffer(int nextrow)
-{
-	/*		  
+void __cdecl XOR_Delta_Buffer(int nextrow) {
+	/*
 	ARG	nextrow:DWORD
 	*/
-	
+
 	__asm {
 
 		top_loop:
@@ -3853,7 +3729,6 @@ void __cdecl XOR_Delta_Buffer(int nextrow)
 	}
 }
 
-
 /*
 ;----------------------------------------------------------------------------
 
@@ -3876,12 +3751,11 @@ void __cdecl XOR_Delta_Buffer(int nextrow)
 ;*   03/09/1992  SB : Created.                                             *
 ;*=========================================================================*
 */
-void __cdecl Copy_Delta_Buffer(int nextrow)
-{
-	/*		  
+void __cdecl Copy_Delta_Buffer(int nextrow) {
+	/*
 	ARG	nextrow:DWORD
 	*/
-	
+
 	__asm {
 		
 		top_loop:
@@ -4009,27 +3883,6 @@ void __cdecl Copy_Delta_Buffer(int nextrow)
 ;----------------------------------------------------------------------------
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 ;***************************************************************************
 ;**   C O N F I D E N T I A L --- W E S T W O O D    S T U D I O S        **
@@ -4069,8 +3922,7 @@ GLOBAL	C Build_Fading_Table	:NEAR
 ; Bounds Checking: None
 ;*
 */
-void * __cdecl Build_Fading_Table(void const *palette, void const *dest, long int color, long int frac)
-{
+void *__cdecl Build_Fading_Table(void const *palette, void const *dest, long int color, long int frac) {
 	/*
 	PROC	Build_Fading_Table C near
 	USES	ebx, ecx, edi, esi
@@ -4088,16 +3940,16 @@ void * __cdecl Build_Fading_Table(void const *palette, void const *dest, long in
 	LOCAL	idealblue:BYTE
 	LOCAL	matchcolor:BYTE		; Tentative match color.
 	*/
-	
-	int matchvalue = 0;	//:DWORD	; Last recorded match value.
-	unsigned char targetred = 0;		//BYTE		; Target gun red.
-	unsigned char targetgreen = 0;	//BYTE		; Target gun green.
-	unsigned char targetblue = 0;		//BYTE		; Target gun blue.
-	unsigned char idealred = 0;		//BYTE	
-	unsigned char idealgreen = 0;		//BYTE	
-	unsigned char idealblue = 0;		//BYTE	
-	unsigned char matchcolor = 0;		//:BYTE		; Tentative match color.
-	
+
+	int matchvalue = 0;	       //: DWORD	; Last recorded match value.
+	unsigned char targetred = 0;   // BYTE		; Target gun red.
+	unsigned char targetgreen = 0; // BYTE		; Target gun green.
+	unsigned char targetblue = 0;  // BYTE		; Target gun blue.
+	unsigned char idealred = 0;    // BYTE
+	unsigned char idealgreen = 0;  // BYTE
+	unsigned char idealblue = 0;   // BYTE
+	unsigned char matchcolor = 0;  //: BYTE		; Tentative match color.
+
 	__asm {
 		cld
 
@@ -4243,29 +4095,6 @@ void * __cdecl Build_Fading_Table(void const *palette, void const *dest, long in
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 ;***************************************************************************
 ;**   C O N F I D E N T I A L --- W E S T W O O D   A S S O C I A T E S   **
@@ -4320,9 +4149,9 @@ ENDIF
 	CODESEG
 */
 
-extern "C" unsigned char CurrentPalette[768] = {255};	//	DB	768 DUP(255)	; copy of current values of DAC regs
-extern "C" unsigned char PaletteTable[1024] = {0};		//	DB	1024 DUP(0)
-
+extern "C" unsigned char CurrentPalette[768] = {
+    255};					   //	DB	768 DUP(255)	; copy of current values of DAC regs
+extern "C" unsigned char PaletteTable[1024] = {0}; //	DB	1024 DUP(0)
 
 /*
 ;***************************************************************************
@@ -4341,8 +4170,7 @@ extern "C" unsigned char PaletteTable[1024] = {0};		//	DB	1024 DUP(0)
 ;*   03/07/1995 PWG : Created.                                             *
 ;*=========================================================================*
 */
-void __cdecl Set_Palette_Range(void *palette)
-{
+void __cdecl Set_Palette_Range(void *palette) {
 	memcpy(CurrentPalette, palette, 768);
 	Set_DD_Palette(palette);
 
@@ -4352,7 +4180,7 @@ void __cdecl Set_Palette_Range(void *palette)
 
 	GLOBAL	Set_DD_Palette_:near
 	GLOBAL	Wait_Vert_Blank_:near
-	
+
 	pushad
 	mov	esi,[palette]
 	mov	ecx,768/4
@@ -4368,7 +4196,6 @@ void __cdecl Set_Palette_Range(void *palette)
 	ret
 	*/
 }
-
 
 /*
 ;***************************************************************************
@@ -4387,20 +4214,19 @@ void __cdecl Set_Palette_Range(void *palette)
 ;*   04/27/1994 BR : Converted to 32-bit.                                  *
 ;*=========================================================================*
 ; BOOL cdecl Bump_Color(VOID *palette, WORD changable, WORD target);
-*/ 
-BOOL __cdecl Bump_Color(void *pal, int color, int desired)
-{
-	/*		  
+*/
+BOOL __cdecl Bump_Color(void *pal, int color, int desired) {
+	/*
 PROC Bump_Color C NEAR
 	USES ebx,ecx,edi,esi
 	ARG	pal:DWORD, color:WORD, desired:WORD
 	LOCAL	changed:WORD		; Has palette changed?
-	 */ 
-	
-	short short_color = (short) color;
-	short short_desired = (short) desired;
+	 */
+
+	short short_color = (short)color;
+	short short_desired = (short)desired;
 	bool changed = false;
-	
+
 	__asm {
 		mov	edi,[pal]		; Original palette pointer.
 		mov	esi,edi
@@ -4435,20 +4261,6 @@ PROC Bump_Color C NEAR
 		movzx	eax,[changed]
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 ;***************************************************************************
@@ -4503,16 +4315,15 @@ CODESEG
 	USES	eax,ebx,ecx,edx,edi
 */
 
-void __cdecl Buffer_Put_Pixel(void * this_object, int x_pixel, int y_pixel, unsigned char color)
-{
-			  
+void __cdecl Buffer_Put_Pixel(void *this_object, int x_pixel, int y_pixel, unsigned char color) {
+
 	/*
 	ARG    	this_object:DWORD				; this is a member function
 	ARG	x_pixel:DWORD				; x position of pixel to set
 	ARG	y_pixel:DWORD				; y position of pixel to set
 	ARG    	color:BYTE				; what color should we clear to
 	*/
-	
+
 	__asm {
 		
 	
@@ -4552,13 +4363,6 @@ void __cdecl Buffer_Put_Pixel(void * this_object, int x_pixel, int y_pixel, unsi
 		done:
 	}
 }
-
-
-
-
-
-
-
 
 /*
 ;***************************************************************************
@@ -4612,19 +4416,18 @@ CODESEG
 ; int Clip_Rect (int* x, int* y, int* dw, int* dh, int width, int height);          			   *
 */
 
-extern "C" int __cdecl Clip_Rect ( int * x , int * y , int * w , int * h , int width , int height )
-{		
+extern "C" int __cdecl Clip_Rect(int *x, int *y, int *w, int *h, int width, int height) {
 
-/*
-	PROC	Clip_Rect C near
-	uses	ebx,ecx,edx,esi,edi
-	arg	x:dword
-	arg	y:dword
-	arg	w:dword
-	arg	h:dword
-	arg	width:dword
-	arg	height:dword
-*/
+	/*
+		PROC	Clip_Rect C near
+		uses	ebx,ecx,edx,esi,edi
+		arg	x:dword
+		arg	y:dword
+		arg	w:dword
+		arg	h:dword
+		arg	width:dword
+		arg	height:dword
+	*/
 
 	__asm {
 
@@ -4742,7 +4545,7 @@ extern "C" int __cdecl Clip_Rect ( int * x , int * y , int * w , int * h , int w
 		//ret
 	}
 
-	//ENDP	Clip_Rect
+	// ENDP	Clip_Rect
 }
 
 /*
@@ -4765,19 +4568,18 @@ extern "C" int __cdecl Clip_Rect ( int * x , int * y , int * w , int * h , int w
 ; int Confine_Rect (int* x, int* y, int dw, int dh, int width, int height);          			   *
 */
 
-extern "C" int __cdecl Confine_Rect ( int * x , int * y , int w , int h , int width , int height )
-{
-	
-/*
-	PROC	Confine_Rect C near
-	uses	ebx, esi,edi
-	arg	x:dword
-	arg	y:dword
-	arg	w:dword
-	arg	h:dword
-	arg	width :dword
-	arg	height:dword
-*/
+extern "C" int __cdecl Confine_Rect(int *x, int *y, int w, int h, int width, int height) {
+
+	/*
+		PROC	Confine_Rect C near
+		uses	ebx, esi,edi
+		arg	x:dword
+		arg	y:dword
+		arg	w:dword
+		arg	h:dword
+		arg	width :dword
+		arg	height:dword
+	*/
 	__asm {		  
 	
 			xor	eax,eax
@@ -4821,25 +4623,17 @@ extern "C" int __cdecl Confine_Rect ( int * x , int * y , int w , int h , int wi
 			jl	shift_top
 			mov	[dword ptr ebx],0
 
-			//ret
+		 // ret
 			jmp confi_out
 		shift_top:
 			inc	edi
 			sub	[ebx],edi
 		confi_out:
-			//ret
+		// ret
 
-			//ENDP	Confine_Rect
+		// ENDP	Confine_Rect
 	}
 }
-
-
-
-
-
-
-
-
 
 /*
 ; $Header: //depot/Projects/Mobius/QA/Project/Run/SOURCECODE/REDALERT/WIN32LIB/DrawMisc.cpp#139 $
@@ -4878,28 +4672,27 @@ CODESEG
 ;
 ; ----------------------------------------------------------------
 */
-#if (0)//ST 5/10/2019
-extern "C" unsigned long __cdecl LCW_Uncompress(void *source, void *dest, unsigned long length_)
-{
-//PROC	LCW_Uncompress C near
-//
-//	USES ebx,ecx,edx,edi,esi
-//
-//	ARG	source:DWORD
-//	ARG	dest:DWORD
-//	ARG	length:DWORD
-//;LOCALS
-//	LOCAL a1stdest:DWORD
-//	LOCAL maxlen:DWORD
-//	LOCAL lastbyte:DWORD
-//	LOCAL lastcom:DWORD
-//	LOCAL lastcom1:DWORD
-		
+#if (0) // ST 5/10/2019
+extern "C" unsigned long __cdecl LCW_Uncompress(void *source, void *dest, unsigned long length_) {
+	// PROC	LCW_Uncompress C near
+	//
+	//	USES ebx,ecx,edx,edi,esi
+	//
+	//	ARG	source:DWORD
+	//	ARG	dest:DWORD
+	//	ARG	length:DWORD
+	//;LOCALS
+	//	LOCAL a1stdest:DWORD
+	//	LOCAL maxlen:DWORD
+	//	LOCAL lastbyte:DWORD
+	//	LOCAL lastcom:DWORD
+	//	LOCAL lastcom1:DWORD
+
 	unsigned long a1stdest;
-	unsigned long  maxlen;
+	unsigned long maxlen;
 	unsigned long lastbyte;
-	//unsigned long lastcom;
-	//unsigned long lastcom1;
+	// unsigned long lastcom;
+	// unsigned long lastcom1;
 
 	__asm {
 
@@ -5122,18 +4915,6 @@ extern "C" unsigned long __cdecl LCW_Uncompress(void *source, void *dest, unsign
 }
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 ;***************************************************************************
 ;**   C O N F I D E N T I A L --- W E S T W O O D   A S S O C I A T E S   **
@@ -5187,38 +4968,38 @@ CODESEG
 ;* HISTORY:                                                                *
 ;*   06/15/1994 PWG : Created.                                             *
 ;*=========================================================================*
- */ 
+ */
 
-extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width, int pixel_height, void *src, void *dest)
-{
+extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width, int pixel_height, void *src,
+				       void *dest) {
 
-/*
-	PROC	Buffer_To_Page C near
-	USES	eax,ebx,ecx,edx,esi,edi
+	/*
+		PROC	Buffer_To_Page C near
+		USES	eax,ebx,ecx,edx,esi,edi
 
-	;*===================================================================
-	;* define the arguements that our function takes.
-	;*===================================================================
-	ARG	x_pixel     :DWORD		; x pixel position in source
-	ARG	y_pixel     :DWORD		; y pixel position in source
-	ARG	pixel_width :DWORD		; width of rectangle to blit
-	ARG	pixel_height:DWORD		; height of rectangle to blit
-	ARG    	src         :DWORD		; this is a member function
-	ARG	dest        :DWORD		; what are we blitting to
+		;*===================================================================
+		;* define the arguements that our function takes.
+		;*===================================================================
+		ARG	x_pixel     :DWORD		; x pixel position in source
+		ARG	y_pixel     :DWORD		; y pixel position in source
+		ARG	pixel_width :DWORD		; width of rectangle to blit
+		ARG	pixel_height:DWORD		; height of rectangle to blit
+		ARG    	src         :DWORD		; this is a member function
+		ARG	dest        :DWORD		; what are we blitting to
 
-;	ARG	trans       :DWORD			; do we deal with transparents?
+	;	ARG	trans       :DWORD			; do we deal with transparents?
 
-	;*===================================================================
-	; Define some locals so that we can handle things quickly
-	;*===================================================================
-	LOCAL 	x1_pixel :dword
-	LOCAL	y1_pixel :dword
-	local	scr_x 	: dword
-	local	scr_y 	: dword
-	LOCAL	dest_ajust_width:DWORD
-	LOCAL	scr_ajust_width:DWORD
-	LOCAL	dest_area   :  dword
-*/
+		;*===================================================================
+		; Define some locals so that we can handle things quickly
+		;*===================================================================
+		LOCAL 	x1_pixel :dword
+		LOCAL	y1_pixel :dword
+		local	scr_x 	: dword
+		local	scr_y 	: dword
+		LOCAL	dest_ajust_width:DWORD
+		LOCAL	scr_ajust_width:DWORD
+		LOCAL	dest_area   :  dword
+	*/
 
 	unsigned long x1_pixel;
 	unsigned long y1_pixel;
@@ -5226,7 +5007,7 @@ extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width
 	unsigned long scr_y;
 	unsigned long dest_ajust_width;
 	unsigned long scr_ajust_width;
-	//unsigned long dest_area;
+	// unsigned long dest_area;
 
 	__asm {
 	
@@ -5343,10 +5124,10 @@ extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width
 		; ********************************************************************
 		; Forward bitblit only
 
-		//IF TRANSP
-   	//	    test	[ trans ] , 1
-   	//	    jnz	forward_Blit_trans
-		//ENDIF
+		// IF TRANSP
+		//	    test	[ trans ] , 1
+		//	    jnz	forward_Blit_trans
+		// ENDIF
 
 
 		; the inner loop is so efficient that
@@ -5372,7 +5153,7 @@ extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width
    		    add	edi , [ dest_ajust_width ]
    		    dec	edx
    		    jnz	forward_loop_dword
-   		    jmp	real_out	//ret
+   		    jmp	real_out // ret
 
 		forward_loop_bytes:
    		    mov	ecx , eax
@@ -5381,62 +5162,54 @@ extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width
    		    add	edi , [ dest_ajust_width ]
    		    dec	edx					; decrement the height
    		    jnz	forward_loop_bytes
-   		  //  ret
+		    //  ret
 
-		//IF  TRANSP
-		//
-		//
-		//forward_Blit_trans:
-		//
-		//
-   	//	    mov	ecx , eax
-   	//	    and	ecx , 01fh
-   	//	    lea	ecx , [ ecx + ecx * 4 ]
-   	//	    neg	ecx
-   	//	    shr	eax , 5
-   	//	    lea	ecx , [ transp_reference + ecx * 2 ]
-   	//	    mov	[ y1_pixel ] , ecx
-		//
-		//
-		//forward_loop_trans:
-   	//	    mov	ecx , eax
-   	//	    jmp	[ y1_pixel ]
-		//forward_trans_line:
-   	//	    REPT	32
-   	//	    local	transp_pixel
-   	//	    		mov	bl , [ esi ]
-   	//	    		inc	esi
-   	//	    		test	bl , bl
-   	//	    		jz	transp_pixel
-   	//	    		mov	[ edi ] , bl
-   	//	 	    transp_pixel:
-   	//	    		inc	edi
-		//	ENDM
-   	//	 transp_reference:
-   	//	    dec	ecx
-   	//	    jge	forward_trans_line
-   	//	    add	esi , [ scr_ajust_width ]
-   	//	    add	edi , [ dest_ajust_width ]
-   	//	    dec	edx
-   	//	    jnz	forward_loop_trans
-   	//	    ret
-		//ENDIF
+		    // IF  TRANSP
+		    //
+		    //
+		    // forward_Blit_trans:
+		    //
+		    //
+		    //	    mov	ecx , eax
+		    //	    and	ecx , 01fh
+		    //	    lea	ecx , [ ecx + ecx * 4 ]
+		    //	    neg	ecx
+		    //	    shr	eax , 5
+		    //	    lea	ecx , [ transp_reference + ecx * 2 ]
+		    //	    mov	[ y1_pixel ] , ecx
+		    //
+		    //
+		    // forward_loop_trans:
+		    //	    mov	ecx , eax
+		    //	    jmp	[ y1_pixel ]
+		    // forward_trans_line:
+		    //	    REPT	32
+		    //	    local	transp_pixel
+		    //	    		mov	bl , [ esi ]
+		    //	    		inc	esi
+		    //	    		test	bl , bl
+		    //	    		jz	transp_pixel
+		    //	    		mov	[ edi ] , bl
+		    //	 	    transp_pixel:
+		    //	    		inc	edi
+		    //	ENDM
+		    //	 transp_reference:
+		    //	    dec	ecx
+		    //	    jge	forward_trans_line
+		    //	    add	esi , [ scr_ajust_width ]
+		    //	    add	edi , [ dest_ajust_width ]
+		    //	    dec	edx
+		    //	    jnz	forward_loop_trans
+		    //	    ret
+		    // ENDIF
 
 		real_out:
-   		    //ret
+		// ret
 	}
 }
 
-			//ENDP	Buffer_To_Page
-		//END
-
-
-
-
-
-
-
-
+// ENDP	Buffer_To_Page
+// END
 
 /*
 
@@ -5462,8 +5235,7 @@ extern "C" long __cdecl Buffer_To_Page(int x_pixel, int y_pixel, int pixel_width
 	ARG	y_pixel:DWORD				; y position of pixel to set
 */
 
-extern "C" int __cdecl Buffer_Get_Pixel(void * this_object, int x_pixel, int y_pixel)
-{
+extern "C" int __cdecl Buffer_Get_Pixel(void *this_object, int x_pixel, int y_pixel) {
 	__asm {		  
 
 		;*===================================================================
@@ -5500,10 +5272,8 @@ extern "C" int __cdecl Buffer_Get_Pixel(void * this_object, int x_pixel, int y_p
 		xor	eax,eax					; clear the word
 		mov	al,[edi]				; read in the pixel
 	exit_label:
-		//ret
-		//ENDP	Buffer_Get_Pixel
+		// ret
+		// ENDP	Buffer_Get_Pixel
 
 	}
 }
-
-

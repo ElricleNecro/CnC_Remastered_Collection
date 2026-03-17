@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/AADATA.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -47,174 +47,164 @@
  *   AircraftTypeClass::operator new -- Allocates an aircraft type object from special pool.   *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
+#include "function.h"
 
-
-void const * AircraftTypeClass::LRotorData = NULL;
-void const * AircraftTypeClass::RRotorData = NULL;
+void const *AircraftTypeClass::LRotorData = NULL;
+void const *AircraftTypeClass::RRotorData = NULL;
 
 // Badger bomber
-static AircraftTypeClass const BadgerPlane(
-	AIRCRAFT_BADGER,		// What kind of aircraft is this.
-	TXT_BADGER,				// Translated text number for aircraft.
-	"BADR",					// INI name of aircraft.
-	0x0000,					//	Vertical offset.
-	0x0000,					// Primary weapon offset along turret centerline.
-	0x0000,					// Primary weapon lateral offset along turret centerline.
-		true,					// Fixed wing aircraft?
-		false,				// Equipped with a rotor?
-		false,				// Custom rotor sets for each facing?
-		false,				// Can this aircraft land on clear terrain?
-		true,					// Is it invisible on radar?
-		false,				// Can the player select it so as to give it orders?
-		true,					// Can it be assigned as a target for attack.
-		false,				// Is it insignificant (won't be announced)?
-		false,				// Is it immune to normal combat damage?
-	STRUCT_NONE,			// Preferred landing building.
-	0xFF,						// Landing speed
-	16,						// Number of rotation stages.
-	MISSION_HUNT			// Default mission for aircraft.
+static AircraftTypeClass const BadgerPlane(AIRCRAFT_BADGER, // What kind of aircraft is this.
+					   TXT_BADGER,	    // Translated text number for aircraft.
+					   "BADR",	    // INI name of aircraft.
+					   0x0000,	    //	Vertical offset.
+					   0x0000,	    // Primary weapon offset along turret centerline.
+					   0x0000,	    // Primary weapon lateral offset along turret centerline.
+					   true,	    // Fixed wing aircraft?
+					   false,	    // Equipped with a rotor?
+					   false,	    // Custom rotor sets for each facing?
+					   false,	    // Can this aircraft land on clear terrain?
+					   true,	    // Is it invisible on radar?
+					   false,	    // Can the player select it so as to give it orders?
+					   true,	    // Can it be assigned as a target for attack.
+					   false,	    // Is it insignificant (won't be announced)?
+					   false,	    // Is it immune to normal combat damage?
+					   STRUCT_NONE,	    // Preferred landing building.
+					   0xFF,	    // Landing speed
+					   16,		    // Number of rotation stages.
+					   MISSION_HUNT	    // Default mission for aircraft.
 );
 
 // Photo recon plane.
-static AircraftTypeClass const U2Plane(
-	AIRCRAFT_U2,			// What kind of aircraft is this.
-	TXT_U2,					// Translated text number for aircraft.
-	"U2",						// INI name of aircraft.
-	0x0000,					//	Vertical offset.
-	0x0000,					// Primary weapon offset along turret centerline.
-	0x0000,					// Primary weapon lateral offset along turret centerline.
-		true,					// Fixed wing aircraft?
-		false,				// Equipped with a rotor?
-		false,				// Custom rotor sets for each facing?
-		false,				// Can this aircraft land on clear terrain?
-		true,					// Is it invisible on radar?
-		false,				// Can the player select it so as to give it orders?
-		true,					// Can it be assigned as a target for attack.
-		false,				// Is it insignificant (won't be announced)?
-		false,				// Is it immune to normal combat damage?
-	STRUCT_NONE,			// Preferred landing building.
-	0xFF,						// Landing speed
-	16,						// Number of rotation stages.
-	MISSION_HUNT			// Default mission for aircraft.
+static AircraftTypeClass const U2Plane(AIRCRAFT_U2, // What kind of aircraft is this.
+				       TXT_U2,	    // Translated text number for aircraft.
+				       "U2",	    // INI name of aircraft.
+				       0x0000,	    //	Vertical offset.
+				       0x0000,	    // Primary weapon offset along turret centerline.
+				       0x0000,	    // Primary weapon lateral offset along turret centerline.
+				       true,	    // Fixed wing aircraft?
+				       false,	    // Equipped with a rotor?
+				       false,	    // Custom rotor sets for each facing?
+				       false,	    // Can this aircraft land on clear terrain?
+				       true,	    // Is it invisible on radar?
+				       false,	    // Can the player select it so as to give it orders?
+				       true,	    // Can it be assigned as a target for attack.
+				       false,	    // Is it insignificant (won't be announced)?
+				       false,	    // Is it immune to normal combat damage?
+				       STRUCT_NONE, // Preferred landing building.
+				       0xFF,	    // Landing speed
+				       16,	    // Number of rotation stages.
+				       MISSION_HUNT // Default mission for aircraft.
 );
 
 // Mig attack aircraft.
-static AircraftTypeClass const MigPlane(
-	AIRCRAFT_MIG,			// What kind of aircraft is this.
-	TXT_MIG,					// Translated text number for aircraft.
-	"MIG",					// INI name of aircraft.
-	0x0000,					//	Vertical offset.
-	0x0020,					// Primary weapon offset along turret centerline.
-	0x0020,					// Primary weapon lateral offset along turret centerline.
-		true,					// Fixed wing aircraft?
-		false,				// Equipped with a rotor?
-		false,				// Custom rotor sets for each facing?
-		false,				// Can this aircraft land on clear terrain?
-		true,					// Is it invisible on radar?
-		true,					// Can the player select it so as to give it orders?
-		true,					// Can it be assigned as a target for attack.
-		false,				// Is it insignificant (won't be announced)?
-		false,				// Is it immune to normal combat damage?
-	STRUCT_AIRSTRIP,		// Preferred landing building.
-	0xC0,						// Landing speed
-	16,						// Number of rotation stages.
-	MISSION_HUNT			// Default mission for aircraft.
+static AircraftTypeClass const MigPlane(AIRCRAFT_MIG,	 // What kind of aircraft is this.
+					TXT_MIG,	 // Translated text number for aircraft.
+					"MIG",		 // INI name of aircraft.
+					0x0000,		 //	Vertical offset.
+					0x0020,		 // Primary weapon offset along turret centerline.
+					0x0020,		 // Primary weapon lateral offset along turret centerline.
+					true,		 // Fixed wing aircraft?
+					false,		 // Equipped with a rotor?
+					false,		 // Custom rotor sets for each facing?
+					false,		 // Can this aircraft land on clear terrain?
+					true,		 // Is it invisible on radar?
+					true,		 // Can the player select it so as to give it orders?
+					true,		 // Can it be assigned as a target for attack.
+					false,		 // Is it insignificant (won't be announced)?
+					false,		 // Is it immune to normal combat damage?
+					STRUCT_AIRSTRIP, // Preferred landing building.
+					0xC0,		 // Landing speed
+					16,		 // Number of rotation stages.
+					MISSION_HUNT	 // Default mission for aircraft.
 );
 
 // Yak attack aircraft.
-static AircraftTypeClass const YakPlane(
-	AIRCRAFT_YAK,			// What kind of aircraft is this.
-	TXT_YAK,					// Translated text number for aircraft.
-	"YAK",					// INI name of aircraft.
-	0x0000,					//	Vertical offset.
-	0x0020,					// Primary weapon offset along turret centerline.
-	0x0020,					// Primary weapon lateral offset along turret centerline.
-		true,					// Fixed wing aircraft?
-		false,				// Equipped with a rotor?
-		false,				// Custom rotor sets for each facing?
-		false,				// Can this aircraft land on clear terrain?
-		true,					// Is it invisible on radar?
-		true,					// Can the player select it so as to give it orders?
-		true,					// Can it be assigned as a target for attack.
-		false,				// Is it insignificant (won't be announced)?
-		false,				// Is it immune to normal combat damage?
-	STRUCT_AIRSTRIP,		// Preferred landing building.
-	0xFF,						// Landing speed
-	16,						// Number of rotation stages.
-	MISSION_HUNT			// Default mission for aircraft.
+static AircraftTypeClass const YakPlane(AIRCRAFT_YAK,	 // What kind of aircraft is this.
+					TXT_YAK,	 // Translated text number for aircraft.
+					"YAK",		 // INI name of aircraft.
+					0x0000,		 //	Vertical offset.
+					0x0020,		 // Primary weapon offset along turret centerline.
+					0x0020,		 // Primary weapon lateral offset along turret centerline.
+					true,		 // Fixed wing aircraft?
+					false,		 // Equipped with a rotor?
+					false,		 // Custom rotor sets for each facing?
+					false,		 // Can this aircraft land on clear terrain?
+					true,		 // Is it invisible on radar?
+					true,		 // Can the player select it so as to give it orders?
+					true,		 // Can it be assigned as a target for attack.
+					false,		 // Is it insignificant (won't be announced)?
+					false,		 // Is it immune to normal combat damage?
+					STRUCT_AIRSTRIP, // Preferred landing building.
+					0xFF,		 // Landing speed
+					16,		 // Number of rotation stages.
+					MISSION_HUNT	 // Default mission for aircraft.
 );
 
 // Transport helicopter.
-static AircraftTypeClass const TransportHeli(
-	AIRCRAFT_TRANSPORT,	// What kind of aircraft is this.
-	TXT_TRANS,				// Translated text number for aircraft.
-	"TRAN",					// INI name of aircraft.
-	0x0000,					//	Vertical offset.
-	0x0000,					// Primary weapon offset along turret centerline.
-	0x0000,					// Primary weapon lateral offset along turret centerline.
-		false,				// Fixed wing aircraft?
-		true,					// Equipped with a rotor?
-		true,					// Custom rotor sets for each facing?
-		true,					// Can this aircraft land on clear terrain?
-		true,					// Is it invisible on radar?
-		true,					// Can the player select it so as to give it orders?
-		true,					// Can it be assigned as a target for attack.
-		false,				// Is it insignificant (won't be announced)?
-		false,				// Is it immune to normal combat damage?
-	STRUCT_NONE,			// Preferred landing building.
-	0xFF,						// Landing speed
-	32,						// Number of rotation stages.
-	MISSION_HUNT			// Default mission for aircraft.
+static AircraftTypeClass const TransportHeli(AIRCRAFT_TRANSPORT, // What kind of aircraft is this.
+					     TXT_TRANS,		 // Translated text number for aircraft.
+					     "TRAN",		 // INI name of aircraft.
+					     0x0000,		 //	Vertical offset.
+					     0x0000,		 // Primary weapon offset along turret centerline.
+					     0x0000,	  // Primary weapon lateral offset along turret centerline.
+					     false,	  // Fixed wing aircraft?
+					     true,	  // Equipped with a rotor?
+					     true,	  // Custom rotor sets for each facing?
+					     true,	  // Can this aircraft land on clear terrain?
+					     true,	  // Is it invisible on radar?
+					     true,	  // Can the player select it so as to give it orders?
+					     true,	  // Can it be assigned as a target for attack.
+					     false,	  // Is it insignificant (won't be announced)?
+					     false,	  // Is it immune to normal combat damage?
+					     STRUCT_NONE, // Preferred landing building.
+					     0xFF,	  // Landing speed
+					     32,	  // Number of rotation stages.
+					     MISSION_HUNT // Default mission for aircraft.
 );
 
 // Longbow attack helicopter
-static AircraftTypeClass const AttackHeli(
-	AIRCRAFT_LONGBOW,		// What kind of aircraft is this.
-	TXT_HELI,				// Translated text number for aircraft.
-	"HELI",					// INI name of aircraft.
-	0x0000,					//	Vertical offset.
-	0x0040,					// Primary weapon offset along turret centerline.
-	0x0000,					// Primary weapon lateral offset along turret centerline.
-		false,				// Fixed wing aircraft?
-		true,					// Equipped with a rotor?
-		false,				// Custom rotor sets for each facing?
-		false,				// Can this aircraft land on clear terrain?
-		true,					// Is it invisible on radar?
-		true,					// Can the player select it so as to give it orders?
-		true,					// Can it be assigned as a target for attack.
-		false,				// Is it insignificant (won't be announced)?
-		false,				// Is it immune to normal combat damage?
-	STRUCT_HELIPAD,		// Preferred landing building.
-	0xFF,						// Landing speed
-	32,						// Number of rotation stages.
-	MISSION_HUNT			// Default mission for aircraft.
+static AircraftTypeClass const AttackHeli(AIRCRAFT_LONGBOW, // What kind of aircraft is this.
+					  TXT_HELI,	    // Translated text number for aircraft.
+					  "HELI",	    // INI name of aircraft.
+					  0x0000,	    //	Vertical offset.
+					  0x0040,	    // Primary weapon offset along turret centerline.
+					  0x0000,	    // Primary weapon lateral offset along turret centerline.
+					  false,	    // Fixed wing aircraft?
+					  true,		    // Equipped with a rotor?
+					  false,	    // Custom rotor sets for each facing?
+					  false,	    // Can this aircraft land on clear terrain?
+					  true,		    // Is it invisible on radar?
+					  true,		    // Can the player select it so as to give it orders?
+					  true,		    // Can it be assigned as a target for attack.
+					  false,	    // Is it insignificant (won't be announced)?
+					  false,	    // Is it immune to normal combat damage?
+					  STRUCT_HELIPAD,   // Preferred landing building.
+					  0xFF,		    // Landing speed
+					  32,		    // Number of rotation stages.
+					  MISSION_HUNT	    // Default mission for aircraft.
 );
-
 
 // Hind
-static AircraftTypeClass const OrcaHeli(
-	AIRCRAFT_HIND,			// What kind of aircraft is this.
-	TXT_ORCA,				// Translated text number for aircraft.
-	"HIND",					// INI name of aircraft.
-	0x0000,					//	Vertical offset.
-	0x0040,					// Primary weapon offset along turret centerline.
-	0x0000,					// Primary weapon lateral offset along turret centerline.
-		false,				// Fixed wing aircraft?
-		true,					// Equipped with a rotor?
-		false,				// Custom rotor sets for each facing?
-		false,				// Can this aircraft land on clear terrain?
-		true,					// Is it invisible on radar?
-		true,					// Can the player select it so as to give it orders?
-		true,					// Can it be assigned as a target for attack.
-		false,				// Is it insignificant (won't be announced)?
-		false,				// Is it immune to normal combat damage?
-	STRUCT_HELIPAD,		// Preferred landing building.
-	0xFF,						// Landing speed
-	32,						// Number of rotation stages.
-	MISSION_HUNT			// Default mission for aircraft.
+static AircraftTypeClass const OrcaHeli(AIRCRAFT_HIND,	// What kind of aircraft is this.
+					TXT_ORCA,	// Translated text number for aircraft.
+					"HIND",		// INI name of aircraft.
+					0x0000,		//	Vertical offset.
+					0x0040,		// Primary weapon offset along turret centerline.
+					0x0000,		// Primary weapon lateral offset along turret centerline.
+					false,		// Fixed wing aircraft?
+					true,		// Equipped with a rotor?
+					false,		// Custom rotor sets for each facing?
+					false,		// Can this aircraft land on clear terrain?
+					true,		// Is it invisible on radar?
+					true,		// Can the player select it so as to give it orders?
+					true,		// Can it be assigned as a target for attack.
+					false,		// Is it insignificant (won't be announced)?
+					false,		// Is it immune to normal combat damage?
+					STRUCT_HELIPAD, // Preferred landing building.
+					0xFF,		// Landing speed
+					32,		// Number of rotation stages.
+					MISSION_HUNT	// Default mission for aircraft.
 );
-
 
 /***********************************************************************************************
  * AircraftTypeClass::AircraftTypeClass -- Constructor for aircraft objects.                   *
@@ -230,64 +220,21 @@ static AircraftTypeClass const OrcaHeli(
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-AircraftTypeClass::AircraftTypeClass(
-				AircraftType airtype,
-				int name,
-				char const * ininame,
-				int verticaloffset,
-				int primaryoffset,
-				int primarylateral,
-				bool is_fixedwing,
-				bool is_rotorequipped,
-				bool is_rotorcustom,
-				bool is_landable,
-				bool is_stealthy,
-				bool is_selectable,
-				bool is_legal_target,
-				bool is_insignificant,
-				bool is_immune,
-				StructType building,
-				int landingspeed,
-				int rotation,
-				MissionType deforder
-				) :
-					TechnoTypeClass(RTTI_AIRCRAFTTYPE,
-										int(airtype),
-										name,
-										ininame,
-										REMAP_NORMAL,
-										verticaloffset,
-										primaryoffset,
-										primarylateral,
-										primaryoffset,
-										primarylateral,
-										false,
-										is_stealthy,
-										is_selectable,
-										is_legal_target,
-										is_insignificant,
-										is_immune,
-										false,
-										false,
-										true,
-										true,
-										rotation,
-										SPEED_WINGED),
-	IsFixedWing(is_fixedwing),
-	IsLandable(is_landable),
-	IsRotorEquipped(is_rotorequipped),
-	IsRotorCustom(is_rotorcustom),
-	Type(airtype),
-	Mission(deforder),
-	Building(building),
-	LandingSpeed(landingspeed)
-{
+AircraftTypeClass::AircraftTypeClass(AircraftType airtype, int name, char const *ininame, int verticaloffset,
+				     int primaryoffset, int primarylateral, bool is_fixedwing, bool is_rotorequipped,
+				     bool is_rotorcustom, bool is_landable, bool is_stealthy, bool is_selectable,
+				     bool is_legal_target, bool is_insignificant, bool is_immune, StructType building,
+				     int landingspeed, int rotation, MissionType deforder)
+    : TechnoTypeClass(RTTI_AIRCRAFTTYPE, int(airtype), name, ininame, REMAP_NORMAL, verticaloffset, primaryoffset,
+		      primarylateral, primaryoffset, primarylateral, false, is_stealthy, is_selectable, is_legal_target,
+		      is_insignificant, is_immune, false, false, true, true, rotation, SPEED_WINGED),
+      IsFixedWing(is_fixedwing), IsLandable(is_landable), IsRotorEquipped(is_rotorequipped),
+      IsRotorCustom(is_rotorcustom), Type(airtype), Mission(deforder), Building(building), LandingSpeed(landingspeed) {
 	/*
 	**	Forced aircraft overrides from the default.
 	*/
 	Speed = SPEED_WINGED;
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::operator new -- Allocates an aircraft type object from special pool.     *
@@ -304,11 +251,7 @@ AircraftTypeClass::AircraftTypeClass(
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * AircraftTypeClass::operator new(size_t)
-{
-	return(AircraftTypes.Alloc());
-}
-
+void *AircraftTypeClass::operator new(size_t) { return (AircraftTypes.Alloc()); }
 
 /***********************************************************************************************
  * AircraftTypeClass::operator delete -- Returns aircraft type to special memory pool.         *
@@ -325,11 +268,7 @@ void * AircraftTypeClass::operator new(size_t)
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AircraftTypeClass::operator delete(void * pointer)
-{
-	AircraftTypes.Free((AircraftTypeClass *)pointer);
-}
-
+void AircraftTypeClass::operator delete(void *pointer) { AircraftTypes.Free((AircraftTypeClass *)pointer); }
 
 /***********************************************************************************************
  * AircraftTypeClass::Init_Heap -- Initialize the aircraft type class heap.                    *
@@ -346,8 +285,7 @@ void AircraftTypeClass::operator delete(void * pointer)
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AircraftTypeClass::Init_Heap(void)
-{
+void AircraftTypeClass::Init_Heap(void) {
 	/*
 	**	These aircraft type class objects must be allocated in the exact order that they
 	**	are specified in the AircraftSmen enumeration. This is necessary because the heap
@@ -361,7 +299,6 @@ void AircraftTypeClass::Init_Heap(void)
 	new AircraftTypeClass(AttackHeli);
 	new AircraftTypeClass(OrcaHeli);
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::From_Name -- Converts an ASCII name into an aircraft type number.        *
@@ -379,18 +316,16 @@ void AircraftTypeClass::Init_Heap(void)
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-AircraftType AircraftTypeClass::From_Name(char const * name)
-{
+AircraftType AircraftTypeClass::From_Name(char const *name) {
 	if (name != NULL) {
 		for (int classid = AIRCRAFT_FIRST; classid < AIRCRAFT_COUNT; classid++) {
 			if (stricmp(As_Reference((AircraftType)classid).IniName, name) == 0) {
-				return(AircraftType)classid;
+				return (AircraftType)classid;
 			}
 		}
 	}
-	return(AIRCRAFT_NONE);
+	return (AIRCRAFT_NONE);
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::One_Time -- Performs one time initialization of the aircraft type class. *
@@ -407,11 +342,10 @@ AircraftType AircraftTypeClass::From_Name(char const * name)
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AircraftTypeClass::One_Time(void)
-{
+void AircraftTypeClass::One_Time(void) {
 	for (int index = AIRCRAFT_FIRST; index < AIRCRAFT_COUNT; index++) {
-		char fullname[_MAX_FNAME+_MAX_EXT];
-		AircraftTypeClass	const & uclass = As_Reference((AircraftType)index);
+		char fullname[_MAX_FNAME + _MAX_EXT];
+		AircraftTypeClass const &uclass = As_Reference((AircraftType)index);
 
 		/*
 		**	Fetch the supporting data files for the unit.
@@ -432,7 +366,6 @@ void AircraftTypeClass::One_Time(void)
 	RRotorData = MFCD::Retrieve("RROTOR.SHP");
 }
 
-
 /***********************************************************************************************
  * AircraftTypeClass::Create_One_Of -- Creates an aircraft object of the appropriate type.     *
  *                                                                                             *
@@ -449,11 +382,9 @@ void AircraftTypeClass::One_Time(void)
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-ObjectClass * AircraftTypeClass::Create_One_Of(HouseClass * house) const
-{
-	return(new AircraftClass(Type, house->Class->House));
+ObjectClass *AircraftTypeClass::Create_One_Of(HouseClass *house) const {
+	return (new AircraftClass(Type, house->Class->House));
 }
-
 
 #ifdef SCENARIO_EDITOR
 /***********************************************************************************************
@@ -471,15 +402,13 @@ ObjectClass * AircraftTypeClass::Create_One_Of(HouseClass * house) const
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AircraftTypeClass::Prep_For_Add(void)
-{
+void AircraftTypeClass::Prep_For_Add(void) {
 	for (AircraftType index = AIRCRAFT_FIRST; index < AIRCRAFT_COUNT; index++) {
 		if (As_Reference(index).Get_Image_Data()) {
 			Map.Add_To_List(&As_Reference(index));
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::Display -- Displays a generic version of the aircraft type.              *
@@ -500,18 +429,16 @@ void AircraftTypeClass::Prep_For_Add(void)
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AircraftTypeClass::Display(int x, int y, WindowNumberType window, HousesType ) const
-{
+void AircraftTypeClass::Display(int x, int y, WindowNumberType window, HousesType) const {
 	int shape = 0;
-	void const * ptr = Get_Cameo_Data();
+	void const *ptr = Get_Cameo_Data();
 	if (ptr == NULL) {
 		ptr = Get_Image_Data();
 		shape = 5;
 	}
-	CC_Draw_Shape(ptr, shape, x, y, window, SHAPE_CENTER|SHAPE_WIN_REL);
+	CC_Draw_Shape(ptr, shape, x, y, window, SHAPE_CENTER | SHAPE_WIN_REL);
 }
 #endif
-
 
 /***********************************************************************************************
  * AircraftTypeClass::Occupy_List -- Returns with occupation list for landed aircraft.         *
@@ -528,12 +455,10 @@ void AircraftTypeClass::Display(int x, int y, WindowNumberType window, HousesTyp
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-short const * AircraftTypeClass::Occupy_List(bool) const
-{
+short const *AircraftTypeClass::Occupy_List(bool) const {
 	static short const _list[] = {0, REFRESH_EOL};
-	return(_list);
+	return (_list);
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::Overlap_List -- Determines the overlap list for a landed aircraft.       *
@@ -549,12 +474,11 @@ short const * AircraftTypeClass::Occupy_List(bool) const
  * HISTORY:                                                                                    *
  *   07/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-short const * AircraftTypeClass::Overlap_List(void) const
-{
-	static short const _list[] = {-(MAP_CELL_W-1), -MAP_CELL_W, -(MAP_CELL_W+1), -1, 1, (MAP_CELL_W-1), MAP_CELL_W, (MAP_CELL_W+1), REFRESH_EOL};
-	return(_list);
+short const *AircraftTypeClass::Overlap_List(void) const {
+	static short const _list[] = {-(MAP_CELL_W - 1), -MAP_CELL_W, -(MAP_CELL_W + 1), -1,	     1,
+				      (MAP_CELL_W - 1),	 MAP_CELL_W,  (MAP_CELL_W + 1),	 REFRESH_EOL};
+	return (_list);
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::Max_Pips -- Fetches the maximum number of pips allowed.                  *
@@ -571,17 +495,15 @@ short const * AircraftTypeClass::Overlap_List(void) const
  * HISTORY:                                                                                    *
  *   06/26/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int AircraftTypeClass::Max_Pips(void) const
-{
+int AircraftTypeClass::Max_Pips(void) const {
 	if (PrimaryWeapon != NULL) {
 		// Camera weapon (ex. on the Spy plane) doesn't display any pips
 		if (!PrimaryWeapon->IsCamera) {
-			return(5);
+			return (5);
 		}
 	}
-	return(Max_Passengers());
+	return (Max_Passengers());
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::Create_And_Place -- Creates and places aircraft using normal game system *
@@ -598,11 +520,7 @@ int AircraftTypeClass::Max_Pips(void) const
  * HISTORY:                                                                                    *
  *   08/07/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool AircraftTypeClass::Create_And_Place(CELL, HousesType) const
-{
-	return(false);
-}
-
+bool AircraftTypeClass::Create_And_Place(CELL, HousesType) const { return (false); }
 
 /***********************************************************************************************
  * AircraftTypeClass::Dimensions -- Fetches the graphic dimensions of the aircraft type.       *
@@ -621,8 +539,7 @@ bool AircraftTypeClass::Create_And_Place(CELL, HousesType) const
  * HISTORY:                                                                                    *
  *   08/07/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void AircraftTypeClass::Dimensions(int &width, int &height) const
-{
+void AircraftTypeClass::Dimensions(int &width, int &height) const {
 	if (Type == AIRCRAFT_BADGER) {
 		width = 56;
 		height = 56;
@@ -631,7 +548,6 @@ void AircraftTypeClass::Dimensions(int &width, int &height) const
 		height = 20;
 	}
 }
-
 
 /***********************************************************************************************
  * AircraftTypeClass::As_Reference -- Given an aircraft type, find the matching type object.   *
@@ -649,7 +565,4 @@ void AircraftTypeClass::Dimensions(int &width, int &height) const
  * HISTORY:                                                                                    *
  *   07/09/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-AircraftTypeClass & AircraftTypeClass::As_Reference(AircraftType aircraft)
-{
-	return(*AircraftTypes.Ptr(aircraft));
-}
+AircraftTypeClass &AircraftTypeClass::As_Reference(AircraftType aircraft) { return (*AircraftTypes.Ptr(aircraft)); }

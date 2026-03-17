@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/FACTORY.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -49,8 +49,7 @@
  *   FactoryClass::~FactoryClass -- Default destructor for factory objects.                    *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * FactoryClass::FactoryClass -- Default constructor for factory objects.                      *
@@ -67,22 +66,12 @@
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-FactoryClass::FactoryClass(void) :
-	RTTI(RTTI_FACTORY),
-	ID(Factories.ID(this)),
-	IsSuspended(false),
-	IsDifferent(false),
-	IsBlocked(false),
-	Balance(0),
-	OriginalBalance(0),
-	Object(0),
-	SpecialItem(SPC_NONE),
-	House(0)
-{
+FactoryClass::FactoryClass(void)
+    : RTTI(RTTI_FACTORY), ID(Factories.ID(this)), IsSuspended(false), IsDifferent(false), IsBlocked(false), Balance(0),
+      OriginalBalance(0), Object(0), SpecialItem(SPC_NONE), House(0) {
 	Set_Rate(0);
 	Set_Stage(0);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::~FactoryClass -- Default destructor for factory objects.                      *
@@ -99,13 +88,11 @@ FactoryClass::FactoryClass(void) :
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-FactoryClass::~FactoryClass(void)
-{
+FactoryClass::~FactoryClass(void) {
 	if (GameActive) {
 		Abandon();
 	}
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Init -- Clears all units for scenario preparation.                            *
@@ -123,11 +110,7 @@ FactoryClass::~FactoryClass(void)
  * HISTORY:                                                                                    *
  *   08/15/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FactoryClass::Init(void)
-{
-	Factories.Free_All();
-}
-
+void FactoryClass::Init(void) { Factories.Free_All(); }
 
 /***********************************************************************************************
  * FactoryClass::operator new -- Allocates a factory object from the free factory pool.        *
@@ -144,15 +127,13 @@ void FactoryClass::Init(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * FactoryClass::operator new(size_t)
-{
-	void * ptr = Factories.Allocate();
+void *FactoryClass::operator new(size_t) {
+	void *ptr = Factories.Allocate();
 	if (ptr) {
 		((FactoryClass *)ptr)->IsActive = true;
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::operator delete -- Returns a factory to the free factory pool.                *
@@ -169,14 +150,12 @@ void * FactoryClass::operator new(size_t)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FactoryClass::operator delete(void * ptr)
-{
+void FactoryClass::operator delete(void *ptr) {
 	if (ptr) {
 		((FactoryClass *)ptr)->IsActive = false;
 	}
 	Factories.Free((FactoryClass *)ptr);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::AI -- Process factory production logic.                                       *
@@ -196,13 +175,12 @@ void FactoryClass::operator delete(void * ptr)
  *   12/26/1994 JLB : Created.                                                                 *
  *   01/04/1995 JLB : Uses exact installment payment method.                                   *
  *=============================================================================================*/
-void FactoryClass::AI(void)
-{
+void FactoryClass::AI(void) {
 	assert(Factories.ID(this) == ID);
 
 	if (!IsSuspended && (Object != NULL || SpecialItem)) {
 		for (int index = 0; index < 1; index++) {
-			if (!Has_Completed() && Graphic_Logic() ) {
+			if (!Has_Completed() && Graphic_Logic()) {
 				IsDifferent = true;
 
 				int cost = Cost_Per_Tick();
@@ -216,7 +194,7 @@ void FactoryClass::AI(void)
 				**	production step occurs, there may be sufficient funds available.
 				*/
 				if (cost > House->Available_Money()) {
-					Set_Stage(Fetch_Stage()-1);
+					Set_Stage(Fetch_Stage() - 1);
 				} else {
 					House->Spend_Money(cost);
 					Balance -= cost;
@@ -236,8 +214,6 @@ void FactoryClass::AI(void)
 	}
 }
 
-
-
 /***********************************************************************************************
  * FactoryClass::Force_Complete -- Force the factory to finish what it's building              *
  *                                                                                             *
@@ -253,10 +229,9 @@ void FactoryClass::AI(void)
  * HISTORY:                                                                                    *
  *   8/23/2019 3:54PM ST : Created.                                                            *
  *=============================================================================================*/
-void FactoryClass::Force_Complete(void)
-{
+void FactoryClass::Force_Complete(void) {
 	assert(Factories.ID(this) == ID);
-	
+
 	if (!IsSuspended && (Object != NULL || SpecialItem)) {
 		Set_Stage(STEP_COUNT);
 		IsSuspended = true;
@@ -265,7 +240,6 @@ void FactoryClass::Force_Complete(void)
 		IsDifferent = true;
 	}
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Has_Changed -- Checks to see if a production step has occurred?               *
@@ -283,15 +257,13 @@ void FactoryClass::Force_Complete(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FactoryClass::Has_Changed(void)
-{
+bool FactoryClass::Has_Changed(void) {
 	assert(Factories.ID(this) == ID);
 
 	bool changed = IsDifferent;
 	IsDifferent = false;
-	return(changed);
+	return (changed);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Set -- Assigns a factory to produce an object.                                *
@@ -315,8 +287,7 @@ bool FactoryClass::Has_Changed(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FactoryClass::Set(TechnoTypeClass const & object, HouseClass & house)
-{
+bool FactoryClass::Set(TechnoTypeClass const &object, HouseClass &house) {
 	assert(Factories.ID(this) == ID);
 
 	/*
@@ -346,7 +317,7 @@ bool FactoryClass::Set(TechnoTypeClass const & object, HouseClass & house)
 	}
 
 	if (Object) {
-		House  = Object->House;
+		House = Object->House;
 		Balance = object.Cost_Of() * house.CostBias;
 		Object->PurchasePrice = Balance;
 	}
@@ -354,9 +325,8 @@ bool FactoryClass::Set(TechnoTypeClass const & object, HouseClass & house)
 	/*
 	**	If all was set up successfully, then return true.
 	*/
-	return(Object != NULL);
+	return (Object != NULL);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Set -- Fills a factory with an already completed object.                      *
@@ -375,20 +345,18 @@ bool FactoryClass::Set(TechnoTypeClass const & object, HouseClass & house)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void FactoryClass::Set(TechnoClass & object)
-{
+void FactoryClass::Set(TechnoClass &object) {
 	assert(Factories.ID(this) == ID);
 
 	Abandon();
 	Object = &object;
-	House  = Object->House;
+	House = Object->House;
 	Balance = 0;
 	Set_Rate(0);
 	Set_Stage(STEP_COUNT);
 	IsDifferent = true;
 	IsSuspended = true;
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Suspend -- Temporarily stop production.                                       *
@@ -407,18 +375,16 @@ void FactoryClass::Set(TechnoClass & object)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FactoryClass::Suspend(void)
-{
+bool FactoryClass::Suspend(void) {
 	assert(Factories.ID(this) == ID);
 
 	if (!IsSuspended) {
 		IsSuspended = true;
 		Set_Rate(0);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Start -- Resumes production after suspension or creation.                     *
@@ -436,8 +402,7 @@ bool FactoryClass::Suspend(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FactoryClass::Start(void)
-{
+bool FactoryClass::Start(void) {
 	assert(Factories.ID(this) == ID);
 
 	if ((Object || SpecialItem) && IsSuspended && !Has_Completed()) {
@@ -453,12 +418,11 @@ bool FactoryClass::Start(void)
 
 			Set_Rate(time);
 			IsSuspended = false;
-			return(true);
+			return (true);
 		}
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Abandon -- Abandons current construction with money refunded.                 *
@@ -478,8 +442,7 @@ bool FactoryClass::Start(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FactoryClass::Abandon(void)
-{
+bool FactoryClass::Abandon(void) {
 	assert(Factories.ID(this) == ID);
 
 	if (Object) {
@@ -512,11 +475,10 @@ bool FactoryClass::Abandon(void)
 		IsSuspended = true;
 		IsDifferent = true;
 
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Completion -- Fetches the completion step for this factory.                   *
@@ -533,13 +495,11 @@ bool FactoryClass::Abandon(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FactoryClass::Completion(void)
-{
+int FactoryClass::Completion(void) {
 	assert(Factories.ID(this) == ID);
 
-	return(Fetch_Stage());
+	return (Fetch_Stage());
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Has_Completed -- Checks to see if object has completed production.            *
@@ -556,19 +516,17 @@ int FactoryClass::Completion(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FactoryClass::Has_Completed(void)
-{
+bool FactoryClass::Has_Completed(void) {
 	assert(Factories.ID(this) == ID);
 
 	if (Object && Fetch_Stage() == STEP_COUNT) {
-		return(true);
+		return (true);
 	}
 	if (SpecialItem && Fetch_Stage() == STEP_COUNT) {
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Get_Object -- Fetches pointer to object being constructed.                    *
@@ -584,13 +542,11 @@ bool FactoryClass::Has_Completed(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-TechnoClass * FactoryClass::Get_Object(void) const
-{
+TechnoClass *FactoryClass::Get_Object(void) const {
 	assert(Factories.ID(this) == ID);
 
-	return(Object);
+	return (Object);
 }
-
 
 /***************************************************************************
  * FactoryClass::Get_Special_Item -- gets factory spc prod item            *
@@ -602,13 +558,11 @@ TechnoClass * FactoryClass::Get_Object(void) const
  * HISTORY:                                                                *
  *   05/05/1995 PWG : Created.                                             *
  *=========================================================================*/
-int FactoryClass::Get_Special_Item(void) const
-{
+int FactoryClass::Get_Special_Item(void) const {
 	assert(Factories.ID(this) == ID);
 
-	return(SpecialItem);
+	return (SpecialItem);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Cost_Per_Tick -- Breaks entire production cost into manageable chunks.        *
@@ -624,20 +578,18 @@ int FactoryClass::Get_Special_Item(void) const
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FactoryClass::Cost_Per_Tick(void)
-{
+int FactoryClass::Cost_Per_Tick(void) {
 	assert(Factories.ID(this) == ID);
 
 	if (Object) {
 		int steps = STEP_COUNT - Fetch_Stage();
 		if (steps) {
-			return(Balance / steps);
+			return (Balance / steps);
 		}
-		return(Balance);
+		return (Balance);
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * FactoryClass::Completed -- Clears factory object after a completed production process.      *
@@ -656,8 +608,7 @@ int FactoryClass::Cost_Per_Tick(void)
  * HISTORY:                                                                                    *
  *   12/26/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool FactoryClass::Completed(void)
-{
+bool FactoryClass::Completed(void) {
 	assert(Factories.ID(this) == ID);
 
 	if (Object && Fetch_Stage() == STEP_COUNT) {
@@ -666,7 +617,7 @@ bool FactoryClass::Completed(void)
 		IsDifferent = true;
 		Set_Stage(0);
 		Set_Rate(0);
-		return(true);
+		return (true);
 	}
 
 	if (SpecialItem && Fetch_Stage() == STEP_COUNT) {
@@ -675,7 +626,7 @@ bool FactoryClass::Completed(void)
 		IsDifferent = true;
 		Set_Stage(0);
 		Set_Rate(0);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }

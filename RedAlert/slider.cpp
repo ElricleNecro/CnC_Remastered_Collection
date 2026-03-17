@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/SLIDER.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -42,9 +42,8 @@
  *   SliderClass::~SliderClass -- Destructor for slider object.                                *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
 #include "slider.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * SliderClass::SliderClass -- Normal constructor for a slider (with thumb) gadget.            *
@@ -60,16 +59,14 @@
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/15/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-SliderClass::SliderClass(unsigned id, int x, int y, int w, int h, int belong_to_list)
-	: GaugeClass(id, x, y, w, h)
-{
+SliderClass::SliderClass(unsigned id, int x, int y, int w, int h, int belong_to_list) : GaugeClass(id, x, y, w, h) {
 	BelongToList = belong_to_list ? true : false;
 
 	PlusGadget = 0;
 	MinusGadget = 0;
 	if (!BelongToList) {
-		PlusGadget  = new ShapeButtonClass(id, MFCD::Retrieve("BTN-PLUS.SHP"), X+Width+2, Y);
-		MinusGadget = new ShapeButtonClass(id, MFCD::Retrieve("BTN-MINS.SHP"), X-6, Y);
+		PlusGadget = new ShapeButtonClass(id, MFCD::Retrieve("BTN-PLUS.SHP"), X + Width + 2, Y);
+		MinusGadget = new ShapeButtonClass(id, MFCD::Retrieve("BTN-MINS.SHP"), X - 6, Y);
 
 		if (PlusGadget) {
 			PlusGadget->Make_Peer(*this);
@@ -91,7 +88,6 @@ SliderClass::SliderClass(unsigned id, int x, int y, int w, int h, int belong_to_
 	IsColorized = 0;
 }
 
-
 /***********************************************************************************************
  * SliderClass::~SliderClass -- Destructor for slider object.                                  *
  *                                                                                             *
@@ -106,8 +102,7 @@ SliderClass::SliderClass(unsigned id, int x, int y, int w, int h, int belong_to_
  * HISTORY:                                                                                    *
  *   09/20/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-SliderClass::~SliderClass(void)
-{
+SliderClass::~SliderClass(void) {
 	if (PlusGadget) {
 		delete PlusGadget;
 		PlusGadget = 0;
@@ -117,7 +112,6 @@ SliderClass::~SliderClass(void)
 		MinusGadget = 0;
 	}
 }
-
 
 /***********************************************************************************************
  * SliderClass::Set_Maximum -- Sets the maximum value for this slider.                         *
@@ -131,15 +125,13 @@ SliderClass::~SliderClass(void)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/15/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-int SliderClass::Set_Maximum(int value)
-{
+int SliderClass::Set_Maximum(int value) {
 	if (GaugeClass::Set_Maximum(value)) {
 		Recalc_Thumb();
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * SliderClass::Set_Thumb_Size -- Sets the size of the thumb in "slider units".                *
@@ -154,14 +146,12 @@ int SliderClass::Set_Maximum(int value)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/15/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-void SliderClass::Set_Thumb_Size(int value)
-{
+void SliderClass::Set_Thumb_Size(int value) {
 	Thumb = min(value, MaxValue);
 	Thumb = max(Thumb, 1);
 	Flag_To_Redraw();
 	Recalc_Thumb();
 }
-
 
 /***********************************************************************************************
  * SliderClass::Set_Value -- Sets the current thumb position for the slider.                   *
@@ -175,17 +165,15 @@ void SliderClass::Set_Thumb_Size(int value)
  * WARNINGS:  none                                                                             *
  * HISTORY:   01/15/1995 JLB : Created.                                                        *
  *=============================================================================================*/
-int SliderClass::Set_Value(int value)
-{
-	value = min(value, MaxValue-Thumb);
+int SliderClass::Set_Value(int value) {
+	value = min(value, MaxValue - Thumb);
 
 	if (GaugeClass::Set_Value(value)) {
 		Recalc_Thumb();
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * SliderClass::Recalc_Thumb -- Recalculates the thumb pixel size and starting offset.         *
@@ -199,17 +187,15 @@ int SliderClass::Set_Value(int value)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/15/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-void SliderClass::Recalc_Thumb(void)
-{
+void SliderClass::Recalc_Thumb(void) {
 	int length = IsHorizontal ? Width : Height;
-	int size   = length * fixed(Thumb, MaxValue);
-//	int size   = Fixed_To_Cardinal(length, Cardinal_To_Fixed(MaxValue, Thumb));
-	ThumbSize  = max(size, 4);
-	int start  = length * fixed(CurValue, MaxValue);
-//	int start  = Fixed_To_Cardinal(length, Cardinal_To_Fixed(MaxValue, CurValue));
-	ThumbStart = min(start, length-ThumbSize);
+	int size = length * fixed(Thumb, MaxValue);
+	//	int size   = Fixed_To_Cardinal(length, Cardinal_To_Fixed(MaxValue, Thumb));
+	ThumbSize = max(size, 4);
+	int start = length * fixed(CurValue, MaxValue);
+	//	int start  = Fixed_To_Cardinal(length, Cardinal_To_Fixed(MaxValue, CurValue));
+	ThumbStart = min(start, length - ThumbSize);
 }
-
 
 /***********************************************************************************************
  * SliderClass::Action -- Handles input processing for the slider.                             *
@@ -225,8 +211,7 @@ void SliderClass::Recalc_Thumb(void)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/15/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-int SliderClass::Action(unsigned flags, KeyNumType &key)
-{
+int SliderClass::Action(unsigned flags, KeyNumType &key) {
 	/*
 	**	Handle the mouse click in a special way. If the click was not on the thumb, then
 	**	jump the thumb position one "step" in the appropriate direction. Otherwise, let normal
@@ -234,8 +219,8 @@ int SliderClass::Action(unsigned flags, KeyNumType &key)
 	**	mouse position.
 	*/
 	if (flags & LEFTPRESS) {
-		int mouse;		// Mouse pixel position.
-		int edge;		// Edge of slider.
+		int mouse; // Mouse pixel position.
+		int edge;  // Edge of slider.
 
 		if (IsHorizontal) {
 			mouse = Get_Mouse_X();
@@ -250,21 +235,21 @@ int SliderClass::Action(unsigned flags, KeyNumType &key)
 		** Clicking outside the thumb: invoke parent's Action to process flags etc,
 		** but turn off the event & return true so processing stops at this button.
 		*/
-		if (mouse < edge+ThumbStart) {
+		if (mouse < edge + ThumbStart) {
 			Bump(true);
 			GaugeClass::Action(0, key);
 			key = KN_NONE;
-			return(true);
+			return (true);
 		} else {
-			if (mouse > edge+ThumbStart+ThumbSize) {
+			if (mouse > edge + ThumbStart + ThumbSize) {
 				Bump(false);
 				GaugeClass::Action(0, key);
 				key = KN_NONE;
-				return(true);
+				return (true);
 			} else {
 				GaugeClass::Action(flags, key);
 				key = KN_NONE;
-				return(true);
+				return (true);
 			}
 		}
 	}
@@ -272,9 +257,8 @@ int SliderClass::Action(unsigned flags, KeyNumType &key)
 	/*
 	**  CHANGE GAUGECLASS::ACTION -- REMOVE (LEFTRELEASE) FROM IF STMT
 	*/
-	return(GaugeClass::Action(flags, key));
+	return (GaugeClass::Action(flags, key));
 }
-
 
 /***********************************************************************************************
  * SliderClass::Bump -- Bumps the slider one "thumb size" up or down.                          *
@@ -289,14 +273,12 @@ int SliderClass::Action(unsigned flags, KeyNumType &key)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/15/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-int SliderClass::Bump(int up)
-{
+int SliderClass::Bump(int up) {
 	if (up) {
-		return(Set_Value(CurValue - Thumb));
+		return (Set_Value(CurValue - Thumb));
 	}
-	return(Set_Value(CurValue + Thumb));
+	return (Set_Value(CurValue + Thumb));
 }
-
 
 /***********************************************************************************************
  * SliderClass::Step -- Steps the slider one value up or down.                                 *
@@ -309,14 +291,12 @@ int SliderClass::Bump(int up)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/15/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-int SliderClass::Step(int up)
-{
+int SliderClass::Step(int up) {
 	if (up) {
-		return(Set_Value(CurValue - 1));
+		return (Set_Value(CurValue - 1));
 	}
-	return(Set_Value(CurValue + 1));
+	return (Set_Value(CurValue + 1));
 }
-
 
 /***********************************************************************************************
  * SliderClass::Draw_Thumb -- Draws the "thumb" for this slider.                               *
@@ -329,15 +309,13 @@ int SliderClass::Step(int up)
  * WARNINGS:   The mouse is guaranteed to be hidden when this routine is called.               *
  * HISTORY:    01/16/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-void SliderClass::Draw_Thumb(void)
-{
+void SliderClass::Draw_Thumb(void) {
 	if (IsHorizontal) {
-		Draw_Box(X+ThumbStart, Y, ThumbSize, Height, BOXSTYLE_RAISED, true);
+		Draw_Box(X + ThumbStart, Y, ThumbSize, Height, BOXSTYLE_RAISED, true);
 	} else {
-		Draw_Box(X, Y+ThumbStart, Width, ThumbSize, BOXSTYLE_RAISED, true);
+		Draw_Box(X, Y + ThumbStart, Width, ThumbSize, BOXSTYLE_RAISED, true);
 	}
 }
-
 
 /***********************************************************************************************
  * SliderClass::Draw_Me -- Draws the body of the gauge.                                        *
@@ -349,8 +327,7 @@ void SliderClass::Draw_Thumb(void)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/16/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-int SliderClass::Draw_Me(int forced)
-{
+int SliderClass::Draw_Me(int forced) {
 	if (BelongToList) {
 		if (ControlClass::Draw_Me(forced)) {
 
@@ -358,13 +335,13 @@ int SliderClass::Draw_Me(int forced)
 			**	Hide the mouse.
 			*/
 			if (LogicPage == &SeenBuff) {
-				Conditional_Hide_Mouse(X, Y, X+Width, Y+Height);
+				Conditional_Hide_Mouse(X, Y, X + Width, Y + Height);
 			}
 
 			/*
 			**	Draw the body & set text color.
 			*/
-			Draw_Box (X, Y, Width, Height, BOXSTYLE_DOWN, true);
+			Draw_Box(X, Y, Width, Height, BOXSTYLE_DOWN, true);
 			Draw_Thumb();
 
 			/*
@@ -373,16 +350,15 @@ int SliderClass::Draw_Me(int forced)
 			if (LogicPage == &SeenBuff) {
 				Conditional_Show_Mouse();
 			}
-			return(true);
+			return (true);
 		}
 	}
 
 	/*
 	**	If it does not belong to a listbox...
 	*/
-	return(GaugeClass::Draw_Me(forced));
+	return (GaugeClass::Draw_Me(forced));
 }
-
 
 /***********************************************************************************************
  * SliderClass::Peer_To_Peer -- A peer gadget was touched -- make adjustments.                 *
@@ -398,8 +374,7 @@ int SliderClass::Draw_Me(int forced)
  * WARNINGS:   none                                                                            *
  * HISTORY:    01/16/1995 JLB : Created.                                                       *
  *=============================================================================================*/
-void SliderClass::Peer_To_Peer(unsigned flags, KeyNumType & , ControlClass & whom)
-{
+void SliderClass::Peer_To_Peer(unsigned flags, KeyNumType &, ControlClass &whom) {
 	if (flags & LEFTRELEASE) {
 		if (&whom == PlusGadget) {
 			Step(false);
@@ -409,5 +384,3 @@ void SliderClass::Peer_To_Peer(unsigned flags, KeyNumType & , ControlClass & who
 		}
 	}
 }
-
-

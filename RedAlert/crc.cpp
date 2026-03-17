@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/CRC.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -36,7 +36,6 @@
 
 #include "crc.h"
 
-
 /***********************************************************************************************
  * CRCEngine::operator() -- Submits one byte of data to the CRC engine.                        *
  *                                                                                             *
@@ -55,17 +54,15 @@
  * HISTORY:                                                                                    *
  *   03/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void CRCEngine::operator() (char datum)
-{
+void CRCEngine::operator()(char datum) {
 	StagingBuffer.Buffer[Index++] = datum;
 
-	if (Index == sizeof(long))  {
+	if (Index == sizeof(long)) {
 		CRC = Value();
 		StagingBuffer.Composite = 0;
 		Index = 0;
 	}
 }
-
 
 /***********************************************************************************************
  * CRCEngine::operator() -- Submits an arbitrary data block to the CRC engine.                 *
@@ -85,10 +82,9 @@ void CRCEngine::operator() (char datum)
  * HISTORY:                                                                                    *
  *   03/02/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-long CRCEngine::operator() (void const * buffer, int length)
-{
-	if (buffer != NULL && length > 0)  {
-		char const * dataptr = (char const *)buffer;
+long CRCEngine::operator()(void const *buffer, int length) {
+	if (buffer != NULL && length > 0) {
+		char const *dataptr = (char const *)buffer;
 		int bytes_left = length;
 
 		/*
@@ -107,8 +103,8 @@ long CRCEngine::operator() (void const * buffer, int length)
 		**	Perform the fast 'bulk' processing by reading long word sized
 		**	data blocks.
 		*/
-		long const * longptr = (long const *)dataptr;
-		int longcount = bytes_left / sizeof(long);		// Whole 'long' elements remaining.
+		long const *longptr = (long const *)dataptr;
+		int longcount = bytes_left / sizeof(long); // Whole 'long' elements remaining.
 		while (longcount--) {
 			CRC = _lrotl(CRC, 1) + *longptr++;
 			bytes_left -= sizeof(long);
@@ -129,5 +125,5 @@ long CRCEngine::operator() (void const * buffer, int length)
 	/*
 	**	Return the current CRC value.
 	*/
-	return(Value());
+	return (Value());
 }

@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /counterstrike/SIDEBAR.CPP 2     3/17/97 1:05a Steve_tall $ */
@@ -74,26 +74,23 @@
  *   SidebarClass::Zoom_Mode_Control -- Handles the zoom mode toggle operation.                *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
+#include "function.h"
 
-
-void * SidebarClass::SidebarShape = NULL;
-void * SidebarClass::SidebarMiddleShape = NULL;
-void * SidebarClass::SidebarBottomShape = NULL;
-
+void *SidebarClass::SidebarShape = NULL;
+void *SidebarClass::SidebarMiddleShape = NULL;
+void *SidebarClass::SidebarBottomShape = NULL;
 
 /***************************************************************************
 **	This holds the translucent table for use with the construction clock
 **	animation.
 */
-char SidebarClass::StripClass::ClockTranslucentTable[(1+1)*256];
-
+char SidebarClass::StripClass::ClockTranslucentTable[(1 + 1) * 256];
 
 /***************************************************************************
 **	This points to the main sidebar shapes. These include the upgrade and
 **	repair buttons.
 */
-//TheaterType SidebarClass::StripClass::LastTheater = THEATER_NONE;
+// TheaterType SidebarClass::StripClass::LastTheater = THEATER_NONE;
 
 typedef enum ButtonNumberType {
 	BUTTON_RADAR = 100,
@@ -113,16 +110,14 @@ ShapeButtonClass SidebarClass::Upgrade;
 ShapeButtonClass SidebarClass::Zoom;
 ShapeButtonClass SidebarClass::StripClass::UpButton[COLUMNS];
 ShapeButtonClass SidebarClass::StripClass::DownButton[COLUMNS];
-SidebarClass::StripClass::SelectClass
-SidebarClass::StripClass::SelectButton[COLUMNS][MAX_VISIBLE];
+SidebarClass::StripClass::SelectClass SidebarClass::StripClass::SelectButton[COLUMNS][MAX_VISIBLE];
 
 /*
 ** Shape data pointers
 */
-void * SidebarClass::StripClass::LogoShapes = NULL;
-void const * SidebarClass::StripClass::ClockShapes;
-void const * SidebarClass::StripClass::SpecialShapes[SPC_COUNT];
-
+void *SidebarClass::StripClass::LogoShapes = NULL;
+void const *SidebarClass::StripClass::ClockShapes;
+void const *SidebarClass::StripClass::SpecialShapes[SPC_COUNT];
 
 /***********************************************************************************************
  * SidebarClass::SidebarClass -- Default constructor for the sidebar.                          *
@@ -139,23 +134,18 @@ void const * SidebarClass::StripClass::SpecialShapes[SPC_COUNT];
  * HISTORY:                                                                                    *
  *   11/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-SidebarClass::SidebarClass(void) :
-	IsSidebarActive(false),
-	IsToRedraw(true),
-	IsRepairActive(false),
-	IsUpgradeActive(false),
-	IsDemolishActive(false)
-{
+SidebarClass::SidebarClass(void)
+    : IsSidebarActive(false), IsToRedraw(true), IsRepairActive(false), IsUpgradeActive(false), IsDemolishActive(false) {
 	/*
 	**	This sets up the clipping window. This window is used by the shape drawing
 	**	code so that as the sidebar buildable buttons scroll, they get properly
 	**	clipped at the top and bottom edges.
 	*/
-	WindowList[WINDOW_SIDEBAR][WINDOWX] = (SIDE_X+8);
+	WindowList[WINDOW_SIDEBAR][WINDOWX] = (SIDE_X + 8);
 	WindowList[WINDOW_SIDEBAR][WINDOWY] = SIDE_Y + 1 + TOP_HEIGHT;
 	WindowList[WINDOW_SIDEBAR][WINDOWWIDTH] = SIDE_WIDTH;
 	WindowList[WINDOW_SIDEBAR][WINDOWHEIGHT] = StripClass::MAX_VISIBLE * StripClass::OBJECT_HEIGHT;
-//	WindowList[WINDOW_SIDEBAR][WINDOWHEIGHT] = StripClass::MAX_VISIBLE * StripClass::OBJECT_HEIGHT-1;
+	//	WindowList[WINDOW_SIDEBAR][WINDOWHEIGHT] = StripClass::MAX_VISIBLE * StripClass::OBJECT_HEIGHT-1;
 
 	/*
 	**	Set up the coordinates for the sidebar strips. These coordinates are for
@@ -169,7 +159,6 @@ SidebarClass::SidebarClass(void) :
 	Column[1].X = COLUMN_TWO_X * RESFACTOR;
 	Column[1].Y = COLUMN_TWO_Y * RESFACTOR;
 }
-
 
 /***********************************************************************************************
  * SidebarClass::SidebarClass -- This is the no initialization constructor for the sidebar.    *
@@ -188,18 +177,16 @@ SidebarClass::SidebarClass(void) :
  * HISTORY:                                                                                    *
  *   08/06/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-SidebarClass::SidebarClass(NoInitClass const & x) : PowerClass(x)
-{
+SidebarClass::SidebarClass(NoInitClass const &x) : PowerClass(x) {
 	/*
 	**	Set up the coordinates for the sidebar strips. These coordinates are for
 	**	the upper left corner.
 	*/
-//	Column[0].X = COLUMN_ONE_X * RESFACTOR;
-//	Column[0].Y = COLUMN_ONE_Y * RESFACTOR;
-//	Column[1].X = COLUMN_TWO_X * RESFACTOR;
-//	Column[1].Y = COLUMN_TWO_Y * RESFACTOR;
+	//	Column[0].X = COLUMN_ONE_X * RESFACTOR;
+	//	Column[0].Y = COLUMN_ONE_Y * RESFACTOR;
+	//	Column[1].X = COLUMN_TWO_X * RESFACTOR;
+	//	Column[1].Y = COLUMN_TWO_Y * RESFACTOR;
 }
-
 
 /***********************************************************************************************
  * SidebarClass::One_Time -- Handles the one time game initializations.                        *
@@ -216,8 +203,7 @@ SidebarClass::SidebarClass(NoInitClass const & x) : PowerClass(x)
  * HISTORY:                                                                                    *
  *   10/28/94   JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::One_Time(void)
-{
+void SidebarClass::One_Time(void) {
 	PowerClass::One_Time();
 
 	/*
@@ -225,25 +211,26 @@ void SidebarClass::One_Time(void)
 	**	code so that as the sidebar buildable buttons scroll, they get properly
 	**	clipped at the top and bottom edges.
 	*/
-	WindowList[WINDOW_SIDEBAR][WINDOWX] = ((SIDE_X+8))  * RESFACTOR;
+	WindowList[WINDOW_SIDEBAR][WINDOWX] = ((SIDE_X + 8)) * RESFACTOR;
 	WindowList[WINDOW_SIDEBAR][WINDOWY] = (SIDE_Y + 1 + TOP_HEIGHT) * RESFACTOR;
-	WindowList[WINDOW_SIDEBAR][WINDOWWIDTH] = (SIDE_WIDTH) * RESFACTOR;
+	WindowList[WINDOW_SIDEBAR][WINDOWWIDTH] = (SIDE_WIDTH)*RESFACTOR;
 	WindowList[WINDOW_SIDEBAR][WINDOWHEIGHT] = (StripClass::MAX_VISIBLE * StripClass::OBJECT_HEIGHT) * RESFACTOR;
-//	WindowList[WINDOW_SIDEBAR][WINDOWHEIGHT] = (StripClass::MAX_VISIBLE * StripClass::OBJECT_HEIGHT-1) * RESFACTOR;
+	//	WindowList[WINDOW_SIDEBAR][WINDOWHEIGHT] = (StripClass::MAX_VISIBLE * StripClass::OBJECT_HEIGHT-1) *
+	// RESFACTOR;
 
 	/*
 	** Top of the window seems to be wrong for the new sidebar. ST - 5/2/96 2:49AM
 	*/
-	WindowList[WINDOW_SIDEBAR][WINDOWY] -= 1*RESFACTOR;
+	WindowList[WINDOW_SIDEBAR][WINDOWY] -= 1 * RESFACTOR;
 
 	/*
 	**	Set up the coordinates for the sidebar strips. These coordinates are for
 	**	the upper left corner.
 	*/
-//	Column[0].X = COLUMN_ONE_X * RESFACTOR;
-//	Column[0].Y = COLUMN_ONE_Y * RESFACTOR;
-//	Column[1].X = COLUMN_TWO_X * RESFACTOR;
-//	Column[1].Y = COLUMN_TWO_Y * RESFACTOR;
+	//	Column[0].X = COLUMN_ONE_X * RESFACTOR;
+	//	Column[0].Y = COLUMN_ONE_Y * RESFACTOR;
+	//	Column[1].X = COLUMN_TWO_X * RESFACTOR;
+	//	Column[1].Y = COLUMN_TWO_Y * RESFACTOR;
 	Column[0].One_Time(0);
 	Column[1].One_Time(1);
 
@@ -251,10 +238,9 @@ void SidebarClass::One_Time(void)
 	**	Load the sidebar shape in at this time. (Hi-Res sidebar is theater dependant)
 	*/
 	if (SidebarShape == NULL) {
-		SidebarShape = (void*)MFCD::Retrieve("SIDEBAR.SHP");
+		SidebarShape = (void *)MFCD::Retrieve("SIDEBAR.SHP");
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Init_Clear -- Sets sidebar to a known (and deactivated) state                 *
@@ -268,8 +254,7 @@ void SidebarClass::One_Time(void)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::Init_Clear(void)
-{
+void SidebarClass::Init_Clear(void) {
 
 	PowerClass::Init_Clear();
 
@@ -284,7 +269,6 @@ void SidebarClass::Init_Clear(void)
 	Activate(false);
 }
 
-
 /***********************************************************************************************
  * SidebarClass::Init_IO -- Adds buttons to the button list                                    *
  *                                                                                             *
@@ -297,8 +281,7 @@ void SidebarClass::Init_Clear(void)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::Init_IO(void)
-{
+void SidebarClass::Init_IO(void) {
 	PowerClass::Init_IO();
 
 	/*
@@ -308,8 +291,8 @@ void SidebarClass::Init_IO(void)
 
 		Repair.IsSticky = true;
 		Repair.ID = BUTTON_REPAIR;
-		Repair.X = (0x1f2/2)*RESFACTOR;
-		Repair.Y = (0x96/2)*RESFACTOR;
+		Repair.X = (0x1f2 / 2) * RESFACTOR;
+		Repair.Y = (0x96 / 2) * RESFACTOR;
 		Repair.IsPressed = false;
 		Repair.IsToggleType = true;
 		Repair.ReflectButtonState = true;
@@ -320,9 +303,9 @@ void SidebarClass::Init_IO(void)
 #ifdef WIN32
 		Upgrade.X = 0x21f;
 #else
-		Upgrade.X = ((0x21f/2)+1)*RESFACTOR;
+		Upgrade.X = ((0x21f / 2) + 1) * RESFACTOR;
 #endif
-		Upgrade.Y = (0x96/2)*RESFACTOR;
+		Upgrade.Y = (0x96 / 2) * RESFACTOR;
 		Upgrade.IsPressed = false;
 		Upgrade.IsToggleType = true;
 		Upgrade.ReflectButtonState = true;
@@ -330,8 +313,8 @@ void SidebarClass::Init_IO(void)
 
 		Zoom.IsSticky = true;
 		Zoom.ID = BUTTON_ZOOM;
-		Zoom.X = (0x24c/2)*RESFACTOR;
-		Zoom.Y = (0x96/2)*RESFACTOR;
+		Zoom.X = (0x24c / 2) * RESFACTOR;
+		Zoom.Y = (0x96 / 2) * RESFACTOR;
 		Zoom.IsPressed = false;
 		Zoom.Set_Shape(MFCD::Retrieve("MAP.SHP"));
 
@@ -349,12 +332,11 @@ void SidebarClass::Init_IO(void)
 		if (IsSidebarActive) {
 			IsSidebarActive = false;
 			Activate(1);
-//			Background.Zap();
-//			Add_A_Button(Background);
+			//			Background.Zap();
+			//			Add_A_Button(Background);
 		}
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Init_Theater -- Performs theater-specific initialization                      *
@@ -369,8 +351,7 @@ void SidebarClass::Init_IO(void)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::Init_Theater(TheaterType theater)
-{
+void SidebarClass::Init_Theater(TheaterType theater) {
 	Reload_Sidebar();
 
 	PowerClass::Init_Theater(theater);
@@ -382,7 +363,8 @@ void SidebarClass::Init_Theater(TheaterType theater)
 /***********************************************************************************************
  * SidebarClass::Reload_Sidebar -- Loads appropriate sidebar shapes depending on house			  *
  *                                                                                             *
- * INPUT:  none 																										  *
+ * INPUT:  none
+ **
  *                                                                                             *
  * OUTPUT:  none                                                                               *
  *                                                                                             *
@@ -391,49 +373,43 @@ void SidebarClass::Init_Theater(TheaterType theater)
  * HISTORY:                                                                                    *
  *   9/18/1996 BWG : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::Reload_Sidebar(void)
-{
-	static char * sidebarnames[]={
-		"SIDE?NA.SHP",		//NATO
-		"SIDE?NA.SHP",
-		"SIDE?US.SHP",		//USSR
-		"SIDE?NA.SHP",
-		"SIDE?US.SHP",		//UKRAINE
-		"SIDE?NA.SHP",
-		"SIDE?NA.SHP",
-		"SIDE?NA.SHP",
-		"SIDE?NA.SHP",		//HOUSE_GOOD
-		"SIDE?US.SHP"		//HOUSE_BAD
+void SidebarClass::Reload_Sidebar(void) {
+	static char *sidebarnames[] = {
+	    "SIDE?NA.SHP", // NATO
+	    "SIDE?NA.SHP",
+	    "SIDE?US.SHP", // USSR
+	    "SIDE?NA.SHP",
+	    "SIDE?US.SHP", // UKRAINE
+	    "SIDE?NA.SHP", "SIDE?NA.SHP", "SIDE?NA.SHP",
+	    "SIDE?NA.SHP", // HOUSE_GOOD
+	    "SIDE?US.SHP"  // HOUSE_BAD
 	};
 	int houseloaded = 0;
 
-	if(PlayerPtr) {
+	if (PlayerPtr) {
 		houseloaded = PlayerPtr->ActLike;
 	}
 
 	/*  Don't have write access to the static char array. ST - 5/20/2019 */
 #if (0)
-	char * sidename = sidebarnames[houseloaded];
-	*(sidename+4) = '1';
-	SidebarShape = (void*)MFCD::Retrieve(sidename);
-	*(sidename+4) = '2';
-	SidebarMiddleShape = (void*)MFCD::Retrieve(sidename);
-	*(sidename+4) = '3';
-	SidebarBottomShape = (void*)MFCD::Retrieve(sidename);
+	char *sidename = sidebarnames[houseloaded];
+	*(sidename + 4) = '1';
+	SidebarShape = (void *)MFCD::Retrieve(sidename);
+	*(sidename + 4) = '2';
+	SidebarMiddleShape = (void *)MFCD::Retrieve(sidename);
+	*(sidename + 4) = '3';
+	SidebarBottomShape = (void *)MFCD::Retrieve(sidename);
 #else
 	char sb_name[16];
 	strcpy(sb_name, sidebarnames[houseloaded]);
 	sb_name[4] = '1';
-	SidebarShape = (void*)MFCD::Retrieve(sb_name);
+	SidebarShape = (void *)MFCD::Retrieve(sb_name);
 	sb_name[4] = '2';
-	SidebarMiddleShape = (void*)MFCD::Retrieve(sb_name);
+	SidebarMiddleShape = (void *)MFCD::Retrieve(sb_name);
 	sb_name[4] = '3';
-	SidebarBottomShape = (void*)MFCD::Retrieve(sb_name);
+	SidebarBottomShape = (void *)MFCD::Retrieve(sb_name);
 
 #endif
-
-
-
 
 	Column[0].Reload_LogoShapes();
 	Column[1].Reload_LogoShapes();
@@ -454,14 +430,12 @@ void SidebarClass::Reload_Sidebar(void)
  * HISTORY:                                                                                    *
  *   01/01/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int SidebarClass::Which_Column(RTTIType type)
-{
+int SidebarClass::Which_Column(RTTIType type) {
 	if (type == RTTI_BUILDINGTYPE || type == RTTI_BUILDING) {
-		return(0);
+		return (0);
 	}
-	return(1);
+	return (1);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Factory_Link -- Links a factory to a sidebar strip.                           *
@@ -483,14 +457,12 @@ int SidebarClass::Which_Column(RTTIType type)
  * HISTORY:                                                                                    *
  *   05/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::Factory_Link(int factory, RTTIType type, int id)
-{
+bool SidebarClass::Factory_Link(int factory, RTTIType type, int id) {
 	assert((unsigned)type < RTTI_COUNT);
 	assert(id >= 0);
 
-	return(Column[Which_Column(type)].Factory_Link(factory, type, id));
+	return (Column[Which_Column(type)].Factory_Link(factory, type, id));
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Refresh_Cells -- Intercepts the refresh, looking for sidebar controls.        *
@@ -511,8 +483,7 @@ bool SidebarClass::Factory_Link(int factory, RTTIType type, int id)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::Refresh_Cells(CELL cell, short const * list)
-{
+void SidebarClass::Refresh_Cells(CELL cell, short const *list) {
 	if (*list == REFRESH_SIDEBAR) {
 		IsToRedraw = true;
 		Column[0].IsToRedraw = true;
@@ -521,7 +492,6 @@ void SidebarClass::Refresh_Cells(CELL cell, short const * list)
 	}
 	PowerClass::Refresh_Cells(cell, list);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Activate_Repair -- Controls the repair button on the sidebar.                 *
@@ -541,22 +511,21 @@ void SidebarClass::Refresh_Cells(CELL cell, short const * list)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::Activate_Repair(int control)
-{
+bool SidebarClass::Activate_Repair(int control) {
 	bool old = IsRepairActive;
 
 	if (control == -1) {
 		control = IsRepairActive ? 0 : 1;
 	}
 	switch (control) {
-		case 1:
-			IsRepairActive = true;
-			break;
+	case 1:
+		IsRepairActive = true;
+		break;
 
-		default:
-		case 0:
-			IsRepairActive = false;
-			break;
+	default:
+	case 0:
+		IsRepairActive = false;
+		break;
 	}
 	if (old != IsRepairActive) {
 		Flag_To_Redraw(false);
@@ -567,9 +536,8 @@ bool SidebarClass::Activate_Repair(int control)
 			Set_Default_Mouse(MOUSE_NORMAL, false);
 		}
 	}
-	return(old);
+	return (old);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Activate_Upgrade -- Controls the upgrade button on the sidebar.               *
@@ -589,21 +557,20 @@ bool SidebarClass::Activate_Repair(int control)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::Activate_Upgrade(int control)
-{
+bool SidebarClass::Activate_Upgrade(int control) {
 	bool old = IsUpgradeActive;
 	if (control == -1) {
 		control = IsUpgradeActive ? 0 : 1;
 	}
 	switch (control) {
-		case 1:
-			IsUpgradeActive = true;
-			break;
+	case 1:
+		IsUpgradeActive = true;
+		break;
 
-		default:
-		case 0:
-			IsUpgradeActive = false;
-			break;
+	default:
+	case 0:
+		IsUpgradeActive = false;
+		break;
 	}
 	if (old != IsUpgradeActive) {
 		Flag_To_Redraw(false);
@@ -612,9 +579,8 @@ bool SidebarClass::Activate_Upgrade(int control)
 			Set_Default_Mouse(MOUSE_NORMAL, false);
 		}
 	}
-	return(old);
+	return (old);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Activate_Demolish -- Controls the demolish button on the sidebar.             *
@@ -634,22 +600,21 @@ bool SidebarClass::Activate_Upgrade(int control)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::Activate_Demolish(int control)
-{
+bool SidebarClass::Activate_Demolish(int control) {
 	bool old = IsDemolishActive;
 
 	if (control == -1) {
 		control = IsDemolishActive ? 0 : 1;
 	}
 	switch (control) {
-		case 1:
-			IsDemolishActive = true;
-			break;
+	case 1:
+		IsDemolishActive = true;
+		break;
 
-		default:
-		case 0:
-			IsDemolishActive = false;
-			break;
+	default:
+	case 0:
+		IsDemolishActive = false;
+		break;
 	}
 	if (old != IsDemolishActive) {
 		Flag_To_Redraw(false);
@@ -658,9 +623,8 @@ bool SidebarClass::Activate_Demolish(int control)
 			Set_Default_Mouse(MOUSE_NORMAL, false);
 		}
 	}
-	return(old);
+	return (old);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Add -- Adds a game object to the sidebar list.                                *
@@ -679,8 +643,7 @@ bool SidebarClass::Activate_Demolish(int control)
  *   11/17/1994 JLB : Created.                                                                 *
  *   9/24/2019 3:17PM : Added via capture parameter for new sidebar functionality              *
  *=============================================================================================*/
-bool SidebarClass::Add(RTTIType type, int id, bool via_capture)
-{
+bool SidebarClass::Add(RTTIType type, int id, bool via_capture) {
 	assert((unsigned)type < RTTI_COUNT);
 
 	/*
@@ -693,14 +656,13 @@ bool SidebarClass::Add(RTTIType type, int id, bool via_capture)
 			Activate(1);
 			IsToRedraw = true;
 			Flag_To_Redraw(false);
-			return(true);
+			return (true);
 		}
-		return(false);
+		return (false);
 	}
 
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Scroll -- Handles scrolling the sidebar object strip.                         *
@@ -720,8 +682,7 @@ bool SidebarClass::Add(RTTIType type, int id, bool via_capture)
  * HISTORY:                                                                                    *
  *   10/28/94   JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::Scroll(bool up, int column)
-{
+bool SidebarClass::Scroll(bool up, int column) {
 	if (column == -1) {
 		bool scr = false;
 		scr |= Column[0].Scroll(up);
@@ -732,20 +693,19 @@ bool SidebarClass::Scroll(bool up, int column)
 		if (scr) {
 			IsToRedraw = true;
 			Flag_To_Redraw(false);
-			return(true);
+			return (true);
 		}
-		return(false);
+		return (false);
 	}
 
 	if (Column[column].Scroll(up)) {
 		// No need to redraw the whole sidebar juts because we scrolled a strip is there? ST - 10/15/96 7:29PM
-		//IsToRedraw = true;
+		// IsToRedraw = true;
 		Flag_To_Redraw(false);
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Draw_It -- Renders the sidebar display.                                       *
@@ -762,8 +722,7 @@ bool SidebarClass::Scroll(bool up, int column)
  *   10/28/94   JLB : Created.                                                                 *
  *   12/31/1994 JLB : Split rendering off into the sidebar strip class.                        *
  *=============================================================================================*/
-void SidebarClass::Draw_It(bool complete)
-{
+void SidebarClass::Draw_It(bool complete) {
 	PowerClass::Draw_It(complete);
 
 	BStart(BENCH_SIDEBAR);
@@ -780,9 +739,11 @@ void SidebarClass::Draw_It(bool complete)
 			/*
 			** The sidebar shape is too big in 640x400 so it needs to be drawn in three chunks.
 			*/
-			CC_Draw_Shape(SidebarShape, 0, SIDE_X * RESFACTOR, 8*RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL);
-			CC_Draw_Shape(SidebarMiddleShape, shape, SIDE_X * RESFACTOR, (8+80)*RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL);
-			CC_Draw_Shape(SidebarBottomShape, shape, SIDE_X * RESFACTOR, (8+80+50)*RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL);
+			CC_Draw_Shape(SidebarShape, 0, SIDE_X * RESFACTOR, 8 * RESFACTOR, WINDOW_MAIN, SHAPE_WIN_REL);
+			CC_Draw_Shape(SidebarMiddleShape, shape, SIDE_X * RESFACTOR, (8 + 80) * RESFACTOR, WINDOW_MAIN,
+				      SHAPE_WIN_REL);
+			CC_Draw_Shape(SidebarBottomShape, shape, SIDE_X * RESFACTOR, (8 + 80 + 50) * RESFACTOR,
+				      WINDOW_MAIN, SHAPE_WIN_REL);
 
 			Repair.Draw_Me(true);
 			Upgrade.Draw_Me(true);
@@ -809,7 +770,6 @@ void SidebarClass::Draw_It(bool complete)
 	BEnd(BENCH_SIDEBAR);
 }
 
-
 /***********************************************************************************************
  * SidebarClass::AI -- Handles player clicking on sidebar area.                                *
  *                                                                                             *
@@ -832,8 +792,7 @@ void SidebarClass::Draw_It(bool complete)
  *   12/31/1994 JLB : Uses mouse coordinate parameters.                                        *
  *   06/27/1995 JLB : <TAB> key toggles sidebar.                                               *
  *=============================================================================================*/
-void SidebarClass::AI(KeyNumType & input, int x, int y)
-{
+void SidebarClass::AI(KeyNumType &input, int x, int y) {
 	bool redraw = false;
 
 	//
@@ -853,9 +812,9 @@ void SidebarClass::AI(KeyNumType & input, int x, int y)
 	}
 #else
 	if (!Debug_Map) {
-		Activate(1);	// Force the sidebar always on in Win95 mode
+		Activate(1); // Force the sidebar always on in Win95 mode
 	}
-#endif	//WIN32
+#endif // WIN32
 	if (!Debug_Map) {
 		Column[0].AI(input, x, y);
 		Column[1].AI(input, x, y);
@@ -887,7 +846,6 @@ void SidebarClass::AI(KeyNumType & input, int x, int y)
 	}
 #endif
 
-
 	if (IsSidebarActive) {
 
 		/*
@@ -900,20 +858,20 @@ void SidebarClass::AI(KeyNumType & input, int x, int y)
 			Activate_Repair(false);
 		}
 
-		if (input == (BUTTON_REPAIR|KN_BUTTON)) {
+		if (input == (BUTTON_REPAIR | KN_BUTTON)) {
 			Repair_Mode_Control(-1);
 		}
 
-		if (input == (BUTTON_ZOOM|KN_BUTTON)) {
+		if (input == (BUTTON_ZOOM | KN_BUTTON)) {
 			Zoom_Mode_Control();
 		}
 
-		if (input == (BUTTON_UPGRADE|KN_BUTTON)) {
+		if (input == (BUTTON_UPGRADE | KN_BUTTON)) {
 			Sell_Mode_Control(-1);
 		}
 
 		if (redraw) {
-			//IsToRedraw = true;
+			// IsToRedraw = true;
 			Column[0].Flag_To_Redraw();
 			Column[1].Flag_To_Redraw();
 
@@ -931,7 +889,6 @@ void SidebarClass::AI(KeyNumType & input, int x, int y)
 
 	PowerClass::AI(input, x, y);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Recalc -- Examines the sidebar data and updates it as necessary.              *
@@ -952,8 +909,7 @@ void SidebarClass::AI(KeyNumType & input, int x, int y)
  * HISTORY:                                                                                    *
  *   11/30/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::Recalc(void)
-{
+void SidebarClass::Recalc(void) {
 	bool redraw = false;
 
 	// Done elsewhere for new multiplayer. ST - 8/7/2019 10:49AM
@@ -969,7 +925,6 @@ void SidebarClass::Recalc(void)
 		Flag_To_Redraw(false);
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Activate -- Controls the sidebar activation.                                  *
@@ -989,8 +944,7 @@ void SidebarClass::Recalc(void)
  * HISTORY:                                                                                    *
  *   12/09/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::Activate(int control)
-{
+bool SidebarClass::Activate(int control) {
 	//
 	// We don't want the original sidebar to be visible. ST - 1/31/2019 11:28AM
 	//
@@ -1007,18 +961,18 @@ bool SidebarClass::Activate(int control)
 	**	Determine the new state of the sidebar.
 	*/
 	switch (control) {
-		case -1:
-			IsSidebarActive = IsSidebarActive == false;
-			break;
+	case -1:
+		IsSidebarActive = IsSidebarActive == false;
+		break;
 
-		case 1:
-			IsSidebarActive = true;
-			break;
+	case 1:
+		IsSidebarActive = true;
+		break;
 
-		default:
-		case 0:
-			IsSidebarActive = false;
-			break;
+	default:
+	case 0:
+		IsSidebarActive = false;
+		break;
 	}
 
 	/*
@@ -1032,7 +986,7 @@ bool SidebarClass::Activate(int control)
 		**	activate it on the left side of the screen.
 		*/
 		if (IsSidebarActive /*&& X*/) {
-			Set_View_Dimensions(0, 8 * RESFACTOR, ((320-SIDE_WIDTH)/ICON_PIXEL_W) * RESFACTOR);
+			Set_View_Dimensions(0, 8 * RESFACTOR, ((320 - SIDE_WIDTH) / ICON_PIXEL_W) * RESFACTOR);
 			IsToRedraw = true;
 			Help_Text(TXT_NONE);
 			Repair.Zap();
@@ -1049,7 +1003,7 @@ bool SidebarClass::Activate(int control)
 			Add_A_Button(Map.RadarButton);
 			Map.PowerButton.Zap();
 			Add_A_Button(Map.PowerButton);
-		} else  {
+		} else {
 			Help_Text(TXT_NONE);
 			Set_View_Dimensions(0, 8 * RESFACTOR);
 			Remove_A_Button(Repair);
@@ -1069,9 +1023,8 @@ bool SidebarClass::Activate(int control)
 		Flag_To_Redraw(true);
 	}
 
-	return(old);
+	return (old);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::StripClass -- Default constructor for the side strip class.       *
@@ -1087,28 +1040,17 @@ bool SidebarClass::Activate(int control)
  * HISTORY:                                                                                    *
  *   12/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-SidebarClass::StripClass::StripClass(InitClass const & ) :
-	X(0),
-	Y(0),
-	ID(0),
-	IsToRedraw(true),
-	IsBuilding(false),
-	IsScrollingDown(false),
-	IsScrolling(false),
-	Flasher(-1),
-	TopIndex(0),
-	Scroller(0),
-	Slid(0),
-	BuildableCount(0)
-{
+SidebarClass::StripClass::StripClass(InitClass const &)
+    : X(0), Y(0), ID(0), IsToRedraw(true), IsBuilding(false), IsScrollingDown(false), IsScrolling(false), Flasher(-1),
+      TopIndex(0), Scroller(0), Slid(0), BuildableCount(0) {
 	for (int index = 0; index < MAX_BUILDABLES; index++) {
 		Buildables[index].BuildableID = 0;
 		Buildables[index].BuildableType = RTTI_NONE;
 		Buildables[index].Factory = -1;
-		Buildables[index].BuildableViaCapture = false;		// Added for new sidebar functionality. ST - 9/24/2019 3:10PM 
+		Buildables[index].BuildableViaCapture =
+		    false; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::One_Time -- Performs one time actions necessary for the side stri *
@@ -1125,8 +1067,7 @@ SidebarClass::StripClass::StripClass(InitClass const & ) :
  * HISTORY:                                                                                    *
  *   12/31/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::One_Time(int )
-{
+void SidebarClass::StripClass::One_Time(int) {
 	/*
 	** Sidebar is player team specific in Hires
 	*/
@@ -1136,12 +1077,11 @@ void SidebarClass::StripClass::One_Time(int )
 		char buffer[_MAX_FNAME];
 		sprintf(buffer, "%sICON", SpecialWeaponFile[lp]);
 
-		char	fullname[_MAX_FNAME+_MAX_EXT];
+		char fullname[_MAX_FNAME + _MAX_EXT];
 		_makepath(fullname, NULL, NULL, buffer, ".SHP");
 		SpecialShapes[lp] = MFCD::Retrieve(fullname);
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Get_Special_Cameo -- Fetches the special event cameo shape.       *
@@ -1158,14 +1098,12 @@ void SidebarClass::StripClass::One_Time(int )
  * HISTORY:                                                                                    *
  *   05/19/1995 JLB : commented                                                                *
  *=============================================================================================*/
-void const * SidebarClass::StripClass::Get_Special_Cameo(SpecialWeaponType type)
-{
+void const *SidebarClass::StripClass::Get_Special_Cameo(SpecialWeaponType type) {
 	if ((unsigned)type < SPC_COUNT) {
-		return(SpecialShapes[type]);
+		return (SpecialShapes[type]);
 	}
-	return(0);
+	return (0);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Init_Clear -- Sets sidebar to a known (and deactivated) state     *
@@ -1179,8 +1117,7 @@ void const * SidebarClass::StripClass::Get_Special_Cameo(SpecialWeaponType type)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::Init_Clear(void)
-{
+void SidebarClass::StripClass::Init_Clear(void) {
 	IsScrollingDown = false;
 	IsScrolling = false;
 	IsBuilding = false;
@@ -1196,10 +1133,10 @@ void SidebarClass::StripClass::Init_Clear(void)
 		Buildables[index].BuildableID = 0;
 		Buildables[index].BuildableType = RTTI_NONE;
 		Buildables[index].Factory = -1;
-		Buildables[index].BuildableViaCapture = false;		// Added for new sidebar functionality. ST - 9/24/2019 3:10PM 
+		Buildables[index].BuildableViaCapture =
+		    false; // Added for new sidebar functionality. ST - 9/24/2019 3:10PM
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Init_IO -- Initializes the strip's buttons                        *
@@ -1215,14 +1152,13 @@ void SidebarClass::StripClass::Init_Clear(void)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::Init_IO(int id)
-{
+void SidebarClass::StripClass::Init_IO(int id) {
 	ID = id;
 
 	UpButton[ID].IsSticky = true;
-	UpButton[ID].ID = BUTTON_UP+id;
-	UpButton[ID].X = X+(UP_X_OFFSET * RESFACTOR);
-	UpButton[ID].Y = Y+(UP_Y_OFFSET * RESFACTOR);
+	UpButton[ID].ID = BUTTON_UP + id;
+	UpButton[ID].X = X + (UP_X_OFFSET * RESFACTOR);
+	UpButton[ID].Y = Y + (UP_Y_OFFSET * RESFACTOR);
 
 #if (FRENCH)
 #ifdef WIN32
@@ -1230,14 +1166,14 @@ void SidebarClass::StripClass::Init_IO(int id)
 #else
 	UpButton[ID].Set_Shape(MFCD::Retrieve("STUP_FIX.SHP"));
 #endif
-#else	//FRENCH
+#else  // FRENCH
 	UpButton[ID].Set_Shape(MFCD::Retrieve("STRIPUP.SHP"));
-#endif	//FRENCH
+#endif // FRENCH
 
 	DownButton[ID].IsSticky = true;
-	DownButton[ID].ID = BUTTON_DOWN+id;
-	DownButton[ID].X = X+(DOWN_X_OFFSET * RESFACTOR);
-	DownButton[ID].Y = Y+(DOWN_Y_OFFSET * RESFACTOR);
+	DownButton[ID].ID = BUTTON_DOWN + id;
+	DownButton[ID].X = X + (DOWN_X_OFFSET * RESFACTOR);
+	DownButton[ID].Y = Y + (DOWN_Y_OFFSET * RESFACTOR);
 
 	/*
 	** Buttons are in a slightly different position in the new sidebar
@@ -1248,17 +1184,15 @@ void SidebarClass::StripClass::Init_IO(int id)
 	DownButton[ID].Set_Shape(MFCD::Retrieve("STRIPDN.SHP"));
 
 	for (int index = 0; index < MAX_VISIBLE; index++) {
-		SelectClass & g = SelectButton[ID][index];
+		SelectClass &g = SelectButton[ID][index];
 		g.ID = BUTTON_SELECT;
 		g.X = X;
-		g.Y = Y + ((OBJECT_HEIGHT*index) * RESFACTOR);
+		g.Y = Y + ((OBJECT_HEIGHT * index) * RESFACTOR);
 		g.Width = OBJECT_WIDTH * RESFACTOR;
 		g.Height = OBJECT_HEIGHT * RESFACTOR;
 		g.Set_Owner(*this, index);
 	}
-
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Init_Theater -- Performs theater-specific initialization          *
@@ -1272,54 +1206,49 @@ void SidebarClass::StripClass::Init_IO(int id)
  * HISTORY:                                                                                    *
  *   12/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::Init_Theater(TheaterType theater)
-{
+void SidebarClass::StripClass::Init_Theater(TheaterType theater) {
 
 	Reload_LogoShapes();
 
-	if ( (theater != THEATER_NONE) && (theater != ::LastTheater)) {
+	if ((theater != THEATER_NONE) && (theater != ::LastTheater)) {
 
 		static TLucentType const ClockCols[1] = {
-			{GREEN, BLACK, 100, 0}
-//			{GREEN, LTGREY, 180, 0}
+		    {GREEN, BLACK, 100, 0} //			{GREEN, LTGREY, 180, 0}
 		};
 
 		/*
 		**	Make sure that remapping doesn't occur on the colors that cycle.
 		*/
 		PaletteClass pal = OriginalPalette;
-		memset(&pal[CYCLE_COLOR_START*3], 0x3f, CYCLE_COLOR_COUNT*3);
-		Build_Translucent_Table(pal, &ClockCols[0], 1, (void*)ClockTranslucentTable);
+		memset(&pal[CYCLE_COLOR_START * 3], 0x3f, CYCLE_COLOR_COUNT * 3);
+		Build_Translucent_Table(pal, &ClockCols[0], 1, (void *)ClockTranslucentTable);
 
-//		Mem_Copy(GamePalette, OriginalPalette, 768);
-//		memset(&GamePalette[CYCLE_COLOR_START*3], 0x3f, CYCLE_COLOR_COUNT*3);
+		//		Mem_Copy(GamePalette, OriginalPalette, 768);
+		//		memset(&GamePalette[CYCLE_COLOR_START*3], 0x3f, CYCLE_COLOR_COUNT*3);
 
 		/*
 		**	Create the translucent table used for the sidebar.
 		*/
-//		Build_Translucent_Table(GamePalette, &ClockCols[0], 1, (void*)ClockTranslucentTable);
-//		GamePalette = OriginalPalette;
+		//		Build_Translucent_Table(GamePalette, &ClockCols[0], 1, (void*)ClockTranslucentTable);
+		//		GamePalette = OriginalPalette;
 
 		Conquer_Build_Fading_Table(GamePalette, &ClockTranslucentTable[256], BLACK, 100);
 	}
 }
 
-void SidebarClass::StripClass::Reload_LogoShapes(void)
-{
+void SidebarClass::StripClass::Reload_LogoShapes(void) {
 	/*
 	** Load hi-res strip art here since it is player side specific
 	*/
-	static char * stripnames[]={
-		"stripna.shp",		//Nato
-		"stripna.shp",
-		"stripus.shp",		//USSR
-		"stripna.shp",
-		"stripus.shp",		//UKRAINE
-		"stripna.shp",
-		"stripna.shp",
-		"stripna.shp",
-		"stripna.shp",		//HOUSE_GOOD
-		"stripus.shp",		//HOUSE_BAD
+	static char *stripnames[] = {
+	    "stripna.shp", // Nato
+	    "stripna.shp",
+	    "stripus.shp", // USSR
+	    "stripna.shp",
+	    "stripus.shp", // UKRAINE
+	    "stripna.shp", "stripna.shp", "stripna.shp",
+	    "stripna.shp", // HOUSE_GOOD
+	    "stripus.shp", // HOUSE_BAD
 	};
 	int houseloaded = 0;
 
@@ -1327,10 +1256,10 @@ void SidebarClass::StripClass::Reload_LogoShapes(void)
 	** Sidebar art is dependent on the side of the player
 	*/
 
-	if(PlayerPtr) {
+	if (PlayerPtr) {
 		houseloaded = PlayerPtr->ActLike;
 	}
-	LogoShapes = (void*)MFCD::Retrieve(stripnames[houseloaded]);
+	LogoShapes = (void *)MFCD::Retrieve(stripnames[houseloaded]);
 }
 
 /***********************************************************************************************
@@ -1348,8 +1277,7 @@ void SidebarClass::StripClass::Reload_LogoShapes(void)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::Activate(void)
-{
+void SidebarClass::StripClass::Activate(void) {
 	UpButton[ID].Zap();
 	Map.Add_A_Button(UpButton[ID]);
 
@@ -1361,7 +1289,6 @@ void SidebarClass::StripClass::Activate(void)
 		Map.Add_A_Button(SelectButton[ID][index]);
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Deactivate -- Removes the side strip buttons from the input syste *
@@ -1378,15 +1305,13 @@ void SidebarClass::StripClass::Activate(void)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::Deactivate(void)
-{
+void SidebarClass::StripClass::Deactivate(void) {
 	Map.Remove_A_Button(UpButton[ID]);
 	Map.Remove_A_Button(DownButton[ID]);
 	for (int index = 0; index < MAX_VISIBLE; index++) {
 		Map.Remove_A_Button(SelectButton[ID][index]);
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Add -- Add an object to the side strip.                           *
@@ -1406,12 +1331,11 @@ void SidebarClass::StripClass::Deactivate(void)
  *   12/31/1994 JLB : Created.                                                                 *
  *   9/24/2019 3:17PM : Added via capture parameter for new sidebar functionality              *
  *=============================================================================================*/
-bool SidebarClass::StripClass::Add(RTTIType type, int id, bool via_capture)
-{
+bool SidebarClass::StripClass::Add(RTTIType type, int id, bool via_capture) {
 	if (BuildableCount <= MAX_BUILDABLES) {
 		for (int index = 0; index < BuildableCount; index++) {
 			if (Buildables[index].BuildableType == type && Buildables[index].BuildableID == id) {
-				return(false);
+				return (false);
 			}
 		}
 		if (!ScenarioInit && type != RTTI_SPECIAL) {
@@ -1422,11 +1346,10 @@ bool SidebarClass::StripClass::Add(RTTIType type, int id, bool via_capture)
 		Buildables[BuildableCount].BuildableViaCapture = via_capture;
 		BuildableCount++;
 		IsToRedraw = true;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Scroll -- Causes the side strip to scroll.                        *
@@ -1446,18 +1369,18 @@ bool SidebarClass::StripClass::Add(RTTIType type, int id, bool via_capture)
  *   12/31/1994 JLB : Created.                                                                 *
  *   07/29/1995 JLB : Simplified scrolling logic.                                              *
  *=============================================================================================*/
-bool SidebarClass::StripClass::Scroll(bool up)
-{
+bool SidebarClass::StripClass::Scroll(bool up) {
 	if (up) {
-		if (!TopIndex) return(false);
+		if (!TopIndex)
+			return (false);
 		Scroller--;
 	} else {
-		if (TopIndex+MAX_VISIBLE >= BuildableCount) return(false);
+		if (TopIndex + MAX_VISIBLE >= BuildableCount)
+			return (false);
 		Scroller++;
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Flag_To_Redra -- Flags the sidebar strip to be redrawn.           *
@@ -1474,13 +1397,11 @@ bool SidebarClass::StripClass::Scroll(bool up)
  * HISTORY:                                                                                    *
  *   05/18/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::Flag_To_Redraw(void)
-{
+void SidebarClass::StripClass::Flag_To_Redraw(void) {
 	IsToRedraw = true;
-	//Map.SidebarClass::IsToRedraw = true;
+	// Map.SidebarClass::IsToRedraw = true;
 	Map.Flag_To_Redraw(false);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::AI -- Input and AI processing for the side strip.                 *
@@ -1503,21 +1424,20 @@ void SidebarClass::StripClass::Flag_To_Redraw(void)
  *   12/31/1994 JLB : Created.                                                                 *
  *   12/31/1994 JLB : Uses mouse coordinate parameters.                                        *
  *=============================================================================================*/
-bool SidebarClass::StripClass::AI(KeyNumType & input, int , int )
-{
+bool SidebarClass::StripClass::AI(KeyNumType &input, int, int) {
 	bool redraw = false;
 
 	/*
 	**	If this is scroll button for this side strip, then scroll the strip as
 	**	indicated.
 	*/
-	if (input == (UpButton[ID].ID|KN_BUTTON)) {	// && !IsScrolling
+	if (input == (UpButton[ID].ID | KN_BUTTON)) { // && !IsScrolling
 		UpButton[ID].IsPressed = false;
 		if (!Scroll(true)) {
 			Sound_Effect(VOC_SCOLD);
 		}
 	}
-	if (input == (DownButton[ID].ID|KN_BUTTON)) {	// && !IsScrolling
+	if (input == (DownButton[ID].ID | KN_BUTTON)) { // && !IsScrolling
 		DownButton[ID].IsPressed = false;
 		if (!Scroll(false)) {
 			Sound_Effect(VOC_SCOLD);
@@ -1550,7 +1470,7 @@ bool SidebarClass::StripClass::AI(KeyNumType & input, int , int )
 				}
 
 			} else {
-				if (TopIndex+MAX_VISIBLE >= BuildableCount) {
+				if (TopIndex + MAX_VISIBLE >= BuildableCount) {
 					Scroller = 0;
 				} else {
 					Scroller--;
@@ -1606,40 +1526,42 @@ bool SidebarClass::StripClass::AI(KeyNumType & input, int , int )
 			int factoryid = Buildables[index].Factory;
 
 			if (factoryid != -1) {
-				FactoryClass * factory = Factories.Raw_Ptr(factoryid);
+				FactoryClass *factory = Factories.Raw_Ptr(factoryid);
 
 				if (factory && (factory->Has_Changed() || factory->Is_Blocked())) {
 					redraw = true;
 					if (factory->Has_Completed()) {
 
 						/*
-						**	Construction has been completed. Announce this fact to the player and
-						**	try to get the object to automatically leave the factory. Buildings are
-						**	the main exception to the ability to leave the factory under their own
-						**	power.
+						**	Construction has been completed. Announce this fact to the
+						*player and *	try to get the object to automatically leave the
+						*factory. Buildings are *	the main exception to the ability to
+						*leave the factory under their own *	power.
 						*/
-						TechnoClass * pending = factory->Get_Object();
+						TechnoClass *pending = factory->Get_Object();
 						if (pending != NULL) {
 							switch (pending->What_Am_I()) {
-								case RTTI_VESSEL:
-								case RTTI_UNIT:
-								case RTTI_AIRCRAFT:
-									OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
-									if (!factory->Is_Blocked()) {
-										Speak(VOX_UNIT_READY);
-									}
-									break;
+							case RTTI_VESSEL:
+							case RTTI_UNIT:
+							case RTTI_AIRCRAFT:
+								OutList.Add(EventClass(EventClass::PLACE,
+										       pending->What_Am_I(), -1));
+								if (!factory->Is_Blocked()) {
+									Speak(VOX_UNIT_READY);
+								}
+								break;
 
-								case RTTI_BUILDING:
-									Speak(VOX_CONSTRUCTION);
-									break;
+							case RTTI_BUILDING:
+								Speak(VOX_CONSTRUCTION);
+								break;
 
-								case RTTI_INFANTRY:
-									OutList.Add(EventClass(EventClass::PLACE, pending->What_Am_I(), -1));
-									if (!factory->Is_Blocked()) {
-										Speak(VOX_UNIT_READY);
-									}
-									break;
+							case RTTI_INFANTRY:
+								OutList.Add(EventClass(EventClass::PLACE,
+										       pending->What_Am_I(), -1));
+								if (!factory->Is_Blocked()) {
+									Speak(VOX_UNIT_READY);
+								}
+								break;
 							}
 						}
 					}
@@ -1655,9 +1577,8 @@ bool SidebarClass::StripClass::AI(KeyNumType & input, int , int )
 	if (redraw) {
 		Flag_To_Redraw();
 	}
-	return(redraw);
+	return (redraw);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Draw_It -- Render the sidebar display.                            *
@@ -1677,8 +1598,7 @@ bool SidebarClass::StripClass::AI(KeyNumType & input, int , int )
  *   12/31/1994 JLB : Created.                                                                 *
  *   08/06/1995 JLB : Handles multi factory tracking in same strip.                            *
  *=============================================================================================*/
-void SidebarClass::StripClass::Draw_It(bool complete)
-{
+void SidebarClass::StripClass::Draw_It(bool complete) {
 	if (IsToRedraw || complete) {
 		IsToRedraw = false;
 
@@ -1696,7 +1616,8 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 		** New sidebar needs to be drawn not filled
 		*/
 		if (BuildableCount < MAX_VISIBLE) {
-			CC_Draw_Shape(LogoShapes, ID,	X+(2*RESFACTOR),	Y,	WINDOW_MAIN, SHAPE_WIN_REL|SHAPE_NORMAL,	0);
+			CC_Draw_Shape(LogoShapes, ID, X + (2 * RESFACTOR), Y, WINDOW_MAIN, SHAPE_WIN_REL | SHAPE_NORMAL,
+				      0);
 		}
 
 		/*
@@ -1712,22 +1633,22 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 		for (int i = 0; i < MAX_VISIBLE + (IsScrolling ? 1 : 0); i++) {
 			bool production;
 			bool completed;
-			int  stage;
+			int stage;
 			bool darken = false;
-			void const * shapefile = 0;
+			void const *shapefile = 0;
 			int shapenum = 0;
-			void const * remapper = 0;
-			FactoryClass * factory = 0;
-			int index = i+TopIndex;
+			void const *remapper = 0;
+			FactoryClass *factory = 0;
+			int index = i + TopIndex;
 			int x = X;
-			int y = Y + (i*OBJECT_HEIGHT * RESFACTOR);
+			int y = Y + (i * OBJECT_HEIGHT * RESFACTOR);
 
 			/*
 			**	If the strip is scrolling, then the offset is adjusted accordingly.
 			*/
 			if (IsScrolling) {
-				y -= (OBJECT_HEIGHT - Slid)  * RESFACTOR;
-//				y -= OBJECT_HEIGHT - Slid;
+				y -= (OBJECT_HEIGHT - Slid) * RESFACTOR;
+				//				y -= OBJECT_HEIGHT - Slid;
 			}
 
 			/*
@@ -1735,26 +1656,31 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 			**	slot. This shape pointer is used to draw the underlying graphic there.
 			*/
 			if (index < BuildableCount) {
-				ObjectTypeClass const * obj = NULL;
+				ObjectTypeClass const *obj = NULL;
 				SpecialWeaponType spc = SPC_NONE;
 
 				if (Buildables[index].BuildableType != RTTI_SPECIAL) {
 
-					obj = Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
+					obj = Fetch_Techno_Type(Buildables[index].BuildableType,
+								Buildables[index].BuildableID);
 					if (obj != NULL) {
 
 						/*
 						**	Fetch the remap table that is appropriate for this object
 						**	type.
 						*/
-						remapper = PlayerPtr->Remap_Table(false, ((TechnoTypeClass const *)obj)->Remap);
+						remapper = PlayerPtr->Remap_Table(
+						    false, ((TechnoTypeClass const *)obj)->Remap);
 
 						/*
-						**	If there is already a factory producing this kind of object, then all
-						**	objects of this type are displays in a disabled state.
+						**	If there is already a factory producing this kind of object,
+						*then all *	objects of this type are displays in a disabled state.
 						*/
-						bool isbusy = (PlayerPtr->Fetch_Factory(Buildables[index].BuildableType) != NULL);
-						if (!isbusy && PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType, Buildables[index].BuildableID)) {
+						bool isbusy =
+						    (PlayerPtr->Fetch_Factory(Buildables[index].BuildableType) != NULL);
+						if (!isbusy &&
+						    PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType,
+										 Buildables[index].BuildableID)) {
 							isbusy = true;
 						}
 
@@ -1766,16 +1692,17 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 						}
 
 						shapefile = obj->Get_Cameo_Data();
-						shapenum  = 0;
+						shapenum = 0;
 						if (Buildables[index].Factory != -1) {
-							factory 		= Factories.Raw_Ptr(Buildables[index].Factory);
-							production	= true;
-							completed	= factory->Has_Completed();
-							stage			= factory->Completion();
-							darken		= false;
+							factory = Factories.Raw_Ptr(Buildables[index].Factory);
+							production = true;
+							completed = factory->Has_Completed();
+							stage = factory->Completion();
+							darken = false;
 						} else {
-							production  = false;
-//							darken      = IsBuilding;
+							production = false;
+							//							darken
+							//= IsBuilding;
 
 							/*
 							**	Darken the imagery if a factory of a matching type is
@@ -1784,10 +1711,11 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 							darken = isbusy;
 						}
 					} else {
-						darken = PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType, Buildables[index].BuildableID);
+						darken = PlayerPtr->Is_Hack_Prevented(Buildables[index].BuildableType,
+										      Buildables[index].BuildableID);
 					}
 
-				} else  {
+				} else {
 
 					spc = SpecialWeaponType(Buildables[index].BuildableID);
 					shapefile = Get_Special_Cameo(spc);
@@ -1809,15 +1737,15 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 					}
 
 				} else {
-					shapefile	= LogoShapes;
+					shapefile = LogoShapes;
 					if (!darken) {
-						shapenum		= SB_BLANK;
+						shapenum = SB_BLANK;
 					}
 				}
 			} else {
-				shapefile	= LogoShapes;
-				shapenum		= SB_BLANK;
-				production	= false;
+				shapefile = LogoShapes;
+				shapenum = SB_BLANK;
+				production = false;
 			}
 
 			remapper = 0;
@@ -1828,24 +1756,22 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 			** Don't draw blank shapes over the new 640x400 sidebar art - ST 5/1/96 6:01PM
 			*/
 			if (shapenum != SB_BLANK || shapefile != LogoShapes) {
-				CC_Draw_Shape(shapefile, shapenum,
-					x-(WindowList[WINDOW_SIDEBAR][WINDOWX])+(LEFT_EDGE_OFFSET * RESFACTOR),
-					y-WindowList[WINDOW_SIDEBAR][WINDOWY],
-					WINDOW_SIDEBAR,
-					SHAPE_NORMAL|SHAPE_WIN_REL| (remapper ? SHAPE_FADING : SHAPE_NORMAL),
-					remapper);
+				CC_Draw_Shape(
+				    shapefile, shapenum,
+				    x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
+				    y - WindowList[WINDOW_SIDEBAR][WINDOWY], WINDOW_SIDEBAR,
+				    SHAPE_NORMAL | SHAPE_WIN_REL | (remapper ? SHAPE_FADING : SHAPE_NORMAL), remapper);
 
 				/*
 				**	Darken this object because it cannot be produced or is otherwise
 				**	unavailable.
 				*/
 				if (darken) {
-					CC_Draw_Shape(ClockShapes, 0,
-							x-(WindowList[WINDOW_SIDEBAR][WINDOWX])+(LEFT_EDGE_OFFSET * RESFACTOR),
-							y-WindowList[WINDOW_SIDEBAR][WINDOWY],
-							WINDOW_SIDEBAR,
-							SHAPE_NORMAL|SHAPE_WIN_REL|SHAPE_GHOST,
-							NULL, ClockTranslucentTable);
+					CC_Draw_Shape(
+					    ClockShapes, 0,
+					    x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
+					    y - WindowList[WINDOW_SIDEBAR][WINDOWY], WINDOW_SIDEBAR,
+					    SHAPE_NORMAL | SHAPE_WIN_REL | SHAPE_GHOST, NULL, ClockTranslucentTable);
 				}
 			}
 
@@ -1860,36 +1786,36 @@ void SidebarClass::StripClass::Draw_It(bool complete)
 					**	Display text showing that the object is ready to place.
 					*/
 					CC_Draw_Shape(ObjectTypeClass::PipShapes, PIP_READY,
-					(x-(WindowList[WINDOW_SIDEBAR][WINDOWX]))+(LEFT_EDGE_OFFSET+15) * RESFACTOR,
-					(y-WindowList[WINDOW_SIDEBAR][WINDOWY])+(4 * RESFACTOR),
-					WINDOW_SIDEBAR, SHAPE_CENTER);
+						      (x - (WindowList[WINDOW_SIDEBAR][WINDOWX])) +
+							  (LEFT_EDGE_OFFSET + 15) * RESFACTOR,
+						      (y - WindowList[WINDOW_SIDEBAR][WINDOWY]) + (4 * RESFACTOR),
+						      WINDOW_SIDEBAR, SHAPE_CENTER);
 				} else {
 
-					CC_Draw_Shape(ClockShapes, stage+1,
-							x-(WindowList[WINDOW_SIDEBAR][WINDOWX])+(LEFT_EDGE_OFFSET * RESFACTOR),
-							y-WindowList[WINDOW_SIDEBAR][WINDOWY],
-							WINDOW_SIDEBAR,
-							SHAPE_NORMAL|SHAPE_WIN_REL|SHAPE_GHOST,
-							NULL, ClockTranslucentTable);
+					CC_Draw_Shape(
+					    ClockShapes, stage + 1,
+					    x - (WindowList[WINDOW_SIDEBAR][WINDOWX]) + (LEFT_EDGE_OFFSET * RESFACTOR),
+					    y - WindowList[WINDOW_SIDEBAR][WINDOWY], WINDOW_SIDEBAR,
+					    SHAPE_NORMAL | SHAPE_WIN_REL | SHAPE_GHOST, NULL, ClockTranslucentTable);
 
 					/*
 					**	Display text showing that the construction is temporarily on hold.
 					*/
 					if (factory && !factory->Is_Building()) {
 						CC_Draw_Shape(ObjectTypeClass::PipShapes, PIP_HOLDING,
-						(x-(WindowList[WINDOW_SIDEBAR][WINDOWX])) + ((LEFT_EDGE_OFFSET+15) * RESFACTOR),
-						(y-WindowList[WINDOW_SIDEBAR][WINDOWY])+(4 * RESFACTOR),
-						WINDOW_SIDEBAR, SHAPE_CENTER);
+							      (x - (WindowList[WINDOW_SIDEBAR][WINDOWX])) +
+								  ((LEFT_EDGE_OFFSET + 15) * RESFACTOR),
+							      (y - WindowList[WINDOW_SIDEBAR][WINDOWY]) +
+								  (4 * RESFACTOR),
+							      WINDOW_SIDEBAR, SHAPE_CENTER);
 					}
 				}
 			}
-
 		}
 
 		LastSlid = Slid;
 	}
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Recalc -- Revalidates the current sidebar list of objects.        *
@@ -1910,12 +1836,11 @@ void SidebarClass::StripClass::Draw_It(bool complete)
  *   01/19/1995 JLB : Created.                                                                 *
  *   06/26/1995 JLB : Doesn't collapse sidebar when buildables removed.                        *
  *=============================================================================================*/
-bool SidebarClass::StripClass::Recalc(void)
-{
+bool SidebarClass::StripClass::Recalc(void) {
 	int ok;
 
 	if (Debug_Map || !BuildableCount) {
-		return(false);
+		return (false);
 	}
 
 	/*
@@ -1925,7 +1850,8 @@ bool SidebarClass::StripClass::Recalc(void)
 	*/
 	bool redraw = false;
 	for (int index = 0; index < BuildableCount; index++) {
-		TechnoTypeClass const * tech = Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
+		TechnoTypeClass const *tech =
+		    Fetch_Techno_Type(Buildables[index].BuildableType, Buildables[index].BuildableID);
 		if (tech != NULL) {
 			ok = tech->Who_Can_Build_Me(true, false, PlayerPtr->Class->House) != NULL;
 		} else {
@@ -1941,8 +1867,9 @@ bool SidebarClass::StripClass::Recalc(void)
 			/*
 			**	Removes this entry from the list.
 			*/
-			if (BuildableCount > 1 && index < BuildableCount-1) {
-				memcpy(&Buildables[index], &Buildables[index+1], sizeof(Buildables[0])*((BuildableCount-index)-1));
+			if (BuildableCount > 1 && index < BuildableCount - 1) {
+				memcpy(&Buildables[index], &Buildables[index + 1],
+				       sizeof(Buildables[0]) * ((BuildableCount - index) - 1));
 			}
 			TopIndex = 0;
 			IsToRedraw = true;
@@ -1960,9 +1887,8 @@ bool SidebarClass::StripClass::Recalc(void)
 		Map.SidebarClass::Activate(0);
 	}
 #endif
-	return(redraw);
+	return (redraw);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::SelectClass::SelectClass -- Default constructor.                  *
@@ -1980,13 +1906,9 @@ bool SidebarClass::StripClass::Recalc(void)
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-SidebarClass::StripClass::SelectClass::SelectClass(void) :
-	ControlClass(0, 0, 0, (OBJECT_WIDTH-1) * RESFACTOR, OBJECT_HEIGHT * RESFACTOR, LEFTPRESS|RIGHTPRESS|LEFTUP),
-	Strip(0),
-	Index(0)
-{
-}
-
+SidebarClass::StripClass::SelectClass::SelectClass(void)
+    : ControlClass(0, 0, 0, (OBJECT_WIDTH - 1) * RESFACTOR, OBJECT_HEIGHT * RESFACTOR, LEFTPRESS | RIGHTPRESS | LEFTUP),
+      Strip(0), Index(0) {}
 
 /***********************************************************************************************
  * SidebarClass::StripClass::SelectClass:: -- Assigns special values to a buildable select but *
@@ -2007,14 +1929,12 @@ SidebarClass::StripClass::SelectClass::SelectClass(void) :
  * HISTORY:                                                                                    *
  *   01/19/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::StripClass::SelectClass::Set_Owner(StripClass & strip, int index)
-{
+void SidebarClass::StripClass::SelectClass::Set_Owner(StripClass &strip, int index) {
 	Strip = &strip;
 	Index = index;
 	X = strip.X;
 	Y = strip.Y + ((index * OBJECT_HEIGHT) * RESFACTOR);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::SelectClass:: -- Action function when buildable cameo is selected *
@@ -2034,15 +1954,14 @@ void SidebarClass::StripClass::SelectClass::Set_Owner(StripClass & strip, int in
  *   01/19/1995 JLB : Created.                                                                 *
  *   10/09/1996 JLB : Sonar pulse converted to regular event type.                             *
  *=============================================================================================*/
-int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & key)
-{
+int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType &key) {
 	int index = Strip->TopIndex + Index;
 	RTTIType otype = Strip->Buildables[index].BuildableType;
 	int oid = Strip->Buildables[index].BuildableID;
 	int fnumber = Strip->Buildables[index].Factory;
-	RemapControlType * scheme = GadgetClass::Get_Color_Scheme();
+	RemapControlType *scheme = GadgetClass::Get_Color_Scheme();
 
-	ObjectTypeClass const * choice = NULL;
+	ObjectTypeClass const *choice = NULL;
 	SpecialWeaponType spc = SPC_NONE;
 
 	/*
@@ -2052,13 +1971,13 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & k
 	**	kind of factory is specified by the "genfactory" value. This can be used to see
 	**	if the factory type is currently busy or not.
 	*/
-	FactoryClass * factory = PlayerPtr->Fetch_Factory(otype);
+	FactoryClass *factory = PlayerPtr->Fetch_Factory(otype);
 
 	Map.Override_Mouse_Shape(MOUSE_NORMAL);
 
 	if (index < Strip->BuildableCount) {
 		if (otype != RTTI_SPECIAL) {
-			choice  = Fetch_Techno_Type(otype, oid);
+			choice = Fetch_Techno_Type(otype, oid);
 		} else {
 			spc = SpecialWeaponType(oid);
 		}
@@ -2067,9 +1986,9 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & k
 			factory = Factories.Raw_Ptr(fnumber);
 		}
 
-  	} else {
-  		Map.Help_Text(TXT_NONE);
-  	}
+	} else {
+		Map.Help_Text(TXT_NONE);
+	}
 
 	if (spc != SPC_NONE) {
 
@@ -2168,51 +2087,57 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & k
 				if (fnumber == -1 && factory != NULL) {
 					Speak(VOX_NO_FACTORY);
 					ControlClass::Action(flags, key);
-					return(true);
+					return (true);
 				}
 
 				if (factory != NULL) {
 
 					/*
-					**	If this object is currently being built, then give a scold sound and text and then
-					**	bail.
+					**	If this object is currently being built, then give a scold sound and
+					*text and then *	bail.
 					*/
 					if (factory->Is_Building()) {
 						Speak(VOX_NO_FACTORY);
 					} else {
 
 						/*
-						**	If production has completed, then attempt to have the object exit
-						**	the factory or go into placement mode.
+						**	If production has completed, then attempt to have the object
+						*exit *	the factory or go into placement mode.
 						*/
 						if (factory->Has_Completed()) {
 
-							TechnoClass * pending = factory->Get_Object();
+							TechnoClass *pending = factory->Get_Object();
 							if (!pending && factory->Get_Special_Item()) {
 								Map.IsTargettingMode = SPC_ANY;
 							} else {
-								BuildingClass * builder = pending->Who_Can_Build_Me(false, false);
+								BuildingClass *builder =
+								    pending->Who_Can_Build_Me(false, false);
 								if (!builder) {
-									OutList.Add(EventClass(EventClass::ABANDON, otype, oid));
+									OutList.Add(EventClass(EventClass::ABANDON,
+											       otype, oid));
 									Speak(VOX_NO_FACTORY);
 								} else {
 
 									/*
-									**	If the completed object is a building, then change the
-									**	game state into building placement mode. This fact is
-									**	not transmitted to any linked computers until the moment
+									**	If the completed object is a building,
+									*then change the *	game state into building
+									*placement mode. This fact is *	not transmitted
+									*to any linked computers until the moment
 									**	the building is actually placed down.
 									*/
 									if (pending->What_Am_I() == RTTI_BUILDING) {
-								 		PlayerPtr->Manual_Place(builder, (BuildingClass *)pending);
+										PlayerPtr->Manual_Place(
+										    builder, (BuildingClass *)pending);
 									} else {
 
 										/*
-										**	For objects that can leave the factory under their own
-										**	power, queue this event and process through normal house
-										**	production channels.
+										**	For objects that can leave the
+										*factory under their own *	power,
+										*queue this event and process through
+										*normal house *	production channels.
 										*/
-										OutList.Add(EventClass(EventClass::PLACE, otype, -1));
+										OutList.Add(EventClass(
+										    EventClass::PLACE, otype, -1));
 									}
 								}
 							}
@@ -2222,15 +2147,18 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & k
 								// Eva scolds the player here.
 							} else {
 								/*
-								**	The factory must have been in a suspended state. Resume construction
-								**	normally.
+								**	The factory must have been in a suspended state.
+								*Resume construction *	normally.
 								*/
 								if (otype == RTTI_INFANTRYTYPE) {
 									Speak(VOX_TRAINING);
 								} else {
 									Speak(VOX_BUILDING);
 								}
-								OutList.Add(EventClass(EventClass::PRODUCE, Strip->Buildables[index].BuildableType, Strip->Buildables[index].BuildableID));
+								OutList.Add(
+								    EventClass(EventClass::PRODUCE,
+									       Strip->Buildables[index].BuildableType,
+									       Strip->Buildables[index].BuildableID));
 							}
 						}
 					}
@@ -2242,15 +2170,17 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & k
 					} else {
 
 						/*
-						**	If this side strip is already busy with production, then ignore the
-						**	input and announce this fact.
+						**	If this side strip is already busy with production, then ignore
+						*the *	input and announce this fact.
 						*/
 						if (otype == RTTI_INFANTRYTYPE) {
 							Speak(VOX_TRAINING);
 						} else {
 							Speak(VOX_BUILDING);
 						}
-						OutList.Add(EventClass(EventClass::PRODUCE, Strip->Buildables[index].BuildableType, Strip->Buildables[index].BuildableID));
+						OutList.Add(EventClass(EventClass::PRODUCE,
+								       Strip->Buildables[index].BuildableType,
+								       Strip->Buildables[index].BuildableID));
 					}
 				}
 			}
@@ -2260,9 +2190,8 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & k
 	}
 
 	ControlClass::Action(flags, key);
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::SBGadgetClass::Action -- Special function that controls the mouse over the si *
@@ -2281,13 +2210,11 @@ int SidebarClass::StripClass::SelectClass::Action(unsigned flags, KeyNumType & k
  * HISTORY:                                                                                    *
  *   03/28/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int SidebarClass::SBGadgetClass::Action(unsigned , KeyNumType & )
-{
+int SidebarClass::SBGadgetClass::Action(unsigned, KeyNumType &) {
 	Map.Help_Text(TXT_NONE);
 	Map.Override_Mouse_Shape(MOUSE_NORMAL, false);
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Factory_Link -- Links a factory to a sidebar button.              *
@@ -2311,8 +2238,7 @@ int SidebarClass::SBGadgetClass::Action(unsigned , KeyNumType & )
  * HISTORY:                                                                                    *
  *   05/18/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::StripClass::Factory_Link(int factory, RTTIType type, int id)
-{
+bool SidebarClass::StripClass::Factory_Link(int factory, RTTIType type, int id) {
 	for (int index = 0; index < BuildableCount; index++) {
 		if (Buildables[index].BuildableType == type && Buildables[index].BuildableID == id) {
 			Buildables[index].Factory = factory;
@@ -2321,12 +2247,11 @@ bool SidebarClass::StripClass::Factory_Link(int factory, RTTIType type, int id)
 			** Flag that all the icons on this strip need to be redrawn
 			*/
 			Flag_To_Redraw();
-			return(true);
+			return (true);
 		}
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Abandon_Production -- Stops production of the object specified.               *
@@ -2347,11 +2272,9 @@ bool SidebarClass::StripClass::Factory_Link(int factory, RTTIType type, int id)
  * HISTORY:                                                                                    *
  *   05/18/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool SidebarClass::Abandon_Production(RTTIType type, int factory)
-{
-	return(Column[Which_Column(type)].Abandon_Production(factory));
+bool SidebarClass::Abandon_Production(RTTIType type, int factory) {
+	return (Column[Which_Column(type)].Abandon_Production(factory));
 }
-
 
 /***********************************************************************************************
  * SidebarClass::StripClass::Abandon_Produ -- Abandons production associated with sidebar.     *
@@ -2369,8 +2292,7 @@ bool SidebarClass::Abandon_Production(RTTIType type, int factory)
  *   05/18/1995 JLB : Created.                                                                 *
  *   08/06/1995 JLB : More intelligent abandon logic for multiple factories.                   *
  *=============================================================================================*/
-bool SidebarClass::StripClass::Abandon_Production(int factory)
-{
+bool SidebarClass::StripClass::Abandon_Production(int factory) {
 	bool noprod = true;
 	bool abandon = false;
 	for (int index = 0; index < BuildableCount; index++) {
@@ -2398,9 +2320,8 @@ bool SidebarClass::StripClass::Abandon_Production(int factory)
 	if (noprod) {
 		IsBuilding = false;
 	}
-	return(abandon);
+	return (abandon);
 }
-
 
 /***********************************************************************************************
  * SidebarClass::Zoom_Mode_Control -- Handles the zoom mode toggle operation.                  *
@@ -2417,8 +2338,7 @@ bool SidebarClass::StripClass::Abandon_Production(int factory)
  * HISTORY:                                                                                    *
  *   07/31/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void SidebarClass::Zoom_Mode_Control(void)
-{
+void SidebarClass::Zoom_Mode_Control(void) {
 #ifdef WIN32
 	/*
 	** If radar is active, cycle as follows:
@@ -2428,7 +2348,7 @@ void SidebarClass::Zoom_Mode_Control(void)
 	** radar spying readout => zoomed
 	*/
 	if (IsRadarActive) {
-		if (Is_Zoomed() || Session.Type==GAME_NORMAL) {
+		if (Is_Zoomed() || Session.Type == GAME_NORMAL) {
 			if (Is_Zoomed() || !Spy_Next_House()) {
 				Zoom_Mode(Coord_Cell(TacticalCoord));
 			}
@@ -2443,8 +2363,8 @@ void SidebarClass::Zoom_Mode_Control(void)
 			}
 		}
 	} else {
-		if (Session.Type!=GAME_NORMAL) {
-			Player_Names(Is_Player_Names()==0);
+		if (Session.Type != GAME_NORMAL) {
+			Player_Names(Is_Player_Names() == 0);
 		}
 	}
 #else
@@ -2455,7 +2375,7 @@ void SidebarClass::Zoom_Mode_Control(void)
 	** radar spying readout => not zoomed
 	*/
 	if (IsRadarActive) {
-		if (Session.Type==GAME_NORMAL) {
+		if (Session.Type == GAME_NORMAL) {
 			if (!Spy_Next_House()) {
 				Zoom_Mode(Coord_Cell(TacticalCoord));
 			}
@@ -2470,8 +2390,8 @@ void SidebarClass::Zoom_Mode_Control(void)
 			}
 		}
 	} else {
-		if (Session.Type!=GAME_NORMAL) {
-			Player_Names(Is_Player_Names()==0);
+		if (Session.Type != GAME_NORMAL) {
+			Player_Names(Is_Player_Names() == 0);
 		}
 	}
 #endif

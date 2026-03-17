@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/BFIOFILE.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -48,10 +48,8 @@
  *   BufferIOFileClass::~BufferIOFileClass -- Destructor for the file object.                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"bfiofile.h"
-#include	<string.h>
-
+#include "bfiofile.h"
+#include <string.h>
 
 /***********************************************************************************************
  * BufferIOFileClass::BufferIOFileClass -- Filename based constructor for a file object.       *
@@ -70,27 +68,12 @@
  * HISTORY:                                                                                    *
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-BufferIOFileClass::BufferIOFileClass(char const * filename) :
-	IsAllocated(false),
-	IsOpen(false),
-	IsDiskOpen(false),
-	IsCached(false),
-	IsChanged(false),
-	UseBuffer(false),
-	BufferRights(0),
-	Buffer(0),
-	BufferSize(0),
-	BufferPos(0),
-	BufferFilePos(0),
-	BufferChangeBeg(-1),
-	BufferChangeEnd(-1),
-	FileSize(0),
-	FilePos(0),
-	TrueFileStart(0)
-{
+BufferIOFileClass::BufferIOFileClass(char const *filename)
+    : IsAllocated(false), IsOpen(false), IsDiskOpen(false), IsCached(false), IsChanged(false), UseBuffer(false),
+      BufferRights(0), Buffer(0), BufferSize(0), BufferPos(0), BufferFilePos(0), BufferChangeBeg(-1),
+      BufferChangeEnd(-1), FileSize(0), FilePos(0), TrueFileStart(0) {
 	BufferIOFileClass::Set_Name(filename);
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::BufferIOFileClass -- default constructor for a file object.              *
@@ -106,26 +89,10 @@ BufferIOFileClass::BufferIOFileClass(char const * filename) :
  * HISTORY:                                                                                    *
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-BufferIOFileClass::BufferIOFileClass(void) :
-	IsAllocated(false),
-	IsOpen(false),
-	IsDiskOpen(false),
-	IsCached(false),
-	IsChanged(false),
-	UseBuffer(false),
-	BufferRights(0),
-	Buffer(0),
-	BufferSize(0),
-	BufferPos(0),
-	BufferFilePos(0),
-	BufferChangeBeg(-1),
-	BufferChangeEnd(-1),
-	FileSize(0),
-	FilePos(0),
-	TrueFileStart(0)
-{
-}
-
+BufferIOFileClass::BufferIOFileClass(void)
+    : IsAllocated(false), IsOpen(false), IsDiskOpen(false), IsCached(false), IsChanged(false), UseBuffer(false),
+      BufferRights(0), Buffer(0), BufferSize(0), BufferPos(0), BufferFilePos(0), BufferChangeBeg(-1),
+      BufferChangeEnd(-1), FileSize(0), FilePos(0), TrueFileStart(0) {}
 
 /***********************************************************************************************
  * BufferIOFileClass::~BufferIOFileClass -- Destructor for the file object.                    *
@@ -141,11 +108,7 @@ BufferIOFileClass::BufferIOFileClass(void) :
  * HISTORY:                                                                                    *
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-BufferIOFileClass::~BufferIOFileClass(void)
-{
-	Free();
-}
-
+BufferIOFileClass::~BufferIOFileClass(void) { Free(); }
 
 /***********************************************************************************************
  * BufferIOFileClass::Cache -- Load part or all of a file data into RAM.                       *
@@ -160,20 +123,19 @@ BufferIOFileClass::~BufferIOFileClass(void)
  * HISTORY:                                                                                    *
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-bool BufferIOFileClass::Cache( long size, void * ptr )
-{
+bool BufferIOFileClass::Cache(long size, void *ptr) {
 	if (Buffer) {
 		//
 		// if trying to cache again with size or ptr fail
 		//
 		if (size || ptr) {
-			return( false );
+			return (false);
 		} else {
-			return( true );
+			return (true);
 		}
 	}
 
-	if ( Is_Available() ) {
+	if (Is_Available()) {
 		FileSize = Size();
 	} else {
 		FileSize = 0;
@@ -206,25 +168,25 @@ bool BufferIOFileClass::Cache( long size, void * ptr )
 	// if the BufferSize is 0 then this must be a new file and no size was
 	// specified so exit.
 	//
-	if ( (size == 0 && ptr) || !BufferSize) {
-		return( false );
+	if ((size == 0 && ptr) || !BufferSize) {
+		return (false);
 	}
 
 	if (ptr) {
 		Buffer = ptr;
 	} else {
-		Buffer = new char [BufferSize];
+		Buffer = new char[BufferSize];
 	}
 
 	if (Buffer) {
-		IsAllocated			= true;
-		IsDiskOpen			= false;
-		BufferPos			= 0;
-		BufferFilePos		= 0;
-		BufferChangeBeg	= -1;
-		BufferChangeEnd	= -1;
-		FilePos				= 0;
-		TrueFileStart		= 0;
+		IsAllocated = true;
+		IsDiskOpen = false;
+		BufferPos = 0;
+		BufferFilePos = 0;
+		BufferChangeBeg = -1;
+		BufferChangeEnd = -1;
+		FilePos = 0;
+		TrueFileStart = 0;
 
 		//
 		// the file was checked for availability then set the FileSize
@@ -234,14 +196,13 @@ bool BufferIOFileClass::Cache( long size, void * ptr )
 			int opened = false;
 			long prevpos = 0;
 
-
 			if (FileSize <= BufferSize) {
 				readsize = FileSize;
 			} else {
 				readsize = BufferSize;
 			}
 
-			if ( Is_Open() ) {
+			if (Is_Open()) {
 				//
 				// get previous file position
 				//
@@ -250,7 +211,7 @@ bool BufferIOFileClass::Cache( long size, void * ptr )
 				//
 				// get true file position
 				//
-				if ( RawFileClass::Is_Open() ) {
+				if (RawFileClass::Is_Open()) {
 					TrueFileStart = RawFileClass::Seek(0);
 				} else {
 					TrueFileStart = prevpos;
@@ -274,7 +235,7 @@ bool BufferIOFileClass::Cache( long size, void * ptr )
 
 				FilePos = prevpos;
 			} else {
-				if ( Open() ) {
+				if (Open()) {
 					TrueFileStart = RawFileClass::Seek(0);
 					opened = true;
 				}
@@ -299,14 +260,13 @@ bool BufferIOFileClass::Cache( long size, void * ptr )
 		}
 
 		UseBuffer = true;
-		return(true);
+		return (true);
 	}
 
 	Error(ENOMEM);
 
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Free -- Frees the allocated buffer.                                      *
@@ -323,24 +283,22 @@ bool BufferIOFileClass::Cache( long size, void * ptr )
  * HISTORY:                                                                                    *
  *   11/10/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-void BufferIOFileClass::Free(void)
-{
+void BufferIOFileClass::Free(void) {
 	if (Buffer) {
 		if (IsAllocated) {
-			delete [] Buffer;
+			delete[] Buffer;
 			IsAllocated = false;
 		}
 
 		Buffer = 0;
 	}
 
-	BufferSize		= 0;
-	IsOpen			= false;
-	IsCached			= false;
-	IsChanged		= false;
-	UseBuffer		= false;
+	BufferSize = 0;
+	IsOpen = false;
+	IsCached = false;
+	IsChanged = false;
+	UseBuffer = false;
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Commit -- Writes the cache to the file if it has changed.                *
@@ -356,38 +314,33 @@ void BufferIOFileClass::Free(void)
  * HISTORY:                                                                                    *
  *   11/15/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-bool BufferIOFileClass::Commit( void )
-{
+bool BufferIOFileClass::Commit(void) {
 	long size;
-
 
 	if (UseBuffer) {
 		if (IsChanged) {
 			size = BufferChangeEnd - BufferChangeBeg;
 
 			if (IsDiskOpen) {
-				RawFileClass::Seek( TrueFileStart + BufferFilePos +
-										  BufferChangeBeg, SEEK_SET );
-				RawFileClass::Write( Buffer, size );
-				RawFileClass::Seek( TrueFileStart + FilePos, SEEK_SET );
+				RawFileClass::Seek(TrueFileStart + BufferFilePos + BufferChangeBeg, SEEK_SET);
+				RawFileClass::Write(Buffer, size);
+				RawFileClass::Seek(TrueFileStart + FilePos, SEEK_SET);
 			} else {
 				RawFileClass::Open();
-				RawFileClass::Seek( TrueFileStart + BufferFilePos +
-										  BufferChangeBeg, SEEK_SET );
-				RawFileClass::Write( Buffer, size );
+				RawFileClass::Seek(TrueFileStart + BufferFilePos + BufferChangeBeg, SEEK_SET);
+				RawFileClass::Write(Buffer, size);
 				RawFileClass::Close();
 			}
 
 			IsChanged = false;
-			return( true );
+			return (true);
 		} else {
-			return( false );
+			return (false);
 		}
 	} else {
-		return( false );
+		return (false);
 	}
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Set_Name -- Checks for name changed for a cached file.                   *
@@ -407,11 +360,10 @@ bool BufferIOFileClass::Commit( void )
  * HISTORY:                                                                                    *
  *   11/15/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-char const * BufferIOFileClass::Set_Name(char const * filename)
-{
-	if ( File_Name() && UseBuffer) {
-		if ( strcmp(filename, File_Name() ) == 0) {
-			return( File_Name() );
+char const *BufferIOFileClass::Set_Name(char const *filename) {
+	if (File_Name() && UseBuffer) {
+		if (strcmp(filename, File_Name()) == 0) {
+			return (File_Name());
 		} else {
 			Commit();
 			IsCached = false;
@@ -419,9 +371,8 @@ char const * BufferIOFileClass::Set_Name(char const * filename)
 	}
 
 	RawFileClass::Set_Name(filename);
-	return( File_Name() );
+	return (File_Name());
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Is_Available -- Checks for existence of file cached or on disk.          *
@@ -436,15 +387,13 @@ char const * BufferIOFileClass::Set_Name(char const * filename)
  * HISTORY:                                                                                    *
  *   11/16/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-int BufferIOFileClass::Is_Available(int )
-{
+int BufferIOFileClass::Is_Available(int) {
 	if (UseBuffer) {
-		return(true);
+		return (true);
 	}
 
-	return( RawFileClass::Is_Available() );
+	return (RawFileClass::Is_Available());
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Is_Open -- Determines if the file is open.                               *
@@ -461,15 +410,13 @@ int BufferIOFileClass::Is_Available(int )
  * HISTORY:                                                                                    *
  *   11/14/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-int BufferIOFileClass::Is_Open(void) const
-{
+int BufferIOFileClass::Is_Open(void) const {
 	if (IsOpen && UseBuffer) {
-		return( true );
+		return (true);
 	}
 
-	return( RawFileClass::Is_Open() );
+	return (RawFileClass::Is_Open());
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Open -- Assigns name and opens file in one operation.                    *
@@ -492,12 +439,10 @@ int BufferIOFileClass::Is_Open(void) const
  * HISTORY:                                                                                    *
  *   11/14/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-int BufferIOFileClass::Open(char const * filename, int rights)
-{
+int BufferIOFileClass::Open(char const *filename, int rights) {
 	Set_Name(filename);
-	return( BufferIOFileClass::Open( rights ) );
+	return (BufferIOFileClass::Open(rights));
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Open -- Opens the file object with the rights specified.                 *
@@ -517,30 +462,28 @@ int BufferIOFileClass::Open(char const * filename, int rights)
  * HISTORY:                                                                                    *
  *   11/14/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-int BufferIOFileClass::Open(int rights)
-{
+int BufferIOFileClass::Open(int rights) {
 	BufferIOFileClass::Close();
 
 	if (UseBuffer) {
 
-		BufferRights = rights;		// save rights requested for checks later
+		BufferRights = rights; // save rights requested for checks later
 
-		if (rights != READ ||
-			 (rights == READ && FileSize > BufferSize) ) {
+		if (rights != READ || (rights == READ && FileSize > BufferSize)) {
 
 			if (rights == WRITE) {
-				RawFileClass::Open( rights );
+				RawFileClass::Open(rights);
 				RawFileClass::Close();
 				rights = READ | WRITE;
-				TrueFileStart = 0;		// now writing to single file
+				TrueFileStart = 0; // now writing to single file
 			}
 
 			if (TrueFileStart) {
 				UseBuffer = false;
-				Open( rights );
+				Open(rights);
 				UseBuffer = true;
 			} else {
-				RawFileClass::Open( rights );
+				RawFileClass::Open(rights);
 			}
 
 			IsDiskOpen = true;
@@ -553,19 +496,18 @@ int BufferIOFileClass::Open(int rights)
 			IsDiskOpen = false;
 		}
 
-		BufferPos			= 0;
-		BufferFilePos		= 0;
-		BufferChangeBeg	= -1;
-		BufferChangeEnd	= -1;
-		FilePos				= 0;
-		IsOpen				= true;
+		BufferPos = 0;
+		BufferFilePos = 0;
+		BufferChangeBeg = -1;
+		BufferChangeEnd = -1;
+		FilePos = 0;
+		IsOpen = true;
 	} else {
-		RawFileClass::Open( rights );
+		RawFileClass::Open(rights);
 	}
 
-	return( true );
+	return (true);
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Write -- Writes data to the file cache.                                  *
@@ -582,13 +524,12 @@ int BufferIOFileClass::Open(int rights)
  * HISTORY:                                                                                    *
  *   11/15/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-long BufferIOFileClass::Write(void const * buffer, long size)
-{
+long BufferIOFileClass::Write(void const *buffer, long size) {
 	int opened = false;
 
-	if ( !Is_Open() ) {
+	if (!Is_Open()) {
 		if (!Open(WRITE)) {
-			return(0);
+			return (0);
 		}
 		TrueFileStart = RawFileClass::Seek(0);
 		opened = true;
@@ -601,7 +542,7 @@ long BufferIOFileClass::Write(void const * buffer, long size)
 			while (size) {
 				long sizetowrite;
 
-				if (size >= (BufferSize - BufferPos) ) {
+				if (size >= (BufferSize - BufferPos)) {
 					sizetowrite = (BufferSize - BufferPos);
 				} else {
 					sizetowrite = size;
@@ -609,7 +550,7 @@ long BufferIOFileClass::Write(void const * buffer, long size)
 
 				if (sizetowrite != BufferSize) {
 
-					if ( !IsCached ) {
+					if (!IsCached) {
 						long readsize;
 
 						if (FileSize < BufferSize) {
@@ -622,18 +563,18 @@ long BufferIOFileClass::Write(void const * buffer, long size)
 
 						if (TrueFileStart) {
 							UseBuffer = false;
-							Seek( FilePos, SEEK_SET );
-							Read( Buffer, BufferSize );
-							Seek( FilePos, SEEK_SET );
+							Seek(FilePos, SEEK_SET);
+							Read(Buffer, BufferSize);
+							Seek(FilePos, SEEK_SET);
 							UseBuffer = true;
 						} else {
-							RawFileClass::Seek( BufferFilePos, SEEK_SET );
-							RawFileClass::Read( Buffer, readsize );
+							RawFileClass::Seek(BufferFilePos, SEEK_SET);
+							RawFileClass::Read(Buffer, readsize);
 						}
 
-						BufferPos			= 0;
-						BufferChangeBeg	= -1;
-						BufferChangeEnd	= -1;
+						BufferPos = 0;
+						BufferChangeBeg = -1;
+						BufferChangeEnd = -1;
 
 						IsCached = true;
 					}
@@ -680,13 +621,13 @@ long BufferIOFileClass::Write(void const * buffer, long size)
 					if (size && FileSize > FilePos) {
 						if (TrueFileStart) {
 							UseBuffer = false;
-							Seek( FilePos, SEEK_SET );
-							Read( Buffer, BufferSize );
-							Seek( FilePos, SEEK_SET );
+							Seek(FilePos, SEEK_SET);
+							Read(Buffer, BufferSize);
+							Seek(FilePos, SEEK_SET);
 							UseBuffer = true;
 						} else {
-							RawFileClass::Seek( FilePos, SEEK_SET );
-							RawFileClass::Read( Buffer, BufferSize );
+							RawFileClass::Seek(FilePos, SEEK_SET);
+							RawFileClass::Read(Buffer, BufferSize);
 						}
 					} else {
 						IsCached = false;
@@ -706,9 +647,8 @@ long BufferIOFileClass::Write(void const * buffer, long size)
 		Close();
 	}
 
-	return( size );
+	return (size);
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Read -- Reads data from the file cache.                                  *
@@ -725,12 +665,11 @@ long BufferIOFileClass::Write(void const * buffer, long size)
  * HISTORY:                                                                                    *
  *   11/15/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-long BufferIOFileClass::Read(void * buffer, long size)
-{
+long BufferIOFileClass::Read(void *buffer, long size) {
 	int opened = false;
 
-	if ( !Is_Open() ) {
-		if ( Open() ) {
+	if (!Is_Open()) {
+		if (Open()) {
 			TrueFileStart = RawFileClass::Seek(0);
 			opened = true;
 		}
@@ -743,13 +682,13 @@ long BufferIOFileClass::Read(void * buffer, long size)
 			while (size) {
 				long sizetoread;
 
-				if (size >= (BufferSize - BufferPos) ) {
+				if (size >= (BufferSize - BufferPos)) {
 					sizetoread = (BufferSize - BufferPos);
 				} else {
 					sizetoread = size;
 				}
 
-				if ( !IsCached ) {
+				if (!IsCached) {
 					long readsize;
 
 					if (FileSize < BufferSize) {
@@ -762,18 +701,18 @@ long BufferIOFileClass::Read(void * buffer, long size)
 
 					if (TrueFileStart) {
 						UseBuffer = false;
-						Seek( FilePos, SEEK_SET );
-						Read( Buffer, BufferSize );
-						Seek( FilePos, SEEK_SET );
+						Seek(FilePos, SEEK_SET);
+						Read(Buffer, BufferSize);
+						Seek(FilePos, SEEK_SET);
 						UseBuffer = true;
 					} else {
-						RawFileClass::Seek( BufferFilePos, SEEK_SET );
-						RawFileClass::Read( Buffer, readsize );
+						RawFileClass::Seek(BufferFilePos, SEEK_SET);
+						RawFileClass::Read(Buffer, readsize);
 					}
 
-					BufferPos			= 0;
-					BufferChangeBeg	= -1;
-					BufferChangeEnd	= -1;
+					BufferPos = 0;
+					BufferChangeBeg = -1;
+					BufferChangeEnd = -1;
 
 					IsCached = true;
 				}
@@ -799,13 +738,13 @@ long BufferIOFileClass::Read(void * buffer, long size)
 					if (size && FileSize > FilePos) {
 						if (TrueFileStart) {
 							UseBuffer = false;
-							Seek( FilePos, SEEK_SET );
-							Read( Buffer, BufferSize );
-							Seek( FilePos, SEEK_SET );
+							Seek(FilePos, SEEK_SET);
+							Read(Buffer, BufferSize);
+							Seek(FilePos, SEEK_SET);
 							UseBuffer = true;
 						} else {
-							RawFileClass::Seek( FilePos, SEEK_SET );
-							RawFileClass::Read( Buffer, BufferSize );
+							RawFileClass::Seek(FilePos, SEEK_SET);
+							RawFileClass::Read(Buffer, BufferSize);
 						}
 					} else {
 						IsCached = false;
@@ -825,9 +764,8 @@ long BufferIOFileClass::Read(void * buffer, long size)
 		Close();
 	}
 
-	return( size );
+	return (size);
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Seek -- Moves the current file pointer in the file.                      *
@@ -849,23 +787,22 @@ long BufferIOFileClass::Read(void * buffer, long size)
  * HISTORY:                                                                                    *
  *   11/15/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-long BufferIOFileClass::Seek(long pos, int dir)
-{
+long BufferIOFileClass::Seek(long pos, int dir) {
 	if (UseBuffer) {
 		bool adjusted = false;
 
 		switch (dir) {
-			case SEEK_END:
-				FilePos = FileSize;
-				break;
+		case SEEK_END:
+			FilePos = FileSize;
+			break;
 
-			case SEEK_SET:
-				FilePos = 0;
-				break;
+		case SEEK_SET:
+			FilePos = 0;
+			break;
 
-			case SEEK_CUR:
-			default:
-				break;
+		case SEEK_CUR:
+		default:
+			break;
 		}
 
 		if (TrueFileStart) {
@@ -881,19 +818,18 @@ long BufferIOFileClass::Seek(long pos, int dir)
 			FilePos = 0;
 		}
 
-		if (FilePos > FileSize ) {
+		if (FilePos > FileSize) {
 			FilePos = FileSize;
 		}
 
 		if (FileSize <= BufferSize) {
 			BufferPos = FilePos;
 		} else {
-			if (FilePos >= BufferFilePos &&
-				 FilePos < (BufferFilePos + BufferSize) ) {
+			if (FilePos >= BufferFilePos && FilePos < (BufferFilePos + BufferSize)) {
 				BufferPos = FilePos - BufferFilePos;
 			} else {
 				Commit();
-// check!!
+				// check!!
 				if (TrueFileStart) {
 					UseBuffer = false;
 					Seek(FilePos, SEEK_SET);
@@ -907,15 +843,14 @@ long BufferIOFileClass::Seek(long pos, int dir)
 		}
 
 		if (TrueFileStart && adjusted) {
-			return( FilePos + TrueFileStart );
+			return (FilePos + TrueFileStart);
 		}
 
-		return( FilePos );
+		return (FilePos);
 	}
 
-	return( RawFileClass::Seek(pos, dir) );
+	return (RawFileClass::Seek(pos, dir));
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Size -- Determines size of file (in bytes).                              *
@@ -933,15 +868,13 @@ long BufferIOFileClass::Seek(long pos, int dir)
  * HISTORY:                                                                                    *
  *   11/14/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-long BufferIOFileClass::Size(void)
-{
+long BufferIOFileClass::Size(void) {
 	if (IsOpen && UseBuffer) {
-		return( FileSize );
+		return (FileSize);
 	}
 
-	return( RawFileClass::Size() );
+	return (RawFileClass::Size());
 }
-
 
 /***********************************************************************************************
  * BufferIOFileClass::Close -- Perform a closure of the file.                                  *
@@ -958,8 +891,7 @@ long BufferIOFileClass::Size(void)
  * HISTORY:                                                                                    *
  *   11/14/1995 DRD : Created.                                                                 *
  *=============================================================================================*/
-void BufferIOFileClass::Close(void)
-{
+void BufferIOFileClass::Close(void) {
 	if (UseBuffer) {
 		Commit();
 
@@ -981,4 +913,3 @@ void BufferIOFileClass::Close(void)
 		RawFileClass::Close();
 	}
 }
-

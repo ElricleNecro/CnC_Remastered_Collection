@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/FACING.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -36,9 +36,8 @@
  *   FacingClass::Set_Desired -- Sets the desired facing  value.                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"facing.h"
-
+#include "facing.h"
+#include "function.h"
 
 /***********************************************************************************************
  * FacingClass::FacingClass -- Default constructor for the facing class.                       *
@@ -55,12 +54,10 @@
  * HISTORY:                                                                                    *
  *   03/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-FacingClass::FacingClass(void)
-{
+FacingClass::FacingClass(void) {
 	CurrentFacing = DIR_N;
 	DesiredFacing = DIR_N;
 }
-
 
 /***********************************************************************************************
  * FacingClass::Set_Desired -- Sets the desired facing  value.                                 *
@@ -80,15 +77,13 @@ FacingClass::FacingClass(void)
  * HISTORY:                                                                                    *
  *   03/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FacingClass::Set_Desired(DirType facing)
-{
+int FacingClass::Set_Desired(DirType facing) {
 	if (DesiredFacing != facing) {
 		DesiredFacing = facing;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FacingClass::Set_Current -- Sets the current rotation value.                                *
@@ -106,15 +101,13 @@ int FacingClass::Set_Desired(DirType facing)
  * HISTORY:                                                                                    *
  *   03/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FacingClass::Set_Current(DirType facing)
-{
+int FacingClass::Set_Current(DirType facing) {
 	if (CurrentFacing != facing) {
 		CurrentFacing = facing;
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * FacingClass::Rotation_Adjust -- Perform a rotation adjustment to current facing.            *
@@ -136,8 +129,7 @@ int FacingClass::Set_Current(DirType facing)
  * HISTORY:                                                                                    *
  *   03/21/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int FacingClass::Rotation_Adjust(int rate)
-{
+int FacingClass::Rotation_Adjust(int rate) {
 	/*
 	**	Only perform the rotation adjustment if the desired facing is not the
 	**	same as the current facing.
@@ -174,7 +166,7 @@ int FacingClass::Rotation_Adjust(int rate)
 		**	new 1/32 rotation zone (likely to cause a redraw), then return
 		**	this fact with a true value.
 		*/
-		return(Dir_To_32(CurrentFacing) != Dir_To_32(oldfacing));
+		return (Dir_To_32(CurrentFacing) != Dir_To_32(oldfacing));
 	}
-	return(false);
+	return (false);
 }

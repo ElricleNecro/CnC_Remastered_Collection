@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/B64PIPE.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -34,11 +34,9 @@
  *   Base64Pipe::Flush -- Flushes the final pending data through the pipe.                     *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
 #include "b64pipe.h"
-#include	"base64.h"
-#include	<string.h>
-
+#include "base64.h"
+#include <string.h>
 
 /***********************************************************************************************
  * Base64Pipe::Put -- Processes a block of data through the pipe.                              *
@@ -59,17 +57,16 @@
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int Base64Pipe::Put(void const * source, int slen)
-{
+int Base64Pipe::Put(void const *source, int slen) {
 	if (source == NULL || slen < 1) {
-		return(Pipe::Put(source, slen));
+		return (Pipe::Put(source, slen));
 	}
 
 	int total = 0;
 
-	char * from;
+	char *from;
 	int fromsize;
-	char * to;
+	char *to;
 	int tosize;
 
 	if (Control == ENCODE) {
@@ -85,7 +82,7 @@ int Base64Pipe::Put(void const * source, int slen)
 	}
 
 	if (Counter > 0) {
-		int len = (slen < (fromsize-Counter)) ? slen : (fromsize-Counter);
+		int len = (slen < (fromsize - Counter)) ? slen : (fromsize - Counter);
 		memmove(&from[Counter], source, len);
 		Counter += len;
 		slen -= len;
@@ -120,9 +117,8 @@ int Base64Pipe::Put(void const * source, int slen)
 		Counter = slen;
 	}
 
-	return(total);
+	return (total);
 }
-
 
 /***********************************************************************************************
  * Base64Pipe::Flush -- Flushes the final pending data through the pipe.                       *
@@ -140,8 +136,7 @@ int Base64Pipe::Put(void const * source, int slen)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int Base64Pipe::Flush(void)
-{
+int Base64Pipe::Flush(void) {
 	int len = 0;
 
 	if (Counter) {
@@ -155,8 +150,5 @@ int Base64Pipe::Flush(void)
 		Counter = 0;
 	}
 	len += Pipe::Flush();
-	return(len);
+	return (len);
 }
-
-
-

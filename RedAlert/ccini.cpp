@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/CCINI.CPP 1     3/03/97 10:24a Joe_bostic $ */
@@ -77,9 +77,7 @@
  *   CCINIClass::Save -- Save the INI data to the file specified.                              *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-
-#include	"function.h"
-
+#include "function.h"
 
 /***********************************************************************************************
  * CCINIClass::Load -- Load the INI database from the file specified.                          *
@@ -104,11 +102,7 @@
  *   07/03/1996 JLB : Created.                                                                 *
  *   08/21/1996 JLB : Handles digest control.                                                  *
  *=============================================================================================*/
-bool CCINIClass::Load(FileClass & file, bool withdigest)
-{
-	return(Load(FileStraw(file), withdigest));
-}
-
+bool CCINIClass::Load(FileClass &file, bool withdigest) { return (Load(FileStraw(file), withdigest)); }
 
 /***********************************************************************************************
  * CCINIClass::Load -- Load the INI database from the data stream specified.                   *
@@ -129,8 +123,7 @@ bool CCINIClass::Load(FileClass & file, bool withdigest)
  *   07/10/1996 JLB : Created.                                                                 *
  *   08/21/1996 JLB : Handles message digest control.                                          *
  *=============================================================================================*/
-int CCINIClass::Load(Straw & file, bool withdigest)
-{
+int CCINIClass::Load(Straw &file, bool withdigest) {
 	bool ok = INIClass::Load(file);
 
 	Invalidate_Message_Digest();
@@ -153,13 +146,12 @@ int CCINIClass::Load(Straw & file, bool withdigest)
 			**	If the message digests don't match, then return with the special error code.
 			*/
 			if (memcmp(digest, Digest, sizeof(digest)) != 0) {
-				return(2);
+				return (2);
 			}
 		}
 	}
-	return(ok);
+	return (ok);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Save -- Save the INI data to the file specified.                                *
@@ -180,11 +172,7 @@ int CCINIClass::Load(Straw & file, bool withdigest)
  *   07/03/1996 JLB : Created.                                                                 *
  *   08/21/1996 JLB : Handles message digest control.                                          *
  *=============================================================================================*/
-int CCINIClass::Save(FileClass & file, bool withdigest) const
-{
-	return(Save(FilePipe(file), withdigest));
-}
-
+int CCINIClass::Save(FileClass &file, bool withdigest) const { return (Save(FilePipe(file), withdigest)); }
 
 /***********************************************************************************************
  * CCINIClass::Save -- Pipes the INI database to the pipe specified.                           *
@@ -206,10 +194,9 @@ int CCINIClass::Save(FileClass & file, bool withdigest) const
  *   07/03/1996 JLB : Created.                                                                 *
  *   08/21/1996 JLB : Handles message digest control.                                          *
  *=============================================================================================*/
-int CCINIClass::Save(Pipe & pipe, bool withdigest) const
-{
+int CCINIClass::Save(Pipe &pipe, bool withdigest) const {
 	if (!withdigest) {
-		return(INIClass::Save(pipe));
+		return (INIClass::Save(pipe));
 	}
 
 	/*
@@ -241,19 +228,16 @@ int CCINIClass::Save(Pipe & pipe, bool withdigest) const
 	/*
 	**	Finally, return with the total number of bytes send out the pipe.
 	*/
-	return(length);
+	return (length);
 }
 
-
-static inline int _Scale_To_256(int val)
-{
+static inline int _Scale_To_256(int val) {
 	val = min(val, 100);
 	val = max(val, 0);
 	val = ((val * 256) / 100);
 	val = min(val, 255);
-	return(val);
+	return (val);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_Lepton -- Fetches a lepton value from the INI database.                     *
@@ -276,12 +260,10 @@ static inline int _Scale_To_256(int val)
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-LEPTON CCINIClass::Get_Lepton(char const * section, char const * entry, LEPTON defvalue) const
-{
+LEPTON CCINIClass::Get_Lepton(char const *section, char const *entry, LEPTON defvalue) const {
 	fixed result = Get_Fixed(section, entry, fixed(defvalue, CELL_LEPTON_W));
-	return(result * CELL_LEPTON_W);
+	return (result * CELL_LEPTON_W);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_Lepton -- Stores a lepton value to the INI database.                        *
@@ -302,11 +284,9 @@ LEPTON CCINIClass::Get_Lepton(char const * section, char const * entry, LEPTON d
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_Lepton(char const * section, char const * entry, LEPTON value)
-{
-	return(Put_Fixed(section, entry, fixed(value, CELL_LEPTON_W)));
+bool CCINIClass::Put_Lepton(char const *section, char const *entry, LEPTON value) {
+	return (Put_Fixed(section, entry, fixed(value, CELL_LEPTON_W)));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_MPHType -- Fetches the speed value as a number from 0 to 100.               *
@@ -328,12 +308,10 @@ bool CCINIClass::Put_Lepton(char const * section, char const * entry, LEPTON val
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-MPHType CCINIClass::Get_MPHType(char const * section, char const * entry, MPHType defvalue) const
-{
+MPHType CCINIClass::Get_MPHType(char const *section, char const *entry, MPHType defvalue) const {
 	int val = Get_Int(section, entry, ((int)defvalue * 100) / 256);
 	return (MPHType(_Scale_To_256(val)));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_MPHType -- Stores the speed value to the section & entry specified.         *
@@ -354,11 +332,9 @@ MPHType CCINIClass::Get_MPHType(char const * section, char const * entry, MPHTyp
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_MPHType(char const * section, char const * entry, MPHType value)
-{
-	return(Put_Int(section, entry, ((int)value * 100) / 256));
+bool CCINIClass::Put_MPHType(char const *section, char const *entry, MPHType value) {
+	return (Put_Int(section, entry, ((int)value * 100) / 256));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_Owners -- Fetch the owners (list of house bits).                            *
@@ -383,24 +359,22 @@ bool CCINIClass::Put_MPHType(char const * section, char const * entry, MPHType v
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-long CCINIClass::Get_Owners(char const * section, char const * entry, long defvalue) const
-{
+long CCINIClass::Get_Owners(char const *section, char const *entry, long defvalue) const {
 	char buffer[128];
 	long ownable = defvalue;
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
 
 		ownable = 0;
-		char * name = strtok(buffer, ",");
+		char *name = strtok(buffer, ",");
 
 		while (name) {
 			ownable |= Owner_From_Name(name);
 			name = strtok(NULL, ",");
 		}
 	}
-	return(ownable);
+	return (ownable);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_Owners -- Store the house bitfield to the INI database.                     *
@@ -422,8 +396,7 @@ long CCINIClass::Get_Owners(char const * section, char const * entry, long defva
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_Owners(char const * section, char const * entry, long value)
-{
+bool CCINIClass::Put_Owners(char const *section, char const *entry, long value) {
 	char buffer[128];
 
 	buffer[0] = '\0';
@@ -450,11 +423,10 @@ bool CCINIClass::Put_Owners(char const * section, char const * entry, long value
 	}
 
 	if (buffer[0] != '\0') {
-		return(Put_String(section, entry, buffer));
+		return (Put_String(section, entry, buffer));
 	}
-	return(true);
+	return (true);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_ArmorType -- Fetches the armor type from the INI database.                  *
@@ -475,14 +447,12 @@ bool CCINIClass::Put_Owners(char const * section, char const * entry, long value
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-ArmorType CCINIClass::Get_ArmorType(char const * section, char const * entry, ArmorType defvalue) const
-{
+ArmorType CCINIClass::Get_ArmorType(char const *section, char const *entry, ArmorType defvalue) const {
 	char buffer[128];
 
 	Get_String(section, entry, ArmorName[defvalue], buffer, sizeof(buffer));
-	return(Armor_From_Name(buffer));
+	return (Armor_From_Name(buffer));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_ArmorType -- Store the armor type to the INI database.                      *
@@ -502,11 +472,9 @@ ArmorType CCINIClass::Get_ArmorType(char const * section, char const * entry, Ar
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_ArmorType(char const * section, char const * entry, ArmorType value)
-{
-	return(Put_String(section, entry, ArmorName[value]));
+bool CCINIClass::Put_ArmorType(char const *section, char const *entry, ArmorType value) {
+	return (Put_String(section, entry, ArmorName[value]));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_VocType -- Fetch a voc (sound effect) from the INI database.                *
@@ -528,14 +496,12 @@ bool CCINIClass::Put_ArmorType(char const * section, char const * entry, ArmorTy
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-VocType CCINIClass::Get_VocType(char const * section, char const * entry, VocType defvalue) const
-{
+VocType CCINIClass::Get_VocType(char const *section, char const *entry, VocType defvalue) const {
 	char buffer[128];
 
 	Get_String(section, entry, Voc_Name(defvalue), buffer, sizeof(buffer));
-	return(Voc_From_Name(buffer));
+	return (Voc_From_Name(buffer));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_VocType -- Store a sound effect identifier into the INI database.           *
@@ -556,14 +522,12 @@ VocType CCINIClass::Get_VocType(char const * section, char const * entry, VocTyp
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_VocType(char const * section, char const * entry, VocType value)
-{
+bool CCINIClass::Put_VocType(char const *section, char const *entry, VocType value) {
 	if (value == VOC_NONE) {
-		return(Put_String(section, entry, "<none>"));
+		return (Put_String(section, entry, "<none>"));
 	}
-	return(Put_String(section, entry, Voc_Name(value)));
+	return (Put_String(section, entry, Voc_Name(value)));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_AnimType -- Fetch an animation type number from the INI database.           *
@@ -585,14 +549,12 @@ bool CCINIClass::Put_VocType(char const * section, char const * entry, VocType v
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-AnimType CCINIClass::Get_AnimType(char const * section, char const * entry, AnimType defvalue) const
-{
+AnimType CCINIClass::Get_AnimType(char const *section, char const *entry, AnimType defvalue) const {
 	char buffer[128];
 
 	Get_String(section, entry, Anim_Name(defvalue), buffer, sizeof(buffer));
-	return(Anim_From_Name(buffer));
+	return (Anim_From_Name(buffer));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_AnimType -- Stores the animation identifier to the INI database.            *
@@ -613,37 +575,30 @@ AnimType CCINIClass::Get_AnimType(char const * section, char const * entry, Anim
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_AnimType(char const * section, char const * entry, AnimType value)
-{
+bool CCINIClass::Put_AnimType(char const *section, char const *entry, AnimType value) {
 	if (value == ANIM_NONE) {
-		return(Put_String(section, entry, "<none>"));
+		return (Put_String(section, entry, "<none>"));
 	}
-	return(Put_String(section, entry, Anim_Name(value)));
+	return (Put_String(section, entry, Anim_Name(value)));
 }
 
-
-UnitType CCINIClass::Get_UnitType(char const * section, char const * entry, UnitType defvalue) const
-{
+UnitType CCINIClass::Get_UnitType(char const *section, char const *entry, UnitType defvalue) const {
 	char buffer[128];
 
-	char const * def = "<none>";
+	char const *def = "<none>";
 	if (defvalue != UNIT_NONE) {
 		def = UnitTypeClass::As_Reference(defvalue).Name();
 	}
 	Get_String(section, entry, def, buffer, sizeof(buffer));
-	return(UnitTypeClass::From_Name(buffer));
+	return (UnitTypeClass::From_Name(buffer));
 }
 
-
-bool CCINIClass::Put_UnitType(char const * section, char const * entry, UnitType value)
-{
+bool CCINIClass::Put_UnitType(char const *section, char const *entry, UnitType value) {
 	if (value == UNIT_NONE) {
-		return(Put_String(section, entry, "<none>"));
+		return (Put_String(section, entry, "<none>"));
 	}
-	return(Put_String(section, entry, UnitTypeClass::As_Reference(value).Name()));
+	return (Put_String(section, entry, UnitTypeClass::As_Reference(value).Name()));
 }
-
-
 
 /***********************************************************************************************
  * CCINIClass::Get_WeaponType -- Fetches the weapon type from the INI database.                *
@@ -665,16 +620,14 @@ bool CCINIClass::Put_UnitType(char const * section, char const * entry, UnitType
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-WeaponType CCINIClass::Get_WeaponType(char const * section, char const * entry, WeaponType defvalue) const
-{
+WeaponType CCINIClass::Get_WeaponType(char const *section, char const *entry, WeaponType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(Weapon_From_Name(buffer));
+		return (Weapon_From_Name(buffer));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_WeaponType -- Store the weapon identifier to the INI database.              *
@@ -694,14 +647,12 @@ WeaponType CCINIClass::Get_WeaponType(char const * section, char const * entry, 
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_WeaponType(char const * section, char const * entry, WeaponType value)
-{
+bool CCINIClass::Put_WeaponType(char const *section, char const *entry, WeaponType value) {
 	if (value == WEAPON_NONE) {
-		return(Put_String(section, entry, "<none>"));
+		return (Put_String(section, entry, "<none>"));
 	}
-	return(Put_String(section, entry, WeaponTypeClass::As_Pointer(value)->Name()));
+	return (Put_String(section, entry, WeaponTypeClass::As_Pointer(value)->Name()));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_WarheadType -- Fetch the warhead type from the INI database.                *
@@ -722,20 +673,18 @@ bool CCINIClass::Put_WeaponType(char const * section, char const * entry, Weapon
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-WarheadType CCINIClass::Get_WarheadType(char const * section, char const * entry, WarheadType defvalue) const
-{
+WarheadType CCINIClass::Get_WarheadType(char const *section, char const *entry, WarheadType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
 		for (WarheadType wh = WARHEAD_FIRST; wh < WARHEAD_COUNT; wh++) {
 			if (stricmp(WarheadTypeClass::As_Pointer(wh)->Name(), buffer) == 0) {
-				return(wh);
+				return (wh);
 			}
 		}
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_WarheadType -- Stores the warhead identifier to the INI database.           *
@@ -755,14 +704,12 @@ WarheadType CCINIClass::Get_WarheadType(char const * section, char const * entry
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_WarheadType(char const * section, char const * entry, WarheadType value)
-{
+bool CCINIClass::Put_WarheadType(char const *section, char const *entry, WarheadType value) {
 	if (value == WARHEAD_NONE) {
-		return(Put_String(section, entry, "<none>"));
+		return (Put_String(section, entry, "<none>"));
 	}
-	return(Put_String(section, entry, WarheadTypeClass::As_Pointer(value)->Name()));
+	return (Put_String(section, entry, WarheadTypeClass::As_Pointer(value)->Name()));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_OverlayType -- Fetch the overlay identifier from the INI database.          *
@@ -783,16 +730,14 @@ bool CCINIClass::Put_WarheadType(char const * section, char const * entry, Warhe
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-OverlayType CCINIClass::Get_OverlayType(char const * section, char const * entry, OverlayType defvalue) const
-{
+OverlayType CCINIClass::Get_OverlayType(char const *section, char const *entry, OverlayType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(OverlayTypeClass::From_Name(buffer));
+		return (OverlayTypeClass::From_Name(buffer));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_OverlayType -- Store the overlay identifier into the INI database.          *
@@ -812,12 +757,10 @@ OverlayType CCINIClass::Get_OverlayType(char const * section, char const * entry
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_OverlayType(char const * section, char const * entry, OverlayType value)
-{
+bool CCINIClass::Put_OverlayType(char const *section, char const *entry, OverlayType value) {
 	assert(value != OVERLAY_NONE);
-	return(Put_String(section, entry, OverlayTypeClass::As_Reference(value).Name()));
+	return (Put_String(section, entry, OverlayTypeClass::As_Reference(value).Name()));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_BulletType -- Fetch the bullet identifier from the INI database.            *
@@ -839,21 +782,19 @@ bool CCINIClass::Put_OverlayType(char const * section, char const * entry, Overl
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-BulletType CCINIClass::Get_BulletType(char const * section, char const * entry, BulletType defvalue) const
-{
+BulletType CCINIClass::Get_BulletType(char const *section, char const *entry, BulletType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
 		for (BulletType proj = BULLET_FIRST; proj < BULLET_COUNT; proj++) {
 			if (stricmp(BulletTypeClass::As_Reference(proj).Name(), buffer) == 0) {
-//			if (stricmp(ProjectileNames[proj], buffer) == 0) {
-				return(proj);
+				//			if (stricmp(ProjectileNames[proj], buffer) == 0) {
+				return (proj);
 			}
 		}
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_BulletType -- Store the projectile identifier into the INI database.        *
@@ -873,15 +814,13 @@ BulletType CCINIClass::Get_BulletType(char const * section, char const * entry, 
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_BulletType(char const * section, char const * entry, BulletType value)
-{
+bool CCINIClass::Put_BulletType(char const *section, char const *entry, BulletType value) {
 	if (value == BULLET_NONE) {
-		return(Put_String(section, entry, "<none>"));
+		return (Put_String(section, entry, "<none>"));
 	}
-	return(Put_String(section, entry, BulletTypeClass::As_Reference(value).Name()));
-//	return(Put_String(section, entry, ProjectileNames[value]));
+	return (Put_String(section, entry, BulletTypeClass::As_Reference(value).Name()));
+	//	return(Put_String(section, entry, ProjectileNames[value]));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_HousesType -- Fetch a house identifier from the INI database.               *
@@ -903,16 +842,14 @@ bool CCINIClass::Put_BulletType(char const * section, char const * entry, Bullet
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-HousesType CCINIClass::Get_HousesType(char const * section, char const * entry, HousesType defvalue) const
-{
+HousesType CCINIClass::Get_HousesType(char const *section, char const *entry, HousesType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(HouseTypeClass::From_Name(buffer));
+		return (HouseTypeClass::From_Name(buffer));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_HousesType -- Store a house identifier to the INI database.                 *
@@ -932,11 +869,9 @@ HousesType CCINIClass::Get_HousesType(char const * section, char const * entry, 
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_HousesType(char const * section, char const * entry, HousesType value)
-{
-	return(Put_String(section, entry, HouseTypeClass::As_Reference(value).Name()));
+bool CCINIClass::Put_HousesType(char const *section, char const *entry, HousesType value) {
+	return (Put_String(section, entry, HouseTypeClass::As_Reference(value).Name()));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_VQType -- Fetch the VQ movie identifier from the INI database.              *
@@ -957,20 +892,18 @@ bool CCINIClass::Put_HousesType(char const * section, char const * entry, Houses
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-VQType CCINIClass::Get_VQType(char const * section, char const * entry, VQType defvalue) const
-{
+VQType CCINIClass::Get_VQType(char const *section, char const *entry, VQType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
 		for (VQType vq = VQ_FIRST; vq < VQ_COUNT; vq++) {
 			if (stricmp(buffer, VQName[vq]) == 0) {
-				return(vq);
+				return (vq);
 			}
 		}
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_VQType -- Store the VQ movie identifier into the INI database.              *
@@ -990,14 +923,12 @@ VQType CCINIClass::Get_VQType(char const * section, char const * entry, VQType d
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_VQType(char const * section, char const * entry, VQType value)
-{
+bool CCINIClass::Put_VQType(char const *section, char const *entry, VQType value) {
 	if (value == VQ_NONE) {
-		return(Put_String(section, entry, "<none>"));
+		return (Put_String(section, entry, "<none>"));
 	}
-	return(Put_String(section, entry, VQName[value]));
+	return (Put_String(section, entry, VQName[value]));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_TheaterType -- Fetch the theater type from the INI database.                *
@@ -1018,16 +949,14 @@ bool CCINIClass::Put_VQType(char const * section, char const * entry, VQType val
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-TheaterType CCINIClass::Get_TheaterType(char const * section, char const * entry, TheaterType defvalue) const
-{
+TheaterType CCINIClass::Get_TheaterType(char const *section, char const *entry, TheaterType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(Theater_From_Name(buffer));
+		return (Theater_From_Name(buffer));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_TheaterType -- Store the theater identifier to the INI database.            *
@@ -1047,11 +976,9 @@ TheaterType CCINIClass::Get_TheaterType(char const * section, char const * entry
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_TheaterType(char const * section, char const * entry, TheaterType value)
-{
-	return(Put_String(section, entry, Theaters[value].Name));
+bool CCINIClass::Put_TheaterType(char const *section, char const *entry, TheaterType value) {
+	return (Put_String(section, entry, Theaters[value].Name));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_TriggerType -- Fetch the trigger type identifier from the INI database.     *
@@ -1070,16 +997,14 @@ bool CCINIClass::Put_TheaterType(char const * section, char const * entry, Theat
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-TriggerTypeClass * CCINIClass::Get_TriggerType(char const * section, char const * entry) const
-{
+TriggerTypeClass *CCINIClass::Get_TriggerType(char const *section, char const *entry) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(TriggerTypeClass::From_Name(buffer));
+		return (TriggerTypeClass::From_Name(buffer));
 	}
-	return(NULL);
+	return (NULL);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_TriggerType -- Store the trigger identifier to the INI database.            *
@@ -1099,11 +1024,9 @@ TriggerTypeClass * CCINIClass::Get_TriggerType(char const * section, char const 
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_TriggerType(char const * section, char const * entry, TriggerTypeClass * value)
-{
-	return(Put_String(section, entry, value->Name()));
+bool CCINIClass::Put_TriggerType(char const *section, char const *entry, TriggerTypeClass *value) {
+	return (Put_String(section, entry, value->Name()));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_ThemeType -- Fetch the theme identifier.                                    *
@@ -1124,16 +1047,14 @@ bool CCINIClass::Put_TriggerType(char const * section, char const * entry, Trigg
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-ThemeType CCINIClass::Get_ThemeType(char const * section, char const * entry, ThemeType defvalue) const
-{
+ThemeType CCINIClass::Get_ThemeType(char const *section, char const *entry, ThemeType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(Theme.From_Name(buffer));
+		return (Theme.From_Name(buffer));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_ThemeType -- Store the theme identifier to the INI database.                *
@@ -1153,11 +1074,9 @@ ThemeType CCINIClass::Get_ThemeType(char const * section, char const * entry, Th
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_ThemeType(char const * section, char const * entry, ThemeType value)
-{
-	return(Put_String(section, entry, Theme.Base_Name(value)));
+bool CCINIClass::Put_ThemeType(char const *section, char const *entry, ThemeType value) {
+	return (Put_String(section, entry, Theme.Base_Name(value)));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_SourceType -- Fetch the source (edge) type from the INI database.           *
@@ -1179,16 +1098,14 @@ bool CCINIClass::Put_ThemeType(char const * section, char const * entry, ThemeTy
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-SourceType CCINIClass::Get_SourceType(char const * section, char const * entry, SourceType defvalue) const
-{
+SourceType CCINIClass::Get_SourceType(char const *section, char const *entry, SourceType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(Source_From_Name(buffer));
+		return (Source_From_Name(buffer));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_SourceType -- Store the source (edge) identifier to the INI database.       *
@@ -1208,11 +1125,9 @@ SourceType CCINIClass::Get_SourceType(char const * section, char const * entry, 
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_SourceType(char const * section, char const * entry, SourceType value)
-{
-	return(Put_String(section, entry, SourceName[value]));
+bool CCINIClass::Put_SourceType(char const *section, char const *entry, SourceType value) {
+	return (Put_String(section, entry, SourceName[value]));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_CrateType -- Fetches a crate type value from the INI database.              *
@@ -1233,16 +1148,14 @@ bool CCINIClass::Put_SourceType(char const * section, char const * entry, Source
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-CrateType CCINIClass::Get_CrateType(char const * section, char const * entry, CrateType defvalue) const
-{
+CrateType CCINIClass::Get_CrateType(char const *section, char const *entry, CrateType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(Crate_From_Name(buffer));
+		return (Crate_From_Name(buffer));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_CrateType -- Stores the crate value in the section and entry specified.     *
@@ -1262,11 +1175,9 @@ CrateType CCINIClass::Get_CrateType(char const * section, char const * entry, Cr
  * HISTORY:                                                                                    *
  *   08/08/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_CrateType(char const * section, char const * entry, CrateType value)
-{
-	return(Put_String(section, entry, CrateNames[value]));
+bool CCINIClass::Put_CrateType(char const *section, char const *entry, CrateType value) {
+	return (Put_String(section, entry, CrateNames[value]));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_TerrainType -- Fetch the terrain type identifier from the INI database.     *
@@ -1287,16 +1198,14 @@ bool CCINIClass::Put_CrateType(char const * section, char const * entry, CrateTy
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-TerrainType CCINIClass::Get_TerrainType(char const * section, char const * entry, TerrainType defvalue) const
-{
+TerrainType CCINIClass::Get_TerrainType(char const *section, char const *entry, TerrainType defvalue) const {
 	char buffer[128];
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
-		return(TerrainTypeClass::From_Name(strtok(buffer, ",")));
+		return (TerrainTypeClass::From_Name(strtok(buffer, ",")));
 	}
-	return(defvalue);
+	return (defvalue);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_TerrainType -- Store the terrain type number to the INI database.           *
@@ -1316,11 +1225,9 @@ TerrainType CCINIClass::Get_TerrainType(char const * section, char const * entry
  * HISTORY:                                                                                    *
  *   07/03/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_TerrainType(char const * section, char const * entry, TerrainType value)
-{
-	return(Put_String(section, entry, TerrainTypeClass::As_Reference(value).Name()));
+bool CCINIClass::Put_TerrainType(char const *section, char const *entry, TerrainType value) {
+	return (Put_String(section, entry, TerrainTypeClass::As_Reference(value).Name()));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_Buildings -- Fetch a building bitfield from the INI database.               *
@@ -1344,15 +1251,14 @@ bool CCINIClass::Put_TerrainType(char const * section, char const * entry, Terra
  * HISTORY:                                                                                    *
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-long CCINIClass::Get_Buildings(char const * section, char const * entry, long defvalue) const
-{
+long CCINIClass::Get_Buildings(char const *section, char const *entry, long defvalue) const {
 	char buffer[128];
 	long pre;
 
 	if (Get_String(section, entry, "", buffer, sizeof(buffer))) {
 
 		pre = 0;
-		char * token = strtok(buffer, ",");
+		char *token = strtok(buffer, ",");
 		while (token != NULL && *token != '\0') {
 			StructType building = BuildingTypeClass::From_Name(token);
 			if (building != STRUCT_NONE) {
@@ -1364,9 +1270,8 @@ long CCINIClass::Get_Buildings(char const * section, char const * entry, long de
 		pre = defvalue;
 	}
 
-	return(pre);
+	return (pre);
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Put_Buildings -- Store a building list to the INI database.                     *
@@ -1390,8 +1295,7 @@ long CCINIClass::Get_Buildings(char const * section, char const * entry, long de
  * HISTORY:                                                                                    *
  *   07/11/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-bool CCINIClass::Put_Buildings(char const * section, char const * entry, long value)
-{
+bool CCINIClass::Put_Buildings(char const *section, char const *entry, long value) {
 	char buffer[128] = "";
 	int maxi = (32 < STRUCT_COUNT) ? 32 : STRUCT_COUNT;
 
@@ -1405,9 +1309,8 @@ bool CCINIClass::Put_Buildings(char const * section, char const * entry, long va
 		}
 	}
 
-	return(Put_String(section, entry, buffer));
+	return (Put_String(section, entry, buffer));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Get_Unique_ID -- Fetch a unique identifier number for the INI file.             *
@@ -1425,15 +1328,13 @@ bool CCINIClass::Put_Buildings(char const * section, char const * entry, long va
  * HISTORY:                                                                                    *
  *   11/01/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-int CCINIClass::Get_Unique_ID(void) const
-{
+int CCINIClass::Get_Unique_ID(void) const {
 	if (!IsDigestPresent) {
 		((CCINIClass *)this)->Calculate_Message_Digest();
 	}
 
-	return(CRCEngine()(&Digest[0], sizeof(Digest)));
+	return (CRCEngine()(&Digest[0], sizeof(Digest)));
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Calculate_Message_Digest -- Calculate a message digest for the current database *
@@ -1451,8 +1352,7 @@ int CCINIClass::Get_Unique_ID(void) const
  * HISTORY:                                                                                    *
  *   11/01/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void CCINIClass::Calculate_Message_Digest(void)
-{
+void CCINIClass::Calculate_Message_Digest(void) {
 	/*
 	**	Calculate the message digest for the INI data that was read.
 	*/
@@ -1461,7 +1361,6 @@ void CCINIClass::Calculate_Message_Digest(void)
 	sha.Result(Digest);
 	IsDigestPresent = true;
 }
-
 
 /***********************************************************************************************
  * CCINIClass::Invalidate_Message_Digest -- Flag message digest as being invalid.              *
@@ -1478,7 +1377,4 @@ void CCINIClass::Calculate_Message_Digest(void)
  * HISTORY:                                                                                    *
  *   11/01/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-void CCINIClass::Invalidate_Message_Digest(void)
-{
-	IsDigestPresent = false;
-}
+void CCINIClass::Invalidate_Message_Digest(void) { IsDigestPresent = false; }

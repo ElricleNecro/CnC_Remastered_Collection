@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/SURFACE.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -31,16 +31,11 @@
  *---------------------------------------------------------------------------------------------*
  * Functions:                                                                                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#if (0)//PG
-#include "FUNCTION.H"
+#if (0) // PG
 #include "surface.h"
+#include "FUNCTION.H"
 
-
-Surface::Surface(int w, int h, Buffer const * buffer, int pitch) :
-	Width(w),
-	Height(h),
-	Pitch(pitch)
-{
+Surface::Surface(int w, int h, Buffer const *buffer, int pitch) : Width(w), Height(h), Pitch(pitch) {
 	/*
 	**	If a buffer was specified, then this means that the surface will use the buffer memory
 	**	and thus not allocate and manage its own memory.
@@ -54,7 +49,7 @@ Surface::Surface(int w, int h, Buffer const * buffer, int pitch) :
 		*/
 		if (buffer->Get_Size() > 0 && Get_Size() > buffer->Get_Size()) {
 
-			Height = buffer->Get_Size() / (Width+Pitch);
+			Height = buffer->Get_Size() / (Width + Pitch);
 			if (Height == 0) {
 				Height = 1;
 				Width = buffer->Get_Size();
@@ -65,22 +60,16 @@ Surface::Surface(int w, int h, Buffer const * buffer, int pitch) :
 		**	A new buffer without existing memory specified, will allocate and manage its
 		**	own memory for the surface.
 		*/
-		new(&SurfaceData) Buffer(Logical_Size());
+		new (&SurfaceData) Buffer(Logical_Size());
 	}
 }
 
-
-Surface::Surface(Surface const & surface, int x, int y, int w, int h) :
-	Width(w),
-	Height(h),
-	Pitch(surface.Bytes_Per_Line() % w)
-{
-	new(&SurfaceData) Buffer((char*)surface.Get_Buffer() + y*surface.Bytes_Per_Line() + x);
+Surface::Surface(Surface const &surface, int x, int y, int w, int h)
+    : Width(w), Height(h), Pitch(surface.Bytes_Per_Line() % w) {
+	new (&SurfaceData) Buffer((char *)surface.Get_Buffer() + y * surface.Bytes_Per_Line() + x);
 }
 
-
-void Surface::Copy_To(Buffer & buffer, int x, int y, int w, int h) const
-{
+void Surface::Copy_To(Buffer &buffer, int x, int y, int w, int h) const {
 	assert(buffer.Is_Valid());
 
 	/*
@@ -102,9 +91,7 @@ void Surface::Copy_To(Buffer & buffer, int x, int y, int w, int h) const
 	Copy_To(Rect(x, y, width, height), buffer);
 }
 
-
-void Surface::Copy_To(Rect const & fromrect, Buffer & tobuffer) const
-{
+void Surface::Copy_To(Rect const &fromrect, Buffer &tobuffer) const {
 	assert(fromrect.Is_Valid());
 	assert(tobuffer.Is_Valid());
 
@@ -129,13 +116,13 @@ void Surface::Copy_To(Rect const & fromrect, Buffer & tobuffer) const
 	/*
 	**	Determine the source starting byte pointer.
 	*/
-	char * source = (char*)Get_Buffer() + rect.Y*Bytes_Per_Line() + rect.X;
+	char *source = (char *)Get_Buffer() + rect.Y * Bytes_Per_Line() + rect.X;
 
 	/*
 	**	Determine the destination buffer pointer. This will always be the
 	**	start of the destination buffer object specified.
 	*/
-	char * dest = tobuffer;
+	char *dest = tobuffer;
 
 	/*
 	**	Determine the working pitch value to use. For full width surface

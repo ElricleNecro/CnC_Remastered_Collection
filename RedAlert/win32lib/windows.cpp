@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: g:/library/source/rcs/./windows.c 1.12 1994/05/20 15:35:25 joe_bostic Exp $ */
@@ -42,55 +42,53 @@
  *   Window_Print -- Displays and wraps text into a window.                *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#include "ww_win.h"
 #include <ctype.h>
+#include <dipthong.h>
+#include <font.h>
+#include <keyboard.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include	<stdio.h>
-#include	<stdarg.h>
 #include <wwstd.h>
-#include "ww_win.h"
-#include <keyboard.h>
-#include	<font.h>
-#include <dipthong.h>
 
 PRIVATE void Scroll_Window(void);
 PRIVATE void Flush_Line(void);
 PRIVATE void In_Char(char *str);
 PRIVATE char Fetch_Char(void);
 
-
-PRIVATE int ScrollCounter = 0;	//	Count of the lines displayed before a pause.
-PRIVATE char Line[84];	// Staging line buffer.
-PRIVATE int Pos;			// Char Position of next free character.
-PRIVATE int PPos;		// Pixel position of next free character.
-PRIVATE int WPos;		// Char position in window.
+PRIVATE int ScrollCounter = 0; //	Count of the lines displayed before a pause.
+PRIVATE char Line[84];	       // Staging line buffer.
+PRIVATE int Pos;	       // Char Position of next free character.
+PRIVATE int PPos;	       // Pixel position of next free character.
+PRIVATE int WPos;	       // Char position in window.
 PRIVATE char *MainSource;
 PRIVATE char *AltSource;
 PRIVATE char Char[2];
 PRIVATE char Stack;
-PRIVATE char WordWrapFlag = FALSE;	// flag for a word wrap.
+PRIVATE char WordWrapFlag = FALSE; // flag for a word wrap.
 
 PRIVATE int MoreSpace = 7;
 PRIVATE int MoreFColor = 0;
 PRIVATE int MoreBColor = 0;
 
-
-int WindowColumns=40;
-int WindowLines=25;
-int WindowWidth=40;
-unsigned int WinB=0;
-unsigned int WinC=1;
-unsigned int WinX=0;
-unsigned int WinY=0;
-unsigned int WinCx=0;
-unsigned int WinCy=0;
-unsigned int WinH=25;
-unsigned int WinW=40;
-unsigned int Window=0;
+int WindowColumns = 40;
+int WindowLines = 25;
+int WindowWidth = 40;
+unsigned int WinB = 0;
+unsigned int WinC = 1;
+unsigned int WinX = 0;
+unsigned int WinY = 0;
+unsigned int WinCx = 0;
+unsigned int WinCy = 0;
+unsigned int WinH = 25;
+unsigned int WinW = 40;
+unsigned int Window = 0;
 
 int MoreOn = TRUE;
 char *TXT_MoreText = "--More--";
-void (*Window_More_Ptr)(char const *,int,int,int) = Standard_More_Prompt;
+void (*Window_More_Ptr)(char const *, int, int, int) = Standard_More_Prompt;
 
 extern GraphicViewPortClass *LogicPage;
 /***************************************************************************
@@ -117,35 +115,34 @@ extern GraphicViewPortClass *LogicPage;
  * HISTORY:                                                                *
  *   07/29/1991 JLB : Created.                                             *
  *=========================================================================*/
-void Standard_More_Prompt(char const *prompt, int space, int fcolor, int bcolor)
-{
-	int	x, y, moresize;
+void Standard_More_Prompt(char const *prompt, int space, int fcolor, int bcolor) {
+	int x, y, moresize;
 
-	moresize = (space - 1) * (FontWidth+FontXSpacing);
-	x = ((WinX+WinW) << 3) - moresize;
-	//y = WinY + ((WinH/FontHeight)-1)*FontHeight;
-	y = WinY + (WinCy-1) * (FontHeight+FontYSpacing);
+	moresize = (space - 1) * (FontWidth + FontXSpacing);
+	x = ((WinX + WinW) << 3) - moresize;
+	// y = WinY + ((WinH/FontHeight)-1)*FontHeight;
+	y = WinY + (WinCy - 1) * (FontHeight + FontYSpacing);
 
 	// Default "more" prompter.
-	LogicPage->Print(prompt, x, y, fcolor ? fcolor : WindowList[Window][WINDOWBCOL], bcolor ? bcolor : WindowList[Window][WINDOWFCOL]);
-//BG	if (LogicPage == SEENPAGE) {
-//BG		Window_Show_Mouse();
-//BG	}
+	LogicPage->Print(prompt, x, y, fcolor ? fcolor : WindowList[Window][WINDOWBCOL],
+			 bcolor ? bcolor : WindowList[Window][WINDOWFCOL]);
+	// BG	if (LogicPage == SEENPAGE) {
+	// BG		Window_Show_Mouse();
+	// BG	}
 
 	// PWG - have to figure out how to do this in windows library
 
-//	Clear_KeyBuffer();
-//	Get_Key();
+	//	Clear_KeyBuffer();
+	//	Get_Key();
 
-//BG	if (LogicPage == SEENPAGE) {
-//BG		Window_Hide_Mouse(Window);
-//BG	}
+	// BG	if (LogicPage == SEENPAGE) {
+	// BG		Window_Hide_Mouse(Window);
+	// BG	}
 
 	// Erase the more prompt prompt.
 	//	Text_Print(prompt, x, y, WinB, WinB);
-	LogicPage->Fill_Rect(x, y, x + moresize - 1, y + (FontHeight+FontYSpacing) - 1, (unsigned char)WinB);
+	LogicPage->Fill_Rect(x, y, x + moresize - 1, y + (FontHeight + FontYSpacing) - 1, (unsigned char)WinB);
 }
-
 
 /***************************************************************************
  * SET_MORE_PROMPT -- Adjusts the more prompt text for default routine     *
@@ -170,21 +167,18 @@ void Standard_More_Prompt(char const *prompt, int space, int fcolor, int bcolor)
  * HISTORY:                                                                *
  *   07/29/1991 JLB : Created.                                             *
  *=========================================================================*/
-void Set_More_Prompt(char const *prompt, int space, int fcolor, int bcolor)
-{
+void Set_More_Prompt(char const *prompt, int space, int fcolor, int bcolor) {
 	if (prompt) {
-		TXT_MoreText = (char*)prompt;
+		TXT_MoreText = (char *)prompt;
 		MoreSpace = space;
 		MoreFColor = fcolor;
 		MoreBColor = bcolor;
-	}
-	else {
+	} else {
 		TXT_MoreText = "<MORE>";
 		MoreSpace = 7;
 		MoreFColor = MoreBColor = 0;
 	}
 }
-
 
 /***************************************************************************
  * SET_MORE_ON -- Turns the 'more' prompting on.                           *
@@ -203,12 +197,10 @@ void Set_More_Prompt(char const *prompt, int space, int fcolor, int bcolor)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-void Set_More_On(void)
-{
+void Set_More_On(void) {
 	MoreOn = TRUE;
 	ScrollCounter = 0;
 }
-
 
 /***************************************************************************
  * SET_MORE_OFF -- Turns the 'more' prompting off.                         *
@@ -225,11 +217,7 @@ void Set_More_On(void)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-void Set_More_Off(void)
-{
-	MoreOn = FALSE;
-}
-
+void Set_More_Off(void) { MoreOn = FALSE; }
 
 /***************************************************************************
  * CHANGE_WINDOW -- Changes the 'current' window in the system.            *
@@ -246,10 +234,9 @@ void Set_More_Off(void)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-int Change_Window(int windnum)
-{
-	int	oldwindow;
-	int	*data;
+int Change_Window(int windnum) {
+	int oldwindow;
+	int *data;
 
 	oldwindow = Window;
 	Window = windnum;
@@ -264,13 +251,12 @@ int Change_Window(int windnum)
 	WinCx = *data++;
 	WinCy = *data++;
 	ScrollCounter = 0;
-	WPos = WinCx / (FontWidth+FontXSpacing);
-	WindowLines = (WinH-FontYSpacing) / (FontHeight+FontYSpacing);
+	WPos = WinCx / (FontWidth + FontXSpacing);
+	WindowLines = (WinH - FontYSpacing) / (FontHeight + FontYSpacing);
 	WindowWidth = WinW << 3;
-	WindowColumns = WindowWidth / (FontWidth+FontXSpacing);
+	WindowColumns = WindowWidth / (FontWidth + FontXSpacing);
 	return (oldwindow);
 }
-
 
 /***************************************************************************
  * CHANGE_NEW_WINDOW -- Combined Change_Window and New_Window.             *
@@ -288,15 +274,13 @@ int Change_Window(int windnum)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-int Change_New_Window(int windnum)
-{
-	int	oldwindow;
+int Change_New_Window(int windnum) {
+	int oldwindow;
 
 	oldwindow = Change_Window(windnum);
 	New_Window();
-	return(oldwindow);
+	return (oldwindow);
 }
-
 
 /***************************************************************************
  * NEW_WINDOW -- Clears the current window to the background color.        *
@@ -314,9 +298,8 @@ int Change_New_Window(int windnum)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-void New_Window(void)
-{
-	int	x,y,w,h;
+void New_Window(void) {
+	int x, y, w, h;
 
 	x = WinX << 3;
 	y = WinY;
@@ -329,7 +312,6 @@ void New_Window(void)
 	WinCy = 0;
 	ScrollCounter = 0;
 }
-
 
 /***************************************************************************
  * WINDOW_INT_PRINT -- Prints an integer to the window.                    *
@@ -346,11 +328,7 @@ void New_Window(void)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-void Window_Int_Print(int num)
-{
-	Window_Print("%d", num);
-}
-
+void Window_Int_Print(int num) { Window_Print("%d", num); }
 
 /***************************************************************************
  * WINDOW_PRINT -- Displays and wraps text into a window.                  *
@@ -408,35 +386,34 @@ void Window_Int_Print(int num)
  *   07/25/1991 JLB : Created.                                             *
  *   07/29/1991 JLB : Added MORE, SETX, and SETY                           *
  *=========================================================================*/
-void Window_Print(char const string[], ...)
-{
-	int		oldcx, x, y;	// Scratch variables.
-	char		c;					// Current character.
-	char		buffer[10];		// Working %d buffer.
-	int		old_c, old_b;	// Original window colors.
-	va_list	arg;				// Argument list var.
-
+void Window_Print(char const string[], ...) {
+	int oldcx, x, y;  // Scratch variables.
+	char c;		  // Current character.
+	char buffer[10];  // Working %d buffer.
+	int old_c, old_b; // Original window colors.
+	va_list arg;	  // Argument list var.
 
 	va_start(arg, string);
 
-	WordWrapFlag = FALSE;			// initialize word wrap flag.
+	WordWrapFlag = FALSE; // initialize word wrap flag.
 	Pos = PPos = 0;
 	Line[0] = '\0';
 	Char[0] = Char[1] = 0;
-	MainSource = (char*)&string[0];
+	MainSource = (char *)&string[0];
 	AltSource = NULL;
 	old_c = WinC;
 	old_b = WinB;
 
-//BG	if (LogicPage == SEENPAGE) {
-//BG		Window_Hide_Mouse(Window);
-//BG	}
+	// BG	if (LogicPage == SEENPAGE) {
+	// BG		Window_Hide_Mouse(Window);
+	// BG	}
 
 	while (TRUE) {
 
 		c = Fetch_Char();
 
-		if (!c) break;	// Exit on NULL character.
+		if (!c)
+			break; // Exit on NULL character.
 
 		/*
 		**	Substitution commands only work if not already expanding a
@@ -444,224 +421,223 @@ void Window_Print(char const string[], ...)
 		*/
 		if (!AltSource) {
 			if (c == '%') {
-		 		switch(tolower(Char[0])) {
-					case 's':
-						AltSource = va_arg(arg, char*);
-						if (AltSource) {
-							Stack = Char[1];
-							Char[0] = Char[1] = '\0';
-							c = Fetch_Char();
-						}
-						break;
-
-					case 'd':
-						AltSource = buffer;
-						sprintf(buffer, "%d", va_arg(arg, int));
+				switch (tolower(Char[0])) {
+				case 's':
+					AltSource = va_arg(arg, char *);
+					if (AltSource) {
 						Stack = Char[1];
 						Char[0] = Char[1] = '\0';
 						c = Fetch_Char();
-						break;
+					}
+					break;
 
-					default:
-						break;
+				case 'd':
+					AltSource = buffer;
+					sprintf(buffer, "%d", va_arg(arg, int));
+					Stack = Char[1];
+					Char[0] = Char[1] = '\0';
+					c = Fetch_Char();
+					break;
+
+				default:
+					break;
 				}
 			}
 		}
 
-		switch(c) {
+		switch (c) {
 
-#if(FALSE)
-	// these are the positions of foreign language characters
-			/*
-			** These are characters that shouldn't be window printed because
-			**	they are currently reserved.
-			*/
-			case KA_CTRL_C:
-			case KA_CTRL_D:
-			case KA_CTRL_E:
-			case KA_CTRL_G:
-			case KA_CTRL_J:
-			case KA_CTRL_K:
-			case KA_CTRL_N:
-			case KA_CTRL_O:
-			case KA_CTRL_P:
-			case KA_CTRL_Q:
-			case KA_CTRL_R:
-			case KA_CTRL_T:
-			case KA_CTRL_U:
-			case KA_CTRL_V:
-			case KA_CTRL_W:
-			case KA_CTRL_Z:
-			case KA_CTRL_BACKSLASH:
-			case KA_CTRL_CARROT:
-			case KA_CTRL_UNDERLINE:
-				break;
+#if (FALSE)
+			// these are the positions of foreign language characters
+		/*
+		** These are characters that shouldn't be window printed because
+		**	they are currently reserved.
+		*/
+		case KA_CTRL_C:
+		case KA_CTRL_D:
+		case KA_CTRL_E:
+		case KA_CTRL_G:
+		case KA_CTRL_J:
+		case KA_CTRL_K:
+		case KA_CTRL_N:
+		case KA_CTRL_O:
+		case KA_CTRL_P:
+		case KA_CTRL_Q:
+		case KA_CTRL_R:
+		case KA_CTRL_T:
+		case KA_CTRL_U:
+		case KA_CTRL_V:
+		case KA_CTRL_W:
+		case KA_CTRL_Z:
+		case KA_CTRL_BACKSLASH:
+		case KA_CTRL_CARROT:
+		case KA_CTRL_UNDERLINE:
+			break;
 #endif
-			/*
-			**	Force cursor column to specified X value.
-			*/
-			case KA_SETX:
-				Flush_Line();
-				WPos  = Fetch_Char();
-				WPos  = MAX(0, WPos);
+		/*
+		**	Force cursor column to specified X value.
+		*/
+		case KA_SETX:
+			Flush_Line();
+			WPos = Fetch_Char();
+			WPos = MAX(0, WPos);
 
-				// WPos is max width char position
+			// WPos is max width char position
 
-				WPos  = MIN(WindowColumns-1, WPos);
-				WinCx = WPos * (FontWidth+FontXSpacing);
-				break;
+			WPos = MIN(WindowColumns - 1, WPos);
+			WinCx = WPos * (FontWidth + FontXSpacing);
+			break;
 
-			/*
-			**	Force the cursor to specified Y value.
-			*/
-			case KA_SETY:
-				Flush_Line();
-				WinCy = Fetch_Char();
-				//WinCy = MAX(0, WinCy);
-				WinCy = MIN((long)WindowLines-1, (long)WinCy);
-				break;
+		/*
+		**	Force the cursor to specified Y value.
+		*/
+		case KA_SETY:
+			Flush_Line();
+			WinCy = Fetch_Char();
+			// WinCy = MAX(0, WinCy);
+			WinCy = MIN((long)WindowLines - 1, (long)WinCy);
+			break;
 
-			/*
-			**	Force a "<MORE>" prompt.
-			*/
-			case KA_MORE:
-				Flush_Line();
-				if (Window_More_Ptr) {
-//BG					if (LogicPage == SEENPAGE) Window_Show_Mouse();
-					Window_More_Ptr(TXT_MoreText, MoreSpace, MoreFColor, MoreBColor);
-//BG					if (LogicPage == SEENPAGE) Window_Hide_Mouse(Window);
-				}
-				break;
+		/*
+		**	Force a "<MORE>" prompt.
+		*/
+		case KA_MORE:
+			Flush_Line();
+			if (Window_More_Ptr) {
+				// BG					if (LogicPage == SEENPAGE) Window_Show_Mouse();
+				Window_More_Ptr(TXT_MoreText, MoreSpace, MoreFColor, MoreBColor);
+				// BG					if (LogicPage == SEENPAGE)
+				// Window_Hide_Mouse(Window);
+			}
+			break;
 
-			/*
-			**	Clear and home the window cursor.  This is the same
-			**	as New_Window().
-			*/
-			case KA_FORMFEED:
-				New_Window();
-				break;
+		/*
+		**	Clear and home the window cursor.  This is the same
+		**	as New_Window().
+		*/
+		case KA_FORMFEED:
+			New_Window();
+			break;
 
-			/*
-			**	Move cursor to start of next line.
-			*/
-			case KA_RETURN:
-				Flush_Line();
-				ScrollCounter++;
-				WinCx = 0;
+		/*
+		**	Move cursor to start of next line.
+		*/
+		case KA_RETURN:
+			Flush_Line();
+			ScrollCounter++;
+			WinCx = 0;
 
-#if(FALSE)
-				if (WinCy >= WindowLines-1) {
-					Scroll_Window();
-				}
-				else {
-					WinCy++;
-				}
+#if (FALSE)
+			if (WinCy >= WindowLines - 1) {
+				Scroll_Window();
+			} else {
+				WinCy++;
+			}
 #else
-	  			WinCy++;
+			WinCy++;
 #endif
 
-				break;
+			break;
 
-			/*
-			**	Set the background color.
-			*/
-			case KA_SETBKGDCOL:
-				Flush_Line();
-				WinB = Fetch_Char();
-				break;
+		/*
+		**	Set the background color.
+		*/
+		case KA_SETBKGDCOL:
+			Flush_Line();
+			WinB = Fetch_Char();
+			break;
 
-			/*
-			**	Set the foreground color.
-			*/
-			case KA_SETFORECOL:
-				Flush_Line();
-				WinC = Fetch_Char();
-				break;
+		/*
+		**	Set the foreground color.
+		*/
+		case KA_SETFORECOL:
+			Flush_Line();
+			WinC = Fetch_Char();
+			break;
 
-			/*
-			**	Move cursor to next column.
-			*/
-			case KA_TAB:
-				Flush_Line();
-				WPos = ((WPos + 8) & 0xFFF8) - 1;
-				if (WPos >= WindowColumns) {
-					WPos = 0;
-				}
-				WinCx = WPos * (FontWidth+FontXSpacing);
-				break;
+		/*
+		**	Move cursor to next column.
+		*/
+		case KA_TAB:
+			Flush_Line();
+			WPos = ((WPos + 8) & 0xFFF8) - 1;
+			if (WPos >= WindowColumns) {
+				WPos = 0;
+			}
+			WinCx = WPos * (FontWidth + FontXSpacing);
+			break;
 
-			/*
-			**	Tab to specified column but add spaces.
-			*/
-			case KA_SPCTAB:
-				Flush_Line();
-				oldcx = WinCx;
-				x = WinX << 3;
-				y = WinY + (WinCy * (FontHeight+FontYSpacing));
-				WPos = ((WPos + 8) & 0xFFF8) - 1;
+		/*
+		**	Tab to specified column but add spaces.
+		*/
+		case KA_SPCTAB:
+			Flush_Line();
+			oldcx = WinCx;
+			x = WinX << 3;
+			y = WinY + (WinCy * (FontHeight + FontYSpacing));
+			WPos = ((WPos + 8) & 0xFFF8) - 1;
 
-				if (WPos >= WindowColumns) {
-					WinCx = WPos = 0;
+			if (WPos >= WindowColumns) {
+				WinCx = WPos = 0;
 
-					// Fill_Rect instead of printing spaces
+				// Fill_Rect instead of printing spaces
 
-					LogicPage->Fill_Rect(x + oldcx, y,
-								x + WindowWidth - 1, y + (FontHeight+FontYSpacing) - 1, (unsigned char)WinB);
+				LogicPage->Fill_Rect(x + oldcx, y, x + WindowWidth - 1,
+						     y + (FontHeight + FontYSpacing) - 1, (unsigned char)WinB);
 
-					ScrollCounter++;
-		  			WinCy++;
-				}
-				else {
-					WinCx = WPos * (FontWidth+FontXSpacing);
+				ScrollCounter++;
+				WinCy++;
+			} else {
+				WinCx = WPos * (FontWidth + FontXSpacing);
 
-					// Fill_Rect instead of printing spaces
+				// Fill_Rect instead of printing spaces
 
-					LogicPage->Fill_Rect(x + oldcx, y,
-								x + WinCx - 1, y + (FontHeight+FontYSpacing) - 1, (unsigned char)WinB);
-				}
-				break;
+				LogicPage->Fill_Rect(x + oldcx, y, x + WinCx - 1, y + (FontHeight + FontYSpacing) - 1,
+						     (unsigned char)WinB);
+			}
+			break;
 
-			/*
-			**	next character is a extended value 1-127, but 128 is added
-			** for a value 129-255
-			*/
-			case KA_EXTEND:
-				c = 127;
+		/*
+		**	next character is a extended value 1-127, but 128 is added
+		** for a value 129-255
+		*/
+		case KA_EXTEND:
+			c = 127;
 
 			// NOTE: this falls thru to the default case DO NOT MOVE!!!!!
-
 
 			/*
 			**	next character is a literal value 1-127, except 13
 			*/
-//			case KA_LITERAL:
-//				if (c != (char) 127) {	// check if fell thru from extend case
-//					c = 0;					// set to zero for literal case
-//				}
-//				c += Fetch_Char();
+			//			case KA_LITERAL:
+			//				if (c != (char) 127) {	// check if fell thru from extend case
+			//					c = 0;					// set to zero
+			//for literal case
+			//				}
+			//				c += Fetch_Char();
 
-			// NOTE: this falls thru to the default case DO NOT MOVE!!!!!
+		// NOTE: this falls thru to the default case DO NOT MOVE!!!!!
 
+		/*
+		**	Normal character output.
+		*/
+		default:
+			PPos += Char_Pixel_Width(c); // get pixel location of next char
+			Line[Pos++] = c;
+			Line[Pos] = '\0';
 
-			/*
-			**	Normal character output.
-			*/
-			default:
-				PPos += Char_Pixel_Width(c);	// get pixel location of next char
-				Line[Pos++] = c;
-				Line[Pos] = '\0';
-
-				if (WinCx + PPos > (unsigned)WindowWidth) {
-					Flush_Line();
-				}
-				break;
+			if (WinCx + PPos > (unsigned)WindowWidth) {
+				Flush_Line();
+			}
+			break;
 		}
 	}
 
 	/*
 	**	If there is text still pending, then display it before exiting.
 	*/
-	if (Pos) Flush_Line();
+	if (Pos)
+		Flush_Line();
 
 	/*
 	**	Record changes in the cursor position.
@@ -675,13 +651,12 @@ void Window_Print(char const string[], ...)
 	WindowList[Window][WINDOWFCOL] = WinC = old_c;
 	WindowList[Window][WINDOWBCOL] = WinB = old_b;
 
-//BG	if (LogicPage == SEENPAGE) {
-//BG		Window_Show_Mouse();
-//BG	}
+	// BG	if (LogicPage == SEENPAGE) {
+	// BG		Window_Show_Mouse();
+	// BG	}
 
 	va_end(arg);
 }
-
 
 /***************************************************************************
  * SCROLL_WINDOW -- Scrolls the text window up one line.                   *
@@ -700,35 +675,30 @@ void Window_Print(char const string[], ...)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-PRIVATE void Scroll_Window(void)
-{
-	int	y;		// Top pixel row of bottom line of window.
+PRIVATE void Scroll_Window(void) {
+	int y; // Top pixel row of bottom line of window.
 
 	/*
 	**	Possibly prompt for more text.
 	*/
-	if (ScrollCounter >= WindowLines-1 && MoreOn) {
+	if (ScrollCounter >= WindowLines - 1 && MoreOn) {
 		ScrollCounter = 0;
 
 		if (Window_More_Ptr) {
-//BG			if (LogicPage == SEENPAGE) Window_Show_Mouse();
+			// BG			if (LogicPage == SEENPAGE) Window_Show_Mouse();
 			Window_More_Ptr(TXT_MoreText, MoreSpace, MoreFColor, MoreBColor);
-//BG			if (LogicPage == SEENPAGE) Window_Hide_Mouse(Window);
+			// BG			if (LogicPage == SEENPAGE) Window_Hide_Mouse(Window);
 		}
 	}
 
 	/*
 	**	Scroll the window up one line.
 	*/
-	y = ((WinH / (FontHeight+FontYSpacing)) - 1) * (FontHeight+FontYSpacing);
-	LogicPage->Blit(*LogicPage,WinX<<3, WinY + (FontHeight+FontYSpacing), WinX<<3, WinY, WinW<<3, WinH - (FontHeight+FontYSpacing) );
-	LogicPage->Fill_Rect(WinX<<3,
-				WinY + y,
-				((WinX+WinW)<<3) - 1,
-				WinY + WinH - 1,
-				(unsigned char)WinB);
+	y = ((WinH / (FontHeight + FontYSpacing)) - 1) * (FontHeight + FontYSpacing);
+	LogicPage->Blit(*LogicPage, WinX << 3, WinY + (FontHeight + FontYSpacing), WinX << 3, WinY, WinW << 3,
+			WinH - (FontHeight + FontYSpacing));
+	LogicPage->Fill_Rect(WinX << 3, WinY + y, ((WinX + WinW) << 3) - 1, WinY + WinH - 1, (unsigned char)WinB);
 }
-
 
 /***************************************************************************
  * FLUSH_LINE -- Outputs the accumulate text line to screen.               *
@@ -745,13 +715,12 @@ PRIVATE void Scroll_Window(void)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-PRIVATE void Flush_Line(void)
-{
-	int	breakit, breaksize, breakwidth;
-	int	x, y;					// Coordinates of text print.
-	int	breakpoint;			// Point to break the line (if possible).
-	char	breakchar;			// Break replace character.
-	int	index;				// Backward moving index var.
+PRIVATE void Flush_Line(void) {
+	int breakit, breaksize, breakwidth;
+	int x, y;	// Coordinates of text print.
+	int breakpoint; // Point to break the line (if possible).
+	char breakchar; // Break replace character.
+	int index;	// Backward moving index var.
 
 	/*
 	** There could be a held <CR> and this is implied by the cursor Y position
@@ -760,17 +729,18 @@ PRIVATE void Flush_Line(void)
 	*/
 	while (WinCy >= (unsigned)WindowLines /*&& Pos > 0*/) {
 		Scroll_Window();
-		if (WinCy >= (unsigned)WindowLines) WinCy--;
+		if (WinCy >= (unsigned)WindowLines)
+			WinCy--;
 	}
-	//if (WinCy >= WindowLines) WinCy = WindowLines-1;
+	// if (WinCy >= WindowLines) WinCy = WindowLines-1;
 
-	x = (WinX<<3) + WinCx;
-	y = WinY + (WinCy*(FontHeight+FontYSpacing));
+	x = (WinX << 3) + WinCx;
+	y = WinY + (WinCy * (FontHeight + FontYSpacing));
 
 	breakwidth = WindowWidth;
-//	if (ScrollCounter >= WindowLines - 1 && MoreOn) {
-//		breakwidth -= (MoreSpace * (FontWidth+FontXSpacing));		// use maximum font width
-//	}
+	//	if (ScrollCounter >= WindowLines - 1 && MoreOn) {
+	//		breakwidth -= (MoreSpace * (FontWidth+FontXSpacing));		// use maximum font width
+	//	}
 
 	/*
 	**	Try to break the line at the last space IF the line has reached the edge
@@ -786,7 +756,7 @@ PRIVATE void Flush_Line(void)
 		**	prompt, then breaking must account for the <MORE> text.
 		*/
 		if (ScrollCounter >= WindowLines - 1 && MoreOn) {
-			breakwidth -= (MoreSpace * (FontWidth+FontXSpacing));		// use maximum font width
+			breakwidth -= (MoreSpace * (FontWidth + FontXSpacing)); // use maximum font width
 		}
 		breakwidth -= WinCx;
 
@@ -799,7 +769,7 @@ PRIVATE void Flush_Line(void)
 			if (!breakit) {
 				// was this the char that went past the right edge
 				if (breaksize <= breakwidth) {
-					breakit = index;	// save this position if there is no spaces
+					breakit = index; // save this position if there is no spaces
 				}
 			}
 
@@ -819,11 +789,10 @@ PRIVATE void Flush_Line(void)
 		*/
 		if (!index) {
 			if (WinCx && !WordWrapFlag) {
-				breakpoint = breaksize = 0;		// Continue text on next line.
-				WordWrapFlag = TRUE;		// indicate a word continuation.
-			}
-			else {
-				breakpoint = breakit;	// Just print as much as possible.
+				breakpoint = breaksize = 0; // Continue text on next line.
+				WordWrapFlag = TRUE;	    // indicate a word continuation.
+			} else {
+				breakpoint = breakit; // Just print as much as possible.
 			}
 		}
 	}
@@ -832,10 +801,10 @@ PRIVATE void Flush_Line(void)
 	Line[breakpoint] = '\0';
 
 	LogicPage->Print(Line, x, y, WinC, WinB);
-	WinCx += breaksize;					// add size of text string printed.
+	WinCx += breaksize; // add size of text string printed.
 
 	Line[breakpoint] = breakchar;
-	if (breakchar == KA_SPACE) {		// take out a space between words.
+	if (breakchar == KA_SPACE) { // take out a space between words.
 		breakpoint++;
 	}
 
@@ -855,20 +824,19 @@ PRIVATE void Flush_Line(void)
 	*/
 	if (Pos || WinCx >= (unsigned)WindowWidth) {
 		WinCx = WPos = 0;
-		#if(FALSE)
-			if (WinCy >= WindowLines-1) {
-				Scroll_Window();
-			} else {
-				WinCy++;
-			}
-		#else
+#if (FALSE)
+		if (WinCy >= WindowLines - 1) {
+			Scroll_Window();
+		} else {
 			WinCy++;
-		#endif
+		}
+#else
+		WinCy++;
+#endif
 		Flush_Line();
-		ScrollCounter++;	// must be done after flush line for correct counting
+		ScrollCounter++; // must be done after flush line for correct counting
 	}
 }
-
 
 /***************************************************************************
  * IN_CHAR -- Stores (un-dipped) character(s) from input to buffer.        *
@@ -888,10 +856,9 @@ PRIVATE void Flush_Line(void)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-PRIVATE void In_Char(char *str)
-{
-	char	c;		// Character to return.
-	char	next;	// Following character (if any).
+PRIVATE void In_Char(char *str) {
+	char c;	   // Character to return.
+	char next; // Following character (if any).
 
 	c = next = '\0';
 
@@ -924,14 +891,13 @@ PRIVATE void In_Char(char *str)
 		next = c & (char)0x07;
 		c = (char)((c & (char)0x78) >> 3);
 
-		next = Dipthong[c][next];	// Dipthong character.
-		c = Common[c];				// Common character.
+		next = Dipthong[c][next]; // Dipthong character.
+		c = Common[c];		  // Common character.
 	}
 
 	*str++ = c;
 	*str = next;
 }
-
 
 /***************************************************************************
  * FETCH_CHAR -- Gets one undipthonged char from input.                    *
@@ -951,9 +917,8 @@ PRIVATE void In_Char(char *str)
  * HISTORY:                                                                *
  *   07/25/1991 JLB : Created.                                             *
  *=========================================================================*/
-PRIVATE char Fetch_Char(void)
-{
-	char	c;		// Character to return.
+PRIVATE char Fetch_Char(void) {
+	char c; // Character to return.
 
 	if (!Char[0]) {
 		In_Char(&Char[0]);
@@ -969,5 +934,4 @@ PRIVATE char Fetch_Char(void)
 
 	return (c);
 }
-
 

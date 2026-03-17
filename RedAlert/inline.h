@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/INLINE.H 1     3/03/97 10:24a Joe_bostic $ */
@@ -75,7 +75,6 @@
 #ifndef INLINE_H
 #define INLINE_H
 
-
 /***********************************************************************************************
  * Lepton_To_Pixel -- Convert a lepton value into pixel value.                                 *
  *                                                                                             *
@@ -93,11 +92,11 @@
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Lepton_To_Pixel(LEPTON lepton)
-{
-	return (((int)(signed short)lepton * ICON_PIXEL_W) + (ICON_LEPTON_W / 2) - ((lepton < 0) ? (ICON_LEPTON_W - 1) : 0)) / ICON_LEPTON_W;
+inline int Lepton_To_Pixel(LEPTON lepton) {
+	return (((int)(signed short)lepton * ICON_PIXEL_W) + (ICON_LEPTON_W / 2) -
+		((lepton < 0) ? (ICON_LEPTON_W - 1) : 0)) /
+	       ICON_LEPTON_W;
 }
-
 
 /***********************************************************************************************
  * Pixel_To_Lepton -- Convert pixel value into lepton equivalent.                              *
@@ -113,11 +112,10 @@ inline int Lepton_To_Pixel(LEPTON lepton)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline LEPTON Pixel_To_Lepton(int pixel)
-{
-	return (LEPTON)(((pixel * ICON_LEPTON_W) + (ICON_PIXEL_W / 2) - ((pixel < 0) ? (ICON_PIXEL_W - 1) : 0)) / ICON_PIXEL_W);
+inline LEPTON Pixel_To_Lepton(int pixel) {
+	return (LEPTON)(((pixel * ICON_LEPTON_W) + (ICON_PIXEL_W / 2) - ((pixel < 0) ? (ICON_PIXEL_W - 1) : 0)) /
+			ICON_PIXEL_W);
 }
-
 
 /***********************************************************************************************
  * XY_Coord -- Convert X Y lepton components into a COORD.                                     *
@@ -134,15 +132,13 @@ inline LEPTON Pixel_To_Lepton(int pixel)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE XY_Coord(LEPTON x, LEPTON y)
-{
+inline COORDINATE XY_Coord(LEPTON x, LEPTON y) {
 	COORD_COMPOSITE coord;
 
 	coord.Sub.X.Raw = x;
 	coord.Sub.Y.Raw = y;
-	return(coord.Coord);
+	return (coord.Coord);
 }
-
 
 /***********************************************************************************************
  * XYP_COORD -- Convert pixel components into a coordinate value.                              *
@@ -159,11 +155,7 @@ inline COORDINATE XY_Coord(LEPTON x, LEPTON y)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE XYP_COORD(int x, int y)
-{
-	return(XY_Coord(Pixel_To_Lepton(x), Pixel_To_Lepton(y)));
-}
-
+inline COORDINATE XYP_COORD(int x, int y) { return (XY_Coord(Pixel_To_Lepton(x), Pixel_To_Lepton(y))); }
 
 /***********************************************************************************************
  * Coord_XCell -- Fetch the X cell component from a coordinate value.                          *
@@ -180,11 +172,7 @@ inline COORDINATE XYP_COORD(int x, int y)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline CELL Coord_XCell(COORDINATE coord)
-{
-	return(((COORD_COMPOSITE &)coord).Sub.X.Sub.Cell);
-}
-
+inline CELL Coord_XCell(COORDINATE coord) { return (((COORD_COMPOSITE &)coord).Sub.X.Sub.Cell); }
 
 /***********************************************************************************************
  * Coord_YCell -- Fetch the Y cell component from a coordinate.                                *
@@ -200,11 +188,7 @@ inline CELL Coord_XCell(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline CELL Coord_YCell(COORDINATE coord)
-{
-	return(((COORD_COMPOSITE &)coord).Sub.Y.Sub.Cell);
-}
-
+inline CELL Coord_YCell(COORDINATE coord) { return (((COORD_COMPOSITE &)coord).Sub.Y.Sub.Cell); }
 
 /***********************************************************************************************
  * XY_Cell -- Create a cell from X and Y cell components.                                      *
@@ -221,15 +205,13 @@ inline CELL Coord_YCell(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline CELL XY_Cell(int x, int y)
-{
+inline CELL XY_Cell(int x, int y) {
 	CELL_COMPOSITE cell;
 	cell.Cell = 0;
 	cell.Sub.X = x;
 	cell.Sub.Y = y;
-	return(cell.Cell);
+	return (cell.Cell);
 }
-
 
 /***********************************************************************************************
  * Cell_To_Lepton -- Convert a cell distance into a lepton distance.                           *
@@ -245,14 +227,12 @@ inline CELL XY_Cell(int x, int y)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline LEPTON Cell_To_Lepton(int cell_distance)
-{
+inline LEPTON Cell_To_Lepton(int cell_distance) {
 	LEPTON_COMPOSITE lepton;
 	lepton.Sub.Cell = (unsigned char)cell_distance;
 	lepton.Sub.Lepton = 0;
-	return(lepton.Raw);
+	return (lepton.Raw);
 }
-
 
 /***********************************************************************************************
  * Lepton_To_Cell -- Convert lepton distance to cell distance.                                 *
@@ -270,14 +250,12 @@ inline LEPTON Cell_To_Lepton(int cell_distance)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Lepton_To_Cell(LEPTON lepton_distance)
-{
-	if (((LEPTON_COMPOSITE &)lepton_distance).Sub.Lepton >= (CELL_LEPTON_W/2)) {
-		return(((LEPTON_COMPOSITE &)lepton_distance).Sub.Cell + 1);
+inline int Lepton_To_Cell(LEPTON lepton_distance) {
+	if (((LEPTON_COMPOSITE &)lepton_distance).Sub.Lepton >= (CELL_LEPTON_W / 2)) {
+		return (((LEPTON_COMPOSITE &)lepton_distance).Sub.Cell + 1);
 	}
-	return(((LEPTON_COMPOSITE &)lepton_distance).Sub.Cell);
+	return (((LEPTON_COMPOSITE &)lepton_distance).Sub.Cell);
 }
-
 
 /***********************************************************************************************
  * Coord_X -- Fetches the X lepton component from a coordinate value.                          *
@@ -293,11 +271,7 @@ inline int Lepton_To_Cell(LEPTON lepton_distance)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline LEPTON Coord_X(COORDINATE coord)
-{
-	return(((COORD_COMPOSITE &)coord).Sub.X.Raw);
-}
-
+inline LEPTON Coord_X(COORDINATE coord) { return (((COORD_COMPOSITE &)coord).Sub.X.Raw); }
 
 /***********************************************************************************************
  * Coord_Y -- Fetch the Y lepton component from the coordinate value.                          *
@@ -313,11 +287,7 @@ inline LEPTON Coord_X(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline LEPTON Coord_Y(COORDINATE coord)
-{
-	return(((COORD_COMPOSITE &)coord).Sub.Y.Raw);
-}
-
+inline LEPTON Coord_Y(COORDINATE coord) { return (((COORD_COMPOSITE &)coord).Sub.Y.Raw); }
 
 /***********************************************************************************************
  * Cell_X -- Fetch the X cell component from the cell value.                                   *
@@ -333,11 +303,7 @@ inline LEPTON Coord_Y(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Cell_X(CELL cell)
-{
-	return(((CELL_COMPOSITE &)cell).Sub.X);
-}
-
+inline int Cell_X(CELL cell) { return (((CELL_COMPOSITE &)cell).Sub.X); }
 
 /***********************************************************************************************
  * Cell_Y -- Fetch the Y cell component from the cell value specified.                         *
@@ -353,11 +319,7 @@ inline int Cell_X(CELL cell)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Cell_Y(CELL cell)
-{
-	return(((CELL_COMPOSITE &)cell).Sub.Y);
-}
-
+inline int Cell_Y(CELL cell) { return (((CELL_COMPOSITE &)cell).Sub.Y); }
 
 /***********************************************************************************************
  * Coord_XLepton -- Fetch the X sub-cell lepton component from the coordinate.                 *
@@ -376,11 +338,7 @@ inline int Cell_Y(CELL cell)
  * HISTORY:                                                                                    *
  *   08/21/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Coord_XLepton(COORDINATE coord)
-{
-	return(((COORD_COMPOSITE &)coord).Sub.X.Sub.Lepton);
-}
-
+inline int Coord_XLepton(COORDINATE coord) { return (((COORD_COMPOSITE &)coord).Sub.X.Sub.Lepton); }
 
 /***********************************************************************************************
  * Coord_YLepton -- Fetches the Y lepton sub-cell component from the coordinate.               *
@@ -397,11 +355,7 @@ inline int Coord_XLepton(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Coord_YLepton(COORDINATE coord)
-{
-	return(((COORD_COMPOSITE &)coord).Sub.Y.Sub.Lepton);
-}
-
+inline int Coord_YLepton(COORDINATE coord) { return (((COORD_COMPOSITE &)coord).Sub.Y.Sub.Lepton); }
 
 /***********************************************************************************************
  * XYP_Coord -- Combine pixel values into a coordinate.                                        *
@@ -421,15 +375,13 @@ inline int Coord_YLepton(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE XYP_Coord(int x, int y)
-{
+inline COORDINATE XYP_Coord(int x, int y) {
 	COORD_COMPOSITE coord;
 
 	coord.Sub.X.Raw = Pixel_To_Lepton(x);
 	coord.Sub.Y.Raw = Pixel_To_Lepton(y);
-	return(coord.Coord);
+	return (coord.Coord);
 }
-
 
 /***********************************************************************************************
  * Cell_Coord -- Convert a cell to a coordinate value.                                         *
@@ -446,17 +398,15 @@ inline COORDINATE XYP_Coord(int x, int y)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Cell_Coord(CELL cell)
-{
+inline COORDINATE Cell_Coord(CELL cell) {
 	COORD_COMPOSITE coord;
 
 	coord.Sub.X.Sub.Cell = (unsigned char)(((CELL_COMPOSITE &)cell).Sub.X);
 	coord.Sub.X.Sub.Lepton = (unsigned char)(CELL_LEPTON_W / 2);
 	coord.Sub.Y.Sub.Cell = (unsigned char)(((CELL_COMPOSITE &)cell).Sub.Y);
 	coord.Sub.Y.Sub.Lepton = (unsigned char)(CELL_LEPTON_W / 2);
-	return(coord.Coord);
+	return (coord.Coord);
 }
-
 
 /***********************************************************************************************
  * Coord_Snap -- Coerce coordinate to refer to center of a cell.                               *
@@ -474,13 +424,11 @@ inline COORDINATE Cell_Coord(CELL cell)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Coord_Snap(COORDINATE coord)
-{
-	((COORD_COMPOSITE &)coord).Sub.X.Sub.Lepton = CELL_LEPTON_W/2;
-	((COORD_COMPOSITE &)coord).Sub.Y.Sub.Lepton = CELL_LEPTON_W/2;
-	return(coord);
+inline COORDINATE Coord_Snap(COORDINATE coord) {
+	((COORD_COMPOSITE &)coord).Sub.X.Sub.Lepton = CELL_LEPTON_W / 2;
+	((COORD_COMPOSITE &)coord).Sub.Y.Sub.Lepton = CELL_LEPTON_W / 2;
+	return (coord);
 }
-
 
 /***********************************************************************************************
  * Coord_Fraction -- Discards all but the sub-cell components of the coordinate.               *
@@ -497,13 +445,11 @@ inline COORDINATE Coord_Snap(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Coord_Fraction(COORDINATE coord)
-{
+inline COORDINATE Coord_Fraction(COORDINATE coord) {
 	((COORD_COMPOSITE &)coord).Sub.X.Sub.Cell = 0;
 	((COORD_COMPOSITE &)coord).Sub.Y.Sub.Cell = 0;
-	return(coord);
+	return (coord);
 }
-
 
 /***********************************************************************************************
  * Coord_Whole -- Discards the sub-cell components of the coordinate.                          *
@@ -520,13 +466,11 @@ inline COORDINATE Coord_Fraction(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Coord_Whole(COORDINATE coord)
-{
+inline COORDINATE Coord_Whole(COORDINATE coord) {
 	((COORD_COMPOSITE &)coord).Sub.X.Sub.Lepton = 0;
 	((COORD_COMPOSITE &)coord).Sub.Y.Sub.Lepton = 0;
-	return(coord);
+	return (coord);
 }
-
 
 /***********************************************************************************************
  * Coord_Add -- Adds coordinates together.                                                     *
@@ -545,15 +489,15 @@ inline COORDINATE Coord_Whole(COORDINATE coord)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Coord_Add(COORDINATE coord1, COORDINATE coord2)
-{
+inline COORDINATE Coord_Add(COORDINATE coord1, COORDINATE coord2) {
 	COORD_COMPOSITE coord;
 
-	coord.Sub.X.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.X.Raw + (int)(short)((COORD_COMPOSITE &)coord2).Sub.X.Raw);
-	coord.Sub.Y.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.Y.Raw + (int)(short)((COORD_COMPOSITE &)coord2).Sub.Y.Raw);
-	return(coord.Coord);
+	coord.Sub.X.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.X.Raw +
+				   (int)(short)((COORD_COMPOSITE &)coord2).Sub.X.Raw);
+	coord.Sub.Y.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.Y.Raw +
+				   (int)(short)((COORD_COMPOSITE &)coord2).Sub.Y.Raw);
+	return (coord.Coord);
 }
-
 
 /***********************************************************************************************
  * Coord_Sub -- Subtracts one coordinate from another.                                         *
@@ -573,15 +517,15 @@ inline COORDINATE Coord_Add(COORDINATE coord1, COORDINATE coord2)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Coord_Sub(COORDINATE coord1, COORDINATE coord2)
-{
+inline COORDINATE Coord_Sub(COORDINATE coord1, COORDINATE coord2) {
 	COORD_COMPOSITE coord;
 
-	coord.Sub.X.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.X.Raw - (int)(short)((COORD_COMPOSITE &)coord2).Sub.X.Raw);
-	coord.Sub.Y.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.Y.Raw - (int)(short)((COORD_COMPOSITE &)coord2).Sub.Y.Raw);
-	return(coord.Coord);
+	coord.Sub.X.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.X.Raw -
+				   (int)(short)((COORD_COMPOSITE &)coord2).Sub.X.Raw);
+	coord.Sub.Y.Raw = (LEPTON)((int)(short)((COORD_COMPOSITE &)coord1).Sub.Y.Raw -
+				   (int)(short)((COORD_COMPOSITE &)coord2).Sub.Y.Raw);
+	return (coord.Coord);
 }
-
 
 /***********************************************************************************************
  * Coord_Mid -- Finds the midpoint between two coordinates.                                    *
@@ -599,15 +543,15 @@ inline COORDINATE Coord_Sub(COORDINATE coord1, COORDINATE coord2)
  * HISTORY:                                                                                    *
  *   08/23/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Coord_Mid(COORDINATE coord1, COORDINATE coord2)
-{
+inline COORDINATE Coord_Mid(COORDINATE coord1, COORDINATE coord2) {
 	COORD_COMPOSITE coord;
 
-	coord.Sub.X.Raw = (LEPTON)(((int)((COORD_COMPOSITE &)coord1).Sub.X.Raw + (int)((COORD_COMPOSITE &)coord2).Sub.X.Raw) / 2);
-	coord.Sub.Y.Raw = (LEPTON)(((int)((COORD_COMPOSITE &)coord1).Sub.Y.Raw + (int)((COORD_COMPOSITE &)coord2).Sub.Y.Raw) / 2);
-	return(coord.Coord);
+	coord.Sub.X.Raw =
+	    (LEPTON)(((int)((COORD_COMPOSITE &)coord1).Sub.X.Raw + (int)((COORD_COMPOSITE &)coord2).Sub.X.Raw) / 2);
+	coord.Sub.Y.Raw =
+	    (LEPTON)(((int)((COORD_COMPOSITE &)coord1).Sub.Y.Raw + (int)((COORD_COMPOSITE &)coord2).Sub.Y.Raw) / 2);
+	return (coord.Coord);
 }
-
 
 /***********************************************************************************************
  * Dir_Facing -- Convert a DirType into a FacingType value.                                    *
@@ -624,11 +568,7 @@ inline COORDINATE Coord_Mid(COORDINATE coord1, COORDINATE coord2)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline FacingType Dir_Facing(DirType facing)
-{
-	return (FacingType)(((unsigned char)((int)facing+0x10)&0xFF)>>5);
-}
-
+inline FacingType Dir_Facing(DirType facing) { return (FacingType)(((unsigned char)((int)facing + 0x10) & 0xFF) >> 5); }
 
 /***********************************************************************************************
  * Facing_Dir -- Convert a FacingType into a DirType.                                          *
@@ -645,11 +585,7 @@ inline FacingType Dir_Facing(DirType facing)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline DirType Facing_Dir(FacingType facing)
-{
-	return (DirType)((int)facing << 5);
-}
-
+inline DirType Facing_Dir(FacingType facing) { return (DirType)((int)facing << 5); }
 
 /***********************************************************************************************
  * Dir_To_16 -- Convert a facing to a 0..15 value.                                             *
@@ -666,11 +602,7 @@ inline DirType Facing_Dir(FacingType facing)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Dir_To_16(DirType facing)
-{
-	return Facing16[facing];
-}
-
+inline int Dir_To_16(DirType facing) { return Facing16[facing]; }
 
 /***********************************************************************************************
  * Dir_To_32 -- Convert a DirType into a 0..31 value.                                          *
@@ -688,11 +620,7 @@ inline int Dir_To_16(DirType facing)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Dir_To_32(DirType facing)
-{
-	return Facing32[facing];
-}
-
+inline int Dir_To_32(DirType facing) { return Facing32[facing]; }
 
 /***********************************************************************************************
  * Direction256 -- Calculate the facing value from one coordinate to another.                  *
@@ -710,11 +638,9 @@ inline int Dir_To_32(DirType facing)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline DirType Direction256(COORDINATE coord1, COORDINATE coord2)
-{
+inline DirType Direction256(COORDINATE coord1, COORDINATE coord2) {
 	return (Desired_Facing256(Coord_X(coord1), Coord_Y(coord1), Coord_X(coord2), Coord_Y(coord2)));
 }
-
 
 /***********************************************************************************************
  * Direction -- Determines the facing value from one coordinate to another.                    *
@@ -733,11 +659,9 @@ inline DirType Direction256(COORDINATE coord1, COORDINATE coord2)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline DirType Direction(COORDINATE coord1, COORDINATE coord2)
-{
+inline DirType Direction(COORDINATE coord1, COORDINATE coord2) {
 	return (Desired_Facing256(Coord_X(coord1), Coord_Y(coord1), Coord_X(coord2), Coord_Y(coord2)));
 }
-
 
 /***********************************************************************************************
  * Direction8 -- Fetches the direction from one coordinate to another.                         *
@@ -756,11 +680,9 @@ inline DirType Direction(COORDINATE coord1, COORDINATE coord2)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline DirType Direction8(COORDINATE coord1, COORDINATE coord2)
-{
+inline DirType Direction8(COORDINATE coord1, COORDINATE coord2) {
 	return (Desired_Facing8(Coord_X(coord1), Coord_Y(coord1), Coord_X(coord2), Coord_Y(coord2)));
 }
-
 
 /***********************************************************************************************
  * Direction -- Calculates the DirType from one cell to another.                               *
@@ -780,12 +702,10 @@ inline DirType Direction8(COORDINATE coord1, COORDINATE coord2)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline DirType Direction(CELL cell1, CELL cell2)
-{
+inline DirType Direction(CELL cell1, CELL cell2) {
 	return (Desired_Facing8(Cell_X(cell1), Cell_Y(cell1), Cell_X(cell2), Cell_Y(cell2)));
 }
 
-
 /***********************************************************************************************
  * Adjacent_Cell -- Calculate the adjacent cell in the direction specified.                    *
  *                                                                                             *
@@ -804,12 +724,10 @@ inline DirType Direction(CELL cell1, CELL cell2)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Adjacent_Cell(COORDINATE coord, FacingType dir)
-{
+inline COORDINATE Adjacent_Cell(COORDINATE coord, FacingType dir) {
 	return (Coord_Snap(Coord_Add(AdjacentCoord[(int)dir & 0x07], coord)));
 }
 
-
 /***********************************************************************************************
  * Adjacent_Cell -- Calculate the adjacent cell in the direction specified.                    *
  *                                                                                             *
@@ -828,11 +746,7 @@ inline COORDINATE Adjacent_Cell(COORDINATE coord, FacingType dir)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline COORDINATE Adjacent_Cell(COORDINATE coord, DirType dir)
-{
-	return Adjacent_Cell(coord, Dir_Facing(dir));
-}
-
+inline COORDINATE Adjacent_Cell(COORDINATE coord, DirType dir) { return Adjacent_Cell(coord, Dir_Facing(dir)); }
 
 /***********************************************************************************************
  * Adjacent_Cell -- Calculate the adjacent cell in the direction specified.                    *
@@ -852,11 +766,7 @@ inline COORDINATE Adjacent_Cell(COORDINATE coord, DirType dir)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline CELL Adjacent_Cell(CELL cell, FacingType dir)
-{
-	return (CELL)(cell + AdjacentCell[dir]);
-}
-
+inline CELL Adjacent_Cell(CELL cell, FacingType dir) { return (CELL)(cell + AdjacentCell[dir]); }
 
 /***********************************************************************************************
  * Adjacent_Cell -- Calculate the adjacent cell in the direction specified.                    *
@@ -876,11 +786,7 @@ inline CELL Adjacent_Cell(CELL cell, FacingType dir)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline CELL Adjacent_Cell(CELL cell, DirType dir)
-{
-	return (CELL)(cell + AdjacentCell[Dir_Facing(dir)]);
-}
-
+inline CELL Adjacent_Cell(CELL cell, DirType dir) { return (CELL)(cell + AdjacentCell[Dir_Facing(dir)]); }
 
 /***********************************************************************************************
  * Dir_To_8 -- Convert a DirType into a value from 0 to 7.                                     *
@@ -897,11 +803,7 @@ inline CELL Adjacent_Cell(CELL cell, DirType dir)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline FacingType Dir_To_8(DirType facing)
-{
-	return (FacingType)(((unsigned char)((int)facing|0x10))>>5);
-}
-
+inline FacingType Dir_To_8(DirType facing) { return (FacingType)(((unsigned char)((int)facing | 0x10)) >> 5); }
 
 /***********************************************************************************************
  * Text_String -- Convert a text number into a text pointer.                                   *
@@ -918,18 +820,17 @@ inline FacingType Dir_To_8(DirType facing)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline char const * Text_String(int string)
-{
+inline char const *Text_String(int string) {
 #ifdef FIXIT_NAME_OVERRIDE
 	if (string < 0 && abs(string) < ARRAY_SIZE(NameOverride)) {
-		return(NameOverride[-(string+1)]);
+		return (NameOverride[-(string + 1)]);
 	}
 #endif
 
-	if (string < 1000) return(Extract_String(SystemStrings, string));
-	return(Extract_String(DebugStrings, string-1000));
+	if (string < 1000)
+		return (Extract_String(SystemStrings, string));
+	return (Extract_String(DebugStrings, string - 1000));
 }
-
 
 /***********************************************************************************************
  * Random_Pick -- Pick a random number in a specified range.                                   *
@@ -949,11 +850,7 @@ inline char const * Text_String(int string)
  * HISTORY:                                                                                    *
  *   09/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-template<class T> inline T Random_Pick(T a, T b)
-{
-	return T(Scen.RandomNumber((int)a, (int)b));
-};
-
+template <class T> inline T Random_Pick(T a, T b) { return T(Scen.RandomNumber((int)a, (int)b)); };
 
 /***********************************************************************************************
  * Percent_Chance -- Calculate a percentage chance event.                                      *
@@ -973,11 +870,7 @@ template<class T> inline T Random_Pick(T a, T b)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline bool Percent_Chance(int percent)
-{
-	return (Scen.RandomNumber(0, 99) < percent);
-}
-
+inline bool Percent_Chance(int percent) { return (Scen.RandomNumber(0, 99) < percent); }
 
 /***********************************************************************************************
  * Sim_Random_Pick -- Picks a random number that will not affect the game.                     *
@@ -1000,11 +893,7 @@ inline bool Percent_Chance(int percent)
  *   09/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
 extern RandomClass NonCriticalRandomNumber;
-template<class T> inline T Sim_Random_Pick(T a, T b)
-{
-	return T(NonCriticalRandomNumber((int)a, (int)b));
-};
-
+template <class T> inline T Sim_Random_Pick(T a, T b) { return T(NonCriticalRandomNumber((int)a, (int)b)); };
 
 /***********************************************************************************************
  * Sim_Percent_Chance -- Calculates a percentage chance event for local events.                *
@@ -1024,11 +913,7 @@ template<class T> inline T Sim_Random_Pick(T a, T b)
  * HISTORY:                                                                                    *
  *   08/26/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline bool Sim_Percent_Chance(int percent)
-{
-	return (NonCriticalRandomNumber(0, 99) < percent);
-}
-
+inline bool Sim_Percent_Chance(int percent) { return (NonCriticalRandomNumber(0, 99) < percent); }
 
 /***********************************************************************************************
  * Distance -- Finds the distance between two arbitrary points.                                *
@@ -1049,18 +934,17 @@ inline bool Sim_Percent_Chance(int percent)
  * HISTORY:                                                                                    *
  *   09/30/1996 JLB : Created.                                                                 *
  *=============================================================================================*/
-inline int Distance(int x1, int y1, int x2, int y2)
-{
+inline int Distance(int x1, int y1, int x2, int y2) {
 	int diff1 = y1 - y2;
-	if (diff1 < 0) diff1 = -diff1;
+	if (diff1 < 0)
+		diff1 = -diff1;
 	int diff2 = x1 - x2;
-	if (diff2 < 0) diff2 = -diff2;
+	if (diff2 < 0)
+		diff2 = -diff2;
 	if (diff1 > diff2) {
-		return(diff1 + ((unsigned)diff2 / 2));
+		return (diff1 + ((unsigned)diff2 / 2));
 	}
-	return(diff2 + ((unsigned)diff1 / 2));
+	return (diff2 + ((unsigned)diff1 / 2));
 }
 
-
 #endif
-

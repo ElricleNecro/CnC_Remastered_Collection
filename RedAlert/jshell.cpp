@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/JSHELL.CPP 2     3/13/97 2:05p Steve_tall $ */
@@ -40,9 +40,8 @@
  *   Translucent_Table_Size -- Determines the size of a translucent table.                     *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"wwfile.h"
-
+#include "function.h"
+#include "wwfile.h"
 
 /***********************************************************************************************
  * Small_Icon -- Create a small icon from a big one.                                           *
@@ -62,36 +61,25 @@
  * HISTORY:                                                                                    *
  *   05/11/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * Small_Icon(void const * iconptr, int iconnum)
-{
+void *Small_Icon(void const *iconptr, int iconnum) {
 	static unsigned char _icon[9];
-	IControl_Type const * iptr = (IControl_Type const *)iconptr;
-	unsigned char * data;
+	IControl_Type const *iptr = (IControl_Type const *)iconptr;
+	unsigned char *data;
 
 	if (iconptr) {
 		iconnum = ((char *)((char *)iptr + iptr->Map))[iconnum];
-		data = &((unsigned char *)((unsigned char *)iptr + iptr->Icons))[iconnum*(24*24)];
-//		data = &iptr->Icons[iconnum*(24*24)];
+		data = &((unsigned char *)((unsigned char *)iptr + iptr->Icons))[iconnum * (24 * 24)];
+		//		data = &iptr->Icons[iconnum*(24*24)];
 
 		for (int index = 0; index < 9; index++) {
-			int _offsets[9] = {
-				4+4*24,
-				12+4*24,
-				20+4*24,
-				4+12*24,
-				12+12*24,
-				20+12*24,
-				4+20*24,
-				12+20*24,
-				20+20*24
-			};
+			int _offsets[9] = {4 + 4 * 24,	 12 + 4 * 24, 20 + 4 * 24,  4 + 12 * 24, 12 + 12 * 24,
+					   20 + 12 * 24, 4 + 20 * 24, 12 + 20 * 24, 20 + 20 * 24};
 			_icon[index] = data[_offsets[index]];
 		}
 	}
 
-	return(_icon);
+	return (_icon);
 }
-
 
 /***********************************************************************************************
  * Set_Window -- Sets the window dimensions to that specified.                                 *
@@ -115,14 +103,12 @@ void * Small_Icon(void const * iconptr, int iconnum)
  * HISTORY:                                                                                    *
  *   01/15/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Set_Window(int window, int x, int y, int w, int h)
-{
+void Set_Window(int window, int x, int y, int w, int h) {
 	WindowList[window][WINDOWWIDTH] = w;
 	WindowList[window][WINDOWHEIGHT] = h;
 	WindowList[window][WINDOWX] = x;
 	WindowList[window][WINDOWY] = y;
 }
-
 
 /***********************************************************************************************
  * Fatal -- General purpose fatal error handler.                                               *
@@ -141,30 +127,25 @@ void Set_Window(int window, int x, int y, int w, int h)
  * HISTORY:                                                                                    *
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void Fatal(char const * message, ...)
-{
-	va_list	va;
+void Fatal(char const *message, ...) {
+	va_list va;
 
 	va_start(va, message);
 	Prog_End(message, true);
 	vfprintf(stderr, message, va);
 	Mono_Printf(message);
-	if (!RunningAsDLL) {	//PG
+	if (!RunningAsDLL) { // PG
 		Emergency_Exit(EXIT_FAILURE);
 	}
 }
 
-
 #ifdef NEVER
-void File_Fatal(char const * message)
-{
-	//Prog_End();
+void File_Fatal(char const *message) {
+	// Prog_End();
 	perror(message);
 	Emergency_Exit(EXIT_FAILURE);
 }
 #endif
-
-
 
 /***********************************************************************************************
  * Load_Uncompress -- Loads and uncompresses data to a buffer.                                 *
@@ -189,13 +170,12 @@ void File_Fatal(char const * message)
  * HISTORY:                                                                                    *
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-long Load_Uncompress(FileClass &file, BuffType &uncomp_buff, BuffType &dest_buff, void * reserved_data)
-{
-	unsigned short	size;
-	void	* sptr = uncomp_buff.Get_Buffer();
-	void	* dptr = dest_buff.Get_Buffer();
-	int	opened = false;
-	CompHeaderType	header;
+long Load_Uncompress(FileClass &file, BuffType &uncomp_buff, BuffType &dest_buff, void *reserved_data) {
+	unsigned short size;
+	void *sptr = uncomp_buff.Get_Buffer();
+	void *dptr = dest_buff.Get_Buffer();
+	int opened = false;
+	CompHeaderType header;
 
 	/*
 	**	The file must be opened in order to be read from. If the file
@@ -204,7 +184,7 @@ long Load_Uncompress(FileClass &file, BuffType &uncomp_buff, BuffType &dest_buff
 	*/
 	if (!file.Is_Open()) {
 		if (!file.Open()) {
-			return(0);
+			return (0);
 		}
 		opened = true;
 	}
@@ -242,7 +222,7 @@ long Load_Uncompress(FileClass &file, BuffType &uncomp_buff, BuffType &dest_buff
 	**	the buffer and decompressed at the beginning.
 	*/
 	if (uncomp_buff.Get_Buffer() == dest_buff.Get_Buffer()) {
-		sptr = (char *)sptr + uncomp_buff.Get_Size()-(size+sizeof(header));
+		sptr = (char *)sptr + uncomp_buff.Get_Size() - (size + sizeof(header));
 	}
 
 	/*
@@ -254,7 +234,7 @@ long Load_Uncompress(FileClass &file, BuffType &uncomp_buff, BuffType &dest_buff
 	/*
 	**	Decompress the data.
 	*/
-	size = (unsigned int) Uncompress_Data(sptr, dptr);
+	size = (unsigned int)Uncompress_Data(sptr, dptr);
 
 	/*
 	**	Close the file if necessary.
@@ -262,15 +242,13 @@ long Load_Uncompress(FileClass &file, BuffType &uncomp_buff, BuffType &dest_buff
 	if (opened) {
 		file.Close();
 	}
-	return((long)size);
+	return ((long)size);
 }
 
-
-int Load_Picture(char const * filename, BufferClass& scratchbuf, BufferClass& destbuf, unsigned char * palette, PicturePlaneType )
-{
-	return(Load_Uncompress(CCFileClass(filename), scratchbuf, destbuf,  palette ) / 8000);
+int Load_Picture(char const *filename, BufferClass &scratchbuf, BufferClass &destbuf, unsigned char *palette,
+		 PicturePlaneType) {
+	return (Load_Uncompress(CCFileClass(filename), scratchbuf, destbuf, palette) / 8000);
 }
-
 
 /***********************************************************************************************
  * Load_Alloc_Data -- Allocates a buffer and loads the file into it.                           *
@@ -289,18 +267,16 @@ int Load_Picture(char const * filename, BufferClass& scratchbuf, BufferClass& de
  * HISTORY:                                                                                    *
  *   10/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * Load_Alloc_Data(FileClass &file)
-{
-	void * ptr = 0;
+void *Load_Alloc_Data(FileClass &file) {
+	void *ptr = 0;
 	long size = file.Size();
 
-	ptr = new char [size];
+	ptr = new char[size];
 	if (ptr) {
 		file.Read(ptr, size);
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***********************************************************************************************
  * Translucent_Table_Size -- Determines the size of a translucent table.                       *
@@ -318,11 +294,7 @@ void * Load_Alloc_Data(FileClass &file)
  * HISTORY:                                                                                    *
  *   04/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-long Translucent_Table_Size(int count)
-{
-	return(256L + (256L * count));
-}
-
+long Translucent_Table_Size(int count) { return (256L + (256L * count)); }
 
 /***********************************************************************************************
  * Build_Translucent_Table -- Creates a translucent control table.                             *
@@ -351,33 +323,32 @@ long Translucent_Table_Size(int count)
  * HISTORY:                                                                                    *
  *   04/02/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * Build_Translucent_Table(PaletteClass const & palette, TLucentType const * control, int count, void * buffer)
-{
-	unsigned char	const *table;		// Remap table pointer.
-	int			index;		// Working color index.
+void *Build_Translucent_Table(PaletteClass const &palette, TLucentType const *control, int count, void *buffer) {
+	unsigned char const *table; // Remap table pointer.
+	int index;		    // Working color index.
 
-	if (count && control/* && palette*/) {		// palette can't be NULL... ST - 5/9/2019
+	if (count && control /* && palette*/) { // palette can't be NULL... ST - 5/9/2019
 		if (!buffer) {
-			buffer = new char [Translucent_Table_Size(count)];
+			buffer = new char[Translucent_Table_Size(count)];
 		}
 
 		if (buffer) {
 			memset(buffer, -1, 256);
-			table = (unsigned char*)buffer + 256;
+			table = (unsigned char *)buffer + 256;
 
 			/*
 			**	Build the individual remap tables for each translucent color.
 			*/
 			for (index = 0; index < count; index++) {
-				((unsigned char*)buffer)[control[index].SourceColor] = index;
-				Build_Fading_Table(palette.Get_Data(), (void*)table, control[index].DestColor, control[index].Fading);
-				table = (unsigned char*)table + 256;
+				((unsigned char *)buffer)[control[index].SourceColor] = index;
+				Build_Fading_Table(palette.Get_Data(), (void *)table, control[index].DestColor,
+						   control[index].Fading);
+				table = (unsigned char *)table + 256;
 			}
 		}
 	}
-	return(buffer);
+	return (buffer);
 }
-
 
 /***********************************************************************************************
  * Conquer_Build_Translucent_Table -- Builds fading table for shadow colors only.              *
@@ -405,37 +376,36 @@ void * Build_Translucent_Table(PaletteClass const & palette, TLucentType const *
  * HISTORY:                                                                                    *
  *   06/27/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * Conquer_Build_Translucent_Table(PaletteClass const & palette, TLucentType const * control, int count, void * buffer)
-{
-	unsigned char	const *table;		// Remap table pointer.
+void *Conquer_Build_Translucent_Table(PaletteClass const &palette, TLucentType const *control, int count,
+				      void *buffer) {
+	unsigned char const *table; // Remap table pointer.
 
 	if (count && control) {
 		if (!buffer) {
-			buffer = new char [Translucent_Table_Size(count)];
+			buffer = new char[Translucent_Table_Size(count)];
 		}
 
 		if (buffer) {
 			memset(buffer, -1, 256);
-			table = (unsigned char*)buffer + 256;
+			table = (unsigned char *)buffer + 256;
 
 			/*
 			**	Build the individual remap tables for each translucent color.
 			*/
 			for (int index = 0; index < count; index++) {
-				((unsigned char*)buffer)[control[index].SourceColor] = index;
-				Conquer_Build_Fading_Table(palette, (void*)table, control[index].DestColor, control[index].Fading);
-				table = (unsigned char*)table + 256;
+				((unsigned char *)buffer)[control[index].SourceColor] = index;
+				Conquer_Build_Fading_Table(palette, (void *)table, control[index].DestColor,
+							   control[index].Fading);
+				table = (unsigned char *)table + 256;
 			}
 		}
 	}
-	return(buffer);
+	return (buffer);
 }
 
-
-void * Make_Fading_Table(PaletteClass const & palette, void * dest, int color, int frac)
-{
+void *Make_Fading_Table(PaletteClass const &palette, void *dest, int color, int frac) {
 	if (dest) {
-		unsigned char * ptr = (unsigned char *)dest;
+		unsigned char *ptr = (unsigned char *)dest;
 
 		/*
 		**	Find an appropriate remap color index for every color in the palette.
@@ -449,7 +419,7 @@ void * Make_Fading_Table(PaletteClass const & palette, void * dest, int color, i
 			**	to in the special remap range.
 			*/
 			RGBClass trycolor = palette[index];
-			trycolor.Adjust(frac, palette[color]);			// Try to match this color.
+			trycolor.Adjust(frac, palette[color]); // Try to match this color.
 
 			/*
 			**	Search through the remap range to find the color that should be remapped
@@ -459,15 +429,13 @@ void * Make_Fading_Table(PaletteClass const & palette, void * dest, int color, i
 			*ptr++ = palette.Closest_Color(trycolor);
 		}
 	}
-	return(dest);
+	return (dest);
 }
 
-
-void * Conquer_Build_Fading_Table(PaletteClass const & palette, void * dest, int color, int frac)
-{
+void *Conquer_Build_Fading_Table(PaletteClass const &palette, void *dest, int color, int frac) {
 	if (dest) {
-		unsigned char * ptr = (unsigned char *)dest;
-//		HSVClass desthsv = palette[color];
+		unsigned char *ptr = (unsigned char *)dest;
+		//		HSVClass desthsv = palette[color];
 
 		/*
 		**	Find an appropriate remap color index for every color in the palette.
@@ -480,7 +448,7 @@ void * Conquer_Build_Fading_Table(PaletteClass const & palette, void * dest, int
 			**	If this color should not be remapped, then it will be stored as a remap
 			**	to itself. This is effectively no remap.
 			*/
-			if (index > PaletteClass::COLOR_COUNT-16 || index == 0) {
+			if (index > PaletteClass::COLOR_COUNT - 16 || index == 0) {
 				*ptr++ = index;
 			} else {
 
@@ -489,7 +457,7 @@ void * Conquer_Build_Fading_Table(PaletteClass const & palette, void * dest, int
 				**	to in the special remap range.
 				*/
 				RGBClass trycolor = palette[index];
-				trycolor.Adjust(frac, palette[color]);			// Try to match this color.
+				trycolor.Adjust(frac, palette[color]); // Try to match this color.
 
 				/*
 				**	Search through the remap range to find the color that should be remapped
@@ -498,7 +466,8 @@ void * Conquer_Build_Fading_Table(PaletteClass const & palette, void * dest, int
 				*/
 				int best = -1;
 				int bvalue = 0;
-				for (int id = PaletteClass::COLOR_COUNT-16; id < PaletteClass::COLOR_COUNT-1; id++) {
+				for (int id = PaletteClass::COLOR_COUNT - 16; id < PaletteClass::COLOR_COUNT - 1;
+				     id++) {
 					int diff = palette[id].Difference(trycolor);
 					if (best == -1 || diff < bvalue) {
 						best = id;
@@ -509,21 +478,19 @@ void * Conquer_Build_Fading_Table(PaletteClass const & palette, void * dest, int
 			}
 		}
 	}
-	return(dest);
+	return (dest);
 }
 
-
 #ifdef OBSOLETE
-//int Desired_Facing8(int x1, int y1, int x2, int y2)
-DirType xDesired_Facing8(int x1, int y1, int x2, int y2)
-{
-	int index = 0;				// Facing composite value.
+// int Desired_Facing8(int x1, int y1, int x2, int y2)
+DirType xDesired_Facing8(int x1, int y1, int x2, int y2) {
+	int index = 0; // Facing composite value.
 
 	/*
 	**	Figure the absolute X difference. This determines
 	**	if the facing is leftward or not.
 	*/
-	int xdiff = x2-x1;
+	int xdiff = x2 - x1;
 	if (xdiff < 0) {
 		index |= 0x00C0;
 		xdiff = -xdiff;
@@ -534,7 +501,7 @@ DirType xDesired_Facing8(int x1, int y1, int x2, int y2)
 	**	if the facing is downward or not. This also clarifies
 	**	exactly which quadrant the facing lies.
 	*/
-	int ydiff = y1-y2;
+	int ydiff = y1 - y2;
 	if (ydiff < 0) {
 		index ^= 0x0040;
 		ydiff = -ydiff;
@@ -559,9 +526,9 @@ DirType xDesired_Facing8(int x1, int y1, int x2, int y2)
 	**	If on the diagonal, then incorporate this into the facing
 	**	and then bail. The facing is known.
 	*/
-	if (((bigger+1)/2) <= smaller) {
+	if (((bigger + 1) / 2) <= smaller) {
 		index += 0x0020;
-		return(DirType(index));
+		return (DirType(index));
 	}
 
 	/*
@@ -574,14 +541,12 @@ DirType xDesired_Facing8(int x1, int y1, int x2, int y2)
 	}
 	index += adder;
 
-	return(DirType(index));
+	return (DirType(index));
 }
 
-
-//int Desired_Facing256(int srcx, int srcy, int dstx, int dsty)
-DirType xDesired_Facing256(int srcx, int srcy, int dstx, int dsty)
-{
-	int composite=0;		// Facing built from intermediate calculations.
+// int Desired_Facing256(int srcx, int srcy, int dstx, int dsty)
+DirType xDesired_Facing256(int srcx, int srcy, int dstx, int dsty) {
+	int composite = 0; // Facing built from intermediate calculations.
 
 	/*
 	**	Fetch the absolute X difference. This also gives a clue as
@@ -608,7 +573,8 @@ DirType xDesired_Facing256(int srcx, int srcy, int dstx, int dsty)
 	**	has the added bonus of ensuring that checking for division
 	**	by zero is not needed in the following section.
 	*/
-	if (xdiff == 0 && ydiff == 0) return(DirType(0xFF));
+	if (xdiff == 0 && ydiff == 0)
+		return (DirType(0xFF));
 
 	/*
 	**	Determine which of the two direction offsets it bigger. The
@@ -643,7 +609,7 @@ DirType xDesired_Facing256(int srcx, int srcy, int dstx, int dsty)
 		adder ^= 0x0040;
 	}
 	if (adder) {
-		frac = (adder - frac)-1;
+		frac = (adder - frac) - 1;
 	}
 
 	/*
@@ -654,6 +620,6 @@ DirType xDesired_Facing256(int srcx, int srcy, int dstx, int dsty)
 	/*
 	**	Return with the final facing value.
 	*/
-	return(DirType(composite & 0x00FF));
+	return (DirType(composite & 0x00FF));
 }
 #endif

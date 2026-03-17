@@ -1,16 +1,16 @@
 //
 // Copyright 2020 Electronic Arts Inc.
 //
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free 
-// software: you can redistribute it and/or modify it under the terms of 
-// the GNU General Public License as published by the Free Software Foundation, 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is free
+// software: you can redistribute it and/or modify it under the terms of
+// the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
 
-// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed 
-// in the hope that it will be useful, but with permitted additional restrictions 
-// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT 
-// distributed with this program. You should have received a copy of the 
-// GNU General Public License along with permitted additional restrictions 
+// TiberianDawn.DLL and RedAlert.dll and corresponding source code is distributed
+// in the hope that it will be useful, but with permitted additional restrictions
+// under Section 7 of the GPL. See the GNU General Public License in LICENSE.TXT
+// distributed with this program. You should have received a copy of the
+// GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
 /* $Header: /CounterStrike/TEMPLATE.CPP 1     3/03/97 10:25a Joe_bostic $ */
@@ -39,9 +39,8 @@
  *   TemplateClass::new -- Allocates a template object from pool                               *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include	"function.h"
-#include	"template.h"
-
+#include "template.h"
+#include "function.h"
 
 /***********************************************************************************************
  * TemplateClass::Init -- Resets the template object system.                                   *
@@ -58,11 +57,7 @@
  * HISTORY:                                                                                    *
  *   05/24/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TemplateClass::Init(void)
-{
-	Templates.Free_All();
-}
-
+void TemplateClass::Init(void) { Templates.Free_All(); }
 
 /***********************************************************************************************
  * TemplateClass::Mark -- Lifts or drops a template object.                                    *
@@ -81,30 +76,29 @@ void TemplateClass::Init(void)
  *   05/17/1994 JLB : Created.                                                                 *
  *   12/23/1994 JLB : Examines low level legality before processing.                           *
  *=============================================================================================*/
-bool TemplateClass::Mark(MarkType mark)
-{
+bool TemplateClass::Mark(MarkType mark) {
 	assert(Templates.ID(this) == ID);
 	assert(IsActive);
 
 	static bool noup = false;
-	void const * iset = Get_Image_Data();
+	void const *iset = Get_Image_Data();
 	if (iset && ObjectClass::Mark(mark)) {
 
-		void * map = Get_Icon_Set_Map(iset);
+		void *map = Get_Icon_Set_Map(iset);
 
 		for (int y = 0; y < Class->Height; y++) {
 			for (int x = 0; x < Class->Width; x++) {
-				CELL cell = Coord_Cell(Coord) + y*MAP_CELL_W + x;
+				CELL cell = Coord_Cell(Coord) + y * MAP_CELL_W + x;
 				if (Map.In_Radar(cell)) {
-					CellClass * cellptr = &Map[cell];
-					int number = y*Class->Width + x;
+					CellClass *cellptr = &Map[cell];
+					int number = y * Class->Width + x;
 
 					/*
 					**	Determine if this logical icon actually maps to a real icon. If no real
 					**	icon is associated with this logical position, then don't do any action
 					**	since none is required.
 					*/
-					char * mapptr = (char*)map;
+					char *mapptr = (char *)map;
 					bool real = (mapptr[number] != -1);
 
 					if (real) {
@@ -157,11 +151,10 @@ bool TemplateClass::Mark(MarkType mark)
 			delete this;
 			noup = false;
 		}
-		return(true);
+		return (true);
 	}
-	return(false);
+	return (false);
 }
-
 
 /***********************************************************************************************
  * TemplateClass::new -- Allocates a template object from pool                                 *
@@ -178,15 +171,13 @@ bool TemplateClass::Mark(MarkType mark)
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void * TemplateClass::operator new(size_t )
-{
-	void * ptr = Templates.Allocate();
+void *TemplateClass::operator new(size_t) {
+	void *ptr = Templates.Allocate();
 	if (ptr) {
 		((TemplateClass *)ptr)->IsActive = true;
 	}
-	return(ptr);
+	return (ptr);
 }
-
 
 /***********************************************************************************************
  * TemplateClass::delete -- Returns a template object to the pool.                             *
@@ -203,14 +194,12 @@ void * TemplateClass::operator new(size_t )
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-void TemplateClass::operator delete(void * ptr)
-{
+void TemplateClass::operator delete(void *ptr) {
 	if (ptr) {
 		((TemplateClass *)ptr)->IsActive = false;
 	}
 	Templates.Free((TemplateClass *)ptr);
 }
-
 
 /***********************************************************************************************
  * TemplateClass::TemplateClass -- Template object constructor.                                *
@@ -228,10 +217,8 @@ void TemplateClass::operator delete(void * ptr)
  * HISTORY:                                                                                    *
  *   05/17/1994 JLB : Created.                                                                 *
  *=============================================================================================*/
-TemplateClass::TemplateClass(TemplateType type, CELL pos) :
-	ObjectClass(RTTI_TEMPLATE, Templates.ID(this)),
-	Class(TemplateTypes.Ptr((int)type))
-{
+TemplateClass::TemplateClass(TemplateType type, CELL pos)
+    : ObjectClass(RTTI_TEMPLATE, Templates.ID(this)), Class(TemplateTypes.Ptr((int)type)) {
 	if (pos != -1) {
 		Unlimbo(Cell_Coord(pos));
 	}
