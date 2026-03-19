@@ -38,11 +38,11 @@
 #include "function.h"
 
 #ifdef WIN32
-#include <win32lib/drawmisc.h>
 #include <win32lib/memflag.h>
+#include <win32lib/wsa.h>
 #else
-#include <linuxlib/drawmisc.h>
 #include <linuxlib/memflag.h>
+#include <linuxlib/wsa.h>
 #endif
 
 #define SUBFRAMEOFFS 7 // 3 1/2 frame offsets loaded (2 offsets/frame)
