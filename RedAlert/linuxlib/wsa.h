@@ -44,11 +44,11 @@
 #define WSA_H
 
 #ifndef WWSTD_H
-#include "wwstd.h"
+#include "linuxlib/wwstd.h"
 #endif
 
 #ifndef GBUFFER_H
-#include "gbuffer.h"
+#include "linuxlib/gbuffer.h"
 #endif
 
 // lint -strong(AJX,WSAType)
