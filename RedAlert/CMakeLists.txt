@@ -19,11 +19,19 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 endif()
 
-add_executable(
+add_library(
 	redalert
+	SHARED
 	${ra_srcs}
 	${ra_system_srcs}
 )
+
+if(WIN32)
+    target_compile_definitions(redalert PRIVATE WIN32)
+else()
+    target_compile_definitions(redalert PRIVATE LINUX)
+endif()
+
 target_include_directories(redalert PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	target_compile_options(redalert PRIVATE /W4)

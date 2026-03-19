@@ -22,11 +22,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_options(-fpermissive)
 
-if(WIN32)
-    target_compile_definitions(redalert PRIVATE WIN32)
-else()
-    target_compile_definitions(redalert PRIVATE LINUX)
-endif()
-
 add_subdirectory(RedAlert)
 add_subdirectory(TiberianDawn)
