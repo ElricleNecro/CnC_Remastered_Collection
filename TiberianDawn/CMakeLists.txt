@@ -35,6 +35,8 @@ else()
     target_compile_definitions(tiberiandawn PRIVATE LINUX)
 endif()
 
+target_compile_definitions(tiberiandawn PRIVATE TIBERIAN_DAWN)
+
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	target_compile_options(tiberiandawn PRIVATE /W4)
 	target_include_directories(tiberiandawn PRIVATE ${CMAKE_CURRENT_LIST_DIR}/win32lib)

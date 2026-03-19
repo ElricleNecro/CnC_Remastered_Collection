@@ -21,6 +21,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_compile_options(-fpermissive)
+add_compile_options(-fvisibility=hidden)
 
 add_subdirectory(RedAlert)
 add_subdirectory(TiberianDawn)
