@@ -35,9 +35,6 @@
 #ifndef CDFILE_H
 #define CDFILE_H
 
-#ifdef __BORLANDC__
-#include <dos.h>
-#endif
 #include "bfiofile.h"
 
 /*

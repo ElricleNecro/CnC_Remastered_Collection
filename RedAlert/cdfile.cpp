@@ -43,10 +43,8 @@
 #include <string.h>
 #include "cdfile.h"
 
-#ifndef WIN32
 #include <playcd.h>
-#include <wwstd.h>
-#endif
+#include "utils.h"
 
 /*
 **	Pointer to the first search path record.
@@ -83,12 +81,7 @@ extern int Get_CD_Index(int cd_drive, int timeout);
  * HISTORY:                                                                                    *
  *   09/22/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-#ifdef WIN32
-int harderr_handler(unsigned int, unsigned int, unsigned int *)
-#else
-int harderr_handler(unsigned int, unsigned int, unsigned int __far *)
-#endif
-{
+int harderr_handler(unsigned int, unsigned int, unsigned int *) {
 	return (0); // _HARDERR_FAIL);
 }
 
@@ -107,9 +100,8 @@ int harderr_handler(unsigned int, unsigned int, unsigned int __far *)
  * HISTORY:                                                                                    *
  *   09/20/1995 JLB : Created.                                                                 *
  *=============================================================================================*/
-int cdecl Is_Disk_Inserted(int disk) {
+int __cdecl Is_Disk_Inserted([[maybe_unused]] int disk) {
 #ifndef OBSOLETE
-	disk;
 	return true;
 #if (0)
 	struct find_t fb;
@@ -152,44 +144,6 @@ int cdecl Is_Disk_Inserted(int disk) {
 	geninterrupt(0x21);
 	return (!(_AX & (1 << 11)));
 #endif
-}
-
-/***********************************************************************************************
- * CDFileClass::Open -- Opens the file object -- with path search.                             *
- *                                                                                             *
- *    This will open the file object, but since the file object could have been constructed    *
- *    with a pathname, this routine will try to find the file first. For files opened for      *
- *    writing, then use the existing filename without performing a path search.                *
- *                                                                                             *
- * INPUT:   rights   -- The access rights to use when opening the file                         *
- *                                                                                             *
- * OUTPUT:  bool; Was the open successful?                                                     *
- *                                                                                             *
- * WARNINGS:   none                                                                            *
- *                                                                                             *
- * HISTORY:                                                                                    *
- *   10/18/1994 JLB : Created.                                                                 *
- *=============================================================================================*/
-int CDFileClass::Open(int rights) {
-	return (BufferIOFileClass::Open(rights));
-}
-/***********************************************************************************************
- * CDFC::Refresh_Search_Drives -- Updates the search path when a CD changes or is added        *
- *                                                                                             *
- *                                                                                             *
- *                                                                                             *
- * INPUT:    Nothing                                                                           *
- *                                                                                             *
- * OUTPUT:   Nothing                                                                           *
- *                                                                                             *
- * WARNINGS: None                                                                              *
- *                                                                                             *
- * HISTORY:                                                                                    *
- *    5/22/96 9:01AM ST : Created                                                              *
- *=============================================================================================*/
-void CDFileClass::Refresh_Search_Drives(void) {
-	Clear_Search_Drives();
-	Set_Search_Drives(RawPath);
 }
 
 #if 0
@@ -320,6 +274,44 @@ nextpath:
 #endif
 
 /***********************************************************************************************
+ * CDFileClass::Open -- Opens the file object -- with path search.                             *
+ *                                                                                             *
+ *    This will open the file object, but since the file object could have been constructed    *
+ *    with a pathname, this routine will try to find the file first. For files opened for      *
+ *    writing, then use the existing filename without performing a path search.                *
+ *                                                                                             *
+ * INPUT:   rights   -- The access rights to use when opening the file                         *
+ *                                                                                             *
+ * OUTPUT:  bool; Was the open successful?                                                     *
+ *                                                                                             *
+ * WARNINGS:   none                                                                            *
+ *                                                                                             *
+ * HISTORY:                                                                                    *
+ *   10/18/1994 JLB : Created.                                                                 *
+ *=============================================================================================*/
+int CDFileClass::Open(int rights) {
+	return (BufferIOFileClass::Open(rights));
+}
+/***********************************************************************************************
+ * CDFC::Refresh_Search_Drives -- Updates the search path when a CD changes or is added        *
+ *                                                                                             *
+ *                                                                                             *
+ *                                                                                             *
+ * INPUT:    Nothing                                                                           *
+ *                                                                                             *
+ * OUTPUT:   Nothing                                                                           *
+ *                                                                                             *
+ * WARNINGS: None                                                                              *
+ *                                                                                             *
+ * HISTORY:                                                                                    *
+ *    5/22/96 9:01AM ST : Created                                                              *
+ *=============================================================================================*/
+void CDFileClass::Refresh_Search_Drives(void) {
+	Clear_Search_Drives();
+	Set_Search_Drives(RawPath);
+}
+
+/***********************************************************************************************
  * CDFileClass::Set_Search_Drives -- Sets a list of search paths for file access.              *
  *                                                                                             *
  *    This routine sets up a list of search paths to use when accessing files. The path list   *
@@ -357,8 +349,8 @@ nextpath:
  *   05/21/1996 ST  : Modified to recognise multiple CD drives                                 *
  *=============================================================================================*/
 int CDFileClass::Set_Search_Drives(char *pathlist) {
-	int found = FALSE;
-	int empty = FALSE;
+	int found = false;
+	int empty = false;
 
 	/*
 	**	If there is no pathlist to add, then just return.
