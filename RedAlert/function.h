@@ -335,15 +335,6 @@ void Sound_Effect(VocType voc, COORDINATE coord, int variation = 1, HousesType h
 bool Is_Speaking(void);
 
 /*
-**	CDFILE.CPP
-*/
-#ifdef WIN32
-int harderr_handler(unsigned, unsigned, unsigned *);
-#else
-int harderr_handler(unsigned, unsigned, unsigned __far *);
-#endif
-
-/*
 **	COMBAT.CPP
 */
 int Modify_Damage(int damage, WarheadType warhead, ArmorType armor, int distance);
