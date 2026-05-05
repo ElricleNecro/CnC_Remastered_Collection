@@ -35,6 +35,8 @@
 #ifndef FIXED_H
 #define FIXED_H
 
+#include <cstdint>
+
 // #pragma warning 604 9
 // #pragma warning 595 9
 
@@ -102,14 +104,14 @@ public:
 
 	// Convert to integer when implicitly required.
 	operator unsigned(void) const {
-		return (unsigned)(((unsigned __int64)Data.Raw + (PRECISION >> 1)) / PRECISION);
+		return (unsigned)(((uint64_t)Data.Raw + (PRECISION >> 1)) / PRECISION);
 	}
 
 	/*
 	**	The standard operators as they apply to in-place operation.
 	*/
 	fixed &operator*=(fixed const &rvalue) {
-		Data.Raw = (unsigned int)(((unsigned __int64)Data.Raw * rvalue.Data.Raw) / PRECISION);
+		Data.Raw = (unsigned int)(((uint64_t)Data.Raw * rvalue.Data.Raw) / PRECISION);
 		return (*this);
 	}
 	fixed &operator*=(int rvalue) {
@@ -118,7 +120,7 @@ public:
 	}
 	fixed &operator/=(fixed const &rvalue) {
 		if (rvalue.Data.Raw != 0U && rvalue.Data.Raw != PRECISION)
-			Data.Raw = (unsigned int)((((unsigned __int64)Data.Raw * PRECISION) + (PRECISION >> 1)) / rvalue.Data.Raw);
+			Data.Raw = (unsigned int)((((uint64_t)Data.Raw * PRECISION) + (PRECISION >> 1)) / rvalue.Data.Raw);
 		return (*this);
 	}
 	fixed &operator/=(int rvalue) {
