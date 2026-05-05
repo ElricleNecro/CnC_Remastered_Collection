@@ -199,10 +199,10 @@ protected:
 /**************************************************************************
 **	A fixed-size array of dynamic vectors.
 */
-template <class T, int COUNT, int FIRST = 0, int DEFAULT = FIRST>
+template <class T, int _COUNT, int FIRST = 0, int DEFAULT = FIRST>
 class DynamicVectorArrayClass {
 public:
-	static const int COUNT = COUNT;
+	static const int COUNT = _COUNT;
 
 	DynamicVectorArrayClass() : Active(DEFAULT) {
 	}
@@ -212,7 +212,7 @@ public:
 	}
 
 	void Clear_All() {
-		for (int i = FIRST; i < COUNT; ++i) {
+		for (int i = FIRST; i < _COUNT; ++i) {
 			Clear(i);
 		}
 	}
@@ -239,7 +239,7 @@ public:
 
 	int Delete_All(T const &object) {
 		int count = 0;
-		for (int i = FIRST; i < COUNT; ++i) {
+		for (int i = FIRST; i < _COUNT; ++i) {
 			count += Delete(i, object);
 		}
 		return count;
@@ -247,7 +247,7 @@ public:
 
 	int Delete_All_Except(T const &object, int except) {
 		int count = 0;
-		for (int i = FIRST; i < COUNT; ++i) {
+		for (int i = FIRST; i < _COUNT; ++i) {
 			if (except != i) {
 				count += Delete(i, object);
 			}
@@ -300,7 +300,7 @@ public:
 	}
 
 private:
-	DynamicVectorClass<T> Collection[COUNT];
+	DynamicVectorClass<T> Collection[_COUNT];
 	int Active;
 };
 
