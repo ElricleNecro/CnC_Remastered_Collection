@@ -35,6 +35,8 @@
 #ifndef HEAP_H
 #define HEAP_H
 
+#include "pipe.h"
+#include "straw.h"
 #include "vector.h"
 
 /**************************************************************************
