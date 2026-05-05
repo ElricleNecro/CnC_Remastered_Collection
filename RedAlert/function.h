@@ -35,6 +35,8 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 
+#include "utils.h"
+
 /*
 **	!!!DEFINE!!!  "NDEBUG" if the assertion code is to be !!!REMOVED!!! from the project.
 */
