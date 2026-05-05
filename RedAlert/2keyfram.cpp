@@ -37,13 +37,8 @@
 
 #include "function.h"
 
-#ifdef WIN32
-#include <win32lib/memflag.h>
-#include <win32lib/wsa.h>
-#else
-#include <linuxlib/memflag.h>
-#include <linuxlib/wsa.h>
-#endif
+#include "memflag.h"
+#include "win32lib/wsa.h"
 
 #define SUBFRAMEOFFS 7 // 3 1/2 frame offsets loaded (2 offsets/frame)
 
