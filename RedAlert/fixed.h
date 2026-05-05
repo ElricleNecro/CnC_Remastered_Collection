@@ -144,25 +144,25 @@ public:
 	const fixed operator*(fixed const &rvalue) const {
 		return fixed(*this) *= rvalue;
 	}
-	const int operator*(int rvalue) const {
+	int operator*(int rvalue) const {
 		return fixed(*this) *= rvalue;
 	}
 	const fixed operator/(fixed const &rvalue) const {
 		return fixed(*this) /= rvalue;
 	}
-	const int operator/(int rvalue) const {
+	int operator/(int rvalue) const {
 		return fixed(*this) /= rvalue;
 	}
 	const fixed operator+(fixed const &rvalue) const {
 		return fixed(*this) += rvalue;
 	}
-	const int operator+(int rvalue) const {
+	int operator+(int rvalue) const {
 		return fixed(*this) += rvalue;
 	}
 	const fixed operator-(fixed const &rvalue) const {
 		return fixed(*this) -= rvalue;
 	}
-	const int operator-(int rvalue) const {
+	int operator-(int rvalue) const {
 		return fixed(*this) -= rvalue;
 	}
 
@@ -234,16 +234,16 @@ public:
 	/*
 	**	Friend functions to handle the alternate positioning of fixed and integer parameters.
 	*/
-	friend const int operator*(int lvalue, fixed const &rvalue) {
+	friend int operator*(int lvalue, fixed const &rvalue) {
 		return fixed(lvalue) * rvalue;
 	}
-	friend const int operator/(int lvalue, fixed const &rvalue) {
+	friend int operator/(int lvalue, fixed const &rvalue) {
 		return fixed(lvalue) / rvalue;
 	}
-	friend const int operator+(int lvalue, fixed const &rvalue) {
+	friend int operator+(int lvalue, fixed const &rvalue) {
 		return fixed(lvalue) + rvalue;
 	}
-	friend const int operator-(int lvalue, fixed const &rvalue) {
+	friend int operator-(int lvalue, fixed const &rvalue) {
 		return fixed(lvalue) - rvalue;
 	}
 	friend bool operator<(unsigned lvalue, fixed const &rvalue) {
