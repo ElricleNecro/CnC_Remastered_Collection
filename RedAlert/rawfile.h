@@ -39,7 +39,6 @@
 #ifndef RAWFILE_Hx
 #define RAWFILE_Hx
 
-#include <errno.h>
 #include <limits.h>
 #include <stddef.h>
 #include <stdlib.h>
