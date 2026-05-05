@@ -326,7 +326,7 @@ char const *Speech_Name(VoxType speech);
 char const *Voc_Name(VocType voc);
 int Sound_Effect(VocType voc, fixed volume = 1, int variation = 1, signed short panvalue = 0, HousesType house = HOUSE_NONE);
 // void Speak(VoxType voice); // MBL 02.06.2020
-void Speak(VoxType voice, HouseClass *house = NULL, COORDINATE coord = 0);
+void Speak(VoxType voice, HouseClass *house = nullptr, COORDINATE coord = 0);
 void Speak_AI(void);
 void Stop_Speaking(void);
 void Sound_Effect(VocType voc, COORDINATE coord, int variation = 1, HousesType house = HOUSE_NONE);
@@ -386,7 +386,7 @@ void Play_Movie(VQType name, ThemeType theme = THEME_NONE, bool clrscrn = true, 
 bool Main_Loop(void);
 TheaterType Theater_From_Name(char const *name);
 void Main_Game(int argc, char *argv[]);
-long VQ_Call_Back(unsigned char *buffer = NULL, long frame = 0);
+long VQ_Call_Back(unsigned char *buffer = nullptr, long frame = 0);
 void Call_Back(void);
 char const *Language_Name(char const *basename);
 SourceType Source_From_Name(char const *name);
