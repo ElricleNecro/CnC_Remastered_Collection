@@ -64,6 +64,7 @@
 #include <stdlib.h>
 
 #include "ftimer.h"
+#include "jshell.h"
 
 // ST - 5/8/1029
 // inline void * operator new(size_t , void * pointer) {return(pointer);}
