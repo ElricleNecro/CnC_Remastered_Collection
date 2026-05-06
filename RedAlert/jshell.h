@@ -35,7 +35,12 @@
 #ifndef JSHELL_H
 #define JSHELL_H
 
+#include <algorithm>
 #include <assert.h>
+#include <bit>
+
+#include "shape.h"
+#include "utils.h"
 
 #ifdef WIN32
 // #define getch	Get_Key_Num
@@ -221,11 +226,33 @@ inline ShapeFlags_Type operator|(ShapeFlags_Type, ShapeFlags_Type);
 inline ShapeFlags_Type operator&(ShapeFlags_Type, ShapeFlags_Type);
 inline ShapeFlags_Type operator~(ShapeFlags_Type);
 
-void __cdecl Set_Bit(void *array, int bit, int value);
-int __cdecl Get_Bit(void const *array, int bit);
-int __cdecl First_True_Bit(void const *array);
-int __cdecl First_False_Bit(void const *array);
-int __cdecl Bound(int original, int min, int max);
+void __cdecl Set_Bit(unsigned int *array, int bit, int value) {
+	if (value)
+		array[bit >> 5] |= (1u << (bit & 0x1F));
+	else
+		array[bit >> 5] &= ~(1u << (bit & 0x1F));
+}
+int __cdecl Get_Bit(const unsigned int *array, int bit) {
+	return (array[bit >> 5] >> (bit & 0x1F)) & 1;
+}
+int __cdecl First_True_Bit(const unsigned int *array) {
+	for (int word = 0;; ++word) {
+		if (array[word] != 0)
+			return word * 32 + std::countr_zero(array[word]);
+	}
+}
+int __cdecl First_False_Bit(const unsigned int *array) {
+	for (int word = 0;; ++word) {
+		unsigned int inv = ~array[word];
+		if (inv != 0)
+			return word * 32 + std::countr_zero(inv);
+	}
+}
+int __cdecl Bound(int original, int min, int max) {
+	if (min > max)
+		std::swap(min, max);
+	return std::clamp(original, min, max);
+}
 
 #if (0)
 void Set_Bit(void *array, int bit, int value);
