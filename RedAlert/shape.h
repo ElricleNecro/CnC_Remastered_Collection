@@ -102,7 +102,7 @@ inline ShapeFlags_Type operator~(ShapeFlags_Type a) {
 */
 typedef struct {
 	unsigned short ShapeType; // 0 = normal, 1 = 16 colors,
-		//  2 = uncompressed, 4 = 	<16 colors
+	//  2 = uncompressed, 4 = 	<16 colors
 	unsigned char Height; // Height of the shape in scan lines
 	unsigned short Width; // Width of the shape in bytes
 	unsigned char OriginalHeight; // Original height of shape in scan lines
@@ -118,9 +118,9 @@ typedef struct {
 typedef struct {
 	unsigned short NumShapes; // number of shapes in the block
 	long Offsets[]; // array of offsets to shape data
-		//  (offsets within the shape block, with
-		//  0 being the first offset value, not the
-		//  start of the shape block)
+	//  (offsets within the shape block, with
+	//  0 being the first offset value, not the
+	//  start of the shape block)
 } ShapeBlock_Type;
 
 /*
@@ -181,5 +181,3 @@ int __cdecl Get_Shape_Scaled_Height(void const *shape, int scale);
 #endif // SHAPE_H
 
 /****************************** End of shape.h *****************************/
-
-

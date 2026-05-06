@@ -43,13 +43,9 @@
 #ifndef WSA_H
 #define WSA_H
 
-#ifndef WWSTD_H
-#include "wwstd.h"
-#endif
+#include "utils.h"
 
-#ifndef GBUFFER_H
 #include "gbuffer.h"
-#endif
 
 // lint -strong(AJX,WSAType)
 typedef enum {
