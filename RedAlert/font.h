@@ -35,9 +35,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#ifndef GBUFFER_H
-#include <gbuffer.h>
-#endif
+#include "gbuffer.h"
 
 //////////////////////////////////////// Defines //////////////////////////////////////////
 
