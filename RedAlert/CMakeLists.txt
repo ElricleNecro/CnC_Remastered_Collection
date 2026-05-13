@@ -27,6 +27,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 	target_compile_options(redalert PRIVATE -Wall -Wextra)
 endif()
 
+target_link_libraries(redalert PRIVATE SDL3::SDL3)
 # target_include_directories(redalert PRIVATE .)
 # target_link_librairies(
 # 	redalert

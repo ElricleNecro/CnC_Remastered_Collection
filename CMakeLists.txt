@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.28)
 
 # Disable in-source builds to prevent source tree corruption.
 if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
@@ -14,6 +14,22 @@ project(
 	DESCRIPTION "Command and Conquer Remastered edition."
 	LANGUAGES CXX ASM
 )
+
+# set the output directory for built objects.
+# This makes sure that the dynamic library goes into the build directory automatically.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+if (APPLE AND NOT CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "")    # Disable shared builds on platforms where it does not make sense to use them
+    set(SDL_SHARED OFF)
+else()
+    set(SDL_SHARED ON)
+endif()
+
+# This assumes the SDL source is available in vendored/SDL
+add_subdirectory(vendor/SDL EXCLUDE_FROM_ALL)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
