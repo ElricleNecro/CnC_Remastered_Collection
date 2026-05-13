@@ -58,6 +58,8 @@ namespace rendering {
 	class RenderSurface {
 	public:
 		virtual ~RenderSurface(void) = default;
+
+		virtual SDL_PixelFormat format(void) = 0;
 		virtual void lock(void **pixels, int *pitch) = 0;
 		virtual void unlock(void) = 0;
 
@@ -77,6 +79,10 @@ namespace rendering {
 		virtual ~RenderToSurface(void) {
 			SDL_DestroySurface(this->texture);
 		}
+
+		virtual SDL_PixelFormat format(void) {
+			return this->texture->format;
+		};
 
 		virtual void lock(void **pixels, int *pitch);
 		virtual void unlock(void);
@@ -106,6 +112,10 @@ namespace rendering {
 		virtual ~RenderToTexture(void) {
 			SDL_DestroyTexture(this->texture);
 		}
+
+		virtual SDL_PixelFormat format(void) {
+			return this->texture->format;
+		};
 
 		virtual void lock(void **pixels, int *pitch);
 		virtual void unlock(void);
@@ -146,6 +156,7 @@ namespace rendering {
 			  const SDL_Rect *dst_rect);
 
 		void fill_rect(const std::unique_ptr<RenderSurface> &dst, const SDL_Rect *rect, const uint8_t color);
+		void draw_line(const std::unique_ptr<RenderSurface> &dst, const Point start, const Point end, const uint8_t color, const Rect &box);
 		void present();
 
 		inline void lock(const std::unique_ptr<RenderSurface> &s, void **pixels, int *pitch) {

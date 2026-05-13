@@ -934,10 +934,9 @@ inline void GraphicViewPortClass::Draw_Stamp(void const *icondata, int icon, int
  *   01/16/1995 PWG : Created.                                             *
  *=========================================================================*/
 inline void GraphicViewPortClass::Draw_Line(int sx, int sy, int dx, int dy, unsigned char color) {
-	if (Lock()) {
-		Buffer_Draw_Line(this, sx, sy, dx, dy, color);
-	}
-	Unlock();
+	rendering::Point start = { sx, sy }, end = { dx, dy };
+	rendering::Rect viewport = { this->XPos, this->YPos, this->Width, this->Height };
+	rendering::GRenderer->draw_line(this->GraphicBuff->get_surface(), start, end, color, viewport);
 }
 
 /***************************************************************************

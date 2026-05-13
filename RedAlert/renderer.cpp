@@ -1,8 +1,11 @@
+#include <cstdint>
 #include <memory>
 #include "renderer.h"
 
+#include "SDL3/SDL_pixels.h"
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_surface.h"
+#include "line.h"
 #include "palettec.h"
 #include "rgb.h"
 
@@ -111,5 +114,36 @@ namespace rendering {
 				 const std::unique_ptr<RenderSurface> &dst,
 				 const SDL_Rect *dst_rect) {
 		dst->blit(this->renderer, src, src_rect, dst_rect);
+	}
+
+	void RenderBackend::draw_line(const std::unique_ptr<RenderSurface> &dst,
+				      const Point start,
+				      const Point end,
+				      const uint8_t color,
+				      const Rect &box) {
+		ClipResult clip = clip_line_cohen_sutherland(start, end, box);
+		if (!clip.visible)
+			return;
+
+		void *pixels = nullptr;
+		int pitch = 0;
+		this->lock(dst, &pixels, &pitch);
+
+		uint8_t *buffer = static_cast<uint8_t *>(pixels);
+		const RGBClass &rgb = PaletteClass::CurrentPalette[color];
+		const uint32_t pixel_color = SDL_MapRGBA(SDL_GetPixelFormatDetails(dst->format()),
+							 nullptr,
+							 (uint8_t)rgb.Red_Component(),
+							 (uint8_t)rgb.Green_Component(),
+							 (uint8_t)rgb.Blue_Component(),
+							 255);
+		auto set_pixel = [buffer, pitch, pixel_color](Point p) {
+			uint32_t *addr = (uint32_t *)(buffer + p.y * pitch + p.x * 4);
+			*addr = pixel_color;
+		};
+
+		bresenham_line(clip.start, clip.end, set_pixel);
+
+		this->unlock(dst);
 	}
 } // namespace rendering
