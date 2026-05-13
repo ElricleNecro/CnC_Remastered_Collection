@@ -89,7 +89,7 @@ namespace rendering {
 			.a = 255,
 		};
 
-		dst.fill_rect(this->renderer, rect, sdl_color);
+		dst->fill_rect(this->renderer, rect, sdl_color);
 	}
 
 	void RenderBackend::blit(const std::unique_ptr<RenderSurface> &src, const std::unique_ptr<RenderSurface> &dst, int x, int y) {
