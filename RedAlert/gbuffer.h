@@ -13,143 +13,118 @@
 // GNU General Public License along with permitted additional restrictions
 // with this program. If not, see https://github.com/electronicarts/CnC_Remastered_Collection
 
-/***************************************************************************
- **   C O N F I D E N T I A L --- W E S T W O O D   A S S O C I A T E S   **
- ***************************************************************************
- *                                                                         *
- *                 Project Name : Westwood 32 Bit Library						*
- *                                                                         *
- *                    File Name : GBUFFER.H                                *
- *                                                                         *
- *                   Programmer : Phil W. Gorrow                           *
- *                                                                         *
- *                   Start Date : May 26, 1994                             *
- *                                                                         *
- *                  Last Update : October 9, 1995   []                     *
- *                                                                         *
- ***************************************************************************
- *                                                                         *
- *	This module contains the definition for the graphic buffer class.  The	*
- * primary functionality of the graphic buffer class is handled by inline	*
- * functions that make a call through function pointers to the correct		*
- * routine.  This has two benefits:
- **
- *																									*
- *																									*
- *		1) C++ name mangling is not a big deal since the function pointers	*
- *		   point to functions in standard C format.
- ** 2) The function pointers can be changed when we set a different		* graphic mode.  This allows us to have
- *both supervga and mcga		* routines present in memory at once.
- **
- *																									*
- * In the basic library, these functions point to stub routines which just	*
- * return.  This makes a product that just uses a graphic buffer take the	*
- * minimum amount of code space.  For programs that require MCGA or VESA	*
- * support, all that is necessary to do is link either the MCGA or VESA		*
- * specific libraries in, previous to WWLIB32.  The linker will then 		*
- * overide the the necessary stub functions automatically.						*
- *																									*
- * In addition, there are helpful inline function calls for parameter		*
- * ellimination.  This header file gives the defintion for all					*
- * GraphicViewPort and GraphicBuffer classes. *
- *																									*
- * Terminology:
- **
- *																									*
- *	Buffer Class - A class which consists of a pointer to an allocated		*
- *		buffer and the size of the buffer that was allocated.						*
- *																									*
- *	Graphic ViewPort - The Graphic ViewPort defines a window into a 			*
- *		Graphic Buffer.  This means that although a Graphic Buffer 				*
- *		represents linear memory, this may not be true with a Graphic			*
- *		Viewport.  All low level functions that act directly on a graphic		*
- *		viewport are included within this class.  This includes but is not	*
- *		limited to most of the functions which can act on a Video Viewport	*
- *		Video Buffer.
- **
- *																									*
- * Graphic Buffer - A Graphic Buffer is an instance of an allocated buffer	*
- *		used to represent a rectangular region of graphics memory.				*
- *		The HidBuff	and BackBuff are excellent examples of a Graphic Buffer.	*
- *																									*
- * Below is a tree which shows the relationship of the VideoBuffer and 		*
- * Buffer classes to the GraphicBuffer class: *
- *																									*
- *	  BUFFER.H				 GBUFFER.H			  BUFFER.H
- *VBUFFER.H	*
- *  ----------          ----------         ----------          ----------	*
- * |  Buffer  |        | Graphic  |       |  Buffer  |        |  Video   |	*
- * |  Class   |        | ViewPort |       |  Class   |        | ViewPort |	*
- *  ----------          ----------         ----------          ----------	*
- *            \        /                             \        /				*
- *             \      /                               \      /					*
- *            ----------                             ----------				*
- *           |  Graphic |                           |  Video   |				*
- *           |  Buffer  |                           |  Buffer  |				*
- *            ----------                             ---------- 				*
- *	  			  GBUFFER.H			                       VBUFFER.H
- **
- *-------------------------------------------------------------------------*
- * Functions:                                                              *
- *   GBC::GraphicBufferClass -- inline constructor for GraphicBufferClass  *
- *   GVPC::Remap -- Short form to remap an entire graphic view port        *
- *   GVPC::Get_XPos -- Returns x offset for a graphic viewport class       *
- *   GVPC::Get_Ypos -- Return y offset in a GraphicViewPortClass           *
- *   VVPC::Get_XPos -- Get the x pos of the VP on the Video                *
- *   VVPC::Get_YPos -- Get the y pos of the VP on the video                *
- *   GBC::Get_Graphic_Buffer -- Get the graphic buffer of the VP.          *
- *   GVPC::Draw_Line -- Stub function to draw line in Graphic Viewport Class*
- *   GVPC::Fill_Rect -- Stub function to fill rectangle in a GVPC          *
- *   GVPC::Remap -- Stub function to remap a GVPC                          *
- *   GVPC::Print -- stub func to print a text string                       *
- *   GVPC::Print -- Stub function to print an integer                      *
- *   GVPC::Print -- Stub function to print a short to a graphic viewport   *
- *   GVPC::Print -- stub function to print a long on a graphic view port   *
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/**********************************************************************************
+ **   C O N F I D E N T I A L --- W E S T W O O D   A S S O C I A T E S          **
+ **********************************************************************************
+ *                                                                                *
+ *                 Project Name : Westwood 32 Bit Library                         *
+ *                                                                                *
+ *                    File Name : GBUFFER.H                                       *
+ *                                                                                *
+ *                   Programmer : Phil W. Gorrow                                  *
+ *                                                                                *
+ *                   Start Date : May 26, 1994                                    *
+ *                                                                                *
+ *                  Last Update : October 9, 1995   []                            *
+ *                                                                                *
+ **********************************************************************************
+ *                                                                                *
+ * This module contains the definition for the graphic buffer class.  The         *
+ * primary functionality of the graphic buffer class is handled by inline         *
+ * functions that make a call through function pointers to the correct            *
+ * routine.  This has two benefits:                                               *
+ *                                                                                *
+ *                                                                                *
+ *                                                                                *
+ * 1) C++ name mangling is not a big deal since the function pointers             *
+ *    point to functions in standard C format.                                    *
+ * 2) The function pointers can be changed when we set a different                *
+ *    graphic mode.  This allows us to have *both supervga and mcga               *
+ *    routines present in memory at once.                                         *
+ *                                                                                *
+ *                                                                                *
+ * In the basic library, these functions point to stub routines which just        *
+ * return.  This makes a product that just uses a graphic buffer take the         *
+ * minimum amount of code space.  For programs that require MCGA or VESA          *
+ * support, all that is necessary to do is link either the MCGA or VESA           *
+ * specific libraries in, previous to WWLIB32.  The linker will then              *
+ * overide the the necessary stub functions automatically.                        *
+ *                                                                                *
+ * In addition, there are helpful inline function calls for parameter             *
+ * ellimination.  This header file gives the defintion for all                    *
+ * GraphicViewPort and GraphicBuffer classes.                                     *
+ *                                                                                *
+ * Terminology:                                                                   *
+ *                                                                                *
+ *    Buffer Class - A class which consists of a pointer to an allocated          *
+ *        buffer and the size of the buffer that was allocated.                   *
+ *                                                                                *
+ *    Graphic ViewPort - The Graphic ViewPort defines a window into a             *
+ *        Graphic Buffer.  This means that although a Graphic Buffer              *
+ *        represents linear memory, this may not be true with a Graphic           *
+ *        Viewport.  All low level functions that act directly on a graphic       *
+ *        viewport are included within this class.  This includes but is not      *
+ *        limited to most of the functions which can act on a Video Viewport      *
+ *        Video Buffer.                                                           *
+ *                                                                                *
+ *    Graphic Buffer - A Graphic Buffer is an instance of an allocated buffer     *
+ *        used to represent a rectangular region of graphics memory.              *
+ *        The HidBuff and BackBuff are excellent examples of a Graphic Buffer.    *
+ *                                                                                *
+ * Below is a tree which shows the relationship of the VideoBuffer and            *
+ * Buffer classes to the GraphicBuffer class:                                     *
+ *                                                                                *
+ *   BUFFER.H            GBUFFER.H          BUFFER.H            VBUFFER.H         *
+ *  ----------          ----------         ----------          ----------         *
+ * |  Buffer  |        | Graphic  |       |  Buffer  |        |  Video   |        *
+ * |  Class   |        | ViewPort |       |  Class   |        | ViewPort |        *
+ *  ----------          ----------         ----------          ----------         *
+ *            \        /                             \        /                   *
+ *             \      /                               \      /                    *
+ *            ----------                             ----------                   *
+ *           |  Graphic |                           |  Video   |                  *
+ *           |  Buffer  |                           |  Buffer  |                  *
+ *            ----------                             ----------                   *
+ *            GBUFFER.H                               VBUFFER.H                   *
+ *                                                                                *
+ *-------------------------------------------------------------------------       *
+ * Functions:                                                                     *
+ *   GBC::GraphicBufferClass -- inline constructor for GraphicBufferClass         *
+ *   GVPC::Remap -- Short form to remap an entire graphic view port               *
+ *   GVPC::Get_XPos -- Returns x offset for a graphic viewport class              *
+ *   GVPC::Get_Ypos -- Return y offset in a GraphicViewPortClass                  *
+ *   VVPC::Get_XPos -- Get the x pos of the VP on the Video                       *
+ *   VVPC::Get_YPos -- Get the y pos of the VP on the video                       *
+ *   GBC::Get_Graphic_Buffer -- Get the graphic buffer of the VP.                 *
+ *   GVPC::Draw_Line -- Stub function to draw line in Graphic Viewport Class      *
+ *   GVPC::Fill_Rect -- Stub function to fill rectangle in a GVPC                 *
+ *   GVPC::Remap -- Stub function to remap a GVPC                                 *
+ *   GVPC::Print -- stub func to print a text string                              *
+ *   GVPC::Print -- Stub function to print an integer                             *
+ *   GVPC::Print -- Stub function to print a short to a graphic viewport          *
+ *   GVPC::Print -- stub function to print a long on a graphic view port          *
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -        */
 
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
-#include <stdlib.h>
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_render.h>
-#include <SDL3/SDL_video.h>
+#include <charconv>
+#include <cstdlib>
+#include <memory>
+#include <system_error>
 
 #include "buffer.h"
 #include "drawbuff.h"
 #include "function.h"
+#include "renderer.h"
 #include "utils.h"
 #include "ww_win.h"
 
-// #include "iconcach.h"
+#include "iconcach.h"
 
 #ifdef Size_Of_Region
 #undef Size_Of_Region
 #endif
-
-struct RenderSurface {
-	SDL_Texture *texture = nullptr;
-	int width = 0, height = 0, pitch = 0;
-
-	inline operator bool(void) {
-		return this->texture != nullptr;
-	}
-};
-
-struct RenderBackend {
-	SDL_Window *window;
-	SDL_Renderer *renderer;
-
-	RenderSurface create_surface(int w, int h);
-	void destroy_surface(RenderSurface &s);
-	void blit(RenderSurface &src, RenderSurface &dst, int x, int y);
-	void present();
-	void lock(RenderSurface &s, void **pixels, int *pitch);
-	void unlock(RenderSurface &s);
-};
-
-extern RenderBackend *GRenderer; // pointer to direct draw object
-extern SDL_Window *MainWindow; // handle to programs main window
 
 /*
 ** Pointer to function to call if we detect a focus loss
@@ -200,7 +175,7 @@ public:
 	~GraphicViewPortClass();
 
 	/*===================================================================*/
-	/* define functions to get at the private data members					*/
+	/* define functions to get at the private data members               */
 	/*===================================================================*/
 	inline long Get_Offset(void) {
 		return (Offset);
@@ -227,15 +202,14 @@ public:
 	GraphicBufferClass *Get_Graphic_Buffer(void);
 
 	/*===================================================================*/
-	/* Define a function which allows us to change a video viewport on	*/
-	/*		the fly.
-	 */
+	/* Define a function which allows us to change a video viewport on   */
+	/* the fly.                                                          */
 	/*===================================================================*/
 	bool Change(int x, int y, int w, int h);
 
 	/*===================================================================*/
-	/* Define the set of common graphic functions that are supported by	*/
-	/*		both Graphic ViewPorts and VideoViewPorts. */
+	/* Define the set of common graphic functions that are supported by  */
+	/* both Graphic ViewPorts and VideoViewPorts.                        */
 	/*===================================================================*/
 	long Size_Of_Region(int w, int h);
 	void Put_Pixel(int x, int y, unsigned char color);
@@ -286,9 +260,8 @@ public:
 	unsigned long Print(long num, int x_pixel, int y_pixel, int fcol, int bcol);
 
 	/*===================================================================*/
-	/* Define the list of graphic functions which work only with a 		*/
-	/*		graphic buffer.
-	 */
+	/* Define the list of graphic functions which work only with a       */
+	/* graphic buffer.                                                   */
 	/*===================================================================*/
 	void Draw_Line(int sx, int sy, int dx, int dy, unsigned char color);
 	void Draw_Rect(int sx, int sy, int dx, int dy, unsigned char color);
@@ -299,8 +272,8 @@ public:
 	void Draw_Stamp(void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap);
 	void Draw_Stamp(void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap, int clip_window);
 
-	//	This doesnt seem to exist anywhere?? - Steve T 9/26/95 6:05PM
-	//		void Grey_Out_Region(int x, int y, int width, int height, int color);
+	// This doesnt seem to exist anywhere?? - Steve T 9/26/95 6:05PM
+	// void Grey_Out_Region(int x, int y, int width, int height, int color);
 
 	//
 	// New members to lock and unlock the direct draw video memory
@@ -316,14 +289,14 @@ public:
 	DD_Linear_Blit_To_Linear(GraphicViewPortClass &dest, int source_x, int source_y, int dest_x, int dest_y, int width, int height, bool mask);
 
 	/*===================================================================*/
-	/* Define functions to attach the viewport to a graphicbuffer			*/
+	/* Define functions to attach the viewport to a graphicbuffer        */
 	/*===================================================================*/
 	void Attach(GraphicBufferClass *graphic_buff, int x, int y, int w, int h);
 	void Attach(GraphicBufferClass *video_buff, int w, int h);
 
 protected:
 	/*===================================================================*/
-	/* Define the data used by a GraphicViewPortClass							*/
+	/* Define the data used by a GraphicViewPortClass                    */
 	/*===================================================================*/
 	long Offset; // offset to graphic page
 	int Width; // width of graphic page
@@ -334,28 +307,22 @@ protected:
 	long Pitch; // Distance from one line to the next
 	GraphicBufferClass *GraphicBuff; // related graphic buff
 	int LockCount; // Count for stacking locks if non-zero the buffer
-	bool IsDirectDraw = false;
-}; //   is a locked DD surface
+	bool IsDirectDraw = false; // is a locked DD surface
+};
 
 /*=========================================================================*/
-/* GraphicBufferClass - A GraphicBuffer refers to an actual instance of an	*/
-/*		allocated buffer.  The GraphicBuffer may be drawn to directly 			*/
-/*		becuase it inherits a ViewPort which represents its physcial size.	*/
-/*																									*/
-/*			BYTE	  	*Buffer	-		is the offset to graphic buffer */
-/*			int	  	Width		-		is the width of graphic buffer
- */
-/*			int	  	Height	-		is the height of graphic buffer */
-/*			int	  	XAdd		-		is the xadd of graphic buffer
- */
-/*			int		XPos;		- 		will be 0 because it is graphicbuff
- */
-/*			int		YPos;		-		will be 0 because it is graphicbuff
- */
-/*			long	Pitch		-		modulo of buffer for reading and writing
- */
-/*			bool	IsDirectDraw - 		flag if its a direct draw surface
- */
+/* GraphicBufferClass - A GraphicBuffer refers to an actual instance of an */
+/*    allocated buffer.  The GraphicBuffer may be drawn to directly        */
+/*    becuase it inherits a ViewPort which represents its physcial size.   */
+/*                                                                         */
+/*        BYTE *Buffer       - is the offset to graphic buffer             */
+/*        int   Width        - is the width of graphic buffer              */
+/*        int   Height       - is the height of graphic buffer             */
+/*        int   XAdd         - is the xadd of graphic buffer               */
+/*        int   XPos;        - will be 0 because it is graphicbuff         */
+/*        int   YPos;        - will be 0 because it is graphicbuff         */
+/*        long  Pitch        - modulo of buffer for reading and writing    */
+/*        bool  IsDirectDraw - flag if its a direct draw surface           */
 /*=========================================================================*/
 class GraphicBufferClass : public GraphicViewPortClass, public BufferClass {
 public:
@@ -374,12 +341,12 @@ public:
 
 	void Scale_Rotate(BitmapClass &bmp, TPoint2D const &pt, long scale, unsigned char angle);
 
-	inline RenderSurface Get_DD_Surface(void) {
-		return (VideoSurfacePtr);
+	inline const std::unique_ptr<rendering::RenderSurface> &get_surface(void) {
+		return VideoSurfacePtr;
 	};
 
 protected:
-	RenderSurface VideoSurfacePtr;
+	std::unique_ptr<rendering::RenderSurface> VideoSurfacePtr;
 };
 
 inline bool GraphicViewPortClass::Lock() {
@@ -402,8 +369,9 @@ inline bool GraphicViewPortClass::Unlock() {
 	}
 	return (true);
 };
+
 /***************************************************************************
- * GVPC::GET_GRAPHIC_BUFFER -- Get the graphic buffer of the VP.            *
+ * GVPC::GET_GRAPHIC_BUFFER -- Get the graphic buffer of the VP.           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -417,7 +385,7 @@ inline GraphicBufferClass *GraphicViewPortClass::Get_Graphic_Buffer(void) {
 }
 
 /***************************************************************************
- * GVPC::SIZE_OF_REGION -- stub to call curr graphic mode Size_Of_Region	*
+ * GVPC::SIZE_OF_REGION -- stub to call curr graphic mode Size_Of_Region   *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -433,7 +401,7 @@ inline long GraphicViewPortClass::Size_Of_Region(int w, int h) {
 }
 
 /***************************************************************************
- * GVPC::PUT_PIXEL -- stub to call curr graphic mode Put_Pixel					*
+ * GVPC::PUT_PIXEL -- stub to call curr graphic mode Put_Pixel             *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -452,7 +420,7 @@ inline void GraphicViewPortClass::Put_Pixel(int x, int y, unsigned char color) {
 }
 
 /***************************************************************************
- * GVPC::GET_PIXEL -- stub to call curr graphic mode Get_Pixel          	*
+ * GVPC::GET_PIXEL -- stub to call curr graphic mode Get_Pixel             *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -474,7 +442,7 @@ inline int GraphicViewPortClass::Get_Pixel(int x, int y) {
 }
 
 /***************************************************************************
- * GVPC::CLEAR -- stub to call curr graphic mode Clear	                  *
+ * GVPC::CLEAR -- stub to call curr graphic mode Clear	                   *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -493,7 +461,7 @@ inline void GraphicViewPortClass::Clear(unsigned char color) {
 }
 
 /***************************************************************************
- * GVPC::TO_BUFFER -- stub 1 to call curr graphic mode To_Buffer				*
+ * GVPC::TO_BUFFER -- stub 1 to call curr graphic mode To_Buffer           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -514,7 +482,7 @@ inline long GraphicViewPortClass::To_Buffer(int x, int y, int w, int h, void *bu
 }
 
 /***************************************************************************
- * GVPC::TO_BUFFER -- stub 2 to call curr graphic mode To_Buffer 				*
+ * GVPC::TO_BUFFER -- stub 2 to call curr graphic mode To_Buffer           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -535,7 +503,7 @@ inline long GraphicViewPortClass::To_Buffer(int x, int y, int w, int h, BufferCl
 }
 
 /***************************************************************************
- * GVPC::TO_BUFFER -- stub 3 to call curr graphic mode To_Buffer 				*
+ * GVPC::TO_BUFFER -- stub 3 to call curr graphic mode To_Buffer           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -556,7 +524,7 @@ inline long GraphicViewPortClass::To_Buffer(BufferClass *buff) {
 }
 
 /***************************************************************************
- * GVPC::BLIT -- stub 1 to call curr graphic mode Blit to GVPC					*
+ * GVPC::BLIT -- stub 1 to call curr graphic mode Blit to GVPC             *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -601,7 +569,7 @@ inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest,
 }
 
 /***************************************************************************
- * GVPC::BLIT -- Stub 2 to call curr graphic mode Blit to GVPC					*
+ * GVPC::BLIT -- Stub 2 to call curr graphic mode Blit to GVPC             *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -631,7 +599,7 @@ inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest, int dx, int d
 }
 
 /***************************************************************************
- * GVPC::BLIT -- stub 3 to call curr graphic mode Blit to GVPC					*
+ * GVPC::BLIT -- stub 3 to call curr graphic mode Blit to GVPC             *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -668,7 +636,7 @@ inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest, bool trans) {
 }
 
 /***************************************************************************
- * GVPC::SCALE -- stub 1 to call curr graphic mode Scale to GVPC				*
+ * GVPC::SCALE -- stub 1 to call curr graphic mode Scale to GVPC           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -702,7 +670,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest,
 }
 
 /***************************************************************************
- * GVPC::SCALE -- stub 2 to call curr graphic mode Scale to GVPC				*
+ * GVPC::SCALE -- stub 2 to call curr graphic mode Scale to GVPC           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -735,7 +703,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest,
 }
 
 /***************************************************************************
- * GVPC::SCALE -- stub 3 to call curr graphic mode Scale to GVPC				*
+ * GVPC::SCALE -- stub 3 to call curr graphic mode Scale to GVPC           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -760,7 +728,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest, bool trans, 
 }
 
 /***************************************************************************
- * GVPC::SCALE -- stub 4 to call curr graphic mode Scale to GVPC				*
+ * GVPC::SCALE -- stub 4 to call curr graphic mode Scale to GVPC           *
  *                                                                         *
  * INPUT:                                                                  *
  *                                                                         *
@@ -783,6 +751,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest, char *remap)
 	Unlock();
 	return (return_code);
 }
+
 /***************************************************************************
  * GVPC::PRINT -- stub func to print a text string                         *
  *                                                                         *
@@ -816,11 +785,13 @@ inline unsigned long GraphicViewPortClass::Print(char const *str, int x, int y, 
  * HISTORY:                                                                *
  *=========================================================================*/
 inline unsigned long GraphicViewPortClass::Print(int num, int x, int y, int fcol, int bcol) {
-	char str[17];
+	char str[17] = {};
 
 	unsigned long return_code = 0;
 	if (Lock()) {
-		return_code = (Buffer_Print(this, itoa(num, str, 10), x, y, fcol, bcol));
+		if (auto tmp = std::to_chars(str, str + sizeof(str) - 1, num); tmp.ec == std::errc()) {
+			return_code = (Buffer_Print(this, tmp.ptr, x, y, fcol, bcol));
+		}
 	}
 	Unlock();
 	return (return_code);
@@ -838,11 +809,13 @@ inline unsigned long GraphicViewPortClass::Print(int num, int x, int y, int fcol
  * HISTORY:                                                                *
  *=========================================================================*/
 inline unsigned long GraphicViewPortClass::Print(short num, int x, int y, int fcol, int bcol) {
-	char str[17];
+	char str[17] = {};
 
 	unsigned long return_code = 0;
 	if (Lock()) {
-		return_code = (Buffer_Print(this, itoa(num, str, 10), x, y, fcol, bcol));
+		if (auto tmp = std::to_chars(str, str + sizeof(str) - 1, num); tmp.ec == std::errc()) {
+			return_code = (Buffer_Print(this, tmp.ptr, x, y, fcol, bcol));
+		}
 	}
 	Unlock();
 	return (return_code);
@@ -860,11 +833,13 @@ inline unsigned long GraphicViewPortClass::Print(short num, int x, int y, int fc
  * HISTORY:                                                                *
  *=========================================================================*/
 inline unsigned long GraphicViewPortClass::Print(long num, int x, int y, int fcol, int bcol) {
-	char str[33];
+	char str[33] = {};
 
 	unsigned long return_code = 0;
 	if (Lock()) {
-		return_code = (Buffer_Print(this, ltoa(num, str, 10), x, y, fcol, bcol));
+		if (auto tmp = std::to_chars(str, str + sizeof(str) - 1, num); tmp.ec == std::errc()) {
+			return_code = (Buffer_Print(this, tmp.ptr, x, y, fcol, bcol));
+		}
 	}
 	Unlock();
 	return (return_code);
@@ -978,49 +953,38 @@ inline void GraphicViewPortClass::Draw_Line(int sx, int sy, int dx, int dy, unsi
  *   01/16/1995 PWG : Created.                                             *
  *=========================================================================*/
 inline void GraphicViewPortClass::Fill_Rect(int sx, int sy, int dx, int dy, unsigned char color) {
-	if (AllowHardwareBlitFills && IsDirectDraw && ((dx - sx) * (dy - sy) >= (32 * 32)) &&
-	    GraphicBuff->Get_DD_Surface()->GetBltStatus(DDGBS_CANBLT) == DD_OK) {
-		DDBLTFX blit_effects;
-		RECT dest_rectangle;
+	SDL_Rect dest_rectangle;
 
-		dest_rectangle.left = sx + XPos;
-		dest_rectangle.top = sy + YPos;
-		dest_rectangle.right = dx + XPos;
-		dest_rectangle.bottom = dy + YPos;
+	dest_rectangle.x = sx + XPos;
+	dest_rectangle.y = sy + YPos;
+	dest_rectangle.w = dx - sx + 1;
+	dest_rectangle.h = dy - sy + 1;
 
-		if (dest_rectangle.left < XPos) {
-			dest_rectangle.left = XPos;
-		}
-
-		if (dest_rectangle.right >= Width + XPos) {
-			dest_rectangle.right = Width + XPos - 1;
-		}
-
-		if (dest_rectangle.top < YPos) {
-			dest_rectangle.top = YPos;
-		}
-
-		if (dest_rectangle.bottom >= Height + YPos) {
-			dest_rectangle.bottom = Height + YPos - 1;
-		}
-
-		if (dest_rectangle.left >= dest_rectangle.right)
-			return;
-		if (dest_rectangle.top >= dest_rectangle.bottom)
-			return;
-
-		dest_rectangle.right++;
-		dest_rectangle.bottom++;
-
-		blit_effects.dwSize = sizeof(blit_effects);
-		blit_effects.dwFillColor = color;
-		GraphicBuff->Get_DD_Surface()->Blt(&dest_rectangle, nullptr, nullptr, DDBLT_WAIT | DDBLT_ASYNC | DDBLT_COLORFILL, &blit_effects);
-	} else {
-		if (Lock()) {
-			Buffer_Fill_Rect(this, sx, sy, dx, dy, color);
-			Unlock();
-		}
+	if (dest_rectangle.x < XPos) {
+		dest_rectangle.w -= XPos - dest_rectangle.x;
+		dest_rectangle.x = XPos;
 	}
+
+	if (dest_rectangle.x + dest_rectangle.w > Width + XPos) {
+		dest_rectangle.w = Width + XPos - dest_rectangle.x;
+	}
+
+	if (dest_rectangle.y < YPos) {
+		dest_rectangle.h -= YPos - dest_rectangle.y;
+		dest_rectangle.y = YPos;
+	}
+
+	if (dest_rectangle.y + dest_rectangle.h > Height + YPos) {
+		dest_rectangle.h = Height + YPos - dest_rectangle.y;
+	}
+
+	if (dest_rectangle.w <= 0)
+		return;
+
+	if (dest_rectangle.h <= 0)
+		return;
+
+	rendering::GRenderer->fill_rect(this->GraphicBuff->get_surface(), &dest_rectangle, color);
 }
 
 /***************************************************************************

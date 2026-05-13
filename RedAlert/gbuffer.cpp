@@ -46,6 +46,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+
 #include "gbuffer.h"
 #include "misc.h"
 
@@ -130,9 +131,8 @@ GraphicViewPortClass::~GraphicViewPortClass(void) {
  *=========================================================================*/
 void GraphicViewPortClass::Attach(GraphicBufferClass *gbuffer, int x, int y, int w, int h) {
 	/*======================================================================*/
-	/* Can not attach a Graphic View Port if it is actually the physical		*/
-	/*	   representation of a Graphic Buffer.
-	 */
+	/* Can not attach a Graphic View Port if it is actually the physical    */
+	/* representation of a Graphic Buffer.                                  */
 	/*======================================================================*/
 	if (this == Get_Graphic_Buffer()) {
 		return;
@@ -140,44 +140,42 @@ void GraphicViewPortClass::Attach(GraphicBufferClass *gbuffer, int x, int y, int
 
 	/*======================================================================*/
 	/* Verify that the x and y coordinates are valid and placed within the	*/
-	/*		physical buffer.
-	 */
+	/* physical buffer.                                                     */
 	/*======================================================================*/
 	if (x < 0) // you cannot place view port off
-		x = 0; //		the left edge of physical buf
+		x = 0; // the left edge of physical buf
 	if (x >= gbuffer->Get_Width()) // you cannot place left edge off
-		x = gbuffer->Get_Width() - 1; //		the right edge of physical buf
+		x = gbuffer->Get_Width() - 1; // the right edge of physical buf
 	if (y < 0) // you cannot place view port off
-		y = 0; //		the top edge of physical buf
+		y = 0; // the top edge of physical buf
 	if (y >= gbuffer->Get_Height()) // you cannot place view port off
-		y = gbuffer->Get_Height() - 1; //		bottom edge of physical buf
+		y = gbuffer->Get_Height() - 1; // bottom edge of physical buf
 
 	/*======================================================================*/
-	/* Adjust the width and height of necessary
-	 */
+	/* Adjust the width and height of necessary                             */
 	/*======================================================================*/
 	if (x + w > gbuffer->Get_Width()) // if the x plus width is larger
-		w = gbuffer->Get_Width() - x; //		than physical, fix width
+		w = gbuffer->Get_Width() - x; // than physical, fix width
 
 	if (y + h > gbuffer->Get_Height()) // if the y plus height is larger
-		h = gbuffer->Get_Height() - y; //		than physical, fix height
+		h = gbuffer->Get_Height() - y; // than physical, fix height
 
 	/*======================================================================*/
-	/* Get a pointer to the top left edge of the buffer.							*/
+	/* Get a pointer to the top left edge of the buffer.                    */
 	/*======================================================================*/
-	Offset = gbuffer->Get_Offset() + ((gbuffer->Get_Width() + gbuffer->Get_Pitch()) * y) + x;
+	this->Offset = gbuffer->Get_Offset() + ((gbuffer->Get_Width() + gbuffer->Get_Pitch()) * y) + x;
 
 	/*======================================================================*/
-	/* Copy over all of the variables that we need to store.						*/
+	/* Copy over all of the variables that we need to store.                */
 	/*======================================================================*/
-	XPos = x;
-	YPos = y;
-	XAdd = gbuffer->Get_Width() - w;
-	Width = w;
-	Height = h;
-	Pitch = gbuffer->Get_Pitch();
-	GraphicBuff = gbuffer;
-	IsDirectDraw = gbuffer->IsDirectDraw;
+	this->XPos = x;
+	this->YPos = y;
+	this->XAdd = gbuffer->Get_Width() - w;
+	this->Width = w;
+	this->Height = h;
+	this->Pitch = gbuffer->Get_Pitch();
+	this->GraphicBuff = gbuffer;
+	this->IsDirectDraw = gbuffer->IsDirectDraw;
 }
 
 /***************************************************************************
@@ -271,7 +269,7 @@ void GraphicBufferClass::DD_Init(GBC_Enum flags) {
 }
 
 void GraphicBufferClass::Attach_DD_Surface(GraphicBufferClass *attach_buffer) {
-	VideoSurfacePtr->AddAttachedSurface(attach_buffer->Get_DD_Surface());
+	VideoSurfacePtr->AddAttachedSurface(attach_buffer->get_surface());
 }
 
 /***************************************************************************
@@ -660,8 +658,8 @@ HRESULT GraphicViewPortClass::DD_Linear_Blit_To_Linear(GraphicViewPortClass &des
 	dest_rectangle.right = dest_x + width;
 	dest_rectangle.bottom = dest_y + height;
 
-	return (dest.GraphicBuff->Get_DD_Surface()
-			->Blt(&dest_rectangle, GraphicBuff->Get_DD_Surface(), &source_rectangle, key_source | DDBLT_WAIT | DDBLT_ASYNC, NULL));
+	return (dest.GraphicBuff->get_surface()
+			->Blt(&dest_rectangle, GraphicBuff->get_surface(), &source_rectangle, key_source | DDBLT_WAIT | DDBLT_ASYNC, NULL));
 }
 
 extern "C" long __cdecl
