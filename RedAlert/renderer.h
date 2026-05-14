@@ -60,12 +60,16 @@ namespace rendering {
 		virtual ~RenderSurface(void) = default;
 
 		virtual SDL_PixelFormat format(void) = 0;
+
 		virtual void lock(void **pixels, int *pitch) = 0;
 		virtual void unlock(void) = 0;
 
 		virtual void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color) = 0;
-		virtual void
-		blit(SDL_Renderer *renderer, const std::unique_ptr<RenderSurface> &src, const SDL_Rect *src_rect, const SDL_Rect *dst_rect) = 0;
+		virtual void blit(SDL_Renderer *renderer,
+				  const std::unique_ptr<RenderSurface> &src,
+				  const SDL_Rect *src_rect,
+				  const SDL_Rect *dst_rect,
+				  const bool transparent = false) = 0;
 
 		int width = 0, height = 0, pitch = 0;
 
@@ -92,8 +96,11 @@ namespace rendering {
 		}
 
 		virtual void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color);
-		virtual void
-		blit(SDL_Renderer *renderer, const std::unique_ptr<RenderSurface> &src, const SDL_Rect *src_rect, const SDL_Rect *dst_rect);
+		virtual void blit(SDL_Renderer *renderer,
+				  const std::unique_ptr<RenderSurface> &src,
+				  const SDL_Rect *src_rect,
+				  const SDL_Rect *dst_rect,
+				  const bool transparent = false);
 
 	private:
 		RenderToSurface(int w, int h) : RenderSurface(w, h) {
@@ -125,8 +132,11 @@ namespace rendering {
 		}
 
 		virtual void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color);
-		virtual void
-		blit(SDL_Renderer *renderer, const std::unique_ptr<RenderSurface> &src, const SDL_Rect *src_rect, const SDL_Rect *dst_rect);
+		virtual void blit(SDL_Renderer *renderer,
+				  const std::unique_ptr<RenderSurface> &src,
+				  const SDL_Rect *src_rect,
+				  const SDL_Rect *dst_rect,
+				  const bool transparent = false);
 
 	private:
 		RenderToTexture(SDL_Renderer *renderer, int w, int h) : RenderSurface(w, h) {
@@ -147,13 +157,28 @@ namespace rendering {
 		std::unique_ptr<RenderSurface> create_surface(int w, int h);
 		void destroy_surface(std::unique_ptr<RenderSurface> &s);
 
-		void blit(const std::unique_ptr<RenderSurface> &src, const std::unique_ptr<RenderSurface> &dst, int x, int y);
-		void
-		blit(const std::unique_ptr<RenderSurface> &src, const SDL_Rect *src_rect, const std::unique_ptr<RenderSurface> &dst, int x, int y);
+		inline void blit(const std::unique_ptr<RenderSurface> &src,
+				 const std::unique_ptr<RenderSurface> &dst,
+				 int x,
+				 int y,
+				 const bool transparent = false) {
+			SDL_Rect dst_rect = SDL_Rect{ x, y, src->width, src->height };
+			this->blit(src, nullptr, dst, &dst_rect, transparent);
+		};
+		inline void blit(const std::unique_ptr<RenderSurface> &src,
+				 const SDL_Rect *src_rect,
+				 const std::unique_ptr<RenderSurface> &dst,
+				 int x,
+				 int y,
+				 const bool transparent = false) {
+			SDL_Rect dst_rect = SDL_Rect{ x, y, src_rect->w, src_rect->h };
+			this->blit(src, src_rect, dst, &dst_rect, transparent);
+		};
 		void blit(const std::unique_ptr<RenderSurface> &src,
 			  const SDL_Rect *src_rect,
 			  const std::unique_ptr<RenderSurface> &dst,
-			  const SDL_Rect *dst_rect);
+			  const SDL_Rect *dst_rect,
+			  const bool transparent = false);
 
 		void fill_rect(const std::unique_ptr<RenderSurface> &dst, const SDL_Rect *rect, const uint8_t color);
 		void draw_line(const std::unique_ptr<RenderSurface> &dst, const Point start, const Point end, const uint8_t color, const Rect &box);

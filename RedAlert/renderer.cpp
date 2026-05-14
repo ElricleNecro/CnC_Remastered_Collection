@@ -2,6 +2,7 @@
 #include <memory>
 #include "renderer.h"
 
+#include "SDL3/SDL_blendmode.h"
 #include "SDL3/SDL_pixels.h"
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_surface.h"
@@ -22,17 +23,35 @@ namespace rendering {
 		SDL_SetRenderTarget(renderer, nullptr);
 	}
 
-	void
-	RenderToSurface::blit(SDL_Renderer *renderer, const std::unique_ptr<RenderSurface> &src, const SDL_Rect *src_rect, const SDL_Rect *dst_rect) {
+	void RenderToSurface::blit([[maybe_unused]] SDL_Renderer *renderer,
+				   const std::unique_ptr<RenderSurface> &src,
+				   const SDL_Rect *src_rect,
+				   const SDL_Rect *dst_rect,
+				   const bool transparent) {
 		auto &src_tex = static_cast<RenderToSurface &>(*src);
-		SDL_BlitSurface(src_tex.texture, src_rect, this->texture, dst_rect);
+		if (transparent)
+			SDL_SetSurfaceColorKey(src_tex.texture, true, 0);
+
+		if (src_rect && dst_rect && (src_rect->w != dst_rect->w || src_rect->h != dst_rect->h))
+			SDL_BlitSurfaceScaled(src_tex.texture, src_rect, this->texture, dst_rect, SDL_SCALEMODE_LINEAR);
+		else
+			SDL_BlitSurface(src_tex.texture, src_rect, this->texture, dst_rect);
+
+		if (transparent)
+			SDL_SetSurfaceColorKey(src_tex.texture, false, 0);
 	}
 
-	void
-	RenderToTexture::blit(SDL_Renderer *renderer, const std::unique_ptr<RenderSurface> &src, const SDL_Rect *src_rect, const SDL_Rect *dst_rect) {
+	void RenderToTexture::blit(SDL_Renderer *renderer,
+				   const std::unique_ptr<RenderSurface> &src,
+				   const SDL_Rect *src_rect,
+				   const SDL_Rect *dst_rect,
+				   const bool transparent) {
 		auto &src_tex = static_cast<RenderToTexture &>(*src);
 
 		SDL_SetRenderTarget(renderer, this->texture);
+		if (transparent)
+			SDL_SetTextureBlendMode(src_tex.texture, SDL_BLENDMODE_BLEND);
+
 		SDL_FRect src_frect = {};
 		SDL_FRect *p_src_frect = nullptr;
 		if (src_rect) {
@@ -40,16 +59,12 @@ namespace rendering {
 			p_src_frect = &src_frect;
 		}
 
-		SDL_FRect dst_frect = {};
-		SDL_FRect *p_dst_frect = nullptr;
-		if (dst_rect->w == 0 && dst_rect->h == 0) {
-			dst_frect = SDL_FRect{ (float)dst_rect->x, (float)dst_rect->y, (float)src_tex.texture->w, (float)src_tex.texture->h };
-		} else {
-			dst_frect = SDL_FRect{ (float)dst_rect->x, (float)dst_rect->y, (float)dst_rect->w, (float)dst_rect->h };
-		}
-		p_dst_frect = &dst_frect;
+		SDL_FRect dst_frect = SDL_FRect{ (float)dst_rect->x, (float)dst_rect->y, (float)dst_rect->w, (float)dst_rect->h };
 
-		SDL_RenderTexture(renderer, src_tex.texture, p_src_frect, p_dst_frect);
+		SDL_RenderTexture(renderer, src_tex.texture, p_src_frect, &dst_frect);
+
+		if (transparent)
+			SDL_SetTextureBlendMode(src_tex.texture, SDL_BLENDMODE_NONE);
 		SDL_SetRenderTarget(renderer, nullptr);
 	}
 
@@ -95,25 +110,22 @@ namespace rendering {
 		dst->fill_rect(this->renderer, rect, sdl_color);
 	}
 
-	void RenderBackend::blit(const std::unique_ptr<RenderSurface> &src, const std::unique_ptr<RenderSurface> &dst, int x, int y) {
-		SDL_Rect dst_rect = SDL_Rect{ x, y, 0, 0 };
-		this->blit(src, nullptr, dst, &dst_rect);
-	}
-
 	void RenderBackend::blit(const std::unique_ptr<RenderSurface> &src,
 				 const SDL_Rect *src_rect,
 				 const std::unique_ptr<RenderSurface> &dst,
-				 int x,
-				 int y) {
-		SDL_Rect dst_rect = SDL_Rect{ x, y, 0, 0 };
-		this->blit(src, src_rect, dst, &dst_rect);
-	}
-
-	void RenderBackend::blit(const std::unique_ptr<RenderSurface> &src,
-				 const SDL_Rect *src_rect,
-				 const std::unique_ptr<RenderSurface> &dst,
-				 const SDL_Rect *dst_rect) {
-		dst->blit(this->renderer, src, src_rect, dst_rect);
+				 const SDL_Rect *dst_rect,
+				 const bool transparent) {
+		SDL_Rect dst_rect_new = *dst_rect;
+		if (dst_rect->w == 0 && dst_rect->h == 0) {
+			if (src_rect) {
+				dst_rect_new.w = src_rect->w;
+				dst_rect_new.h = src_rect->h;
+			} else {
+				dst_rect_new.w = src->width;
+				dst_rect_new.h = src->height;
+			}
+		}
+		dst->blit(this->renderer, src, src_rect, &dst_rect_new, transparent);
 	}
 
 	void RenderBackend::draw_line(const std::unique_ptr<RenderSurface> &dst,
