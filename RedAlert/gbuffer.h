@@ -284,10 +284,6 @@ public:
 		return (LockCount);
 	};
 
-	// Member to blit using direct draw access to hardware blitter
-	bool
-	DD_Linear_Blit_To_Linear(GraphicViewPortClass &dest, int source_x, int source_y, int dest_x, int dest_y, int width, int height, bool mask);
-
 	/*===================================================================*/
 	/* Define functions to attach the viewport to a graphicbuffer        */
 	/*===================================================================*/
@@ -543,29 +539,11 @@ inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest,
 				       int pixel_width,
 				       int pixel_height,
 				       bool trans) {
-	bool return_code = 0;
+	SDL_Rect src_rect = { x_pixel, y_pixel, pixel_width, pixel_height };
+	SDL_Rect dst_rect = { dx_pixel, dy_pixel, 0, 0 };
+	rendering::GRenderer->blit(this->GraphicBuff->get_surface(), src_rect, dest.GraphicBuff->get_surface(), dst_rect, trans);
 
-	if (IsDirectDraw && dest.IsDirectDraw) {
-		return (DD_Linear_Blit_To_Linear(dest,
-						 XPos + x_pixel,
-						 YPos + y_pixel,
-						 dest.Get_XPos() + dx_pixel,
-						 dest.Get_YPos() + dy_pixel,
-						 pixel_width,
-						 pixel_height,
-						 trans));
-	} else {
-		if (Lock()) {
-			if (dest.Lock()) {
-				return_code =
-					(Linear_Blit_To_Linear(this, &dest, x_pixel, y_pixel, dx_pixel, dy_pixel, pixel_width, pixel_height, trans));
-			}
-			dest.Unlock();
-		}
-		Unlock();
-	}
-
-	return (return_code);
+	return true;
 }
 
 /***************************************************************************
@@ -581,21 +559,9 @@ inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest,
  *   01/06/1995 PWG : Created.                                             *
  *=========================================================================*/
 inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest, int dx, int dy, bool trans) {
-	bool return_code = 0;
+	this->Blit(dest, 0, 0, dx, dy, this->Width, this->Height, trans);
 
-	if (IsDirectDraw && dest.IsDirectDraw) {
-		return (DD_Linear_Blit_To_Linear(dest, XPos, YPos, dest.Get_XPos() + dx, dest.Get_YPos() + dy, Width, Height, trans));
-	} else {
-		if (Lock()) {
-			if (dest.Lock()) {
-				return_code = (Linear_Blit_To_Linear(this, &dest, 0, 0, dx, dy, Width, Height, trans));
-			}
-			dest.Unlock();
-		}
-		Unlock();
-	}
-
-	return (return_code);
+	return true;
 }
 
 /***************************************************************************
@@ -611,28 +577,9 @@ inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest, int dx, int d
  *   01/06/1995 PWG : Created.                                             *
  *=========================================================================*/
 inline bool GraphicViewPortClass::Blit(GraphicViewPortClass &dest, bool trans) {
-	bool return_code = 0;
+	this->Blit(dest, 0, 0, 0, 0, Width, Height, trans);
 
-	if (IsDirectDraw && dest.IsDirectDraw) {
-		return (DD_Linear_Blit_To_Linear(dest,
-						 XPos,
-						 YPos,
-						 dest.Get_XPos(),
-						 dest.Get_YPos(),
-						 MAX(Width, dest.Get_Width()),
-						 MAX(Height, dest.Get_Height()),
-						 trans));
-	} else {
-		if (Lock()) {
-			if (dest.Lock()) {
-				return_code = (Linear_Blit_To_Linear(this, &dest, 0, 0, 0, 0, Width, Height, trans));
-			}
-			dest.Unlock();
-		}
-		Unlock();
-	}
-
-	return (return_code);
+	return true;
 }
 
 /***************************************************************************

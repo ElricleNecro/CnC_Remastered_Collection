@@ -609,59 +609,6 @@ bool GraphicBufferClass::Unlock(void) {
 	return (true);
 }
 
-/***********************************************************************************************
- * GVPC::DD_Linear_Blit_To_Linear -- blit using the hardware blitter                           *
- *                                                                                             *
- *                                                                                             *
- *                                                                                             *
- * INPUT:    destination vvpc                                                                  *
- *           x coord to blit from                                                              *
- *           y coord to blit from                                                              *
- *           x coord to blit to                                                                *
- *           y coord to blit to                                                                *
- *           width to blit                                                                     *
- *           height to blit                                                                    *
- *                                                                                             *
- * OUTPUT:   DD_OK if successful                                                               *
- *                                                                                             *
- * WARNINGS: None                                                                              *
- *                                                                                             *
- * HISTORY:                                                                                    *
- *   09-22-95 11:05am ST : Created                                                             *
- *=============================================================================================*/
-
-HRESULT GraphicViewPortClass::DD_Linear_Blit_To_Linear(GraphicViewPortClass &dest,
-						       int source_x,
-						       int source_y,
-						       int dest_x,
-						       int dest_y,
-						       int width,
-						       int height,
-						       bool mask)
-
-{
-	RECT source_rectangle;
-	RECT dest_rectangle;
-	int key_source = 0;
-
-	if (mask) {
-		key_source = DDBLT_KEYSRC;
-	}
-
-	source_rectangle.left = source_x;
-	source_rectangle.top = source_y;
-	source_rectangle.right = source_x + width;
-	source_rectangle.bottom = source_y + height;
-
-	dest_rectangle.left = dest_x;
-	dest_rectangle.top = dest_y;
-	dest_rectangle.right = dest_x + width;
-	dest_rectangle.bottom = dest_y + height;
-
-	return (dest.GraphicBuff->get_surface()
-			->Blt(&dest_rectangle, GraphicBuff->get_surface(), &source_rectangle, key_source | DDBLT_WAIT | DDBLT_ASYNC, NULL));
-}
-
 extern "C" long __cdecl
 Buffer_To_Page(const int x_pixel, const int y_pixel, const int pixel_width, const int pixel_height, const uint8_t *src, void *dest) {
 	if (!src)
