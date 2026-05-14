@@ -605,15 +605,10 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest,
 					int dst_h,
 					bool trans,
 					char *remap) {
-	bool return_code = 0;
-	if (Lock()) {
-		if (dest.Lock()) {
-			return_code = (Linear_Scale_To_Linear(this, &dest, src_x, src_y, dst_x, dst_y, src_w, src_h, dst_w, dst_h, trans, remap));
-		}
-		dest.Unlock();
-	}
-	Unlock();
-	return (return_code);
+	SDL_Rect src_rect = { src_x, src_y, src_w, src_h };
+	SDL_Rect dst_rect = { dst_x, dst_y, dst_w, dst_h };
+	rendering::GRenderer->blit(this->GraphicBuff->get_surface(), &src_rect, dest.GraphicBuff->get_surface(), &dst_rect, trans);
+	return true;
 }
 
 /***************************************************************************
@@ -638,15 +633,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest,
 					int dst_w,
 					int dst_h,
 					char *remap) {
-	bool return_code = 0;
-	if (Lock()) {
-		if (dest.Lock()) {
-			return_code = (Linear_Scale_To_Linear(this, &dest, src_x, src_y, dst_x, dst_y, src_w, src_h, dst_w, dst_h, false, remap));
-		}
-		dest.Unlock();
-	}
-	Unlock();
-	return (return_code);
+	return this->Scale(dest, src_x, src_y, dst_x, dst_y, src_w, src_h, dst_w, dst_h, false, remap);
 }
 
 /***************************************************************************
@@ -662,16 +649,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest,
  *   01/06/1995 PWG : Created.                                             *
  *=========================================================================*/
 inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest, bool trans, char *remap) {
-	bool return_code = 0;
-	if (Lock()) {
-		if (dest.Lock()) {
-			return_code =
-				(Linear_Scale_To_Linear(this, &dest, 0, 0, 0, 0, Width, Height, dest.Get_Width(), dest.Get_Height(), trans, remap));
-		}
-		dest.Unlock();
-	}
-	Unlock();
-	return (return_code);
+	return this->Scale(dest, 0, 0, 0, 0, Width, Height, dest.Get_Width(), dest.Get_Height(), trans, remap);
 }
 
 /***************************************************************************
@@ -687,16 +665,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest, bool trans, 
  *   01/06/1995 PWG : Created.                                             *
  *=========================================================================*/
 inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest, char *remap) {
-	bool return_code = 0;
-	if (Lock()) {
-		if (dest.Lock()) {
-			return_code =
-				(Linear_Scale_To_Linear(this, &dest, 0, 0, 0, 0, Width, Height, dest.Get_Width(), dest.Get_Height(), false, remap));
-		}
-		dest.Unlock();
-	}
-	Unlock();
-	return (return_code);
+	return this->Scale(dest, 0, 0, 0, 0, Width, Height, dest.Get_Width(), dest.Get_Height(), false, remap);
 }
 
 /***************************************************************************
