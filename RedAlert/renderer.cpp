@@ -48,18 +48,22 @@ namespace rendering {
 
 		SDL_Surface *source = src_tex.texture;
 		if (remap) {
-			SDL_Surface *new_src = SDL_CreateSurface(source->w, source->h, source->format);
+			SDL_Surface *new_src = SDL_CreateSurface(src_tex.width, src_tex.height, src_tex.format());
 
-			SDL_LockSurface(src_tex.texture);
+			void *source_pixels = nullptr;
+			int source_pitch = 0;
+			src_tex.lock(&source_pixels, &source_pitch);
 			SDL_LockSurface(new_src);
-			apply_remap(static_cast<uint8_t *>(source->pixels),
-				    source->pitch,
+
+			apply_remap(static_cast<uint8_t *>(source_pixels),
+				    source_pitch,
 				    static_cast<uint8_t *>(new_src->pixels),
 				    new_src->pitch,
-				    source->w,
-				    source->h,
+				    src_tex.width,
+				    src_tex.height,
 				    remap);
-			SDL_UnlockSurface(src_tex.texture);
+
+			src_tex.unlock();
 			SDL_UnlockSurface(new_src);
 
 			source = new_src;
