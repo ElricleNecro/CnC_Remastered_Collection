@@ -134,20 +134,24 @@ namespace rendering {
 		}
 	}
 
-	void RenderToSurface::lock(void **pixels, int *pitch) {
+	bool RenderToSurface::lock(void **pixels, int *pitch) {
 		*pixels = this->texture->pixels;
 		*pitch = this->texture->pitch;
+		return SDL_LockSurface(this->texture);
 	}
 
-	void RenderToSurface::unlock(void) {
+	bool RenderToSurface::unlock(void) {
+		SDL_UnlockSurface(this->texture);
+		return true;
 	}
 
-	void RenderToTexture::lock(void **pixels, int *pitch) {
-		SDL_LockTexture(this->texture, nullptr, pixels, pitch);
+	bool RenderToTexture::lock(void **pixels, int *pitch) {
+		return SDL_LockTexture(this->texture, nullptr, pixels, pitch);
 	}
 
-	void RenderToTexture::unlock(void) {
+	bool RenderToTexture::unlock(void) {
 		SDL_UnlockTexture(this->texture);
+		return true;
 	}
 
 	std::unique_ptr<RenderSurface> RenderBackend::create_surface(int w, int h) {

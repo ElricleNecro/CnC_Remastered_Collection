@@ -68,8 +68,8 @@ namespace rendering {
 
 		virtual SDL_PixelFormat format(void) = 0;
 
-		virtual void lock(void **pixels, int *pitch) = 0;
-		virtual void unlock(void) = 0;
+		virtual bool lock(void **pixels, int *pitch) = 0;
+		virtual bool unlock(void) = 0;
 
 		virtual void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color) = 0;
 		virtual void blit(SDL_Renderer *renderer,
@@ -96,8 +96,8 @@ namespace rendering {
 			return this->texture->format;
 		};
 
-		virtual void lock(void **pixels, int *pitch);
-		virtual void unlock(void);
+		virtual bool lock(void **pixels, int *pitch);
+		virtual bool unlock(void);
 
 		inline operator bool(void) {
 			return this->texture != nullptr;
@@ -134,8 +134,8 @@ namespace rendering {
 			return this->texture->format;
 		};
 
-		virtual void lock(void **pixels, int *pitch);
-		virtual void unlock(void);
+		virtual bool lock(void **pixels, int *pitch);
+		virtual bool unlock(void);
 
 		inline operator bool(void) {
 			return this->texture != nullptr;
@@ -208,12 +208,12 @@ namespace rendering {
 		void draw_line(const std::unique_ptr<RenderSurface> &dst, const Point start, const Point end, const uint8_t color, const Rect &box);
 		void present();
 
-		inline void lock(const std::unique_ptr<RenderSurface> &s, void **pixels, int *pitch) {
-			s->lock(pixels, pitch);
+		inline bool lock(const std::unique_ptr<RenderSurface> &s, void **pixels, int *pitch) {
+			return s->lock(pixels, pitch);
 		};
 
-		inline void unlock(const std::unique_ptr<RenderSurface> &s) {
-			s->unlock();
+		inline bool unlock(const std::unique_ptr<RenderSurface> &s) {
+			return s->unlock();
 		};
 	};
 
