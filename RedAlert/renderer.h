@@ -92,7 +92,7 @@ namespace rendering {
 			SDL_DestroySurface(this->texture);
 		}
 
-		virtual SDL_PixelFormat format(void) {
+		virtual inline SDL_PixelFormat format(void) {
 			return this->texture->format;
 		};
 
@@ -130,7 +130,7 @@ namespace rendering {
 			SDL_DestroyTexture(this->texture);
 		}
 
-		virtual SDL_PixelFormat format(void) {
+		virtual inline SDL_PixelFormat format(void) {
 			return this->texture->format;
 		};
 
