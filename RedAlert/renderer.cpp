@@ -1,4 +1,6 @@
+#include <cassert>
 #include <cstdint>
+#include <cstring>
 #include <memory>
 #include "renderer.h"
 
@@ -23,34 +25,63 @@ namespace rendering {
 		SDL_SetRenderTarget(renderer, nullptr);
 	}
 
+	template <typename T>
+	void
+	apply_remap(const T *src, const size_t src_pitch, T *dst, const size_t dst_pitch, const size_t width, const size_t height, const char *remap) {
+		for (size_t row = 0; row < height; row++) {
+			const T *src_row = reinterpret_cast<const T *>(reinterpret_cast<const uint8_t *>(src) + row * src_pitch);
+			T *dst_row = reinterpret_cast<T *>(reinterpret_cast<uint8_t *>(dst) + row * dst_pitch);
+
+			for (size_t col = 0; col < width; col++) {
+				dst_row[col] = remap[src_row[col]];
+			}
+		}
+	}
+
 	void RenderToSurface::blit([[maybe_unused]] SDL_Renderer *renderer,
 				   const std::unique_ptr<RenderSurface> &src,
 				   const SDL_Rect *src_rect,
 				   const SDL_Rect *dst_rect,
-				   const bool transparent) {
+				   [[maybe_unused]] const bool transparent,
+				   const char *remap) {
 		auto &src_tex = static_cast<RenderToSurface &>(*src);
-		if (transparent)
-			SDL_SetSurfaceColorKey(src_tex.texture, true, 0);
+
+		SDL_Surface *source = src_tex.texture;
+		if (remap) {
+			SDL_Surface *new_src = SDL_CreateSurface(source->w, source->h, source->format);
+
+			SDL_LockSurface(src_tex.texture);
+			SDL_LockSurface(new_src);
+			apply_remap(static_cast<uint8_t *>(source->pixels),
+				    source->pitch,
+				    static_cast<uint8_t *>(new_src->pixels),
+				    new_src->pitch,
+				    source->w,
+				    source->h,
+				    remap);
+			SDL_UnlockSurface(src_tex.texture);
+			SDL_UnlockSurface(new_src);
+
+			source = new_src;
+		}
 
 		if (src_rect && dst_rect && (src_rect->w != dst_rect->w || src_rect->h != dst_rect->h))
-			SDL_BlitSurfaceScaled(src_tex.texture, src_rect, this->texture, dst_rect, SDL_SCALEMODE_LINEAR);
+			SDL_BlitSurfaceScaled(source, src_rect, this->texture, dst_rect, SDL_SCALEMODE_LINEAR);
 		else
-			SDL_BlitSurface(src_tex.texture, src_rect, this->texture, dst_rect);
+			SDL_BlitSurface(source, src_rect, this->texture, dst_rect);
 
-		if (transparent)
-			SDL_SetSurfaceColorKey(src_tex.texture, false, 0);
+		if (remap) {
+			SDL_DestroySurface(source);
+		}
 	}
 
 	void RenderToTexture::blit(SDL_Renderer *renderer,
 				   const std::unique_ptr<RenderSurface> &src,
 				   const SDL_Rect *src_rect,
 				   const SDL_Rect *dst_rect,
-				   const bool transparent) {
+				   [[maybe_unused]] const bool transparent,
+				   const char *remap) {
 		auto &src_tex = static_cast<RenderToTexture &>(*src);
-
-		SDL_SetRenderTarget(renderer, this->texture);
-		if (transparent)
-			SDL_SetTextureBlendMode(src_tex.texture, SDL_BLENDMODE_BLEND);
 
 		SDL_FRect src_frect = {};
 		SDL_FRect *p_src_frect = nullptr;
@@ -61,11 +92,46 @@ namespace rendering {
 
 		SDL_FRect dst_frect = SDL_FRect{ (float)dst_rect->x, (float)dst_rect->y, (float)dst_rect->w, (float)dst_rect->h };
 
-		SDL_RenderTexture(renderer, src_tex.texture, p_src_frect, &dst_frect);
+		SDL_Texture *source = src_tex.texture;
+		if (remap) {
+			void *src_pixels = nullptr;
+			int src_pitch = 0;
+			src_tex.lock(&src_pixels, &src_pitch);
 
-		if (transparent)
-			SDL_SetTextureBlendMode(src_tex.texture, SDL_BLENDMODE_NONE);
+			SDL_Texture *new_src =
+				SDL_CreateTexture(renderer, SDL_PIXELFORMAT_INDEX8, SDL_TEXTUREACCESS_STREAMING, src_tex.width, src_tex.height);
+			void *new_pixels = nullptr;
+			int pitch = 0;
+			SDL_LockTexture(new_src, nullptr, &new_pixels, &pitch);
+
+			apply_remap(static_cast<uint8_t *>(src_pixels),
+				    src_pitch,
+				    static_cast<uint8_t *>(new_pixels),
+				    pitch,
+				    src_tex.width,
+				    src_tex.height,
+				    remap);
+
+			src_tex.unlock();
+			SDL_UnlockTexture(new_src);
+
+			source = new_src;
+		}
+
+		// if (transparent)
+		// 	SDL_SetTextureBlendMode(source, SDL_BLENDMODE_BLEND);
+
+		SDL_SetRenderTarget(renderer, this->texture);
+
+		SDL_RenderTexture(renderer, source, p_src_frect, &dst_frect);
+
+		// if (transparent)
+		// 	SDL_SetTextureBlendMode(source, SDL_BLENDMODE_NONE);
 		SDL_SetRenderTarget(renderer, nullptr);
+
+		if (remap) {
+			SDL_DestroyTexture(source);
+		}
 	}
 
 	void RenderToSurface::lock(void **pixels, int *pitch) {
@@ -100,12 +166,7 @@ namespace rendering {
 
 	void RenderBackend::fill_rect(const std::unique_ptr<RenderSurface> &dst, const SDL_Rect *rect, const uint8_t color) {
 		const RGBClass &rgb = PaletteClass::CurrentPalette[color];
-		SDL_Color sdl_color = {
-			.r = (uint8_t)rgb.Red_Component(),
-			.g = (uint8_t)rgb.Green_Component(),
-			.b = (uint8_t)rgb.Blue_Component(),
-			.a = 255,
-		};
+		SDL_Color sdl_color = static_cast<SDL_Color>(rgb);
 
 		dst->fill_rect(this->renderer, rect, sdl_color);
 	}
@@ -114,7 +175,8 @@ namespace rendering {
 				 const SDL_Rect *src_rect,
 				 const std::unique_ptr<RenderSurface> &dst,
 				 const SDL_Rect *dst_rect,
-				 const bool transparent) {
+				 const bool transparent,
+				 const char *remap) {
 		SDL_Rect dst_rect_new = *dst_rect;
 		if (dst_rect->w == 0 && dst_rect->h == 0) {
 			if (src_rect) {
@@ -125,7 +187,7 @@ namespace rendering {
 				dst_rect_new.h = src->height;
 			}
 		}
-		dst->blit(this->renderer, src, src_rect, &dst_rect_new, transparent);
+		dst->blit(this->renderer, src, src_rect, &dst_rect_new, transparent, remap);
 	}
 
 	void RenderBackend::draw_line(const std::unique_ptr<RenderSurface> &dst,

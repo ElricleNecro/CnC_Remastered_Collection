@@ -69,7 +69,8 @@ namespace rendering {
 				  const std::unique_ptr<RenderSurface> &src,
 				  const SDL_Rect *src_rect,
 				  const SDL_Rect *dst_rect,
-				  const bool transparent = false) = 0;
+				  const bool transparent = false,
+				  const char *remap = nullptr) = 0;
 
 		int width = 0, height = 0, pitch = 0;
 
@@ -100,12 +101,14 @@ namespace rendering {
 				  const std::unique_ptr<RenderSurface> &src,
 				  const SDL_Rect *src_rect,
 				  const SDL_Rect *dst_rect,
-				  const bool transparent = false);
+				  const bool transparent = false,
+				  const char *remap = nullptr);
 
 	private:
 		RenderToSurface(int w, int h) : RenderSurface(w, h) {
 			this->texture = SDL_CreateSurface(this->width, this->height, SDL_PIXELFORMAT_RGBA32);
 			this->pitch = this->texture->pitch;
+			SDL_SetSurfacePalette(this->texture, static_cast<SDL_Palette *>(PaletteClass::CurrentPalette));
 		}
 
 		friend RenderBackend;
@@ -136,11 +139,12 @@ namespace rendering {
 				  const std::unique_ptr<RenderSurface> &src,
 				  const SDL_Rect *src_rect,
 				  const SDL_Rect *dst_rect,
-				  const bool transparent = false);
+				  const bool transparent = false,
+				  const char *remap = nullptr);
 
 	private:
 		RenderToTexture(SDL_Renderer *renderer, int w, int h) : RenderSurface(w, h) {
-			this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, this->width, this->height);
+			this->texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_INDEX8, SDL_TEXTUREACCESS_STREAMING, this->width, this->height);
 			this->pitch = 0;
 		}
 
@@ -161,24 +165,27 @@ namespace rendering {
 				 const std::unique_ptr<RenderSurface> &dst,
 				 int x,
 				 int y,
-				 const bool transparent = false) {
+				 const bool transparent = false,
+				 const char *remap = nullptr) {
 			SDL_Rect dst_rect = SDL_Rect{ x, y, src->width, src->height };
-			this->blit(src, nullptr, dst, &dst_rect, transparent);
+			this->blit(src, nullptr, dst, &dst_rect, transparent, remap);
 		};
 		inline void blit(const std::unique_ptr<RenderSurface> &src,
 				 const SDL_Rect *src_rect,
 				 const std::unique_ptr<RenderSurface> &dst,
 				 int x,
 				 int y,
-				 const bool transparent = false) {
+				 const bool transparent = false,
+				 const char *remap = nullptr) {
 			SDL_Rect dst_rect = SDL_Rect{ x, y, src_rect->w, src_rect->h };
-			this->blit(src, src_rect, dst, &dst_rect, transparent);
+			this->blit(src, src_rect, dst, &dst_rect, transparent, remap);
 		};
 		void blit(const std::unique_ptr<RenderSurface> &src,
 			  const SDL_Rect *src_rect,
 			  const std::unique_ptr<RenderSurface> &dst,
 			  const SDL_Rect *dst_rect,
-			  const bool transparent = false);
+			  const bool transparent = false,
+			  const char *remap = nullptr);
 
 		void fill_rect(const std::unique_ptr<RenderSurface> &dst, const SDL_Rect *rect, const uint8_t color);
 		void draw_line(const std::unique_ptr<RenderSurface> &dst, const Point start, const Point end, const uint8_t color, const Rect &box);

@@ -607,7 +607,7 @@ inline bool GraphicViewPortClass::Scale(GraphicViewPortClass &dest,
 					char *remap) {
 	SDL_Rect src_rect = { src_x, src_y, src_w, src_h };
 	SDL_Rect dst_rect = { dst_x, dst_y, dst_w, dst_h };
-	rendering::GRenderer->blit(this->GraphicBuff->get_surface(), &src_rect, dest.GraphicBuff->get_surface(), &dst_rect, trans);
+	rendering::GRenderer->blit(this->GraphicBuff->get_surface(), &src_rect, dest.GraphicBuff->get_surface(), &dst_rect, trans, remap);
 	return true;
 }
 
