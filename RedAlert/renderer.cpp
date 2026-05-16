@@ -204,13 +204,8 @@ namespace rendering {
 		this->lock(dst, &pixels, &pitch);
 
 		uint8_t *buffer = static_cast<uint8_t *>(pixels);
-		const RGBClass &rgb = PaletteClass::CurrentPalette[color];
-		const uint32_t pixel_color = SDL_MapRGBA(SDL_GetPixelFormatDetails(dst->format()),
-							 nullptr,
-							 (uint8_t)rgb.Red_Component(),
-							 (uint8_t)rgb.Green_Component(),
-							 (uint8_t)rgb.Blue_Component(),
-							 255);
+		const SDL_Color &rgb = this->current_palette->colors[color];
+		const uint32_t pixel_color = SDL_MapRGBA(SDL_GetPixelFormatDetails(dst->format()), nullptr, rgb.r, rgb.g, rgb.b, 255);
 		auto set_pixel = [buffer, pitch, pixel_color](Point p) {
 			uint32_t *addr = (uint32_t *)(buffer + p.y * pitch + p.x * 4);
 			*addr = pixel_color;

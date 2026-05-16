@@ -36,6 +36,7 @@
 #define PALETTE_Hx
 
 #include "rgb.h"
+#include <SDL3/SDL_pixels.h>
 
 /*
 **	The palette class is used to manipulate a palette as a whole. All 256 colors are
@@ -72,11 +73,23 @@ public:
 		return &Palette[0];
 	}
 
+	operator SDL_Palette *() const {
+		SDL_Palette *sdl_pal = SDL_CreatePalette(COLOR_COUNT);
+		if (!sdl_pal)
+			return nullptr;
+
+		for (int i = 0; i < COLOR_COUNT; i++) {
+			sdl_pal->colors[i] = static_cast<SDL_Color>(Palette[i]);
+		}
+		sdl_pal->colors[0].a = 0;
+		return sdl_pal;
+	};
+
 	void Adjust(int ratio);
 	void Adjust(int ratio, PaletteClass const &palette);
 	void Partial_Adjust(int ratio, char *lut);
 	void Partial_Adjust(int ratio, PaletteClass const &palette, char *lut);
-	void Set(int time = 0, void (*callback)(void) = 0) const;
+	void Set(const int time = 0, void (*callback)(void) = 0) const;
 	int Closest_Color(RGBClass const &rgb) const;
 
 	static PaletteClass const &CurrentPalette;

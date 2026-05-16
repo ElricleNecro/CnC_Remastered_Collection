@@ -39,77 +39,15 @@
  *   PaletteClass::operator == -- Equality operator for palette objects.                       *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#ifndef NOINITCLASS
-#define NOINITCLASS
-struct NoInitClass {
-public:
-	void operator()(void) const {};
-};
-#endif
-
-void __cdecl Set_Palette(void *palette);
-
-#ifndef BITMAPCLASS
-#define BITMAPCLASS
-class BitmapClass {
-public:
-	BitmapClass(int w, int h, unsigned char *data) : Width(w), Height(h), Data(data) {};
-
-	int Width;
-	int Height;
-	unsigned char *Data;
-};
-
-class TPoint2D {
-public:
-	TPoint2D(int xx, int yy) : x(xx), y(yy) {};
-	TPoint2D(void) : x(0), y(0) {};
-
-	int x;
-	int y;
-};
-#endif
-
-#include "palettec.h"
-#include "ftimer.h"
-#include "function.h"
-#include "palette.h"
-#include "watcom.h"
-// #define TIMER_H
-#include "wwlib32.h"
-// #include	"timer.h"
 #include <string.h>
 
-#ifndef SYSTEM_TIMER_CLASS
-#define SYSTEM_TIMER_CLASS
-
-#ifdef WIN32
-extern WinTimerClass *WindowsTimer;
-#endif
-
-class SystemTimerClass {
-public:
-#ifdef WIN32
-	long operator()(void) const {
-		if (!WindowsTimer)
-			return (0);
-		return (WindowsTimer->Get_System_Tick_Count());
-	};
-	operator long(void) const {
-		if (!WindowsTimer)
-			return (0);
-		return (WindowsTimer->Get_System_Tick_Count());
-	};
-#else
-	long operator()(void) const {
-		return (Get_System_Tick_Count());
-	};
-	operator long(void) const {
-		return (Get_System_Tick_Count());
-	};
-#endif
-};
-#endif
+#include "SDL3/SDL_timer.h"
+#include "function.h"
+#include "palette.h"
+#include "palettec.h"
+#include "renderer.h"
+#include "watcom.h"
+#include "wwlib32.h"
 
 // PaletteClass const PaletteClass::CurrentPalette;
 extern "C" unsigned char CurrentPalette[];
@@ -370,36 +308,33 @@ extern void Vsync(void);
  *   12/02/1995 JLB : Created.                                                                 *
  *   02/05/1996 JLB : Uses new timer system.                                                   *
  *=============================================================================================*/
-void PaletteClass::Set(int time, void (*callback)(void)) const {
-	CDTimerClass<SystemTimerClass> timer = time;
-	PaletteClass original = CurrentPalette;
+void PaletteClass::Set(const int _time, void (*callback)(void)) const {
+	PaletteClass original = PaletteClass::CurrentPalette;
+	const uint64_t time = _time;
+	const uint64_t start = SDL_GetTicks();
+	uint64_t last_tick = 0;
+	uint64_t elapsed = 0;
 
-	while (timer) {
-		/*
-		**	Build an intermediate palette that is as close to the destination palette
-		**	as the current time is proportional to the ending time.
-		*/
-		PaletteClass palette = original;
-		int adjust = ((time - timer) * 256) / time;
-		palette.Adjust(adjust, *this);
+	while (elapsed < time) {
+		elapsed = SDL_GetTicks() - start;
+		uint64_t current_tick = elapsed / TIME_PER_TICK;
 
-		/*
-		**	Remember the current time so that multiple palette sets within the same game
-		**	time tick won't occur. This is probably unnecessary since the palette setting
-		**	code, at the time of this writing, delays at least one game tick in the process
-		**	of setting the palette.
-		*/
-		long holdtime = timer;
+		if (current_tick != last_tick || last_tick == 0) {
+			/*
+			**	Build an intermediate palette that is as close to the destination palette
+			**	as the current time is proportional to the ending time.
+			*/
+			PaletteClass palette = original;
+			int adjust = (elapsed * 256) / time;
+			palette.Adjust(adjust, *this);
 
-		/*
-		**	Set the palette to this intermediate palette and then loop back
-		**	to calculate and set a new intermediate palette.
-		*/
-#ifdef WIN32
-		Set_Palette((void *)&palette[0]);
-#else
-		palette.Set();
-#endif // WIN32
+			/*
+			**	Set the palette to this intermediate palette and then loop back
+			**	to calculate and set a new intermediate palette.
+			*/
+			rendering::GRenderer->set_palette(palette);
+			last_tick = current_tick;
+		}
 
 		/*
 		**	If the callback routine was specified, then call it once per palette
@@ -409,31 +344,13 @@ void PaletteClass::Set(int time, void (*callback)(void)) const {
 			callback();
 		}
 
-		/*
-		**	This loop ensures that the palette won't be set more than once per game tick. Setting
-		**	the palette more than once per game tick will have no effect since the calculation will
-		**	result in the same intermediate palette that was previously calculated.
-		*/
-		while (timer == holdtime && holdtime != 0) {
-			if (callback)
-				callback();
-		}
+		SDL_DelayNS(1000000);
 	}
 
 	/*
 	**	Ensure that the final palette exactly matches the requested
 	**	palette before exiting the fading routine.
 	*/
-#ifndef WIN32
-	Vsync();
-	RGBClass const *rgbptr = &Palette[0];
-	RGBClass::Raw_Color_Prep(0);
-	for (int index = 0; index < COLOR_COUNT; index++) {
-		rgbptr->Raw_Set();
-		rgbptr++;
-	}
-	((PaletteClass &)CurrentPalette) = *this;
-#else // WIN32
-	Set_Palette((void *)&Palette[0]);
-#endif
+	rendering::GRenderer->set_palette(*this);
+	((PaletteClass &)PaletteClass::CurrentPalette) = *this;
 }

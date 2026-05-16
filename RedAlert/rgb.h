@@ -35,6 +35,8 @@
 #ifndef RGB_H
 #define RGB_H
 
+#include <SDL3/SDL_pixels.h>
+
 class PaletteClass;
 class HSVClass;
 
@@ -89,6 +91,15 @@ public:
 		Green = rgb.Green;
 		Blue = rgb.Blue;
 		return (*this);
+	};
+
+	operator SDL_Color() const {
+		return SDL_Color{
+			.r = (uint8_t)Red_Component(),
+			.g = (uint8_t)Green_Component(),
+			.b = (uint8_t)Blue_Component(),
+			.a = 0xFF
+		};
 	};
 
 	enum { MAX_VALUE = 255 };

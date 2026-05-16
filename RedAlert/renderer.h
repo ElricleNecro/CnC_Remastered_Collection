@@ -4,10 +4,16 @@
 #include <format>
 #include <memory>
 #include <string>
+#include "SDL3/SDL_oldnames.h"
+#include "palettec.h"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
 #include <SDL3/SDL_surface.h>
 #include <SDL3/SDL_video.h>
+
+#ifndef TIME_PER_TICK
+#define TIME_PER_TICK 16
+#endif
 
 namespace rendering {
 	enum SurfaceType {
@@ -157,9 +163,19 @@ namespace rendering {
 	struct RenderBackend {
 		SDL_Window *window;
 		SDL_Renderer *renderer;
+		SDL_Palette *current_palette = nullptr;
 
 		std::unique_ptr<RenderSurface> create_surface(int w, int h);
 		void destroy_surface(std::unique_ptr<RenderSurface> &s);
+
+		inline void set_palette(const PaletteClass &palette) {
+			if (this->current_palette)
+				SDL_DestroyPalette(this->current_palette);
+			this->current_palette = static_cast<SDL_Palette *>(palette);
+		}
+		inline SDL_Palette *get_palette(void) {
+			return this->current_palette;
+		}
 
 		inline void blit(const std::unique_ptr<RenderSurface> &src,
 				 const std::unique_ptr<RenderSurface> &dst,
