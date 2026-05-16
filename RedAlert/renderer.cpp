@@ -2,9 +2,9 @@
 #include <cstdint>
 #include <cstring>
 #include <memory>
+
 #include "renderer.h"
 
-#include "SDL3/SDL_blendmode.h"
 #include "SDL3/SDL_pixels.h"
 #include "SDL3/SDL_render.h"
 #include "SDL3/SDL_surface.h"
