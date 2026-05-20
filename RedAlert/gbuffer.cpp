@@ -268,10 +268,6 @@ void GraphicBufferClass::DD_Init(GBC_Enum flags) {
 	LockCount = 0; //  surface is not locked
 }
 
-void GraphicBufferClass::Attach_DD_Surface(GraphicBufferClass *attach_buffer) {
-	VideoSurfacePtr->AddAttachedSurface(attach_buffer->get_surface());
-}
-
 /***************************************************************************
  * GBC::INIT -- Core function responsible for initing a GBC                *
  *                                                                         *

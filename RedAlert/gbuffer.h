@@ -331,7 +331,7 @@ public:
 	void DD_Init(GBC_Enum flags);
 	void Init(int w, int h, void *buffer, long size, GBC_Enum flags);
 	void Un_Init(void);
-	void Attach_DD_Surface(GraphicBufferClass *attach_buffer);
+	void Attach_DD_Surface(GraphicBufferClass *attach_buffer) {};
 	bool Lock(void);
 	bool Unlock(void);
 
