@@ -323,7 +323,6 @@ void GraphicBufferClass::Un_Init(void) {
 GraphicBufferClass::GraphicBufferClass(void) {
 	GraphicBuff = this; // Get a pointer to our self
 	VideoSurfacePtr = NULL;
-	memset(&VideoSurfaceDescription, 0, sizeof(DDSURFACEDESC));
 }
 
 /***************************************************************************
