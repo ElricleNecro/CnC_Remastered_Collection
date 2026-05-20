@@ -228,42 +228,11 @@ bool GraphicViewPortClass::Change(int x, int y, int w, int h) {
  *   10/09/1995     : Created.                                             *
  *=========================================================================*/
 void GraphicBufferClass::DD_Init(GBC_Enum flags) {
-	//
-	// Create the direct draw surface description
-	//
-	memset(&VideoSurfaceDescription, 0, sizeof(VideoSurfaceDescription));
-
-	VideoSurfaceDescription.dwSize = sizeof(VideoSurfaceDescription);
-	VideoSurfaceDescription.dwFlags = DDSD_CAPS;
-	VideoSurfaceDescription.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
-
-	if (!(flags & GBC_VISIBLE)) {
-		VideoSurfaceDescription.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
-		VideoSurfaceDescription.dwFlags |= DDSD_HEIGHT | DDSD_WIDTH;
-		VideoSurfaceDescription.dwHeight = Height;
-		VideoSurfaceDescription.dwWidth = Width;
-	}
-
-	//
-	// Need to set the DDSCAPS_MODEX  flag if we want a 320 wide mode
-	//
-	if (Width == 320) {
-		VideoSurfaceDescription.ddsCaps.dwCaps |= DDSCAPS_MODEX;
-	}
-
-	//
-	// Call CreateSurface
-	//
-	DirectDrawObject->CreateSurface(&VideoSurfaceDescription, &VideoSurfacePtr, NULL);
-	AllSurfaces.Add_DD_Surface(VideoSurfacePtr);
-
-	if (GBC_VISIBLE & flags) {
-		PaletteSurface = VideoSurfacePtr;
-	}
+	this->VideoSurfacePtr = rendering::GRenderer->create_surface(this->Width, this->Height);
 
 	Allocated = false; //	even if system alloced, dont flag it cuz
 	//   we dont want it freed.
-	IsDirectDraw = true; //	flag it as a video surface
+	IsDirectDraw = false; //	flag it as a video surface
 	Offset = NOT_LOCKED; //	flag it as unavailable for reading or writing
 	LockCount = 0; //  surface is not locked
 }
@@ -333,21 +302,11 @@ void GraphicBufferClass::Init(int w, int h, void *buffer, long size, GBC_Enum fl
  *=============================================================================================*/
 
 void GraphicBufferClass::Un_Init(void) {
-	if (IsDirectDraw) {
-		if (VideoSurfacePtr) {
-			while (LockCount) {
-				if (VideoSurfacePtr->Unlock(NULL) == DDERR_SURFACELOST) {
-					if (Gbuffer_Focus_Loss_Function) {
-						Gbuffer_Focus_Loss_Function();
-					}
-					AllSurfaces.Restore_Surfaces();
-				}
-			}
-
-			AllSurfaces.Remove_DD_Surface(VideoSurfacePtr);
-			VideoSurfacePtr->Release();
-			VideoSurfacePtr = NULL;
+	if (VideoSurfacePtr) {
+		while (LockCount) {
+			this->VideoSurfacePtr->unlock();
 		}
+		VideoSurfacePtr.reset();
 	}
 }
 
