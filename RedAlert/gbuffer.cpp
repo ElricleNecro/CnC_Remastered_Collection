@@ -49,6 +49,7 @@
 
 #include "gbuffer.h"
 #include "misc.h"
+#include "renderer.h"
 
 int TotalLocks;
 bool AllowHardwareBlitFills = true;
@@ -450,26 +451,20 @@ extern void Block_Mouse(GraphicBufferClass *buffer);
 extern void Unblock_Mouse(GraphicBufferClass *buffer);
 
 bool GraphicBufferClass::Lock(void) {
-	HRESULT result;
+	bool result;
 	int restore_attempts = 0;
-
-	//
-	// If its not a direct draw surface then the lock is always sucessful.
-	//
-	if (!IsDirectDraw)
-		return (true);
 
 	/*
 	** If the video surface pointer is null then return
 	*/
 	if (!VideoSurfacePtr)
-		return (false);
+		return false;
 
 	/*
 	** If we dont have focus then return failure
 	*/
 	if (!GameInFocus)
-		return (false);
+		return false;
 
 	Block_Mouse(this);
 
@@ -479,46 +474,39 @@ bool GraphicBufferClass::Lock(void) {
 	if (LockCount) {
 		LockCount++;
 		Unblock_Mouse(this);
-		return (true);
+		return true;
 	}
 
 	//
 	// If it isn't locked at all then we will have to request that Direct
 	// Draw actually lock the surface.
 	//
-
 	if (VideoSurfacePtr) {
 		while (!LockCount && restore_attempts < 2) {
-			result = VideoSurfacePtr->Lock(NULL, &(VideoSurfaceDescription), DDLOCK_WAIT, NULL);
+			void *pixels;
+			result = VideoSurfacePtr->lock(&pixels, &this->Pitch);
 
-			switch (result) {
-			case DD_OK:
-				Offset = (unsigned long)VideoSurfaceDescription.lpSurface;
-				Pitch = VideoSurfaceDescription.lPitch;
+			if (result) {
+				Offset = (long)pixels;
 				Pitch -= Width;
 				LockCount++; // increment count so we can track if
 				TotalLocks++; // Total number of times we have locked (for debugging)
 				// Colour_Debug (1);
 				Unblock_Mouse(this);
-				return (true); // we locked it multiple times.
-
-			case DDERR_SURFACELOST:
+				return true; // we locked it multiple times.
+			} else {
 				if (Gbuffer_Focus_Loss_Function) {
 					Gbuffer_Focus_Loss_Function();
 				}
-				AllSurfaces.Restore_Surfaces();
 				restore_attempts++;
 				break;
-
-			default:
-				Unblock_Mouse(this);
-				return (false);
 			}
 		}
 	}
+
 	// Colour_Debug(1);
 	Unblock_Mouse(this);
-	return (false); // Return false because we couldnt lock or restore the surface
+	return false; // Return false because we couldnt lock or restore the surface
 }
 
 /***************************************************************************
