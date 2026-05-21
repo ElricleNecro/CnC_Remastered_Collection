@@ -410,7 +410,8 @@ inline long GraphicViewPortClass::Size_Of_Region(int w, int h) {
  *=========================================================================*/
 inline void GraphicViewPortClass::Put_Pixel(int x, int y, unsigned char color) {
 	if (Lock()) {
-		Buffer_Put_Pixel(this, x, y, color);
+		auto *ptr = reinterpret_cast<uint8_t *>(Offset);
+		ptr[y * (this->Width + this->XAdd + this->Pitch) + x] = color;
 	}
 	Unlock();
 }
@@ -431,10 +432,11 @@ inline int GraphicViewPortClass::Get_Pixel(int x, int y) {
 	int return_code = 0;
 
 	if (Lock()) {
-		return_code = (Buffer_Get_Pixel(this, x, y));
+		auto *ptr = reinterpret_cast<uint8_t *>(Offset);
+		return_code = ptr[y * (this->Width + this->XAdd + this->Pitch) + x];
 	}
 	Unlock();
-	return (return_code);
+	return return_code;
 }
 
 /***************************************************************************
