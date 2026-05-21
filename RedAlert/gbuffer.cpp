@@ -481,27 +481,14 @@ bool GraphicBufferClass::Lock(void) {
 	// If it isn't locked at all then we will have to request that Direct
 	// Draw actually lock the surface.
 	//
-	if (VideoSurfacePtr) {
-		while (!LockCount && restore_attempts < 2) {
-			void *pixels;
-			result = VideoSurfacePtr->lock(&pixels, &this->Pitch);
-
-			if (result) {
-				Offset = (long)pixels;
-				Pitch -= Width;
-				LockCount++; // increment count so we can track if
-				TotalLocks++; // Total number of times we have locked (for debugging)
-				// Colour_Debug (1);
-				Unblock_Mouse(this);
-				return true; // we locked it multiple times.
-			} else {
-				if (Gbuffer_Focus_Loss_Function) {
-					Gbuffer_Focus_Loss_Function();
-				}
-				restore_attempts++;
-				break;
-			}
-		}
+	if (void *pixels; VideoSurfacePtr->lock(&pixels, &this->Pitch)) {
+		Offset = (long)pixels;
+		Pitch -= Width;
+		LockCount++; // increment count so we can track if
+		TotalLocks++; // Total number of times we have locked (for debugging)
+		// Colour_Debug (1);
+		Unblock_Mouse(this);
+		return true; // we locked it multiple times.
 	}
 
 	// Colour_Debug(1);
@@ -520,14 +507,13 @@ bool GraphicBufferClass::Lock(void) {
  *   10/09/1995     : Created.                                             *
  *   10/09/1995     : Code stolen from Steve Tall                          *
  *=========================================================================*/
-
 bool GraphicBufferClass::Unlock(void) {
 	//
 	// If there is no lock count or this is not a direct draw surface
 	// then just return true as there is no harm done.
 	//
-	if (!(LockCount && IsDirectDraw)) {
-		return (true);
+	if (!LockCount) {
+		return true;
 	}
 
 	//
@@ -536,19 +522,19 @@ bool GraphicBufferClass::Unlock(void) {
 	//
 	if (LockCount == 1 && VideoSurfacePtr) {
 		Block_Mouse(this);
-		if (VideoSurfacePtr->Unlock(NULL) != DD_OK) {
+		if (!VideoSurfacePtr->unlock()) {
 			Unblock_Mouse(this);
-			return (false);
+			return false;
 		} else {
 			Offset = NOT_LOCKED;
 			LockCount--;
 			Unblock_Mouse(this);
-			return (true);
+			return true;
 		}
 	}
 	// Colour_Debug (0);
 	LockCount--;
-	return (true);
+	return true;
 }
 
 extern "C" long __cdecl
