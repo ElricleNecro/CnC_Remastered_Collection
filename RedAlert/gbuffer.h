@@ -348,22 +348,22 @@ protected:
 inline bool GraphicViewPortClass::Lock() {
 	bool lock = GraphicBuff->Lock();
 	if (!lock)
-		return (false);
+		return false;
 
 	if (this != GraphicBuff) {
 		Attach(GraphicBuff, XPos, YPos, Width, Height);
 	}
-	return (true);
+	return true;
 };
 
 inline bool GraphicViewPortClass::Unlock() {
 	bool unlock = GraphicBuff->Unlock();
 	if (!unlock)
-		return (false);
+		return false;
 	if (this != GraphicBuff && IsDirectDraw && !GraphicBuff->LockCount) {
 		Offset = 0;
 	}
-	return (true);
+	return true;
 };
 
 /***************************************************************************
@@ -377,7 +377,7 @@ inline bool GraphicViewPortClass::Unlock() {
  *   08/22/1994 SKB : Created.                                             *
  *=========================================================================*/
 inline GraphicBufferClass *GraphicViewPortClass::Get_Graphic_Buffer(void) {
-	return (GraphicBuff);
+	return GraphicBuff;
 }
 
 /***************************************************************************
