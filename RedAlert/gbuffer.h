@@ -393,7 +393,7 @@ inline GraphicBufferClass *GraphicViewPortClass::Get_Graphic_Buffer(void) {
  *   03/01/1995 BWG : Created.                                             *
  *=========================================================================*/
 inline long GraphicViewPortClass::Size_Of_Region(int w, int h) {
-	return Buffer_Size_Of_Region(this, w, h);
+	return (long)(h - 1) * (this->Width + this->XAdd + this->Pitch) + w;
 }
 
 /***************************************************************************
