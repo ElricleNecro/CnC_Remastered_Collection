@@ -452,10 +452,8 @@ inline int GraphicViewPortClass::Get_Pixel(int x, int y) {
  *   01/06/1995 PWG : Created.                                             *
  *=========================================================================*/
 inline void GraphicViewPortClass::Clear(unsigned char color) {
-	if (Lock()) {
-		Buffer_Clear(this, color);
-	}
-	Unlock();
+	SDL_Rect rect = { this->XPos, this->YPos, this->Width, this->Height };
+	rendering::GRenderer->fill_rect(this->GraphicBuff->get_surface(), &rect, color);
 }
 
 /***************************************************************************
