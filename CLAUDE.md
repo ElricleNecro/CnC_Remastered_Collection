@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a port of the Command & Conquer Remastered Collection (Red Alert and Tiberian Dawn games + map editor) from Windows-only (DirectDraw/Win32) to cross-platform (SDL3 + Linux/Windows, targeting Mac compatibility if feasible). The project is educational and values pedagogical clarity over pure optimization.
 
 **Target audience for code discussion**: PhD-level in non-CS fields with C/C++ hobby experience; familiar with Python/Java in industry; gaps in low-level systems programming.
+This is mainly an educational project, so explaination and guidance are welcome, but the user write the code himself.
 
 ## Build System & Commands
 
