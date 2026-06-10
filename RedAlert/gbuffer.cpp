@@ -758,16 +758,16 @@ long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, uint8_t 
 		return 0;
 
 	auto *view = static_cast<GraphicViewPortClass const *>(thisptr);
-	const int vp_width  = view->Get_Width();
+	const int vp_width = view->Get_Width();
 	const int vp_height = view->Get_Height();
-	const int stride    = vp_width + view->Get_XAdd() + view->Get_Pitch();
+	const int stride = vp_width + view->Get_XAdd() + view->Get_Pitch();
 	uint8_t *const vp_base = reinterpret_cast<uint8_t *>(view->Get_Offset());
 
-	const uint8_t *base        = static_cast<const uint8_t *>(FontPtr);
-	const uint8_t  *font_info   = base + *reinterpret_cast<const uint16_t *>(base + FONTINFOBLOCK);
+	const uint8_t *base = static_cast<const uint8_t *>(FontPtr);
+	const uint8_t *font_info = base + *reinterpret_cast<const uint16_t *>(base + FONTINFOBLOCK);
 	const uint16_t *font_offset = reinterpret_cast<const uint16_t *>(base + *reinterpret_cast<const uint16_t *>(base + FONTOFFSETBLOCK));
-	const uint8_t  *font_width  = base + *reinterpret_cast<const uint16_t *>(base + FONTWIDTHBLOCK);
-	const uint8_t  *font_height = base + *reinterpret_cast<const uint16_t *>(base + FONTHEIGHTBLOCK);
+	const uint8_t *font_width = base + *reinterpret_cast<const uint16_t *>(base + FONTWIDTHBLOCK);
+	const uint8_t *font_height = base + *reinterpret_cast<const uint16_t *>(base + FONTHEIGHTBLOCK);
 
 	const uint8_t max_height = font_info[FONTINFOMAXHEIGHT];
 	if (y + max_height > vp_height)
@@ -776,11 +776,11 @@ long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, uint8_t 
 	ColorXlat[1] = ColorXlat[16] = fcolor;
 	ColorXlat[0] = bcolor;
 
-	const int original_x  = x;
-	int       cur_x        = x;
-	int       cur_y        = y;
+	const int original_x = x;
+	int cur_x = x;
+	int cur_y = y;
 	// y_pixel in asm: tracks where the *next* line would start (initially y + max_height)
-	int       next_line_y  = y + max_height;
+	int next_line_y = y + max_height;
 
 	uint8_t *startdraw = vp_base + cur_y * stride + cur_x;
 
@@ -790,10 +790,10 @@ long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, uint8_t 
 		const int line_h = max_height + FontYSpacing;
 		if (next_line_y + line_h > vp_height)
 			return false;
-		cur_y       += line_h;
+		cur_y += line_h;
 		next_line_y += line_h;
-		cur_x        = new_x;
-		startdraw    = vp_base + cur_y * stride + cur_x;
+		cur_x = new_x;
+		startdraw = vp_base + cur_y * stride + cur_x;
 		return true;
 	};
 
@@ -809,7 +809,7 @@ long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, uint8_t 
 			continue;
 		}
 
-		const int char_w  = font_width[c];
+		const int char_w = font_width[c];
 		const int advance = char_w + FontXSpacing;
 
 		// Word-wrap: character doesn't fit on this line — back up and feed.
@@ -821,13 +821,13 @@ long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, uint8_t 
 			continue;
 		}
 
-		const uint8_t top_blank   = font_height[c * 2];
+		const uint8_t top_blank = font_height[c * 2];
 		const uint8_t data_height = font_height[c * 2 + 1];
-		const uint8_t bot_blank   = max_height - top_blank - data_height;
+		const uint8_t bot_blank = max_height - top_blank - data_height;
 
 		uint8_t *dst = startdraw;
-		startdraw   += advance;
-		cur_x       += advance;
+		startdraw += advance;
+		cur_x += advance;
 
 		const uint8_t bg = ColorXlat[0];
 
@@ -851,12 +851,14 @@ long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, uint8_t 
 			int col = 0;
 			while (col < char_w) {
 				const uint8_t byte = *char_data++;
-				const uint8_t lo   = ColorXlat[byte & 0x0F];
-				const uint8_t hi   = ColorXlat[byte & 0xF0];
-				if (lo) dst[col] = lo;
+				const uint8_t lo = ColorXlat[byte & 0x0F];
+				const uint8_t hi = ColorXlat[byte & 0xF0];
+				if (lo)
+					dst[col] = lo;
 				col++;
 				if (col < char_w) {
-					if (hi) dst[col] = hi;
+					if (hi)
+						dst[col] = hi;
 					col++;
 				}
 			}
