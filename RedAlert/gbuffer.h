@@ -155,6 +155,7 @@ GraphicViewPortClass *Set_Logic_Page(GraphicViewPortClass *ptr);
 GraphicViewPortClass *Set_Logic_Page(GraphicViewPortClass &ptr);
 
 long __cdecl Buffer_To_Buffer(const void *thisptr, int x, int y, int width, int height, uint8_t *const buff, const long size);
+long __cdecl Buffer_To_Page(const int x_pixel, const int y_pixel, const int pixel_width, const int pixel_height, const uint8_t *src, void *dest);
 void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object,
 				    void const *icondata,
 				    int icon,

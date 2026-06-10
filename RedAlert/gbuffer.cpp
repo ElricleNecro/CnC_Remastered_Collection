@@ -538,8 +538,6 @@ bool GraphicBufferClass::Unlock(void) {
 	return true;
 }
 
-extern "C" long __cdecl
-Buffer_To_Page(const int x_pixel, const int y_pixel, const int pixel_width, const int pixel_height, const uint8_t *src, void *dest) {
 long __cdecl Buffer_To_Buffer(const void *thisptr, int x, int y, int width, int height, uint8_t *const buff, const long size) {
 	if (!thisptr)
 		return 0;
@@ -588,6 +586,7 @@ long __cdecl Buffer_To_Buffer(const void *thisptr, int x, int y, int width, int 
 	return 0;
 }
 
+long __cdecl Buffer_To_Page(const int x_pixel, const int y_pixel, const int pixel_width, const int pixel_height, const uint8_t *src, void *dest) {
 	if (!src)
 		return 0;
 
@@ -620,8 +619,8 @@ long __cdecl Buffer_To_Buffer(const void *thisptr, int x, int y, int width, int 
 		return 0;
 
 	const int stride = w + view->Get_XAdd() + view->Get_Pitch();
-	auto *dst = static_cast<uint8_t *>(view->Get_Offset()) + y0 * stride + x0;
-	auto *src_row = static_cast<uint8_t *>(src) + src_y * pixel_width + src_x;
+	auto *dst = reinterpret_cast<uint8_t *>(view->Get_Offset()) + y0 * stride + x0;
+	auto *src_row = src + src_y * pixel_width + src_x;
 
 	for (std::size_t row = 0; row < copy_h; row++) {
 		std::memcpy(dst, src_row, copy_w);
