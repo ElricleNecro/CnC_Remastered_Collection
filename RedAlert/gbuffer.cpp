@@ -48,6 +48,7 @@
 #include <cstring>
 
 #include "compat.h"
+#include "font.h"
 #include "gbuffer.h"
 #include "misc.h"
 #include "renderer.h"
