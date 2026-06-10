@@ -35,6 +35,7 @@
 #ifndef FONT_H
 #define FONT_H
 
+#include <cstring>
 #include "gbuffer.h"
 
 //////////////////////////////////////// Defines //////////////////////////////////////////
@@ -88,15 +89,13 @@ void *__cdecl Load_Font(char const *name);
 /* The following prototypes are for the file: TEXTPRNT.ASM	  					*/
 /*=========================================================================*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-void __cdecl Set_Font_Palette_Range(void const *palette, INT start_idx, INT end_idx);
-
-#ifdef __cplusplus
+inline void *__cdecl Get_Font_Palette_Ptr(void) {
+	return &ColorXlat[0];
 }
-#endif
+
+inline void __cdecl Set_Font_Palette_Range(void const *palette, const INT start_idx, const INT end_idx) {
+	std::memcpy(&ColorXlat[start_idx], palette, end_idx - start_idx + 1);
+}
 
 /*=========================================================================*/
 
