@@ -36,6 +36,9 @@
 #define COMPAT_H
 
 #include <cstddef>
+
+#include "utils.h"
+
 #define BuffType BufferClass
 // #define movmem(a,b,c) memmove(b,a,c)
 #define ShapeBufferSize _ShapeBufferSize
