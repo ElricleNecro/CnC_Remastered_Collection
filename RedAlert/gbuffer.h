@@ -187,26 +187,28 @@ public:
 	/*===================================================================*/
 	/* define functions to get at the private data members               */
 	/*===================================================================*/
-	inline long Get_Offset(void) {
+	inline long Get_Offset(void) const {
 		return (Offset);
 	};
-	inline int Get_Height(void) {
+	inline int Get_Height(void) const {
 		return (Height);
 	};
-	inline int Get_Width(void) {
+	inline int Get_Width(void) const {
 		return (Width);
 	};
-	inline int Get_XAdd(void) {
+	inline int Get_XAdd(void) const {
 		return (XAdd);
 	};
-	inline int Get_XPos(void) {
+	inline int Get_XPos(void) const {
 		return (XPos);
 	};
-	inline int Get_YPos(void) {
+	inline int Get_YPos(void) const {
 		return (YPos);
 	};
-	int Get_Pitch(void);
-	inline bool Get_IsDirectDraw(void) {
+	inline int Get_Pitch(void) const {
+		return static_cast<int>(Pitch);
+	}
+	inline bool Get_IsDirectDraw(void) const {
 		return false;
 	};
 	GraphicBufferClass *Get_Graphic_Buffer(void);
@@ -925,10 +927,6 @@ inline void GraphicViewPortClass::Remap(void *remap) {
 		Buffer_Remap(this, 0, 0, Width, Height, remap);
 	}
 	Unlock();
-}
-
-inline int GraphicViewPortClass::Get_Pitch(void) {
-	return (Pitch);
 }
 /*=========================================================================*/
 /* The following BufferClass functions are defined here because they act	*/
