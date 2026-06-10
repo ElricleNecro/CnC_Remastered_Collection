@@ -35,6 +35,7 @@
 #ifndef COMPAT_H
 #define COMPAT_H
 
+#include <cstddef>
 #define BuffType BufferClass
 // #define movmem(a,b,c) memmove(b,a,c)
 #define ShapeBufferSize _ShapeBufferSize
@@ -120,7 +121,6 @@ typedef enum MenuIndexType { MENUX, MENUY, ITEMWIDTH, ITEMSHIGH, MSELECTED, NORM
 #define LTGRAY LTGREY
 
 class IconsetClass;
-#ifndef WIN32
 typedef struct {
 	short Width; // Width of icons (pixels).
 	short Height; // Height of icons (pixels).
@@ -130,15 +130,14 @@ typedef struct {
 	short MapHeight; // Height of map (in icons).
 	long Size; // Size of entire iconset memory block.
 	long Icons; // Offset from buffer start to icon data.
-		//	unsigned char * Icons;	// Offset from buffer start to icon data.
+	//	unsigned char * Icons;	// Offset from buffer start to icon data.
 	long Palettes; // Offset from buffer start to palette data.
 	long Remaps; // Offset from buffer start to remap index data.
 	long TransFlag; // Offset for transparency flag table.
 	long ColorMap; // Offset for color control value table.
 	long Map; // Icon map offset (if present).
-		//	unsigned char * Map;				// Icon map offset (if present).
+	//	unsigned char * Map;				// Icon map offset (if present).
 } IControl_Type;
-#endif
 
 inline int Get_IconSet_MapWidth(void const *data) {
 	if (data) {
@@ -166,58 +165,58 @@ public:
 	/*
 	**	Query functions.
 	*/
-	int Map_Width(void) const {
+	inline int Map_Width(void) const {
 		return (MapWidth);
 	};
-	int Map_Height(void) const {
+	inline int Map_Height(void) const {
 		return (MapHeight);
 	};
-	unsigned char *Control_Map(void) {
+	inline unsigned char *Control_Map(void) {
 		return ((unsigned char *)this + ColorMap);
 	};
-	unsigned char const *Control_Map(void) const {
+	inline unsigned char const *Control_Map(void) const {
 		return ((unsigned char const *)this + ColorMap);
 	};
-	int Icon_Count(void) const {
+	inline int Icon_Count(void) const {
 		return (Count);
 	};
-	int Pixel_Width(void) const {
+	inline int Pixel_Width(void) const {
 		return (Width);
 	};
-	int Pixel_Height(void) const {
+	inline int Pixel_Height(void) const {
 		return (Height);
 	};
-	int Total_Size(void) const {
+	inline int Total_Size(void) const {
 		return (Size);
 	};
-	unsigned char const *Palette_Data(void) const {
+	inline unsigned char const *Palette_Data(void) const {
 		return ((unsigned char const *)this + Palettes);
 	};
-	unsigned char *Palette_Data(void) {
+	inline unsigned char *Palette_Data(void) {
 		return ((unsigned char *)this + Palettes);
 	};
-	unsigned char const *Icon_Data(void) const {
+	inline unsigned char const *Icon_Data(void) const {
 		return ((unsigned char const *)this + Icons);
 	};
-	unsigned char *Icon_Data(void) {
+	inline unsigned char *Icon_Data(void) {
 		return ((unsigned char *)this + Icons);
 	};
-	unsigned char const *Map_Data(void) const {
+	inline unsigned char const *Map_Data(void) const {
 		return ((unsigned char const *)this + Map);
 	};
-	unsigned char *Map_Data(void) {
+	inline unsigned char *Map_Data(void) {
 		return ((unsigned char *)this + Map);
 	};
-	unsigned char const *Remap_Data(void) const {
+	inline unsigned char const *Remap_Data(void) const {
 		return ((unsigned char const *)this + Remaps);
 	};
-	unsigned char *Remap_Data(void) {
+	inline unsigned char *Remap_Data(void) {
 		return ((unsigned char *)this + Remaps);
 	};
-	unsigned char const *Trans_Data(void) const {
+	inline unsigned char const *Trans_Data(void) const {
 		return ((unsigned char const *)this + TransFlag);
 	};
-	unsigned char *Trans_Data(void) {
+	inline unsigned char *Trans_Data(void) {
 		return ((unsigned char *)this + TransFlag);
 	};
 
@@ -227,7 +226,7 @@ public:
 private:
 	IconsetClass &operator=(IconsetClass const &);
 	IconsetClass(void);
-	static void *operator new(size_t);
+	static void *operator new(std::size_t);
 };
 
 #endif
