@@ -101,7 +101,7 @@ namespace rendering {
 			SDL_DestroySurface(this->texture);
 		}
 
-		virtual inline SDL_PixelFormat format(void) {
+		inline SDL_PixelFormat format(void) override {
 			return this->texture->format;
 		};
 
@@ -112,13 +112,13 @@ namespace rendering {
 			return this->texture != nullptr;
 		}
 
-		virtual void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color);
-		virtual void blit(SDL_Renderer *renderer,
-				  const std::unique_ptr<RenderSurface> &src,
-				  const SDL_Rect *src_rect,
-				  const SDL_Rect *dst_rect,
-				  const bool transparent = false,
-				  const char *remap = nullptr);
+		void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color) override;
+		void blit(SDL_Renderer *renderer,
+			  const std::unique_ptr<RenderSurface> &src,
+			  const SDL_Rect *src_rect,
+			  const SDL_Rect *dst_rect,
+			  const bool transparent = false,
+			  const char *remap = nullptr) override;
 
 	private:
 		RenderToSurface(int w, int h) : RenderSurface(w, h) {
@@ -139,7 +139,7 @@ namespace rendering {
 			SDL_DestroyTexture(this->texture);
 		}
 
-		virtual inline SDL_PixelFormat format(void) {
+		inline SDL_PixelFormat format(void) override {
 			return this->texture->format;
 		};
 
@@ -150,13 +150,13 @@ namespace rendering {
 			return this->texture != nullptr;
 		}
 
-		virtual void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color);
-		virtual void blit(SDL_Renderer *renderer,
-				  const std::unique_ptr<RenderSurface> &src,
-				  const SDL_Rect *src_rect,
-				  const SDL_Rect *dst_rect,
-				  const bool transparent = false,
-				  const char *remap = nullptr);
+		void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color) override;
+		void blit(SDL_Renderer *renderer,
+			  const std::unique_ptr<RenderSurface> &src,
+			  const SDL_Rect *src_rect,
+			  const SDL_Rect *dst_rect,
+			  const bool transparent = false,
+			  const char *remap = nullptr) override;
 
 	private:
 		RenderToTexture(SDL_Renderer *renderer, int w, int h) : RenderSurface(w, h) {
