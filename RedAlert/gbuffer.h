@@ -105,8 +105,7 @@
  *   GVPC::Print -- stub function to print a long on a graphic view port          *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -        */
 
-#ifndef GBUFFER_H
-#define GBUFFER_H
+#pragma once
 
 #include <charconv>
 #include <cstdlib>
@@ -119,8 +118,6 @@
 #include "renderer.h"
 #include "utils.h"
 #include "ww_win.h"
-
-#include "iconcach.h"
 
 #ifdef Size_Of_Region
 #undef Size_Of_Region
@@ -1029,7 +1026,6 @@ inline long BufferClass::To_Page(int x, int y, int w, int h, GraphicViewPortClas
 	return (return_code);
 }
 
-#endif
 inline void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap) {
 	auto *view = static_cast<GraphicViewPortClass const *>(this_object);
 	Buffer_Draw_Stamp_Clip(this_object, icondata, icon, x_pixel, y_pixel, remap, 0, 0, view->Get_Width(), view->Get_Height());
