@@ -1022,7 +1022,3 @@ inline void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icond
 
 extern GraphicViewPortClass *LogicPage;
 extern bool AllowHardwareBlitFills;
-extern void const *FontPtr;
-extern int FontXSpacing;
-extern int FontYSpacing;
-extern uint8_t ColorXlat[256];

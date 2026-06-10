@@ -52,6 +52,16 @@
 #define FONTINFOMAXHEIGHT 4
 #define FONTINFOMAXWIDTH 5
 
+//////////////////////////////////////// External varables ///////////////////////////////////////
+extern "C" int FontXSpacing;
+extern "C" int FontYSpacing;
+extern char FontWidth;
+extern char FontHeight;
+extern char *FontWidthBlockPtr;
+
+extern "C" void const *FontPtr;
+extern uint8_t ColorXlat[];
+
 //////////////////////////////////////// Prototypes //////////////////////////////////////////
 
 /*=========================================================================*/
@@ -89,14 +99,5 @@ void __cdecl Set_Font_Palette_Range(void const *palette, INT start_idx, INT end_
 #endif
 
 /*=========================================================================*/
-
-//////////////////////////////////////// External varables ///////////////////////////////////////
-extern "C" int FontXSpacing;
-extern "C" int FontYSpacing;
-extern char FontWidth;
-extern char FontHeight;
-extern char *FontWidthBlockPtr;
-
-extern "C" void const *FontPtr;
 
 #endif // FONT_H
