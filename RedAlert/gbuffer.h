@@ -258,7 +258,15 @@ public:
 	/* graphic buffer.                                                   */
 	/*===================================================================*/
 	void Draw_Line(int sx, int sy, int dx, int dy, unsigned char color);
-	void Draw_Rect(int sx, int sy, int dx, int dy, unsigned char color);
+	inline void Draw_Rect(int x1_pixel, int y1_pixel, int x2_pixel, int y2_pixel, unsigned char color) {
+		this->Lock();
+		this->Draw_Line(x1_pixel, y1_pixel, x2_pixel, y1_pixel, color);
+		this->Draw_Line(x1_pixel, y2_pixel, x2_pixel, y2_pixel, color);
+		this->Draw_Line(x1_pixel, y1_pixel, x1_pixel, y2_pixel, color);
+		this->Draw_Line(x2_pixel, y1_pixel, x2_pixel, y2_pixel, color);
+		this->Unlock();
+	};
+
 	void Fill_Rect(int sx, int sy, int dx, int dy, unsigned char color);
 	void Fill_Quad(void *span_buff, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int color);
 	void Remap(int sx, int sy, int width, int height, void *remap);
