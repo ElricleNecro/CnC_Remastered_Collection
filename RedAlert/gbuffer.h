@@ -155,6 +155,17 @@ GraphicViewPortClass *Set_Logic_Page(GraphicViewPortClass *ptr);
 GraphicViewPortClass *Set_Logic_Page(GraphicViewPortClass &ptr);
 
 long __cdecl Buffer_To_Buffer(const void *thisptr, int x, int y, int width, int height, uint8_t *const buff, const long size);
+void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object,
+				    void const *icondata,
+				    int icon,
+				    int x_pixel,
+				    int y_pixel,
+				    void const *remap,
+				    int min_x,
+				    int min_y,
+				    int max_x,
+				    int max_y);
+void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap);
 /*=========================================================================*/
 /* GraphicViewPortClass - Holds viewport information on a viewport which   */
 /*    has been attached to a GraphicBuffer.  A viewport is effectively a   */
@@ -793,47 +804,18 @@ inline void GraphicViewPortClass::Draw_Stamp(void const *icondata, int icon, int
  * HISTORY:                                                                *
  *    07/31/1995 BWG : Created.                                            *
  *=========================================================================*/
-extern bool IconCacheAllowed;
 inline void GraphicViewPortClass::Draw_Stamp(void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap, int clip_window) {
-	int cache_index = -1;
-
-	int drewit = 0;
-	if (IconCacheAllowed) {
-		if (IsDirectDraw) {
-			if (!remap) {
-				cache_index = Is_Icon_Cached(icondata, icon);
-			}
-
-			if (cache_index != -1) {
-				if (CachedIcons[cache_index].Get_Is_Cached()) {
-					CachedIcons[cache_index].Draw_It(GraphicBuff->Get_DD_Surface(),
-									 x_pixel,
-									 y_pixel,
-									 WindowList[clip_window][WINDOWX] + XPos,
-									 WindowList[clip_window][WINDOWY] + YPos,
-									 WindowList[clip_window][WINDOWWIDTH],
-									 WindowList[clip_window][WINDOWHEIGHT]);
-					CachedIconsDrawn++;
-					drewit = 1;
-				}
-			}
-		}
-	}
-
-	if (drewit == 0) {
-		if (Lock()) {
-			UnCachedIconsDrawn++;
-			Buffer_Draw_Stamp_Clip(this,
-					       icondata,
-					       icon,
-					       x_pixel,
-					       y_pixel,
-					       remap,
-					       WindowList[clip_window][WINDOWX],
-					       WindowList[clip_window][WINDOWY],
-					       WindowList[clip_window][WINDOWWIDTH],
-					       WindowList[clip_window][WINDOWHEIGHT]);
-		}
+	if (Lock()) {
+		Buffer_Draw_Stamp_Clip(this,
+				       icondata,
+				       icon,
+				       x_pixel,
+				       y_pixel,
+				       remap,
+				       WindowList[clip_window][WINDOWX],
+				       WindowList[clip_window][WINDOWY],
+				       WindowList[clip_window][WINDOWWIDTH],
+				       WindowList[clip_window][WINDOWHEIGHT]);
 	}
 	Unlock();
 }
@@ -1047,3 +1029,7 @@ inline long BufferClass::To_Page(int x, int y, int w, int h, GraphicViewPortClas
 }
 
 #endif
+inline void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap) {
+	auto *view = static_cast<GraphicViewPortClass const *>(this_object);
+	Buffer_Draw_Stamp_Clip(this_object, icondata, icon, x_pixel, y_pixel, remap, 0, 0, view->Get_Width(), view->Get_Height());
+}

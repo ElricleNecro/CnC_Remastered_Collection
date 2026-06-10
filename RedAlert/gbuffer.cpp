@@ -47,6 +47,7 @@
 #include <cstdint>
 #include <cstring>
 
+#include "compat.h"
 #include "gbuffer.h"
 #include "misc.h"
 #include "renderer.h"
@@ -629,4 +630,101 @@ long __cdecl Buffer_To_Buffer(const void *thisptr, int x, int y, int width, int 
 	}
 
 	return 0;
+}
+
+void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object,
+				    void const *icondata,
+				    int icon,
+				    int x_pixel,
+				    int y_pixel,
+				    void const *remap,
+				    int min_x,
+				    int min_y,
+				    int max_x,
+				    int max_y) {
+	if (!icondata)
+		return;
+
+	// Parsing header:
+	auto *header = static_cast<IControl_Type const *>(icondata);
+	const int icon_w = header->Width;
+	const int icon_h = header->Height;
+	const int icon_count = header->Count;
+	auto *stamp = static_cast<uint8_t const *>(icondata) + header->Icons;
+	auto *is_trans = static_cast<uint8_t const *>(icondata) + header->TransFlag;
+	auto *map = header->Map ? static_cast<uint8_t const *>(icondata) + header->Map : nullptr;
+
+	// Logical to physical icon map:
+	if (map)
+		icon = map[icon];
+	if (icon >= icon_count)
+		return;
+
+	// Convert clip params:
+	max_x += min_x;
+	max_y += min_y;
+	x_pixel += min_x;
+	y_pixel += min_y;
+
+	// Early out if fully outside
+	if (x_pixel >= max_x || y_pixel >= max_y)
+		return;
+	if (x_pixel + icon_w <= min_x || y_pixel + icon_h <= min_y)
+		return;
+
+	// Clip source pointer and draw dimensions
+	auto *src = stamp + icon * icon_w * icon_h;
+	int iwidth = icon_w;
+	int rows = icon_h;
+
+	if (x_pixel < min_x) {
+		const int clip = min_x - x_pixel;
+		src += clip;
+		iwidth -= clip;
+		x_pixel = min_x;
+	}
+	if (x_pixel + iwidth > max_x)
+		iwidth = max_x - x_pixel;
+
+	int skip = icon_w - iwidth; // What we need to skip at the end of each row
+
+	if (y_pixel < min_y) {
+		const int clip = min_y - y_pixel;
+		src += clip * icon_w;
+		rows -= clip;
+		y_pixel = min_y;
+	}
+	if (y_pixel + rows > max_y)
+		rows = max_y - y_pixel;
+
+	if (iwidth <= 0 || rows <= 0)
+		return;
+
+	// Get destination pointer from locked viewport
+	auto *view = static_cast<GraphicViewPortClass const *>(this_object);
+	const int stride = view->Get_Width() + view->Get_XAdd() + view->Get_Pitch();
+	auto *dst = reinterpret_cast<uint8_t *>(view->Get_Offset()) + y_pixel * stride + x_pixel;
+	const int modulo = stride - iwidth;
+	auto *remap_8 = static_cast<uint8_t const *>(remap);
+
+	// Draw
+	if (remap_8) {
+		for (int row = 0; row < rows; row++, dst += modulo, src += skip) {
+			for (int col = 0; col < iwidth; col++, dst++, src++) {
+				uint8_t px = remap_8[*src];
+				if (px)
+					*dst = px;
+			}
+		}
+	} else if (!is_trans[icon]) {
+		for (int row = 0; row < rows; row++, dst += modulo, src += skip)
+			std::memcpy(dst, src, iwidth);
+	} else {
+		for (int row = 0; row < rows; row++, dst += modulo, src += skip) {
+			for (int col = 0; col < iwidth; col++, dst++, src++) {
+				if (*src)
+					*dst = *src;
+			}
+		}
+	}
 }
