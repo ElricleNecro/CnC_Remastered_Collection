@@ -164,6 +164,8 @@ void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object,
 				    int max_x,
 				    int max_y);
 void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icondata, int icon, int x_pixel, int y_pixel, void const *remap);
+long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, int fcolor, int bcolor);
+
 /*=========================================================================*/
 /* GraphicViewPortClass - Holds viewport information on a viewport which   */
 /*    has been attached to a GraphicBuffer.  A viewport is effectively a   */

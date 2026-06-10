@@ -727,3 +727,147 @@ void __cdecl Buffer_Draw_Stamp_Clip(void const *this_object,
 		}
 	}
 }
+
+void const *FontPtr = nullptr;
+int FontXSpacing = 0;
+int FontYSpacing = 0;
+// clang-format off
+uint8_t ColorXlat[256] = {
+	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+	0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x0A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x0D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+// clang-format on
+
+long __cdecl Buffer_Print(void *thisptr, const char *str, int x, int y, uint8_t fcolor, uint8_t bcolor) {
+	if (!FontPtr || !thisptr)
+		return 0;
+
+	auto *view = static_cast<GraphicViewPortClass const *>(thisptr);
+	const int vp_width  = view->Get_Width();
+	const int vp_height = view->Get_Height();
+	const int stride    = vp_width + view->Get_XAdd() + view->Get_Pitch();
+	uint8_t *const vp_base = reinterpret_cast<uint8_t *>(view->Get_Offset());
+
+	const uint8_t *base        = static_cast<const uint8_t *>(FontPtr);
+	const uint8_t  *font_info   = base + *reinterpret_cast<const uint16_t *>(base + FONTINFOBLOCK);
+	const uint16_t *font_offset = reinterpret_cast<const uint16_t *>(base + *reinterpret_cast<const uint16_t *>(base + FONTOFFSETBLOCK));
+	const uint8_t  *font_width  = base + *reinterpret_cast<const uint16_t *>(base + FONTWIDTHBLOCK);
+	const uint8_t  *font_height = base + *reinterpret_cast<const uint16_t *>(base + FONTHEIGHTBLOCK);
+
+	const uint8_t max_height = font_info[FONTINFOMAXHEIGHT];
+	if (y + max_height > vp_height)
+		return 0;
+
+	ColorXlat[1] = ColorXlat[16] = fcolor;
+	ColorXlat[0] = bcolor;
+
+	const int original_x  = x;
+	int       cur_x        = x;
+	int       cur_y        = y;
+	// y_pixel in asm: tracks where the *next* line would start (initially y + max_height)
+	int       next_line_y  = y + max_height;
+
+	uint8_t *startdraw = vp_base + cur_y * stride + cur_x;
+
+	// Shared line-feed logic: advance to next text line, reset x.
+	// Returns false (overflow) if the new line would not fit in the viewport.
+	auto do_line_feed = [&](int new_x) -> bool {
+		const int line_h = max_height + FontYSpacing;
+		if (next_line_y + line_h > vp_height)
+			return false;
+		cur_y       += line_h;
+		next_line_y += line_h;
+		cur_x        = new_x;
+		startdraw    = vp_base + cur_y * stride + cur_x;
+		return true;
+	};
+
+	while (const uint8_t c = static_cast<uint8_t>(*str++)) {
+		if (c == '\n') {
+			if (!do_line_feed(0))
+				return 0;
+			continue;
+		}
+		if (c == '\r') {
+			if (!do_line_feed(original_x))
+				return 0;
+			continue;
+		}
+
+		const int char_w  = font_width[c];
+		const int advance = char_w + FontXSpacing;
+
+		// Word-wrap: character doesn't fit on this line — back up and feed.
+		// Resets to original_x (same as CR), matching asm force_line_feed behaviour.
+		if (cur_x + advance > vp_width) {
+			--str;
+			if (!do_line_feed(original_x))
+				return 0;
+			continue;
+		}
+
+		const uint8_t top_blank   = font_height[c * 2];
+		const uint8_t data_height = font_height[c * 2 + 1];
+		const uint8_t bot_blank   = max_height - top_blank - data_height;
+
+		uint8_t *dst = startdraw;
+		startdraw   += advance;
+		cur_x       += advance;
+
+		const uint8_t bg = ColorXlat[0];
+
+		// Top blank rows
+		if (top_blank > 0) {
+			if (bg) {
+				for (int r = 0; r < top_blank; r++, dst += stride)
+					for (int col = 0; col < char_w; col++)
+						dst[col] = bg;
+			} else {
+				dst += top_blank * stride;
+			}
+		}
+
+		// Data rows: each source byte encodes two pixels as nibbles.
+		// Low nibble  → ColorXlat[byte & 0x0F]  (left pixel)
+		// High nibble → ColorXlat[byte & 0xF0]  (right pixel, kept in high position
+		//               so it indexes the correct row of the 16×16 ColorXlat table)
+		const uint8_t *char_data = base + font_offset[c];
+		for (int r = 0; r < data_height; r++, dst += stride) {
+			int col = 0;
+			while (col < char_w) {
+				const uint8_t byte = *char_data++;
+				const uint8_t lo   = ColorXlat[byte & 0x0F];
+				const uint8_t hi   = ColorXlat[byte & 0xF0];
+				if (lo) dst[col] = lo;
+				col++;
+				if (col < char_w) {
+					if (hi) dst[col] = hi;
+					col++;
+				}
+			}
+		}
+
+		// Bottom blank rows (skipped entirely if background is transparent)
+		if (bot_blank > 0 && bg) {
+			for (int r = 0; r < bot_blank; r++, dst += stride)
+				for (int col = 0; col < char_w; col++)
+					dst[col] = bg;
+		}
+	}
+
+	return reinterpret_cast<long>(startdraw);
+}
