@@ -1010,3 +1010,6 @@ inline void __cdecl Buffer_Draw_Stamp(void const *this_object, void const *icond
 	auto *view = static_cast<GraphicViewPortClass const *>(this_object);
 	Buffer_Draw_Stamp_Clip(this_object, icondata, icon, x_pixel, y_pixel, remap, 0, 0, view->Get_Width(), view->Get_Height());
 }
+
+extern GraphicViewPortClass *LogicPage;
+extern bool AllowHardwareBlitFills;
