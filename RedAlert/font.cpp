@@ -32,14 +32,11 @@
  *   Get_Next_Text_Print_XY -- Calculates X and Y given ret value from Text_P*
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-#include <dos.h>
-#include <fcntl.h>
-#include <io.h>
-#include <malloc.h>
-#include <string.h>
-#include <wwstd.h>
+#include <algorithm>
+
 #include "font.h"
-#include <sys\stat.h>
+#include "wwstd.h"
+
 void const *FontPtr = nullptr;
 int FontXSpacing = 0;
 int FontYSpacing = 0;
@@ -118,13 +115,13 @@ unsigned int __cdecl String_Pixel_Width(char const *string) {
 	while (*string) {
 		if (*string == '\r') {
 			string++;
-			largest = MAX(largest, width);
+			largest = std::max(largest, width);
 			width = 0;
 		} else {
 			width += Char_Pixel_Width(*string++); // add each char's width
 		}
 	}
-	largest = MAX(largest, width);
+	largest = std::max(largest, width);
 	return (largest);
 }
 
@@ -144,7 +141,7 @@ unsigned int __cdecl String_Pixel_Width(char const *string) {
  * HISTORY:                                                                *
  *   07/20/1994 SKB : Created.                                             *
  *=========================================================================*/
-VOID __cdecl Get_Next_Text_Print_XY(GraphicViewPortClass &gp, unsigned long offset, INT *x, INT *y) {
+void __cdecl Get_Next_Text_Print_XY(GraphicViewPortClass &gp, unsigned long offset, INT *x, INT *y) {
 	INT buffwidth;
 
 	if (offset) {
