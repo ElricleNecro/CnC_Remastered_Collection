@@ -154,6 +154,7 @@ class VideoBufferClass;
 GraphicViewPortClass *Set_Logic_Page(GraphicViewPortClass *ptr);
 GraphicViewPortClass *Set_Logic_Page(GraphicViewPortClass &ptr);
 
+long __cdecl Buffer_To_Buffer(const void *thisptr, int x, int y, int width, int height, uint8_t *const buff, const long size);
 /*=========================================================================*/
 /* GraphicViewPortClass - Holds viewport information on a viewport which   */
 /*    has been attached to a GraphicBuffer.  A viewport is effectively a   */
