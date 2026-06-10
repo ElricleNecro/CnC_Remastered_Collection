@@ -234,10 +234,6 @@ public:
 	Blit(GraphicViewPortClass &dest, int x_pixel, int y_pixel, int dx_pixel, int dy_pixel, int pixel_width, int pixel_height, bool trans = false);
 	bool Blit(GraphicViewPortClass &dest, int dx, int dy, bool trans = false);
 	bool Blit(GraphicViewPortClass &dest, bool trans = false);
-	bool
-	Blit(VideoViewPortClass &dest, int x_pixel, int y_pixel, int dx_pixel, int dy_pixel, int pixel_width, int pixel_height, bool trans = false);
-	bool Blit(VideoViewPortClass &dest, int dx, int dy, bool trans = false);
-	bool Blit(VideoViewPortClass &dest, bool trans = false);
 	bool Scale(GraphicViewPortClass &dest,
 		   int src_x,
 		   int src_y,
@@ -252,20 +248,6 @@ public:
 	bool Scale(GraphicViewPortClass &dest, int src_x, int src_y, int dst_x, int dst_y, int src_w, int src_h, int dst_w, int dst_h, char *remap);
 	bool Scale(GraphicViewPortClass &dest, bool trans = false, char *remap = nullptr);
 	bool Scale(GraphicViewPortClass &dest, char *remap);
-	bool Scale(VideoViewPortClass &dest,
-		   int src_x,
-		   int src_y,
-		   int dst_x,
-		   int dst_y,
-		   int src_w,
-		   int src_h,
-		   int dst_w,
-		   int dst_h,
-		   bool trans = false,
-		   char *remap = nullptr);
-	bool Scale(VideoViewPortClass &dest, int src_x, int src_y, int dst_x, int dst_y, int src_w, int src_h, int dst_w, int dst_h, char *remap);
-	bool Scale(VideoViewPortClass &dest, bool trans = false, char *remap = nullptr);
-	bool Scale(VideoViewPortClass &dest, char *remap);
 	unsigned long Print(char const *string, int x_pixel, int y_pixel, int fcolor, int bcolor);
 	unsigned long Print(short num, int x_pixel, int y_pixel, int fcol, int bcol);
 	unsigned long Print(int num, int x_pixel, int y_pixel, int fcol, int bcol);
