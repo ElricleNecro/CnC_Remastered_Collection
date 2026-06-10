@@ -138,22 +138,45 @@ namespace rendering {
 		}
 	}
 
-	bool RenderToSurface::lock(void **pixels, int *pitch) {
+	bool RenderSurface::lock(void **pixels, int *pitch) {
+		if (this->lock_count++ > 0) {
+			*pixels = this->cache.pixels;
+			*pitch = this->cache.pitch;
+
+			return true;
+		}
+
+		bool ret = this->do_lock(&this->cache.pixels, &this->cache.pitch);
+		*pixels = this->cache.pixels;
+		*pitch = this->cache.pitch;
+
+		return ret;
+	}
+
+	bool RenderSurface::unlock(void) {
+		if (this->lock_count == 0)
+			return true;
+		if (--this->lock_count >= 1)
+			return true;
+		return this->do_unlock();
+	}
+
+	bool RenderToSurface::do_lock(void **pixels, int *pitch) {
 		*pixels = this->texture->pixels;
 		*pitch = this->texture->pitch;
 		return SDL_LockSurface(this->texture);
 	}
 
-	bool RenderToSurface::unlock(void) {
+	bool RenderToSurface::do_unlock(void) {
 		SDL_UnlockSurface(this->texture);
 		return true;
 	}
 
-	bool RenderToTexture::lock(void **pixels, int *pitch) {
+	bool RenderToTexture::do_lock(void **pixels, int *pitch) {
 		return SDL_LockTexture(this->texture, nullptr, pixels, pitch);
 	}
 
-	bool RenderToTexture::unlock(void) {
+	bool RenderToTexture::do_unlock(void) {
 		SDL_UnlockTexture(this->texture);
 		return true;
 	}

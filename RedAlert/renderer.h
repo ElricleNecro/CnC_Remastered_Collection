@@ -68,8 +68,8 @@ namespace rendering {
 
 		virtual SDL_PixelFormat format(void) = 0;
 
-		virtual bool lock(void **pixels, int *pitch) = 0;
-		virtual bool unlock(void) = 0;
+		bool lock(void **pixels, int *pitch);
+		bool unlock(void);
 
 		virtual void fill_rect(SDL_Renderer *renderer, const SDL_Rect *rect, const SDL_Color color) = 0;
 		virtual void blit(SDL_Renderer *renderer,
@@ -84,6 +84,15 @@ namespace rendering {
 	protected:
 		RenderSurface(int w, int h) : width(w), height(h) {
 		}
+
+		virtual bool do_lock(void **pixels, int *pitch) = 0;
+		virtual bool do_unlock(void) = 0;
+
+		std::size_t lock_count = 0;
+		struct {
+			int pitch = 0;
+			void *pixels = nullptr;
+		} cache;
 	};
 
 	class RenderToSurface : public RenderSurface {
@@ -96,8 +105,8 @@ namespace rendering {
 			return this->texture->format;
 		};
 
-		virtual bool lock(void **pixels, int *pitch);
-		virtual bool unlock(void);
+		bool do_lock(void **pixels, int *pitch) override;
+		bool do_unlock(void) override;
 
 		inline operator bool(void) {
 			return this->texture != nullptr;
@@ -134,8 +143,8 @@ namespace rendering {
 			return this->texture->format;
 		};
 
-		virtual bool lock(void **pixels, int *pitch);
-		virtual bool unlock(void);
+		bool do_lock(void **pixels, int *pitch) override;
+		bool do_unlock(void) override;
 
 		inline operator bool(void) {
 			return this->texture != nullptr;
